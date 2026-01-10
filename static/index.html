@@ -121,6 +121,36 @@
             devTranscript.innerText = "---"; devRawJson.innerText = "{}";
             Object.values(steps).forEach(s => s.innerHTML = s.innerHTML.split(':')[0] + ': <span class="text-slate-500 italic text-[10px]">Processing...</span>');
         }
+        function updateUI(data) {
+    // 1. Cập nhật STT và Điểm tổng quát
+    document.getElementById('stt-result').innerText = data.ai_thinking.step_2_stt;
+    document.getElementById('overallScore').innerText = data.overall_score + '%';
+    
+    // 2. Cập nhật AI Thinking Pipeline
+    document.getElementById('logic-phonemes').innerText = data.phoneme_details.map(p => p.phoneme).join(' ');
+    document.getElementById('logic-prosody').innerText = data.ai_thinking.step_4_prosody.split('✅')[1];
+    document.getElementById('logic-score').innerText = `Completed (Confidence: ${data.overall_score}%)`;
+    
+    // 3. Hiển thị lưới âm vị với IPA
+    const phonemeGrid = document.getElementById('phonemeGrid');
+    phonemeGrid.innerHTML = '';
+    
+    data.phoneme_details.forEach(p => {
+        const div = document.createElement('div');
+        // Thiết kế card âm vị 2 tầng: Arpabet và IPA
+        const isCorrect = p.score >= 70;
+        div.className = `flex flex-col items-center justify-center p-2 rounded-lg border ${isCorrect ? 'bg-green-900/20 border-green-500/50' : 'bg-red-900/20 border-red-500/50'}`;
+        
+        div.innerHTML = `
+            <span class="text-xs font-bold ${isCorrect ? 'text-green-400' : 'text-red-400'}">${p.phoneme}</span>
+            <span class="text-[14px] text-white font-serif">/${p.ipa}/</span>
+            <span class="text-[8px] text-gray-500 mt-1">${p.score}%</span>
+        `;
+        phonemeGrid.appendChild(div);
+    });
+    
+    document.getElementById('resultArea').classList.remove('hidden');
+}
     </script>
 </body>
 </html>

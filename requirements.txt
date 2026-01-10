@@ -1,0 +1,18 @@
+# --- Web Server & API ---
+fastapi>=0.115.0
+uvicorn>=0.30.0
+python-multipart>=0.0.9
+aiofiles>=23.0.0
+
+# --- Database & Cloud ---
+supabase>=2.5.0
+python-dotenv>=1.0.1
+
+# --- AI & Speech Processing ---
+g2p-en>=2.1.0
+transformers>=4.40.0
+accelerate>=0.30.0
+huggingface-hub>=0.23.0
+
+# --- Cảnh báo: Không thêm torch vào đây để tránh cài nhầm bản CPU ---
+# --- WhisperX bắt buộc cài từ GitHub theo lệnh riêng ---

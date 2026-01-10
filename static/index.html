@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Pronunciation Assistant - VLU Tech Lead Mode</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .spinner { border: 4px solid rgba(0,0,0,0.1); width: 36px; height: 36px; border-radius: 50%; border-left-color: #3b82f6; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .phoneme-card { transition: all 0.3s ease; }
+        .terminal-text { font-family: 'Courier New', monospace; }
+    </style>
+</head>
+<body class="bg-slate-100 min-h-screen p-4 md:p-8">
+    <div class="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div class="bg-white rounded-2xl shadow-xl p-8 h-fit">
+            <h1 class="text-2xl font-bold text-slate-800 mb-6">Luyện phát âm AI <span class="text-blue-600 text-sm">VLU</span></h1>
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-slate-600 mb-2">Từ muốn luyện tập:</label>
+                <input type="text" id="targetWord" value="English" class="w-full px-4 py-2 border rounded-lg outline-none text-lg font-semibold">
+            </div>
+            <div class="flex gap-3 mb-8">
+                <button id="start" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl transition-all">Bắt đầu nói</button>
+                <button id="stop" disabled class="flex-1 bg-red-500 hover:bg-red-600 text-white font-semibold py-3 rounded-xl transition-all disabled:opacity-50">Dừng & Phân tích</button>
+            </div>
+            <div id="loading" class="hidden flex flex-col items-center mb-6">
+                <div class="spinner mb-2"></div>
+                <p class="text-blue-600 font-medium text-sm italic">RTX 3050 đang xử lý...</p>
+            </div>
+            <div id="resultArea" class="hidden">
+                <div class="flex justify-between items-end mb-4">
+                    <h3 class="text-lg font-semibold text-slate-700">Kết quả:</h3>
+                    <div id="overallScore" class="text-3xl font-black text-blue-600">0%</div>
+                </div>
+                <div id="phonemeGrid" class="grid grid-cols-3 gap-3"></div>
+            </div>
+        </div>
+
+        <div class="bg-slate-900 rounded-2xl p-6 text-green-400 terminal-text border-t-4 border-blue-500 h-fit">
+            <h3 class="text-blue-400 font-bold uppercase mb-4 border-b border-slate-700 pb-2">🛠️ AI Thinking Pipeline</h3>
+            <div class="space-y-3 text-xs">
+                <p id="dev-step-1">● [STEP 1] VAD: <span class="text-slate-500 italic text-[10px]">Waiting...</span></p>
+                <p id="dev-step-2">● [STEP 2] STT: <span class="text-slate-500 italic text-[10px]">Waiting...</span></p>
+                <p id="dev-step-3">● [STEP 3] Alignment: <span class="text-slate-500 italic text-[10px]">Waiting...</span></p>
+                <p id="dev-step-4">● [STEP 4] Prosody: <span class="text-slate-500 italic text-[10px]">Waiting...</span></p>
+                <p id="dev-step-5">● [STEP 5] Cloud Sync: <span class="text-slate-500 italic text-[10px]">Waiting...</span></p>
+                
+                <div class="bg-slate-800 p-3 rounded mt-4">
+                    <p class="text-[9px] text-slate-400 uppercase mb-1">AI Heard Text:</p>
+                    <p id="dev-transcript" class="text-white font-bold italic uppercase tracking-widest text-base">---</p>
+                </div>
+                <pre id="dev-raw-json" class="mt-4 bg-black p-2 rounded h-48 overflow-y-auto text-[10px] text-blue-300">{}</pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let recorder; let audioChunks = [];
+        const startBtn = document.getElementById('start'); const stopBtn = document.getElementById('stop');
+        const loading = document.getElementById('loading'); const resultArea = document.getElementById('resultArea');
+        const phonemeGrid = document.getElementById('phonemeGrid'); const overallScoreDisp = document.getElementById('overallScore');
+        const devTranscript = document.getElementById('dev-transcript'); const devRawJson = document.getElementById('dev-raw-json');
+        
+        const steps = {
+            vad: document.getElementById('dev-step-1'), stt: document.getElementById('dev-step-2'),
+            align: document.getElementById('dev-step-3'), prosody: document.getElementById('dev-step-4'),
+            db: document.getElementById('dev-step-5')
+        };
+
+        startBtn.onclick = async () => {
+            try {
+                audioChunks = [];
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                recorder = new MediaRecorder(stream);
+                recorder.ondataavailable = e => audioChunks.push(e.data);
+                recorder.start();
+                startBtn.disabled = true; stopBtn.disabled = false;
+                resultArea.classList.add('hidden'); resetDevUI();
+            } catch (err) { alert("Cần quyền Microphone!"); }
+        };
+
+        stopBtn.onclick = () => {
+            recorder.stop(); loading.classList.remove('hidden'); stopBtn.disabled = true;
+            recorder.onstop = async () => {
+                const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                const formData = new FormData();
+                formData.append('file', audioBlob, 'recording.wav');
+                formData.append('target_word', document.getElementById('targetWord').value);
+                try {
+                    const response = await fetch('http://127.0.0.1:8000/upload-audio', { method: 'POST', body: formData });
+                    const result = await response.json();
+                    displayResults(result); updateDevUI(result);
+                } catch (err) { alert("Lỗi Backend!"); } finally { loading.classList.add('hidden'); startBtn.disabled = false; }
+            };
+        };
+
+        function displayResults(data) {
+            phonemeGrid.innerHTML = ''; resultArea.classList.remove('hidden');
+            overallScoreDisp.innerText = data.overall_score + '%';
+            data.phoneme_details.forEach(item => {
+                const isCorrect = item.score >= 70;
+                const card = document.createElement('div');
+                card.className = `phoneme-card p-3 rounded-lg border-2 text-center ${isCorrect ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'}`;
+                card.innerHTML = `<div class="text-xl font-bold ${isCorrect ? 'text-green-600' : 'text-red-600'}">${item.phoneme}</div><div class="text-xs text-slate-500">${item.score}%</div>`;
+                phonemeGrid.appendChild(card);
+            });
+        }
+
+        function updateDevUI(data) {
+            devTranscript.innerText = data.ai_thinking.step_2_stt;
+            devRawJson.innerText = JSON.stringify(data, null, 2);
+            steps.vad.innerHTML = `● [STEP 1] VAD: <span class="text-green-400 font-bold underline">DETECTED</span>`;
+            steps.stt.innerHTML = `● [STEP 2] STT: <span class="text-green-400 font-bold underline">SUCCESS</span>`;
+            steps.align.innerHTML = `● [STEP 3] Alignment: <span class="text-green-400 font-bold underline">DONE</span>`;
+            steps.prosody.innerHTML = `● [STEP 4] Prosody: <span class="text-blue-400 font-bold underline">${data.ai_thinking.step_4_prosody.split('✅')[1]}</span>`;
+            steps.db.innerHTML = `● [STEP 5] Cloud Sync: <span class="text-green-400 font-bold underline">SYNCED</span>`;
+        }
+
+        function resetDevUI() {
+            devTranscript.innerText = "---"; devRawJson.innerText = "{}";
+            Object.values(steps).forEach(s => s.innerHTML = s.innerHTML.split(':')[0] + ': <span class="text-slate-500 italic text-[10px]">Processing...</span>');
+        }
+    </script>
+</body>
+</html>

@@ -1,9 +1,9 @@
-from fastapi import FastAPI, UploadFile, File, Form
+from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from core.phoneme_engine import analyze_pronunciation
 from core.database import save_attempt_to_cloud
-from core.prosody_engine import analyze_prosody # Import engine mới
+from core.prosody_engine import analyze_prosody
 import os
 import nltk
 import torch
@@ -33,33 +33,37 @@ async def startup_event():
 
 @app.get("/")
 async def read_index():
-    # Phục vụ file giao diện chính
     index_path = os.path.join("static", "index.html")
     if os.path.exists(index_path):
         return FileResponse(index_path)
     return {"error": "Cậu chưa để file index.html vào thư mục 'static' rồi."}
 
 @app.post("/upload-audio")
-async def upload_audio(file: UploadFile = File(...), target_word: str = Form(...)):
+async def upload_audio(file: UploadFile = File(...)):
+    # Bỏ target_word vì AI sẽ tự nhận dạng từ giọng nói
     file_path = os.path.join("data/samples", file.filename)
     
     with open(file_path, "wb") as buffer:
         buffer.write(await file.read())
     
-    # 1. Gọi AI xử lý âm vị (WhisperX + RTX 3050)
-    ai_result = analyze_pronunciation(file_path, target_word)
-    
-    # 2. Phân tích âm học (Parselmouth - Pitch & Intensity)
+    # 1. AI tự nhận dạng và bóc tách âm vị (WhisperX + G2P + Vocabulary Boosting)
+    ai_result = analyze_pronunciation(file_path)
+    if "error" in ai_result: 
+        return ai_result
+
+    # 2. Phân tích âm học (Parselmouth + Librosa)
     acoustic_data = analyze_prosody(file_path)
     
-    # 3. Lưu lên Supabase Cloud
-    save_attempt_to_cloud(target_word, ai_result["overall_score"], ai_result["phoneme_details"])
+    # 3. Lưu kết quả lên Cloud
+    save_attempt_to_cloud(
+        ai_result["transcribed_text"], 
+        ai_result["overall_score"], 
+        ai_result["phoneme_details"]
+    )
     
-    # 4. Trả về định dạng chuẩn tích hợp 5 bước AI Thinking
     return {
         "overall_score": ai_result["overall_score"],
         "phoneme_details": ai_result["phoneme_details"],
-        "prosody_analysis": acoustic_data,
         "ai_thinking": {
             "step_1_vad": "✅ Đã nhận diện giọng nói",
             "step_2_stt": ai_result["transcribed_text"],

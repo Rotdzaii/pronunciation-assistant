@@ -3,154 +3,193 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Pronunciation Assistant - VLU Tech Lead Mode</title>
+    <title>Voice AI Workflow - Tech Lead Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        .spinner { border: 4px solid rgba(0,0,0,0.1); width: 36px; height: 36px; border-radius: 50%; border-left-color: #3b82f6; animation: spin 1s linear infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .phoneme-card { transition: all 0.3s ease; }
-        .terminal-text { font-family: 'Courier New', monospace; }
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+        .terminal-text { font-family: 'JetBrains Mono', monospace; }
+        .phoneme-card { transition: all 0.2s ease-in-out; }
+        .phoneme-card:hover { transform: scale(1.05); background-color: rgba(59, 130, 246, 0.1); }
+        .pulse-ring { animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); } 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); } }
     </style>
 </head>
-<body class="bg-slate-100 min-h-screen p-4 md:p-8">
-    <div class="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div class="bg-white rounded-2xl shadow-xl p-8 h-fit">
-            <h1 class="text-2xl font-bold text-slate-800 mb-6">Luyện phát âm AI <span class="text-blue-600 text-sm">VLU</span></h1>
-            <div class="mb-6">
-                <label class="block text-sm font-medium text-slate-600 mb-2">Từ muốn luyện tập:</label>
-                <input type="text" id="targetWord" value="English" class="w-full px-4 py-2 border rounded-lg outline-none text-lg font-semibold">
+<body class="bg-[#0b0f1a] text-slate-300 min-h-screen p-4 md:p-8 terminal-text">
+    <div class="max-w-4xl mx-auto space-y-6">
+        
+        <header class="flex justify-between items-center border-b border-slate-800 pb-6">
+            <div>
+                <h1 class="text-blue-500 font-bold text-xl tracking-tighter">Pronunciation Assistant <span class="text-[10px] bg-blue-500/10 text-blue-400 px-2 py-0.5 rounded ml-2 border border-blue-500/20">V3.0-AUTODETECT</span></h1>
+                <p class="text-[10px] text-slate-500 uppercase mt-1">Research Project: CAPT System for VLU Thesis</p>
             </div>
-            <div class="flex gap-3 mb-8">
-                <button id="start" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl transition-all">Bắt đầu nói</button>
-                <button id="stop" disabled class="flex-1 bg-red-500 hover:bg-red-600 text-white font-semibold py-3 rounded-xl transition-all disabled:opacity-50">Dừng & Phân tích</button>
+            <div class="text-right">
+                <p class="text-[10px] text-slate-500 uppercase">Hardware Engine</p>
+                <p class="text-xs font-bold text-slate-400">NVIDIA RTX 3050 GPU</p>
             </div>
-            <div id="loading" class="hidden flex flex-col items-center mb-6">
-                <div class="spinner mb-2"></div>
-                <p class="text-blue-600 font-medium text-sm italic">RTX 3050 đang xử lý...</p>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="md:col-span-1 bg-slate-900/50 border border-slate-800 p-6 rounded-2xl flex flex-col justify-center items-center space-y-4">
+                <button id="start" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-xl transition-all pulse-ring">BẮT ĐẦU NÓI</button>
+                <button id="stop" disabled class="w-full bg-red-600/20 hover:bg-red-600 text-red-500 hover:text-white font-bold py-4 rounded-xl transition-all disabled:opacity-20">DỪNG & PHÂN TÍCH</button>
+                <p id="status" class="text-[10px] italic text-slate-500">Ready for voice input...</p>
             </div>
-            <div id="resultArea" class="hidden">
-                <div class="flex justify-between items-end mb-4">
-                    <h3 class="text-lg font-semibold text-slate-700">Kết quả:</h3>
-                    <div id="overallScore" class="text-3xl font-black text-blue-600">0%</div>
+
+            <div class="md:col-span-2 bg-slate-900/50 border border-slate-800 p-6 rounded-2xl flex flex-col justify-center relative overflow-hidden">
+                <div class="absolute top-3 left-4 text-[9px] text-slate-600 uppercase tracking-widest">Column 1: Speech-To-Text (WhisperX)</div>
+                <div class="text-center">
+                    <h2 id="stt-result" class="text-4xl font-black text-white tracking-tighter italic uppercase opacity-20 transition-all duration-700">---</h2>
                 </div>
-                <div id="phonemeGrid" class="grid grid-cols-3 gap-3"></div>
             </div>
         </div>
 
-        <div class="bg-slate-900 rounded-2xl p-6 text-green-400 terminal-text border-t-4 border-blue-500 h-fit">
-            <h3 class="text-blue-400 font-bold uppercase mb-4 border-b border-slate-700 pb-2">🛠️ AI Thinking Pipeline</h3>
-            <div class="space-y-3 text-xs">
-                <p id="dev-step-1">● [STEP 1] VAD: <span class="text-slate-500 italic text-[10px]">Waiting...</span></p>
-                <p id="dev-step-2">● [STEP 2] STT: <span class="text-slate-500 italic text-[10px]">Waiting...</span></p>
-                <p id="dev-step-3">● [STEP 3] Alignment: <span class="text-slate-500 italic text-[10px]">Waiting...</span></p>
-                <p id="dev-step-4">● [STEP 4] Prosody: <span class="text-slate-500 italic text-[10px]">Waiting...</span></p>
-                <p id="dev-step-5">● [STEP 5] Cloud Sync: <span class="text-slate-500 italic text-[10px]">Waiting...</span></p>
-                
-                <div class="bg-slate-800 p-3 rounded mt-4">
-                    <p class="text-[9px] text-slate-400 uppercase mb-1">AI Heard Text:</p>
-                    <p id="dev-transcript" class="text-white font-bold italic uppercase tracking-widest text-base">---</p>
+        <div class="bg-slate-900/80 border border-blue-900/20 rounded-2xl p-6 relative">
+            <div class="absolute top-3 left-4 text-[9px] text-blue-500 uppercase tracking-widest flex items-center gap-2">
+                <span class="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse"></span> Column 2: AI Thinking Pipeline (GOP Logic)
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6 text-[11px] border-b border-slate-800 pb-6 mb-6">
+                <div class="space-y-1">
+                    <p class="text-slate-500 uppercase text-[9px]">Phonetic G2P</p>
+                    <p id="logic-phonemes" class="text-yellow-500/80 font-bold">Waiting for input...</p>
                 </div>
-                <pre id="dev-raw-json" class="mt-4 bg-black p-2 rounded h-48 overflow-y-auto text-[10px] text-blue-300">{}</pre>
+                <div class="space-y-1">
+                    <p class="text-slate-500 uppercase text-[9px]">Acoustic Prosody</p>
+                    <p id="logic-prosody" class="text-blue-400 font-bold">Waiting for input...</p>
+                </div>
+                <div class="space-y-1">
+                    <p class="text-slate-500 uppercase text-[9px]">Scoring Confidence</p>
+                    <p id="logic-score" class="text-green-500/80 font-bold">Waiting for input...</p>
+                </div>
+            </div>
+
+            <div>
+                <p class="text-[9px] text-slate-600 uppercase mb-4 tracking-widest">Phoneme Analysis (IPA Mapping)</p>
+                <div id="phonemeGrid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3"></div>
+            </div>
+        </div>
+
+        <div id="resultArea" class="hidden animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div class="bg-blue-600/10 border border-blue-500/30 rounded-2xl p-6 flex flex-col md:flex-row justify-between items-center gap-6">
+                <div class="flex items-center gap-6">
+                    <div class="bg-slate-900 p-4 rounded-xl border border-slate-800">
+                        <p class="text-[10px] text-slate-500 uppercase mb-1">Overall Score</p>
+                        <div id="overallScore" class="text-4xl font-black text-blue-500">0%</div>
+                    </div>
+                    <div>
+                        <p class="text-sm font-bold text-slate-200">Phân tích hoàn tất</p>
+                        <p class="text-xs text-slate-500">Dữ liệu đã được đồng bộ lên Supabase Cloud.</p>
+                    </div>
+                </div>
+                <button onclick="playTTS()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-8 py-4 rounded-full transition-all uppercase tracking-widest">🔊 Nghe giọng mẫu (TTS)</button>
             </div>
         </div>
     </div>
 
     <script>
         let recorder; let audioChunks = [];
-        const startBtn = document.getElementById('start'); const stopBtn = document.getElementById('stop');
-        const loading = document.getElementById('loading'); const resultArea = document.getElementById('resultArea');
-        const phonemeGrid = document.getElementById('phonemeGrid'); const overallScoreDisp = document.getElementById('overallScore');
-        const devTranscript = document.getElementById('dev-transcript'); const devRawJson = document.getElementById('dev-raw-json');
+        let mediaStream = null; // Biến quản lý stream
         
-        const steps = {
-            vad: document.getElementById('dev-step-1'), stt: document.getElementById('dev-step-2'),
-            align: document.getElementById('dev-step-3'), prosody: document.getElementById('dev-step-4'),
-            db: document.getElementById('dev-step-5')
-        };
+        const startBtn = document.getElementById('start'); const stopBtn = document.getElementById('stop');
+        const sttResult = document.getElementById('stt-result'); const phonemeGrid = document.getElementById('phonemeGrid');
+        const statusText = document.getElementById('status');
+        
+        let lastDetectedText = "";
+
+        function playTTS() {
+            if (!lastDetectedText) return;
+            const msg = new SpeechSynthesisUtterance(lastDetectedText);
+            msg.lang = 'en-US';
+            window.speechSynthesis.speak(msg);
+        }
 
         startBtn.onclick = async () => {
             try {
                 audioChunks = [];
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                recorder = new MediaRecorder(stream);
+                // Bật Micro
+                mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                recorder = new MediaRecorder(mediaStream);
                 recorder.ondataavailable = e => audioChunks.push(e.data);
                 recorder.start();
+                
                 startBtn.disabled = true; stopBtn.disabled = false;
-                resultArea.classList.add('hidden'); resetDevUI();
-            } catch (err) { alert("Cần quyền Microphone!"); }
+                statusText.innerText = "Listening... Speak clearly into the mic.";
+                sttResult.classList.add('opacity-20');
+                resetUI();
+            } catch (err) { alert("Microphone access denied!"); }
         };
 
         stopBtn.onclick = () => {
-            recorder.stop(); loading.classList.remove('hidden'); stopBtn.disabled = true;
+            recorder.stop(); 
+            
+            // THAY ĐỔI QUAN TRỌNG: Tắt hẳn phần cứng Micro ngay lập tức
+            if (mediaStream) {
+                mediaStream.getTracks().forEach(track => track.stop());
+                mediaStream = null; 
+            }
+            
+            stopBtn.disabled = true;
+            statusText.innerText = "Microphone OFF. Processing on RTX 3050...";
+            
             recorder.onstop = async () => {
                 const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
                 const formData = new FormData();
                 formData.append('file', audioBlob, 'recording.wav');
-                formData.append('target_word', document.getElementById('targetWord').value);
+
                 try {
-                    const response = await fetch('http://127.0.0.1:8000/upload-audio', { method: 'POST', body: formData });
-                    const result = await response.json();
-                    displayResults(result); updateDevUI(result);
-                } catch (err) { alert("Lỗi Backend!"); } finally { loading.classList.add('hidden'); startBtn.disabled = false; }
+                    const response = await fetch('http://127.0.0.1:8000/upload-audio', { 
+                        method: 'POST', 
+                        body: formData 
+                    });
+                    const data = await response.json();
+                    if (data.error) {
+                        statusText.innerText = data.error;
+                        startBtn.disabled = false;
+                    } else {
+                        updateUI(data);
+                        statusText.innerText = "Analysis Complete.";
+                    }
+                } catch (err) { 
+                    alert("Backend Error! Is FastAPI running?");
+                    statusText.innerText = "Connection failed.";
+                } finally { startBtn.disabled = false; }
             };
         };
 
-        function displayResults(data) {
-            phonemeGrid.innerHTML = ''; resultArea.classList.remove('hidden');
-            overallScoreDisp.innerText = data.overall_score + '%';
-            data.phoneme_details.forEach(item => {
-                const isCorrect = item.score >= 70;
+        function updateUI(data) {
+            lastDetectedText = data.ai_thinking.step_2_stt;
+            sttResult.innerText = lastDetectedText;
+            sttResult.classList.remove('opacity-20');
+            
+            document.getElementById('logic-phonemes').innerText = data.phoneme_details.map(p => p.phoneme).join(' ');
+            document.getElementById('logic-prosody').innerText = data.ai_thinking.step_4_prosody.split('✅')[1];
+            document.getElementById('logic-score').innerText = `Confidence: ${data.overall_score}%`;
+            
+            phonemeGrid.innerHTML = '';
+            data.phoneme_details.forEach(p => {
+                const isCorrect = p.score >= 75;
                 const card = document.createElement('div');
-                card.className = `phoneme-card p-3 rounded-lg border-2 text-center ${isCorrect ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'}`;
-                card.innerHTML = `<div class="text-xl font-bold ${isCorrect ? 'text-green-600' : 'text-red-600'}">${item.phoneme}</div><div class="text-xs text-slate-500">${item.score}%</div>`;
+                card.className = `phoneme-card flex flex-col items-center justify-center p-3 rounded-xl border border-slate-800 bg-slate-900/30 ${isCorrect ? 'border-green-500/20' : 'border-red-500/20'}`;
+                card.innerHTML = `
+                    <span class="text-[9px] font-bold ${isCorrect ? 'text-green-500' : 'text-red-500'} mb-1">${p.phoneme}</span>
+                    <span class="text-xl text-white font-serif">/${p.ipa}/</span>
+                    <span class="text-[8px] text-slate-600 mt-2">${p.score}%</span>
+                `;
                 phonemeGrid.appendChild(card);
             });
+
+            document.getElementById('overallScore').innerText = data.overall_score + '%';
+            document.getElementById('resultArea').classList.remove('hidden');
         }
 
-        function updateDevUI(data) {
-            devTranscript.innerText = data.ai_thinking.step_2_stt;
-            devRawJson.innerText = JSON.stringify(data, null, 2);
-            steps.vad.innerHTML = `● [STEP 1] VAD: <span class="text-green-400 font-bold underline">DETECTED</span>`;
-            steps.stt.innerHTML = `● [STEP 2] STT: <span class="text-green-400 font-bold underline">SUCCESS</span>`;
-            steps.align.innerHTML = `● [STEP 3] Alignment: <span class="text-green-400 font-bold underline">DONE</span>`;
-            steps.prosody.innerHTML = `● [STEP 4] Prosody: <span class="text-blue-400 font-bold underline">${data.ai_thinking.step_4_prosody.split('✅')[1]}</span>`;
-            steps.db.innerHTML = `● [STEP 5] Cloud Sync: <span class="text-green-400 font-bold underline">SYNCED</span>`;
+        function resetUI() {
+            sttResult.innerText = "---";
+            phonemeGrid.innerHTML = '';
+            document.getElementById('resultArea').classList.add('hidden');
+            ['logic-phonemes', 'logic-prosody', 'logic-score'].forEach(id => {
+                document.getElementById(id).innerText = "Processing...";
+            });
         }
-
-        function resetDevUI() {
-            devTranscript.innerText = "---"; devRawJson.innerText = "{}";
-            Object.values(steps).forEach(s => s.innerHTML = s.innerHTML.split(':')[0] + ': <span class="text-slate-500 italic text-[10px]">Processing...</span>');
-        }
-        function updateUI(data) {
-    // 1. Cập nhật STT và Điểm tổng quát
-    document.getElementById('stt-result').innerText = data.ai_thinking.step_2_stt;
-    document.getElementById('overallScore').innerText = data.overall_score + '%';
-    
-    // 2. Cập nhật AI Thinking Pipeline
-    document.getElementById('logic-phonemes').innerText = data.phoneme_details.map(p => p.phoneme).join(' ');
-    document.getElementById('logic-prosody').innerText = data.ai_thinking.step_4_prosody.split('✅')[1];
-    document.getElementById('logic-score').innerText = `Completed (Confidence: ${data.overall_score}%)`;
-    
-    // 3. Hiển thị lưới âm vị với IPA
-    const phonemeGrid = document.getElementById('phonemeGrid');
-    phonemeGrid.innerHTML = '';
-    
-    data.phoneme_details.forEach(p => {
-        const div = document.createElement('div');
-        // Thiết kế card âm vị 2 tầng: Arpabet và IPA
-        const isCorrect = p.score >= 70;
-        div.className = `flex flex-col items-center justify-center p-2 rounded-lg border ${isCorrect ? 'bg-green-900/20 border-green-500/50' : 'bg-red-900/20 border-red-500/50'}`;
-        
-        div.innerHTML = `
-            <span class="text-xs font-bold ${isCorrect ? 'text-green-400' : 'text-red-400'}">${p.phoneme}</span>
-            <span class="text-[14px] text-white font-serif">/${p.ipa}/</span>
-            <span class="text-[8px] text-gray-500 mt-1">${p.score}%</span>
-        `;
-        phonemeGrid.appendChild(div);
-    });
-    
-    document.getElementById('resultArea').classList.remove('hidden');
-}
     </script>
 </body>
 </html>

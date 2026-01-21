@@ -2,9 +2,8 @@ name: Supabase Keep Alive
 
 on:
   schedule:
-    # Chạy vào lúc 00:00 ngày mùng 1, 5, 9, 13, 17, 21, 25, 29 hàng tháng
     - cron: '0 0 */4 * *'
-  workflow_dispatch: # Cho phép nhấn nút chạy thủ công để kiểm tra
+  workflow_dispatch:
 
 jobs:
   ping:
@@ -12,6 +11,9 @@ jobs:
     steps:
       - name: Send a request to Supabase
         run: |
-          curl -X GET "${{ secrets.SUPABASE_URL }}/rest/v1/" \
+          # Xóa dấu / ở cuối URL nếu có để tránh bị lỗi double slash //
+          CLEAN_URL=$(echo "${{ secrets.SUPABASE_URL }}" | sed 's/\/$//')
+          
+          curl -s -o /dev/null -w "%{http_code}" -X GET "$CLEAN_URL/rest/v1/" \
           -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
           -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}"

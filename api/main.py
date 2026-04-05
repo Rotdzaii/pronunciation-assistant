@@ -5,13 +5,15 @@ from core.phoneme_engine import analyze_pronunciation
 from core.database import save_attempt_to_cloud
 from core.prosody_engine import analyze_prosody
 import os
+import io
 import nltk
 import torch
-
+import sys
 # Tối ưu cấu hình cho RTX 3050
 torch.backends.cuda.matmul.allow_tf32 = True
 torch.backends.cudnn.allow_tf32 = True
 
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 app = FastAPI()
 
 app.add_middleware(
@@ -23,13 +25,13 @@ app.add_middleware(
 
 @app.on_event("startup")
 async def startup_event():
-    print("\n--- 🔍 ĐANG KIỂM TRA CẤU HÌNH HỆ THỐNG ---")
+    print("\n--- ĐANG KIỂM TRA CẤU HÌNH HỆ THỐNG ---")
     nltk.download('averaged_perceptron_tagger_eng', quiet=True)
     nltk.download('punkt_tab', quiet=True)
     os.makedirs("data/samples", exist_ok=True)
     if not os.path.exists(".env"):
-        print("--- ⚠️ CẢNH BÁO: Thiếu file .env ---")
-    print("--- 🚀 HỆ THỐNG ĐÃ SẴN SÀNG ---\n")
+        print("---  CẢNH BÁO: Thiếu file .env ---")
+    print("---  HỆ THỐNG ĐÃ SẴN SÀNG ---\n")
 
 @app.get("/")
 async def read_index():

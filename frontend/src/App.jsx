@@ -8,6 +8,7 @@ import AssignmentDetailPage from "./pages/AssignmentDetailPage";
 import AssignmentPracticePage from "./pages/AssignmentPracticePage";
 import TeacherCreateAssignmentPage from "./pages/TeacherCreateAssignmentPage";
 import TeacherAssignmentDashboardPage from "./pages/TeacherAssignmentDashboardPage";
+import TeacherAssignmentReviewPage from "./pages/TeacherAssignmentReviewPage";
 
 export default function App() {
   return (
@@ -33,6 +34,10 @@ export default function App() {
       <Route
         path="/teacher/assignments"
         element={<TeacherAssignmentDashboardPage />}
+      />
+      <Route
+        path="/teacher/assignments/:assignmentId"
+        element={<TeacherAssignmentReviewPage />}
       />
     </Routes>
   );

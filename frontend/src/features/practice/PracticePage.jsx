@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import AudioRecorder from "./AudioRecorder";
 import AudioUploader from "./AudioUploader";
 import { saveLatestResult } from "../result/resultStorage";
+import { addToHistory } from "../history/historyStorage";
 
 async function mockSubmitAudio() {
     await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -124,6 +125,7 @@ export default function PracticePage() {
                     };
 
                     saveLatestResult(completedResult);
+                    addToHistory(completedResult);
                     setStatus("completed");
                     setMockResult(completedResult);
                     return;

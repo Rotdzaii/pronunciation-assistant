@@ -1,26 +1,38 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PronunciationScore from "./PronunciationScore";
 import PhonemeHighlighter from "./PhonemeHighlighter";
 import SuggestionCard from "./SuggestionCard";
-
-const mockResult = {
-    word: "computer",
-    score: 78,
-    phonemes: [
-        { symbol: "/k/", correct: true },
-        { symbol: "/ə/", correct: true },
-        { symbol: "/m/", correct: true },
-        { symbol: "/pjuː/", correct: false },
-        { symbol: "/tər/", correct: true },
-    ],
-    suggestion:
-        "Try pronouncing /pjuː/ more clearly. Keep your lips rounded and release the /j/ sound before the long /uː/.",
-};
+import { getLatestResult } from "./resultStorage";
 
 export default function ResultPage() {
     const navigate = useNavigate();
+    const [result, setResult] = useState(null);
 
-    const wrongPhonemes = mockResult.phonemes.filter(
+    useEffect(() => {
+        const latestResult = getLatestResult();
+
+        if (!latestResult) {
+            navigate("/practice");
+            return;
+        }
+
+        setResult(latestResult);
+    }, [navigate]);
+
+    if (!result) {
+        return (
+            <main className="min-h-screen bg-[#f7f1ff] p-8 text-slate-900">
+                <div className="mx-auto max-w-3xl rounded-3xl bg-white p-10 text-center shadow-sm">
+                    <p className="text-lg font-extrabold text-purple-600">
+                        Loading result...
+                    </p>
+                </div>
+            </main>
+        );
+    }
+
+    const wrongPhonemes = result.phonemes.filter(
         (phoneme) => !phoneme.correct
     );
 
@@ -36,6 +48,12 @@ export default function ResultPage() {
                         <h1 className="mt-2 text-4xl font-extrabold">
                             Kết quả phân tích phát âm
                         </h1>
+
+                        {result.analyzedAt && (
+                            <p className="mt-2 text-sm text-slate-400">
+                                Analyzed at: {new Date(result.analyzedAt).toLocaleString()}
+                            </p>
+                        )}
                     </div>
 
                     <button
@@ -49,27 +67,33 @@ export default function ResultPage() {
 
                 <div className="grid grid-cols-[360px_1fr] gap-8">
                     <div className="space-y-6">
-                        <PronunciationScore score={mockResult.score} />
+                        <PronunciationScore score={result.score} />
 
-                        <SuggestionCard suggestion={mockResult.suggestion} />
+                        <SuggestionCard suggestion={result.suggestion} />
                     </div>
 
                     <div className="space-y-6">
                         <section className="rounded-3xl bg-white p-8 shadow-sm">
                             <p className="text-sm font-extrabold uppercase text-purple-500">
-                                Target Word
+                                Target
                             </p>
 
-                            <h2 className="mt-4 text-6xl font-extrabold text-slate-900">
-                                {mockResult.word}
+                            <h2 className="mt-4 text-5xl font-extrabold text-slate-900">
+                                {result.word}
                             </h2>
+
+                            {result.sentence && (
+                                <p className="mt-4 rounded-2xl bg-slate-50 p-4 text-slate-600">
+                                    "{result.sentence}"
+                                </p>
+                            )}
 
                             <p className="mt-4 text-slate-500">
                                 AI đã phân tích phát âm của bạn theo từng âm vị.
                             </p>
                         </section>
 
-                        <PhonemeHighlighter phonemes={mockResult.phonemes} />
+                        <PhonemeHighlighter phonemes={result.phonemes} />
 
                         {wrongPhonemes.length > 0 && (
                             <section className="rounded-3xl bg-red-50 p-8">

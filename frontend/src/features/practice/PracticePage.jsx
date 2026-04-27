@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AudioRecorder from "./AudioRecorder";
 import AudioUploader from "./AudioUploader";
+import { saveLatestResult } from "../result/resultStorage";
 
 async function mockSubmitAudio() {
     await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -45,9 +46,13 @@ async function mockGetJobStatus(jobId, pollCount) {
             word: "computer",
             phonemes: [
                 { symbol: "/k/", correct: true },
+                { symbol: "/ə/", correct: true },
+                { symbol: "/m/", correct: true },
                 { symbol: "/pjuː/", correct: false },
+                { symbol: "/tər/", correct: true },
             ],
-            suggestion: "Try pronouncing /pjuː/ more clearly.",
+            suggestion:
+                "Try pronouncing /pjuː/ more clearly. Keep your lips rounded and release the /j/ sound before the long /uː/.",
         },
     };
 }
@@ -110,8 +115,17 @@ export default function PracticePage() {
                 }
 
                 if (response.status === "completed") {
+                    const completedResult = {
+                        id: response.result_id,
+                        analyzedAt: new Date().toISOString(),
+                        sentence,
+                        audioUrl,
+                        ...response.result,
+                    };
+
+                    saveLatestResult(completedResult);
                     setStatus("completed");
-                    setMockResult(response.result);
+                    setMockResult(completedResult);
                     return;
                 }
 
@@ -130,7 +144,7 @@ export default function PracticePage() {
                 clearTimeout(pollingTimerRef.current);
             }
         };
-    }, [jobId, status, pollCount]);
+    }, [jobId, status, pollCount, sentence, audioUrl]);
 
     function handleAudioReady(blob) {
         if (audioUrl) {
@@ -329,7 +343,7 @@ export default function PracticePage() {
                         <div className="flex items-center justify-between">
                             <div>
                                 <p className="font-extrabold text-emerald-700">
-                                    Mock result ready
+                                    Result ready
                                 </p>
                                 <p className="text-sm text-emerald-600">
                                     Bấm để xem trang kết quả chi tiết.
@@ -346,8 +360,8 @@ export default function PracticePage() {
                                 <span
                                     key={phoneme.symbol}
                                     className={`rounded-2xl px-4 py-2 text-sm font-extrabold ${phoneme.correct
-                                            ? "bg-emerald-100 text-emerald-700"
-                                            : "bg-red-100 text-red-700"
+                                        ? "bg-emerald-100 text-emerald-700"
+                                        : "bg-red-100 text-red-700"
                                         }`}
                                 >
                                     {phoneme.correct ? "✓" : "!"} {phoneme.symbol}
@@ -389,10 +403,10 @@ function ProcessingStep({ step, currentStep, label }) {
         <div className="flex items-center gap-3">
             <div
                 className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-extrabold ${isDone
-                        ? "bg-emerald-500 text-white"
-                        : isActive
-                            ? "bg-purple-600 text-white"
-                            : "bg-purple-100 text-purple-300"
+                    ? "bg-emerald-500 text-white"
+                    : isActive
+                        ? "bg-purple-600 text-white"
+                        : "bg-purple-100 text-purple-300"
                     }`}
             >
                 {isDone ? "✓" : step}

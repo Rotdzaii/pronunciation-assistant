@@ -1,5 +1,5 @@
-import PracticePage from "./features/practice/PracticePage";
+import ResultPage from "./features/result/ResultPage";
 
 export default function App() {
-  return <PracticePage />;
+  return <ResultPage />;
 }

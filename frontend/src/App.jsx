@@ -6,6 +6,7 @@ import ProgressPage from "./pages/ProgressPage";
 import AssignmentsPage from "./pages/AssignmentsPage";
 import AssignmentDetailPage from "./pages/AssignmentDetailPage";
 import AssignmentPracticePage from "./pages/AssignmentPracticePage";
+import TeacherCreateAssignmentPage from "./pages/TeacherCreateAssignmentPage";
 
 export default function App() {
   return (
@@ -20,6 +21,10 @@ export default function App() {
       <Route
         path="/assignments/:assignmentId/practice"
         element={<AssignmentPracticePage />}
+      />
+      <Route
+        path="/teacher/assignments/create"
+        element={<TeacherCreateAssignmentPage />}
       />
     </Routes>
   );

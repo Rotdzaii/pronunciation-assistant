@@ -2,6 +2,8 @@ import { NavLink } from "react-router-dom";
 
 const navItems = [
     { path: "/practice", label: "Practice", icon: "🎙️" },
+    { path: "/assignments", label: "Assignments", icon: "📚" },
+    { path: "/teacher/assignments/create", label: "Create Assignment", icon: "🧑‍🏫" },
     { path: "/result", label: "Result", icon: "📊" },
     { path: "/history", label: "History", icon: "🕘" },
     { path: "/progress", label: "Progress", icon: "📈" },
@@ -43,6 +45,7 @@ export default function AppLayout({ children }) {
                         <p className="text-sm font-extrabold text-purple-700">
                             Daily Goal
                         </p>
+
                         <p className="mt-1 text-xs text-purple-500">
                             Practice 10 minutes today to improve your pronunciation.
                         </p>

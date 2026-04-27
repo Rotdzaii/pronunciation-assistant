@@ -1,8 +1,8 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import PracticePage from "./features/practice/PracticePage";
-import ResultPage from "./features/result/ResultPage";
-import HistoryPage from "./features/history/HistoryPage";
-import ProgressPage from "./features/progress/ProgressPage";
+import PracticePage from "./pages/PracticePage";
+import ResultPage from "./pages/ResultPage";
+import HistoryPage from "./pages/HistoryPage";
+import ProgressPage from "./pages/ProgressPage";
 
 export default function App() {
   return (

@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import PronunciationScore from "./PronunciationScore";
-import PhonemeHighlighter from "./PhonemeHighlighter";
-import SuggestionCard from "./SuggestionCard";
-import { getLatestResult } from "./resultStorage";
+import { getLatestResult } from "../features/result/resultStorage";
+import PronunciationScore from "../features/result/PronunciationScore";
+import PhonemeHighlighter from "../features/result/PhonemeHighlighter";
+import SuggestionCard from "../features/result/SuggestionCard";
 
 export default function ResultPage() {
     const navigate = useNavigate();

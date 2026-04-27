@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getHistory } from "./historyStorage";
-import { saveLatestResult } from "../result/resultStorage";
+import { getHistory } from "../features/history/historyStorage";
+import { saveLatestResult } from "../features/result/resultStorage";
 
 export default function HistoryPage() {
     const [history, setHistory] = useState([]);
@@ -49,10 +49,10 @@ export default function HistoryPage() {
 
                                 <div
                                     className={`rounded-full px-4 py-2 font-extrabold ${item.score >= 85
-                                            ? "bg-emerald-100 text-emerald-600"
-                                            : item.score >= 70
-                                                ? "bg-yellow-100 text-yellow-600"
-                                                : "bg-red-100 text-red-600"
+                                        ? "bg-emerald-100 text-emerald-600"
+                                        : item.score >= 70
+                                            ? "bg-yellow-100 text-yellow-600"
+                                            : "bg-red-100 text-red-600"
                                         }`}
                                 >
                                     {item.score}
@@ -64,8 +64,8 @@ export default function HistoryPage() {
                                     <span
                                         key={i}
                                         className={`rounded-lg px-2 py-1 text-xs font-bold ${p.correct
-                                                ? "bg-emerald-50 text-emerald-600"
-                                                : "bg-red-50 text-red-600"
+                                            ? "bg-emerald-50 text-emerald-600"
+                                            : "bg-red-50 text-red-600"
                                             }`}
                                     >
                                         {p.symbol}

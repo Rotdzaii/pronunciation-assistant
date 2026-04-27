@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { getHistory } from "../history/historyStorage";
+import { getHistory } from "../features/history/historyStorage";
 
 function getScoreColor(score) {
     if (score >= 85) return "text-emerald-600 bg-emerald-50";

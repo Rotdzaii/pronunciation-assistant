@@ -1,38 +1,37 @@
+import { useState } from "react";
+import PhonemeDetailCard from "./PhonemeDetailCard";
+
 export default function PhonemeHighlighter({ phonemes }) {
+    const [selected, setSelected] = useState(null);
+
     return (
-        <section className="rounded-3xl bg-white p-8 shadow-sm">
-            <p className="text-sm font-extrabold uppercase text-purple-500">
-                Phoneme Analysis
-            </p>
+        <div className="grid grid-cols-[1fr_300px] gap-6">
+            <section className="rounded-3xl bg-white p-8 shadow-sm">
+                <p className="text-sm font-extrabold uppercase text-purple-500">
+                    Phoneme Analysis
+                </p>
 
-            <h2 className="mt-3 text-2xl font-extrabold text-slate-900">
-                Âm vị trong từ
-            </h2>
-
-            <div className="mt-6 flex flex-wrap gap-4">
-                {phonemes.map((phoneme) => (
-                    <div
-                        key={phoneme.symbol}
-                        className={`rounded-2xl border px-6 py-4 text-xl font-extrabold ${phoneme.correct
-                                ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-                                : "border-red-200 bg-red-50 text-red-700 ring-2 ring-red-100"
-                            }`}
-                    >
-                        <span className="mr-2">{phoneme.correct ? "✓" : "!"}</span>
-                        {phoneme.symbol}
-                    </div>
-                ))}
-            </div>
-
-            <div className="mt-6 grid grid-cols-2 gap-4 text-sm font-bold">
-                <div className="rounded-2xl bg-emerald-50 p-4 text-emerald-700">
-                    Xanh = phát âm đúng
+                <div className="mt-6 flex flex-wrap gap-4">
+                    {phonemes.map((phoneme, index) => (
+                        <button
+                            key={index}
+                            onClick={() => setSelected(phoneme)}
+                            className={`rounded-2xl px-5 py-3 text-lg font-extrabold transition ${phoneme.correct
+                                    ? "bg-emerald-50 text-emerald-700"
+                                    : "bg-red-50 text-red-700 ring-2 ring-red-200"
+                                } hover:scale-105`}
+                        >
+                            {phoneme.symbol}
+                        </button>
+                    ))}
                 </div>
 
-                <div className="rounded-2xl bg-red-50 p-4 text-red-700">
-                    Đỏ = âm vị cần sửa
-                </div>
-            </div>
-        </section>
+                <p className="mt-6 text-sm text-slate-500">
+                    Click vào từng âm để xem chi tiết cách phát âm.
+                </p>
+            </section>
+
+            <PhonemeDetailCard phoneme={selected} />
+        </div>
     );
 }

@@ -3,7 +3,11 @@ import { useNavigate } from "react-router-dom";
 import PronunciationScore from "./PronunciationScore";
 import PhonemeHighlighter from "./PhonemeHighlighter";
 import SuggestionCard from "./SuggestionCard";
+import AudioComparison from "./AudioComparison";
 import { getLatestResult } from "./resultStorage";
+
+const mockReferenceAudio =
+    "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
 
 export default function ResultPage() {
     const navigate = useNavigate();
@@ -59,21 +63,21 @@ export default function ResultPage() {
                     <button
                         type="button"
                         onClick={() => navigate("/practice")}
-                        className="rounded-2xl bg-purple-600 px-6 py-3 font-extrabold text-white shadow-sm"
+                        className="rounded-2xl bg-purple-600 px-6 py-3 font-extrabold text-white shadow-sm transition hover:bg-purple-700"
                     >
                         Practice Again
                     </button>
                 </header>
 
                 <div className="grid grid-cols-[360px_1fr] gap-8">
-                    <div className="space-y-6">
+                    <aside className="space-y-6">
                         <PronunciationScore score={result.score} />
 
                         <SuggestionCard suggestion={result.suggestion} />
-                    </div>
+                    </aside>
 
-                    <div className="space-y-6">
-                        <section className="rounded-3xl bg-white p-8 shadow-sm">
+                    <section className="space-y-6">
+                        <div className="rounded-3xl bg-white p-8 shadow-sm">
                             <p className="text-sm font-extrabold uppercase text-purple-500">
                                 Target
                             </p>
@@ -91,9 +95,14 @@ export default function ResultPage() {
                             <p className="mt-4 text-slate-500">
                                 AI đã phân tích phát âm của bạn theo từng âm vị.
                             </p>
-                        </section>
+                        </div>
 
                         <PhonemeHighlighter phonemes={result.phonemes} />
+
+                        <AudioComparison
+                            userAudioUrl={result.audioUrl}
+                            referenceAudioUrl={mockReferenceAudio}
+                        />
 
                         {wrongPhonemes.length > 0 && (
                             <section className="rounded-3xl bg-red-50 p-8">
@@ -115,9 +124,14 @@ export default function ResultPage() {
                                         </span>
                                     ))}
                                 </div>
+
+                                <p className="mt-5 text-sm font-medium text-red-500">
+                                    Các âm vị màu đỏ là phần AI nhận diện phát âm chưa rõ. Hãy
+                                    nghe lại audio chuẩn và luyện riêng các âm này.
+                                </p>
                             </section>
                         )}
-                    </div>
+                    </section>
                 </div>
             </div>
         </main>

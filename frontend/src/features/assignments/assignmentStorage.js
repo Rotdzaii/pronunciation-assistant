@@ -23,38 +23,6 @@ const getInitialAssignments = () => {
     return cloneData(mockAssignments);
 };
 
-const loadAssignmentsFromStorage = () => {
-    if (!isBrowser()) {
-        return getInitialAssignments();
-    }
-
-    const storedAssignments = window.localStorage.getItem(ASSIGNMENTS_STORAGE_KEY);
-
-    if (!storedAssignments) {
-        const initialAssignments = getInitialAssignments();
-        saveAssignmentsToStorage(initialAssignments);
-        return initialAssignments;
-    }
-
-    try {
-        const parsedAssignments = JSON.parse(storedAssignments);
-
-        if (!Array.isArray(parsedAssignments)) {
-            const initialAssignments = getInitialAssignments();
-            saveAssignmentsToStorage(initialAssignments);
-            return initialAssignments;
-        }
-
-        return parsedAssignments;
-    } catch (error) {
-        console.error("Failed to parse assignments from localStorage:", error);
-
-        const initialAssignments = getInitialAssignments();
-        saveAssignmentsToStorage(initialAssignments);
-        return initialAssignments;
-    }
-};
-
 const calculateProgress = (items = []) => {
     const totalItems = items.length;
     const completedItems = items.filter((item) => item.completed).length;
@@ -101,6 +69,56 @@ const resolveAssignmentStatus = (assignment) => {
     return ASSIGNMENT_STATUS.IN_PROGRESS;
 };
 
+const normalizeAssignment = (assignment) => {
+    const progress = calculateProgress(assignment.items || []);
+
+    const normalizedAssignment = {
+        ...assignment,
+        progress,
+    };
+
+    return {
+        ...normalizedAssignment,
+        status: resolveAssignmentStatus(normalizedAssignment),
+    };
+};
+
+const loadAssignmentsFromStorage = () => {
+    if (!isBrowser()) {
+        return getInitialAssignments().map(normalizeAssignment);
+    }
+
+    const storedAssignments = window.localStorage.getItem(ASSIGNMENTS_STORAGE_KEY);
+
+    if (!storedAssignments) {
+        const initialAssignments = getInitialAssignments().map(normalizeAssignment);
+        saveAssignmentsToStorage(initialAssignments);
+        return initialAssignments;
+    }
+
+    try {
+        const parsedAssignments = JSON.parse(storedAssignments);
+
+        if (!Array.isArray(parsedAssignments)) {
+            const initialAssignments = getInitialAssignments().map(normalizeAssignment);
+            saveAssignmentsToStorage(initialAssignments);
+            return initialAssignments;
+        }
+
+        const normalizedAssignments = parsedAssignments.map(normalizeAssignment);
+        saveAssignmentsToStorage(normalizedAssignments);
+
+        return normalizedAssignments;
+    } catch (error) {
+        console.error("Failed to parse assignments from localStorage:", error);
+
+        const initialAssignments = getInitialAssignments().map(normalizeAssignment);
+        saveAssignmentsToStorage(initialAssignments);
+
+        return initialAssignments;
+    }
+};
+
 export const initializeAssignments = () => {
     const assignments = loadAssignmentsFromStorage();
     saveAssignmentsToStorage(assignments);
@@ -122,7 +140,7 @@ export const createAssignment = (assignmentData) => {
 
     const items = assignmentData.items || [];
 
-    const newAssignment = {
+    const assignmentDraft = {
         id: assignmentData.id || `assignment-${Date.now()}`,
         title: assignmentData.title,
         description: assignmentData.description || "",
@@ -134,9 +152,14 @@ export const createAssignment = (assignmentData) => {
         status: assignmentData.status || ASSIGNMENT_STATUS.NEW,
         isNew: assignmentData.isNew ?? true,
         items,
-        progress: assignmentData.progress || calculateProgress(items),
+        progress: calculateProgress(items),
         results: assignmentData.results || [],
         teacherFeedback: assignmentData.teacherFeedback || "",
+    };
+
+    const newAssignment = {
+        ...assignmentDraft,
+        status: resolveAssignmentStatus(assignmentDraft),
     };
 
     const updatedAssignments = [newAssignment, ...assignments];
@@ -155,11 +178,13 @@ export const updateAssignment = (assignmentId, updates) => {
             return assignment;
         }
 
-        updatedAssignment = {
+        const assignmentDraft = {
             ...assignment,
             ...updates,
             id: assignment.id,
         };
+
+        updatedAssignment = normalizeAssignment(assignmentDraft);
 
         return updatedAssignment;
     });
@@ -170,10 +195,27 @@ export const updateAssignment = (assignmentId, updates) => {
 };
 
 export const updateAssignmentStatus = (assignmentId, status) => {
-    return updateAssignment(assignmentId, {
-        status,
-        isNew: status === ASSIGNMENT_STATUS.NEW,
+    const assignments = loadAssignmentsFromStorage();
+
+    let updatedAssignment = null;
+
+    const updatedAssignments = assignments.map((assignment) => {
+        if (assignment.id !== assignmentId) {
+            return assignment;
+        }
+
+        updatedAssignment = {
+            ...assignment,
+            status,
+            isNew: status === ASSIGNMENT_STATUS.NEW,
+        };
+
+        return updatedAssignment;
     });
+
+    saveAssignmentsToStorage(updatedAssignments);
+
+    return updatedAssignment;
 };
 
 export const markAssignmentAsViewed = (assignmentId) => {
@@ -186,10 +228,7 @@ export const markAssignmentAsViewed = (assignmentId) => {
             ? ASSIGNMENT_STATUS.IN_PROGRESS
             : assignment.status;
 
-    return updateAssignment(assignmentId, {
-        isNew: false,
-        status: nextStatus,
-    });
+    return updateAssignmentStatus(assignmentId, nextStatus);
 };
 
 export const updateAssignmentItemResult = ({
@@ -224,24 +263,26 @@ export const updateAssignmentItemResult = ({
         phonemeErrors,
     };
 
-    const updatedAssignmentDraft = {
+    const progress = calculateProgress(updatedItems);
+
+    const assignmentDraft = {
         ...assignment,
         isNew: false,
         items: updatedItems,
-        results: [updatedResult, ...assignment.results],
-        progress: calculateProgress(updatedItems),
+        results: [updatedResult, ...(assignment.results || [])],
+        progress,
     };
 
     const updatedAssignment = {
-        ...updatedAssignmentDraft,
-        status: resolveAssignmentStatus(updatedAssignmentDraft),
+        ...assignmentDraft,
+        status: resolveAssignmentStatus(assignmentDraft),
     };
 
     return updateAssignment(assignmentId, updatedAssignment);
 };
 
 export const resetAssignmentsStorage = () => {
-    const initialAssignments = getInitialAssignments();
+    const initialAssignments = getInitialAssignments().map(normalizeAssignment);
     saveAssignmentsToStorage(initialAssignments);
     return initialAssignments;
 };

@@ -1,5 +1,13 @@
+import { Navigate, Route, Routes } from "react-router-dom";
+import PracticePage from "./features/practice/PracticePage";
 import ResultPage from "./features/result/ResultPage";
 
 export default function App() {
-  return <ResultPage />;
+  return (
+    <Routes>
+      <Route path="/" element={<Navigate to="/practice" replace />} />
+      <Route path="/practice" element={<PracticePage />} />
+      <Route path="/result" element={<ResultPage />} />
+    </Routes>
+  );
 }

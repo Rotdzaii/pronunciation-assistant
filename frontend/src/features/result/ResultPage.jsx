@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import PronunciationScore from "./PronunciationScore";
 import PhonemeHighlighter from "./PhonemeHighlighter";
 import SuggestionCard from "./SuggestionCard";
@@ -12,10 +13,13 @@ const mockResult = {
         { symbol: "/pjuː/", correct: false },
         { symbol: "/tər/", correct: true },
     ],
-    suggestion: "Try pronouncing /pjuː/ more clearly. Keep your lips rounded and release the /j/ sound before the long /uː/.",
+    suggestion:
+        "Try pronouncing /pjuː/ more clearly. Keep your lips rounded and release the /j/ sound before the long /uː/.",
 };
 
 export default function ResultPage() {
+    const navigate = useNavigate();
+
     const wrongPhonemes = mockResult.phonemes.filter(
         (phoneme) => !phoneme.correct
     );
@@ -34,7 +38,11 @@ export default function ResultPage() {
                         </h1>
                     </div>
 
-                    <button className="rounded-2xl bg-purple-600 px-6 py-3 font-extrabold text-white shadow-sm">
+                    <button
+                        type="button"
+                        onClick={() => navigate("/practice")}
+                        className="rounded-2xl bg-purple-600 px-6 py-3 font-extrabold text-white shadow-sm"
+                    >
                         Practice Again
                     </button>
                 </header>

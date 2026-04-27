@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import AudioRecorder from "./AudioRecorder";
 import AudioUploader from "./AudioUploader";
 
@@ -52,6 +53,7 @@ async function mockGetJobStatus(jobId, pollCount) {
 }
 
 export default function PracticePage() {
+    const navigate = useNavigate();
     const pollingTimerRef = useRef(null);
 
     const [audioBlob, setAudioBlob] = useState(null);
@@ -330,7 +332,7 @@ export default function PracticePage() {
                                     Mock result ready
                                 </p>
                                 <p className="text-sm text-emerald-600">
-                                    Result Page sẽ được làm ở feature sau.
+                                    Bấm để xem trang kết quả chi tiết.
                                 </p>
                             </div>
 
@@ -356,6 +358,14 @@ export default function PracticePage() {
                         <p className="mt-4 rounded-2xl bg-white p-4 text-sm font-medium text-slate-600">
                             💡 {mockResult.suggestion}
                         </p>
+
+                        <button
+                            type="button"
+                            onClick={() => navigate("/result")}
+                            className="mt-5 w-full rounded-2xl bg-emerald-600 px-6 py-3 font-extrabold text-white transition hover:bg-emerald-700"
+                        >
+                            View Full Result
+                        </button>
                     </div>
                 )}
 

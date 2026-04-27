@@ -7,6 +7,7 @@ import AssignmentsPage from "./pages/AssignmentsPage";
 import AssignmentDetailPage from "./pages/AssignmentDetailPage";
 import AssignmentPracticePage from "./pages/AssignmentPracticePage";
 import TeacherCreateAssignmentPage from "./pages/TeacherCreateAssignmentPage";
+import TeacherAssignmentDashboardPage from "./pages/TeacherAssignmentDashboardPage";
 
 export default function App() {
   return (
@@ -17,7 +18,10 @@ export default function App() {
       <Route path="/history" element={<HistoryPage />} />
       <Route path="/progress" element={<ProgressPage />} />
       <Route path="/assignments" element={<AssignmentsPage />} />
-      <Route path="/assignments/:assignmentId" element={<AssignmentDetailPage />} />
+      <Route
+        path="/assignments/:assignmentId"
+        element={<AssignmentDetailPage />}
+      />
       <Route
         path="/assignments/:assignmentId/practice"
         element={<AssignmentPracticePage />}
@@ -25,6 +29,10 @@ export default function App() {
       <Route
         path="/teacher/assignments/create"
         element={<TeacherCreateAssignmentPage />}
+      />
+      <Route
+        path="/teacher/assignments"
+        element={<TeacherAssignmentDashboardPage />}
       />
     </Routes>
   );

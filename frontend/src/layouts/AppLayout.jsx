@@ -3,7 +3,12 @@ import { NavLink } from "react-router-dom";
 const navItems = [
     { path: "/practice", label: "Practice", icon: "🎙️" },
     { path: "/assignments", label: "Assignments", icon: "📚" },
-    { path: "/teacher/assignments/create", label: "Create Assignment", icon: "🧑‍🏫" },
+    { path: "/teacher/assignments", label: "Teacher Dashboard", icon: "🧑‍🏫" },
+    {
+        path: "/teacher/assignments/create",
+        label: "Create Assignment",
+        icon: "✍️",
+    },
     { path: "/result", label: "Result", icon: "📊" },
     { path: "/history", label: "History", icon: "🕘" },
     { path: "/progress", label: "Progress", icon: "📈" },
@@ -18,6 +23,7 @@ export default function AppLayout({ children }) {
                         <h1 className="text-2xl font-extrabold text-purple-600">
                             SpeakBetter
                         </h1>
+
                         <p className="text-xs font-bold uppercase text-slate-400">
                             AI Pronunciation
                         </p>

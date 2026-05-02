@@ -30,6 +30,27 @@ export class PracticeService {
       );
     }
 
+    const { error: queueError } = await admin.rpc('enqueue_practice_job', {
+      p_job_id: jobId,
+      p_student_id: studentId,
+      p_target_word: targetWord,
+      p_audio_url: audioUrl,
+    });
+
+    if (queueError) {
+      await admin
+        .from('practice_history')
+        .update({
+          status: 'failed',
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', jobId);
+
+      throw new InternalServerErrorException(
+        `Enqueue practice job failed: ${queueError.message}`,
+      );
+    }
+
     return {
       job_id: jobId,
       status: 'processing',

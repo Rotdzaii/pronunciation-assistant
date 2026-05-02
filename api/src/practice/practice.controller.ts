@@ -1,15 +1,21 @@
-﻿import {
-  BadRequestException,
+import { PracticeService } from './practice.service';
+import {
+  Body,
   Controller,
-  InternalServerErrorException,
-  PayloadTooLargeException,
+  Get,
+  HttpCode,
+  Param,
   Post,
-  Req,
   UploadedFile,
   UseGuards,
   UseInterceptors,
   UnsupportedMediaTypeException,
+  PayloadTooLargeException,
+  BadRequestException,
+  Req,
+  InternalServerErrorException,
 } from '@nestjs/common';
+  
 import { FileInterceptor } from '@nestjs/platform-express';
 import { memoryStorage } from 'multer';
 import { randomUUID } from 'crypto';
@@ -26,7 +32,10 @@ const BUCKET_NAME = 'practice-audios';
 
 @Controller('practice')
 export class PracticeController {
-  constructor(private readonly supabaseService: SupabaseService) {}
+  constructor(
+  private readonly supabaseService: SupabaseService,
+  private readonly practiceService: PracticeService,
+) {}
 
   @UseGuards(SupabaseAuthGuard, RolesGuard)
   @Roles('student')
@@ -77,23 +86,83 @@ export class PracticeController {
 
     const { data: signedUrlData, error: signedUrlError } = await admin.storage
       .from(BUCKET_NAME)
-      .createSignedUrl(filePath, 60 * 60 * 24);
+      .createSignedUrl(filePath, 60 * 60 * 24); // 24 giờ
 
     if (signedUrlError || !signedUrlData?.signedUrl) {
       throw new InternalServerErrorException(
         `Create signed URL failed: ${signedUrlError?.message ?? 'Unknown error'}`,
       );
+      
     }
 
     return {
       message: 'Audio uploaded successfully',
       uploaded_by: req.user.email,
       app_role: req.user.app_role,
+      bucket: BUCKET_NAME,
+      file_path: filePath,
+      audio_url: signedUrlData.signedUrl,
       original_name: file.originalname,
       mime_type: file.mimetype,
       size: file.size,
-      storage_path: filePath,
-      audio_url: signedUrlData.signedUrl,
     };
+  }
+
+  @UseGuards(SupabaseAuthGuard, RolesGuard)
+@Roles('student')
+@HttpCode(202)
+@Post('create-job')
+async createJob(
+  @Body() body: { target_word?: string; audio_url?: string },
+  @Req() req: any,
+) {
+  const { target_word, audio_url } = body;
+
+  if (!target_word || !audio_url) {
+    throw new BadRequestException('target_word and audio_url are required');
+  }
+
+  return this.practiceService.createJob(
+    req.user.id,
+    target_word,
+    audio_url,
+  );
+}
+
+  @UseGuards(SupabaseAuthGuard, RolesGuard)
+  @Roles('student')
+  @Get(':job_id')
+  async getJobStatus(
+    @Param('job_id') jobId: string,
+    @Req() req: any,
+  ) {
+    return this.practiceService.getJobStatus(req.user.id, jobId);
+  }
+
+  @Post('webhook/ai-result')
+  async receiveAiResult(
+    @Body()
+    body: {
+      job_id?: string;
+      status?: 'completed' | 'failed';
+      score?: number | null;
+      problem_phonemes?: any[];
+    },
+  ) {
+    const { job_id, status, score, problem_phonemes } = body;
+
+    if (!job_id || !status) {
+      throw new BadRequestException('job_id and status are required');
+    }
+
+    if (!['completed', 'failed'].includes(status)) {
+      throw new BadRequestException('status must be completed or failed');
+    }
+
+    return this.practiceService.updateJobResult(job_id, {
+      status,
+      score,
+      problem_phonemes,
+    });
   }
 }

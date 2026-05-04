@@ -10,6 +10,7 @@ load_dotenv()
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_SERVICE_ROLE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
 NODE_WEBHOOK_URL = os.getenv("NODE_WEBHOOK_URL")
+AI_WEBHOOK_SECRET = os.getenv("AI_WEBHOOK_SECRET")
 
 
 if not SUPABASE_URL:
@@ -20,6 +21,9 @@ if not SUPABASE_SERVICE_ROLE_KEY:
 
 if not NODE_WEBHOOK_URL:
     raise RuntimeError("Missing NODE_WEBHOOK_URL in .env")
+
+if not AI_WEBHOOK_SECRET:
+    raise RuntimeError("Missing AI_WEBHOOK_SECRET in .env")
 
 
 supabase = create_client(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
@@ -36,10 +40,9 @@ def read_one_job():
 
 def send_mock_result_to_node(job_payload: dict):
     job_id = job_payload["job_id"]
-    
+
     # TODO: Replace this mock payload with real AI inference result.
     # Current values are fixed only for testing queue -> webhook flow.
-
     webhook_payload = {
         "job_id": job_id,
         "status": "completed",
@@ -47,8 +50,16 @@ def send_mock_result_to_node(job_payload: dict):
         "problem_phonemes": ["/k/", "/ju:/"],
     }
 
+    headers = {
+        "x-ai-webhook-secret": AI_WEBHOOK_SECRET,
+    }
+
     with httpx.Client(timeout=10) as client:
-        response = client.post(NODE_WEBHOOK_URL, json=webhook_payload)
+        response = client.post(
+            NODE_WEBHOOK_URL,
+            json=webhook_payload,
+            headers=headers,
+        )
         response.raise_for_status()
 
     return response.json()

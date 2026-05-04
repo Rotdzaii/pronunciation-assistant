@@ -38,18 +38,38 @@ def read_one_job():
     return response.data[0]
 
 
-def send_mock_result_to_node(job_payload: dict):
+def build_mock_ai_result(job_payload: dict):
     job_id = job_payload["job_id"]
+    target_word = job_payload.get("target_word")
+
+    # Testing hook: use target_word="__fail__" to simulate AI/model failure.
+    if target_word == "__fail__":
+        raise RuntimeError("Forced mock AI failure for testing")
 
     # TODO: Replace this mock payload with real AI inference result.
     # Current values are fixed only for testing queue -> webhook flow.
-    webhook_payload = {
+    return {
         "job_id": job_id,
         "status": "completed",
         "score": 85,
         "problem_phonemes": ["/k/", "/ju:/"],
     }
 
+
+def build_failed_result(job_payload: dict, error: Exception):
+    job_id = job_payload["job_id"]
+
+    print(f"AI processing failed for job_id={job_id}: {error}")
+
+    return {
+        "job_id": job_id,
+        "status": "failed",
+        "score": None,
+        "problem_phonemes": [],
+    }
+
+
+def send_result_to_node(webhook_payload: dict):
     headers = {
         "x-ai-webhook-secret": AI_WEBHOOK_SECRET,
     }
@@ -86,12 +106,19 @@ def run_once():
 
     print(f"Processing msg_id={msg_id}, job_id={payload.get('job_id')}")
 
-    send_mock_result_to_node(payload)
+    try:
+        webhook_payload = build_mock_ai_result(payload)
+    except Exception as error:
+        webhook_payload = build_failed_result(payload, error)
+
+    send_result_to_node(webhook_payload)
 
     archived = archive_job_message(msg_id)
 
-    print(f"Done. Archived msg_id={msg_id}, result={archived}")
-
-
+    print(
+        f"Done. job_id={payload.get('job_id')}, "
+        f"status={webhook_payload['status']}, "
+        f"archived msg_id={msg_id}, result={archived}"
+    )
 if __name__ == "__main__":
     run_once()

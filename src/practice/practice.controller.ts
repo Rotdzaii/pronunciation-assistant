@@ -3,6 +3,7 @@ import {
   Body,
   Controller,
   Get,
+  Headers,
   HttpCode,
   Param,
   Post,
@@ -14,6 +15,7 @@ import {
   BadRequestException,
   Req,
   InternalServerErrorException,
+  UnauthorizedException,
 } from '@nestjs/common';
   
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -141,15 +143,28 @@ async createJob(
 
   @Post('webhook/ai-result')
   async receiveAiResult(
+  @Headers('x-ai-webhook-secret') aiWebhookSecret: string,
     @Body()
     body: {
-      job_id?: string;
-      status?: 'completed' | 'failed';
-      score?: number | null;
-      problem_phonemes?: any[];
-    },
-  ) {
-    const { job_id, status, score, problem_phonemes } = body;
+     job_id?: string;
+     status?: 'completed' | 'failed';
+     score?: number | null;
+     problem_phonemes?: any[];
+  },
+) {
+  const expectedSecret = process.env.AI_WEBHOOK_SECRET;
+
+  if (!expectedSecret) {
+    throw new InternalServerErrorException(
+      'AI_WEBHOOK_SECRET is not configured',
+    );
+  }
+
+  if (aiWebhookSecret !== expectedSecret) {
+    throw new UnauthorizedException('Invalid AI webhook secret');
+  }
+
+  const { job_id, status, score, problem_phonemes } = body;
 
     if (!job_id || !status) {
       throw new BadRequestException('job_id and status are required');

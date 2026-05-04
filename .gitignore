@@ -1,5 +1,19 @@
+# Python virtual environments
 .venv/
 venv/
+
+# Python cache
 __pycache__/
-data/samples/*.wav
+*.pyc
+
+# Node/NestJS generated files
+node_modules/
+dist/
+
+# Local environment files
 .env
+.env.*
+!.env.example
+
+# Local audio samples
+data/samples/*.wav

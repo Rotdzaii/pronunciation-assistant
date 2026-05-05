@@ -6,6 +6,7 @@ import {
   Headers,
   HttpCode,
   Param,
+  Query,
   Post,
   UploadedFile,
   UseGuards,
@@ -130,6 +131,21 @@ async createJob(
     audio_url,
   );
 }
+
+  @UseGuards(SupabaseAuthGuard, RolesGuard)
+  @Roles('student')
+  @Get('history/me')
+  async getMyPracticeHistory(
+    @Req() req: any,
+    @Query('page') page = '1',
+    @Query('limit') limit = '10',
+  ) {
+    return this.practiceService.getMyPracticeHistory(
+      req.user.id,
+      Number(page),
+      Number(limit),
+    );
+  }
 
   @UseGuards(SupabaseAuthGuard, RolesGuard)
   @Roles('student')

@@ -57,6 +57,53 @@ export class PracticeService {
     };
   }
 
+  async getMyPracticeHistory(studentId: string, page = 1, limit = 10) {
+    const admin = this.supabaseService.getAdminClient();
+
+    const safePage =
+      Number.isFinite(page) && page > 0 ? Math.floor(page) : 1;
+
+    const safeLimit =
+      Number.isFinite(limit) && limit > 0
+        ? Math.min(Math.floor(limit), 50)
+        : 10;
+
+    const from = (safePage - 1) * safeLimit;
+    const to = from + safeLimit - 1;
+
+    const { data, error, count } = await admin
+      .from('practice_history')
+      .select(
+        'id, target_word, audio_url, status, score, problem_phonemes, created_at, updated_at',
+        { count: 'exact' },
+      )
+      .eq('student_id', studentId)
+      .order('created_at', { ascending: false })
+      .range(from, to);
+
+    if (error) {
+      throw new InternalServerErrorException(
+        `Get practice history failed: ${error.message}`,
+      );
+    }
+
+    return {
+      items: (data ?? []).map((item) => ({
+        job_id: item.id,
+        target_word: item.target_word,
+        audio_url: item.audio_url,
+        status: item.status,
+        score: item.score,
+        problem_phonemes: item.problem_phonemes,
+        created_at: item.created_at,
+        updated_at: item.updated_at,
+      })),
+      page: safePage,
+      limit: safeLimit,
+      total: count ?? 0,
+    };
+  }
+
   async getJobStatus(studentId: string, jobId: string) {
     const admin = this.supabaseService.getAdminClient();
 

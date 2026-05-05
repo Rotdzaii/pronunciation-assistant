@@ -104,6 +104,33 @@ export class PracticeService {
     };
   }
 
+  async getTopProblemPhonemes(limit = 5) {
+    const admin = this.supabaseService.getAdminClient();
+
+    const safeLimit =
+      Number.isFinite(limit) && limit > 0
+        ? Math.min(Math.floor(limit), 20)
+        : 5;
+
+    const { data, error } = await admin.rpc('get_top_problem_phonemes', {
+      p_limit: safeLimit,
+    });
+
+    if (error) {
+      throw new InternalServerErrorException(
+        `Get top problem phonemes failed: ${error.message}`,
+      );
+    }
+
+    return {
+      items: (data ?? []).map((item) => ({
+        phoneme: item.phoneme,
+        count: Number(item.error_count),
+      })),
+      limit: safeLimit,
+    };
+  }
+
   async getJobStatus(studentId: string, jobId: string) {
     const admin = this.supabaseService.getAdminClient();
 

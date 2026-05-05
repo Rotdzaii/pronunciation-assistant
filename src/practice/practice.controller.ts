@@ -133,6 +133,13 @@ async createJob(
 }
 
   @UseGuards(SupabaseAuthGuard, RolesGuard)
+  @Roles('teacher')
+  @Get('teacher/phoneme-errors')
+  async getTeacherPhonemeErrors(@Query('limit') limit = '5') {
+    return this.practiceService.getTopProblemPhonemes(Number(limit));
+  }
+
+  @UseGuards(SupabaseAuthGuard, RolesGuard)
   @Roles('student')
   @Get('history/me')
   async getMyPracticeHistory(

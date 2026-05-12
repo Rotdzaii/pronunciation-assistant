@@ -1,9 +1,11 @@
+from datetime import datetime, timezone
+from hmac import compare_digest
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 from uuid import UUID, uuid4
 
-from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
-from pydantic import BaseModel, Field
+from fastapi import APIRouter, Depends, File, Header, HTTPException, UploadFile, status
+from pydantic import BaseModel, Field, model_validator
 
 from app.core.auth import (
     CurrentUser,
@@ -43,6 +45,27 @@ class PracticeJobCreateResponse(BaseModel):
     message: str
 
 
+class PracticeJobResult(BaseModel):
+    job_id: UUID
+    status: Literal["completed", "failed"]
+    score: float | None = Field(default=None, ge=0, le=100)
+    problem_phonemes: list[Any]
+    feedback: dict[str, Any]
+
+    @model_validator(mode="after")
+    def validate_completed_score(self) -> "PracticeJobResult":
+        if self.status == "completed" and self.score is None:
+            raise ValueError("score is required when status is completed")
+
+        return self
+
+
+class PracticeJobResultResponse(BaseModel):
+    job_id: str
+    status: str
+    message: str
+
+
 class PracticeJobResponse(BaseModel):
     id: str
     student_id: str
@@ -59,6 +82,23 @@ class PracticeJobResponse(BaseModel):
 def _safe_filename(filename: str | None) -> str:
     name = Path(filename or "audio").name.strip()
     return name or "audio"
+
+
+def _require_ai_webhook_secret(
+    provided_secret: str | None,
+    configured_secret: str | None,
+) -> None:
+    if not configured_secret:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="AI webhook secret is not configured",
+        )
+
+    if not provided_secret or not compare_digest(provided_secret, configured_secret):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid AI webhook secret",
+        )
 
 
 @router.post(
@@ -127,6 +167,62 @@ def create_practice_job(
         job_id=str(job_id),
         status="processing",
         message="Practice job created and queued",
+    )
+
+
+@router.post("/webhook/ai-result", response_model=PracticeJobResultResponse)
+def update_practice_job_result(
+    payload: PracticeJobResult,
+    x_ai_webhook_secret: str | None = Header(default=None),
+    settings: Settings = Depends(get_settings),
+) -> PracticeJobResultResponse:
+    _require_ai_webhook_secret(x_ai_webhook_secret, settings.ai_webhook_secret)
+
+    job_id = str(payload.job_id)
+    supabase_client = get_supabase_service_client(settings)
+
+    try:
+        existing = (
+            supabase_client.table("practice_history")
+            .select("id")
+            .eq("id", job_id)
+            .limit(1)
+            .execute()
+        )
+    except Exception as exc:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Unable to load practice job",
+        ) from exc
+
+    if not (existing.data or []):
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Practice job not found",
+        )
+
+    update_payload = {
+        "status": payload.status,
+        "score": payload.score,
+        "problem_phonemes": payload.problem_phonemes,
+        "feedback": payload.feedback,
+        "updated_at": datetime.now(timezone.utc).isoformat(),
+    }
+
+    try:
+        supabase_client.table("practice_history").update(update_payload).eq(
+            "id", job_id
+        ).execute()
+    except Exception as exc:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Unable to update practice job result",
+        ) from exc
+
+    return PracticeJobResultResponse(
+        job_id=job_id,
+        status=payload.status,
+        message="Practice job result updated",
     )
 
 

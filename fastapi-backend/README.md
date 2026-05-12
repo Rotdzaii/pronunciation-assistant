@@ -40,6 +40,7 @@ SUPABASE_ANON_KEY="your-supabase-anon-key"
 SUPABASE_SERVICE_ROLE_KEY="your-supabase-service-role-key"
 SUPABASE_JWT_SECRET="your-supabase-jwt-secret"
 PRACTICE_AUDIO_BUCKET="practice-audios"
+AI_WEBHOOK_SECRET="replace-with-ai-webhook-secret"
 ```
 
 Start the API:
@@ -146,3 +147,37 @@ curl.exe -H "Authorization: Bearer <supabase-access-token>" `
 ```
 
 Students can fetch only their own jobs. Teachers can fetch any job when their profile has `app_role = "teacher"`.
+
+## AI result webhook
+
+`POST /practice/webhook/ai-result` is for the AI worker. It does not use a user JWT. It requires the shared secret header `x-ai-webhook-secret`.
+
+Mark a job completed:
+
+```powershell
+curl.exe -X POST `
+  -H "x-ai-webhook-secret: <ai-webhook-secret>" `
+  -H "Content-Type: application/json" `
+  -d "{\"job_id\":\"<practice-job-id>\",\"status\":\"completed\",\"score\":82.5,\"problem_phonemes\":[],\"feedback\":{}}" `
+  http://localhost:8000/practice/webhook/ai-result
+```
+
+Mark a job failed:
+
+```powershell
+curl.exe -X POST `
+  -H "x-ai-webhook-secret: <ai-webhook-secret>" `
+  -H "Content-Type: application/json" `
+  -d "{\"job_id\":\"<practice-job-id>\",\"status\":\"failed\",\"problem_phonemes\":[],\"feedback\":{}}" `
+  http://localhost:8000/practice/webhook/ai-result
+```
+
+Successful response:
+
+```json
+{
+  "job_id": "practice-job-id",
+  "status": "completed",
+  "message": "Practice job result updated"
+}
+```

@@ -1,0 +1,1 @@
+alter table public.practice_history_legacy enable row level security;

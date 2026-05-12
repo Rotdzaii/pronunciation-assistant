@@ -12,6 +12,10 @@ class Settings(BaseSettings):
         "http://localhost:19006,"
         "http://localhost:3000"
     )
+    supabase_url: str | None = None
+    supabase_anon_key: str | None = None
+    supabase_service_role_key: str | None = None
+    supabase_jwt_secret: str | None = None
 
     model_config = SettingsConfigDict(
         env_file=".env",

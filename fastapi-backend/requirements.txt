@@ -2,3 +2,7 @@ fastapi==0.115.6
 uvicorn[standard]==0.34.0
 pydantic-settings==2.7.1
 python-dotenv
+pyjwt==2.10.1
+httpx>=0.26.0,<0.29.0
+supabase>=2.11.0,<3.0.0
+

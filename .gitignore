@@ -17,3 +17,6 @@ dist/
 
 # Local audio samples
 data/samples/*.wav
+
+# Codex CLI Documentation
+docs/

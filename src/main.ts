@@ -1,9 +1,12 @@
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { JsonLoggerService } from './common/json-logger.service';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    logger: new JsonLoggerService(),
+  });
 
   const config = new DocumentBuilder()
     .setTitle('Pronunciation Assistant Backend API')

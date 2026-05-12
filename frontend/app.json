@@ -1,0 +1,15 @@
+{
+  "expo": {
+    "name": "Tro ly Phat am",
+    "slug": "pronunciation-assistant",
+    "scheme": "pronunciation-assistant",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "platforms": ["ios", "android", "web"],
+    "plugins": ["expo-router"],
+    "web": {
+      "bundler": "metro"
+    }
+  }
+}

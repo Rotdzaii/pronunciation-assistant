@@ -1,9 +1,11 @@
-import whisperx
+from transformers import Wav2Vec2ForCTC, Wav2Vec2Processor
+import librosa
 import torch
+import torch.nn.functional as F
 from g2p_en import G2p
 import numpy as np
 
-# Từ điển ánh xạ Arpabet sang IPA chuẩn quốc tế
+# Tu dien anh xa Arpabet sang IPA chuan quoc te
 ARPABET_TO_IPA = {
     'AA': 'ɑ', 'AE': 'æ', 'AH': 'ʌ', 'AO': 'ɔ', 'AW': 'aʊ', 'AY': 'aɪ',
     'EH': 'ɛ', 'ER': 'ɝ', 'EY': 'eɪ', 'IH': 'ɪ', 'IY': 'i', 'OW': 'oʊ',
@@ -14,66 +16,57 @@ ARPABET_TO_IPA = {
     'Y': 'j', 'Z': 'z', 'ZH': 'ʒ'
 }
 
-# Vocabulary Boosting & Slang giới trẻ
-TARGET_VOCAB = "Fluoxetine, Paroxetine, Sertraline, lit, bet, no cap, bussin, lowkey, slay, fr fr."
-
-# --- CẤU HÌNH AI THINKING CHO TECH LEAD ---
+# --- CAU HINH AI ---
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
-# FIX: Đưa initial_prompt vào asr_options tại đây
-asr_options = {
-    "initial_prompt": TARGET_VOCAB,
-    "beam_size": 5 # Tăng khả năng 'đoán' chính xác cho thuốc và slang
-}
+MODEL_NAME = "facebook/wav2vec2-large-960h"
+processor = Wav2Vec2Processor.from_pretrained(MODEL_NAME)
+model = Wav2Vec2ForCTC.from_pretrained(MODEL_NAME)
+model = model.to(device)
+model.eval()
 
-# Khởi tạo model với asr_options đã được cấu hình sẵn
-model = whisperx.load_model(
-    "small", 
-    device, 
-    compute_type="float16", 
-    asr_options=asr_options # Model sẽ luôn nhớ vocab của cậu
-)
 g2p = G2p()
+
 
 def get_ipa(arpabet_symbol):
     clean_symbol = ''.join([i for i in arpabet_symbol if not i.isdigit()])
     return ARPABET_TO_IPA.get(clean_symbol, arpabet_symbol)
 
+
 def analyze_pronunciation(audio_path):
-    # 1. AI nghe và chuyển thành văn bản (Chỉ nhận diện tiếng Anh)
-    audio = whisperx.load_audio(audio_path)
-    
-    # FIX: Bỏ tham số asr_options ở hàm transcribe
-    result = model.transcribe(
-        audio, 
-        batch_size=16, 
-        language="en"
-    )
-    
-    if not result['segments']:
-        return {"error": "AI không nghe rõ tiếng Anh."}
+    # 1. AI nghe va chuyen thanh van ban (chi nhan dien tieng Anh)
+    audio, sample_rate = librosa.load(audio_path, sr=16000, mono=True)
+    if audio.size == 0:
+        return {"error": "AI khong nghe ro tieng Anh."}
 
-    segment = result['segments'][0]
-    detected_text = segment['text'].strip()
-    confidence = segment.get('avg_logprob', -1.0)
+    inputs = processor(audio, sampling_rate=16000, return_tensors="pt", padding=True)
+    input_values = inputs.input_values.to(device)
 
-    # 2. Bóc tách âm vị và IPA
+    with torch.no_grad():
+        logits = model(input_values).logits
+        predicted_ids = torch.argmax(logits, dim=-1)
+        detected_text = processor.batch_decode(predicted_ids)[0].strip()
+        max_probs = torch.max(F.softmax(logits, dim=-1), dim=-1).values
+        confidence = float(torch.mean(max_probs).cpu().item())
+
+    # 2. Boc tach am vi va IPA
     phonemes_list = g2p(detected_text)
     phoneme_details = []
-    
+
     for p in phonemes_list:
-        if p == ' ' or p in ['.', ',', '!', '?']: continue
+        if p == ' ' or p in ['.', ',', '!', '?']:
+            continue
         score = int(np.random.randint(70, 99))
         phoneme_details.append({
             "phoneme": p,
             "ipa": get_ipa(p),
             "score": score
         })
-    
+
     overall = int(np.mean([p['score'] for p in phoneme_details])) if phoneme_details else 0
     return {
-        "overall_score": overall, 
+        "overall_score": overall,
         "phoneme_details": phoneme_details,
-        "transcribed_text": detected_text.upper(), 
+        "transcribed_text": detected_text.upper(),
         "confidence": confidence
     }

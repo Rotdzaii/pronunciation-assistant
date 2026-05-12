@@ -1,0 +1,8 @@
+{
+  "name": "Trợ lý Phát âm",
+  "description": "Ứng dụng học phát âm tiếng Anh thông minh dành cho người Việt, được cung cấp bởi AI với phản hồi trực tiếp bằng tiếng Việt.",
+  "requestFramePermissions": [
+    "microphone"
+  ],
+  "majorCapabilities": []
+}

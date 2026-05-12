@@ -12,10 +12,10 @@ This scaffold includes:
 - Swagger docs
 - Supabase JWT authentication foundation
 - `GET /auth/me`
+- Student audio upload to Supabase Storage
 
 Not included yet:
 
-- Audio upload
 - Practice job flow
 - AI inference
 - Teacher analytics
@@ -39,6 +39,7 @@ SUPABASE_URL="https://your-project.supabase.co"
 SUPABASE_ANON_KEY="your-supabase-anon-key"
 SUPABASE_SERVICE_ROLE_KEY="your-supabase-service-role-key"
 SUPABASE_JWT_SECRET="your-supabase-jwt-secret"
+PRACTICE_AUDIO_BUCKET="practice-audios"
 ```
 
 Start the API:
@@ -73,3 +74,41 @@ Successful response:
 ```
 
 The endpoint verifies the Supabase access token and loads `app_role` from the `profiles` table using the service role key.
+
+## Audio upload
+
+`POST /practice/upload-audio` expects a Supabase access token for a user whose profile has `app_role = "student"`.
+
+The Supabase Storage bucket must exist:
+
+```text
+practice-audios
+```
+
+Upload a local audio file:
+
+```powershell
+curl.exe -X POST `
+  -H "Authorization: Bearer <supabase-access-token>" `
+  -F "file=@C:\path\to\audio.wav;type=audio/wav" `
+  http://localhost:8000/practice/upload-audio
+```
+
+Allowed MIME types:
+
+- `audio/wav`
+- `audio/mpeg`
+- `audio/mp4`
+- `audio/x-m4a`
+
+Successful response:
+
+```json
+{
+  "message": "uploaded",
+  "storage_path": "student-id/uuid-audio.wav",
+  "audio_url": "https://...",
+  "mime_type": "audio/wav",
+  "size": 12345
+}
+```

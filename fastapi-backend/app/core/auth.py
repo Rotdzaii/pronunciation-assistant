@@ -17,7 +17,6 @@ bearer_scheme = HTTPBearer(auto_error=False)
 class CurrentUser(BaseModel):
     id: str
     email: str | None = None
-    auth_role: str
     app_role: str | None = None
 
 
@@ -121,7 +120,6 @@ async def get_current_user(
     return CurrentUser(
         id=user_id,
         email=claims.get("email"),
-        auth_role=claims.get("role", ""),
         app_role=get_profile_app_role(supabase_client, user_id),
     )
 

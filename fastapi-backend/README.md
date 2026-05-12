@@ -13,10 +13,10 @@ This scaffold includes:
 - Supabase JWT authentication foundation
 - `GET /auth/me`
 - Student audio upload to Supabase Storage
+- Practice job creation and lookup
 
 Not included yet:
 
-- Practice job flow
 - AI inference
 - Teacher analytics
 
@@ -68,7 +68,6 @@ Successful response:
 {
   "id": "user-id",
   "email": "user@example.com",
-  "auth_role": "authenticated",
   "app_role": "student"
 }
 ```
@@ -112,3 +111,38 @@ Successful response:
   "size": 12345
 }
 ```
+
+## Practice jobs
+
+`POST /practice/create-job` expects a Supabase access token for a user whose profile has `app_role = "student"`.
+
+Create and enqueue a practice job after uploading audio:
+
+```powershell
+curl.exe -X POST `
+  -H "Authorization: Bearer <student-supabase-access-token>" `
+  -H "Content-Type: application/json" `
+  -d "{\"target_word\":\"Architecture\",\"audio_url\":\"https://...\"}" `
+  http://localhost:8000/practice/create-job
+```
+
+Successful response:
+
+```json
+{
+  "job_id": "practice-job-id",
+  "status": "processing",
+  "message": "Practice job created and queued"
+}
+```
+
+The API inserts into `public.practice_history` with `problem_phonemes = []` and `feedback = {}`, then calls `public.enqueue_practice_job(...)`.
+
+Fetch a practice job:
+
+```powershell
+curl.exe -H "Authorization: Bearer <supabase-access-token>" `
+  http://localhost:8000/practice/<practice-job-id>
+```
+
+Students can fetch only their own jobs. Teachers can fetch any job when their profile has `app_role = "teacher"`.

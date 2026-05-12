@@ -4,7 +4,16 @@ from pathlib import Path
 from typing import Any, Literal
 from uuid import UUID, uuid4
 
-from fastapi import APIRouter, Depends, File, Header, HTTPException, UploadFile, status
+from fastapi import (
+    APIRouter,
+    Depends,
+    File,
+    Header,
+    HTTPException,
+    Query,
+    UploadFile,
+    status,
+)
 from pydantic import BaseModel, Field, model_validator
 
 from app.core.auth import (
@@ -77,6 +86,12 @@ class PracticeJobResponse(BaseModel):
     feedback: dict[str, Any]
     created_at: str | None = None
     updated_at: str | None = None
+
+
+class PracticeHistoryResponse(BaseModel):
+    items: list[PracticeJobResponse]
+    limit: int
+    offset: int
 
 
 def _safe_filename(filename: str | None) -> str:
@@ -264,6 +279,63 @@ async def upload_practice_audio(
         audio_url=signed.get("signedURL") or signed.get("signedUrl") or "",
         mime_type=file.content_type,
         size=size,
+    )
+
+
+@router.get("/history", response_model=PracticeHistoryResponse)
+def list_practice_history(
+    limit: int = Query(default=20, ge=1),
+    offset: int = Query(default=0, ge=0),
+    status_filter: str | None = Query(default=None, alias="status"),
+    student_id: UUID | None = None,
+    current_user: CurrentUser = Depends(get_current_user),
+    settings: Settings = Depends(get_settings),
+) -> PracticeHistoryResponse:
+    supabase_client = get_supabase_service_client(settings)
+
+    try:
+        query = (
+            supabase_client.table("practice_history")
+            .select(
+                "id,student_id,target_word,audio_url,status,score,"
+                "problem_phonemes,feedback,created_at,updated_at"
+            )
+            .order("created_at", desc=True)
+            .range(offset, offset + limit - 1)
+        )
+
+        if status_filter:
+            query = query.eq("status", status_filter)
+
+        if current_user.app_role == "student":
+            if student_id is not None:
+                raise HTTPException(
+                    status_code=status.HTTP_403_FORBIDDEN,
+                    detail="student_id filter is only available to teachers",
+                )
+            query = query.eq("student_id", current_user.id)
+        elif current_user.app_role == "teacher":
+            if student_id is not None:
+                query = query.eq("student_id", str(student_id))
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Insufficient role",
+            )
+
+        response = query.execute()
+    except HTTPException:
+        raise
+    except Exception as exc:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Unable to load practice history",
+        ) from exc
+
+    return PracticeHistoryResponse(
+        items=[PracticeJobResponse(**item) for item in response.data or []],
+        limit=limit,
+        offset=offset,
     )
 
 

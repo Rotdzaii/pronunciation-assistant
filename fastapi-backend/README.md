@@ -148,6 +148,43 @@ curl.exe -H "Authorization: Bearer <supabase-access-token>" `
 
 Students can fetch only their own jobs. Teachers can fetch any job when their profile has `app_role = "teacher"`.
 
+List practice history as a student:
+
+```powershell
+curl.exe -H "Authorization: Bearer <student-supabase-access-token>" `
+  "http://localhost:8000/practice/history?limit=20&offset=0"
+```
+
+List completed practice history as a teacher for one student:
+
+```powershell
+curl.exe -H "Authorization: Bearer <teacher-supabase-access-token>" `
+  "http://localhost:8000/practice/history?student_id=<student-id>&status=completed&limit=20&offset=0"
+```
+
+Successful history response:
+
+```json
+{
+  "items": [
+    {
+      "id": "practice-job-id",
+      "student_id": "student-id",
+      "target_word": "Architecture",
+      "audio_url": "https://...",
+      "status": "completed",
+      "score": 86.5,
+      "problem_phonemes": [],
+      "feedback": {},
+      "created_at": "2026-05-12T00:00:00Z",
+      "updated_at": "2026-05-12T00:01:00Z"
+    }
+  ],
+  "limit": 20,
+  "offset": 0
+}
+```
+
 ## AI result webhook
 
 `POST /practice/webhook/ai-result` is for the AI worker. It does not use a user JWT. It requires the shared secret header `x-ai-webhook-secret`.

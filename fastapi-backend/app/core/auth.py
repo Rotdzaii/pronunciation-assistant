@@ -2,7 +2,6 @@ from collections.abc import Callable, Sequence
 from typing import Any
 
 import httpx
-import jwt
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import BaseModel
@@ -17,10 +16,11 @@ bearer_scheme = HTTPBearer(auto_error=False)
 class CurrentUser(BaseModel):
     id: str
     email: str | None = None
+    auth_role: str | None = None
     app_role: str | None = None
 
 
-def _auth_error(detail: str = "Missing or invalid bearer token") -> HTTPException:
+def _auth_error(detail: str = "Invalid or expired token") -> HTTPException:
     return HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail=detail,
@@ -35,19 +35,7 @@ def _settings_error() -> HTTPException:
     )
 
 
-def _decode_supabase_jwt(token: str, settings: Settings) -> dict[str, Any]:
-    if not settings.supabase_jwt_secret:
-        return jwt.decode(token, options={"verify_signature": False})
-
-    return jwt.decode(
-        token,
-        settings.supabase_jwt_secret,
-        algorithms=["HS256"],
-        audience="authenticated",
-    )
-
-
-async def _verify_token_with_supabase(token: str, settings: Settings) -> None:
+async def _get_supabase_auth_user(token: str, settings: Settings) -> dict[str, Any]:
     if not settings.supabase_url or not settings.supabase_anon_key:
         raise _settings_error()
 
@@ -61,7 +49,20 @@ async def _verify_token_with_supabase(token: str, settings: Settings) -> None:
         response = await client.get(auth_url, headers=headers)
 
     if response.status_code != status.HTTP_200_OK:
-        raise _auth_error()
+        raise _auth_error("Invalid or expired token")
+
+    try:
+        user_data = response.json()
+    except ValueError as exc:
+        raise _auth_error("Invalid or expired token") from exc
+
+    if not isinstance(user_data, dict):
+        raise _auth_error("Invalid or expired token")
+
+    if not user_data.get("id"):
+        raise _auth_error("Invalid or expired token")
+
+    return user_data
 
 
 def get_supabase_service_client(settings: Settings) -> Client:
@@ -100,26 +101,30 @@ async def get_current_user(
     if credentials is None or credentials.scheme.lower() != "bearer":
         raise _auth_error("Missing bearer token")
 
-    token = credentials.credentials
+    token = credentials.credentials.strip()
+    if not token:
+        raise _auth_error("Missing bearer token")
 
     try:
-        claims = _decode_supabase_jwt(token, settings)
-        if not settings.supabase_jwt_secret:
-            await _verify_token_with_supabase(token, settings)
-    except jwt.PyJWTError as exc:
-        raise _auth_error() from exc
+        user_data = await _get_supabase_auth_user(token, settings)
     except httpx.HTTPError as exc:
         raise _auth_error("Unable to verify bearer token") from exc
 
-    user_id = claims.get("sub")
-    if not user_id:
-        raise _auth_error()
+    user_id = str(user_data["id"])
+
+    auth_role = (
+        user_data.get("auth_role")
+        or user_data.get("role")
+        or user_data.get("aud")
+        or "authenticated"
+    )
 
     supabase_client = get_supabase_service_client(settings)
 
     return CurrentUser(
         id=user_id,
-        email=claims.get("email"),
+        email=user_data.get("email"),
+        auth_role=auth_role,
         app_role=get_profile_app_role(supabase_client, user_id),
     )
 

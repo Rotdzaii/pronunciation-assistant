@@ -15,7 +15,6 @@ class Settings(BaseSettings):
     supabase_url: str | None = None
     supabase_anon_key: str | None = None
     supabase_service_role_key: str | None = None
-    supabase_jwt_secret: str | None = None
     practice_audio_bucket: str = "practice-audios"
     ai_webhook_secret: str | None = None
 

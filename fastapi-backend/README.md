@@ -1,24 +1,6 @@
 # Pronunciation Assistant FastAPI Backend
 
-FastAPI backend scaffold for the AI-powered English pronunciation diagnosis system.
-
-## Current scope
-
-This scaffold includes:
-
-- FastAPI app setup
-- CORS for Expo frontend
-- Health check endpoint
-- Swagger docs
-- Supabase JWT authentication foundation
-- `GET /auth/me`
-- Student audio upload to Supabase Storage
-- Practice job creation and lookup
-
-Not included yet:
-
-- AI inference
-- Teacher analytics
+FastAPI backend for the Expo pronunciation practice demo. It verifies Supabase access tokens, loads roles from `public.profiles`, uploads practice audio to Supabase Storage, creates practice jobs, and receives simulated AI results through a shared-secret webhook.
 
 ## Setup
 
@@ -28,7 +10,7 @@ cd fastapi-backend
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
 copy .env.example .env
 ```
 
@@ -38,22 +20,30 @@ Fill in these Supabase values in `.env`:
 SUPABASE_URL="https://your-project.supabase.co"
 SUPABASE_ANON_KEY="your-supabase-anon-key"
 SUPABASE_SERVICE_ROLE_KEY="your-supabase-service-role-key"
-SUPABASE_JWT_SECRET="your-supabase-jwt-secret"
-PRACTICE_AUDIO_BUCKET="practice-audios"
 AI_WEBHOOK_SECRET="replace-with-ai-webhook-secret"
+PRACTICE_AUDIO_BUCKET="practice-audios"
 ```
 
 Start the API:
 
 ```powershell
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-Swagger docs are available at:
+Open:
 
-```text
-http://localhost:8000/docs
-```
+- `http://localhost:8000/health`
+- `http://localhost:8000/docs`
+
+## Current API endpoints
+
+- `GET /health`
+- `GET /auth/me`
+- `POST /practice/upload-audio`
+- `POST /practice/create-job`
+- `GET /practice/{job_id}`
+- `POST /practice/webhook/ai-result`
+- `GET /practice/history`
 
 ## Auth
 
@@ -69,11 +59,12 @@ Successful response:
 {
   "id": "user-id",
   "email": "user@example.com",
+  "auth_role": "authenticated",
   "app_role": "student"
 }
 ```
 
-The endpoint verifies the Supabase access token and loads `app_role` from the `profiles` table using the service role key.
+The endpoint verifies the Supabase access token with Supabase Auth's `/auth/v1/user` endpoint and loads `app_role` from the `profiles` table using the service role key.
 
 ## Audio upload
 

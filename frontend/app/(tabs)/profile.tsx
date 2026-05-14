@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { AppButton, AppCard, AppScreen, ErrorState, SectionHeader, colors } from '../../components/AppUI';
 import { useAuth } from '../../lib/auth';
-import { supabase } from '../../lib/supabase';
 
 const settings = [
   ['Vai trò', 'Người học'],
@@ -12,18 +11,20 @@ const settings = [
 ];
 
 export default function ProfileScreen() {
-  const { session } = useAuth();
+  const { session, signOut } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const handleSignOut = async () => {
     setLoading(true);
     setError(null);
-    const { error: signOutError } = await supabase.auth.signOut();
-    if (signOutError) {
-      setError(signOutError.message);
+    try {
+      await signOut();
+    } catch (signOutError) {
+      setError(signOutError instanceof Error ? signOutError.message : 'Không thể đăng xuất.');
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (

@@ -1,8 +1,8 @@
-# Pronunciation Assistant FastAPI Backend
+# Phần Máy Chủ FastAPI Cho Pronunciation Assistant
 
-FastAPI backend for the Expo pronunciation practice demo. It verifies Supabase access tokens, loads roles from `public.profiles`, uploads practice audio to Supabase Storage, creates practice jobs, and receives simulated AI results through a shared-secret webhook.
+Phần máy chủ FastAPI cho bản thử nghiệm luyện phát âm trên Expo. Phần máy chủ xác thực mã truy cập của Supabase, lấy vai trò ứng dụng từ bảng `public.profiles`, tải âm thanh luyện tập lên Supabase Storage, tạo bài luyện tập và nhận kết quả mô phỏng từ AI qua móc nối webhook dùng khóa bí mật chung.
 
-## Setup
+## Cài đặt
 
 ```powershell
 cd fastapi-backend
@@ -14,7 +14,7 @@ python -m pip install -r requirements.txt
 copy .env.example .env
 ```
 
-Fill in these Supabase values in `.env`:
+Điền các giá trị Supabase sau vào file `.env`:
 
 ```dotenv
 SUPABASE_URL="https://your-project.supabase.co"
@@ -24,18 +24,18 @@ AI_WEBHOOK_SECRET="replace-with-ai-webhook-secret"
 PRACTICE_AUDIO_BUCKET="practice-audios"
 ```
 
-Start the API:
+Chạy API:
 
 ```powershell
 python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-Open:
+Mở các địa chỉ sau:
 
 - `http://localhost:8000/health`
 - `http://localhost:8000/docs`
 
-## Current API endpoints
+## Các API Hiện Có
 
 - `GET /health`
 - `GET /auth/me`
@@ -45,15 +45,15 @@ Open:
 - `POST /practice/webhook/ai-result`
 - `GET /practice/history`
 
-## Auth
+## Xác thực
 
-`GET /auth/me` expects a Supabase access token:
+`GET /auth/me` cần mã truy cập của Supabase:
 
 ```powershell
 curl.exe -H "Authorization: Bearer <supabase-access-token>" http://localhost:8000/auth/me
 ```
 
-Successful response:
+Phản hồi thành công:
 
 ```json
 {
@@ -64,19 +64,19 @@ Successful response:
 }
 ```
 
-The endpoint verifies the Supabase access token with Supabase Auth's `/auth/v1/user` endpoint and loads `app_role` from the `profiles` table using the service role key.
+Điểm cuối này xác thực mã truy cập của Supabase bằng điểm cuối `/auth/v1/user` của Supabase Auth, sau đó lấy `app_role` từ bảng `profiles` bằng khóa vai trò dịch vụ.
 
-## Audio upload
+## Tải Âm Thanh
 
-`POST /practice/upload-audio` expects a Supabase access token for a user whose profile has `app_role = "student"`.
+`POST /practice/upload-audio` cần mã truy cập của Supabase cho người dùng có hồ sơ với `app_role = "student"`.
 
-The Supabase Storage bucket must exist:
+Bucket Supabase Storage sau phải tồn tại:
 
 ```text
 practice-audios
 ```
 
-Upload a local audio file:
+Tải một tệp âm thanh cục bộ:
 
 ```powershell
 curl.exe -X POST `
@@ -85,14 +85,19 @@ curl.exe -X POST `
   http://localhost:8000/practice/upload-audio
 ```
 
-Allowed MIME types:
+Với bản ghi từ Expo Web hoặc trình duyệt, file thường có MIME `audio/webm` hoặc `audio/webm;codecs=opus`. Backend sẽ chuẩn hóa giá trị này thành `audio/webm` trước khi kiểm tra.
+
+Các loại MIME được chấp nhận:
 
 - `audio/wav`
 - `audio/mpeg`
 - `audio/mp4`
 - `audio/x-m4a`
+- `audio/m4a`
+- `audio/webm`
+- `audio/ogg`
 
-Successful response:
+Phản hồi thành công:
 
 ```json
 {
@@ -104,11 +109,11 @@ Successful response:
 }
 ```
 
-## Practice jobs
+## Bài Luyện Tập
 
-`POST /practice/create-job` expects a Supabase access token for a user whose profile has `app_role = "student"`.
+`POST /practice/create-job` cần mã truy cập của Supabase cho người dùng có hồ sơ với `app_role = "student"`.
 
-Create and enqueue a practice job after uploading audio:
+Tạo và đưa một bài luyện tập vào hàng đợi sau khi tải âm thanh:
 
 ```powershell
 curl.exe -X POST `
@@ -118,7 +123,7 @@ curl.exe -X POST `
   http://localhost:8000/practice/create-job
 ```
 
-Successful response:
+Phản hồi thành công:
 
 ```json
 {
@@ -128,32 +133,32 @@ Successful response:
 }
 ```
 
-The API inserts into `public.practice_history` with `problem_phonemes = []` and `feedback = {}`, then calls `public.enqueue_practice_job(...)`.
+API ghi dữ liệu vào `public.practice_history` với `problem_phonemes = []` và `feedback = {}`, sau đó gọi `public.enqueue_practice_job(...)`.
 
-Fetch a practice job:
+Lấy thông tin một bài luyện tập:
 
 ```powershell
 curl.exe -H "Authorization: Bearer <supabase-access-token>" `
   http://localhost:8000/practice/<practice-job-id>
 ```
 
-Students can fetch only their own jobs. Teachers can fetch any job when their profile has `app_role = "teacher"`.
+Học viên chỉ có thể xem bài luyện tập của chính mình. Giáo viên có thể xem mọi bài luyện tập khi hồ sơ có `app_role = "teacher"`.
 
-List practice history as a student:
+Liệt kê lịch sử luyện tập với vai trò học viên:
 
 ```powershell
 curl.exe -H "Authorization: Bearer <student-supabase-access-token>" `
   "http://localhost:8000/practice/history?limit=20&offset=0"
 ```
 
-List completed practice history as a teacher for one student:
+Liệt kê các bài đã hoàn thành với vai trò giáo viên cho một học viên:
 
 ```powershell
 curl.exe -H "Authorization: Bearer <teacher-supabase-access-token>" `
   "http://localhost:8000/practice/history?student_id=<student-id>&status=completed&limit=20&offset=0"
 ```
 
-Successful history response:
+Phản hồi lịch sử thành công:
 
 ```json
 {
@@ -176,11 +181,11 @@ Successful history response:
 }
 ```
 
-## AI result webhook
+## Móc Nối Webhook Kết Quả AI
 
-`POST /practice/webhook/ai-result` is for the AI worker. It does not use a user JWT. It requires the shared secret header `x-ai-webhook-secret`.
+`POST /practice/webhook/ai-result` dành cho tiến trình AI. Điểm cuối này không dùng JWT của người dùng. Điểm cuối yêu cầu tiêu đề HTTP chứa khóa bí mật chung `x-ai-webhook-secret`.
 
-Mark a job completed:
+Đánh dấu một bài luyện tập là hoàn thành:
 
 ```powershell
 curl.exe -X POST `
@@ -190,7 +195,7 @@ curl.exe -X POST `
   http://localhost:8000/practice/webhook/ai-result
 ```
 
-Mark a job failed:
+Đánh dấu một bài luyện tập là thất bại:
 
 ```powershell
 curl.exe -X POST `
@@ -200,7 +205,7 @@ curl.exe -X POST `
   http://localhost:8000/practice/webhook/ai-result
 ```
 
-Successful response:
+Phản hồi thành công:
 
 ```json
 {

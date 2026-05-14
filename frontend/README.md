@@ -1,20 +1,37 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Frontend
 
-# Run and deploy your AI Studio app
+Expo Router web frontend for the pronunciation practice demo.
 
-This contains everything you need to run your app locally.
+## Setup
 
-View your app in AI Studio: https://ai.studio/apps/f82a1f4d-ccf7-458a-9631-32f13e49cafd
+```powershell
+cd frontend
+npm install
+copy .env.example .env
+```
 
-## Run Locally
+`frontend/.env` must contain only frontend-safe variables:
 
-**Prerequisites:**  Node.js
+```dotenv
+EXPO_PUBLIC_API_BASE_URL=http://localhost:8000
+EXPO_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+EXPO_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
+```
 
+Do not put backend secrets in frontend env files.
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## Scripts
+
+- `npm install`: install dependencies.
+- `npm run web`: start Expo web, usually at `http://localhost:8081`.
+- `npm run lint`: run TypeScript checks with `tsc --noEmit`.
+
+## Local demo
+
+Start the FastAPI backend first, then run:
+
+```powershell
+npm run web
+```
+
+Login with a Supabase student user, record audio, replay it, submit it for scoring, and open History after simulating completion through the backend Swagger webhook.

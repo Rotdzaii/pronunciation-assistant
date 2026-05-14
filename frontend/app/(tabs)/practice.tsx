@@ -11,9 +11,14 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Audio } from 'expo-av';
 import { ErrorState, colors } from '../../components/AppUI';
-import { createPracticeJob, fetchPracticeStatus } from '../../lib/api';
+import { createPracticeJob, fetchPracticeStatus, uploadPracticeAudio } from '../../lib/api';
 import { useAuth } from '../../lib/auth';
-import type { PracticeStatusResponse } from '../../types';
+import {
+  formatFeedbackLines,
+  formatProblemPhonemes,
+  getScoreTone,
+} from '../../lib/practiceFormatters';
+import type { PracticeJob, PracticeJobStatus } from '../../types';
 
 const WAVEFORM_BARS = [12, 24, 40, 28, 46, 30, 34, 12];
 
@@ -33,7 +38,8 @@ export default function PracticeScreen() {
   const [sound, setSound] = useState<Audio.Sound | null>(null);
   const [audioUri, setAudioUri] = useState<string | null>(null);
   const [jobId, setJobId] = useState<string | null>(null);
-  const [status, setStatus] = useState<PracticeStatusResponse | null>(null);
+  const [job, setJob] = useState<PracticeJob | null>(null);
+  const [jobStatus, setJobStatus] = useState<PracticeJobStatus | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const pollingRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -93,13 +99,25 @@ export default function PracticeScreen() {
       setError('Hãy ghi âm trước khi gửi.');
       return;
     }
+    if (!accessToken) {
+      setError('Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.');
+      return;
+    }
 
     setLoading(true);
     setError(null);
     try {
-      const response = await createPracticeJob(audioUri, accessToken);
+      const uploadResponse = await uploadPracticeAudio(audioUri, accessToken);
+      const response = await createPracticeJob(
+        {
+          target_word: fallbackPracticeTarget.word,
+          audio_url: uploadResponse.audio_url || uploadResponse.storage_path,
+        },
+        accessToken,
+      );
+      setJob(null);
       setJobId(response.job_id);
-      setStatus({ status: 'queued' });
+      setJobStatus(response.status);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Không tạo được lượt chấm.');
     } finally {
@@ -135,7 +153,8 @@ export default function PracticeScreen() {
     pollingRef.current = setInterval(async () => {
       try {
         const response = await fetchPracticeStatus(jobId, accessToken);
-        setStatus(response);
+        setJob(response);
+        setJobStatus(response.status);
         if (response.status === 'completed' || response.status === 'failed') {
           if (pollingRef.current) {
             clearInterval(pollingRef.current);
@@ -158,6 +177,9 @@ export default function PracticeScreen() {
     : audioUri
       ? 'Bản ghi đã sẵn sàng'
       : 'Nhấn micro để bắt đầu';
+  const problemLines = formatProblemPhonemes(job?.problem_phonemes);
+  const feedbackLines = formatFeedbackLines(job?.feedback);
+  const scoreTone = getScoreTone(job?.score);
 
   const content = (
     <View style={[styles.rootShell, isDesktop ? { height } : styles.mobileShell]}>
@@ -212,12 +234,26 @@ export default function PracticeScreen() {
             <Text style={styles.meaningLabel}>Nghĩa tiếng Việt</Text>
             <Text style={styles.meaningText}>"{fallbackPracticeTarget.meaning}"</Text>
 
-            {status?.result ? (
-              <View style={styles.resultStrip}>
-                <Text style={styles.resultScore}>{status.result.score} điểm</Text>
-                <Text style={styles.resultDetail}>
-                  Âm cần sửa: {status.result.problem_phonemes.join(', ') || 'Chưa phát hiện lỗi nổi bật'}
+            {jobStatus ? (
+              <View style={[styles.resultStrip, { borderColor: scoreTone.color }]}>
+                <Text style={[styles.resultScore, { color: scoreTone.color }]}>
+                  {job?.score != null ? `${job.score} điểm` : `Trạng thái: ${jobStatus}`}
                 </Text>
+                {job?.score != null ? (
+                  <Text style={styles.resultMood}>{scoreTone.label}</Text>
+                ) : null}
+                <Text style={styles.resultDetailTitle}>Âm cần sửa</Text>
+                {problemLines.map((line, index) => (
+                  <Text key={`${line}-${index}`} style={styles.resultDetail}>
+                    {line}
+                  </Text>
+                ))}
+                <Text style={styles.resultDetailTitle}>Nhận xét</Text>
+                {feedbackLines.map((line, index) => (
+                  <Text key={`${line}-${index}`} style={styles.resultDetail}>
+                    {line}
+                  </Text>
+                ))}
               </View>
             ) : null}
           </View>
@@ -537,10 +573,23 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   resultScore: {
-    color: '#191b23',
     fontSize: 12,
     fontWeight: '800',
     textAlign: 'center',
+  },
+  resultMood: {
+    color: '#434655',
+    fontSize: 11,
+    fontWeight: '800',
+    textAlign: 'center',
+    marginBottom: 4,
+  },
+  resultDetailTitle: {
+    color: '#737686',
+    fontSize: 10,
+    fontWeight: '800',
+    textAlign: 'center',
+    marginTop: 4,
   },
   resultDetail: {
     color: '#434655',

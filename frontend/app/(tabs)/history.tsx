@@ -12,7 +12,15 @@ import {
 import { ScreenContainer } from '../../components/ScreenContainer';
 import { fetchPracticeHistory } from '../../lib/api';
 import { useAuth } from '../../lib/auth';
-import type { PracticeHistoryItem } from '../../types';
+import {
+  clampScore,
+  formatFeedbackLines,
+  formatProblemPhonemes,
+  getScoreTone,
+} from '../../lib/practiceFormatters';
+import type { PracticeHistoryItem, PracticeJobStatus } from '../../types';
+
+const SCORE_RING_SEGMENTS = 40;
 
 export default function HistoryScreen() {
   const { accessToken } = useAuth();
@@ -25,7 +33,7 @@ export default function HistoryScreen() {
       setLoading(true);
       setError(null);
       try {
-        const data = await fetchPracticeHistory(accessToken);
+        const data = await fetchPracticeHistory(accessToken, { limit: 20, offset: 0 });
         setHistory(data);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Không tải được lịch sử.');
@@ -74,31 +82,109 @@ export default function HistoryScreen() {
 }
 
 function HistoryCard({ item }: { item: PracticeHistoryItem }) {
-  const problemText = item.problem_phonemes.join(', ') || 'Chưa phát hiện lỗi nổi bật';
+  const scoreTone = getScoreTone(item.score);
+  const problemLines = formatProblemPhonemes(item.problem_phonemes);
+  const feedbackLines = formatFeedbackLines(item.feedback);
 
   return (
     <AppCard style={styles.card}>
       <View style={styles.cardTop}>
-        <View style={styles.scoreMark}>
-          <Text style={styles.scoreValue}>{Math.round(item.score)}</Text>
-          <Text style={styles.scoreLabel}>điểm</Text>
-        </View>
+        <ScoreRing score={item.score} />
         <View style={styles.cardInfo}>
-          <Text style={styles.cardTitle}>Lượt luyện phát âm</Text>
+          <Text style={styles.cardTitle}>{item.target_word || 'Lượt luyện phát âm'}</Text>
           <Text style={styles.cardDate}>{formatDate(item.created_at)}</Text>
-          <StatusBadge label="Đã chấm" tone="success" style={styles.badge} />
+          <View style={styles.badgeRow}>
+            <StatusBadge
+              label={getStatusLabel(item.status)}
+              tone={getStatusTone(item.status)}
+              style={styles.badge}
+            />
+            {item.score != null ? (
+              <View style={[styles.scoreBadge, { backgroundColor: scoreTone.color }]}>
+                <Text style={styles.scoreBadgeText}>{scoreTone.label}</Text>
+              </View>
+            ) : null}
+          </View>
         </View>
       </View>
 
       <View style={styles.problemBox}>
         <Text style={styles.problemLabel}>Âm cần chú ý</Text>
-        <Text style={styles.problemText}>{problemText}</Text>
+        {problemLines.map((line, index) => (
+          <Text key={`${line}-${index}`} style={styles.problemText}>
+            {line}
+          </Text>
+        ))}
+        <Text style={styles.problemLabel}>Nhận xét</Text>
+        {feedbackLines.map((line, index) => (
+          <Text key={`${line}-${index}`} style={styles.feedbackText}>
+            {line}
+          </Text>
+        ))}
       </View>
     </AppCard>
   );
 }
 
-function formatDate(value: string) {
+function ScoreRing({ score }: { score: number | null }) {
+  const clampedScore = clampScore(score);
+  const roundedScore = score == null ? '--' : Math.round(clampedScore);
+  const filledSegments = Math.round((clampedScore / 100) * SCORE_RING_SEGMENTS);
+  const scoreTone = getScoreTone(score);
+
+  return (
+    <View style={[styles.scoreRing, { backgroundColor: scoreTone.softColor }]}>
+      {Array.from({ length: SCORE_RING_SEGMENTS }).map((_, index) => {
+        const isFilled = index < filledSegments;
+        return (
+          <View
+            key={index}
+            style={[
+              styles.scoreRingSegment,
+              {
+                backgroundColor: isFilled ? scoreTone.color : colors.border,
+                transform: [
+                  { rotate: `${(360 / SCORE_RING_SEGMENTS) * index}deg` },
+                  { translateY: -34 },
+                ],
+              },
+            ]}
+          />
+        );
+      })}
+      <View style={styles.scoreRingCenter}>
+        <Text style={styles.scoreValue}>{roundedScore}</Text>
+        <Text style={styles.scoreLabel}>điểm</Text>
+      </View>
+    </View>
+  );
+}
+
+function getStatusLabel(status: PracticeJobStatus) {
+  if (status === 'completed') {
+    return 'Đã chấm';
+  }
+  if (status === 'failed') {
+    return 'Lỗi';
+  }
+  return 'Đang xử lý';
+}
+
+function getStatusTone(status: PracticeJobStatus) {
+  if (status === 'completed') {
+    return 'success';
+  }
+  if (status === 'failed') {
+    return 'error';
+  }
+  return 'processing';
+}
+
+function formatDate(value: string | null) {
+  if (!value) {
+    return '';
+  }
+
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) {
     return value;
@@ -126,13 +212,27 @@ const styles = StyleSheet.create({
     gap: 14,
     alignItems: 'center',
   },
-  scoreMark: {
+  scoreRing: {
     width: 78,
     height: 78,
     borderRadius: 39,
-    backgroundColor: colors.softBlue,
-    borderWidth: 6,
-    borderColor: colors.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'relative',
+  },
+  scoreRingSegment: {
+    position: 'absolute',
+    width: 4,
+    height: 10,
+    borderRadius: 999,
+    top: 34,
+    left: 37,
+  },
+  scoreRingCenter: {
+    width: 58,
+    height: 58,
+    borderRadius: 29,
+    backgroundColor: colors.surface,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -163,6 +263,23 @@ const styles = StyleSheet.create({
   badge: {
     marginTop: 2,
   },
+  badgeRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+    alignItems: 'center',
+  },
+  scoreBadge: {
+    alignSelf: 'flex-start',
+    borderRadius: 999,
+    paddingHorizontal: 12,
+    paddingVertical: 7,
+  },
+  scoreBadgeText: {
+    color: '#FFFFFF',
+    fontSize: 12,
+    fontWeight: '800',
+  },
   problemBox: {
     backgroundColor: colors.background,
     borderColor: colors.border,
@@ -181,5 +298,11 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '700',
     lineHeight: 21,
+  },
+  feedbackText: {
+    color: colors.muted,
+    fontSize: 14,
+    fontWeight: '700',
+    lineHeight: 20,
   },
 });

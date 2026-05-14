@@ -32,6 +32,9 @@ ALLOWED_AUDIO_TYPES = {
     "audio/mpeg",
     "audio/mp4",
     "audio/x-m4a",
+    "audio/m4a",
+    "audio/webm",
+    "audio/ogg",
 }
 
 
@@ -97,6 +100,23 @@ class PracticeHistoryResponse(BaseModel):
 def _safe_filename(filename: str | None) -> str:
     name = Path(filename or "audio").name.strip()
     return name or "audio"
+
+
+def _normalize_audio_content_type(content_type: str | None) -> str:
+    if not content_type:
+        raise HTTPException(
+            status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
+            detail="Missing audio content type",
+        )
+
+    normalized_content_type = content_type.split(";", 1)[0].strip().lower()
+    if normalized_content_type not in ALLOWED_AUDIO_TYPES:
+        raise HTTPException(
+            status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
+            detail="Unsupported audio type",
+        )
+
+    return normalized_content_type
 
 
 def _require_ai_webhook_secret(
@@ -247,11 +267,7 @@ async def upload_practice_audio(
     current_user: CurrentUser = Depends(require_roles(["student"])),
     settings: Settings = Depends(get_settings),
 ) -> AudioUploadResponse:
-    if file.content_type not in ALLOWED_AUDIO_TYPES:
-        raise HTTPException(
-            status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
-            detail="Unsupported audio type",
-        )
+    normalized_content_type = _normalize_audio_content_type(file.content_type)
 
     content = await file.read()
     size = len(content)
@@ -262,7 +278,7 @@ async def upload_practice_audio(
         supabase_client.storage.from_(settings.practice_audio_bucket).upload(
             path=storage_path,
             file=content,
-            file_options={"content-type": file.content_type},
+            file_options={"content-type": normalized_content_type},
         )
         signed = supabase_client.storage.from_(
             settings.practice_audio_bucket
@@ -277,7 +293,7 @@ async def upload_practice_audio(
         message="uploaded",
         storage_path=storage_path,
         audio_url=signed.get("signedURL") or signed.get("signedUrl") or "",
-        mime_type=file.content_type,
+        mime_type=normalized_content_type,
         size=size,
     )
 

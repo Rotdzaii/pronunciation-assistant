@@ -1,186 +1,149 @@
-# Pronunciation Assistant AI
+# Pronunciation Assistant
 
-Tai lieu nay huong dan chi tiet de demo du an tren may khac (fresh machine), tu cai dat moi truong den khoi dong backend va mo giao dien.
+Local demo setup for the FastAPI backend, Expo frontend web app, Supabase Auth/Storage/Postgres, and the practice flow.
 
-## 1) Tong quan nhanh
+## Prerequisites
 
-- Backend: FastAPI (Python)
-- AI core: WhisperX + G2P + Prosody (Librosa + Parselmouth)
-- UI demo: Web tinh tai static/index.html (duoc phuc vu qua FastAPI)
-- Database cloud: Supabase (tuy chon, co the bo qua khi demo local)
-
-## 2) Yeu cau he thong
-
-Khuyen nghi toi thieu:
-
-- Windows 10/11 (du an da co script run_server.bat cho Windows)
-- Python 3.12.x
 - Git
-- FFmpeg (de xu ly audio cho mot so thu vien)
-- Ket noi Internet de tai dependencies va model
+- Node.js LTS
+- npm
+- Python 3.11 or 3.12
+- Supabase project access
 
-Khuyen nghi de chay nhanh:
-
-- GPU NVIDIA (vi du RTX 3050) + driver moi
-- CUDA phu hop voi ban torch trong requirements (torch cu121)
-
-Ghi chu:
-
-- Co the chay CPU neu khong co GPU, nhung se cham hon.
-- Lan dau chay se mat them thoi gian de tai model/du lieu phu tro.
-
-## 3) Clone source code
+## Clone and checkout
 
 ```powershell
 git clone <REPO_URL>
 cd pronunciation-assistant
+git checkout develop
 ```
 
-Neu da co source code san (file zip), chi can giai nen va mo dung thu muc goc du an.
-
-## 4) Tao va kich hoat moi truong ao
-
-### Windows PowerShell
+## Backend setup
 
 ```powershell
-py -3.12 -m venv .venv
+cd fastapi-backend
+python -m venv .venv
 .\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+copy .env.example .env
 ```
 
-Neu bi chan script execution policy:
+Fill backend-only secrets in `fastapi-backend/.env`:
+
+- `SUPABASE_URL`
+- `SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `SUPABASE_JWT_SECRET`
+- `AI_WEBHOOK_SECRET`
+- `PRACTICE_AUDIO_BUCKET=practice-audios`
+
+Start the API:
 
 ```powershell
-Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
+python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-Sau do mo lai PowerShell va activate lai .venv.
+Open:
 
-## 5) Cai dat dependencies
+- `http://localhost:8000/health`
+- `http://localhost:8000/docs`
+
+## Frontend setup
+
+Open a new terminal:
 
 ```powershell
-python -m pip install --upgrade pip setuptools wheel
-pip install -r requirements.txt
+cd frontend
+npm install
+copy .env.example .env
 ```
 
-Cai FFmpeg neu may chua co:
+Fill only frontend-safe Expo variables in `frontend/.env`:
+
+```dotenv
+EXPO_PUBLIC_API_BASE_URL=http://localhost:8000
+EXPO_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+EXPO_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
+```
+
+Run Expo web:
 
 ```powershell
-winget install Gyan.FFmpeg
+npm run web
 ```
 
-Kiem tra nhanh:
+Open `http://localhost:8081`.
+
+## Supabase setup checklist
+
+- Authentication users exist.
+- `public.profiles` has matching `id`, `email`, and `app_role`.
+- `public.practice_history` exists.
+- `practice-audios` storage bucket exists.
+- PGMQ `practice_jobs` queue/RPC exists if using the queue path.
+
+## Demo flow
+
+1. Start the backend.
+2. Start the frontend.
+3. Login with a student user.
+4. Record audio.
+5. Replay audio.
+6. Submit to AI scoring.
+7. Confirm backend calls in the network/API logs:
+   - `POST /practice/upload-audio`
+   - `POST /practice/create-job`
+   - `GET /practice/{job_id}`
+8. Use Swagger `POST /practice/webhook/ai-result` to simulate AI completion.
+9. Open History to see the result.
+
+## Current API endpoints
+
+- `GET /health`
+- `GET /auth/me`
+- `POST /practice/upload-audio`
+- `POST /practice/create-job`
+- `GET /practice/{job_id}`
+- `POST /practice/webhook/ai-result`
+- `GET /practice/history`
+
+## Common troubleshooting
+
+- Frontend calls port 3000 instead of 8000: check `EXPO_PUBLIC_API_BASE_URL`, then restart Expo with a clear cache.
+- Invalid login credentials: check the Supabase Auth user, password, and email confirmation state.
+- `Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.`: clear browser `localStorage` and login again.
+- `python-multipart` missing: run `python -m pip install -r requirements.txt`.
+- `uvicorn` not recognized: use `python -m uvicorn`.
+- VS Code auto activates the wrong `.venv`: set `"python.terminal.activateEnvironment": false`.
+- Expo says `expo` is not installed: run `npm install` inside `frontend`.
+
+To clear Expo cache:
 
 ```powershell
-python --version
-ffmpeg -version
+npx expo start --web --clear
 ```
 
-Luu y:
+## Git workflow
 
-- Buoc nay co the mat kha lau do co nhieu goi AI.
-- WhisperX duoc cai truc tiep tu GitHub theo requirements.
+- Create feature branches from `develop`.
+- Do not commit `.env`, `.venv`, `node_modules`, or generated caches.
+- Commit convention examples:
+  - `feat(backend): add practice job flow`
+  - `fix(frontend): correct API base URL`
+  - `chore(docs): update demo setup guide`
 
-## 6) Tao file .env
+## Verification
 
-Tao file .env o thu muc goc du an voi noi dung:
-
-```env
-SUPABASE_URL=https://<your-project>.supabase.co
-SUPABASE_KEY=<your-anon-or-service-role-key>
-```
-
-Neu chua co Supabase, app van chay local demo duoc, nhung phan luu cloud se bao canh bao.
-
-## 7) Chay du an
-
-### Cach 1 (khuyen nghi tren Windows): dung script san co
+Backend:
 
 ```powershell
-run_server.bat
+cd fastapi-backend
+python -m compileall app
 ```
 
-Script se:
-
-- Kiem tra thu muc .venv
-- Kiem tra CUDA status
-- Khoi dong FastAPI tai cong 8000
-
-### Cach 2 (thu cong)
+Frontend:
 
 ```powershell
-.\.venv\Scripts\python.exe -m uvicorn api.main:app --reload --port 8000
+cd frontend
+npm run lint
 ```
-
-## 8) Truy cap giao dien demo
-
-Mo trinh duyet:
-
-```text
-http://127.0.0.1:8000
-```
-
-Sau do:
-
-1. Nhan nut BAT DAU NOI.
-2. Cho phep trinh duyet truy cap microphone.
-3. Noi mot cau tieng Anh ro rang.
-4. Nhan DUNG & PHAN TICH.
-5. Xem ket qua STT, thinking pipeline, phoneme details, overall score.
-
-## 9) Kiem tra nhanh endpoint
-
-Swagger UI:
-
-```text
-http://127.0.0.1:8000/docs
-```
-
-Endpoint chinh:
-
-- GET /
-- POST /upload-audio
-
-## 10) Loi thuong gap va cach xu ly
-
-1. Khong mo duoc mic tren browser
-- Kiem tra quyen microphone cua browser va he dieu hanh.
-- Thu refresh page, dong/mo lai tab.
-
-2. Port 8000 dang bi chiem
-- Doi cong:
-	- uvicorn api.main:app --reload --port 8001
-- Hoac tat tien trinh dang dung cong 8000.
-
-3. CUDA status la False
-- App van chay duoc bang CPU.
-- Kiem tra lai NVIDIA driver/CUDA va ban torch.
-
-4. Bao loi thieu module
-- Dam bao dang activate .venv.
-- Chay lai pip install -r requirements.txt.
-
-5. Supabase loi ket noi
-- Kiem tra SUPABASE_URL va SUPABASE_KEY trong .env.
-- Neu demo local, co the tiep tuc bo qua buoc luu cloud.
-
-## 11) Cac file quan trong de demo
-
-- api/main.py: FastAPI app va endpoint upload audio
-- core/phoneme_engine.py: STT + phoneme pipeline hien tai
-- core/prosody_engine.py: phan tich pitch/intensity/duration
-- core/database.py: ghi ket qua len Supabase
-- static/index.html: giao dien demo va xu ly ghi am tren browser
-- run_server.bat: script khoi dong nhanh tren Windows
-
-## 12) Demo checklist (5 phut)
-
-1. Da tao .venv va cai dependencies.
-2. Da tao .env (neu can luu cloud).
-3. Da chay run_server.bat thanh cong.
-4. Mo duoc trang http://127.0.0.1:8000.
-5. Ghi am va nhan duoc ket qua phan tich.
-6. (Tuy chon) Kiem tra logs Supabase co ban ghi moi.
-
----
-
-Neu ban muon, co the bo sung them phien ban README cho Linux/macOS va script setup tu dong 1 lenh (bootstrap) de doi demo khoi dong nhanh hon.

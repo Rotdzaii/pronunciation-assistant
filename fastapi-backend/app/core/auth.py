@@ -1,16 +1,16 @@
 from collections.abc import Callable, Sequence
+import logging
 from typing import Any
 
 import httpx
-from fastapi import Depends, HTTPException, status
-from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from fastapi import Depends, HTTPException, Request, status
 from pydantic import BaseModel
 from supabase import Client, create_client
 
 from app.core.config import Settings, get_settings
 
 
-bearer_scheme = HTTPBearer(auto_error=False)
+logger = logging.getLogger(__name__)
 
 
 class CurrentUser(BaseModel):
@@ -47,6 +47,8 @@ async def _get_supabase_auth_user(token: str, settings: Settings) -> dict[str, A
 
     async with httpx.AsyncClient(timeout=10.0) as client:
         response = await client.get(auth_url, headers=headers)
+
+    logger.debug("Supabase Auth /auth/v1/user status=%s", response.status_code)
 
     if response.status_code != status.HTTP_200_OK:
         raise _auth_error("Invalid or expired token")
@@ -95,15 +97,28 @@ def get_profile_app_role(client: Client, user_id: str) -> str | None:
 
 
 async def get_current_user(
-    credentials: HTTPAuthorizationCredentials | None = Depends(bearer_scheme),
+    request: Request,
     settings: Settings = Depends(get_settings),
 ) -> CurrentUser:
-    if credentials is None or credentials.scheme.lower() != "bearer":
-        raise _auth_error("Missing bearer token")
+    authorization = request.headers.get("authorization")
+    logger.debug("Authorization header exists=%s", bool(authorization))
 
-    token = credentials.credentials.strip()
-    if not token:
-        raise _auth_error("Missing bearer token")
+    if not authorization:
+        raise _auth_error("Missing or invalid bearer token")
+
+    parts = authorization.strip().split(" ", 1)
+    if len(parts) != 2:
+        raise _auth_error("Missing or invalid bearer token")
+
+    scheme, token = parts
+    token = token.strip()
+
+    logger.debug("Authorization scheme=%s", scheme)
+
+    if scheme.lower() != "bearer" or not token:
+        raise _auth_error("Missing or invalid bearer token")
+
+    logger.debug("Bearer token prefix=%s...", token[:8])
 
     try:
         user_data = await _get_supabase_auth_user(token, settings)

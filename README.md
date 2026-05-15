@@ -18,6 +18,30 @@ cd pronunciation-assistant
 git checkout develop
 ```
 
+## Start the full local demo
+
+Create the backend and frontend env files first:
+
+```powershell
+copy fastapi-backend\.env.example fastapi-backend\.env
+copy frontend\.env.example frontend\.env
+```
+
+Fill the Supabase backend secrets in `fastapi-backend/.env` and the frontend-safe `EXPO_PUBLIC_` values in `frontend/.env`.
+
+Then double-click `run_server.bat` from the repo root, or run:
+
+```powershell
+.\run_server.bat
+```
+
+The script opens two terminal windows:
+
+- `FastAPI Backend`: creates `fastapi-backend/.venv` if needed, installs backend requirements on first setup, and starts `http://localhost:8000`.
+- `Expo Frontend`: installs frontend dependencies if needed, sets `EXPO_PUBLIC_API_BASE_URL=http://localhost:8000` for that terminal session, and starts Expo Web with a clear cache.
+
+If port `8000` is busy, close the old backend process or restart your machine, then run the script again.
+
 ## Backend setup
 
 ```powershell

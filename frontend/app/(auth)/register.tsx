@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { ComponentProps } from 'react';
 import { Link, useRouter } from 'expo-router';
 import {
@@ -12,12 +12,14 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AppButton, ErrorState, colors } from '../../components/AppUI';
+import { useAuth } from '../../lib/auth';
 import { supabase } from '../../lib/supabase';
 
 type Role = 'student' | 'teacher';
 
 export default function RegisterScreen() {
   const router = useRouter();
+  const { session } = useAuth();
   const { width } = useWindowDimensions();
   const isWide = width >= 820;
   const [email, setEmail] = useState('');
@@ -37,10 +39,16 @@ export default function RegisterScreen() {
     if (error) {
       setError(error.message);
     } else {
-      router.replace('/(tabs)/practice');
+      router.replace(role === 'teacher' ? '/(tabs)/teacher' : '/(tabs)');
     }
     setLoading(false);
   };
+
+  useEffect(() => {
+    if (session) {
+      router.replace('/(tabs)');
+    }
+  }, [session, router]);
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -94,6 +102,11 @@ export default function RegisterScreen() {
               <Text style={styles.footerText}>Đã có tài khoản?</Text>
               <Link href="/(auth)/login" style={styles.footerLink}>
                 Đăng nhập
+              </Link>
+            </View>
+            <View style={styles.footerRow}>
+              <Link href="/welcome" style={styles.footerLink}>
+                Quay lại trang giới thiệu
               </Link>
             </View>
           </View>

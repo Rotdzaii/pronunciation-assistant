@@ -13,9 +13,9 @@ export default function Index() {
       return;
     }
     if (session) {
-      router.replace('/(tabs)/practice');
+      router.replace('/(tabs)');
     } else {
-      router.replace('/(auth)/login');
+      router.replace('/welcome');
     }
   }, [loading, session, router]);
 

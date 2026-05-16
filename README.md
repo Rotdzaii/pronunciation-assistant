@@ -2,6 +2,12 @@
 
 Local demo setup for the FastAPI backend, Expo frontend web app, Supabase Auth/Storage/Postgres, and the practice flow.
 
+## Active project structure
+
+- `frontend/` = active Expo frontend.
+- `fastapi-backend/` = active FastAPI backend.
+- `archive/legacy/` = old reference code only.
+
 ## Prerequisites
 
 - Git

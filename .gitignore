@@ -9,6 +9,8 @@ __pycache__/
 # Node/NestJS generated files
 node_modules/
 dist/
+!archive/legacy/nestjs-backend/dist/
+!archive/legacy/nestjs-backend/dist/**
 
 # Local environment files
 .env

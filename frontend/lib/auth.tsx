@@ -47,7 +47,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
       throw error;
     }
     setSession(null);
-    router.replace('/(auth)/login');
+    router.replace('/welcome');
   }, [router]);
 
   const value = useMemo<AuthState>(

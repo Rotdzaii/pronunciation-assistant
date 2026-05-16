@@ -1,7 +1,8 @@
-import { Tabs, usePathname } from 'expo-router';
+import { Redirect, Tabs, usePathname } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { StyleSheet, useWindowDimensions, View } from 'react-native';
-import { AppSidebar, colors } from '../../components/AppUI';
+import { AppSidebar, LoadingState, colors } from '../../components/AppUI';
+import { useAuth } from '../../lib/auth';
 
 type IconName = keyof typeof MaterialCommunityIcons.glyphMap;
 
@@ -13,6 +14,7 @@ type TabIconProps = {
 export default function TabsLayout() {
   const { width } = useWindowDimensions();
   const pathname = usePathname();
+  const { session, loading } = useAuth();
   const isDesktop = width >= 768;
   const isTeacherRoute = [
     '/teacher',
@@ -22,6 +24,21 @@ export default function TabsLayout() {
     '/student-detail',
     '/(tabs)/student-detail',
   ].includes(pathname);
+
+  if (loading) {
+    return (
+      <View style={styles.loadingShell}>
+        <LoadingState
+          title="Đang kiểm tra phiên đăng nhập"
+          message="Vui lòng chờ trong giây lát."
+        />
+      </View>
+    );
+  }
+
+  if (!session) {
+    return <Redirect href="/welcome" />;
+  }
 
   return (
     <View style={styles.shell}>
@@ -97,6 +114,9 @@ export default function TabsLayout() {
           <Tabs.Screen name="processing" options={{ title: 'AI đang chấm', href: null }} />
           <Tabs.Screen name="result" options={{ title: 'Kết quả phát âm', href: null }} />
           <Tabs.Screen name="progress" options={{ title: 'Tiến độ', href: null }} />
+          <Tabs.Screen name="vocabulary" options={{ title: 'Ôn tập từ vựng', href: null }} />
+          <Tabs.Screen name="quiz" options={{ title: 'Câu hỏi ôn tập', href: null }} />
+          <Tabs.Screen name="quiz-results" options={{ title: 'Kết quả ôn tập', href: null }} />
           <Tabs.Screen name="teacher" options={{ title: 'Bảng điều khiển giáo viên', href: null }} />
           <Tabs.Screen name="students" options={{ title: 'Danh sách học viên', href: null }} />
           <Tabs.Screen name="student-detail" options={{ title: 'Chi tiết học viên', href: null }} />
@@ -119,6 +139,13 @@ function TabIcon({ focused, name }: TabIconProps) {
 }
 
 const styles = StyleSheet.create({
+  loadingShell: {
+    flex: 1,
+    backgroundColor: '#FAF8FF',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+  },
   shell: {
     flex: 1,
     flexDirection: 'row',

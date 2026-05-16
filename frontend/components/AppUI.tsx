@@ -104,6 +104,19 @@ const studentSidebarItems: SidebarItemConfig[] = [
     match: ['/progress', '/(tabs)/progress'],
   },
   {
+    label: 'Ôn từ vựng',
+    href: '/(tabs)/vocabulary',
+    icon: 'cards-outline',
+    match: [
+      '/vocabulary',
+      '/(tabs)/vocabulary',
+      '/quiz',
+      '/(tabs)/quiz',
+      '/quiz-results',
+      '/(tabs)/quiz-results',
+    ],
+  },
+  {
     label: 'Hồ sơ',
     href: '/(tabs)/profile',
     icon: 'account-outline',

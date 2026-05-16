@@ -6,6 +6,7 @@ import { AppScreen, colors } from '../../components/AppUI';
 type IconName = keyof typeof MaterialCommunityIcons.glyphMap;
 
 type MistakeCategory = {
+  slug: string;
   title: string;
   englishTitle: string;
   description: string;
@@ -25,6 +26,7 @@ type MistakeCategory = {
 const categories: MistakeCategory[] = [
   {
     title: 'Âm cuối',
+    slug: 'final-sounds',
     englishTitle: 'Ending Sounds',
     description:
       'Người Việt thường bỏ qua phụ âm cuối như /s/, /z/, /t/, /d/, /k/, /g/, khiến nghĩa của từ thay đổi hoặc câu nghe thiếu rõ ràng.',
@@ -39,6 +41,7 @@ const categories: MistakeCategory[] = [
   },
   {
     title: 'Trọng âm từ',
+    slug: 'word-stress',
     englishTitle: 'Word Stress',
     description:
       'Nhấn sai trọng âm hoặc đọc đều từng âm tiết làm người nghe khó nhận ra từ, đặc biệt với từ dài hoặc từ học thuật.',
@@ -52,6 +55,7 @@ const categories: MistakeCategory[] = [
   },
   {
     title: 'Độ dài nguyên âm',
+    slug: 'vowel-length',
     englishTitle: 'Vowel Length',
     description:
       'Cần phân biệt nguyên âm ngắn và dài, ví dụ /ɪ/ trong “ship” khác với /iː/ trong “sheep”.',
@@ -65,6 +69,7 @@ const categories: MistakeCategory[] = [
   },
   {
     title: 'Cụm phụ âm',
+    slug: 'consonant-clusters',
     englishTitle: 'Consonant Clusters',
     description:
       'Khi nhiều phụ âm đứng cạnh nhau, người học dễ chèn thêm nguyên âm hoặc lược bớt âm trong cụm.',
@@ -79,6 +84,7 @@ const categories: MistakeCategory[] = [
   },
   {
     title: 'Nối âm',
+    slug: 'linking-sounds',
     englishTitle: 'Linking Sounds',
     description:
       'Nối âm giúp câu nói trôi chảy hơn, nhất là khi một từ kết thúc bằng phụ âm và từ sau bắt đầu bằng nguyên âm.',
@@ -115,7 +121,7 @@ export default function MistakesScreen() {
           <MistakeCard
             key={category.title}
             category={category}
-            onPractice={() => router.push('/(tabs)/practice-mode')}
+            onPractice={() => router.push(`/mistakes/${category.slug}/practice`)}
           />
         ))}
       </View>

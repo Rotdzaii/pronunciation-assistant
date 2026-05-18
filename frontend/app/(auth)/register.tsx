@@ -34,6 +34,11 @@ export default function RegisterScreen() {
     const { error } = await supabase.auth.signUp({
       email,
       password,
+      options: {
+        data: {
+          app_role: role,
+        },
+      },
     });
 
     if (error) {

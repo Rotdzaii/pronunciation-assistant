@@ -107,7 +107,8 @@ Open `http://localhost:8081`.
 ## Supabase setup checklist
 
 - Authentication users exist.
-- `public.profiles` has matching `id`, `email`, and `app_role`.
+- Registration sends the selected role as Supabase `user_metadata.app_role`.
+- Apply the database migrations so the auth trigger creates `public.profiles` automatically with matching `id`, `email`, and `app_role`.
 - `public.practice_history` exists.
 - `practice-audios` storage bucket exists.
 - PGMQ `practice_jobs` queue/RPC exists if using the queue path.

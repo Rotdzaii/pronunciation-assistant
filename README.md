@@ -6,6 +6,7 @@ Local demo setup for the FastAPI backend, Expo frontend web app, Supabase Auth/S
 
 - `frontend/` = active Expo frontend.
 - `fastapi-backend/` = active FastAPI backend.
+- `ai-worker/` = lightweight queue worker that scores queued practice jobs and calls the FastAPI webhook.
 - `archive/legacy/` = old reference code only.
 
 ## Prerequisites
@@ -125,7 +126,7 @@ Open `http://localhost:8081`.
    - `POST /practice/upload-audio`
    - `POST /practice/create-job`
    - `GET /practice/{job_id}`
-8. Use Swagger `POST /practice/webhook/ai-result` to simulate AI completion.
+8. Run `python worker.py` from `ai-worker/` to process one queued `practice_jobs` message, or use Swagger `POST /practice/webhook/ai-result` to simulate AI completion manually.
 9. Open History to see the result.
 
 ## Current API endpoints

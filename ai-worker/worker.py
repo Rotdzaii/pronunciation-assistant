@@ -10,6 +10,7 @@ from dotenv import load_dotenv
 from supabase import Client, create_client
 
 from scorers.mock_scorer import score_pronunciation
+from scorers.wav2vec2_scorer import score_pronunciation as score_wav2vec2_pronunciation
 
 
 DEFAULT_VISIBILITY_TIMEOUT_SECONDS = 60
@@ -45,6 +46,13 @@ def _load_env() -> dict[str, Any]:
         "queue_name": os.getenv("QUEUE_NAME", "practice_jobs"),
         "scorer_mode": os.getenv("SCORER_MODE", "mock"),
         "confidence_threshold": confidence_threshold,
+        "wav2vec2_model_name": os.getenv(
+            "WAV2VEC2_MODEL_NAME",
+            "facebook/wav2vec2-base-960h",
+        ),
+        "audio_download_timeout_seconds": float(
+            os.getenv("AUDIO_DOWNLOAD_TIMEOUT_SECONDS", "30")
+        ),
     }
 
 
@@ -163,12 +171,21 @@ def _parse_queue_row(row: dict[str, Any]) -> tuple[int, dict[str, Any]]:
     return int(msg_id), message
 
 
-def _score(job: dict[str, Any], scorer_mode: str, confidence_threshold: float) -> dict[str, Any]:
-    if scorer_mode != "mock":
-        raise RuntimeError(
-            f"Unsupported SCORER_MODE={scorer_mode!r}. Only 'mock' is implemented."
+def _score(job: dict[str, Any], config: dict[str, Any]) -> dict[str, Any]:
+    scorer_mode = config["scorer_mode"]
+    if scorer_mode == "mock":
+        return score_pronunciation(job, config["confidence_threshold"])
+    if scorer_mode == "wav2vec2":
+        return score_wav2vec2_pronunciation(
+            job,
+            confidence_threshold=config["confidence_threshold"],
+            model_name=config["wav2vec2_model_name"],
+            audio_download_timeout_seconds=config["audio_download_timeout_seconds"],
         )
-    return score_pronunciation(job, confidence_threshold)
+
+    raise RuntimeError(
+        f"Unsupported SCORER_MODE={scorer_mode!r}. Use 'mock' or 'wav2vec2'."
+    )
 
 
 def _post_webhook(webhook_url: str, webhook_secret: str, payload: dict[str, Any]) -> requests.Response:
@@ -194,9 +211,11 @@ def main() -> int:
     print(f"job_id={job['job_id']}")
     print(f"target_word={job['target_word']}")
     print(f"scorer_mode={config['scorer_mode']}")
+    if config["scorer_mode"] == "wav2vec2":
+        print(f"wav2vec2_model_name={config['wav2vec2_model_name']}")
 
-    result = _score(job, config["scorer_mode"], config["confidence_threshold"])
-    confidence = result["feedback"]["model_confidence"]["value"]
+    result = _score(job, config)
+    confidence = result.get("feedback", {}).get("model_confidence", {}).get("value")
     print(f"model_confidence={confidence}")
 
     webhook_payload = {"job_id": job["job_id"], **result}

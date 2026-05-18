@@ -6,7 +6,7 @@ Local demo setup for the FastAPI backend, Expo frontend web app, Supabase Auth/S
 
 - `frontend/` = active Expo frontend.
 - `fastapi-backend/` = active FastAPI backend.
-- `ai-worker/` = lightweight queue worker that scores queued practice jobs and calls the FastAPI webhook.
+- `ai-worker/` = lightweight queue worker with mock and Wav2Vec2 baseline scorers that calls the FastAPI webhook.
 - `archive/legacy/` = old reference code only.
 
 ## Prerequisites

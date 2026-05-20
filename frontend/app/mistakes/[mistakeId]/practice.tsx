@@ -16,9 +16,12 @@ import { AppButton, ErrorState, LoadingState, colors } from '../../../components
 import { createPracticeJob, fetchPracticeStatus, uploadPracticeAudio } from '../../../lib/api';
 import { useAuth } from '../../../lib/auth';
 import {
+  formatBaselineMetadata,
   formatFeedbackLines,
   formatProblemPhonemes,
+  getFeedbackScorerBadge,
   getScoreTone,
+  hasLowConfidenceWarning,
 } from '../../../lib/practiceFormatters';
 import type { PracticeJob, PracticeJobStatus } from '../../../types';
 
@@ -215,7 +218,7 @@ export default function MistakePracticeScreen() {
   const router = useRouter();
   const { mistakeId } = useLocalSearchParams();
   const { width } = useWindowDimensions();
-  const { accessToken, loading: authLoading, session } = useAuth();
+  const { accessToken, appRole, loading: authLoading, roleError, roleLoading, session } = useAuth();
   const [targetIndex, setTargetIndex] = useState(0);
   const [recording, setRecording] = useState<Audio.Recording | null>(null);
   const [sound, setSound] = useState<Audio.Sound | null>(null);
@@ -232,6 +235,9 @@ export default function MistakePracticeScreen() {
   const isDesktop = width >= 900;
   const resultLines = useMemo(() => formatFeedbackLines(job?.feedback), [job?.feedback]);
   const problemLines = useMemo(() => formatProblemPhonemes(job?.problem_phonemes), [job?.problem_phonemes]);
+  const baselineMetadata = useMemo(() => formatBaselineMetadata(job?.feedback), [job?.feedback]);
+  const scorerBadge = useMemo(() => getFeedbackScorerBadge(job?.feedback), [job?.feedback]);
+  const showConfidenceWarning = useMemo(() => hasLowConfidenceWarning(job?.feedback), [job?.feedback]);
   const scoreTone = getScoreTone(job?.score);
 
   useEffect(() => {
@@ -390,7 +396,7 @@ export default function MistakePracticeScreen() {
     setTargetIndex((current) => (current + 1) % config.targets.length);
   };
 
-  if (authLoading) {
+  if (authLoading || roleLoading) {
     return (
       <View style={styles.centeredRoot}>
         <LoadingState title="Đang kiểm tra phiên đăng nhập" message="Vui lòng chờ trong giây lát." />
@@ -400,6 +406,22 @@ export default function MistakePracticeScreen() {
 
   if (!session) {
     return <Redirect href="/welcome" />;
+  }
+
+  if (roleError || !appRole) {
+    return (
+      <View style={styles.centeredRoot}>
+        <ErrorState
+          title="Không thể mở bài luyện"
+          message={roleError ?? 'Không thể xác định vai trò tài khoản từ backend.'}
+        />
+      </View>
+    );
+  }
+
+  if (appRole === 'teacher') {
+    console.log('Route decision app_role', appRole);
+    return <Redirect href="/(tabs)/teacher" />;
   }
 
   if (!config || !target) {
@@ -583,10 +605,35 @@ export default function MistakePracticeScreen() {
                     </View>
                     <View style={styles.feedbackBlock}>
                       <Text style={styles.feedbackTitle}>Âm cần sửa</Text>
+                      {scorerBadge ? (
+                        <Text style={styles.scorerBadge}>{scorerBadge}</Text>
+                      ) : null}
+                      {showConfidenceWarning ? (
+                        <Text style={styles.warningText}>
+                          Độ tin cậy của kết quả chưa cao, bạn nên ghi âm lại trong môi trường yên tĩnh hơn.
+                        </Text>
+                      ) : null}
                       {problemLines.map((line, index) => (
                         <Text key={`${line}-${index}`} style={styles.feedbackLine}>{line}</Text>
                       ))}
                       <Text style={styles.feedbackTitle}>Nhận xét</Text>
+                      {baselineMetadata.length ? (
+                        <>
+                          <Text style={styles.feedbackTitle}>Chi tiết kết quả</Text>
+                          {baselineMetadata.map((line) => (
+                            <Text
+                              key={line.label}
+                              style={[
+                                styles.feedbackLine,
+                                line.tone === 'warning' ? styles.warningMetaText : null,
+                                line.tone === 'muted' ? styles.mutedMetaText : null,
+                              ]}
+                            >
+                              {line.label}: {line.value}
+                            </Text>
+                          ))}
+                        </>
+                      ) : null}
                       {resultLines.map((line, index) => (
                         <Text key={`${line}-${index}`} style={styles.feedbackLine}>{line}</Text>
                       ))}
@@ -905,8 +952,27 @@ const styles = StyleSheet.create({
   scoreLabel: { fontSize: 24, fontWeight: '900' },
   scoreSubcopy: { color: colors.muted, fontSize: 14, lineHeight: 20 },
   feedbackBlock: { borderTopWidth: 1, borderTopColor: colors.border, paddingTop: 14, gap: 8 },
+  scorerBadge: {
+    alignSelf: 'flex-start',
+    overflow: 'hidden',
+    borderRadius: 999,
+    backgroundColor: colors.softBlue,
+    color: colors.primary,
+    fontSize: 12,
+    fontWeight: '900',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+  },
+  warningText: {
+    color: colors.error,
+    fontSize: 13,
+    lineHeight: 19,
+    fontWeight: '800',
+  },
   feedbackTitle: { color: colors.text, fontSize: 14, fontWeight: '900', marginTop: 4 },
   feedbackLine: { color: colors.muted, fontSize: 14, lineHeight: 21 },
+  warningMetaText: { color: colors.error, fontWeight: '800' },
+  mutedMetaText: { color: colors.muted, fontSize: 13 },
   emptyResult: { color: colors.muted, fontSize: 15, lineHeight: 23 },
   resultActions: { flexDirection: 'row', gap: 12 },
   retryButton: {

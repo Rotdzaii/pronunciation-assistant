@@ -14,9 +14,12 @@ import { ErrorState, colors } from '../../components/AppUI';
 import { createPracticeJob, fetchPracticeStatus, uploadPracticeAudio } from '../../lib/api';
 import { useAuth } from '../../lib/auth';
 import {
+  formatBaselineMetadata,
   formatFeedbackLines,
   formatProblemPhonemes,
+  getFeedbackScorerBadge,
   getScoreTone,
+  hasLowConfidenceWarning,
 } from '../../lib/practiceFormatters';
 import type { PracticeJob, PracticeJobStatus } from '../../types';
 
@@ -179,10 +182,17 @@ export default function PracticeScreen() {
       : 'Nhấn micro để bắt đầu';
   const problemLines = formatProblemPhonemes(job?.problem_phonemes);
   const feedbackLines = formatFeedbackLines(job?.feedback);
+  const baselineMetadata = formatBaselineMetadata(job?.feedback);
+  const scorerBadge = getFeedbackScorerBadge(job?.feedback);
+  const showConfidenceWarning = hasLowConfidenceWarning(job?.feedback);
+  const confidenceWarningText =
+    'Độ tin cậy của kết quả chưa cao, bạn nên ghi âm lại trong môi trường yên tĩnh hơn.';
+  const shouldShowConfidenceWarning =
+    showConfidenceWarning && !feedbackLines.some((line) => line === confidenceWarningText);
   const scoreTone = getScoreTone(job?.score);
 
   const content = (
-    <View style={[styles.rootShell, isDesktop ? { height } : styles.mobileShell]}>
+    <View style={[styles.rootShell, isDesktop ? { minHeight: Math.max(height - 48, 0) } : styles.mobileShell]}>
       <View style={styles.mainArea}>
         <View style={[styles.practiceContent, isDesktop ? styles.desktopContent : styles.mobileContent]}>
           <View style={styles.progressRow}>
@@ -242,13 +252,41 @@ export default function PracticeScreen() {
                 {job?.score != null ? (
                   <Text style={styles.resultMood}>{scoreTone.label}</Text>
                 ) : null}
+                {jobStatus === 'failed' ? (
+                  <Text style={styles.warningText}>Hãy ghi âm lại và thử trong môi trường yên tĩnh hơn.</Text>
+                ) : null}
                 <Text style={styles.resultDetailTitle}>Âm cần sửa</Text>
+                {scorerBadge ? (
+                  <Text style={styles.scorerBadge}>{scorerBadge}</Text>
+                ) : null}
+                {shouldShowConfidenceWarning ? (
+                  <Text style={styles.warningText}>
+                    Độ tin cậy của kết quả chưa cao, bạn nên ghi âm lại trong môi trường yên tĩnh hơn.
+                  </Text>
+                ) : null}
                 {problemLines.map((line, index) => (
                   <Text key={`${line}-${index}`} style={styles.resultDetail}>
                     {line}
                   </Text>
                 ))}
                 <Text style={styles.resultDetailTitle}>Nhận xét</Text>
+                {baselineMetadata.length ? (
+                  <>
+                    <Text style={styles.resultDetailTitle}>Chi tiết kết quả</Text>
+                    {baselineMetadata.map((line) => (
+                      <Text
+                        key={line.label}
+                        style={[
+                          styles.resultDetail,
+                          line.tone === 'warning' ? styles.warningMetaText : null,
+                          line.tone === 'muted' ? styles.mutedMetaText : null,
+                        ]}
+                      >
+                        {line.label}: {line.value}
+                      </Text>
+                    ))}
+                  </>
+                ) : null}
                 {feedbackLines.map((line, index) => (
                   <Text key={`${line}-${index}`} style={styles.resultDetail}>
                     {line}
@@ -323,7 +361,17 @@ export default function PracticeScreen() {
   );
 
   if (isDesktop) {
-    return <View style={[styles.desktopRoot, { height }]}>{content}</View>;
+    return (
+      <View style={[styles.desktopRoot, { height }]}>
+        <ScrollView
+          contentContainerStyle={styles.desktopScrollContent}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
+          {content}
+        </ScrollView>
+      </View>
+    );
   }
 
   return (
@@ -371,7 +419,11 @@ const styles = StyleSheet.create({
   desktopRoot: {
     flex: 1,
     backgroundColor: '#faf8ff',
-    overflow: 'hidden',
+  },
+  desktopScrollContent: {
+    flexGrow: 1,
+    paddingHorizontal: 24,
+    paddingVertical: 24,
   },
   mobileRoot: {
     flex: 1,
@@ -384,10 +436,8 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     backgroundColor: '#faf8ff',
-    overflow: 'hidden',
   },
   mobileShell: {
-    minHeight: 820,
     flexDirection: 'column',
     paddingHorizontal: 20,
     paddingVertical: 24,
@@ -396,28 +446,24 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     backgroundColor: '#faf8ff',
-    overflow: 'hidden',
   },
   practiceContent: {
     width: '100%',
     maxWidth: 600,
-    flex: 1,
-    position: 'relative',
+    alignSelf: 'center',
+    gap: 20,
   },
   desktopContent: {
-    height: '100%',
+    minHeight: 0,
   },
   mobileContent: {
-    minHeight: 780,
+    minHeight: 0,
   },
   progressRow: {
-    position: 'absolute',
-    top: 24,
-    left: 0,
-    right: 0,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    gap: 12,
   },
   progressPill: {
     backgroundColor: '#e7e7f3',
@@ -442,10 +488,6 @@ const styles = StyleSheet.create({
     fontWeight: '800',
   },
   wordCard: {
-    position: 'absolute',
-    top: 64,
-    left: 0,
-    right: 0,
     minHeight: 304,
     backgroundColor: '#ffffff',
     borderColor: 'rgba(195,198,215,0.3)',
@@ -454,7 +496,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32,
     paddingVertical: 32,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     shadowColor: '#0f172a',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.05,
@@ -569,8 +611,9 @@ const styles = StyleSheet.create({
     borderColor: '#c3c6d7',
     borderWidth: 1,
     borderRadius: 10,
-    padding: 8,
+    padding: 12,
     width: '100%',
+    gap: 6,
   },
   resultScore: {
     fontSize: 12,
@@ -580,6 +623,26 @@ const styles = StyleSheet.create({
   resultMood: {
     color: '#434655',
     fontSize: 11,
+    fontWeight: '800',
+    textAlign: 'center',
+    marginBottom: 4,
+  },
+  scorerBadge: {
+    alignSelf: 'center',
+    overflow: 'hidden',
+    borderRadius: 999,
+    backgroundColor: colors.softBlue,
+    color: colors.primary,
+    fontSize: 10,
+    fontWeight: '900',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    marginBottom: 4,
+  },
+  warningText: {
+    color: colors.error,
+    fontSize: 11,
+    lineHeight: 16,
     fontWeight: '800',
     textAlign: 'center',
     marginBottom: 4,
@@ -594,19 +657,23 @@ const styles = StyleSheet.create({
   resultDetail: {
     color: '#434655',
     fontSize: 11,
+    lineHeight: 17,
     textAlign: 'center',
+    flexShrink: 1,
+  },
+  warningMetaText: {
+    color: colors.error,
+    fontWeight: '800',
+  },
+  mutedMetaText: {
+    color: colors.muted,
+    fontSize: 10,
   },
   errorWrap: {
-    position: 'absolute',
-    top: 374,
-    left: 0,
-    right: 0,
+    width: '100%',
   },
   interactionArea: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: 504,
+    width: '100%',
     alignItems: 'center',
   },
   recordingStatusRow: {

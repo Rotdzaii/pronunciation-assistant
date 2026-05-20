@@ -38,6 +38,16 @@ export type PracticeFeedback = {
   tips?: unknown;
   message?: unknown;
   text?: unknown;
+  scorer?: unknown;
+  result_label?: unknown;
+  model_name?: unknown;
+  target_word?: unknown;
+  recognized_text?: unknown;
+  text_similarity?: unknown;
+  baseline_note?: unknown;
+  model_confidence?: unknown;
+  target_match?: unknown;
+  score_breakdown?: unknown;
   [key: string]: unknown;
 };
 

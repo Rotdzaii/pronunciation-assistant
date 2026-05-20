@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os
 import sys
+import time
 from pathlib import Path
 from typing import Any
 
@@ -10,6 +11,7 @@ from dotenv import load_dotenv
 from supabase import Client, create_client
 
 from scorers.mock_scorer import score_pronunciation
+from scorers.wav2vec2_scorer import score_pronunciation as score_wav2vec2_pronunciation
 
 
 DEFAULT_VISIBILITY_TIMEOUT_SECONDS = 60
@@ -37,6 +39,34 @@ def _load_env() -> dict[str, Any]:
     if not 0 <= confidence_threshold <= 1:
         raise RuntimeError("MODEL_CONFIDENCE_THRESHOLD must be between 0 and 1")
 
+    try:
+        audio_download_timeout_seconds = float(
+            os.getenv("AUDIO_DOWNLOAD_TIMEOUT_SECONDS", "30")
+        )
+        poll_interval_seconds = float(os.getenv("WORKER_POLL_INTERVAL_SECONDS", "1"))
+        idle_backoff_max_seconds = float(
+            os.getenv("WORKER_IDLE_BACKOFF_MAX_SECONDS", "10")
+        )
+        batch_size = int(os.getenv("WORKER_BATCH_SIZE", "1"))
+        max_jobs_per_run = int(os.getenv("WORKER_MAX_JOBS_PER_RUN", "0"))
+    except ValueError as exc:
+        raise RuntimeError("Worker numeric env vars must be valid numbers") from exc
+
+    worker_mode = os.getenv("WORKER_MODE", "once").strip().lower()
+    if worker_mode not in {"once", "loop"}:
+        raise RuntimeError("WORKER_MODE must be 'once' or 'loop'")
+    if poll_interval_seconds <= 0:
+        raise RuntimeError("WORKER_POLL_INTERVAL_SECONDS must be greater than 0")
+    if idle_backoff_max_seconds < poll_interval_seconds:
+        raise RuntimeError(
+            "WORKER_IDLE_BACKOFF_MAX_SECONDS must be greater than or equal to "
+            "WORKER_POLL_INTERVAL_SECONDS"
+        )
+    if batch_size < 1:
+        raise RuntimeError("WORKER_BATCH_SIZE must be at least 1")
+    if max_jobs_per_run < 0:
+        raise RuntimeError("WORKER_MAX_JOBS_PER_RUN must be 0 or greater")
+
     return {
         "supabase_url": os.environ["SUPABASE_URL"],
         "supabase_service_role_key": os.environ["SUPABASE_SERVICE_ROLE_KEY"],
@@ -45,6 +75,16 @@ def _load_env() -> dict[str, Any]:
         "queue_name": os.getenv("QUEUE_NAME", "practice_jobs"),
         "scorer_mode": os.getenv("SCORER_MODE", "mock"),
         "confidence_threshold": confidence_threshold,
+        "wav2vec2_model_name": os.getenv(
+            "WAV2VEC2_MODEL_NAME",
+            "facebook/wav2vec2-base-960h",
+        ),
+        "audio_download_timeout_seconds": audio_download_timeout_seconds,
+        "worker_mode": worker_mode,
+        "poll_interval_seconds": poll_interval_seconds,
+        "idle_backoff_max_seconds": idle_backoff_max_seconds,
+        "batch_size": batch_size,
+        "max_jobs_per_run": max_jobs_per_run,
     }
 
 
@@ -163,12 +203,21 @@ def _parse_queue_row(row: dict[str, Any]) -> tuple[int, dict[str, Any]]:
     return int(msg_id), message
 
 
-def _score(job: dict[str, Any], scorer_mode: str, confidence_threshold: float) -> dict[str, Any]:
-    if scorer_mode != "mock":
-        raise RuntimeError(
-            f"Unsupported SCORER_MODE={scorer_mode!r}. Only 'mock' is implemented."
+def _score(job: dict[str, Any], config: dict[str, Any]) -> dict[str, Any]:
+    scorer_mode = config["scorer_mode"]
+    if scorer_mode == "mock":
+        return score_pronunciation(job, config["confidence_threshold"])
+    if scorer_mode == "wav2vec2":
+        return score_wav2vec2_pronunciation(
+            job,
+            confidence_threshold=config["confidence_threshold"],
+            model_name=config["wav2vec2_model_name"],
+            audio_download_timeout_seconds=config["audio_download_timeout_seconds"],
         )
-    return score_pronunciation(job, confidence_threshold)
+
+    raise RuntimeError(
+        f"Unsupported SCORER_MODE={scorer_mode!r}. Use 'mock' or 'wav2vec2'."
+    )
 
 
 def _post_webhook(webhook_url: str, webhook_secret: str, payload: dict[str, Any]) -> requests.Response:
@@ -180,23 +229,22 @@ def _post_webhook(webhook_url: str, webhook_secret: str, payload: dict[str, Any]
     )
 
 
-def main() -> int:
-    config = _load_env()
-    client = create_client(config["supabase_url"], config["supabase_service_role_key"])
-
+def _process_one_job(client: Client, config: dict[str, Any]) -> bool:
     row = _read_one_job(client, config["queue_name"])
     if not row:
-        print(f"No job found in {config['queue_name']} queue.")
-        return 0
+        return False
 
     msg_id, job = _parse_queue_row(row)
     print(f"msg_id={msg_id}")
     print(f"job_id={job['job_id']}")
     print(f"target_word={job['target_word']}")
     print(f"scorer_mode={config['scorer_mode']}")
+    if config["scorer_mode"] == "wav2vec2":
+        print(f"wav2vec2_model_name={config['wav2vec2_model_name']}")
 
-    result = _score(job, config["scorer_mode"], config["confidence_threshold"])
-    confidence = result["feedback"]["model_confidence"]["value"]
+    result = _score(job, config)
+    confidence = result.get("feedback", {}).get("model_confidence", {}).get("value")
+    print(f"result_status={result.get('status')}")
     print(f"model_confidence={confidence}")
 
     webhook_payload = {"job_id": job["job_id"], **result}
@@ -210,16 +258,89 @@ def main() -> int:
     if not 200 <= response.status_code < 300:
         print(f"Webhook failed. Message {msg_id} was not archived.")
         print(response.text)
-        return 1
+        raise RuntimeError(f"Webhook failed with status {response.status_code}")
 
     _archive_job(client, config["queue_name"], msg_id)
     print(f"Processed job {job['job_id']} and archived message {msg_id}.")
+    return True
+
+
+def _run_once(client: Client, config: dict[str, Any]) -> int:
+    processed = _process_one_job(client, config)
+    if not processed:
+        print(f"No job found in {config['queue_name']} queue.")
     return 0
+
+
+def _run_loop(client: Client, config: dict[str, Any]) -> int:
+    processed_jobs = 0
+    idle_sleep_seconds = config["poll_interval_seconds"]
+    last_idle_log_time = 0.0
+
+    print(
+        "Worker loop started "
+        f"queue={config['queue_name']} "
+        f"poll_interval={config['poll_interval_seconds']}s "
+        f"max_idle_backoff={config['idle_backoff_max_seconds']}s "
+        f"batch_size={config['batch_size']} "
+        f"max_jobs_per_run={config['max_jobs_per_run']}"
+    )
+
+    while True:
+        processed_in_batch = 0
+        for _ in range(config["batch_size"]):
+            if (
+                config["max_jobs_per_run"]
+                and processed_jobs >= config["max_jobs_per_run"]
+            ):
+                print(f"Reached WORKER_MAX_JOBS_PER_RUN={processed_jobs}.")
+                return 0
+
+            try:
+                if not _process_one_job(client, config):
+                    break
+            except Exception as exc:
+                print(f"Job processing failed without archiving message: {exc}")
+                break
+
+            processed_jobs += 1
+            processed_in_batch += 1
+
+        if processed_in_batch:
+            idle_sleep_seconds = config["poll_interval_seconds"]
+            continue
+
+        now = time.monotonic()
+        if now - last_idle_log_time >= 30 or last_idle_log_time == 0:
+            print(
+                f"No job found in {config['queue_name']} queue. "
+                f"Sleeping {idle_sleep_seconds:g}s."
+            )
+            last_idle_log_time = now
+
+        time.sleep(idle_sleep_seconds)
+        idle_sleep_seconds = min(
+            idle_sleep_seconds * 2,
+            config["idle_backoff_max_seconds"],
+        )
+
+
+def main() -> int:
+    config = _load_env()
+    client = create_client(config["supabase_url"], config["supabase_service_role_key"])
+
+    if config["worker_mode"] == "loop":
+        return _run_loop(client, config)
+
+    return _run_once(client, config)
 
 
 if __name__ == "__main__":
     try:
         raise SystemExit(main())
+    except KeyboardInterrupt:
+        print("Worker stopped by Ctrl+C.")
+        raise SystemExit(0)
     except Exception as exc:
         print(f"Worker failed: {exc}", file=sys.stderr)
         raise SystemExit(1)

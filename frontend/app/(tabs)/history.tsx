@@ -16,6 +16,7 @@ import {
   clampScore,
   formatFeedbackLines,
   formatProblemPhonemes,
+  getFeedbackScorerBadge,
   getScoreTone,
 } from '../../lib/practiceFormatters';
 import type { PracticeHistoryItem, PracticeJobStatus } from '../../types';
@@ -83,8 +84,9 @@ export default function HistoryScreen() {
 
 function HistoryCard({ item }: { item: PracticeHistoryItem }) {
   const scoreTone = getScoreTone(item.score);
-  const problemLines = formatProblemPhonemes(item.problem_phonemes);
-  const feedbackLines = formatFeedbackLines(item.feedback);
+  const problemLines = formatProblemPhonemes(item.problem_phonemes).slice(0, 2);
+  const feedbackLines = formatFeedbackLines(item.feedback).slice(0, 3);
+  const scorerBadge = getFeedbackScorerBadge(item.feedback);
 
   return (
     <AppCard style={styles.card}>
@@ -102,6 +104,11 @@ function HistoryCard({ item }: { item: PracticeHistoryItem }) {
             {item.score != null ? (
               <View style={[styles.scoreBadge, { backgroundColor: scoreTone.color }]}>
                 <Text style={styles.scoreBadgeText}>{scoreTone.label}</Text>
+              </View>
+            ) : null}
+            {scorerBadge ? (
+              <View style={styles.scorerBadge}>
+                <Text style={styles.scorerBadgeText}>{scorerBadge}</Text>
               </View>
             ) : null}
           </View>
@@ -277,6 +284,18 @@ const styles = StyleSheet.create({
   },
   scoreBadgeText: {
     color: '#FFFFFF',
+    fontSize: 12,
+    fontWeight: '800',
+  },
+  scorerBadge: {
+    alignSelf: 'flex-start',
+    borderRadius: 999,
+    backgroundColor: colors.softBlue,
+    paddingHorizontal: 12,
+    paddingVertical: 7,
+  },
+  scorerBadgeText: {
+    color: colors.primary,
     fontSize: 12,
     fontWeight: '800',
   },

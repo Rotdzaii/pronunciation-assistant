@@ -1,6 +1,6 @@
 from collections.abc import Callable, Sequence
 import logging
-from typing import Any
+from typing import Any, Literal
 
 import httpx
 from fastapi import Depends, HTTPException, Request, status
@@ -12,12 +12,18 @@ from app.core.config import Settings, get_settings
 
 logger = logging.getLogger(__name__)
 
+AppRole = Literal["student", "teacher", "admin"]
+
 
 class CurrentUser(BaseModel):
     id: str
     email: str | None = None
     auth_role: str | None = None
-    app_role: str | None = None
+    app_role: AppRole | None = None
+    full_name: str | None = None
+    name: str | None = None
+    can_use_student: bool = False
+    can_use_teacher: bool = False
 
 
 def _auth_error(detail: str = "Invalid or expired token") -> HTTPException:
@@ -74,7 +80,7 @@ def get_supabase_service_client(settings: Settings) -> Client:
     return create_client(settings.supabase_url, settings.supabase_service_role_key)
 
 
-def get_profile_app_role(client: Client, user_id: str) -> str | None:
+def get_profile_app_role(client: Client, user_id: str) -> AppRole | None:
     try:
         response = (
             client.table("profiles")
@@ -93,7 +99,10 @@ def get_profile_app_role(client: Client, user_id: str) -> str | None:
     if not data:
         return None
 
-    return data[0].get("app_role")
+    app_role = data[0].get("app_role")
+    if app_role in ("student", "teacher", "admin"):
+        return app_role
+    return None
 
 
 async def get_current_user(
@@ -136,16 +145,24 @@ async def get_current_user(
 
     supabase_client = get_supabase_service_client(settings)
 
+    app_role = get_profile_app_role(supabase_client, user_id)
+
     return CurrentUser(
         id=user_id,
         email=user_data.get("email"),
         auth_role=auth_role,
-        app_role=get_profile_app_role(supabase_client, user_id),
+        app_role=app_role,
+        full_name=(user_data.get("user_metadata") or {}).get("full_name"),
+        name=(user_data.get("user_metadata") or {}).get("name"),
+        can_use_student=app_role in ("student", "admin"),
+        can_use_teacher=app_role in ("teacher", "admin"),
     )
 
 
 def require_roles(roles: Sequence[str]) -> Callable[[CurrentUser], CurrentUser]:
     allowed_roles = set(roles)
+    if allowed_roles.intersection({"student", "teacher"}):
+        allowed_roles.add("admin")
 
     def role_dependency(
         current_user: CurrentUser = Depends(get_current_user),

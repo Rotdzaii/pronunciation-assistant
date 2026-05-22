@@ -1,7 +1,7 @@
-import { Redirect, Tabs, usePathname } from 'expo-router';
+import { Redirect, Tabs, usePathname, useRouter } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { StyleSheet, useWindowDimensions, View } from 'react-native';
-import { AppSidebar, LoadingState, colors } from '../../components/AppUI';
+import { Pressable, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import { AppSidebar, ErrorState, LoadingState, colors } from '../../components/AppUI';
 import { useAuth } from '../../lib/auth';
 
 type IconName = keyof typeof MaterialCommunityIcons.glyphMap;
@@ -12,9 +12,10 @@ type TabIconProps = {
 };
 
 export default function TabsLayout() {
+  const router = useRouter();
   const { width } = useWindowDimensions();
   const pathname = usePathname();
-  const { session, loading } = useAuth();
+  const { appRole, loading, roleError, roleLoading, session } = useAuth();
   const isDesktop = width >= 768;
   const isTeacherRoute = [
     '/teacher',
@@ -24,8 +25,33 @@ export default function TabsLayout() {
     '/student-detail',
     '/(tabs)/student-detail',
   ].includes(pathname);
+  const isStudentOnlyRoute = [
+    '/',
+    '/practice',
+    '/(tabs)/practice',
+    '/mistakes',
+    '/(tabs)/mistakes',
+    '/history',
+    '/(tabs)/history',
+    '/practice-mode',
+    '/(tabs)/practice-mode',
+    '/sentence',
+    '/(tabs)/sentence',
+    '/processing',
+    '/(tabs)/processing',
+    '/result',
+    '/(tabs)/result',
+    '/progress',
+    '/(tabs)/progress',
+    '/vocabulary',
+    '/(tabs)/vocabulary',
+    '/quiz',
+    '/(tabs)/quiz',
+    '/quiz-results',
+    '/(tabs)/quiz-results',
+  ].includes(pathname);
 
-  if (loading) {
+  if (loading || (roleLoading && !appRole)) {
     return (
       <View style={styles.loadingShell}>
         <LoadingState
@@ -40,10 +66,42 @@ export default function TabsLayout() {
     return <Redirect href="/welcome" />;
   }
 
+  if (roleError || !appRole) {
+    return (
+      <View style={styles.loadingShell}>
+        <ErrorState
+          title="Không thể mở khu vực học tập"
+          message={roleError ?? 'Không thể xác định vai trò tài khoản từ backend.'}
+        />
+      </View>
+    );
+  }
+
+  if (appRole === 'student' && isTeacherRoute) {
+    console.log('Route decision app_role', appRole);
+    return <Redirect href="/(tabs)" />;
+  }
+
+  if (appRole === 'teacher' && isStudentOnlyRoute) {
+    console.log('Route decision app_role', appRole);
+    return <Redirect href="/(tabs)/teacher" />;
+  }
+
+  const canUseStudent = appRole === 'student' || appRole === 'admin';
+  const canUseTeacher = appRole === 'teacher' || appRole === 'admin';
+  const sidebarVariant = appRole === 'admin' ? (isTeacherRoute ? 'teacher' : 'student') : appRole;
+
   return (
     <View style={styles.shell}>
-      {isDesktop ? <AppSidebar variant={isTeacherRoute ? 'teacher' : 'student'} /> : null}
+      {isDesktop ? <AppSidebar variant={sidebarVariant} /> : null}
       <View style={styles.content}>
+        {appRole === 'admin' ? (
+          <AdminModeSwitch
+            isTeacherRoute={isTeacherRoute}
+            onStudentMode={() => router.replace('/(tabs)')}
+            onTeacherMode={() => router.replace('/(tabs)/teacher')}
+          />
+        ) : null}
         <Tabs
           screenOptions={{
             headerShown: !isDesktop,
@@ -73,6 +131,7 @@ export default function TabsLayout() {
           <Tabs.Screen
             name="index"
             options={{
+              href: canUseStudent ? undefined : null,
               title: 'Trang chủ',
               tabBarIcon: ({ focused }) => <TabIcon focused={focused} name="home-outline" />,
             }}
@@ -80,6 +139,7 @@ export default function TabsLayout() {
           <Tabs.Screen
             name="practice"
             options={{
+              href: canUseStudent ? undefined : null,
               title: 'Luyện tập',
               tabBarIcon: ({ focused }) => (
                 <TabIcon focused={focused} name="microphone-outline" />
@@ -89,6 +149,7 @@ export default function TabsLayout() {
           <Tabs.Screen
             name="mistakes"
             options={{
+              href: canUseStudent ? undefined : null,
               title: 'Lỗi phổ biến',
               tabBarIcon: ({ focused }) => (
                 <TabIcon focused={focused} name="alert-circle-outline" />
@@ -98,6 +159,7 @@ export default function TabsLayout() {
           <Tabs.Screen
             name="history"
             options={{
+              href: canUseStudent ? undefined : null,
               title: 'Lịch sử',
               tabBarIcon: ({ focused }) => <TabIcon focused={focused} name="history" />,
             }}
@@ -117,7 +179,13 @@ export default function TabsLayout() {
           <Tabs.Screen name="vocabulary" options={{ title: 'Ôn tập từ vựng', href: null }} />
           <Tabs.Screen name="quiz" options={{ title: 'Câu hỏi ôn tập', href: null }} />
           <Tabs.Screen name="quiz-results" options={{ title: 'Kết quả ôn tập', href: null }} />
-          <Tabs.Screen name="teacher" options={{ title: 'Bảng điều khiển giáo viên', href: null }} />
+          <Tabs.Screen
+            name="teacher"
+            options={{
+              title: 'Bảng điều khiển giáo viên',
+              href: canUseTeacher ? '/(tabs)/teacher' : null,
+            }}
+          />
           <Tabs.Screen name="students" options={{ title: 'Danh sách học viên', href: null }} />
           <Tabs.Screen name="student-detail" options={{ title: 'Chi tiết học viên', href: null }} />
         </Tabs>
@@ -138,6 +206,39 @@ function TabIcon({ focused, name }: TabIconProps) {
   );
 }
 
+function AdminModeSwitch({
+  isTeacherRoute,
+  onStudentMode,
+  onTeacherMode,
+}: {
+  isTeacherRoute: boolean;
+  onStudentMode: () => void;
+  onTeacherMode: () => void;
+}) {
+  return (
+    <View style={styles.adminSwitch}>
+      <Pressable
+        accessibilityRole="button"
+        onPress={onStudentMode}
+        style={[styles.adminSwitchButton, !isTeacherRoute ? styles.adminSwitchButtonActive : null]}
+      >
+        <Text style={[styles.adminSwitchText, !isTeacherRoute ? styles.adminSwitchTextActive : null]}>
+          Chế độ học viên
+        </Text>
+      </Pressable>
+      <Pressable
+        accessibilityRole="button"
+        onPress={onTeacherMode}
+        style={[styles.adminSwitchButton, isTeacherRoute ? styles.adminSwitchButtonActive : null]}
+      >
+        <Text style={[styles.adminSwitchText, isTeacherRoute ? styles.adminSwitchTextActive : null]}>
+          Chế độ giảng viên
+        </Text>
+      </Pressable>
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
   loadingShell: {
     flex: 1,
@@ -153,6 +254,37 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
+  },
+  adminSwitch: {
+    position: 'absolute',
+    top: 10,
+    right: 14,
+    zIndex: 10,
+    flexDirection: 'row',
+    gap: 6,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.surface,
+    padding: 4,
+  },
+  adminSwitchButton: {
+    minHeight: 34,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 12,
+  },
+  adminSwitchButtonActive: {
+    backgroundColor: colors.primary,
+  },
+  adminSwitchText: {
+    color: colors.muted,
+    fontSize: 12,
+    fontWeight: '900',
+  },
+  adminSwitchTextActive: {
+    color: '#FFFFFF',
   },
   tabBar: {
     backgroundColor: colors.surface,

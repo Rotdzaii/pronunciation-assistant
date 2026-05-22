@@ -1,8 +1,10 @@
 # AI Worker
 
-Lightweight worker for the demo pronunciation pipeline. It reads one practice job from Supabase PGMQ, produces deterministic mock scoring, posts the result to the FastAPI webhook, then archives the queue message after a successful webhook response.
+Lightweight worker for the demo pronunciation pipeline. In demo loop mode, it keeps polling Supabase PGMQ for practice jobs, scores them with the selected scorer, posts results to the FastAPI webhook, then archives queue messages after successful webhook responses.
 
-The current scorer is mock-only. `SCORER_MODE=wav2vec2` is reserved for a later Wav2Vec2 baseline and this worker intentionally does not install or import `torch` or `transformers`.
+Supported scorer modes are `mock` and `wav2vec2`. The Wav2Vec2 scorer imports `torch`, `transformers`, and audio decoding dependencies only when `SCORER_MODE=wav2vec2`.
+
+Wav2Vec2 audio is preprocessed through `audio/preprocessing.py`: uploaded WebM, M4A, MP3, and related browser audio formats are converted with FFmpeg to mono 16 kHz PCM WAV, then loaded with `soundfile`. The scorer does not directly decode WebM with `librosa`.
 
 ## Setup
 
@@ -22,6 +24,9 @@ SUPABASE_SERVICE_ROLE_KEY=your-supabase-service-role-key
 NODE_WEBHOOK_URL=http://localhost:8000/practice/webhook/ai-result
 AI_WEBHOOK_SECRET=replace-with-ai-webhook-secret
 QUEUE_NAME=practice_jobs
+WORKER_MODE=loop
+WORKER_POLL_INTERVAL_SECONDS=1
+WORKER_IDLE_BACKOFF_MAX_SECONDS=10
 SCORER_MODE=mock
 MODEL_CONFIDENCE_THRESHOLD=0.65
 ```
@@ -34,10 +39,16 @@ Never commit `.env` or service-role secrets.
 python worker.py
 ```
 
-If the queue is empty, the worker prints:
+By default, `WORKER_MODE=loop` keeps the worker alive for the local demo. If the queue is empty, the worker prints:
 
 ```text
 No job found in practice_jobs queue.
+```
+
+For one-shot debugging, run:
+
+```powershell
+$env:WORKER_MODE="once"; python worker.py
 ```
 
 ## Demo Flow
@@ -47,7 +58,7 @@ No job found in practice_jobs queue.
 3. FastAPI inserts `public.practice_history` with `status = processing`.
 4. FastAPI enqueues a PGMQ message in `practice_jobs` with `job_id`, `student_id`, `target_word`, and `audio_url`.
 5. Run `python worker.py`.
-6. The worker reads one queue message, scores it with the mock scorer, and calls `POST /practice/webhook/ai-result`.
+6. The worker reads one queue message, scores it with `SCORER_MODE=mock` or `SCORER_MODE=wav2vec2`, and calls `POST /practice/webhook/ai-result`.
 7. If the webhook succeeds, the worker archives the PGMQ message.
 8. `public.practice_history` becomes `completed` with `score`, `problem_phonemes`, and `feedback`.
 
@@ -67,7 +78,7 @@ Then it tries common exposed PGMQ wrapper names:
 
 ## Confidence Threshold
 
-`MODEL_CONFIDENCE_THRESHOLD` is a float from `0` to `1`. The mock scorer produces a deterministic `feedback.model_confidence.value` from the job id, compares it with the threshold, and sets:
+`MODEL_CONFIDENCE_THRESHOLD` is a float from `0` to `1`. Scorers set `feedback.model_confidence.value`, compare it with the threshold, and return:
 
 - `feedback.model_confidence.threshold`
 - `feedback.model_confidence.level`
@@ -79,7 +90,9 @@ In mock mode, low confidence still returns `status = completed`, but the feedbac
 Độ tin cậy của kết quả chưa cao, bạn nên ghi âm lại trong môi trường yên tĩnh hơn.
 ```
 
-When Wav2Vec2 support is added later, the same threshold will gate real model confidence from inference.
+In `wav2vec2` mode, the scorer also returns `feedback.scorer = "wav2vec2"`, `feedback.target_match`, `feedback.score_breakdown`, and `feedback.audio` metadata when audio decoding succeeds.
+
+The `feedback.audio.preprocessing` metadata includes whether FFmpeg conversion ran, the converted format, target sample rate, and mono/normalization settings.
 
 ## Logs
 

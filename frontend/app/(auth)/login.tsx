@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
-import type { ComponentProps } from 'react';
+import { forwardRef, useEffect, useRef, useState } from 'react';
+import type { ComponentProps, ReactNode } from 'react';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Link, useRouter } from 'expo-router';
 import {
   Pressable,
@@ -15,41 +16,66 @@ import { ErrorState, colors } from '../../components/AppUI';
 import { useAuth } from '../../lib/auth';
 import { supabase } from '../../lib/supabase';
 
-type Role = 'student' | 'teacher';
-
 export default function LoginScreen() {
   const router = useRouter();
-  const { session } = useAuth();
+  const { appRole, loading: authLoading, refreshCurrentUser, roleError, session } = useAuth();
   const { width } = useWindowDimensions();
   const isWide = width >= 860;
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState<Role>('student');
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const [remember, setRemember] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const passwordInputRef = useRef<TextInput>(null);
 
   const handleLogin = async () => {
+    if (loading) {
+      return;
+    }
+    if (!email.trim() || !password) {
+      setError('Vui lòng nhập email và mật khẩu.');
+      return;
+    }
+
     setLoading(true);
     setError(null);
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email: email.trim(),
+        password,
+      });
 
-    if (error) {
-      setError(error.message);
-    } else {
-      router.replace(role === 'teacher' ? '/(tabs)/teacher' : '/(tabs)');
+      if (error) {
+        setError(error.message);
+      } else {
+        const user = await refreshCurrentUser();
+        const backendRole = user?.app_role;
+        if (backendRole === 'teacher' || backendRole === 'admin') {
+          router.replace('/(tabs)/teacher');
+        } else if (backendRole === 'student') {
+          router.replace('/(tabs)');
+        } else {
+          setError('Không tìm thấy hồ sơ người dùng. Vui lòng kiểm tra profile trong Supabase.');
+        }
+      }
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   useEffect(() => {
-    if (session) {
+    if (authLoading || !session) {
+      return;
+    }
+    if (appRole === 'teacher' || appRole === 'admin') {
+      console.log('Login existing session route decision app_role', appRole);
+      router.replace('/(tabs)/teacher');
+    } else if (appRole === 'student') {
+      console.log('Login existing session route decision app_role', appRole);
       router.replace('/(tabs)');
     }
-  }, [session, router]);
+  }, [appRole, authLoading, session, router]);
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -70,8 +96,6 @@ export default function LoginScreen() {
                 <Text style={styles.subtitle}>Vui lòng nhập thông tin để đăng nhập.</Text>
               </View>
 
-              <RoleSelector value={role} onChange={setRole} />
-
               <View style={styles.form}>
                 <LabeledInput
                   label="Địa chỉ Email"
@@ -80,13 +104,33 @@ export default function LoginScreen() {
                   keyboardType="email-address"
                   value={email}
                   onChangeText={setEmail}
+                  returnKeyType="next"
+                  blurOnSubmit={false}
+                  onSubmitEditing={() => passwordInputRef.current?.focus()}
                 />
                 <LabeledInput
+                  ref={passwordInputRef}
                   label="Mật khẩu"
                   placeholder="Nhập mật khẩu"
-                  secureTextEntry
+                  secureTextEntry={!passwordVisible}
                   value={password}
                   onChangeText={setPassword}
+                  returnKeyType="done"
+                  onSubmitEditing={handleLogin}
+                  rightElement={
+                    <Pressable
+                      accessibilityRole="button"
+                      accessibilityLabel={passwordVisible ? 'Ẩn mật khẩu' : 'Hiển thị mật khẩu'}
+                      onPress={() => setPasswordVisible((visible) => !visible)}
+                      style={styles.visibilityButton}
+                    >
+                      <MaterialCommunityIcons
+                        name={passwordVisible ? 'eye-off-outline' : 'eye-outline'}
+                        size={22}
+                        color={colors.muted}
+                      />
+                    </Pressable>
+                  }
                 />
               </View>
 
@@ -100,7 +144,9 @@ export default function LoginScreen() {
                 <Text style={styles.forgotLink}>Quên mật khẩu?</Text>
               </View>
 
-              {error ? <ErrorState title="Không thể đăng nhập" message={error} /> : null}
+              {error || roleError ? (
+                <ErrorState title="Không thể đăng nhập" message={error ?? roleError ?? ''} />
+              ) : null}
 
               <Pressable
                 accessibilityRole="button"
@@ -162,37 +208,26 @@ function BrandPanel({ wide }: { wide: boolean }) {
   );
 }
 
-function RoleSelector({ value, onChange }: { value: Role; onChange: (role: Role) => void }) {
-  return (
-    <View style={styles.roleGroup}>
-      <RoleOption label="Học viên" active={value === 'student'} onPress={() => onChange('student')} />
-      <RoleOption label="Giáo viên" active={value === 'teacher'} onPress={() => onChange('teacher')} />
-    </View>
-  );
-}
-
-function RoleOption({ label, active, onPress }: { label: string; active: boolean; onPress: () => void }) {
-  return (
-    <Pressable onPress={onPress} style={[styles.roleOption, active ? styles.roleOptionActive : null]}>
-      <Text style={[styles.roleText, active ? styles.roleTextActive : null]}>{label}</Text>
-    </Pressable>
-  );
-}
-
-function LabeledInput(props: ComponentProps<typeof TextInput> & { label: string }) {
-  const { label, style, ...inputProps } = props;
+const LabeledInput = forwardRef<TextInput, ComponentProps<typeof TextInput> & { label: string; rightElement?: ReactNode }>(
+  function LabeledInput(props, ref) {
+  const { label, rightElement, style, ...inputProps } = props;
 
   return (
     <View style={styles.field}>
       <Text style={styles.inputLabel}>{label}</Text>
-      <TextInput
-        {...inputProps}
-        style={[styles.input, style]}
-        placeholderTextColor="#94A3B8"
-      />
+      <View style={styles.inputWrap}>
+        <TextInput
+          ref={ref}
+          {...inputProps}
+          style={[styles.input, rightElement ? styles.inputWithAction : null, style]}
+          placeholderTextColor="#94A3B8"
+        />
+        {rightElement}
+      </View>
     </View>
   );
-}
+  },
+);
 
 const styles = StyleSheet.create({
   safeArea: {
@@ -406,33 +441,6 @@ const styles = StyleSheet.create({
     fontSize: 15,
     lineHeight: 22,
   },
-  roleGroup: {
-    flexDirection: 'row',
-    backgroundColor: colors.background,
-    borderColor: colors.border,
-    borderRadius: 16,
-    borderWidth: 1,
-    padding: 4,
-    gap: 4,
-  },
-  roleOption: {
-    flex: 1,
-    minHeight: 46,
-    borderRadius: 13,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  roleOptionActive: {
-    backgroundColor: colors.primary,
-  },
-  roleText: {
-    color: colors.muted,
-    fontSize: 14,
-    fontWeight: '800',
-  },
-  roleTextActive: {
-    color: '#FFFFFF',
-  },
   form: {
     gap: 15,
   },
@@ -453,6 +461,22 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     color: colors.text,
     fontSize: 15,
+  },
+  inputWrap: {
+    position: 'relative',
+  },
+  inputWithAction: {
+    paddingRight: 52,
+  },
+  visibilityButton: {
+    position: 'absolute',
+    right: 8,
+    top: 7,
+    width: 42,
+    height: 42,
+    borderRadius: 21,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   metaRow: {
     flexDirection: 'row',

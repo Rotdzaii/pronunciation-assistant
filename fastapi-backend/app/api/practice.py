@@ -330,7 +330,7 @@ def list_practice_history(
                     detail="student_id filter is only available to teachers",
                 )
             query = query.eq("student_id", current_user.id)
-        elif current_user.app_role == "teacher":
+        elif current_user.app_role in ("teacher", "admin"):
             if student_id is not None:
                 query = query.eq("student_id", str(student_id))
         else:
@@ -375,7 +375,7 @@ def get_practice_job(
         )
         if current_user.app_role == "student":
             query = query.eq("student_id", current_user.id)
-        elif current_user.app_role != "teacher":
+        elif current_user.app_role not in ("teacher", "admin"):
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Insufficient role",

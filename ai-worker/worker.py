@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os
 import sys
+import time
 from pathlib import Path
 from typing import Any
 
@@ -9,10 +10,13 @@ import requests
 from dotenv import load_dotenv
 from supabase import Client, create_client
 
-from scorers.mock_scorer import score_pronunciation
+from scorers.mock_scorer import score_pronunciation as score_mock_pronunciation
 
 
 DEFAULT_VISIBILITY_TIMEOUT_SECONDS = 60
+DEFAULT_WORKER_POLL_INTERVAL_SECONDS = 1.0
+DEFAULT_WORKER_IDLE_BACKOFF_MAX_SECONDS = 10.0
+SUPPORTED_SCORER_MODES = ("mock", "wav2vec2")
 
 
 def _load_env() -> dict[str, Any]:
@@ -37,14 +41,49 @@ def _load_env() -> dict[str, Any]:
     if not 0 <= confidence_threshold <= 1:
         raise RuntimeError("MODEL_CONFIDENCE_THRESHOLD must be between 0 and 1")
 
+    worker_mode = os.getenv("WORKER_MODE", "loop").strip().lower()
+    if worker_mode not in {"once", "loop"}:
+        raise RuntimeError("WORKER_MODE must be either 'once' or 'loop'")
+
+    try:
+        poll_interval_seconds = float(
+            os.getenv("WORKER_POLL_INTERVAL_SECONDS", str(DEFAULT_WORKER_POLL_INTERVAL_SECONDS))
+        )
+    except ValueError as exc:
+        raise RuntimeError("WORKER_POLL_INTERVAL_SECONDS must be a number") from exc
+
+    try:
+        idle_backoff_max_seconds = float(
+            os.getenv("WORKER_IDLE_BACKOFF_MAX_SECONDS", str(DEFAULT_WORKER_IDLE_BACKOFF_MAX_SECONDS))
+        )
+    except ValueError as exc:
+        raise RuntimeError("WORKER_IDLE_BACKOFF_MAX_SECONDS must be a number") from exc
+
+    if poll_interval_seconds <= 0:
+        raise RuntimeError("WORKER_POLL_INTERVAL_SECONDS must be greater than 0")
+    if idle_backoff_max_seconds < poll_interval_seconds:
+        raise RuntimeError(
+            "WORKER_IDLE_BACKOFF_MAX_SECONDS must be greater than or equal to WORKER_POLL_INTERVAL_SECONDS"
+        )
+
+    scorer_mode = os.getenv("SCORER_MODE", "mock").strip().lower()
+    if scorer_mode not in SUPPORTED_SCORER_MODES:
+        raise RuntimeError(
+            f"Unsupported SCORER_MODE={scorer_mode!r}. "
+            f"Supported scorer modes: {', '.join(SUPPORTED_SCORER_MODES)}"
+        )
+
     return {
         "supabase_url": os.environ["SUPABASE_URL"],
         "supabase_service_role_key": os.environ["SUPABASE_SERVICE_ROLE_KEY"],
         "webhook_url": os.environ["NODE_WEBHOOK_URL"],
         "webhook_secret": os.environ["AI_WEBHOOK_SECRET"],
         "queue_name": os.getenv("QUEUE_NAME", "practice_jobs"),
-        "scorer_mode": os.getenv("SCORER_MODE", "mock"),
+        "scorer_mode": scorer_mode,
         "confidence_threshold": confidence_threshold,
+        "worker_mode": worker_mode,
+        "poll_interval_seconds": poll_interval_seconds,
+        "idle_backoff_max_seconds": idle_backoff_max_seconds,
     }
 
 
@@ -164,11 +203,52 @@ def _parse_queue_row(row: dict[str, Any]) -> tuple[int, dict[str, Any]]:
 
 
 def _score(job: dict[str, Any], scorer_mode: str, confidence_threshold: float) -> dict[str, Any]:
-    if scorer_mode != "mock":
-        raise RuntimeError(
-            f"Unsupported SCORER_MODE={scorer_mode!r}. Only 'mock' is implemented."
-        )
-    return score_pronunciation(job, confidence_threshold)
+    if scorer_mode == "mock":
+        return score_mock_pronunciation(job, confidence_threshold)
+    if scorer_mode == "wav2vec2":
+        from scorers.wav2vec2_scorer import score_pronunciation as score_wav2vec2_pronunciation
+
+        return score_wav2vec2_pronunciation(job, confidence_threshold)
+
+    raise RuntimeError(
+        f"Unsupported SCORER_MODE={scorer_mode!r}. "
+        f"Supported scorer modes: {', '.join(SUPPORTED_SCORER_MODES)}"
+    )
+
+
+def _build_failed_result(
+    job: dict[str, Any],
+    scorer_mode: str,
+    confidence_threshold: float,
+    error: Exception,
+) -> dict[str, Any]:
+    return {
+        "status": "failed",
+        "score": None,
+        "problem_phonemes": [],
+        "feedback": {
+            "summary": "AI scoring failed before a pronunciation result could be produced.",
+            "scorer": scorer_mode,
+            "error": str(error),
+            "model_confidence": {
+                "value": 0.0,
+                "threshold": confidence_threshold,
+                "level": "low",
+                "is_reliable": False,
+            },
+            "target_match": {
+                "target_word": str(job.get("target_word") or ""),
+                "transcript": "",
+                "is_match": False,
+                "similarity": 0.0,
+            },
+            "score_breakdown": {
+                "pronunciation": 0.0,
+                "target_match": 0.0,
+                "model_confidence": 0.0,
+            },
+        },
+    }
 
 
 def _post_webhook(webhook_url: str, webhook_secret: str, payload: dict[str, Any]) -> requests.Response:
@@ -180,14 +260,11 @@ def _post_webhook(webhook_url: str, webhook_secret: str, payload: dict[str, Any]
     )
 
 
-def main() -> int:
-    config = _load_env()
-    client = create_client(config["supabase_url"], config["supabase_service_role_key"])
-
+def _process_one_job(client: Client, config: dict[str, Any]) -> bool:
     row = _read_one_job(client, config["queue_name"])
     if not row:
         print(f"No job found in {config['queue_name']} queue.")
-        return 0
+        return False
 
     msg_id, job = _parse_queue_row(row)
     print(f"msg_id={msg_id}")
@@ -195,25 +272,72 @@ def main() -> int:
     print(f"target_word={job['target_word']}")
     print(f"scorer_mode={config['scorer_mode']}")
 
-    result = _score(job, config["scorer_mode"], config["confidence_threshold"])
-    confidence = result["feedback"]["model_confidence"]["value"]
-    print(f"model_confidence={confidence}")
+    try:
+        result = _score(job, config["scorer_mode"], config["confidence_threshold"])
+    except Exception as exc:
+        print(f"Scoring failed for job_id={job['job_id']} scorer_mode={config['scorer_mode']}: {exc}")
+        result = _build_failed_result(
+            job,
+            config["scorer_mode"],
+            config["confidence_threshold"],
+            exc,
+        )
+
+    confidence = result.get("feedback", {}).get("model_confidence", {}).get("value")
+    print(f"model_confidence={confidence if confidence is not None else 'unavailable'}")
 
     webhook_payload = {"job_id": job["job_id"], **result}
-    response = _post_webhook(
-        config["webhook_url"],
-        config["webhook_secret"],
-        webhook_payload,
-    )
+    try:
+        response = _post_webhook(
+            config["webhook_url"],
+            config["webhook_secret"],
+            webhook_payload,
+        )
+    except requests.RequestException as exc:
+        print(f"Webhook request failed. Message {msg_id} was not archived. error={exc}")
+        return False
+
     print(f"webhook_status_code={response.status_code}")
 
     if not 200 <= response.status_code < 300:
         print(f"Webhook failed. Message {msg_id} was not archived.")
         print(response.text)
-        return 1
+        return False
 
     _archive_job(client, config["queue_name"], msg_id)
     print(f"Processed job {job['job_id']} and archived message {msg_id}.")
+    return True
+
+
+def main() -> int:
+    config = _load_env()
+    client = create_client(config["supabase_url"], config["supabase_service_role_key"])
+    print(f"Supported scorer modes: {', '.join(SUPPORTED_SCORER_MODES)}")
+
+    if config["worker_mode"] == "once":
+        _process_one_job(client, config)
+        return 0
+
+    print(
+        "Worker loop started "
+        f"queue={config['queue_name']} "
+        f"poll_interval_seconds={config['poll_interval_seconds']} "
+        f"idle_backoff_max_seconds={config['idle_backoff_max_seconds']}"
+    )
+
+    idle_sleep_seconds = config["poll_interval_seconds"]
+    while True:
+        processed = _process_one_job(client, config)
+        if processed:
+            idle_sleep_seconds = config["poll_interval_seconds"]
+            continue
+
+        time.sleep(idle_sleep_seconds)
+        idle_sleep_seconds = min(
+            config["idle_backoff_max_seconds"],
+            idle_sleep_seconds + config["poll_interval_seconds"],
+        )
+
     return 0
 
 

@@ -1,0 +1,5 @@
+audio_path,label,label_name,target_text
+data/raw/cat_correct_001.wav,0,correct,cat
+data/raw/cat_correct_002.wav,0,correct,cat
+data/raw/cat_incorrect_001.wav,1,incorrect,cat
+data/raw/cat_incorrect_002.wav,1,incorrect,cat

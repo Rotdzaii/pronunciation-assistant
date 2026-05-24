@@ -1,0 +1,7 @@
+split,actual_error_type,addition,deletion,substitution
+val,addition,0,8,50
+val,deletion,0,253,101
+val,substitution,0,89,520
+test,addition,0,4,34
+test,deletion,0,143,79
+test,substitution,0,82,314

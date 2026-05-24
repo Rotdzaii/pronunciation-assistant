@@ -11,3 +11,8 @@ models/*.pth
 models/*.ckpt
 
 .ipynb_checkpoints/
+
+# Local datasets
+datasets/*/raw/
+datasets/*/processed/
+datasets/*/downloads/

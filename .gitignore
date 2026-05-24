@@ -22,3 +22,6 @@ data/samples/*.wav
 
 # Codex CLI Documentation
 docs/
+
+# Local quarantine files
+_quarantine/

@@ -1,0 +1,16 @@
+dataset,speaker_id,utterance_id,audio_path,start_time,end_time,ground_truth_error_type,predicted_error_type,confidence,is_correct
+l2_arctic,TLV,arctic_a0115,ai-training/datasets/l2-arctic/raw/l2arctic_release_v5.0/TLV/wav/arctic_a0115.wav,1.704522,1.740000,addition,deletion,0.4529348611831665,False
+l2_arctic,HQTV,arctic_a0131,ai-training/datasets/l2-arctic/raw/l2arctic_release_v5.0/HQTV/wav/arctic_a0131.wav,1.327517,1.420000,addition,addition,0.5232990384101868,True
+l2_arctic,HQTV,arctic_a0041,ai-training/datasets/l2-arctic/raw/l2arctic_release_v5.0/HQTV/wav/arctic_a0041.wav,0.928153,1.026992,addition,substitution,0.5493065118789673,False
+l2_arctic,TLV,arctic_b0481,ai-training/datasets/l2-arctic/raw/l2arctic_release_v5.0/TLV/wav/arctic_b0481.wav,2.040000,2.204873,addition,substitution,0.7223650217056274,False
+l2_arctic,HQTV,arctic_b0488,ai-training/datasets/l2-arctic/raw/l2arctic_release_v5.0/HQTV/wav/arctic_b0488.wav,4.834440,4.914694,addition,substitution,0.49405214190483093,False
+l2_arctic,PNV,arctic_a0039,ai-training/datasets/l2-arctic/raw/l2arctic_release_v5.0/PNV/wav/arctic_a0039.wav,2.370000,2.440000,deletion,substitution,0.39371877908706665,False
+l2_arctic,HQTV,arctic_b0509,ai-training/datasets/l2-arctic/raw/l2arctic_release_v5.0/HQTV/wav/arctic_b0509.wav,1.860000,1.890000,deletion,deletion,0.4676283895969391,True
+l2_arctic,HQTV,arctic_a0375,ai-training/datasets/l2-arctic/raw/l2arctic_release_v5.0/HQTV/wav/arctic_a0375.wav,5.270000,5.320000,deletion,substitution,0.4033588469028473,False
+l2_arctic,TLV,arctic_b0386,ai-training/datasets/l2-arctic/raw/l2arctic_release_v5.0/TLV/wav/arctic_b0386.wav,1.730000,1.790000,deletion,addition,0.4286542534828186,False
+l2_arctic,HQTV,arctic_a0125,ai-training/datasets/l2-arctic/raw/l2arctic_release_v5.0/HQTV/wav/arctic_a0125.wav,2.880000,2.930000,deletion,deletion,0.43967562913894653,True
+l2_arctic,TLV,arctic_a0115,ai-training/datasets/l2-arctic/raw/l2arctic_release_v5.0/TLV/wav/arctic_a0115.wav,3.410000,3.540000,substitution,substitution,0.5686209797859192,True
+l2_arctic,TLV,arctic_b0315,ai-training/datasets/l2-arctic/raw/l2arctic_release_v5.0/TLV/wav/arctic_b0315.wav,1.050000,1.140000,substitution,substitution,0.46923694014549255,True
+l2_arctic,THV,arctic_b0323,ai-training/datasets/l2-arctic/raw/l2arctic_release_v5.0/THV/wav/arctic_b0323.wav,0.830000,0.910000,substitution,addition,0.4561310112476349,False
+l2_arctic,HQTV,arctic_a0097,ai-training/datasets/l2-arctic/raw/l2arctic_release_v5.0/HQTV/wav/arctic_a0097.wav,1.650000,1.690000,substitution,deletion,0.4643731415271759,False
+l2_arctic,TLV,arctic_a0019,ai-training/datasets/l2-arctic/raw/l2arctic_release_v5.0/TLV/wav/arctic_a0019.wav,0.790000,0.880000,substitution,substitution,0.4948391914367676,True

@@ -1,0 +1,110 @@
+[
+  {
+    "crop_mode": "original_segment",
+    "best_epoch": 7,
+    "best_val_macro_f1": 0.0733154073134133,
+    "validation": {
+      "accuracy": 0.07827788649706457,
+      "macro_f1": 0.0733154073134133,
+      "per_class": {
+        "addition": {
+          "precision": 0.059880239520958084,
+          "recall": 1.0,
+          "f1": 0.11299435028248588,
+          "support": 30
+        },
+        "deletion": {
+          "precision": 1.0,
+          "recall": 0.05649717514124294,
+          "f1": 0.10695187165775401,
+          "support": 177
+        },
+        "substitution": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 304
+        }
+      }
+    },
+    "test": {
+      "accuracy": 0.06606606606606606,
+      "macro_f1": 0.05664053219291993,
+      "per_class": {
+        "addition": {
+          "precision": 0.05521472392638037,
+          "recall": 0.9473684210526315,
+          "f1": 0.10434782608695652,
+          "support": 19
+        },
+        "deletion": {
+          "precision": 0.5714285714285714,
+          "recall": 0.034782608695652174,
+          "f1": 0.06557377049180328,
+          "support": 115
+        },
+        "substitution": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 199
+        }
+      }
+    },
+    "checkpoint_path": "ai-training/models/ablation_original_segment_cnn.pt"
+  },
+  {
+    "crop_mode": "context_window",
+    "best_epoch": 8,
+    "best_val_macro_f1": 0.06955321511087106,
+    "validation": {
+      "accuracy": 0.07632093933463796,
+      "macro_f1": 0.06955321511087106,
+      "per_class": {
+        "addition": {
+          "precision": 0.06012024048096192,
+          "recall": 1.0,
+          "f1": 0.11342155009451796,
+          "support": 30
+        },
+        "deletion": {
+          "precision": 0.75,
+          "recall": 0.05084745762711865,
+          "f1": 0.09523809523809523,
+          "support": 177
+        },
+        "substitution": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 304
+        }
+      }
+    },
+    "test": {
+      "accuracy": 0.06306306306306306,
+      "macro_f1": 0.04761447326288825,
+      "per_class": {
+        "addition": {
+          "precision": 0.057926829268292686,
+          "recall": 1.0,
+          "f1": 0.10951008645533142,
+          "support": 19
+        },
+        "deletion": {
+          "precision": 0.4,
+          "recall": 0.017391304347826087,
+          "f1": 0.03333333333333333,
+          "support": 115
+        },
+        "substitution": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 199
+        }
+      }
+    },
+    "checkpoint_path": "ai-training/models/ablation_context_window_cnn.pt"
+  }
+]

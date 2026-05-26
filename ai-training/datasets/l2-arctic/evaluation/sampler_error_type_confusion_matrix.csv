@@ -1,0 +1,4 @@
+true/predicted,addition,deletion,substitution
+addition,1,2,16
+deletion,4,78,33
+substitution,13,43,143

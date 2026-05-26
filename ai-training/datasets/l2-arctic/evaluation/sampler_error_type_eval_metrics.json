@@ -1,0 +1,91 @@
+{
+  "model": "l2_arctic_error_type_cnn_sampler",
+  "checkpoint_path": "ai-training/models/l2_arctic_error_type_cnn_sampler.pt",
+  "training_strategy": "weighted_random_sampler_only",
+  "loss": "cross_entropy_unweighted",
+  "validation": {
+    "accuracy": 0.735812133072407,
+    "macro_f1": 0.5811915806380359,
+    "weighted_f1": 0.7306848188523506,
+    "per_class": {
+      "addition": {
+        "precision": 0.3157894736842105,
+        "recall": 0.2,
+        "f1": 0.24489795918367346,
+        "support": 30
+      },
+      "deletion": {
+        "precision": 0.6881720430107527,
+        "recall": 0.7231638418079096,
+        "f1": 0.7052341597796143,
+        "support": 177
+      },
+      "substitution": {
+        "precision": 0.7908496732026143,
+        "recall": 0.7960526315789473,
+        "f1": 0.7934426229508197,
+        "support": 304
+      }
+    },
+    "confusion_matrix": [
+      [
+        6,
+        5,
+        19
+      ],
+      [
+        4,
+        128,
+        45
+      ],
+      [
+        9,
+        53,
+        242
+      ]
+    ]
+  },
+  "test": {
+    "accuracy": 0.6666666666666666,
+    "macro_f1": 0.4803246798131709,
+    "weighted_f1": 0.6665624041721367,
+    "per_class": {
+      "addition": {
+        "precision": 0.05555555555555555,
+        "recall": 0.05263157894736842,
+        "f1": 0.05405405405405406,
+        "support": 19
+      },
+      "deletion": {
+        "precision": 0.6341463414634146,
+        "recall": 0.6782608695652174,
+        "f1": 0.6554621848739496,
+        "support": 115
+      },
+      "substitution": {
+        "precision": 0.7447916666666666,
+        "recall": 0.7185929648241206,
+        "f1": 0.731457800511509,
+        "support": 199
+      }
+    },
+    "confusion_matrix": [
+      [
+        1,
+        2,
+        16
+      ],
+      [
+        4,
+        78,
+        33
+      ],
+      [
+        13,
+        43,
+        143
+      ]
+    ]
+  },
+  "note": "Confidence is model confidence for predicted class, not pronunciation correctness."
+}

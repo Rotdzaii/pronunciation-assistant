@@ -1,0 +1,9 @@
+experiment,test_accuracy,test_macro_f1,test_addition_f1,test_deletion_f1,test_substitution_f1,selected_as_main,note
+cnn_baseline,0.6966463414634146,0.465736103290559,0.0,0.6341463414634145,0.7630619684082625,false,Original segment-level CNN baseline; fails addition.
+cnn_v2,0.614329268292683,0.4835345641018409,0.12403100775193797,0.6444444444444444,0.6821282401091405,true,Best overall test macro F1; selected current main candidate.
+context_v3,,0.4227,0.0,,,false,Reported from prior run; detailed metric file unavailable in current tree.
+sampler_only_cnn,0.6666666666666666,0.4803246798131709,0.05405405405405406,0.6554621848739496,0.731457800511509,false,WeightedRandomSampler-only CNN; useful but addition remains weak.
+binary_stage_cnn,0.5945945945945946,0.4662398605498603,0.1095890410958904,0.6063348416289592,0.6827956989247311,false,Improves addition over sampler-only but hurts overall pipeline.
+wav2vec2_encoder,0.4594594594594595,0.376944217719263,0.08602150537634409,0.562962962962963,0.48184818481848185,false,Frozen Wav2Vec2 mean pooling on original segment; underperforms CNN.
+wav2vec2_context_0_15,0.5225225225225225,0.3825771324863883,0.11428571428571428,0.3684210526315789,0.6650246305418719,false,Best Wav2Vec2 context crop by test macro F1 and addition F1.
+wav2vec2_attention,0.43243243243243246,0.37247616299416125,0.16363636363636364,0.4343891402714932,0.5194029850746269,false,Highest addition F1 but low macro F1; not selected as main model.

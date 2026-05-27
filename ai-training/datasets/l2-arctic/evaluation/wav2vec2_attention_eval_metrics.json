@@ -1,0 +1,93 @@
+{
+  "model": "l2_arctic_error_type_wav2vec2_attention",
+  "checkpoint_path": "ai-training/models/l2_arctic_error_type_wav2vec2_attention.pt",
+  "model_name": "facebook/wav2vec2-base-960h",
+  "context_seconds": 0.15,
+  "freeze_encoder": true,
+  "pooling": "attention",
+  "validation": {
+    "accuracy": 0.436399217221135,
+    "macro_f1": 0.37565672422815277,
+    "weighted_f1": 0.48328472198754563,
+    "per_class": {
+      "addition": {
+        "precision": 0.07894736842105263,
+        "recall": 0.4,
+        "f1": 0.13186813186813187,
+        "support": 30
+      },
+      "deletion": {
+        "precision": 0.47398843930635837,
+        "recall": 0.4632768361581921,
+        "f1": 0.4685714285714286,
+        "support": 177
+      },
+      "substitution": {
+        "precision": 0.6935483870967742,
+        "recall": 0.4243421052631579,
+        "f1": 0.5265306122448979,
+        "support": 304
+      }
+    },
+    "confusion_matrix": [
+      [
+        12,
+        8,
+        10
+      ],
+      [
+        48,
+        82,
+        47
+      ],
+      [
+        92,
+        83,
+        129
+      ]
+    ]
+  },
+  "test": {
+    "accuracy": 0.43243243243243246,
+    "macro_f1": 0.37247616299416125,
+    "weighted_f1": 0.4697448530635537,
+    "per_class": {
+      "addition": {
+        "precision": 0.0989010989010989,
+        "recall": 0.47368421052631576,
+        "f1": 0.16363636363636364,
+        "support": 19
+      },
+      "deletion": {
+        "precision": 0.4528301886792453,
+        "recall": 0.41739130434782606,
+        "f1": 0.4343891402714932,
+        "support": 115
+      },
+      "substitution": {
+        "precision": 0.6397058823529411,
+        "recall": 0.4371859296482412,
+        "f1": 0.5194029850746269,
+        "support": 199
+      }
+    },
+    "confusion_matrix": [
+      [
+        9,
+        5,
+        5
+      ],
+      [
+        23,
+        48,
+        44
+      ],
+      [
+        59,
+        53,
+        87
+      ]
+    ]
+  },
+  "note": "Confidence is classifier confidence, not pronunciation correctness."
+}

@@ -10,13 +10,14 @@ import requests
 from dotenv import load_dotenv
 from supabase import Client, create_client
 
+from app.contracts.ai_result_contract import build_failed_ai_result
 from scorers.mock_scorer import score_pronunciation as score_mock_pronunciation
 
 
 DEFAULT_VISIBILITY_TIMEOUT_SECONDS = 60
 DEFAULT_WORKER_POLL_INTERVAL_SECONDS = 1.0
 DEFAULT_WORKER_IDLE_BACKOFF_MAX_SECONDS = 10.0
-SUPPORTED_SCORER_MODES = ("mock", "wav2vec2")
+SUPPORTED_SCORER_MODES = ("mock", "wav2vec2", "cnn_attention")
 
 
 def _load_env() -> dict[str, Any]:
@@ -209,6 +210,10 @@ def _score(job: dict[str, Any], scorer_mode: str, confidence_threshold: float) -
         from scorers.wav2vec2_scorer import score_pronunciation as score_wav2vec2_pronunciation
 
         return score_wav2vec2_pronunciation(job, confidence_threshold)
+    if scorer_mode == "cnn_attention":
+        from app.scorers.cnn_attention_scorer import score_pronunciation as score_cnn_attention_pronunciation
+
+        return score_cnn_attention_pronunciation(job, confidence_threshold)
 
     raise RuntimeError(
         f"Unsupported SCORER_MODE={scorer_mode!r}. "
@@ -222,33 +227,22 @@ def _build_failed_result(
     confidence_threshold: float,
     error: Exception,
 ) -> dict[str, Any]:
-    return {
-        "status": "failed",
-        "score": None,
-        "problem_phonemes": [],
-        "feedback": {
-            "summary": "AI scoring failed before a pronunciation result could be produced.",
-            "scorer": scorer_mode,
-            "error": str(error),
-            "model_confidence": {
-                "value": 0.0,
-                "threshold": confidence_threshold,
-                "level": "low",
-                "is_reliable": False,
-            },
-            "target_match": {
-                "target_word": str(job.get("target_word") or ""),
-                "transcript": "",
-                "is_match": False,
-                "similarity": 0.0,
-            },
-            "score_breakdown": {
-                "pronunciation": 0.0,
-                "target_match": 0.0,
-                "model_confidence": 0.0,
-            },
+    result = build_failed_ai_result(
+        error=str(error),
+        scorer={
+            "name": scorer_mode,
+            "type": "phone_error_classifier" if scorer_mode == "cnn_attention" else scorer_mode,
+            "version": "cnn_attention_selected_baseline" if scorer_mode == "cnn_attention" else "unknown",
         },
-    }
+        metadata={
+            "confidence_threshold": confidence_threshold,
+            "target_word": str(job.get("target_word") or ""),
+        },
+    )
+    result["feedback"]["diagnosis"] = result["diagnosis"]
+    result["feedback"]["scorer"] = result["scorer"]
+    result["feedback"]["metadata"] = result["metadata"]
+    return result
 
 
 def _post_webhook(webhook_url: str, webhook_secret: str, payload: dict[str, Any]) -> requests.Response:
@@ -283,7 +277,10 @@ def _process_one_job(client: Client, config: dict[str, Any]) -> bool:
             exc,
         )
 
-    confidence = result.get("feedback", {}).get("model_confidence", {}).get("value")
+    confidence = (
+        result.get("feedback", {}).get("model_confidence", {}).get("value")
+        or result.get("diagnosis", {}).get("diagnosis_confidence")
+    )
     print(f"model_confidence={confidence if confidence is not None else 'unavailable'}")
 
     webhook_payload = {"job_id": job["job_id"], **result}

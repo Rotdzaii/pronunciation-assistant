@@ -1,0 +1,65 @@
+{
+  "model": "l2_arctic_del_sub_binary_cnn",
+  "checkpoint_path": "ai-training/models/l2_arctic_del_sub_binary_cnn.pt",
+  "training_strategy": "weighted_random_sampler",
+  "loss": "cross_entropy_unweighted",
+  "validation": {
+    "accuracy": 0.8045738045738046,
+    "macro_f1": 0.7850391754145748,
+    "weighted_f1": 0.8021488161264518,
+    "per_class": {
+      "deletion": {
+        "precision": 0.7610062893081762,
+        "recall": 0.6836158192090396,
+        "f1": 0.7202380952380952,
+        "support": 177
+      },
+      "substitution": {
+        "precision": 0.8260869565217391,
+        "recall": 0.875,
+        "f1": 0.8498402555910544,
+        "support": 304
+      }
+    },
+    "confusion_matrix": [
+      [
+        121,
+        56
+      ],
+      [
+        38,
+        266
+      ]
+    ]
+  },
+  "test": {
+    "accuracy": 0.7292993630573248,
+    "macro_f1": 0.7020240926192629,
+    "weighted_f1": 0.7261411738487071,
+    "per_class": {
+      "deletion": {
+        "precision": 0.6442307692307693,
+        "recall": 0.5826086956521739,
+        "f1": 0.6118721461187214,
+        "support": 115
+      },
+      "substitution": {
+        "precision": 0.7714285714285715,
+        "recall": 0.8140703517587939,
+        "f1": 0.7921760391198044,
+        "support": 199
+      }
+    },
+    "confusion_matrix": [
+      [
+        67,
+        48
+      ],
+      [
+        37,
+        162
+      ]
+    ]
+  },
+  "note": "Confidence is model confidence for predicted class, not pronunciation correctness."
+}

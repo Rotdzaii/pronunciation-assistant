@@ -1,0 +1,65 @@
+{
+  "model": "l2_arctic_addition_binary_cnn",
+  "checkpoint_path": "ai-training/models/l2_arctic_addition_binary_cnn.pt",
+  "training_strategy": "weighted_random_sampler_only",
+  "loss": "cross_entropy_unweighted",
+  "validation": {
+    "accuracy": 0.8277886497064579,
+    "macro_f1": 0.5655769379395625,
+    "weighted_f1": 0.8634547263699652,
+    "per_class": {
+      "addition": {
+        "precision": 0.15476190476190477,
+        "recall": 0.43333333333333335,
+        "f1": 0.22807017543859648,
+        "support": 30
+      },
+      "non_addition": {
+        "precision": 0.9601873536299765,
+        "recall": 0.8523908523908524,
+        "f1": 0.9030837004405287,
+        "support": 481
+      }
+    },
+    "confusion_matrix": [
+      [
+        13,
+        17
+      ],
+      [
+        71,
+        410
+      ]
+    ]
+  },
+  "test": {
+    "accuracy": 0.8048048048048048,
+    "macro_f1": 0.4999884497216383,
+    "weighted_f1": 0.845837775681385,
+    "per_class": {
+      "addition": {
+        "precision": 0.07407407407407407,
+        "recall": 0.21052631578947367,
+        "f1": 0.1095890410958904,
+        "support": 19
+      },
+      "non_addition": {
+        "precision": 0.946236559139785,
+        "recall": 0.8407643312101911,
+        "f1": 0.8903878583473862,
+        "support": 314
+      }
+    },
+    "confusion_matrix": [
+      [
+        4,
+        15
+      ],
+      [
+        50,
+        264
+      ]
+    ]
+  },
+  "note": "Confidence is model confidence for predicted class, not pronunciation correctness."
+}

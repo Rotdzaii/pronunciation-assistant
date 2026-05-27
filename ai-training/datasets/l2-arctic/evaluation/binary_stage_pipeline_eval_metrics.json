@@ -1,0 +1,92 @@
+{
+  "model": "l2_arctic_binary_stage_pipeline",
+  "stage1_checkpoint_path": "ai-training/models/l2_arctic_addition_binary_cnn.pt",
+  "stage2_checkpoint_path": "ai-training/models/l2_arctic_del_sub_binary_cnn.pt",
+  "stage1_best_val_macro_f1": 0.5655769379395625,
+  "stage2_best_val_macro_f1": 0.7850391754145748,
+  "validation": {
+    "accuracy": 0.6712328767123288,
+    "macro_f1": 0.5588522087785784,
+    "weighted_f1": 0.697693188599288,
+    "per_class": {
+      "addition": {
+        "precision": 0.15476190476190477,
+        "recall": 0.43333333333333335,
+        "f1": 0.22807017543859648,
+        "support": 30
+      },
+      "deletion": {
+        "precision": 0.7469135802469136,
+        "recall": 0.6836158192090396,
+        "f1": 0.7138643067846607,
+        "support": 177
+      },
+      "substitution": {
+        "precision": 0.7886792452830189,
+        "recall": 0.6875,
+        "f1": 0.7346221441124781,
+        "support": 304
+      }
+    },
+    "confusion_matrix": [
+      [
+        13,
+        3,
+        14
+      ],
+      [
+        14,
+        121,
+        42
+      ],
+      [
+        57,
+        38,
+        209
+      ]
+    ]
+  },
+  "test": {
+    "accuracy": 0.5945945945945946,
+    "macro_f1": 0.4662398605498603,
+    "weighted_f1": 0.6236848127752965,
+    "per_class": {
+      "addition": {
+        "precision": 0.07407407407407407,
+        "recall": 0.21052631578947367,
+        "f1": 0.1095890410958904,
+        "support": 19
+      },
+      "deletion": {
+        "precision": 0.6320754716981132,
+        "recall": 0.5826086956521739,
+        "f1": 0.6063348416289592,
+        "support": 115
+      },
+      "substitution": {
+        "precision": 0.7341040462427746,
+        "recall": 0.6381909547738693,
+        "f1": 0.6827956989247311,
+        "support": 199
+      }
+    },
+    "confusion_matrix": [
+      [
+        4,
+        2,
+        13
+      ],
+      [
+        15,
+        67,
+        33
+      ],
+      [
+        35,
+        37,
+        127
+      ]
+    ]
+  },
+  "note": "Stage confidence is model confidence, not pronunciation correctness."
+}

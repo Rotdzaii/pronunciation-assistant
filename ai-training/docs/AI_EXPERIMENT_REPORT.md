@@ -69,7 +69,8 @@ Metrics are read from available evaluation JSON/CSV files where present. Context
 
 ## 6. Key Findings
 
-- CNN V2 is currently the best overall model by test macro F1.
+- CNN V2 was the previous best overall model before the CNN attention stability check.
+- CNN attention is now the selected current model because it improves mean test macro F1 and mean addition F1 across three seeds.
 - Addition is the hardest class because it has very few samples and low test support.
 - Weighted loss plus weighted sampling can over-balance the classes and cause unstable behavior or collapse toward minority-class predictions.
 - The binary-stage CNN improves addition F1 compared with sampler-only CNN, but the full pipeline loses too much overall accuracy and macro F1.
@@ -113,21 +114,17 @@ All three seeds individually beat CNN V2 on test macro F1 and test addition F1. 
 
 ## 9. Recommended Next Direction
 
-Recommended feature branch:
+The next phase should move from research training to AI Worker integration and model serving preparation.
 
-`feature/ai-cnn-v2-attention-improvement`
+Recommended work:
 
-Goal: improve CNN V2 while preserving macro F1 and improving addition F1.
+- package and manage the selected CNN attention checkpoint
+- define the inference input/output contract
+- connect predicted error type and class probabilities to the feedback format
+- keep pronunciation scoring separate from classifier confidence
+- later improve the model with more data, better alignment, or fine-tuning
 
-Potential methods:
-
-- CNN V2 plus attention pooling.
-- Class-balanced batch sampling without excessive over-balancing.
-- Addition-focused light augmentation.
-- Threshold tuning for addition.
-- Later, a hybrid CNN V2 model that uses a Wav2Vec2 attention-derived signal.
-
-The next work should target CNN V2 specifically instead of randomly training more architectures.
+Further model training should be targeted and evidence-driven, especially around addition false positives/false negatives and deletion/substitution confusion.
 
 ## 10. Report Conclusion
 

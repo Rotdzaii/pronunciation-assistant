@@ -1,0 +1,2 @@
+selected_model,task,dataset,mean_test_accuracy,std_test_accuracy,mean_test_macro_f1,std_test_macro_f1,mean_test_addition_f1,std_test_addition_f1,mean_test_deletion_f1,mean_test_substitution_f1,checkpoint_path_local,selected_reason,confidence_note
+cnn_attention,phone_error_classification,l2_arctic_vietnamese_clean_v2,0.6246,0.0235,0.5124,0.0214,0.1938,0.0415,0.6701,0.6734,ai-training/models/l2_arctic_error_type_cnn_attention.pt,Beats CNN V2 on mean test macro F1 and mean addition F1 across 3 seeds,"classifier confidence, not pronunciation correctness"

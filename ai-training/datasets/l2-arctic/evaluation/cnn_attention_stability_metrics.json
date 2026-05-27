@@ -1,0 +1,165 @@
+{
+  "metadata_csv": "ai-training\\datasets\\l2-arctic\\metadata\\vietnamese_phone_error_classification_v2.csv",
+  "seeds": [
+    42,
+    123,
+    2026
+  ],
+  "config": {
+    "sample_rate": 16000,
+    "n_mels": 64,
+    "max_seconds": 1.0,
+    "batch_size": 8,
+    "epochs": 12,
+    "learning_rate": 0.0001,
+    "num_workers": 0,
+    "dropout": 0.2,
+    "training_strategy": "weighted_random_sampler_only",
+    "loss": "cross_entropy_unweighted",
+    "pooling": "temporal_attention"
+  },
+  "cnn_v2_baseline": {
+    "test_macro_f1": 0.4835,
+    "test_addition_f1": 0.124
+  },
+  "runs": [
+    {
+      "seed": 42,
+      "best_epoch": 1,
+      "val_accuracy": 0.6653620352250489,
+      "val_macro_f1": 0.5390117825073445,
+      "val_weighted_f1": 0.684514859612238,
+      "val_addition_f1": 0.18556701030927836,
+      "val_deletion_f1": 0.7161125319693095,
+      "val_substitution_f1": 0.7153558052434457,
+      "test_accuracy": 0.6126126126126126,
+      "test_macro_f1": 0.4912862988762757,
+      "test_weighted_f1": 0.6377134600415689,
+      "test_addition_f1": 0.14705882352941177,
+      "test_deletion_f1": 0.6484375,
+      "test_substitution_f1": 0.6783625730994152,
+      "checkpoint_path": "ai-training\\models\\l2_arctic_error_type_cnn_attention_seed_42.pt"
+    },
+    {
+      "seed": 123,
+      "best_epoch": 8,
+      "val_accuracy": 0.684931506849315,
+      "val_macro_f1": 0.5658832949272649,
+      "val_weighted_f1": 0.6996318576663386,
+      "val_addition_f1": 0.24444444444444444,
+      "val_deletion_f1": 0.7212276214833759,
+      "val_substitution_f1": 0.7319778188539742,
+      "test_accuracy": 0.6516516516516516,
+      "test_macro_f1": 0.5340837443394714,
+      "test_weighted_f1": 0.662366326008224,
+      "test_addition_f1": 0.22641509433962265,
+      "test_deletion_f1": 0.6848249027237354,
+      "test_substitution_f1": 0.6910112359550562,
+      "checkpoint_path": "ai-training\\models\\l2_arctic_error_type_cnn_attention_seed_123.pt"
+    },
+    {
+      "seed": 2026,
+      "best_epoch": 11,
+      "val_accuracy": 0.639921722113503,
+      "val_macro_f1": 0.5374399368743291,
+      "val_weighted_f1": 0.6707817695507079,
+      "val_addition_f1": 0.2047244094488189,
+      "val_deletion_f1": 0.71875,
+      "val_substitution_f1": 0.6888454011741683,
+      "test_accuracy": 0.6096096096096096,
+      "test_macro_f1": 0.5119012769265443,
+      "test_weighted_f1": 0.6345963217981081,
+      "test_addition_f1": 0.2077922077922078,
+      "test_deletion_f1": 0.6771653543307087,
+      "test_substitution_f1": 0.6507462686567164,
+      "checkpoint_path": "ai-training\\models\\l2_arctic_error_type_cnn_attention_seed_2026.pt"
+    }
+  ],
+  "summary": [
+    {
+      "metric": "test_accuracy",
+      "mean": 0.6246246246246246,
+      "std": 0.023454203230950897
+    },
+    {
+      "metric": "test_macro_f1",
+      "mean": 0.5124237733807637,
+      "std": 0.02140350640554735
+    },
+    {
+      "metric": "test_weighted_f1",
+      "mean": 0.6448920359493003,
+      "std": 0.01521322607157206
+    },
+    {
+      "metric": "test_addition_f1",
+      "mean": 0.19375537522041408,
+      "std": 0.041498541308247316
+    },
+    {
+      "metric": "test_deletion_f1",
+      "mean": 0.6701425856848147,
+      "std": 0.01918333205767811
+    },
+    {
+      "metric": "test_substitution_f1",
+      "mean": 0.6733733592370625,
+      "std": 0.02059092249286837
+    },
+    {
+      "metric": "val_macro_f1",
+      "mean": 0.5474450047696462,
+      "std": 0.015987356961859312
+    },
+    {
+      "metric": "val_addition_f1",
+      "mean": 0.21157862140084724,
+      "std": 0.030031204249874845
+    }
+  ],
+  "mean_test_macro_f1_beats_cnn_v2": true,
+  "mean_test_addition_f1_beats_cnn_v2": true,
+  "initial_gpu_telemetry": {
+    "stage": "before stability check",
+    "cuda_available": true,
+    "gpu_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+    "memory_allocated_mb": 0.0,
+    "memory_reserved_mb": 0.0,
+    "max_memory_allocated_mb": 0.0,
+    "max_memory_reserved_mb": 0.0,
+    "nvidia_smi": "NVIDIA GeForce RTX 5060 Laptop GPU, 34, 101, 8151"
+  },
+  "gpu_telemetry_by_seed": [
+    {
+      "stage": "after seed 42",
+      "cuda_available": true,
+      "gpu_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+      "memory_allocated_mb": 65.5546875,
+      "memory_reserved_mb": 92.0,
+      "max_memory_allocated_mb": 72.1455078125,
+      "max_memory_reserved_mb": 92.0,
+      "nvidia_smi": "NVIDIA GeForce RTX 5060 Laptop GPU, 32, 850, 8151"
+    },
+    {
+      "stage": "after seed 123",
+      "cuda_available": true,
+      "gpu_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+      "memory_allocated_mb": 65.5546875,
+      "memory_reserved_mb": 92.0,
+      "max_memory_allocated_mb": 72.1455078125,
+      "max_memory_reserved_mb": 92.0,
+      "nvidia_smi": "NVIDIA GeForce RTX 5060 Laptop GPU, 31, 854, 8151"
+    },
+    {
+      "stage": "after seed 2026",
+      "cuda_available": true,
+      "gpu_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+      "memory_allocated_mb": 65.5546875,
+      "memory_reserved_mb": 92.0,
+      "max_memory_allocated_mb": 72.1455078125,
+      "max_memory_reserved_mb": 92.0,
+      "nvidia_smi": "NVIDIA GeForce RTX 5060 Laptop GPU, 37, 857, 8151"
+    }
+  ],
+  "note": "Confidence is classifier confidence, not pronunciation correctness."
+}

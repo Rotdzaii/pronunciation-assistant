@@ -63,6 +63,7 @@ Addition F1 is tracked separately because `addition` is the smallest and hardest
 | Wav2Vec2 encoder | Frozen Wav2Vec2 mean pooling on original segment | 0.4595 | 0.3769 | 0.0860 | 0.5630 | 0.4818 | Not selected |
 | Wav2Vec2 context 0.15 | Frozen Wav2Vec2 with 0.15s context-window mean pooling | 0.5225 | 0.3826 | 0.1143 | 0.3684 | 0.6650 | Not selected |
 | Wav2Vec2 attention | Frozen Wav2Vec2 with 0.15s context and attention pooling | 0.4324 | 0.3725 | 0.1636 | 0.4344 | 0.5194 | Not selected as main model; best addition F1 |
+| CNN attention | CNN V2-style CNN with temporal attention pooling; 3-seed mean | 0.6246 | 0.5124 | 0.1938 | 0.6701 | 0.6734 | Selected main candidate after stability check |
 
 Metrics are read from available evaluation JSON/CSV files where present. Context V3 metrics are partially unavailable in the current tree, so the known prior-run values are marked explicitly.
 
@@ -78,11 +79,26 @@ Metrics are read from available evaluation JSON/CSV files where present. Context
 
 ## 7. Selected Main Model Candidate
 
-CNN V2 is selected as the current main model candidate.
+CNN attention is selected as the current main model candidate after the 3-seed stability check.
 
-It has the best test macro F1 among the completed experiments and provides more balanced overall performance than the alternatives. Although Wav2Vec2 attention has higher addition F1, CNN V2 is a better main candidate because macro F1 reflects all three error classes and is more suitable for imbalanced multi-class evaluation.
+CNN V2 was the previous main candidate because it had the best test macro F1 among the earlier completed experiments. The CNN attention experiment improves on CNN V2 by adding temporal attention pooling while keeping sampler-only imbalance handling and normal cross entropy.
 
-Wav2Vec2 attention is not selected as the main model because its overall macro F1 is too low.
+Across seeds 42, 123, and 2026, CNN attention reached mean test macro F1 0.5124 with standard deviation 0.0214, and mean test addition F1 0.1938 with standard deviation 0.0415. These means exceed CNN V2's test macro F1 0.4835 and addition F1 0.1240. Wav2Vec2 attention is still not selected as the main model because its overall macro F1 is too low.
+
+## 7.1. CNN Attention Stability Check
+
+A 3-seed stability check was run for CNN attention using seeds 42, 123, and 2026. The check reused the clean v2 dataset, original segment crops, log-mel spectrogram preprocessing, temporal attention pooling, `WeightedRandomSampler` only, and unweighted `CrossEntropyLoss`.
+
+| Metric | Mean | Std |
+| --- | ---: | ---: |
+| test accuracy | 0.6246 | 0.0235 |
+| test macro F1 | 0.5124 | 0.0214 |
+| test weighted F1 | 0.6449 | 0.0152 |
+| test addition F1 | 0.1938 | 0.0415 |
+| test deletion F1 | 0.6701 | 0.0192 |
+| test substitution F1 | 0.6734 | 0.0206 |
+
+All three seeds individually beat CNN V2 on test macro F1 and test addition F1. Therefore, CNN attention replaces CNN V2 as the current selected model candidate. CNN V2 remains an important previous baseline in the experiment history.
 
 ## 8. Limitations
 
@@ -115,4 +131,4 @@ The next work should target CNN V2 specifically instead of randomly training mor
 
 ## 10. Report Conclusion
 
-The completed experiments establish a reproducible AI training pipeline for phone-level pronunciation error classification and identify CNN V2 as the strongest current baseline. Future work should focus on targeted CNN V2 improvement, especially addition detection, while preserving the overall macro F1 advantage.
+The completed experiments establish a reproducible AI training pipeline for phone-level pronunciation error classification. CNN V2 was the strongest earlier baseline, and the CNN attention stability check now identifies CNN attention as the strongest current model candidate. Future work should focus on error analysis, addition false positives/false negatives, and further validation before integrating this classifier into a larger pronunciation assessment flow.

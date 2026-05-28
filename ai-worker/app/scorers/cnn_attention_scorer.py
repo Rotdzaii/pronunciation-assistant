@@ -436,9 +436,9 @@ def score_pronunciation(job: dict[str, Any], confidence_threshold: float | None 
         temp_audio_path = audio_path if is_temp else None
         prompt_text = _job_prompt_text(job)
         if prompt_text:
-            from app.alignment.fallback_aligner import align_prompt_fallback
+            from app.alignment.alignment_service import align_audio
 
-            alignment_result = align_prompt_fallback(
+            alignment_result = align_audio(
                 audio_path,
                 prompt_text=prompt_text,
                 canonical_phones=_job_canonical_phones(job),

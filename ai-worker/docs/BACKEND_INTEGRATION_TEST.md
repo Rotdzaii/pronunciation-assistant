@@ -10,6 +10,8 @@ AI Worker final output -> backend webhook -> practice_history update
 
 The test uses `ai-worker/scripts/demo_backend_integration.py`. It is dry-run by default and sends no network request unless `--post` is explicitly supplied.
 
+For the local real POST checklist, see [BACKEND_POST_VERIFICATION.md](BACKEND_POST_VERIFICATION.md).
+
 ## Backend Webhook Details
 
 FastAPI route:

@@ -6,6 +6,8 @@ from .ai_result_contract import (
 )
 from .alignment_contract import (
     FALLBACK_ALIGNMENT_NOTE,
+    MFA_ALIGNMENT_NOTE,
+    AlignmentError,
     build_alignment_result,
     build_alignment_segment,
     get_alignment_segments,
@@ -13,6 +15,8 @@ from .alignment_contract import (
 
 __all__ = [
     "FALLBACK_ALIGNMENT_NOTE",
+    "MFA_ALIGNMENT_NOTE",
+    "AlignmentError",
     "build_alignment_result",
     "build_alignment_segment",
     "build_ai_result",

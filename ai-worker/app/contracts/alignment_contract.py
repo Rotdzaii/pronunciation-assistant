@@ -6,6 +6,11 @@ from typing import Any
 FALLBACK_ALIGNMENT_NOTE = (
     "Fallback alignment is approximate scaffolding only and is not real forced alignment."
 )
+MFA_ALIGNMENT_NOTE = "MFA TextGrid forced alignment parsed successfully."
+
+
+class AlignmentError(RuntimeError):
+    """Raised when an alignment provider cannot produce a valid alignment."""
 
 
 def build_alignment_segment(
@@ -34,11 +39,19 @@ def build_alignment_result(
     method: str = "fallback_even_split",
     note: str = FALLBACK_ALIGNMENT_NOTE,
     metadata: dict[str, Any] | None = None,
+    words: list[dict[str, Any]] | None = None,
+    phones: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
+    result_words = list(words or [segment for segment in segments if segment.get("type") == "word"])
+    result_phones = list(phones or [segment for segment in segments if segment.get("type") == "phone"])
     return {
         "status": status,
+        "alignment_status": status,
         "method": method,
+        "alignment_method": method,
         "segments": list(segments),
+        "words": result_words,
+        "phones": result_phones,
         "note": note,
         "metadata": dict(metadata or {}),
     }

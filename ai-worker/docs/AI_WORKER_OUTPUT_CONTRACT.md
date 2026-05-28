@@ -65,6 +65,8 @@ The `score` field is reserved for pronunciation scoring. Until forced alignment,
 
 Aligned inference can also include a `scoring` block. In the current scaffold, `scoring_method=heuristic_gop` is a demo placeholder and not production GOP.
 
+Hybrid aligned inference can add `diagnosis.top_issues`, `diagnosis.severity`, `metadata.hybrid_method`, and `metadata.location_reliability`. These fields are advisory and must preserve the distinction between diagnosis confidence, pronunciation score, and location reliability.
+
 ## Failed Result Example
 
 ```json
@@ -111,7 +113,7 @@ Forced alignment should populate `problem_phonemes` from aligned phone spans and
 
 GOP/CaGOP should provide pronunciation scoring evidence and set `metadata.gop_used = true` only when real acoustic GOP/CaGOP is used. The current `heuristic_gop` scaffold keeps `metadata.gop_used = false` and marks `metadata.scoring_is_heuristic = true`.
 
-Hybrid scoring should combine alignment, GOP/CaGOP, and classifier diagnosis into a real pronunciation score and set `metadata.hybrid_used = true`.
+Hybrid diagnosis combines alignment, scoring, and classifier diagnosis into clearer issue selection and feedback. With heuristic scoring, it may set `metadata.hybrid_used = true`, but it must still mark `metadata.scoring_is_heuristic = true` and avoid claiming real GOP/CaGOP.
 
 ## Backend Webhook Compatibility
 

@@ -129,6 +129,7 @@ def build_ai_result(
     scoring: dict[str, Any] | None = None,
     score_note: str | None = None,
     pronunciation_score_source: str | None = None,
+    diagnosis_extra: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     normalized_error_type = _normalize_error_type(predicted_error_type)
     result_feedback = feedback or map_error_type_to_feedback(normalized_error_type)
@@ -140,6 +141,15 @@ def build_ai_result(
         else result_metadata.get("pronunciation_score_source")
     )
 
+    diagnosis = {
+        "primary_error_type": normalized_error_type,
+        "class_probabilities": _normalize_class_probabilities(class_probabilities),
+        "diagnosis_confidence": diagnosis_confidence,
+        "confidence_note": CONFIDENCE_NOTE,
+    }
+    if diagnosis_extra:
+        diagnosis.update(diagnosis_extra)
+
     result = {
         "status": "completed",
         "score": score,
@@ -147,12 +157,7 @@ def build_ai_result(
         "pronunciation_score_source": resolved_score_source,
         "problem_phonemes": list(problem_phonemes or []),
         "predicted_error_type": normalized_error_type,
-        "diagnosis": {
-            "primary_error_type": normalized_error_type,
-            "class_probabilities": _normalize_class_probabilities(class_probabilities),
-            "diagnosis_confidence": diagnosis_confidence,
-            "confidence_note": CONFIDENCE_NOTE,
-        },
+        "diagnosis": diagnosis,
         "feedback": {
             "summary": str(result_feedback.get("summary") or ""),
             "tips": list(result_feedback.get("tips") or []),

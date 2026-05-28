@@ -358,6 +358,23 @@ def _aggregate_segment_predictions(
 
     demo_score = estimate_demo_score(predicted_error_type, diagnosis_confidence)
     scoring_result = score_pronunciation_segments(alignment_result, segment_predictions)
+    hybrid_result = None
+    try:
+        from app.hybrid.hybrid_diagnosis import build_hybrid_diagnosis
+
+        hybrid_result = build_hybrid_diagnosis(alignment_result, segment_predictions, scoring_result)
+    except Exception as exc:
+        hybrid_error = str(exc)
+    else:
+        hybrid_error = None
+
+    if hybrid_result and hybrid_result.get("primary_error_type") not in {None, "unknown"}:
+        predicted_error_type = hybrid_result["primary_error_type"]
+        problem_phonemes = hybrid_result.get("problem_phonemes") or problem_phonemes
+        primary_issue = (hybrid_result.get("top_issues") or [{}])[0]
+        class_probabilities = primary_issue.get("class_probabilities") or class_probabilities
+        diagnosis_confidence = primary_issue.get("diagnosis_confidence", diagnosis_confidence)
+
     segmental_score = scoring_result.get("utterance_segmental_score")
     scoring_method = scoring_result.get("scoring_method")
     scoring_is_heuristic = bool((scoring_result.get("metadata") or {}).get("is_heuristic"))
@@ -380,10 +397,15 @@ def _aggregate_segment_predictions(
         predicted_error_type=predicted_error_type,
         class_probabilities=class_probabilities,
         diagnosis_confidence=diagnosis_confidence,
+        feedback=(hybrid_result or {}).get("feedback") if hybrid_result else None,
         scorer=SCORER_METADATA,
         scoring=scoring_result,
         score_note=score_note,
         pronunciation_score_source=pronunciation_score_source,
+        diagnosis_extra={
+            "top_issues": (hybrid_result or {}).get("top_issues", []),
+            "severity": (hybrid_result or {}).get("severity", "unknown"),
+        } if hybrid_result else None,
         metadata={
             **DEFAULT_METADATA,
             "alignment_used": True,
@@ -391,10 +413,17 @@ def _aggregate_segment_predictions(
             "alignment_method": alignment_method,
             "alignment_note": alignment_note,
             "gop_used": False,
-            "hybrid_used": False,
+            "hybrid_used": hybrid_result is not None,
+            "hybrid_method": (hybrid_result or {}).get("hybrid_method"),
+            "hybrid_status": (hybrid_result or {}).get("hybrid_status"),
+            "hybrid_error": hybrid_error,
             "model_output_is_scoring": False,
             "segment_level_inference": True,
             "fallback_alignment": is_fallback,
+            "location_reliability": (hybrid_result or {}).get(
+                "location_reliability",
+                "limited_fallback_alignment" if is_fallback else "unknown",
+            ),
             "is_demo_score": True,
             "score_note": score_note,
             "pronunciation_score_source": pronunciation_score_source,

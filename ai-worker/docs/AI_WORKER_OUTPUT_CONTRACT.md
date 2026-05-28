@@ -4,6 +4,8 @@
 
 The AI Worker returns a normalized result object before posting to the backend webhook. This contract separates phone error diagnosis from pronunciation scoring so CNN Attention, forced alignment, GOP/CaGOP, and hybrid scoring can be integrated without changing the app-facing shape each time.
 
+For the backend/frontend-ready final shape and examples, see `ai-worker/docs/FINAL_AI_OUTPUT_CONTRACT.md`.
+
 Current selected model candidate: CNN Attention phone error classifier.
 
 Selected model metrics:

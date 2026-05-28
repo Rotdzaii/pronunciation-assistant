@@ -7,6 +7,7 @@ from typing import Any
 from urllib.parse import urlparse
 
 from app.contracts.ai_result_contract import build_ai_result, estimate_demo_score
+from app.contracts.alignment_contract import FALLBACK_ALIGNMENT_NOTE, get_alignment_segments
 
 
 SAMPLE_RATE = 16000
@@ -115,6 +116,19 @@ def _load_checkpoint(checkpoint_path: Path) -> dict[str, Any]:
     return checkpoint
 
 
+def _load_model(checkpoint_path: str | Path | None = None) -> tuple[Any, dict[int, str], Path, Any]:
+    checkpoint_file = _resolve_checkpoint_path(checkpoint_path)
+    checkpoint = _load_checkpoint(checkpoint_file)
+    index_to_label = _index_to_label(checkpoint)
+
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    dropout = float(checkpoint.get("config", {}).get("dropout", 0.2))
+    model = SmallPronunciationCNNAttention(num_classes=len(index_to_label), dropout=dropout).to(device)
+    model.load_state_dict(checkpoint["model_state_dict"])
+    model.eval()
+    return model, index_to_label, checkpoint_file, device
+
+
 def _index_to_label(checkpoint: dict[str, Any]) -> dict[int, str]:
     raw_index_to_label = checkpoint.get("index_to_label") or {}
     index_to_label = {int(index): str(label) for index, label in raw_index_to_label.items()}
@@ -161,7 +175,11 @@ def _audio_path_from_job(job: dict[str, Any]) -> tuple[Path, bool]:
     return Path(audio_url), False
 
 
-def _feature_from_audio_path(audio_path: Path) -> tuple[Any, dict[str, Any]]:
+def _feature_from_audio_path(
+    audio_path: Path,
+    start_time: float | None = None,
+    end_time: float | None = None,
+) -> tuple[Any, dict[str, Any]]:
     try:
         import librosa
         import numpy as np
@@ -171,6 +189,15 @@ def _feature_from_audio_path(audio_path: Path) -> tuple[Any, dict[str, Any]]:
         ) from exc
 
     audio, sample_rate = librosa.load(str(audio_path), sr=SAMPLE_RATE, mono=True)
+    full_duration_seconds = len(audio) / SAMPLE_RATE if SAMPLE_RATE else 0.0
+    segment_start = max(float(start_time or 0.0), 0.0)
+    segment_end = float(end_time) if end_time is not None else full_duration_seconds
+    segment_end = max(segment_end, segment_start)
+    if start_time is not None or end_time is not None:
+        start_sample = min(int(segment_start * SAMPLE_RATE), len(audio))
+        end_sample = min(int(segment_end * SAMPLE_RATE), len(audio))
+        audio = audio[start_sample:end_sample]
+
     original_samples = int(len(audio))
     if len(audio) > MAX_LENGTH:
         audio = audio[:MAX_LENGTH]
@@ -185,25 +212,26 @@ def _feature_from_audio_path(audio_path: Path) -> tuple[Any, dict[str, Any]]:
         "sample_rate": sample_rate,
         "target_sample_rate": SAMPLE_RATE,
         "original_duration_seconds": round(original_samples / SAMPLE_RATE, 3),
+        "full_duration_seconds": round(full_duration_seconds, 3),
         "max_seconds": MAX_SECONDS,
         "n_mels": N_MELS,
-        "clip_level_inference": True,
-        "segment_source": "full_audio_first_second",
+        "clip_level_inference": start_time is None and end_time is None,
+        "segment_source": "bounded_segment" if start_time is not None or end_time is not None else "full_audio_first_second",
+        "start_time": round(segment_start, 3) if start_time is not None or end_time is not None else None,
+        "end_time": round(segment_end, 3) if start_time is not None or end_time is not None else None,
     }
 
 
-def predict_audio(audio_path: str | Path, checkpoint_path: str | Path | None = None) -> dict[str, Any]:
-    checkpoint_file = _resolve_checkpoint_path(checkpoint_path)
-    checkpoint = _load_checkpoint(checkpoint_file)
-    index_to_label = _index_to_label(checkpoint)
-
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    dropout = float(checkpoint.get("config", {}).get("dropout", 0.2))
-    model = SmallPronunciationCNNAttention(num_classes=len(index_to_label), dropout=dropout).to(device)
-    model.load_state_dict(checkpoint["model_state_dict"])
-    model.eval()
-
-    feature, audio_metadata = _feature_from_audio_path(Path(audio_path))
+def _predict_with_model(
+    model: Any,
+    index_to_label: dict[int, str],
+    device: Any,
+    checkpoint_file: Path,
+    audio_path: str | Path,
+    start_time: float | None = None,
+    end_time: float | None = None,
+) -> dict[str, Any]:
+    feature, audio_metadata = _feature_from_audio_path(Path(audio_path), start_time, end_time)
     with torch.no_grad():
         logits = model(feature.to(device))
         probabilities = torch.softmax(logits, dim=1).squeeze(0).cpu()
@@ -225,11 +253,198 @@ def predict_audio(audio_path: str | Path, checkpoint_path: str | Path | None = N
     }
 
 
+def predict_audio(audio_path: str | Path, checkpoint_path: str | Path | None = None) -> dict[str, Any]:
+    model, index_to_label, checkpoint_file, device = _load_model(checkpoint_path)
+    return _predict_with_model(model, index_to_label, device, checkpoint_file, audio_path)
+
+
+def predict_segment(
+    audio_path: str | Path,
+    start_time: float,
+    end_time: float,
+    checkpoint_path: str | Path | None = None,
+    phone: str | None = None,
+    word: str | None = None,
+) -> dict[str, Any]:
+    model, index_to_label, checkpoint_file, device = _load_model(checkpoint_path)
+    prediction = _predict_with_model(model, index_to_label, device, checkpoint_file, audio_path, start_time, end_time)
+    return _format_segment_prediction(prediction, start_time, end_time, phone=phone, word=word)
+
+
+def _format_segment_prediction(
+    prediction: dict[str, Any],
+    start_time: float,
+    end_time: float,
+    *,
+    phone: str | None = None,
+    word: str | None = None,
+    segment_type: str | None = None,
+    index: int | None = None,
+) -> dict[str, Any]:
+    return {
+        "index": index,
+        "type": segment_type,
+        "phone": phone,
+        "word": word,
+        "start": round(float(start_time), 3),
+        "end": round(float(end_time), 3),
+        "predicted_error_type": prediction["predicted_error_type"],
+        "class_probabilities": prediction["class_probabilities"],
+        "diagnosis_confidence": prediction["diagnosis_confidence"],
+        "confidence_note": "Classifier confidence, not pronunciation correctness.",
+    }
+
+
+def predict_segments(
+    audio_path: str | Path,
+    segments: list[dict[str, Any]],
+    checkpoint_path: str | Path | None = None,
+) -> list[dict[str, Any]]:
+    model, index_to_label, checkpoint_file, device = _load_model(checkpoint_path)
+    predictions = []
+    for fallback_index, segment in enumerate(segments):
+        start_time = float(segment.get("start") or 0.0)
+        end_time = float(segment.get("end") if segment.get("end") is not None else start_time)
+        if end_time <= start_time:
+            end_time = start_time + MAX_SECONDS
+        prediction = _predict_with_model(
+            model,
+            index_to_label,
+            device,
+            checkpoint_file,
+            audio_path,
+            start_time,
+            end_time,
+        )
+        predictions.append(
+            _format_segment_prediction(
+                prediction,
+                start_time,
+                end_time,
+                phone=segment.get("phone"),
+                word=segment.get("word"),
+                segment_type=segment.get("type"),
+                index=segment.get("index", fallback_index),
+            )
+        )
+    return predictions
+
+
+def _aggregate_segment_predictions(
+    segment_predictions: list[dict[str, Any]],
+    *,
+    alignment_result: dict[str, Any],
+    confidence_threshold: float | None = None,
+) -> dict[str, Any]:
+    threshold = 0.5 if confidence_threshold is None else float(confidence_threshold)
+    issue_segments = [
+        segment
+        for segment in segment_predictions
+        if segment.get("predicted_error_type") not in {None, "unknown"}
+    ]
+    issue_segments.sort(key=lambda segment: float(segment.get("diagnosis_confidence") or 0.0), reverse=True)
+    top_segment = issue_segments[0] if issue_segments else None
+    predicted_error_type = top_segment.get("predicted_error_type") if top_segment else "unknown"
+    class_probabilities = top_segment.get("class_probabilities") if top_segment else None
+    diagnosis_confidence = top_segment.get("diagnosis_confidence") if top_segment else None
+    problem_phonemes = []
+    for segment in issue_segments:
+        confidence = float(segment.get("diagnosis_confidence") or 0.0)
+        phone = segment.get("phone")
+        if phone and confidence >= threshold and phone not in problem_phonemes:
+            problem_phonemes.append(phone)
+
+    demo_score = estimate_demo_score(predicted_error_type, diagnosis_confidence)
+    alignment_method = alignment_result.get("method")
+    alignment_note = alignment_result.get("note")
+    is_fallback = str(alignment_method or "").startswith("fallback")
+    if is_fallback and not alignment_note:
+        alignment_note = FALLBACK_ALIGNMENT_NOTE
+
+    result = build_ai_result(
+        score=demo_score["score"],
+        problem_phonemes=problem_phonemes,
+        predicted_error_type=predicted_error_type,
+        class_probabilities=class_probabilities,
+        diagnosis_confidence=diagnosis_confidence,
+        scorer=SCORER_METADATA,
+        metadata={
+            **DEFAULT_METADATA,
+            "alignment_used": True,
+            "alignment_status": alignment_result.get("status"),
+            "alignment_method": alignment_method,
+            "alignment_note": alignment_note,
+            "gop_used": False,
+            "hybrid_used": False,
+            "model_output_is_scoring": False,
+            "segment_level_inference": True,
+            "fallback_alignment": is_fallback,
+            "is_demo_score": demo_score["is_demo_score"],
+            "score_note": demo_score["score_note"],
+            "confidence_threshold": confidence_threshold,
+            "segments_count": len(segment_predictions),
+            "limitation": (
+                "Segment boundaries come from approximate fallback alignment unless an external aligner supplies "
+                "the alignment_result. Classifier confidence is diagnosis confidence, not pronunciation scoring."
+            ),
+        },
+    )
+    result["segments"] = segment_predictions
+    result["metadata"]["top_issue_segments"] = issue_segments[:5]
+    result["feedback"]["diagnosis"] = result["diagnosis"]
+    result["feedback"]["scorer"] = result["scorer"]
+    result["feedback"]["metadata"] = result["metadata"]
+    return result
+
+
+def score_aligned_audio(
+    audio_path: str | Path,
+    alignment_result: dict[str, Any],
+    checkpoint_path: str | Path | None = None,
+    confidence_threshold: float | None = None,
+) -> dict[str, Any]:
+    segments = get_alignment_segments(alignment_result)
+    segment_predictions = predict_segments(audio_path, segments, checkpoint_path)
+    return _aggregate_segment_predictions(
+        segment_predictions,
+        alignment_result=alignment_result,
+        confidence_threshold=confidence_threshold,
+    )
+
+
+def _job_prompt_text(job: dict[str, Any]) -> str | None:
+    for key in ("prompt_text", "target_text", "target_sentence", "target_word"):
+        value = str(job.get(key) or "").strip()
+        if value:
+            return value
+    return None
+
+
+def _job_canonical_phones(job: dict[str, Any]) -> list[str]:
+    raw_phones = job.get("canonical_phones") or job.get("phones")
+    if isinstance(raw_phones, str):
+        return [phone for phone in raw_phones.split() if phone]
+    if isinstance(raw_phones, (list, tuple)):
+        return [str(phone).strip() for phone in raw_phones if str(phone).strip()]
+    return []
+
+
 def score_pronunciation(job: dict[str, Any], confidence_threshold: float | None = None) -> dict[str, Any]:
     temp_audio_path: Path | None = None
     try:
         audio_path, is_temp = _audio_path_from_job(job)
         temp_audio_path = audio_path if is_temp else None
+        prompt_text = _job_prompt_text(job)
+        if prompt_text:
+            from app.alignment.fallback_aligner import align_prompt_fallback
+
+            alignment_result = align_prompt_fallback(
+                audio_path,
+                prompt_text=prompt_text,
+                canonical_phones=_job_canonical_phones(job),
+            )
+            return score_aligned_audio(audio_path, alignment_result, confidence_threshold=confidence_threshold)
+
         prediction = predict_audio(audio_path)
     finally:
         if temp_audio_path is not None:

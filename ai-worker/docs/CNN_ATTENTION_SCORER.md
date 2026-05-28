@@ -63,6 +63,8 @@ The classifier outputs:
 
 The worker maps those fields through `ai-worker/app/contracts/ai_result_contract.py`.
 
+When prompt text is available, the scorer can run aligned inference over fallback alignment segments. See `ai-worker/docs/CNN_ATTENTION_ALIGNED_INFERENCE.md` for the segment-level contract and limitations.
+
 Scorer metadata:
 
 ```json
@@ -86,7 +88,9 @@ Metadata flags:
 
 ## Current Limitation
 
-The app currently uploads word or utterance-level audio and the worker does not have forced alignment yet. Therefore this scorer currently performs clip-level demo inference over the first/whole submitted audio segment. It is not final phone-localized diagnosis.
+Without prompt text, this scorer performs clip-level demo inference over the first/whole submitted audio segment.
+
+With prompt text, it can perform segment-level inference using fallback alignment. Fallback alignment is approximate scaffolding only and is not real forced alignment, so segment boundaries must not be described as precise.
 
 Classifier confidence is not pronunciation correctness. `diagnosis_confidence` and class probabilities must not be displayed as a pronunciation score.
 

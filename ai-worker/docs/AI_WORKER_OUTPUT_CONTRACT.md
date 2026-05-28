@@ -25,6 +25,8 @@ The `score` field is reserved for pronunciation scoring. Until forced alignment,
 {
   "status": "completed",
   "score": 72.0,
+  "score_note": "Demo heuristic only. This is not real pronunciation scoring and must not be derived from classifier confidence in production.",
+  "pronunciation_score_source": "demo_error_type_heuristic",
   "problem_phonemes": ["/t/"],
   "predicted_error_type": "deletion",
   "diagnosis": {
@@ -60,6 +62,8 @@ The `score` field is reserved for pronunciation scoring. Until forced alignment,
   }
 }
 ```
+
+Aligned inference can also include a `scoring` block. In the current scaffold, `scoring_method=heuristic_gop` is a demo placeholder and not production GOP.
 
 ## Failed Result Example
 
@@ -105,7 +109,7 @@ The `score` field is reserved for pronunciation scoring. Until forced alignment,
 
 Forced alignment should populate `problem_phonemes` from aligned phone spans and set `metadata.alignment_used = true`.
 
-GOP/CaGOP should provide pronunciation scoring evidence and set `metadata.gop_used = true`. GOP confidence or likelihood values should remain separate from classifier diagnosis confidence.
+GOP/CaGOP should provide pronunciation scoring evidence and set `metadata.gop_used = true` only when real acoustic GOP/CaGOP is used. The current `heuristic_gop` scaffold keeps `metadata.gop_used = false` and marks `metadata.scoring_is_heuristic = true`.
 
 Hybrid scoring should combine alignment, GOP/CaGOP, and classifier diagnosis into a real pronunciation score and set `metadata.hybrid_used = true`.
 

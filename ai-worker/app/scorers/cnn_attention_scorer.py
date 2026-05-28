@@ -336,6 +336,8 @@ def _aggregate_segment_predictions(
     alignment_result: dict[str, Any],
     confidence_threshold: float | None = None,
 ) -> dict[str, Any]:
+    from app.scoring.scoring_service import score_pronunciation_segments
+
     threshold = 0.5 if confidence_threshold is None else float(confidence_threshold)
     issue_segments = [
         segment
@@ -355,6 +357,17 @@ def _aggregate_segment_predictions(
             problem_phonemes.append(phone)
 
     demo_score = estimate_demo_score(predicted_error_type, diagnosis_confidence)
+    scoring_result = score_pronunciation_segments(alignment_result, segment_predictions)
+    segmental_score = scoring_result.get("utterance_segmental_score")
+    scoring_method = scoring_result.get("scoring_method")
+    scoring_is_heuristic = bool((scoring_result.get("metadata") or {}).get("is_heuristic"))
+    score = segmental_score if segmental_score is not None else demo_score["score"]
+    score_note = (
+        "Heuristic/demo score, not production GOP."
+        if segmental_score is not None and scoring_is_heuristic
+        else demo_score["score_note"]
+    )
+    pronunciation_score_source = scoring_method if segmental_score is not None else "demo_error_type_heuristic"
     alignment_method = alignment_result.get("method")
     alignment_note = alignment_result.get("note")
     is_fallback = str(alignment_method or "").startswith("fallback")
@@ -362,12 +375,15 @@ def _aggregate_segment_predictions(
         alignment_note = FALLBACK_ALIGNMENT_NOTE
 
     result = build_ai_result(
-        score=demo_score["score"],
+        score=score,
         problem_phonemes=problem_phonemes,
         predicted_error_type=predicted_error_type,
         class_probabilities=class_probabilities,
         diagnosis_confidence=diagnosis_confidence,
         scorer=SCORER_METADATA,
+        scoring=scoring_result,
+        score_note=score_note,
+        pronunciation_score_source=pronunciation_score_source,
         metadata={
             **DEFAULT_METADATA,
             "alignment_used": True,
@@ -379,13 +395,18 @@ def _aggregate_segment_predictions(
             "model_output_is_scoring": False,
             "segment_level_inference": True,
             "fallback_alignment": is_fallback,
-            "is_demo_score": demo_score["is_demo_score"],
-            "score_note": demo_score["score_note"],
+            "is_demo_score": True,
+            "score_note": score_note,
+            "pronunciation_score_source": pronunciation_score_source,
+            "scoring_method": scoring_method,
+            "scoring_is_heuristic": scoring_is_heuristic,
+            "scoring_status": scoring_result.get("scoring_status"),
             "confidence_threshold": confidence_threshold,
             "segments_count": len(segment_predictions),
             "limitation": (
                 "Segment boundaries come from approximate fallback alignment unless an external aligner supplies "
-                "the alignment_result. Classifier confidence is diagnosis confidence, not pronunciation scoring."
+                "the alignment_result. Heuristic GOP-like scoring is not production GOP. Classifier confidence is "
+                "diagnosis confidence, not pronunciation scoring."
             ),
         },
     )
@@ -465,6 +486,7 @@ def score_pronunciation(job: dict[str, Any], confidence_threshold: float | None 
             **DEFAULT_METADATA,
             "is_demo_score": demo_score["is_demo_score"],
             "score_note": demo_score["score_note"],
+            "pronunciation_score_source": "demo_error_type_heuristic",
             "confidence_threshold": confidence_threshold,
             "device": prediction["device"],
             "checkpoint_path": prediction["checkpoint_path"],

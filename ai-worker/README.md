@@ -106,3 +106,12 @@ The worker logs:
 - webhook status code
 
 It does not log secrets.
+
+## Documentation
+
+- [AI Worker Pipeline Summary](docs/AI_WORKER_PIPELINE_SUMMARY.md)
+- [AI Worker Integration Status](docs/AI_WORKER_INTEGRATION_STATUS.md)
+- [Final AI Output Contract](docs/FINAL_AI_OUTPUT_CONTRACT.md)
+- [Backend Webhook Contract](docs/BACKEND_WEBHOOK_CONTRACT.md)
+- [End-to-End Worker Demo](docs/END_TO_END_WORKER_DEMO.md)
+- [Backend Integration Test](docs/BACKEND_INTEGRATION_TEST.md)

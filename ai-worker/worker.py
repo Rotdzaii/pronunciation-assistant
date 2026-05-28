@@ -11,6 +11,11 @@ from dotenv import load_dotenv
 from supabase import Client, create_client
 
 from app.contracts.ai_result_contract import build_failed_ai_result
+from app.contracts.webhook_payload import (
+    build_failed_webhook_payload,
+    build_success_webhook_payload,
+    validate_webhook_payload,
+)
 from scorers.mock_scorer import score_pronunciation as score_mock_pronunciation
 
 
@@ -283,7 +288,24 @@ def _process_one_job(client: Client, config: dict[str, Any]) -> bool:
     )
     print(f"model_confidence={confidence if confidence is not None else 'unavailable'}")
 
-    webhook_payload = {"job_id": job["job_id"], **result}
+    if result.get("status") == "failed":
+        webhook_payload = build_failed_webhook_payload(
+            job["job_id"],
+            str(result.get("metadata", {}).get("error") or "AI scoring failed."),
+            result,
+        )
+    else:
+        webhook_payload = build_success_webhook_payload(job["job_id"], result)
+
+    payload_is_valid, payload_issues = validate_webhook_payload(webhook_payload)
+    if not payload_is_valid:
+        print("Webhook payload validation failed: " + " | ".join(payload_issues))
+        webhook_payload = build_failed_webhook_payload(
+            job["job_id"],
+            "AI worker produced an invalid webhook payload: " + " | ".join(payload_issues),
+            result,
+        )
+
     try:
         response = _post_webhook(
             config["webhook_url"],

@@ -126,14 +126,25 @@ def build_ai_result(
     feedback: dict[str, Any] | None = None,
     scorer: dict[str, Any] | None = None,
     metadata: dict[str, Any] | None = None,
+    scoring: dict[str, Any] | None = None,
+    score_note: str | None = None,
+    pronunciation_score_source: str | None = None,
 ) -> dict[str, Any]:
     normalized_error_type = _normalize_error_type(predicted_error_type)
     result_feedback = feedback or map_error_type_to_feedback(normalized_error_type)
     result_metadata = {**DEFAULT_METADATA, **(metadata or {})}
+    resolved_score_note = score_note if score_note is not None else result_metadata.get("score_note")
+    resolved_score_source = (
+        pronunciation_score_source
+        if pronunciation_score_source is not None
+        else result_metadata.get("pronunciation_score_source")
+    )
 
-    return {
+    result = {
         "status": "completed",
         "score": score,
+        "score_note": resolved_score_note,
+        "pronunciation_score_source": resolved_score_source,
         "problem_phonemes": list(problem_phonemes or []),
         "predicted_error_type": normalized_error_type,
         "diagnosis": {
@@ -149,6 +160,9 @@ def build_ai_result(
         "scorer": {**DEFAULT_SCORER, **(scorer or {})},
         "metadata": result_metadata,
     }
+    if scoring is not None:
+        result["scoring"] = scoring
+    return result
 
 
 def build_failed_ai_result(
@@ -163,6 +177,8 @@ def build_failed_ai_result(
     return {
         "status": "failed",
         "score": None,
+        "score_note": None,
+        "pronunciation_score_source": None,
         "problem_phonemes": [],
         "predicted_error_type": None,
         "diagnosis": {

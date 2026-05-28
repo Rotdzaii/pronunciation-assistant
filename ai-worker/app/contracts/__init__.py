@@ -4,6 +4,7 @@ from .ai_result_contract import (
     estimate_demo_score,
     map_error_type_to_feedback,
 )
+from .ai_result_validator import assert_valid_ai_result, validate_ai_result
 from .alignment_contract import (
     FALLBACK_ALIGNMENT_NOTE,
     MFA_ALIGNMENT_NOTE,
@@ -36,4 +37,6 @@ __all__ = [
     "estimate_demo_score",
     "get_alignment_segments",
     "map_error_type_to_feedback",
+    "assert_valid_ai_result",
+    "validate_ai_result",
 ]

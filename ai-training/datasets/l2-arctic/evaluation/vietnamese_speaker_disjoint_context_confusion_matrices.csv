@@ -1,0 +1,13 @@
+context_mode,held_out_speaker,actual_error_type,addition,deletion,substitution
+context_0_10,HQTV,addition,15,17,40
+context_0_10,HQTV,deletion,23,391,63
+context_0_10,HQTV,substitution,69,174,566
+context_0_10,PNV,addition,6,4,6
+context_0_10,PNV,deletion,18,169,59
+context_0_10,PNV,substitution,87,113,431
+context_0_10,THV,addition,21,17,29
+context_0_10,THV,deletion,73,282,51
+context_0_10,THV,substitution,175,129,622
+context_0_10,TLV,addition,17,8,18
+context_0_10,TLV,deletion,75,301,61
+context_0_10,TLV,substitution,170,152,467

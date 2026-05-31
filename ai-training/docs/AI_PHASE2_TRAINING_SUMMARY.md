@@ -103,6 +103,12 @@ It is selected over the addition-focused sampler because sampler-only balancing 
 - Classifier confidence is not pronunciation correctness and must not be used as a pronunciation score.
 - Local checkpoints were generated for experiments but are not committed.
 
+## Integration Implication
+
+AI Worker integration should preserve the selected `context_0_10` crop behavior. For each aligned phone segment, inference should expand the original segment by 0.10 seconds on the left and right, clamp the crop to the audio boundaries, and keep the original segment boundary as the user-facing location.
+
+The final app feedback should remain assistive. It should not present the classifier as a teacher replacement, and it must keep classifier confidence separate from pronunciation scoring.
+
 ## Next Work
 
 Recommended next phase:

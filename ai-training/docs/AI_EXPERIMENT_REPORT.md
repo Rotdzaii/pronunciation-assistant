@@ -111,23 +111,36 @@ All three seeds individually beat CNN V2 on test macro F1 and test addition F1. 
 - Current models classify known phone-level error segments; they are not complete end-to-end pronunciation assessment systems.
 - Confidence scores are model confidence for predicted classes, not direct pronunciation correctness scores.
 
+## 8.1. Phase 2 Speaker-Disjoint Context Result
+
+Phase 2 all-speaker training improved the non-disjoint Vietnamese subset, but Vietnamese leave-one-speaker-out evaluation showed that unseen-speaker addition remained weak. A sampler-only addition-focused variant was not selected because it only moved mean addition F1 from 0.0881 to 0.0958 while reducing mean macro F1 from 0.5022 to 0.4715.
+
+A controlled `context_0_10` CNN Attention run was then tested with the same Vietnamese leave-one-speaker-out protocol. It uses a 0.10 second window on each side of the annotated phone-error segment while preserving the same label order, architecture, sampler, and loss.
+
+| Run | Mean macro F1 | Mean addition F1 | Mean deletion F1 | Mean substitution F1 | Status |
+| --- | ---: | ---: | ---: | ---: | --- |
+| Baseline speaker-disjoint CNN Attention | 0.5022 +/- 0.0210 | 0.0881 +/- 0.0391 | 0.6881 +/- 0.0266 | 0.7303 +/- 0.0286 | Baseline |
+| Addition-focused sampler | 0.4715 +/- 0.0299 | 0.0958 +/- 0.0348 | 0.6347 +/- 0.0225 | 0.6839 +/- 0.0376 | Not selected |
+| Context-window CNN Attention `context_0_10` | 0.5178 +/- 0.0252 | 0.1246 +/- 0.0271 | 0.6801 +/- 0.0371 | 0.7486 +/- 0.0283 | Leading speaker-disjoint robustness candidate |
+
+The context-window result is promising because it improves both mean macro F1 and mean addition F1 compared with the speaker-disjoint baseline. It should still be treated as a candidate rather than a final replacement until the gain is confirmed across additional random seeds or context settings.
+
 ## 9. Recommended Next Direction
 
 Recommended feature branch:
 
-`feature/ai-cnn-v2-attention-improvement`
+`feature/ai-confirm-speaker-disjoint-context-stability`
 
-Goal: improve CNN V2 while preserving macro F1 and improving addition F1.
+Goal: confirm whether the `context_0_10` speaker-disjoint gain is stable across random seeds and, if runtime allows, compare against `context_0_05` and `context_0_15`.
 
 Potential methods:
 
-- CNN V2 plus attention pooling.
-- Class-balanced batch sampling without excessive over-balancing.
-- Addition-focused light augmentation.
-- Threshold tuning for addition.
-- Later, a hybrid CNN V2 model that uses a Wav2Vec2 attention-derived signal.
+- Repeat the Vietnamese leave-one-speaker-out context experiment with multiple random seeds.
+- Test nearby context windows only if the seed check remains promising.
+- Keep Vietnamese-specific evaluation separate from all-speaker aggregate metrics.
+- Do not treat classifier confidence as pronunciation correctness.
 
-The next work should target CNN V2 specifically instead of randomly training more architectures.
+The next work should validate speaker-disjoint robustness before replacing the current main model candidate.
 
 ## 10. Report Conclusion
 

@@ -1,0 +1,13 @@
+evaluation_slice,actual_error_type,addition,deletion,substitution
+val,addition,32,24,25
+val,deletion,25,253,18
+val,substitution,163,181,618
+val_vietnamese,addition,8,7,15
+val_vietnamese,deletion,15,150,12
+val_vietnamese,substitution,48,62,194
+test,addition,18,18,22
+test,deletion,27,161,30
+test,substitution,109,146,466
+test_vietnamese,addition,9,2,8
+test_vietnamese,deletion,11,87,17
+test_vietnamese,substitution,26,57,116

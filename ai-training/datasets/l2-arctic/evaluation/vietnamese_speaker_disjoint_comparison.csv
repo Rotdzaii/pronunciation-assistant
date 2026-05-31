@@ -1,0 +1,4 @@
+run,scope,note,accuracy,macro_f1,macro_f1_std,weighted_f1,addition_f1,addition_f1_std,deletion_f1,deletion_f1_std,substitution_f1,substitution_f1_std
+vietnamese_only_cnn_attention,Vietnamese-only original test split,Previous Vietnamese-only CNN Attention baseline.,0.6366366366366366,0.5104569332936862,,0.6521436690928216,0.17543859649122806,,0.6666666666666666,,0.6892655367231638,
+all_speakers_cnn_attention,Vietnamese subset original test split,All-speaker model evaluated on Vietnamese subset; not speaker-disjoint.,0.6366366366366366,0.5419808949220714,,0.6538031243913597,0.27692307692307694,,0.6666666666666666,,0.6823529411764706,
+vietnamese_speaker_disjoint_cnn_attention,Mean held-out Vietnamese speaker,Mean across leave-one-Vietnamese-speaker-out folds.,0.6579595658286235,0.5021723371367783,0.020969857222687002,0.6936505331148775,0.08811268882823449,0.03912862648346629,0.6880691898047951,0.02660623110926373,0.7303351327773053,0.028557364747595793

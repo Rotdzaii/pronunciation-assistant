@@ -1,0 +1,7 @@
+experiment,macro_f1,macro_f1_std,addition_f1,addition_f1_std,decision,selected_candidate
+Vietnamese-only CNN Attention,0.5105,,0.1754,,Previous candidate,false
+All-speaker non-disjoint Vietnamese subset,0.5420,,0.2769,,Useful but not selected alone because the evaluation is not speaker-disjoint,false
+Speaker-disjoint baseline,0.5022,0.0210,0.0881,0.0391,Unseen Vietnamese speaker baseline,false
+Addition-focused sampler,0.4715,0.0299,0.0958,0.0348,Not selected because macro F1 and common-class performance dropped,false
+Context_0_10 single-seed,0.5178,0.0252,0.1246,0.0271,Leading candidate before stability confirmation,false
+Context_0_10 multi-seed,0.5170,0.0338,0.1251,0.0473,Selected Phase 2 research candidate,true

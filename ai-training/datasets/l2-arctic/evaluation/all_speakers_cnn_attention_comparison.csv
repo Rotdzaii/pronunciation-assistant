@@ -1,0 +1,4 @@
+run,scope,note,total_samples,accuracy,macro_f1,weighted_f1,addition_f1,deletion_f1,substitution_f1
+vietnamese_only_cnn_attention,Vietnamese-only test,Previous Vietnamese-only CNN Attention baseline.,333,0.6366366366366366,0.5104569332936862,0.6521436690928216,0.17543859649122806,0.6666666666666666,0.6892655367231638
+all_speakers_cnn_attention,All-speaker test,CNN Attention trained on all L2-ARCTIC speakers.,997,0.6469408224674023,0.5050108980852973,0.6835243135034561,0.16981132075471697,0.5930018416206262,0.7522195318805488
+all_speakers_cnn_attention,Vietnamese subset test,All-speaker model evaluated only on Vietnamese rows.,333,0.6366366366366366,0.5419808949220714,0.6538031243913597,0.27692307692307694,0.6666666666666666,0.6823529411764706

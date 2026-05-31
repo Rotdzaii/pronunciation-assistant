@@ -1,0 +1,15 @@
+{
+  "input_csv": "ai-training\\datasets\\l2-arctic\\metadata\\all_speakers_phone_error_classification_v2.csv",
+  "total_rows": 18610,
+  "audio_exists_distribution": {
+    "True": 18610
+  },
+  "speaker_count": 24,
+  "speakers_ready": 24,
+  "speakers_missing_audio": 0,
+  "missing_audio_by_speaker": [],
+  "missing_audio_by_l1_group": [],
+  "missing_audio_by_split": [],
+  "missing_audio_by_error_type": [],
+  "all_audio_ready_for_training": true
+}

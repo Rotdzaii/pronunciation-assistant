@@ -111,37 +111,42 @@ All three seeds individually beat CNN V2 on test macro F1 and test addition F1. 
 - Current models classify known phone-level error segments; they are not complete end-to-end pronunciation assessment systems.
 - Confidence scores are model confidence for predicted classes, not direct pronunciation correctness scores.
 
-## 8.1. Phase 2 Speaker-Disjoint Context Result
+## 8.1. Phase 2 Dataset Expansion And Speaker-Disjoint Results
 
-Phase 2 all-speaker training improved the non-disjoint Vietnamese subset, but Vietnamese leave-one-speaker-out evaluation showed that unseen-speaker addition remained weak. A sampler-only addition-focused variant was not selected because it only moved mean addition F1 from 0.0881 to 0.0958 while reducing mean macro F1 from 0.5022 to 0.4715.
+Phase 2 expanded L2-ARCTIC from the Vietnamese-only clean v2 dataset to all 24 available speakers while preserving the same `addition`, `deletion`, and `substitution` schema. The all-speaker dataset contains 18,610 rows: 1,092 additions, 3,420 deletions, and 14,098 substitutions. The Vietnamese subset remains 4,919 rows from `HQTV`, `PNV`, `THV`, and `TLV`.
 
-A controlled `context_0_10` CNN Attention run was then tested with the same Vietnamese leave-one-speaker-out protocol. It uses a 0.10 second window on each side of the annotated phone-error segment while preserving the same label order, architecture, sampler, and loss.
+All-speaker CNN Attention improved the non-disjoint Vietnamese subset, reaching macro F1 0.5420 and addition F1 0.2769. This was not enough for final selection because the split was not speaker-disjoint. Phase 2 therefore added Vietnamese leave-one-speaker-out evaluation to test unseen-speaker generalization.
+
+A sampler-only addition-focused variant was not selected because it only moved mean addition F1 from 0.0881 to 0.0958 while reducing mean macro F1 from 0.5022 to 0.4715.
+
+A controlled `context_0_10` CNN Attention run was then tested with the same Vietnamese leave-one-speaker-out protocol. It uses a 0.10 second window on each side of the annotated phone-error segment while preserving the same label order, architecture, sampler, and loss. A later 3-seed stability run confirmed that the context result remained close to the single-seed result.
 
 | Run | Mean macro F1 | Mean addition F1 | Mean deletion F1 | Mean substitution F1 | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
 | Baseline speaker-disjoint CNN Attention | 0.5022 +/- 0.0210 | 0.0881 +/- 0.0391 | 0.6881 +/- 0.0266 | 0.7303 +/- 0.0286 | Baseline |
 | Addition-focused sampler | 0.4715 +/- 0.0299 | 0.0958 +/- 0.0348 | 0.6347 +/- 0.0225 | 0.6839 +/- 0.0376 | Not selected |
-| Context-window CNN Attention `context_0_10` | 0.5178 +/- 0.0252 | 0.1246 +/- 0.0271 | 0.6801 +/- 0.0371 | 0.7486 +/- 0.0283 | Leading speaker-disjoint robustness candidate |
+| Context-window CNN Attention `context_0_10`, single seed | 0.5178 +/- 0.0252 | 0.1246 +/- 0.0271 | 0.6801 +/- 0.0371 | 0.7486 +/- 0.0283 | Leading candidate before stability |
+| Context-window CNN Attention `context_0_10`, 3 seeds | 0.5170 +/- 0.0338 | 0.1251 +/- 0.0473 | 0.6819 +/- 0.0382 | 0.7439 +/- 0.0316 | Selected Phase 2 research candidate |
 
-The context-window result is promising because it improves both mean macro F1 and mean addition F1 compared with the speaker-disjoint baseline. It should still be treated as a candidate rather than a final replacement until the gain is confirmed across additional random seeds or context settings.
+The final Phase 2 research candidate is `context_0_10` CNN Attention. It improves speaker-disjoint macro F1 and addition F1 over the baseline while avoiding the large degradation seen in the addition-focused sampler.
 
 ## 9. Recommended Next Direction
 
 Recommended feature branch:
 
-`feature/ai-confirm-speaker-disjoint-context-stability`
+`feature/ai-phase3-context-model-integration-plan`
 
-Goal: confirm whether the `context_0_10` speaker-disjoint gain is stable across random seeds and, if runtime allows, compare against `context_0_05` and `context_0_15`.
+Goal: plan how the Phase 2 `context_0_10` candidate should be packaged, versioned, and integrated safely without treating classifier confidence as pronunciation correctness.
 
 Potential methods:
 
-- Repeat the Vietnamese leave-one-speaker-out context experiment with multiple random seeds.
-- Test nearby context windows only if the seed check remains promising.
+- Document checkpoint handling and model version naming.
+- Validate inference compatibility with the AI Worker model-loading path before replacing any model.
 - Keep Vietnamese-specific evaluation separate from all-speaker aggregate metrics.
-- Do not treat classifier confidence as pronunciation correctness.
+- Preserve the rule that classifier confidence is not a pronunciation score.
 
-The next work should validate speaker-disjoint robustness before replacing the current main model candidate.
+The next work should prepare integration and release safeguards rather than run more long training by default.
 
 ## 10. Report Conclusion
 
-The completed experiments establish a reproducible AI training pipeline for phone-level pronunciation error classification. CNN V2 was the strongest earlier baseline, and the CNN attention stability check now identifies CNN attention as the strongest current model candidate. Future work should focus on error analysis, addition false positives/false negatives, and further validation before integrating this classifier into a larger pronunciation assessment flow.
+The completed experiments establish a reproducible AI training pipeline for phone-level pronunciation error classification. CNN V2 was the strongest earlier baseline, CNN attention became the Phase 1 candidate, and Phase 2 now identifies `context_0_10` CNN Attention as the strongest current research candidate under Vietnamese speaker-disjoint evaluation. Future work should focus on integration planning, checkpoint/version control, and preserving the separation between classifier confidence and pronunciation scoring.

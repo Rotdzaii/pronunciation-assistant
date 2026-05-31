@@ -113,5 +113,6 @@ It does not log secrets.
 - [AI Worker Integration Status](docs/AI_WORKER_INTEGRATION_STATUS.md)
 - [Final AI Output Contract](docs/FINAL_AI_OUTPUT_CONTRACT.md)
 - [Backend Webhook Contract](docs/BACKEND_WEBHOOK_CONTRACT.md)
+- [Context CNN Attention Integration Plan](docs/CONTEXT_CNN_ATTENTION_INTEGRATION_PLAN.md)
 - [End-to-End Worker Demo](docs/END_TO_END_WORKER_DEMO.md)
 - [Backend Integration Test](docs/BACKEND_INTEGRATION_TEST.md)

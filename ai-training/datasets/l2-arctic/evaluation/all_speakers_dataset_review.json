@@ -1,0 +1,327 @@
+{
+  "input_csv": "ai-training\\datasets\\l2-arctic\\metadata\\all_speakers_phone_error_classification_v2.csv",
+  "total_rows": 18610,
+  "columns": [
+    "dataset",
+    "speaker_id",
+    "l1",
+    "gender",
+    "split",
+    "audio_path",
+    "utterance_id",
+    "target_text",
+    "tier_name",
+    "label",
+    "error_type",
+    "start_time",
+    "end_time",
+    "original_duration",
+    "context_start_time",
+    "context_end_time",
+    "context_duration",
+    "audio_exists"
+  ],
+  "speaker_count": 24,
+  "l1_group_count": 6,
+  "error_type_distribution": {
+    "substitution": 14098,
+    "deletion": 3420,
+    "addition": 1092
+  },
+  "l1_group_distribution": {
+    "Vietnamese": 4919,
+    "Spanish": 3415,
+    "Chinese": 3244,
+    "Hindi": 2871,
+    "Arabic": 2202,
+    "Korean": 1959
+  },
+  "speaker_distribution": {
+    "THV": 1399,
+    "HQTV": 1358,
+    "TLV": 1269,
+    "EBVS": 1163,
+    "LXC": 983,
+    "ERMS": 954,
+    "BWC": 946,
+    "ASI": 907,
+    "PNV": 893,
+    "SVBI": 834,
+    "SKA": 746,
+    "TXHC": 693,
+    "NJS": 679,
+    "NCC": 622,
+    "YKWK": 621,
+    "MBMPS": 619,
+    "TNI": 567,
+    "RRBI": 563,
+    "ZHAA": 553,
+    "YDCK": 532,
+    "ABA": 511,
+    "HKK": 465,
+    "YBAA": 392,
+    "HJK": 341
+  },
+  "split_distribution": {
+    "train": 16274,
+    "val": 1339,
+    "test": 997
+  },
+  "split_by_error_type": [
+    {
+      "split": "test",
+      "error_type": "addition",
+      "rows": 58
+    },
+    {
+      "split": "test",
+      "error_type": "deletion",
+      "rows": 218
+    },
+    {
+      "split": "test",
+      "error_type": "substitution",
+      "rows": 721
+    },
+    {
+      "split": "train",
+      "error_type": "addition",
+      "rows": 953
+    },
+    {
+      "split": "train",
+      "error_type": "deletion",
+      "rows": 2906
+    },
+    {
+      "split": "train",
+      "error_type": "substitution",
+      "rows": 12415
+    },
+    {
+      "split": "val",
+      "error_type": "addition",
+      "rows": 81
+    },
+    {
+      "split": "val",
+      "error_type": "deletion",
+      "rows": 296
+    },
+    {
+      "split": "val",
+      "error_type": "substitution",
+      "rows": 962
+    }
+  ],
+  "audio_exists_distribution": {
+    "False": 13691,
+    "True": 4919
+  },
+  "duration_summary_by_error_type": [
+    {
+      "error_type": "addition",
+      "count": 1092.0,
+      "mean": 0.074503,
+      "std": 0.062627,
+      "min": 0.006805,
+      "25%": 0.041258,
+      "50%": 0.060202,
+      "75%": 0.089958,
+      "max": 1.034461
+    },
+    {
+      "error_type": "deletion",
+      "count": 3420.0,
+      "mean": 0.049531,
+      "std": 0.031474,
+      "min": 0.004562,
+      "25%": 0.03,
+      "50%": 0.04,
+      "75%": 0.06,
+      "max": 0.332727
+    },
+    {
+      "error_type": "substitution",
+      "count": 14098.0,
+      "mean": 0.098324,
+      "std": 0.053044,
+      "min": 0.010159,
+      "25%": 0.06,
+      "50%": 0.09,
+      "75%": 0.127824,
+      "max": 0.42
+    }
+  ],
+  "context_duration_summary_by_error_type": [
+    {
+      "error_type": "addition",
+      "count": 1092.0,
+      "mean": 0.570972,
+      "std": 0.055679,
+      "min": 0.301146,
+      "25%": 0.540137,
+      "50%": 0.55971,
+      "75%": 0.588949,
+      "max": 1.0
+    },
+    {
+      "error_type": "deletion",
+      "count": 3420.0,
+      "mean": 0.544957,
+      "std": 0.040792,
+      "min": 0.26282,
+      "25%": 0.53,
+      "50%": 0.54,
+      "75%": 0.56,
+      "max": 0.832727
+    },
+    {
+      "error_type": "substitution",
+      "count": 14098.0,
+      "mean": 0.582955,
+      "std": 0.078753,
+      "min": 0.265,
+      "25%": 0.55,
+      "50%": 0.58,
+      "75%": 0.62,
+      "max": 0.92
+    }
+  ],
+  "vietnamese_subset": {
+    "rows": 4919,
+    "speaker_count": 4,
+    "error_type_distribution": {
+      "substitution": 3155,
+      "deletion": 1566,
+      "addition": 198
+    },
+    "split_distribution": {
+      "train": 4075,
+      "val": 511,
+      "test": 333
+    }
+  },
+  "addition_distribution_by_l1_speaker": [
+    {
+      "l1": "Arabic",
+      "speaker_id": "ABA",
+      "rows": 78
+    },
+    {
+      "l1": "Arabic",
+      "speaker_id": "SKA",
+      "rows": 116
+    },
+    {
+      "l1": "Arabic",
+      "speaker_id": "YBAA",
+      "rows": 30
+    },
+    {
+      "l1": "Arabic",
+      "speaker_id": "ZHAA",
+      "rows": 50
+    },
+    {
+      "l1": "Chinese",
+      "speaker_id": "BWC",
+      "rows": 44
+    },
+    {
+      "l1": "Chinese",
+      "speaker_id": "LXC",
+      "rows": 58
+    },
+    {
+      "l1": "Chinese",
+      "speaker_id": "NCC",
+      "rows": 31
+    },
+    {
+      "l1": "Chinese",
+      "speaker_id": "TXHC",
+      "rows": 73
+    },
+    {
+      "l1": "Hindi",
+      "speaker_id": "ASI",
+      "rows": 26
+    },
+    {
+      "l1": "Hindi",
+      "speaker_id": "RRBI",
+      "rows": 47
+    },
+    {
+      "l1": "Hindi",
+      "speaker_id": "SVBI",
+      "rows": 28
+    },
+    {
+      "l1": "Hindi",
+      "speaker_id": "TNI",
+      "rows": 8
+    },
+    {
+      "l1": "Korean",
+      "speaker_id": "HJK",
+      "rows": 7
+    },
+    {
+      "l1": "Korean",
+      "speaker_id": "HKK",
+      "rows": 44
+    },
+    {
+      "l1": "Korean",
+      "speaker_id": "YDCK",
+      "rows": 24
+    },
+    {
+      "l1": "Korean",
+      "speaker_id": "YKWK",
+      "rows": 30
+    },
+    {
+      "l1": "Spanish",
+      "speaker_id": "EBVS",
+      "rows": 93
+    },
+    {
+      "l1": "Spanish",
+      "speaker_id": "ERMS",
+      "rows": 43
+    },
+    {
+      "l1": "Spanish",
+      "speaker_id": "MBMPS",
+      "rows": 26
+    },
+    {
+      "l1": "Spanish",
+      "speaker_id": "NJS",
+      "rows": 38
+    },
+    {
+      "l1": "Vietnamese",
+      "speaker_id": "HQTV",
+      "rows": 72
+    },
+    {
+      "l1": "Vietnamese",
+      "speaker_id": "PNV",
+      "rows": 16
+    },
+    {
+      "l1": "Vietnamese",
+      "speaker_id": "THV",
+      "rows": 67
+    },
+    {
+      "l1": "Vietnamese",
+      "speaker_id": "TLV",
+      "rows": 43
+    }
+  ]
+}

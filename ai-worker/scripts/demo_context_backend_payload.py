@@ -122,6 +122,14 @@ def post_payload(webhook_url: str, secret: str, payload: dict[str, Any]) -> tupl
     return 200 <= response.status_code < 300, f"status_code={response.status_code} body={response.text[:500]}"
 
 
+def is_uuid_like(value: str) -> bool:
+    try:
+        uuid.UUID(str(value))
+    except ValueError:
+        return False
+    return True
+
+
 def main() -> int:
     args = parse_args()
     generated_audio = False
@@ -136,6 +144,8 @@ def main() -> int:
         print("Warning: heuristic score is not real GOP.")
         print("Warning: fallback alignment is approximate.")
         print(f"post_attempted={post_requested}")
+        if not is_uuid_like(job_id):
+            print("job_id_warning=job id is not UUID-shaped; real backend POST usually requires an existing practice_history UUID.")
 
         if not audio_path.exists():
             print(f"Audio file not found: {audio_path}")
@@ -238,11 +248,16 @@ def main() -> int:
         )
 
         if post_requested:
+            print("=== post_result ===")
+            if not ai_result_valid or not payload_valid:
+                print("post_skipped_reason=AI result or webhook payload validation failed.")
+                return 1
             webhook_url = args.webhook_url or os.getenv("NODE_WEBHOOK_URL") or os.getenv("AI_WEBHOOK_URL")
             secret = args.secret or os.getenv("AI_WEBHOOK_SECRET")
             if not webhook_url or not secret:
                 print("post_skipped_reason=--webhook-url/NODE_WEBHOOK_URL and --secret/AI_WEBHOOK_SECRET are required.")
                 return 1
+            print("expected_status=2xx")
             posted, post_message = post_payload(webhook_url, secret, payload)
             print(f"post_success={posted}")
             print(f"post_result={post_message}")

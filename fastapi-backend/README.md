@@ -20,6 +20,7 @@ copy .env.example .env
 SUPABASE_URL="https://your-project.supabase.co"
 SUPABASE_ANON_KEY="your-supabase-anon-key"
 SUPABASE_SERVICE_ROLE_KEY="your-supabase-service-role-key"
+SUPABASE_JWT_SECRET="your-supabase-jwt-secret"
 AI_WEBHOOK_SECRET="replace-with-ai-webhook-secret"
 PRACTICE_AUDIO_BUCKET="practice-audios"
 ```

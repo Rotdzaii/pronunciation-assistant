@@ -134,6 +134,23 @@ After `--post`, verify the related `practice_history` row:
 
 After `--post --archive`, verify the PGMQ message was archived.
 
+## Recorded Context PGMQ Validation Result
+
+Latest once-run validation result:
+
+- `msg_id=24`
+- `job_id=95a38bdd-02fa-421e-a619-cf6586f8dfbb`
+- `scorer_mode=cnn_attention_context`
+- `inference_ran=true`
+- `ai_result_valid=True`
+- `payload_valid=True`
+- `post_success=True`
+- `archive_success=True`
+- `context_mode=context_0_10`
+- `context_used=true`
+
+This result confirms a real PGMQ message was processed by the context scorer, posted to the backend webhook successfully, and archived after the successful POST.
+
 ## Troubleshooting
 
 No queue message:

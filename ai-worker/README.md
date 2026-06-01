@@ -2,7 +2,7 @@
 
 Lightweight worker for the demo pronunciation pipeline. In demo loop mode, it keeps polling Supabase PGMQ for practice jobs, scores them with the selected scorer, posts results to the FastAPI webhook, then archives queue messages after successful webhook responses.
 
-Supported scorer modes are `mock` and `wav2vec2`. The Wav2Vec2 scorer imports `torch`, `transformers`, and audio decoding dependencies only when `SCORER_MODE=wav2vec2`.
+Supported scorer modes are `mock`, `wav2vec2`, `cnn_attention`, and `cnn_attention_context`. The Wav2Vec2 and CNN scorers import their heavier dependencies only when the corresponding scorer mode is used.
 
 Wav2Vec2 audio is preprocessed through `audio/preprocessing.py`: uploaded WebM, M4A, MP3, and related browser audio formats are converted with FFmpeg to mono 16 kHz PCM WAV, then loaded with `soundfile`. The scorer does not directly decode WebM with `librosa`.
 
@@ -58,7 +58,7 @@ $env:WORKER_MODE="once"; python worker.py
 3. FastAPI inserts `public.practice_history` with `status = processing`.
 4. FastAPI enqueues a PGMQ message in `practice_jobs` with `job_id`, `student_id`, `target_word`, and `audio_url`.
 5. Run `python worker.py`.
-6. The worker reads one queue message, scores it with `SCORER_MODE=mock` or `SCORER_MODE=wav2vec2`, and calls `POST /practice/webhook/ai-result`.
+6. The worker reads one queue message, scores it with the configured `SCORER_MODE`, and calls `POST /practice/webhook/ai-result`.
 7. If the webhook succeeds, the worker archives the PGMQ message.
 8. `public.practice_history` becomes `completed` with `score`, `problem_phonemes`, and `feedback`.
 
@@ -114,5 +114,6 @@ It does not log secrets.
 - [Final AI Output Contract](docs/FINAL_AI_OUTPUT_CONTRACT.md)
 - [Backend Webhook Contract](docs/BACKEND_WEBHOOK_CONTRACT.md)
 - [Context CNN Attention Integration Plan](docs/CONTEXT_CNN_ATTENTION_INTEGRATION_PLAN.md)
+- [CNN Attention Context Scorer](docs/CNN_ATTENTION_CONTEXT_SCORER.md)
 - [End-to-End Worker Demo](docs/END_TO_END_WORKER_DEMO.md)
 - [Backend Integration Test](docs/BACKEND_INTEGRATION_TEST.md)

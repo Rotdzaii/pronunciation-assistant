@@ -20,6 +20,11 @@ SCORER_METADATA = {
     "type": "phone_error_classifier",
     "version": "cnn_attention_selected_baseline",
 }
+CONTEXT_SCORER_METADATA = {
+    "name": "cnn_attention_context",
+    "type": "phone_error_classifier",
+    "version": "cnn_attention_context_0_10_phase2_candidate",
+}
 DEFAULT_METADATA = {
     "model_output_is_scoring": False,
     "alignment_used": False,
@@ -30,6 +35,10 @@ DEFAULT_METADATA = {
 
 def default_checkpoint_path() -> Path:
     return Path(__file__).resolve().parents[3] / "ai-training" / "models" / "l2_arctic_error_type_cnn_attention.pt"
+
+
+def default_context_checkpoint_path() -> Path:
+    return Path(__file__).resolve().parents[3] / "ai-training" / "models" / "l2_arctic_cnn_attention_context_0_10.pt"
 
 
 class CNNAttentionScorerError(RuntimeError):
@@ -43,7 +52,7 @@ def _load_torch_modules() -> tuple[Any, Any]:
     except ImportError as exc:
         raise CNNAttentionScorerError(
             "CNN Attention scorer requires torch. Install the AI training/inference dependencies before using "
-            "SCORER_MODE=cnn_attention."
+            "SCORER_MODE=cnn_attention or SCORER_MODE=cnn_attention_context."
         ) from exc
     return torch, nn
 
@@ -98,9 +107,14 @@ class SmallPronunciationCNNAttention(nn.Module):
         return self.classifier(pooled)
 
 
-def _resolve_checkpoint_path(checkpoint_path: str | Path | None = None) -> Path:
-    configured = checkpoint_path or os.getenv("CNN_ATTENTION_CHECKPOINT_PATH")
-    return Path(configured).expanduser() if configured else default_checkpoint_path()
+def _resolve_checkpoint_path(
+    checkpoint_path: str | Path | None = None,
+    *,
+    env_var_name: str = "CNN_ATTENTION_CHECKPOINT_PATH",
+    default_path: Path | None = None,
+) -> Path:
+    configured = checkpoint_path or os.getenv(env_var_name)
+    return Path(configured).expanduser() if configured else default_path or default_checkpoint_path()
 
 
 def _load_checkpoint(checkpoint_path: Path) -> dict[str, Any]:
@@ -121,6 +135,30 @@ def _load_model(checkpoint_path: str | Path | None = None) -> tuple[Any, dict[in
     checkpoint = _load_checkpoint(checkpoint_file)
     index_to_label = _index_to_label(checkpoint)
 
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    dropout = float(checkpoint.get("config", {}).get("dropout", 0.2))
+    model = SmallPronunciationCNNAttention(num_classes=len(index_to_label), dropout=dropout).to(device)
+    model.load_state_dict(checkpoint["model_state_dict"])
+    model.eval()
+    return model, index_to_label, checkpoint_file, device
+
+
+def _load_context_model(checkpoint_path: str | Path | None = None) -> tuple[Any, dict[int, str], Path, Any]:
+    checkpoint_file = _resolve_checkpoint_path(
+        checkpoint_path,
+        env_var_name="CNN_ATTENTION_CONTEXT_CHECKPOINT_PATH",
+        default_path=default_context_checkpoint_path(),
+    )
+    try:
+        checkpoint = _load_checkpoint(checkpoint_file)
+    except CNNAttentionScorerError as exc:
+        raise CNNAttentionScorerError(
+            "CNN Attention context checkpoint not found or invalid. Expected a local context checkpoint at "
+            f"{checkpoint_file}. Set CNN_ATTENTION_CONTEXT_CHECKPOINT_PATH to override. "
+            "Checkpoint files are local artifacts and must not be committed."
+        ) from exc
+
+    index_to_label = _index_to_label(checkpoint)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     dropout = float(checkpoint.get("config", {}).get("dropout", 0.2))
     model = SmallPronunciationCNNAttention(num_classes=len(index_to_label), dropout=dropout).to(device)
@@ -253,6 +291,95 @@ def _predict_with_model(
     }
 
 
+def _context_mode() -> str:
+    return os.getenv("CNN_ATTENTION_CONTEXT_MODE", "context_0_10").strip() or "context_0_10"
+
+
+def _context_seconds(env_var_name: str, default: float) -> float:
+    raw_value = os.getenv(env_var_name)
+    if raw_value in {None, ""}:
+        return default
+    try:
+        value = float(raw_value)
+    except ValueError as exc:
+        raise CNNAttentionScorerError(f"{env_var_name} must be a number") from exc
+    if value < 0:
+        raise CNNAttentionScorerError(f"{env_var_name} must be greater than or equal to 0")
+    return value
+
+
+def _context_config() -> dict[str, Any]:
+    mode = _context_mode()
+    left_seconds = _context_seconds("CNN_ATTENTION_CONTEXT_LEFT_SECONDS", 0.10)
+    right_seconds = _context_seconds("CNN_ATTENTION_CONTEXT_RIGHT_SECONDS", 0.10)
+    if mode != "context_0_10":
+        raise CNNAttentionScorerError(
+            f"Unsupported CNN_ATTENTION_CONTEXT_MODE={mode!r}. The Phase 2 selected mode is context_0_10."
+        )
+    return {
+        "context_mode": mode,
+        "context_used": True,
+        "context_left_seconds": left_seconds,
+        "context_right_seconds": right_seconds,
+    }
+
+
+def _audio_duration_seconds(audio_path: str | Path) -> float:
+    try:
+        import librosa
+    except ImportError as exc:
+        raise CNNAttentionScorerError("CNN Attention context scorer requires librosa for audio duration.") from exc
+
+    audio, _ = librosa.load(str(audio_path), sr=SAMPLE_RATE, mono=True)
+    return len(audio) / SAMPLE_RATE if SAMPLE_RATE else 0.0
+
+
+def _context_crop_metadata(
+    audio_path: str | Path,
+    segment_start_time: float,
+    segment_end_time: float,
+    context_config: dict[str, Any],
+) -> dict[str, Any]:
+    audio_duration = _audio_duration_seconds(audio_path)
+    segment_start = max(float(segment_start_time), 0.0)
+    segment_end = max(float(segment_end_time), segment_start)
+    crop_start = max(0.0, segment_start - float(context_config["context_left_seconds"]))
+    crop_end = min(audio_duration, segment_end + float(context_config["context_right_seconds"]))
+    crop_end = max(crop_end, crop_start)
+    return {
+        **context_config,
+        "segment_start_time": round(segment_start, 3),
+        "segment_end_time": round(segment_end, 3),
+        "crop_start_time": round(crop_start, 3),
+        "crop_end_time": round(crop_end, 3),
+        "audio_duration_seconds": round(audio_duration, 3),
+    }
+
+
+def _predict_context_with_model(
+    model: Any,
+    index_to_label: dict[int, str],
+    device: Any,
+    checkpoint_file: Path,
+    audio_path: str | Path,
+    start_time: float,
+    end_time: float,
+    context_config: dict[str, Any],
+) -> dict[str, Any]:
+    context_metadata = _context_crop_metadata(audio_path, start_time, end_time, context_config)
+    prediction = _predict_with_model(
+        model,
+        index_to_label,
+        device,
+        checkpoint_file,
+        audio_path,
+        context_metadata["crop_start_time"],
+        context_metadata["crop_end_time"],
+    )
+    prediction["audio"]["context"] = context_metadata
+    return prediction
+
+
 def predict_audio(audio_path: str | Path, checkpoint_path: str | Path | None = None) -> dict[str, Any]:
     model, index_to_label, checkpoint_file, device = _load_model(checkpoint_path)
     return _predict_with_model(model, index_to_label, device, checkpoint_file, audio_path)
@@ -281,7 +408,7 @@ def _format_segment_prediction(
     segment_type: str | None = None,
     index: int | None = None,
 ) -> dict[str, Any]:
-    return {
+    result = {
         "index": index,
         "type": segment_type,
         "phone": phone,
@@ -293,6 +420,10 @@ def _format_segment_prediction(
         "diagnosis_confidence": prediction["diagnosis_confidence"],
         "confidence_note": "Classifier confidence, not pronunciation correctness.",
     }
+    context_metadata = (prediction.get("audio") or {}).get("context")
+    if context_metadata:
+        result["context"] = context_metadata
+    return result
 
 
 def predict_segments(
@@ -330,11 +461,50 @@ def predict_segments(
     return predictions
 
 
+def predict_context_segments(
+    audio_path: str | Path,
+    segments: list[dict[str, Any]],
+    checkpoint_path: str | Path | None = None,
+) -> list[dict[str, Any]]:
+    model, index_to_label, checkpoint_file, device = _load_context_model(checkpoint_path)
+    context_config = _context_config()
+    predictions = []
+    for fallback_index, segment in enumerate(segments):
+        start_time = float(segment.get("start") or 0.0)
+        end_time = float(segment.get("end") if segment.get("end") is not None else start_time)
+        if end_time <= start_time:
+            end_time = start_time + MAX_SECONDS
+        prediction = _predict_context_with_model(
+            model,
+            index_to_label,
+            device,
+            checkpoint_file,
+            audio_path,
+            start_time,
+            end_time,
+            context_config,
+        )
+        predictions.append(
+            _format_segment_prediction(
+                prediction,
+                start_time,
+                end_time,
+                phone=segment.get("phone"),
+                word=segment.get("word"),
+                segment_type=segment.get("type"),
+                index=segment.get("index", fallback_index),
+            )
+        )
+    return predictions
+
+
 def _aggregate_segment_predictions(
     segment_predictions: list[dict[str, Any]],
     *,
     alignment_result: dict[str, Any],
     confidence_threshold: float | None = None,
+    scorer_metadata: dict[str, Any] | None = None,
+    extra_metadata: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     from app.scoring.scoring_service import score_pronunciation_segments
 
@@ -398,7 +568,7 @@ def _aggregate_segment_predictions(
         class_probabilities=class_probabilities,
         diagnosis_confidence=diagnosis_confidence,
         feedback=(hybrid_result or {}).get("feedback") if hybrid_result else None,
-        scorer=SCORER_METADATA,
+        scorer=scorer_metadata or SCORER_METADATA,
         scoring=scoring_result,
         score_note=score_note,
         pronunciation_score_source=pronunciation_score_source,
@@ -437,10 +607,13 @@ def _aggregate_segment_predictions(
                 "the alignment_result. Heuristic GOP-like scoring is not production GOP. Classifier confidence is "
                 "diagnosis confidence, not pronunciation scoring."
             ),
+            **(extra_metadata or {}),
         },
     )
     result["segments"] = segment_predictions
     result["metadata"]["top_issue_segments"] = issue_segments[:5]
+    if top_segment and top_segment.get("context"):
+        result["metadata"].update(top_segment["context"])
     result["feedback"]["diagnosis"] = result["diagnosis"]
     result["feedback"]["scorer"] = result["scorer"]
     result["feedback"]["metadata"] = result["metadata"]
@@ -459,6 +632,30 @@ def score_aligned_audio(
         segment_predictions,
         alignment_result=alignment_result,
         confidence_threshold=confidence_threshold,
+    )
+
+
+def score_aligned_audio_context(
+    audio_path: str | Path,
+    alignment_result: dict[str, Any],
+    checkpoint_path: str | Path | None = None,
+    confidence_threshold: float | None = None,
+) -> dict[str, Any]:
+    segments = get_alignment_segments(alignment_result)
+    segment_predictions = predict_context_segments(audio_path, segments, checkpoint_path)
+    context_config = _context_config()
+    return _aggregate_segment_predictions(
+        segment_predictions,
+        alignment_result=alignment_result,
+        confidence_threshold=confidence_threshold,
+        scorer_metadata=CONTEXT_SCORER_METADATA,
+        extra_metadata={
+            **context_config,
+            "context_inference_note": (
+                "CNN Attention ran on context-expanded crops while user-facing locations retain original "
+                "alignment segment boundaries."
+            ),
+        },
     )
 
 
@@ -530,3 +727,32 @@ def score_pronunciation(job: dict[str, Any], confidence_threshold: float | None 
     result["feedback"]["scorer"] = result["scorer"]
     result["feedback"]["metadata"] = result["metadata"]
     return result
+
+
+def score_pronunciation_context(job: dict[str, Any], confidence_threshold: float | None = None) -> dict[str, Any]:
+    temp_audio_path: Path | None = None
+    try:
+        audio_path, is_temp = _audio_path_from_job(job)
+        temp_audio_path = audio_path if is_temp else None
+        prompt_text = _job_prompt_text(job)
+        if not prompt_text:
+            raise CNNAttentionScorerError(
+                "SCORER_MODE=cnn_attention_context requires prompt_text, target_text, target_sentence, "
+                "or target_word so segment boundaries can be aligned before applying context_0_10."
+            )
+
+        from app.alignment.alignment_service import align_audio
+
+        alignment_result = align_audio(
+            audio_path,
+            prompt_text=prompt_text,
+            canonical_phones=_job_canonical_phones(job),
+        )
+        return score_aligned_audio_context(
+            audio_path,
+            alignment_result,
+            confidence_threshold=confidence_threshold,
+        )
+    finally:
+        if temp_audio_path is not None:
+            temp_audio_path.unlink(missing_ok=True)

@@ -1,0 +1,226 @@
+{
+  "created_at_utc": "2026-06-01T08:30:15.412493+00:00",
+  "environment": {
+    "torch_version": "2.12.0+cpu",
+    "torch_cuda_available": false,
+    "torch_device_name": null,
+    "mode": "cpu"
+  },
+  "config": {
+    "scorer_mode": "cnn_attention_context",
+    "context_mode": "context_0_10",
+    "context_left_seconds": 0.1,
+    "context_right_seconds": 0.1,
+    "runs": 3,
+    "warmup_runs": 1,
+    "post_attempted": false,
+    "generated_audio": true,
+    "audio_path_source": "generated_temp_wav",
+    "checkpoint_path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant\\ai-training\\models\\l2_arctic_cnn_attention_speaker_disjoint_context_stability_seed_42_HQTV.pt",
+    "output_json": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant\\ai-worker\\docs\\context_runtime_benchmark_latest.json"
+  },
+  "warmup_runs": [
+    {
+      "run_index": 1,
+      "run_kind": "warmup",
+      "timings": {
+        "total_runtime_seconds": 1.780526,
+        "setup_time_seconds": 4.1e-05,
+        "model_load_time_seconds": 0.007709,
+        "audio_prepare_time_seconds": 1.738217,
+        "alignment_time_seconds": 0.01344,
+        "inference_time_seconds": 0.012816,
+        "ai_result_validation_time_seconds": 2.6e-05,
+        "webhook_payload_build_time_seconds": 0.000863,
+        "webhook_payload_validation_time_seconds": 0.000774
+      },
+      "segments_count": 8,
+      "ai_result_valid": true,
+      "ai_result_issues": [],
+      "payload_valid": true,
+      "payload_issues": [],
+      "post_attempted": false,
+      "post_success": null,
+      "post_result": null,
+      "predicted_error_type": "deletion",
+      "diagnosis_confidence": 0.45438268780708313,
+      "score": 72.8,
+      "score_note": "Heuristic/demo score, not production GOP.",
+      "metadata": {
+        "context_mode": "context_0_10",
+        "alignment_method": "fallback_even_split",
+        "scoring_method": "heuristic_gop",
+        "scoring_is_heuristic": true,
+        "model_output_is_scoring": false
+      }
+    }
+  ],
+  "per_run_timings": [
+    {
+      "run_index": 1,
+      "run_kind": "measured",
+      "timings": {
+        "total_runtime_seconds": 0.053155,
+        "setup_time_seconds": 9.1e-05,
+        "model_load_time_seconds": 0.011648,
+        "audio_prepare_time_seconds": 0.030682,
+        "alignment_time_seconds": 0.000562,
+        "inference_time_seconds": 0.007216,
+        "ai_result_validation_time_seconds": 2.3e-05,
+        "webhook_payload_build_time_seconds": 0.001112,
+        "webhook_payload_validation_time_seconds": 0.00113
+      },
+      "segments_count": 8,
+      "ai_result_valid": true,
+      "ai_result_issues": [],
+      "payload_valid": true,
+      "payload_issues": [],
+      "post_attempted": false,
+      "post_success": null,
+      "post_result": null,
+      "predicted_error_type": "deletion",
+      "diagnosis_confidence": 0.45438268780708313,
+      "score": 72.8,
+      "score_note": "Heuristic/demo score, not production GOP.",
+      "metadata": {
+        "context_mode": "context_0_10",
+        "alignment_method": "fallback_even_split",
+        "scoring_method": "heuristic_gop",
+        "scoring_is_heuristic": true,
+        "model_output_is_scoring": false
+      }
+    },
+    {
+      "run_index": 2,
+      "run_kind": "measured",
+      "timings": {
+        "total_runtime_seconds": 0.051845,
+        "setup_time_seconds": 0.000102,
+        "model_load_time_seconds": 0.01023,
+        "audio_prepare_time_seconds": 0.030184,
+        "alignment_time_seconds": 0.000379,
+        "inference_time_seconds": 0.008704,
+        "ai_result_validation_time_seconds": 1.6e-05,
+        "webhook_payload_build_time_seconds": 0.000695,
+        "webhook_payload_validation_time_seconds": 0.000782
+      },
+      "segments_count": 8,
+      "ai_result_valid": true,
+      "ai_result_issues": [],
+      "payload_valid": true,
+      "payload_issues": [],
+      "post_attempted": false,
+      "post_success": null,
+      "post_result": null,
+      "predicted_error_type": "deletion",
+      "diagnosis_confidence": 0.45438268780708313,
+      "score": 72.8,
+      "score_note": "Heuristic/demo score, not production GOP.",
+      "metadata": {
+        "context_mode": "context_0_10",
+        "alignment_method": "fallback_even_split",
+        "scoring_method": "heuristic_gop",
+        "scoring_is_heuristic": true,
+        "model_output_is_scoring": false
+      }
+    },
+    {
+      "run_index": 3,
+      "run_kind": "measured",
+      "timings": {
+        "total_runtime_seconds": 0.04483,
+        "setup_time_seconds": 5e-05,
+        "model_load_time_seconds": 0.004294,
+        "audio_prepare_time_seconds": 0.028993,
+        "alignment_time_seconds": 0.000149,
+        "inference_time_seconds": 0.008118,
+        "ai_result_validation_time_seconds": 1.9e-05,
+        "webhook_payload_build_time_seconds": 0.001473,
+        "webhook_payload_validation_time_seconds": 0.000979
+      },
+      "segments_count": 8,
+      "ai_result_valid": true,
+      "ai_result_issues": [],
+      "payload_valid": true,
+      "payload_issues": [],
+      "post_attempted": false,
+      "post_success": null,
+      "post_result": null,
+      "predicted_error_type": "deletion",
+      "diagnosis_confidence": 0.45438268780708313,
+      "score": 72.8,
+      "score_note": "Heuristic/demo score, not production GOP.",
+      "metadata": {
+        "context_mode": "context_0_10",
+        "alignment_method": "fallback_even_split",
+        "scoring_method": "heuristic_gop",
+        "scoring_is_heuristic": true,
+        "model_output_is_scoring": false
+      }
+    }
+  ],
+  "aggregate_timings": {
+    "total_runtime_seconds": {
+      "mean": 0.049943,
+      "std": 0.003655,
+      "min": 0.04483,
+      "max": 0.053155
+    },
+    "setup_time_seconds": {
+      "mean": 8.1e-05,
+      "std": 2.2e-05,
+      "min": 5e-05,
+      "max": 0.000102
+    },
+    "model_load_time_seconds": {
+      "mean": 0.008724,
+      "std": 0.003186,
+      "min": 0.004294,
+      "max": 0.011648
+    },
+    "audio_prepare_time_seconds": {
+      "mean": 0.029953,
+      "std": 0.000709,
+      "min": 0.028993,
+      "max": 0.030682
+    },
+    "alignment_time_seconds": {
+      "mean": 0.000363,
+      "std": 0.000169,
+      "min": 0.000149,
+      "max": 0.000562
+    },
+    "inference_time_seconds": {
+      "mean": 0.008013,
+      "std": 0.000612,
+      "min": 0.007216,
+      "max": 0.008704
+    },
+    "ai_result_validation_time_seconds": {
+      "mean": 1.9e-05,
+      "std": 3e-06,
+      "min": 1.6e-05,
+      "max": 2.3e-05
+    },
+    "webhook_payload_build_time_seconds": {
+      "mean": 0.001093,
+      "std": 0.000318,
+      "min": 0.000695,
+      "max": 0.001473
+    },
+    "webhook_payload_validation_time_seconds": {
+      "mean": 0.000964,
+      "std": 0.000142,
+      "min": 0.000782,
+      "max": 0.00113
+    }
+  },
+  "bottleneck_recommendation": "audio_prepare_time dominates: optimize audio decoding and log-mel preprocessing.",
+  "notes": [
+    "CPU/GPU mode: cpu.",
+    "Classifier confidence is not pronunciation correctness.",
+    "Heuristic score is not real GOP.",
+    "Fallback alignment is approximate.",
+    "Default benchmark does not POST; post_time_seconds is present only when --post is passed."
+  ]
+}

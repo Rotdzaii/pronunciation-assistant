@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import os
 import sys
 import tempfile
 import wave
@@ -53,6 +54,18 @@ def _write_temp_wav() -> Path:
     return temp_path
 
 
+def _resolved_context_checkpoint_path() -> Path:
+    configured = os.getenv("CNN_ATTENTION_CONTEXT_CHECKPOINT_PATH")
+    return Path(configured).expanduser() if configured else _default_context_checkpoint_path()
+
+
+def _top_segment(result: dict) -> dict:
+    segments = result.get("segments") or []
+    if not segments:
+        return {}
+    return max(segments, key=lambda item: float(item.get("diagnosis_confidence") or 0.0))
+
+
 def main() -> int:
     args = _parse_args()
     generated_audio = False
@@ -67,7 +80,7 @@ def main() -> int:
         try:
             from app.scorers.cnn_attention_scorer import default_context_checkpoint_path, score_pronunciation_context
 
-            checkpoint_path = default_context_checkpoint_path()
+            checkpoint_path = _resolved_context_checkpoint_path()
             result = score_pronunciation_context(
                 {
                     "job_id": "demo-cnn-attention-context",
@@ -81,7 +94,7 @@ def main() -> int:
             print("CNN Attention context demo could not run inference.")
             print(str(exc))
             try:
-                checkpoint_path = default_context_checkpoint_path()
+                checkpoint_path = _resolved_context_checkpoint_path()
             except UnboundLocalError:
                 checkpoint_path = _default_context_checkpoint_path()
             print(f"Expected local context checkpoint: {checkpoint_path}")
@@ -91,8 +104,50 @@ def main() -> int:
             print("Heuristic score is not real GOP.")
             return 1
 
+        top_segment = _top_segment(result)
+        diagnosis = result.get("diagnosis", {})
+        print("=== context_demo_summary ===")
+        print(
+            json.dumps(
+                {
+                    "predicted_error_type": result.get("predicted_error_type"),
+                    "diagnosis_confidence": diagnosis.get("diagnosis_confidence"),
+                    "class_probabilities": diagnosis.get("class_probabilities"),
+                    "top_segment": {
+                        "phone": top_segment.get("phone"),
+                        "word": top_segment.get("word"),
+                        "predicted_error_type": top_segment.get("predicted_error_type"),
+                        "diagnosis_confidence": top_segment.get("diagnosis_confidence"),
+                        "class_probabilities": top_segment.get("class_probabilities"),
+                        "context": top_segment.get("context"),
+                    },
+                },
+                indent=2,
+                ensure_ascii=False,
+            )
+        )
         print("=== normalized_result_metadata ===")
-        print(json.dumps(result.get("metadata", {}), indent=2, ensure_ascii=False))
+        metadata = result.get("metadata", {})
+        print(
+            json.dumps(
+                {
+                    "context_mode": metadata.get("context_mode"),
+                    "context_used": metadata.get("context_used"),
+                    "context_left_seconds": metadata.get("context_left_seconds"),
+                    "context_right_seconds": metadata.get("context_right_seconds"),
+                    "segment_start_time": metadata.get("segment_start_time"),
+                    "segment_end_time": metadata.get("segment_end_time"),
+                    "crop_start_time": metadata.get("crop_start_time"),
+                    "crop_end_time": metadata.get("crop_end_time"),
+                    "model_output_is_scoring": metadata.get("model_output_is_scoring"),
+                    "scoring_is_heuristic": metadata.get("scoring_is_heuristic"),
+                    "alignment_method": metadata.get("alignment_method"),
+                    "location_reliability": metadata.get("location_reliability"),
+                },
+                indent=2,
+                ensure_ascii=False,
+            )
+        )
         print("=== confidence_note ===")
         print(result.get("diagnosis", {}).get("confidence_note", "Classifier confidence, not pronunciation correctness."))
         print("=== score_note ===")

@@ -116,5 +116,6 @@ It does not log secrets.
 - [Context CNN Attention Integration Plan](docs/CONTEXT_CNN_ATTENTION_INTEGRATION_PLAN.md)
 - [CNN Attention Context Scorer](docs/CNN_ATTENTION_CONTEXT_SCORER.md)
 - [Context Runtime Benchmark](docs/CONTEXT_RUNTIME_BENCHMARK.md)
+- [Context Runtime Real Audio Benchmark](docs/CONTEXT_RUNTIME_REAL_AUDIO_BENCHMARK.md)
 - [End-to-End Worker Demo](docs/END_TO_END_WORKER_DEMO.md)
 - [Backend Integration Test](docs/BACKEND_INTEGRATION_TEST.md)

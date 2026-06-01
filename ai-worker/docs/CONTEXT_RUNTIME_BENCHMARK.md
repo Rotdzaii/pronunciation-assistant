@@ -74,15 +74,17 @@ Latest saved result:
 - Default POST behavior: disabled
 - Environment: torch `2.12.0+cpu`, CUDA unavailable, CPU mode
 - Runs: 3 measured, 1 warmup
-- Aggregate total runtime mean: `0.049943` seconds
-- Aggregate model load mean: `0.008724` seconds
-- Aggregate audio prepare mean: `0.029953` seconds
-- Aggregate inference mean: `0.008013` seconds
-- Aggregate payload build mean: `0.001093` seconds
-- Aggregate payload validation mean: `0.000964` seconds
+- Aggregate total runtime mean: `0.028784` seconds
+- Aggregate model load mean: `0.004212` seconds
+- Aggregate audio decode mean: `0.002011` seconds
+- Aggregate audio prepare mean: `0.014535` seconds
+- Aggregate inference mean: `0.006118` seconds
+- Aggregate payload build mean: `0.000619` seconds
+- Aggregate payload validation mean: `0.000508` seconds
 - Current bottleneck recommendation: audio decoding/log-mel preprocessing
 
 Use the aggregate `mean` values in the JSON to choose the next optimization target. The script also prints `bottleneck_recommendation`.
+For frontend or Supabase Storage audio, use [Context Runtime Real Audio Benchmark](CONTEXT_RUNTIME_REAL_AUDIO_BENCHMARK.md).
 
 ## Limitations
 

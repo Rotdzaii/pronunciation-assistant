@@ -22,7 +22,7 @@ from scorers.mock_scorer import score_pronunciation as score_mock_pronunciation
 DEFAULT_VISIBILITY_TIMEOUT_SECONDS = 60
 DEFAULT_WORKER_POLL_INTERVAL_SECONDS = 1.0
 DEFAULT_WORKER_IDLE_BACKOFF_MAX_SECONDS = 10.0
-SUPPORTED_SCORER_MODES = ("mock", "wav2vec2", "cnn_attention")
+SUPPORTED_SCORER_MODES = ("mock", "wav2vec2", "cnn_attention", "cnn_attention_context")
 
 
 def _load_env() -> dict[str, Any]:
@@ -219,6 +219,10 @@ def _score(job: dict[str, Any], scorer_mode: str, confidence_threshold: float) -
         from app.scorers.cnn_attention_scorer import score_pronunciation as score_cnn_attention_pronunciation
 
         return score_cnn_attention_pronunciation(job, confidence_threshold)
+    if scorer_mode == "cnn_attention_context":
+        from app.scorers.cnn_attention_scorer import score_pronunciation_context
+
+        return score_pronunciation_context(job, confidence_threshold)
 
     raise RuntimeError(
         f"Unsupported SCORER_MODE={scorer_mode!r}. "
@@ -236,8 +240,12 @@ def _build_failed_result(
         error=str(error),
         scorer={
             "name": scorer_mode,
-            "type": "phone_error_classifier" if scorer_mode == "cnn_attention" else scorer_mode,
-            "version": "cnn_attention_selected_baseline" if scorer_mode == "cnn_attention" else "unknown",
+            "type": "phone_error_classifier" if scorer_mode in {"cnn_attention", "cnn_attention_context"} else scorer_mode,
+            "version": (
+                "cnn_attention_context_0_10_phase2_candidate"
+                if scorer_mode == "cnn_attention_context"
+                else "cnn_attention_selected_baseline" if scorer_mode == "cnn_attention" else "unknown"
+            ),
         },
         metadata={
             "confidence_threshold": confidence_threshold,

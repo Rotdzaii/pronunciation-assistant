@@ -8,7 +8,9 @@ The goal is to keep the AI Worker output stable for backend/frontend integration
 
 ## 2. Selected Model
 
-Selected model: CNN Attention phone error classifier.
+Selected integrated model: CNN Attention phone error classifier.
+
+Phase 3 context candidate: CNN Attention with `context_0_10`.
 
 Task: phone-level pronunciation error classification.
 
@@ -30,6 +32,14 @@ ai-training/models/l2_arctic_error_type_cnn_attention.pt
 ```
 
 The checkpoint is a local artifact and is not committed to Git.
+
+Context candidate metrics from Phase 2 Vietnamese speaker-disjoint multi-seed stability:
+
+- mean macro F1 = 0.5170 +/- 0.0338
+- mean addition F1 = 0.1251 +/- 0.0473
+- mean accuracy = 0.6618 +/- 0.0324
+
+The context candidate uses a separate worker scorer mode so the existing `cnn_attention` behavior remains compatible.
 
 ## 3. Pipeline Overview
 
@@ -58,6 +68,8 @@ AI Worker scorer mode
       +-- mock / wav2vec2 legacy paths
       |
       +-- cnn_attention
+      |
+      +-- cnn_attention_context
             |
             v
       alignment_service
@@ -98,6 +110,14 @@ CNN Attention scorer
 - Role: loads the selected CNN Attention checkpoint, performs clip or aligned segment inference, and maps outputs into the normalized result.
 - Status: implemented.
 - Limitation: real inference requires local `torch`, audio dependencies, and checkpoint.
+
+CNN Attention context scorer
+
+- Path: `ai-worker/app/scorers/cnn_attention_scorer.py`
+- Mode: `SCORER_MODE=cnn_attention_context`
+- Role: runs the Phase 2 `context_0_10` candidate on context-expanded aligned segment crops while preserving original segment boundaries for user-facing location.
+- Status: implemented.
+- Limitation: requires local context checkpoint and alignment boundaries; fallback alignment remains approximate.
 
 Alignment contract
 
@@ -165,8 +185,12 @@ Webhook payload builder
 ## 5. Environment Variables
 
 ```dotenv
-SCORER_MODE=mock|wav2vec2|cnn_attention
+SCORER_MODE=mock|wav2vec2|cnn_attention|cnn_attention_context
 CNN_ATTENTION_CHECKPOINT_PATH=C:\path\to\l2_arctic_error_type_cnn_attention.pt
+CNN_ATTENTION_CONTEXT_CHECKPOINT_PATH=C:\path\to\context-checkpoint.pt
+CNN_ATTENTION_CONTEXT_MODE=context_0_10
+CNN_ATTENTION_CONTEXT_LEFT_SECONDS=0.10
+CNN_ATTENTION_CONTEXT_RIGHT_SECONDS=0.10
 
 ALIGNMENT_MODE=fallback|mfa|none
 ALLOW_ALIGNMENT_FALLBACK=true
@@ -208,6 +232,8 @@ The full normalized AI result is preserved under `feedback.ai_result` for curren
 
 Important: `diagnosis.diagnosis_confidence` is classifier diagnosis confidence, not pronunciation score.
 
+For `cnn_attention_context`, metadata also includes context crop fields such as `context_mode`, `context_used`, `segment_start_time`, `segment_end_time`, `crop_start_time`, and `crop_end_time`.
+
 ## 7. Backend Webhook
 
 Route:
@@ -241,6 +267,7 @@ python ai-worker/scripts/demo_scoring_contract.py
 python ai-worker/scripts/demo_hybrid_diagnosis.py
 python ai-worker/scripts/demo_final_ai_output.py
 python ai-worker/scripts/demo_backend_webhook_payload.py
+python ai-worker/scripts/demo_cnn_attention_context_scorer.py
 python ai-worker/scripts/demo_worker_end_to_end.py --dry-run
 python ai-worker/scripts/demo_backend_integration.py --job-id demo-job-id --dry-run
 ```
@@ -260,7 +287,9 @@ python ai-worker/scripts/demo_backend_integration.py --job-id <existing-practice
 - `heuristic_gop` is not real GOP/CaGOP.
 - Severity thresholds are not calibrated.
 - CNN Attention confidence is diagnosis confidence, not pronunciation score.
+- CNN Attention context confidence is also diagnosis confidence, not pronunciation score.
 - Real CNN Attention inference requires local `torch` dependencies and checkpoint.
+- Context scorer inference requires a local context checkpoint and aligned segment boundaries.
 - Current backend stores rich AI result data inside `feedback.ai_result`.
 
 ## 10. Recommended Next Work

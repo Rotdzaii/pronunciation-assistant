@@ -181,3 +181,16 @@ Scoring limitations:
 - Heuristic score is not real GOP.
 - Fallback alignment is approximate.
 - The context CNN Attention model is a research candidate, not a fully final production pronunciation model.
+
+Real PGMQ validation result:
+
+- msg_id=24
+- job_id=95a38bdd-02fa-421e-a619-cf6586f8dfbb
+- inference_ran=true
+- ai_result_valid=True
+- payload_valid=True
+- post_success=True
+- archive_success=True
+- scorer.name=cnn_attention_context
+- context_mode=context_0_10
+- context_used=true

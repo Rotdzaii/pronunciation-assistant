@@ -340,6 +340,8 @@ def main() -> int:
     config = _load_env()
     client = create_client(config["supabase_url"], config["supabase_service_role_key"])
     print(f"Supported scorer modes: {', '.join(SUPPORTED_SCORER_MODES)}")
+    print(f"worker_mode={config['worker_mode']}")
+    print(f"scorer_mode={config['scorer_mode']}")
 
     if config["worker_mode"] == "once":
         _process_one_job(client, config)
@@ -371,6 +373,9 @@ def main() -> int:
 if __name__ == "__main__":
     try:
         raise SystemExit(main())
+    except KeyboardInterrupt:
+        print("Worker stopped by Ctrl+C.")
+        raise SystemExit(0)
     except Exception as exc:
         print(f"Worker failed: {exc}", file=sys.stderr)
         raise SystemExit(1)

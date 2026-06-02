@@ -1,0 +1,261 @@
+{
+  "created_at_utc": "2026-06-02T08:30:52.608595+00:00",
+  "environment": {
+    "torch_version": "2.12.0+cpu",
+    "torch_cuda_available": false,
+    "torch_device_name": null,
+    "mode": "cpu"
+  },
+  "input_type": "audio_url",
+  "audio_source_redacted": "https://wlvmuuktpzficbaugwqw.supabase.co/....webm?<redacted>",
+  "target_word": "Architecture",
+  "config": {
+    "scorer_mode": "cnn_attention_context",
+    "context_mode": "context_0_10",
+    "context_left_seconds": 0.1,
+    "context_right_seconds": 0.1,
+    "runs": 3,
+    "warmup_runs": 1,
+    "post_attempted": false,
+    "input_type": "audio_url",
+    "generated_audio": false,
+    "downloaded_audio": true,
+    "keep_downloaded_audio": false,
+    "audio_source": {
+      "type": "audio_url",
+      "audio_url": "https://wlvmuuktpzficbaugwqw.supabase.co/....webm?<redacted>",
+      "audio_path": null,
+      "downloaded_temp_path": "<temporary-audio-file>",
+      "redacted": true
+    },
+    "target_word": "Architecture",
+    "checkpoint_path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant\\ai-training\\models\\l2_arctic_cnn_attention_speaker_disjoint_context_stability_seed_42_HQTV.pt",
+    "output_json": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant\\ai-worker\\docs\\context_runtime_real_audio_benchmark_latest.json"
+  },
+  "warmup_runs": [
+    {
+      "run_index": 1,
+      "run_kind": "warmup",
+      "timings": {
+        "total_runtime_seconds": 2.184685,
+        "setup_time_seconds": 8.5e-05,
+        "model_load_time_seconds": 0.008855,
+        "audio_decode_time_seconds": 0.630212,
+        "audio_prepare_time_seconds": 0.34652,
+        "alignment_time_seconds": 1.183588,
+        "inference_time_seconds": 0.008809,
+        "ai_result_validation_time_seconds": 2.2e-05,
+        "webhook_payload_build_time_seconds": 0.000627,
+        "webhook_payload_validation_time_seconds": 0.000675
+      },
+      "segments_count": 8,
+      "ai_result_valid": true,
+      "ai_result_issues": [],
+      "payload_valid": true,
+      "payload_issues": [],
+      "post_attempted": false,
+      "post_success": null,
+      "post_result": null,
+      "predicted_error_type": "substitution",
+      "diagnosis_confidence": 0.9485817551612854,
+      "score": 56.8,
+      "score_note": "Heuristic/demo score, not production GOP.",
+      "target_word": "Architecture",
+      "metadata": {
+        "context_mode": "context_0_10",
+        "alignment_method": "fallback_even_split",
+        "scoring_method": "heuristic_gop",
+        "scoring_is_heuristic": true,
+        "model_output_is_scoring": false
+      }
+    }
+  ],
+  "per_run_timings": [
+    {
+      "run_index": 1,
+      "run_kind": "measured",
+      "timings": {
+        "total_runtime_seconds": 2.378739,
+        "setup_time_seconds": 9.5e-05,
+        "model_load_time_seconds": 0.006216,
+        "audio_decode_time_seconds": 0.290017,
+        "audio_prepare_time_seconds": 0.312724,
+        "alignment_time_seconds": 0.033956,
+        "inference_time_seconds": 0.008341,
+        "ai_result_validation_time_seconds": 1.8e-05,
+        "webhook_payload_build_time_seconds": 0.000915,
+        "webhook_payload_validation_time_seconds": 0.000861,
+        "audio_download_time_seconds": 1.724863
+      },
+      "segments_count": 8,
+      "ai_result_valid": true,
+      "ai_result_issues": [],
+      "payload_valid": true,
+      "payload_issues": [],
+      "post_attempted": false,
+      "post_success": null,
+      "post_result": null,
+      "predicted_error_type": "substitution",
+      "diagnosis_confidence": 0.9485817551612854,
+      "score": 56.8,
+      "score_note": "Heuristic/demo score, not production GOP.",
+      "target_word": "Architecture",
+      "metadata": {
+        "context_mode": "context_0_10",
+        "alignment_method": "fallback_even_split",
+        "scoring_method": "heuristic_gop",
+        "scoring_is_heuristic": true,
+        "model_output_is_scoring": false
+      }
+    },
+    {
+      "run_index": 2,
+      "run_kind": "measured",
+      "timings": {
+        "total_runtime_seconds": 0.666979,
+        "setup_time_seconds": 8.1e-05,
+        "model_load_time_seconds": 0.008581,
+        "audio_decode_time_seconds": 0.299107,
+        "audio_prepare_time_seconds": 0.313141,
+        "alignment_time_seconds": 0.037361,
+        "inference_time_seconds": 0.007042,
+        "ai_result_validation_time_seconds": 1.4e-05,
+        "webhook_payload_build_time_seconds": 0.000545,
+        "webhook_payload_validation_time_seconds": 0.000532
+      },
+      "segments_count": 8,
+      "ai_result_valid": true,
+      "ai_result_issues": [],
+      "payload_valid": true,
+      "payload_issues": [],
+      "post_attempted": false,
+      "post_success": null,
+      "post_result": null,
+      "predicted_error_type": "substitution",
+      "diagnosis_confidence": 0.9485817551612854,
+      "score": 56.8,
+      "score_note": "Heuristic/demo score, not production GOP.",
+      "target_word": "Architecture",
+      "metadata": {
+        "context_mode": "context_0_10",
+        "alignment_method": "fallback_even_split",
+        "scoring_method": "heuristic_gop",
+        "scoring_is_heuristic": true,
+        "model_output_is_scoring": false
+      }
+    },
+    {
+      "run_index": 3,
+      "run_kind": "measured",
+      "timings": {
+        "total_runtime_seconds": 0.73117,
+        "setup_time_seconds": 6.5e-05,
+        "model_load_time_seconds": 0.003873,
+        "audio_decode_time_seconds": 0.337288,
+        "audio_prepare_time_seconds": 0.345463,
+        "alignment_time_seconds": 0.031789,
+        "inference_time_seconds": 0.009089,
+        "ai_result_validation_time_seconds": 3.1e-05,
+        "webhook_payload_build_time_seconds": 0.001397,
+        "webhook_payload_validation_time_seconds": 0.001286
+      },
+      "segments_count": 8,
+      "ai_result_valid": true,
+      "ai_result_issues": [],
+      "payload_valid": true,
+      "payload_issues": [],
+      "post_attempted": false,
+      "post_success": null,
+      "post_result": null,
+      "predicted_error_type": "substitution",
+      "diagnosis_confidence": 0.9485817551612854,
+      "score": 56.8,
+      "score_note": "Heuristic/demo score, not production GOP.",
+      "target_word": "Architecture",
+      "metadata": {
+        "context_mode": "context_0_10",
+        "alignment_method": "fallback_even_split",
+        "scoring_method": "heuristic_gop",
+        "scoring_is_heuristic": true,
+        "model_output_is_scoring": false
+      }
+    }
+  ],
+  "aggregate_timings": {
+    "total_runtime_seconds": {
+      "mean": 1.258963,
+      "std": 0.792235,
+      "min": 0.666979,
+      "max": 2.378739
+    },
+    "setup_time_seconds": {
+      "mean": 8e-05,
+      "std": 1.2e-05,
+      "min": 6.5e-05,
+      "max": 9.5e-05
+    },
+    "model_load_time_seconds": {
+      "mean": 0.006223,
+      "std": 0.001922,
+      "min": 0.003873,
+      "max": 0.008581
+    },
+    "audio_download_time_seconds": {
+      "mean": 1.724863,
+      "std": 0.0,
+      "min": 1.724863,
+      "max": 1.724863
+    },
+    "audio_decode_time_seconds": {
+      "mean": 0.308804,
+      "std": 0.02048,
+      "min": 0.290017,
+      "max": 0.337288
+    },
+    "audio_prepare_time_seconds": {
+      "mean": 0.323776,
+      "std": 0.015336,
+      "min": 0.312724,
+      "max": 0.345463
+    },
+    "alignment_time_seconds": {
+      "mean": 0.034369,
+      "std": 0.002293,
+      "min": 0.031789,
+      "max": 0.037361
+    },
+    "inference_time_seconds": {
+      "mean": 0.008157,
+      "std": 0.000846,
+      "min": 0.007042,
+      "max": 0.009089
+    },
+    "ai_result_validation_time_seconds": {
+      "mean": 2.1e-05,
+      "std": 7e-06,
+      "min": 1.4e-05,
+      "max": 3.1e-05
+    },
+    "webhook_payload_build_time_seconds": {
+      "mean": 0.000952,
+      "std": 0.000349,
+      "min": 0.000545,
+      "max": 0.001397
+    },
+    "webhook_payload_validation_time_seconds": {
+      "mean": 0.000893,
+      "std": 0.000309,
+      "min": 0.000532,
+      "max": 0.001286
+    }
+  },
+  "bottleneck_recommendation": "audio_download_time dominates: inspect network or Supabase Storage latency.",
+  "notes": [
+    "CPU/GPU mode: cpu.",
+    "Classifier confidence is not pronunciation correctness.",
+    "Heuristic score is not real GOP.",
+    "Fallback alignment is approximate.",
+    "Signed URLs are redacted.",
+    "Default benchmark does not POST; post_time_seconds is present only when --post is passed."
+  ]
+}

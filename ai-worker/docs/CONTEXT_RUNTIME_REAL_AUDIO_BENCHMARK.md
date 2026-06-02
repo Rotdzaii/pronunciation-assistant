@@ -63,13 +63,17 @@ ai-worker/docs/context_runtime_real_audio_benchmark_latest.json
 
 ## Result Summary
 
-No real frontend/Supabase audio source was provided with this change, so the real-audio benchmark was not run here.
+No real frontend/Supabase audio source was provided with this change, so the real-audio benchmark was not run here and no signed URL was written to docs or JSON.
 
-Generated-audio regression benchmark still verifies that the benchmark script and context scorer path run without POST. The latest generated-audio result remains in:
+Generated-audio regression benchmark still verifies that the benchmark script and context scorer path run without POST:
 
-```text
-ai-worker/docs/context_runtime_benchmark_latest.json
-```
+- Environment: torch `2.12.0+cpu`, CUDA unavailable, CPU mode
+- Input type: `generated_wav`
+- Runs: 3 measured, 1 warmup
+- Aggregate total runtime mean: `0.048446` seconds
+- Aggregate audio prepare mean: `0.024832` seconds
+- Aggregate inference mean: `0.007652` seconds
+- Bottleneck recommendation: audio preparation
 
 Run one of the real-audio commands above with a representative frontend recording or signed Supabase URL to create:
 

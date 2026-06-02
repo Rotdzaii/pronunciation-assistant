@@ -65,7 +65,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--post", action="store_true", help="Explicitly POST the payload. Default never posts.")
     parser.add_argument("--webhook-url", default=None, help="Webhook URL used only with --post.")
     parser.add_argument("--secret", default=None, help="Webhook secret used only with --post. Never printed.")
-    parser.add_argument("--redact-urls", action=argparse.BooleanOptionalAction, default=True, help="Redact audio URLs in output. Default: true.")
+    parser.add_argument("--redact-urls", action=argparse.BooleanOptionalAction, default=True, help="Keep audio URLs redacted in output. Default: true.")
     parser.add_argument("--keep-downloaded-audio", action="store_true", help="Keep audio downloaded from --audio-url. Default deletes it.")
     parser.add_argument("--output-json", default=None, help="Small JSON report path.")
     return parser.parse_args()
@@ -104,13 +104,27 @@ def redacted_url(value: str | None, *, redact: bool = True) -> str | None:
     if not value:
         return None
     parsed = urlparse(value)
-    if not redact and not parsed.query:
-        return value
     if not parsed.scheme or not parsed.netloc:
         return "<redacted-audio-url>"
     suffix = Path(parsed.path).suffix
     path_hint = f"...{suffix}" if suffix else "..."
     return f"{parsed.scheme}://{parsed.netloc}/{path_hint}?<redacted>"
+
+
+def redacted_audio_source(
+    *,
+    input_type: str,
+    audio_url: str | None,
+    audio_path: Path | None,
+    redact_urls: bool,
+) -> str:
+    if input_type == "audio_url":
+        return redacted_url(audio_url, redact=redact_urls) or "<redacted-audio-url>"
+    if input_type == "local_audio_path" and audio_path:
+        return f"<local-audio-path:{audio_path.name}>"
+    if input_type == "generated_wav":
+        return "<generated-temporary-wav>"
+    return "<unknown-audio-source>"
 
 
 def download_audio_to_temp(audio_url: str) -> tuple[Path, float]:
@@ -562,6 +576,14 @@ def main() -> int:
         report = {
             "created_at_utc": datetime.now(timezone.utc).isoformat(),
             "environment": env_info,
+            "input_type": input_type,
+            "audio_source_redacted": redacted_audio_source(
+                input_type=input_type,
+                audio_url=args.audio_url,
+                audio_path=audio_path,
+                redact_urls=args.redact_urls,
+            ),
+            "target_word": args.target_word,
             "config": {
                 "scorer_mode": SCORER_MODE,
                 "context_mode": "context_0_10",
@@ -577,7 +599,11 @@ def main() -> int:
                 "audio_source": {
                     "type": input_type,
                     "audio_url": redacted_url(args.audio_url, redact=args.redact_urls),
-                    "audio_path": str(audio_path) if input_type == "local_audio_path" else None,
+                    "audio_path": (
+                        f"<local-audio-path:{audio_path.name}>"
+                        if input_type == "local_audio_path"
+                        else None
+                    ),
                     "downloaded_temp_path": "<temporary-audio-file>" if downloaded_audio else None,
                     "redacted": bool(args.redact_urls),
                 },

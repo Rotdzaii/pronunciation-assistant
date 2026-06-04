@@ -80,3 +80,9 @@ Compared with the speaker-disjoint baseline, it improves macro F1 and addition F
 - The model operates on known phone-error segments.
 - Confidence is classifier confidence, not pronunciation correctness.
 - Checkpoints are local artifacts and are not committed.
+
+## Phase 4 Direction
+
+Phase 2 selected `context_0_10` CNN Attention as the current candidate, and the candidate has since been integrated into the AI Worker demo flow.
+
+Phase 4 should focus on real forced alignment, real GOP/CaGOP, larger and better-normalized datasets, stronger acoustic models or fine-tuning, calibration, and runtime/audio preprocessing optimization.

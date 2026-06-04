@@ -97,8 +97,6 @@ These files are local artifacts and must not be committed.
 
 ## Next Recommended Phase
 
-Recommended next phase:
+Phase 2 selected `context_0_10` CNN Attention as the current research candidate, and later validation integrated it into the AI Worker flow for the demo pipeline.
 
-`feature/ai-phase3-context-model-integration-plan`
-
-The next phase should plan checkpoint packaging, inference compatibility, model version naming, and AI Worker integration safeguards without mixing classifier confidence into pronunciation scoring.
+Phase 4 should now address the remaining modeling limitations: real forced alignment, real GOP/CaGOP scoring, broader datasets, stronger acoustic models or fine-tuning, score/confidence calibration, and runtime/audio preprocessing optimization.

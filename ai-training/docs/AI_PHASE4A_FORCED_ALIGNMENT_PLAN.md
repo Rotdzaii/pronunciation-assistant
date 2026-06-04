@@ -126,6 +126,8 @@ Planned behavior:
 
 Validation should record whether the result used true MFA alignment or fell back. It should also verify that no local paths, signed URLs, raw audio, checkpoints, or secrets are committed or sent in app-facing payloads.
 
+Local MFA validation should be completed before worker integration. The first implementation step should be a script-driven local readiness check using one developer-provided audio file and transcript, so MFA installation, dictionary/model paths, TextGrid generation, parser behavior, and cleanup rules are verified before enabling `ALIGNMENT_MODE=mfa` in the worker flow.
+
 ## 9. Risks and Limitations
 
 - MFA installation and environment setup can be complex.

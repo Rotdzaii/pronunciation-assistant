@@ -10,6 +10,8 @@ frontend recording -> FastAPI backend -> Supabase Storage + practice_history -> 
 
 The selected scorer for this demo is `SCORER_MODE=cnn_attention_context`.
 
+Final validation evidence is recorded in [Demo Context AI Flow Validation Result](DEMO_CONTEXT_AI_FLOW_VALIDATION_RESULT.md).
+
 ## Safety Notes
 
 - Do not train models during the demo.

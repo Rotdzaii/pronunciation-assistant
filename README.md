@@ -129,7 +129,7 @@ Open `http://localhost:8081`.
 8. Run `python worker.py` from `ai-worker/` to process one queued `practice_jobs` message, or use Swagger `POST /practice/webhook/ai-result` to simulate AI completion manually.
 9. Open History to see the result.
 
-For the final context CNN Attention flow, use [Demo Context AI Flow Checklist](docs/DEMO_CONTEXT_AI_FLOW_CHECKLIST.md).
+For the final context CNN Attention flow, use [Demo Context AI Flow Checklist](docs/DEMO_CONTEXT_AI_FLOW_CHECKLIST.md) and [Demo Context AI Flow Validation Result](docs/DEMO_CONTEXT_AI_FLOW_VALIDATION_RESULT.md).
 
 ## Current API endpoints
 

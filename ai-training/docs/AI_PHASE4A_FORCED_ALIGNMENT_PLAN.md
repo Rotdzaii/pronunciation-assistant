@@ -128,6 +128,21 @@ Validation should record whether the result used true MFA alignment or fell back
 
 Local MFA validation should be completed before worker integration. The first implementation step should be a script-driven local readiness check using one developer-provided audio file and transcript, so MFA installation, dictionary/model paths, TextGrid generation, parser behavior, and cleanup rules are verified before enabling `ALIGNMENT_MODE=mfa` in the worker flow.
 
+Local MFA validation status: completed for transcript `Architecture`.
+
+- MFA exit code: `0`
+- TextGrid generated locally: yes
+- `textgrid_parse_success=True`
+- `alignment_status=success`
+- `alignment_method=mfa`
+- `is_forced_alignment=true`
+- word segments: `1`
+- phone segments: `9`
+- first word segment: `architecture [0.51s, 1.56s]`
+- first phone segments: `ɑ [0.51s, 0.57s]`, `ɹ [0.57s, 0.60s]`, `c [0.60s, 0.71s]`, `ɪ [0.71s, 0.83s]`, `tʰ [0.83s, 0.86s]`, `ɛ [0.86s, 0.91s]`, `k [0.91s, 1.03s]`, `tʃ [1.03s, 1.10s]`, `ɚ [1.10s, 1.56s]`
+
+The recorded result excludes audio files, TextGrid files, temporary folders, local paths, secrets, signed URLs, `.env` files, and checkpoints.
+
 ## 9. Risks and Limitations
 
 - MFA installation and environment setup can be complex.

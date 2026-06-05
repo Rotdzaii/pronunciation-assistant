@@ -101,6 +101,34 @@ The script uses `ai-worker/app/alignment/textgrid_parser.py`. The parser support
 
 Parsed results are mapped into the existing alignment contract with `alignment_method=mfa`, word segments, phone segments, timestamps, and metadata marking forced alignment.
 
+## Recorded Local Validation Result
+
+Safe local MFA validation has passed for the transcript `Architecture`.
+
+- MFA exit code: `0`
+- TextGrid generated locally: yes
+- `textgrid_parse_success=True`
+- `alignment_status=success`
+- `alignment_method=mfa`
+- `is_forced_alignment=true`
+- word segments: `1`
+- phone segments: `9`
+- first word segment: `architecture [0.51s, 1.56s]`
+
+First phone segments:
+
+- `ɑ [0.51s, 0.57s]`
+- `ɹ [0.57s, 0.60s]`
+- `c [0.60s, 0.71s]`
+- `ɪ [0.71s, 0.83s]`
+- `tʰ [0.83s, 0.86s]`
+- `ɛ [0.86s, 0.91s]`
+- `k [0.91s, 1.03s]`
+- `tʃ [1.03s, 1.10s]`
+- `ɚ [1.10s, 1.56s]`
+
+No audio files, TextGrid files, temporary folders, local paths, secrets, signed URLs, `.env` files, or checkpoints are committed as part of this recorded result.
+
 ## Cleanup Behavior
 
 By default, the script deletes its temporary MFA corpus and output directory after the run. Use `--keep-temp` only for local debugging.

@@ -4,6 +4,8 @@
 
 The AI worker now routes prompt-based alignment through `ai-worker/app/alignment/alignment_service.py`.
 
+MFA local validation has passed with MFA `3.3.9`, `conda run -n mfa mfa`, dictionary `english_us_mfa`, acoustic model `english_mfa`, and parsed TextGrid output with `alignment_method=mfa` and `is_forced_alignment=true`.
+
 The service selects alignment using:
 
 ```dotenv
@@ -41,7 +43,6 @@ It returns the normalized alignment contract with `alignment_method=mfa`, `align
 
 ## Next Steps
 
-- configure local MFA installation and model paths outside Git
-- validate MFA TextGrid output on safe local audio
+- introduce worker MFA mode with sanitized metadata and safe fallback behavior
 - feed MFA phone boundaries into GOP/CaGOP scoring
 - keep CNN Attention confidence separate from pronunciation correctness scores

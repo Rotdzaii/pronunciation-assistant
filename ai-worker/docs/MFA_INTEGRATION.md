@@ -20,8 +20,9 @@ The worker must not claim MFA was used unless `alignment_method` is `mfa` and `m
 ALIGNMENT_MODE=fallback
 ALLOW_ALIGNMENT_FALLBACK=true
 MFA_COMMAND=mfa
-MFA_DICTIONARY_PATH=C:\path\to\dictionary.dict
-MFA_ACOUSTIC_MODEL_PATH=C:\path\to\acoustic-model.zip
+MFA_CONDA_ENV=mfa
+MFA_DICTIONARY_PATH=english_us_mfa
+MFA_ACOUSTIC_MODEL_PATH=english_mfa
 MFA_TEMP_DIR=C:\path\to\temp
 ```
 
@@ -41,8 +42,8 @@ Expected local inputs for MFA mode:
 
 - audio file path
 - prompt text
-- dictionary path
-- acoustic model path
+- dictionary model name or path
+- acoustic model name or path
 - writable temp directory
 
 ## TextGrid Mapping
@@ -68,6 +69,8 @@ Phone segments are preferred for downstream aligned CNN Attention inference when
 
 ## Current Status
 
+MFA local validation has passed with MFA `3.3.9` through `conda run -n mfa mfa`, dictionary `english_us_mfa`, and acoustic model `english_mfa`. Worker alignment mode is now being introduced through `ALIGNMENT_MODE=mfa`.
+
 The scaffold is implemented:
 
 - TextGrid parser
@@ -77,6 +80,8 @@ The scaffold is implemented:
 - demos
 
 Actual MFA execution requires a local MFA installation and local dictionary/acoustic model configuration. No MFA dependency, dictionary, or model is installed by this feature.
+
+See `ai-worker/docs/MFA_ALIGNMENT_MODE.md` for the worker-mode environment variables, dry-run command, fallback behavior, and safe metadata fields.
 
 ## Future GOP/CaGOP
 

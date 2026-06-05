@@ -37,28 +37,41 @@ def _resolve_command(command: str) -> str | None:
     return None
 
 
-def _probe_mfa(command: str) -> tuple[str | None, str]:
-    resolved = _resolve_command(command)
-    if not resolved:
-        return None, f"MFA command not found: {command}"
+def _build_mfa_command_prefix(mfa_command: str, conda_env: str | None) -> list[str]:
+    if conda_env:
+        return ["conda", "run", "-n", conda_env, mfa_command]
+    return [mfa_command]
 
-    for version_arg in ("version", "--version"):
-        try:
-            completed = subprocess.run(
-                [resolved, version_arg],
-                capture_output=True,
-                text=True,
-                timeout=20,
-                check=False,
-            )
-        except (OSError, subprocess.TimeoutExpired) as exc:
-            return resolved, f"MFA command found but version probe failed: {exc}"
 
-        output = (completed.stdout or completed.stderr or "").strip()
-        if completed.returncode == 0:
-            return resolved, output or "MFA command is available."
+def _format_command(command_args: list[str]) -> str:
+    return " ".join(f'"{arg}"' if " " in arg else arg for arg in command_args)
 
-    return resolved, "MFA command was found, but version output was not available."
+
+def _probe_mfa(command_prefix: list[str], conda_env: str | None) -> tuple[list[str] | None, str]:
+    if conda_env:
+        resolved_prefix = command_prefix
+    else:
+        resolved = _resolve_command(command_prefix[0])
+        if not resolved:
+            return None, f"MFA command not found: {command_prefix[0]}"
+        resolved_prefix = [resolved]
+
+    try:
+        completed = subprocess.run(
+            [*resolved_prefix, "version"],
+            capture_output=True,
+            text=True,
+            timeout=20,
+            check=False,
+        )
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        return resolved_prefix, f"MFA command found but version probe failed: {exc}"
+
+    output = (completed.stdout or completed.stderr or "").strip()
+    if completed.returncode == 0:
+        return resolved_prefix, output or "MFA command is available."
+
+    return resolved_prefix, output or "MFA command was found, but version output was not available."
 
 
 def _path_status(path_value: str | None, label: str) -> tuple[Path | None, str | None]:
@@ -69,6 +82,16 @@ def _path_status(path_value: str | None, label: str) -> tuple[Path | None, str |
     if not path.exists():
         return path, f"{label} does not exist: {path}"
     return path, None
+
+
+def _model_status(model_value: str | None, label: str) -> tuple[str | None, str | None]:
+    if not model_value:
+        return None, f"{label} is not configured."
+
+    path = Path(model_value).expanduser()
+    if path.exists():
+        return str(path), None
+    return model_value, None
 
 
 def _print_setup_instructions() -> None:
@@ -128,11 +151,11 @@ def _summarize_segments(result: dict[str, Any]) -> None:
 
 def _run_mfa(
     *,
-    command: str,
+    command_prefix: list[str],
     audio_path: Path,
     transcript: str,
-    dictionary_path: Path,
-    acoustic_model_path: Path,
+    dictionary_model: str,
+    acoustic_model: str,
     output_dir: str | None,
     keep_temp: bool,
     parse_textgrid: bool,
@@ -150,11 +173,11 @@ def _run_mfa(
         _write_lab_file(working_audio.with_suffix(".lab"), transcript)
 
         command_args = [
-            command,
+            *command_prefix,
             "align",
             str(corpus_dir),
-            str(dictionary_path),
-            str(acoustic_model_path),
+            dictionary_model,
+            acoustic_model,
             str(aligned_dir),
             "--clean",
             "--single_speaker",
@@ -162,7 +185,7 @@ def _run_mfa(
 
         print()
         print("Running MFA align:")
-        print("  " + " ".join(f'"{arg}"' if " " in arg else arg for arg in command_args))
+        print("  " + _format_command(command_args))
 
         completed = subprocess.run(
             command_args,
@@ -227,12 +250,17 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--audio-path", help="Local WAV audio file to align. Required unless --dry-run is used.")
     parser.add_argument("--transcript", default=DEFAULT_TRANSCRIPT, help=f'Transcript text. Default: "{DEFAULT_TRANSCRIPT}"')
     parser.add_argument("--output-dir", help="Directory where a temporary MFA validation folder will be created.")
-    parser.add_argument("--mfa-command", default=os.getenv("MFA_COMMAND", "mfa"), help='MFA command. Default: env MFA_COMMAND or "mfa".')
-    parser.add_argument("--dictionary-path", default=os.getenv("MFA_DICTIONARY_PATH"), help="MFA dictionary path or env MFA_DICTIONARY_PATH.")
+    parser.add_argument("--mfa-command", default="mfa", help='MFA command. Default: "mfa".')
+    parser.add_argument("--conda-env", default=None, help="Optional conda environment name used to run MFA via conda run.")
+    parser.add_argument(
+        "--dictionary-path",
+        default=os.getenv("MFA_DICTIONARY_PATH"),
+        help="MFA dictionary model name/path or env MFA_DICTIONARY_PATH.",
+    )
     parser.add_argument(
         "--acoustic-model-path",
         default=os.getenv("MFA_ACOUSTIC_MODEL_PATH"),
-        help="MFA acoustic model path or env MFA_ACOUSTIC_MODEL_PATH.",
+        help="MFA acoustic model name/path or env MFA_ACOUSTIC_MODEL_PATH.",
     )
     parser.add_argument("--keep-temp", action="store_true", help="Keep temporary corpus/output files for local inspection.")
     parser.add_argument("--parse-textgrid", action=argparse.BooleanOptionalAction, default=True)
@@ -247,12 +275,14 @@ def main() -> int:
     print("MFA local alignment validation")
     print(f"Transcript: {transcript!r}")
     print(f"MFA command requested: {args.mfa_command}")
+    command_prefix = _build_mfa_command_prefix(args.mfa_command, args.conda_env)
+    print(f"Effective MFA command: {_format_command(command_prefix)}")
 
-    command, availability = _probe_mfa(args.mfa_command)
+    command, availability = _probe_mfa(command_prefix, args.conda_env)
     print(f"MFA availability: {availability}")
 
-    dictionary_path, dictionary_error = _path_status(args.dictionary_path, "Dictionary path")
-    acoustic_model_path, acoustic_error = _path_status(args.acoustic_model_path, "Acoustic model path")
+    dictionary_model, dictionary_error = _model_status(args.dictionary_path, "Dictionary model/path")
+    acoustic_model, acoustic_error = _model_status(args.acoustic_model_path, "Acoustic model/path")
     audio_path, audio_error = _path_status(args.audio_path, "Audio path")
 
     for error in (dictionary_error, acoustic_error):
@@ -283,14 +313,14 @@ def main() -> int:
         return 2
 
     assert audio_path is not None
-    assert dictionary_path is not None
-    assert acoustic_model_path is not None
+    assert dictionary_model is not None
+    assert acoustic_model is not None
     return _run_mfa(
-        command=command,
+        command_prefix=command,
         audio_path=audio_path,
         transcript=transcript,
-        dictionary_path=dictionary_path,
-        acoustic_model_path=acoustic_model_path,
+        dictionary_model=dictionary_model,
+        acoustic_model=acoustic_model,
         output_dir=args.output_dir,
         keep_temp=args.keep_temp,
         parse_textgrid=args.parse_textgrid,

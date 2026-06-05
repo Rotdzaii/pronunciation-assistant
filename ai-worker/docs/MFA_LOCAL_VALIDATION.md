@@ -8,9 +8,9 @@ It is a local validation step only. It does not install MFA, download models, tr
 
 ## Prerequisites
 
-- Local MFA command available as `mfa` or another command path.
-- MFA pronunciation dictionary.
-- MFA acoustic model.
+- Local MFA command available as `mfa`, another command path, or through a conda environment.
+- MFA pronunciation dictionary model name or local file path.
+- MFA acoustic model name or local file path.
 - Local audio file provided by the developer.
 - Transcript matching the audio prompt.
 - AI Worker virtual environment available at `ai-worker/.venv`.
@@ -22,12 +22,19 @@ MFA is used because it is a common forced-alignment tool that can align known tr
 Provide paths through CLI arguments or environment variables:
 
 ```powershell
-$env:MFA_COMMAND = "mfa"
 $env:MFA_DICTIONARY_PATH = "C:\path\to\dictionary.dict"
 $env:MFA_ACOUSTIC_MODEL_PATH = "C:\path\to\acoustic-model.zip"
 ```
 
+Dictionary and acoustic model arguments may also be MFA model names, for example `english_us_mfa` and `english_mfa`.
+
 Audio should be a local WAV file. Prefer 16 kHz mono WAV if the local MFA setup requires that format. The validation script does not convert audio unless an existing local setup has already prepared it.
+
+On Windows, directly invoking `mfa.exe` can fail when DLL paths are not resolved by the shell, including `libsndfile.dll` / `soundfile` loading failures. Prefer checking MFA through conda:
+
+```powershell
+conda run -n mfa mfa version
+```
 
 ## Dry Run
 
@@ -41,7 +48,18 @@ Dry-run prints MFA availability, configured dictionary/model status, and setup i
 
 ## Real Validation
 
-Run real validation with one local audio file:
+Recommended Windows command when MFA is installed in a conda environment:
+
+```powershell
+.\ai-worker\.venv\Scripts\python.exe ai-worker\scripts\validate_mfa_local_alignment.py `
+  --conda-env mfa `
+  --audio-path "C:\path\to\local_sample.wav" `
+  --transcript "Architecture" `
+  --dictionary-path english_us_mfa `
+  --acoustic-model-path english_mfa
+```
+
+You can also run real validation with a direct MFA command and local model files:
 
 ```powershell
 .\ai-worker\.venv\Scripts\python.exe ai-worker\scripts\validate_mfa_local_alignment.py `
@@ -53,7 +71,8 @@ Run real validation with one local audio file:
 
 Optional arguments:
 
-- `--mfa-command "C:\path\to\mfa.exe"` to override the MFA command.
+- `--conda-env mfa` to run MFA as `conda run -n mfa mfa`.
+- `--mfa-command "C:\path\to\mfa.exe"` to override the direct MFA command, or the command used after `conda run -n <env>`.
 - `--output-dir "C:\path\to\scratch"` to choose where the temporary validation folder is created.
 - `--keep-temp` to keep generated local files for inspection.
 - `--no-parse-textgrid` to skip parser validation.
@@ -98,9 +117,13 @@ Never commit generated validation artifacts, including:
 
 `MFA command not found`
 
-Install MFA locally outside this repository or pass the command path using `--mfa-command`.
+Install MFA locally outside this repository, pass the command path using `--mfa-command`, or use `--conda-env mfa` when MFA is installed in a conda environment.
 
-`Dictionary path is not configured` or `Acoustic model path is not configured`
+`Direct mfa.exe fails on Windows with DLL loading errors`
+
+Use `conda run -n mfa mfa version` to verify MFA and pass `--conda-env mfa` to the validation script. This lets conda set the environment DLL paths before MFA starts.
+
+`Dictionary model/path is not configured` or `Acoustic model/path is not configured`
 
 Set `MFA_DICTIONARY_PATH` / `MFA_ACOUSTIC_MODEL_PATH` or pass CLI arguments.
 

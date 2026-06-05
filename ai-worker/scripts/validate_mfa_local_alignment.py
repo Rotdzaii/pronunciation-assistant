@@ -14,7 +14,7 @@ AI_WORKER_ROOT = Path(__file__).resolve().parents[1]
 if str(AI_WORKER_ROOT) not in sys.path:
     sys.path.insert(0, str(AI_WORKER_ROOT))
 
-from app.alignment.textgrid_parser import parse_textgrid  # noqa: E402
+from app.alignment.textgrid_parser import parse_textgrid as parse_textgrid_file  # noqa: E402
 from app.contracts.alignment_contract import AlignmentError  # noqa: E402
 
 
@@ -130,11 +130,14 @@ def _create_work_dirs(output_dir: str | None, keep_temp: bool) -> tuple[Path, bo
 def _summarize_segments(result: dict[str, Any]) -> None:
     words = result.get("words") or []
     phones = result.get("phones") or []
+    metadata = result.get("metadata") or {}
 
     print()
     print("Parsed TextGrid summary:")
+    print("  textgrid_parse_success=True")
     print(f"  alignment_status: {result.get('alignment_status')}")
     print(f"  alignment_method: {result.get('alignment_method')}")
+    print(f"  is_forced_alignment: {str(bool(metadata.get('is_forced_alignment'))).lower()}")
     print(f"  word segments: {len(words)}")
     print(f"  phone segments: {len(phones)}")
 
@@ -158,7 +161,7 @@ def _run_mfa(
     acoustic_model: str,
     output_dir: str | None,
     keep_temp: bool,
-    parse_textgrid: bool,
+    should_parse_textgrid: bool,
 ) -> int:
     work_dir, explicit_work_dir = _create_work_dirs(output_dir, keep_temp)
     corpus_dir = work_dir / "corpus"
@@ -222,11 +225,14 @@ def _run_mfa(
         print(f"TextGrid generated locally: {textgrid_path}")
         print("Do not commit this TextGrid output.")
 
-        if parse_textgrid:
+        if should_parse_textgrid:
             try:
-                result = parse_textgrid(textgrid_path)
+                result = parse_textgrid_file(textgrid_path)
             except AlignmentError as exc:
-                print(f"TextGrid parser failed: {exc}")
+                print()
+                print("TextGrid was generated but parsing failed.")
+                print("MFA alignment completed successfully; this is a parser/script integration validation failure.")
+                print(f"TextGrid parser error: {exc}")
                 return 1
             _summarize_segments(result)
 
@@ -323,7 +329,7 @@ def main() -> int:
         acoustic_model=acoustic_model,
         output_dir=args.output_dir,
         keep_temp=args.keep_temp,
-        parse_textgrid=args.parse_textgrid,
+        should_parse_textgrid=args.parse_textgrid,
     )
 
 

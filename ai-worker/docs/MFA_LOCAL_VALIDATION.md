@@ -143,6 +143,10 @@ Use the exact prompt sentence or target word spoken in the audio. A word-only tr
 
 Check MFA stdout/stderr, dictionary coverage, acoustic model compatibility, audio duration, and transcript normalization.
 
+`TextGrid generated but parser fails`
+
+MFA execution succeeded. Treat this as a parser or validation script integration issue, not an MFA alignment failure.
+
 ## Safety Notes
 
 - Do not commit audio files.

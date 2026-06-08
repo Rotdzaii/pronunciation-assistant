@@ -76,6 +76,28 @@ Expected behavior:
 - the worker archives only after a successful webhook response
 - if webhook payload validation fails, the worker must not POST and must not archive
 
+## Recorded Safe Validation Result
+
+Recorded real `worker.py` once validation passed with:
+
+- `worker_mode=once`
+- `scorer_mode=cnn_attention_context`
+- `msg_id=31`
+- `job_id=df0d1ee4-f376-417b-bbf4-1f2a4edf1003`
+- `target_word=Architecture`
+- `model_confidence=0.883476734161377`
+- `webhook_status_code=200`
+- `archive_success=true`
+
+Notes from this run:
+
+- PySoundFile and audioread warnings occurred but did not stop processing
+- classifier confidence is not pronunciation correctness
+- heuristic score is not real GOP
+- alignment timing is not pronunciation correctness
+
+This recorded run confirms that the real once-only worker entrypoint read one queue message, completed scoring successfully, POSTed the backend webhook successfully, and archived the queue message after the successful POST.
+
 ## practice_history Verification SQL
 
 After a successful once-run, verify:

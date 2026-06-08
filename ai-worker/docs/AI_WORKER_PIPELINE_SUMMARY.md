@@ -310,6 +310,31 @@ For PGMQ once validation, queued frontend audio may arrive as WebM or another br
 
 If `ALIGNMENT_MODE=mfa` was requested but the worker falls back to approximate alignment, payload metadata should explicitly preserve that limited reliability through fields such as `alignment_status=fallback`, `fallback_alignment=true`, `location_reliability=limited_fallback_alignment`, and an alignment note that says fallback alignment is approximate.
 
+Recorded safe real MFA PGMQ once validation also passed with:
+
+- `queue_name=practice_jobs`
+- `msg_id=28`
+- `job_id=183e7f92-beb2-40f7-864d-f6a304e8fe71`
+- `download_success=true`
+- `queue_audio_prepared_for_local_scoring=true`
+- `alignment_status=success`
+- `alignment_method=mfa`
+- `requested_alignment_mode=mfa`
+- `is_forced_alignment=true`
+- `mfa_used=true`
+- `textgrid_parse_success=true`
+- `fallback_alignment=false`
+- `word_segments_count=1`
+- `phone_segments_count=9`
+- `location_reliability=forced_alignment`
+- `inference_ran=true`
+- `ai_result_valid=true`
+- `payload_valid=true`
+- `metadata_safety_check_passed=true`
+- `post_success=true`
+- `response_status=200`
+- `archive_success=true`
+
 ## 8. How to Run Demos
 
 ```powershell

@@ -119,6 +119,39 @@ Expected successful validation fields:
 - `post_attempted=false` for the default dry run
 - `archive_attempted=false` for the default dry run
 
+## Recorded Safe Validation Result
+
+Recorded real PGMQ once validation with MFA alignment passed with:
+
+- `queue_name=practice_jobs`
+- `msg_id=28`
+- `job_id=183e7f92-beb2-40f7-864d-f6a304e8fe71`
+- `target_word=Architecture`
+- `audio_url redacted=true`
+- `download_success=true`
+- `queue_audio_prepared_for_local_scoring=true`
+- `SCORER_MODE=cnn_attention_context`
+- `ALIGNMENT_MODE=mfa`
+- `alignment_status=success`
+- `alignment_method=mfa`
+- `requested_alignment_mode=mfa`
+- `is_forced_alignment=true`
+- `mfa_used=true`
+- `textgrid_parse_success=true`
+- `fallback_alignment=false`
+- `word_segments_count=1`
+- `phone_segments_count=9`
+- `location_reliability=forced_alignment`
+- `inference_ran=true`
+- `ai_result_valid=true`
+- `payload_valid=true`
+- `metadata_safety_check_passed=true`
+- `post_success=true`
+- `response_status=200`
+- `archive_success=true`
+
+This recorded run confirms that one real queue message was read, the queued frontend audio was prepared locally for MFA use without exposing local paths, the backend webhook POST succeeded, and the queue message was archived only after the successful POST.
+
 If MFA fails and fallback is allowed, the script should preserve fallback metadata while still avoiding local path and signed URL leakage in the payload.
 
 Expected fallback metadata when MFA was requested but fallback is used:

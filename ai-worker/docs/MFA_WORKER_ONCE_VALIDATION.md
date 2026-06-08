@@ -42,6 +42,8 @@ $env:AI_WEBHOOK_SECRET="<local-ai-webhook-secret>"
 
 Checkpoints are local artifacts and must not be committed.
 
+Do not use placeholder values such as `<ten-file-checkpoint-that-exists>.pt`. `CNN_ATTENTION_CONTEXT_CHECKPOINT_PATH` must point to a real local checkpoint file.
+
 ## Worker Once Command
 
 ```powershell
@@ -70,6 +72,7 @@ Expected behavior:
 - the scorer/alignment path prepares temporary local WAV input for MFA when needed
 - local temp paths, TextGrid paths, signed URLs, and secrets must not appear in payloads
 - the worker archives only after a successful webhook response
+- if webhook payload validation fails, the worker must not POST and must not archive
 
 ## practice_history Verification SQL
 
@@ -130,6 +133,7 @@ Checkpoint missing:
 
 - set `CNN_ATTENTION_CONTEXT_CHECKPOINT_PATH`
 - confirm the path points to a real local checkpoint
+- do not use placeholder strings in the checkpoint env var
 - do not commit checkpoint files
 
 MFA unavailable:
@@ -153,6 +157,7 @@ Archive failed:
 - confirm the webhook returned success first
 - confirm the project exposes `archive_practice_job(...)` or `pgmq_archive`
 - the worker should leave the message unarchived when the POST fails
+- the worker should also leave the message unarchived when webhook payload validation fails before POST
 
 Fallback alignment used:
 

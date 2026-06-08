@@ -129,13 +129,14 @@ def _resolve_checkpoint_path(
 def _load_checkpoint(checkpoint_path: Path) -> dict[str, Any]:
     if not checkpoint_path.exists():
         raise CNNAttentionScorerError(
-            "CNN Attention checkpoint not found. Expected local checkpoint at "
-            f"{checkpoint_path}. Set CNN_ATTENTION_CHECKPOINT_PATH to override. "
+            "CNN Attention checkpoint not found. Set CNN_ATTENTION_CHECKPOINT_PATH to a valid local checkpoint. "
             "Checkpoint files are local artifacts and must not be committed."
         )
     checkpoint = torch.load(checkpoint_path, map_location="cpu")
     if not isinstance(checkpoint, dict) or "model_state_dict" not in checkpoint:
-        raise CNNAttentionScorerError(f"Invalid CNN Attention checkpoint format: {checkpoint_path}")
+        raise CNNAttentionScorerError(
+            "Invalid CNN Attention checkpoint format. Set CNN_ATTENTION_CHECKPOINT_PATH to a valid local checkpoint."
+        )
     return checkpoint
 
 
@@ -162,8 +163,8 @@ def _load_context_model(checkpoint_path: str | Path | None = None) -> tuple[Any,
         checkpoint = _load_checkpoint(checkpoint_file)
     except CNNAttentionScorerError as exc:
         raise CNNAttentionScorerError(
-            "CNN Attention context checkpoint not found or invalid. Expected a local context checkpoint at "
-            f"{checkpoint_file}. Set CNN_ATTENTION_CONTEXT_CHECKPOINT_PATH to override. "
+            "CNN Attention context checkpoint not found or invalid. Set CNN_ATTENTION_CONTEXT_CHECKPOINT_PATH to a "
+            "valid local checkpoint. "
             "Checkpoint files are local artifacts and must not be committed."
         ) from exc
 

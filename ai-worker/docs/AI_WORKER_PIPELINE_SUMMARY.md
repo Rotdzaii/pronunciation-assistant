@@ -117,7 +117,7 @@ CNN Attention context scorer
 - Mode: `SCORER_MODE=cnn_attention_context`
 - Role: runs the Phase 2 `context_0_10` candidate on context-expanded aligned segment crops while preserving original segment boundaries for user-facing location.
 - Status: implemented.
-- Limitation: requires local context checkpoint and alignment boundaries; fallback alignment remains approximate.
+- Limitation: requires local context checkpoint and alignment boundaries; fallback alignment remains approximate when MFA is unavailable.
 
 Alignment contract
 
@@ -137,7 +137,7 @@ MFA scaffold
 
 - Path: `ai-worker/app/alignment/mfa_aligner.py`
 - Role: wrapper for locally configured MFA execution.
-- Status: scaffolded.
+- Status: implemented for local validation flow.
 - Limitation: does not install MFA or provide models/dictionaries.
 
 TextGrid parser
@@ -234,6 +234,36 @@ Important: `diagnosis.diagnosis_confidence` is classifier diagnosis confidence, 
 
 For `cnn_attention_context`, metadata also includes context crop fields such as `context_mode`, `context_used`, `segment_start_time`, `segment_end_time`, `crop_start_time`, and `crop_end_time`.
 
+When `ALIGNMENT_MODE=mfa` succeeds, final metadata should also preserve:
+
+- `alignment_method=mfa`
+- `alignment_status=success`
+- `is_forced_alignment=true`
+- `mfa_used=true`
+- `textgrid_parse_success=true`
+- `word_segments_count`
+- `phone_segments_count`
+- `fallback_alignment=false`
+
+If MFA fails and fallback is allowed, final metadata should preserve the fallback reason without exposing local TextGrid or temporary paths.
+
+Recorded safe local validation for this path passed with:
+
+- `alignment_status=success`
+- `alignment_method=mfa`
+- `is_forced_alignment=true`
+- `mfa_used=true`
+- `mfa_exit_code=0`
+- `textgrid_parse_success=true`
+- `fallback_alignment=false`
+- `word_segments_count=1`
+- `phone_segments_count=9`
+- `score=67.1`
+- `predicted_error_type=deletion`
+- `context_mode=context_0_10`
+- `location_reliability=forced_alignment`
+- `ai_result_valid=true`
+
 ## 7. Backend Webhook
 
 Route:
@@ -268,6 +298,7 @@ python ai-worker/scripts/demo_hybrid_diagnosis.py
 python ai-worker/scripts/demo_final_ai_output.py
 python ai-worker/scripts/demo_backend_webhook_payload.py
 python ai-worker/scripts/demo_cnn_attention_context_scorer.py
+python ai-worker/scripts/demo_context_mfa_aligned_inference.py --dry-run
 python ai-worker/scripts/demo_worker_end_to_end.py --dry-run
 python ai-worker/scripts/demo_backend_integration.py --job-id demo-job-id --dry-run
 ```
@@ -284,6 +315,7 @@ python ai-worker/scripts/demo_backend_integration.py --job-id <existing-practice
 
 - Fallback alignment is approximate.
 - MFA must be installed and configured locally for real forced alignment.
+- MFA-aligned context inference depends on local dictionary/acoustic model availability or named MFA models.
 - `heuristic_gop` is not real GOP/CaGOP.
 - Severity thresholds are not calibrated.
 - CNN Attention confidence is diagnosis confidence, not pronunciation score.

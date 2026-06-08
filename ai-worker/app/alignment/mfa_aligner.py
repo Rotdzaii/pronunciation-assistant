@@ -11,13 +11,13 @@ from app.alignment.textgrid_parser import parse_textgrid
 from app.contracts.alignment_contract import AlignmentError
 
 
-def _configured_path(value: str | None, name: str) -> Path:
+def _configured_model(value: str | None, name: str) -> str:
     if not value:
         raise AlignmentError(f"{name} is required for MFA alignment.")
     path = Path(value).expanduser()
     if not path.exists():
-        raise AlignmentError(f"{name} does not exist: {path}")
-    return path
+        return str(value)
+    return str(path)
 
 
 def _mfa_command(command: str) -> str:
@@ -30,6 +30,12 @@ def _mfa_command(command: str) -> str:
     raise AlignmentError(
         f"MFA command not found: {command}. Install/configure MFA locally or use ALIGNMENT_MODE=fallback."
     )
+
+
+def _mfa_command_prefix(command: str, conda_env: str | None) -> list[str]:
+    if conda_env:
+        return ["conda", "run", "-n", conda_env, command]
+    return [_mfa_command(command)]
 
 
 def _write_lab_file(path: Path, prompt_text: str) -> None:
@@ -52,9 +58,11 @@ def run_mfa_alignment(
     if not source_audio.exists():
         raise AlignmentError(f"Audio file not found for MFA alignment: {source_audio}")
 
-    command = _mfa_command(os.getenv("MFA_COMMAND", "mfa"))
-    dictionary = _configured_path(str(dictionary_path or os.getenv("MFA_DICTIONARY_PATH") or ""), "MFA_DICTIONARY_PATH")
-    acoustic_model = _configured_path(
+    command_name = os.getenv("MFA_COMMAND", "mfa")
+    conda_env = os.getenv("MFA_CONDA_ENV")
+    command_prefix = _mfa_command_prefix(command_name, conda_env)
+    dictionary = _configured_model(str(dictionary_path or os.getenv("MFA_DICTIONARY_PATH") or ""), "MFA_DICTIONARY_PATH")
+    acoustic_model = _configured_model(
         str(acoustic_model_path or os.getenv("MFA_ACOUSTIC_MODEL_PATH") or ""),
         "MFA_ACOUSTIC_MODEL_PATH",
     )
@@ -74,7 +82,7 @@ def run_mfa_alignment(
         _write_lab_file(working_audio.with_suffix(".lab"), prompt_text)
 
         command_args = [
-            command,
+            *command_prefix,
             "align",
             str(corpus_dir),
             str(dictionary),
@@ -101,6 +109,7 @@ def run_mfa_alignment(
             raise AlignmentError(f"MFA completed but no TextGrid was found in {align_output_dir}")
 
         result = parse_textgrid(textgrid_candidates[0])
-        result["metadata"]["mfa_command"] = os.getenv("MFA_COMMAND", "mfa")
-        result["metadata"]["mfa_output_dir"] = str(align_output_dir)
+        result["metadata"]["mfa_exit_code"] = completed.returncode
+        result["metadata"]["mfa_command"] = command_name
+        result["metadata"]["mfa_conda_env"] = conda_env
         return result

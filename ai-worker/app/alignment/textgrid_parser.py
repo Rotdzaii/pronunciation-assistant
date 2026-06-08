@@ -125,8 +125,10 @@ def parse_textgrid(textgrid_path: str | Path) -> dict[str, Any]:
         metadata={
             "is_forced_alignment": True,
             "is_fallback": False,
-            "textgrid_path": str(path),
-            "word_count": len(words),
-            "phone_count": len(phones),
+            "mfa_used": True,
+            "textgrid_parse_success": True,
+            "fallback_alignment": False,
+            "word_segments_count": len(words),
+            "phone_segments_count": len(phones),
         },
     )

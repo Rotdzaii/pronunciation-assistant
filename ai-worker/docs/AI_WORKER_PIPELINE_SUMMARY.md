@@ -337,6 +337,12 @@ $env:AI_WEBHOOK_SECRET="<local-ai-webhook-secret>"
 python ai-worker/scripts/demo_backend_integration.py --job-id <existing-practice-history-job-id> --post
 ```
 
+Once-only MFA PGMQ validation:
+
+```powershell
+.\ai-worker\.venv\Scripts\python.exe ai-worker\scripts\demo_mfa_pgmq_once.py --checkpoint-path "$env:CNN_ATTENTION_CONTEXT_CHECKPOINT_PATH"
+```
+
 ## 9. Current Limitations
 
 - Fallback alignment is approximate.

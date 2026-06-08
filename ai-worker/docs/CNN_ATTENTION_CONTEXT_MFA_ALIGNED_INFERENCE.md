@@ -72,6 +72,14 @@ The demo prints:
 - `VALIDATION`
 - `METADATA SAFETY CHECK`
 
+For backend webhook payload validation after MFA alignment, use:
+
+```powershell
+.\ai-worker\.venv\Scripts\python.exe ai-worker\scripts\demo_mfa_backend_payload.py --dry-run
+```
+
+That companion demo validates legacy webhook compatibility, preservation of `feedback.ai_result`, and payload safety checks before any optional POST.
+
 On MFA success, the alignment summary should show:
 
 - `alignment_method=mfa`
@@ -151,6 +159,8 @@ Important final AI result metadata fields:
 - `context_used`
 
 Local TextGrid and temporary MFA paths are stripped from the final AI result metadata and webhook payload.
+
+The backend payload validation path also checks for leaked local path markers and signed URL token markers in string values before POST is allowed.
 
 ## Fallback Behavior
 

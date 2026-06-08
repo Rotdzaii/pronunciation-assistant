@@ -70,9 +70,22 @@ The final AI result metadata includes:
 - `crop_end_time`
 - `model_output_is_scoring=false`
 
+When alignment runs through `ALIGNMENT_MODE=mfa`, the final AI result should also preserve:
+
+- `alignment_status`
+- `alignment_method`
+- `is_forced_alignment`
+- `mfa_used`
+- `textgrid_parse_success`
+- `word_segments_count`
+- `phone_segments_count`
+- `fallback_alignment`
+
 Each segment prediction can also include a `context` object with the same crop fields.
 
 Classifier confidence remains diagnosis confidence only. It is not pronunciation correctness.
+
+Local TextGrid or temporary MFA paths must not appear in the final AI result or webhook payload.
 
 ## Demo
 
@@ -90,9 +103,16 @@ python ai-worker/scripts/demo_cnn_attention_context_scorer.py path\to\audio.wav 
 
 If `torch`, audio dependencies, or the checkpoint are missing, the demo prints a clear message and exits without creating committed artifacts.
 
+For MFA-aligned validation, see:
+
+```text
+ai-worker/docs/CNN_ATTENTION_CONTEXT_MFA_ALIGNED_INFERENCE.md
+```
+
 ## Limitations
 
 - Fallback alignment is approximate and not real forced alignment.
+- MFA-aligned context inference depends on local MFA setup and TextGrid parsing.
 - Context quality depends on alignment boundary quality.
 - Real GOP/CaGOP is not implemented.
 - Heuristic score is not real GOP.

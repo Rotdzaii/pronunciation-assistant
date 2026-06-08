@@ -63,8 +63,20 @@ The parser maps TextGrid intervals into the alignment contract:
 - `segments`
 - `metadata.is_forced_alignment: true`
 - `metadata.is_fallback: false`
+- `metadata.mfa_used: true`
+- `metadata.textgrid_parse_success: true`
+- `metadata.word_segments_count`
+- `metadata.phone_segments_count`
 
 Phone segments are preferred for downstream aligned CNN Attention inference when present.
+
+When `ALIGNMENT_MODE=mfa` falls back because MFA fails and `ALLOW_ALIGNMENT_FALLBACK=true`, the fallback result should preserve:
+
+- `metadata.requested_alignment_mode: mfa`
+- `metadata.fallback_alignment: true`
+- `metadata.fallback_reason`
+
+The final AI result and webhook payload must not expose local TextGrid or MFA temporary paths.
 
 ## Current Status
 
@@ -77,6 +89,12 @@ The scaffold is implemented:
 - demos
 
 Actual MFA execution requires a local MFA installation and local dictionary/acoustic model configuration. No MFA dependency, dictionary, or model is installed by this feature.
+
+The context scorer validation entry point is:
+
+```text
+ai-worker/scripts/demo_context_mfa_aligned_inference.py
+```
 
 ## Future GOP/CaGOP
 

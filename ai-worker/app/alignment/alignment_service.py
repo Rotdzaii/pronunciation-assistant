@@ -29,6 +29,9 @@ def _failed_alignment(method: str, error: str) -> dict[str, Any]:
         metadata={
             "is_forced_alignment": False,
             "is_fallback": False,
+            "fallback_alignment": False,
+            "mfa_used": False,
+            "textgrid_parse_success": False,
             "error": error,
         },
     )
@@ -43,6 +46,9 @@ def _fallback_alignment(
     result = align_prompt_fallback(audio_path, prompt_text=prompt_text, canonical_phones=canonical_phones)
     result["metadata"]["is_forced_alignment"] = False
     result["metadata"]["is_fallback"] = True
+    result["metadata"]["fallback_alignment"] = True
+    result["metadata"]["mfa_used"] = False
+    result["metadata"]["textgrid_parse_success"] = False
     if fallback_reason:
         result["metadata"]["fallback_reason"] = fallback_reason
         result["note"] = f"{FALLBACK_ALIGNMENT_NOTE} Fallback reason: {fallback_reason}"
@@ -61,28 +67,43 @@ def align_audio(
     allow_fallback = _env_bool("ALLOW_ALIGNMENT_FALLBACK", True)
 
     if mode == "none":
-        return _failed_alignment("none", "Alignment disabled by ALIGNMENT_MODE=none.")
+        result = _failed_alignment("none", "Alignment disabled by ALIGNMENT_MODE=none.")
+        result["metadata"]["requested_alignment_mode"] = mode
+        return result
 
     if mode == "fallback":
         result = _fallback_alignment(audio_path, prompt_text, canonical_phones)
         if audio_duration is not None:
             result["metadata"]["requested_audio_duration_seconds"] = float(audio_duration)
+        result["metadata"]["requested_alignment_mode"] = mode
         return result
 
     if mode == "mfa":
         try:
-            return run_mfa_alignment(
+            result = run_mfa_alignment(
                 audio_path,
                 prompt_text or "",
                 dictionary_path=os.getenv("MFA_DICTIONARY_PATH"),
                 acoustic_model_path=os.getenv("MFA_ACOUSTIC_MODEL_PATH"),
             )
+            result["metadata"]["requested_alignment_mode"] = mode
+            return result
         except AlignmentError as exc:
             if allow_fallback:
-                return _fallback_alignment(audio_path, prompt_text, canonical_phones, fallback_reason=str(exc))
-            return _failed_alignment("mfa", str(exc))
+                result = _fallback_alignment(audio_path, prompt_text, canonical_phones, fallback_reason=str(exc))
+                result["metadata"]["requested_alignment_mode"] = mode
+                result["metadata"]["mfa_attempted"] = True
+                return result
+            result = _failed_alignment("mfa", str(exc))
+            result["metadata"]["requested_alignment_mode"] = mode
+            result["metadata"]["mfa_attempted"] = True
+            return result
 
     error = f"Unsupported ALIGNMENT_MODE={mode!r}. Use mfa, fallback, or none."
     if allow_fallback:
-        return _fallback_alignment(audio_path, prompt_text, canonical_phones, fallback_reason=error)
-    return _failed_alignment(mode, error)
+        result = _fallback_alignment(audio_path, prompt_text, canonical_phones, fallback_reason=error)
+        result["metadata"]["requested_alignment_mode"] = mode
+        return result
+    result = _failed_alignment(mode, error)
+    result["metadata"]["requested_alignment_mode"] = mode
+    return result

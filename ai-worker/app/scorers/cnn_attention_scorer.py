@@ -31,6 +31,15 @@ DEFAULT_METADATA = {
     "gop_used": False,
     "hybrid_used": False,
 }
+SENSITIVE_ALIGNMENT_METADATA_KEYS = {
+    "audio_path",
+    "checkpoint_path",
+    "local_path",
+    "mfa_output_dir",
+    "mfa_temp_dir",
+    "temp_dir",
+    "textgrid_path",
+}
 
 
 def default_checkpoint_path() -> Path:
@@ -560,6 +569,7 @@ def _aggregate_segment_predictions(
     is_fallback = str(alignment_method or "").startswith("fallback")
     if is_fallback and not alignment_note:
         alignment_note = FALLBACK_ALIGNMENT_NOTE
+    alignment_metadata = _safe_alignment_metadata(alignment_result)
 
     result = build_ai_result(
         score=score,
@@ -607,6 +617,7 @@ def _aggregate_segment_predictions(
                 "the alignment_result. Heuristic GOP-like scoring is not production GOP. Classifier confidence is "
                 "diagnosis confidence, not pronunciation scoring."
             ),
+            **alignment_metadata,
             **(extra_metadata or {}),
         },
     )
@@ -618,6 +629,30 @@ def _aggregate_segment_predictions(
     result["feedback"]["scorer"] = result["scorer"]
     result["feedback"]["metadata"] = result["metadata"]
     return result
+
+
+def _safe_alignment_metadata(alignment_result: dict[str, Any]) -> dict[str, Any]:
+    metadata = alignment_result.get("metadata") if isinstance(alignment_result.get("metadata"), dict) else {}
+    alignment_status = str(alignment_result.get("status") or "")
+    used_mfa = alignment_result.get("method") == "mfa" and alignment_status == "success"
+    safe_metadata = {
+        key: value
+        for key, value in metadata.items()
+        if str(key).lower() not in SENSITIVE_ALIGNMENT_METADATA_KEYS
+    }
+    words = alignment_result.get("words") if isinstance(alignment_result.get("words"), list) else []
+    phones = alignment_result.get("phones") if isinstance(alignment_result.get("phones"), list) else []
+    safe_metadata.setdefault("word_segments_count", len(words))
+    safe_metadata.setdefault("phone_segments_count", len(phones))
+    safe_metadata.setdefault("is_forced_alignment", used_mfa)
+    safe_metadata.setdefault("mfa_used", used_mfa)
+    safe_metadata.setdefault("textgrid_parse_success", used_mfa)
+    safe_metadata["fallback_alignment"] = bool(
+        safe_metadata.get("fallback_alignment")
+        or safe_metadata.get("is_fallback")
+        or str(alignment_result.get("method") or "").startswith("fallback")
+    )
+    return safe_metadata
 
 
 def score_aligned_audio(

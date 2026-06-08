@@ -635,6 +635,11 @@ def _safe_alignment_metadata(alignment_result: dict[str, Any]) -> dict[str, Any]
     metadata = alignment_result.get("metadata") if isinstance(alignment_result.get("metadata"), dict) else {}
     alignment_status = str(alignment_result.get("status") or "")
     used_mfa = alignment_result.get("method") == "mfa" and alignment_status == "success"
+    is_fallback = bool(
+        metadata.get("fallback_alignment")
+        or metadata.get("is_fallback")
+        or str(alignment_result.get("method") or "").startswith("fallback")
+    )
     safe_metadata = {
         key: value
         for key, value in metadata.items()
@@ -647,11 +652,14 @@ def _safe_alignment_metadata(alignment_result: dict[str, Any]) -> dict[str, Any]
     safe_metadata.setdefault("is_forced_alignment", used_mfa)
     safe_metadata.setdefault("mfa_used", used_mfa)
     safe_metadata.setdefault("textgrid_parse_success", used_mfa)
-    safe_metadata["fallback_alignment"] = bool(
-        safe_metadata.get("fallback_alignment")
-        or safe_metadata.get("is_fallback")
-        or str(alignment_result.get("method") or "").startswith("fallback")
-    )
+    safe_metadata["fallback_alignment"] = is_fallback
+    if is_fallback:
+        safe_metadata["alignment_status"] = "fallback"
+        safe_metadata.setdefault(
+            "alignment_note",
+            "Fallback alignment is approximate and has limited location reliability.",
+        )
+        safe_metadata.setdefault("location_reliability", "limited_fallback_alignment")
     return safe_metadata
 
 

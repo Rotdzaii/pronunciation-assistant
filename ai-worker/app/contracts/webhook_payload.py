@@ -178,8 +178,13 @@ def validate_webhook_payload(payload: dict[str, Any]) -> tuple[bool, list[str]]:
         if "real gop" in claims and "not real gop" not in claims:
             issues.append("heuristic_gop webhook payload must not claim real GOP.")
     if metadata.get("alignment_method") == "fallback_even_split":
-        alignment_note = str(metadata.get("alignment_note") or metadata.get("location_reliability") or "").lower()
-        if not any(term in alignment_note for term in ("approximate", "fallback", "limited")):
+        fallback_warning_fields = [
+            str(metadata.get("alignment_note") or ""),
+            str(metadata.get("location_reliability") or ""),
+            str(metadata.get("fallback_reason") or ""),
+        ]
+        fallback_warning_text = " ".join(fallback_warning_fields).lower()
+        if not any(term in fallback_warning_text for term in ("approximate", "fallback", "limited")):
             issues.append("Fallback alignment webhook metadata must mention approximate, fallback, or limited reliability.")
     if payload.get("pronunciation_score_source") == "classifier_confidence":
         issues.append("Webhook payload must not use classifier_confidence as pronunciation_score_source.")

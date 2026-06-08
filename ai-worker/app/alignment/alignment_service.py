@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import re
 from pathlib import Path
 from typing import Any
 
@@ -10,6 +11,21 @@ from app.contracts.alignment_contract import (
     FALLBACK_ALIGNMENT_NOTE,
     AlignmentError,
     build_alignment_result,
+)
+
+FALLBACK_ALIGNMENT_WARNING = "Fallback alignment is approximate and has limited location reliability."
+SENSITIVE_REASON_MARKERS = (
+    "c:\\",
+    "/tmp/",
+    "appdata\\local\\temp",
+    ".textgrid",
+    ".wav",
+    ".webm",
+    ".m4a",
+    "x-amz-signature=",
+    "token=",
+    "sig=",
+    "signature=",
 )
 
 
@@ -37,6 +53,19 @@ def _failed_alignment(method: str, error: str) -> dict[str, Any]:
     )
 
 
+def _sanitize_alignment_reason(reason: str | None) -> str | None:
+    if not reason:
+        return None
+    sanitized = str(reason)
+    sanitized = re.sub(r"[A-Za-z]:\\[^:;\r\n]+", "[redacted-local-path]", sanitized)
+    sanitized = re.sub(r"/tmp/[^\s:;]+", "[redacted-local-path]", sanitized, flags=re.IGNORECASE)
+    sanitized = re.sub(r"https?://\S+", "[redacted-url]", sanitized, flags=re.IGNORECASE)
+    normalized = sanitized.lower()
+    if any(marker in normalized for marker in SENSITIVE_REASON_MARKERS):
+        return "MFA alignment failed before a forced-alignment result was produced."
+    return sanitized
+
+
 def _fallback_alignment(
     audio_path: str | Path,
     prompt_text: str | None,
@@ -44,14 +73,20 @@ def _fallback_alignment(
     fallback_reason: str | None = None,
 ) -> dict[str, Any]:
     result = align_prompt_fallback(audio_path, prompt_text=prompt_text, canonical_phones=canonical_phones)
+    sanitized_reason = _sanitize_alignment_reason(fallback_reason)
+    result["status"] = "fallback"
+    result["alignment_status"] = "fallback"
     result["metadata"]["is_forced_alignment"] = False
     result["metadata"]["is_fallback"] = True
     result["metadata"]["fallback_alignment"] = True
     result["metadata"]["mfa_used"] = False
     result["metadata"]["textgrid_parse_success"] = False
-    if fallback_reason:
-        result["metadata"]["fallback_reason"] = fallback_reason
-        result["note"] = f"{FALLBACK_ALIGNMENT_NOTE} Fallback reason: {fallback_reason}"
+    result["metadata"]["alignment_status"] = "fallback"
+    result["metadata"]["alignment_note"] = FALLBACK_ALIGNMENT_WARNING
+    result["metadata"]["location_reliability"] = "limited_fallback_alignment"
+    if sanitized_reason:
+        result["metadata"]["fallback_reason"] = sanitized_reason
+    result["note"] = FALLBACK_ALIGNMENT_WARNING
     return result
 
 
@@ -69,6 +104,7 @@ def align_audio(
     if mode == "none":
         result = _failed_alignment("none", "Alignment disabled by ALIGNMENT_MODE=none.")
         result["metadata"]["requested_alignment_mode"] = mode
+        result["metadata"]["requested_alignment_method"] = mode
         return result
 
     if mode == "fallback":
@@ -76,6 +112,7 @@ def align_audio(
         if audio_duration is not None:
             result["metadata"]["requested_audio_duration_seconds"] = float(audio_duration)
         result["metadata"]["requested_alignment_mode"] = mode
+        result["metadata"]["requested_alignment_method"] = mode
         return result
 
     if mode == "mfa":
@@ -87,15 +124,18 @@ def align_audio(
                 acoustic_model_path=os.getenv("MFA_ACOUSTIC_MODEL_PATH"),
             )
             result["metadata"]["requested_alignment_mode"] = mode
+            result["metadata"]["requested_alignment_method"] = mode
             return result
         except AlignmentError as exc:
             if allow_fallback:
                 result = _fallback_alignment(audio_path, prompt_text, canonical_phones, fallback_reason=str(exc))
                 result["metadata"]["requested_alignment_mode"] = mode
+                result["metadata"]["requested_alignment_method"] = mode
                 result["metadata"]["mfa_attempted"] = True
                 return result
             result = _failed_alignment("mfa", str(exc))
             result["metadata"]["requested_alignment_mode"] = mode
+            result["metadata"]["requested_alignment_method"] = mode
             result["metadata"]["mfa_attempted"] = True
             return result
 
@@ -103,7 +143,9 @@ def align_audio(
     if allow_fallback:
         result = _fallback_alignment(audio_path, prompt_text, canonical_phones, fallback_reason=error)
         result["metadata"]["requested_alignment_mode"] = mode
+        result["metadata"]["requested_alignment_method"] = mode
         return result
     result = _failed_alignment(mode, error)
     result["metadata"]["requested_alignment_mode"] = mode
+    result["metadata"]["requested_alignment_method"] = mode
     return result

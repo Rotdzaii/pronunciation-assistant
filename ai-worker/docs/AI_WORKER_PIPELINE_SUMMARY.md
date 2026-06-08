@@ -335,6 +335,8 @@ Recorded safe real MFA PGMQ once validation also passed with:
 - `response_status=200`
 - `archive_success=true`
 
+The next production-like validation step is running `ai-worker/worker.py` with `WORKER_MODE=once` using the same `cnn_attention_context` and MFA alignment path.
+
 ## 8. How to Run Demos
 
 ```powershell

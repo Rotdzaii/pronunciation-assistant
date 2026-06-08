@@ -23,6 +23,8 @@ Alignment timing is not pronunciation correctness. Classifier confidence is not 
 - MFA environment `mfa` is available locally
 - `CNN_ATTENTION_CONTEXT_CHECKPOINT_PATH` points to a real local checkpoint
 
+Before running `worker.py` with `SCORER_MODE=cnn_attention_context`, run `ai-worker/scripts/inspect_context_checkpoints.py` and set `CNN_ATTENTION_CONTEXT_CHECKPOINT_PATH` to a compatible checkpoint.
+
 Do not commit audio files, TextGrid files, temporary folders, checkpoints, secrets, signed URLs, or `.env`.
 
 ## PowerShell Environment Setup

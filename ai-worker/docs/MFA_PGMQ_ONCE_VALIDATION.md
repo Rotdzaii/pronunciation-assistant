@@ -10,7 +10,7 @@ This document defines a safe once-only PGMQ validation workflow for:
 - `MFA_DICTIONARY_PATH=english_us_mfa`
 - `MFA_ACOUSTIC_MODEL_PATH=english_mfa`
 
-The workflow reads one message from queue `practice_jobs`, downloads the queued audio to a temporary file, runs MFA-aligned context inference, validates the AI result and backend payload, POSTs only when `--post` is passed, and archives only when `--archive` is passed after a successful POST.
+The workflow reads one message from queue `practice_jobs`, downloads the queued audio to a temporary file, prepares MFA-ready local audio when needed, runs MFA-aligned context inference, validates the AI result and backend payload, POSTs only when `--post` is passed, and archives only when `--archive` is passed after a successful POST.
 
 Default behavior is safe:
 
@@ -36,6 +36,8 @@ ai-worker/scripts/demo_mfa_pgmq_once.py
 - MFA dictionary `english_us_mfa` is available locally
 - MFA acoustic model `english_mfa` is available locally
 
+PGMQ audio can come from frontend/Supabase uploads such as WebM. MFA alignment is more reliable when the worker first prepares a temporary 16 kHz mono WAV input.
+
 Do not commit audio files, TextGrid files, temporary folders, checkpoints, secrets, signed URLs, or `.env`.
 
 ## Environment Notes
@@ -53,6 +55,8 @@ The script sets:
 - `CNN_ATTENTION_CONTEXT_RIGHT_SECONDS=0.10`
 
 Real validation requires passing `--checkpoint-path` or setting `CNN_ATTENTION_CONTEXT_CHECKPOINT_PATH` to a real local checkpoint. Checkpoints are local artifacts and must not be committed.
+
+If the queued audio is not already a suitable WAV for MFA, the worker prepares a temporary local WAV copy for alignment. That prepared file stays in temp only, is cleaned up after the run, and must never be printed or preserved in the webhook payload.
 
 ## Dry-Run Command Without POST Or Archive
 
@@ -100,6 +104,7 @@ Expected safe behavior:
 - redacts `audio_url`
 - never prints the webhook secret
 - removes temporary downloaded audio after the run
+- removes any temporary prepared WAV after the run
 - never archives unless `--archive` is passed after a successful POST
 
 Expected successful validation fields:
@@ -115,6 +120,19 @@ Expected successful validation fields:
 - `archive_attempted=false` for the default dry run
 
 If MFA fails and fallback is allowed, the script should preserve fallback metadata while still avoiding local path and signed URL leakage in the payload.
+
+Expected fallback metadata when MFA was requested but fallback is used:
+
+- `requested_alignment_method=mfa`
+- `alignment_method=fallback_even_split`
+- `alignment_status=fallback`
+- `fallback_alignment=true`
+- `is_forced_alignment=false`
+- `mfa_used=false`
+- `textgrid_parse_success=false`
+- `location_reliability=limited_fallback_alignment`
+- `alignment_note="Fallback alignment is approximate and has limited location reliability."`
+- `fallback_reason` is sanitized and must not contain local paths or signed URLs
 
 ## Supabase Queue And Archive Verification SQL
 
@@ -178,12 +196,19 @@ MFA unavailable:
 
 - confirm `MFA_CONDA_ENV=mfa`
 - confirm MFA dictionary and acoustic model are available locally
+- confirm the queued audio could be decoded and prepared into a temporary WAV
 - if fallback is disabled, the run should fail instead of silently approximating alignment
 
 Signed audio URL expired:
 
 - re-enqueue the job with a fresh signed URL
 - the script downloads queue audio from `audio_url` and will fail if the URL is no longer valid
+
+Queued WebM or browser audio could not align with MFA:
+
+- confirm the downloaded audio can be decoded locally
+- the script now prepares a temporary 16 kHz mono WAV for MFA where possible
+- if decoding or MFA still fails, fallback metadata should explicitly mark approximate and limited location reliability
 
 Backend connection refused:
 

@@ -306,6 +306,10 @@ The current backend updates `practice_history` with those fields. The full norma
 
 For MFA-aligned context validation, the backend payload path should also confirm that no local audio path, TextGrid path, temporary MFA path, checkpoint path, or signed URL token fragment survives into the final payload.
 
+For PGMQ once validation, queued frontend audio may arrive as WebM or another browser format. The worker now prepares a temporary 16 kHz mono WAV for MFA alignment when needed, then cleans it up after the run.
+
+If `ALIGNMENT_MODE=mfa` was requested but the worker falls back to approximate alignment, payload metadata should explicitly preserve that limited reliability through fields such as `alignment_status=fallback`, `fallback_alignment=true`, `location_reliability=limited_fallback_alignment`, and an alignment note that says fallback alignment is approximate.
+
 ## 8. How to Run Demos
 
 ```powershell

@@ -202,7 +202,7 @@ def _download_audio_to_temp(audio_url: str) -> Path:
     return temp_path
 
 
-def prepare_scoring_job(job: dict[str, Any]) -> tuple[dict[str, Any], str]:
+def prepare_scoring_job(job: dict[str, Any]) -> tuple[dict[str, Any], str, bool]:
     audio_url = str(job.get("audio_url") or "").strip()
     if not audio_url:
         raise RuntimeError("Queue message audio_url is required.")
@@ -213,13 +213,13 @@ def prepare_scoring_job(job: dict[str, Any]) -> tuple[dict[str, Any], str]:
         prepared = dict(job)
         prepared["audio_path"] = str(temp_audio_path)
         prepared["audio_url"] = ""
-        return prepared, "downloaded_to_temp"
+        return prepared, "downloaded_to_temp", True
 
     local_path = Path(audio_url).expanduser()
     prepared = dict(job)
     prepared["audio_path"] = str(local_path)
     prepared["audio_url"] = ""
-    return prepared, "local_path"
+    return prepared, "local_path", False
 
 
 def post_payload(webhook_url: str, secret: str, payload: dict[str, Any]) -> tuple[bool, str]:
@@ -362,9 +362,9 @@ def main() -> int:
 
     try:
         try:
-            scoring_job, download_status = prepare_scoring_job(job)
+            scoring_job, download_status, uses_temp_audio = prepare_scoring_job(job)
             temp_audio_value = str(scoring_job.get("audio_path") or "").strip()
-            temp_audio_path = Path(temp_audio_value) if temp_audio_value and download_status == "downloaded_to_temp" else None
+            temp_audio_path = Path(temp_audio_value) if temp_audio_value and uses_temp_audio else None
         except Exception as exc:
             print_section(
                 "DOWNLOAD_RESULT",
@@ -389,12 +389,13 @@ def main() -> int:
 
         print_section(
             "DOWNLOAD_RESULT",
-            {
-                "download_success": True,
-                "download_status": download_status,
-                "audio_url": "<audio-url-redacted>",
-                "local_temp_path_redacted": temp_audio_path is not None,
-            },
+                {
+                    "download_success": True,
+                    "download_status": download_status,
+                    "queue_audio_prepared_for_local_scoring": True,
+                    "audio_url": "<audio-url-redacted>",
+                    "local_temp_path_redacted": temp_audio_path is not None,
+                },
         )
 
         try:

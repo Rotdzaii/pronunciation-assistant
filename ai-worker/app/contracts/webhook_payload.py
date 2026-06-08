@@ -15,6 +15,19 @@ SENSITIVE_KEYS = {
     "local_path",
     "audio_path",
 }
+SENSITIVE_VALUE_MARKERS = (
+    "c:\\",
+    "/tmp/",
+    "appdata\\local\\temp",
+    ".textgrid",
+    ".wav",
+    ".webm",
+    ".m4a",
+    "x-amz-signature=",
+    "token=",
+    "sig=",
+    "signature=",
+)
 
 
 def _sanitize_for_webhook(value: Any) -> Any:
@@ -27,7 +40,30 @@ def _sanitize_for_webhook(value: Any) -> Any:
         return sanitized
     if isinstance(value, list):
         return [_sanitize_for_webhook(item) for item in value]
+    if isinstance(value, str):
+        normalized = value.lower()
+        if any(marker in normalized for marker in SENSITIVE_VALUE_MARKERS):
+            return "[redacted-sensitive-value]"
     return value
+
+
+def _find_sensitive_value_paths(value: Any, path: str = "") -> list[str]:
+    issues: list[str] = []
+    if isinstance(value, dict):
+        for key, item in value.items():
+            next_path = f"{path}.{key}" if path else str(key)
+            issues.extend(_find_sensitive_value_paths(item, next_path))
+        return issues
+    if isinstance(value, list):
+        for index, item in enumerate(value):
+            next_path = f"{path}[{index}]"
+            issues.extend(_find_sensitive_value_paths(item, next_path))
+        return issues
+    if isinstance(value, str):
+        normalized = value.lower()
+        if any(marker in normalized for marker in SENSITIVE_VALUE_MARKERS):
+            issues.append(path or "<root>")
+    return issues
 
 
 def _feedback_with_ai_result(ai_result: dict[str, Any]) -> dict[str, Any]:
@@ -147,5 +183,13 @@ def validate_webhook_payload(payload: dict[str, Any]) -> tuple[bool, list[str]]:
             issues.append("Fallback alignment webhook metadata must mention approximate, fallback, or limited reliability.")
     if payload.get("pronunciation_score_source") == "classifier_confidence":
         issues.append("Webhook payload must not use classifier_confidence as pronunciation_score_source.")
+
+    sensitive_value_paths = _find_sensitive_value_paths(payload)
+    if sensitive_value_paths:
+        issues.append(
+            "Webhook payload contains sensitive local-path or signed-token markers at: "
+            + ", ".join(sensitive_value_paths)
+            + "."
+        )
 
     return not issues, issues

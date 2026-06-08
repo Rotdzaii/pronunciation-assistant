@@ -178,7 +178,7 @@ Final output validator
 Webhook payload builder
 
 - Path: `ai-worker/app/contracts/webhook_payload.py`
-- Role: builds legacy-compatible backend webhook payloads and includes the full normalized result.
+- Role: builds legacy-compatible backend webhook payloads, preserves the full normalized result, and sanitizes sensitive local path or signed-token markers before webhook use.
 - Status: implemented.
 - Limitation: current backend stores rich output through `feedback.ai_result`; a dedicated backend JSONB column can be added later.
 
@@ -264,6 +264,22 @@ Recorded safe local validation for this path passed with:
 - `location_reliability=forced_alignment`
 - `ai_result_valid=true`
 
+Recorded safe real local backend payload validation also passed with:
+
+- `execution_mode=real_mfa_inference`
+- `payload_valid=true`
+- `problem_phonemes=["ɹ", "tʰ", "k"]`
+- `score=67.1`
+- `score_note=Heuristic/demo score, not production GOP.`
+- `pronunciation_score_source=heuristic_gop`
+- `predicted_error_type=deletion`
+- `diagnosis_confidence=0.6575304269790649`
+- `segments_count=9`
+- `metadata_safety_check passed=true`
+- `post_attempted=false`
+
+For real local validation, set `CNN_ATTENTION_CONTEXT_CHECKPOINT_PATH` or pass `--checkpoint-path`. Do not commit checkpoint files.
+
 ## 7. Backend Webhook
 
 Route:
@@ -288,6 +304,8 @@ Legacy backend fields:
 
 The current backend updates `practice_history` with those fields. The full normalized AI result is preserved under `feedback.ai_result`.
 
+For MFA-aligned context validation, the backend payload path should also confirm that no local audio path, TextGrid path, temporary MFA path, checkpoint path, or signed URL token fragment survives into the final payload.
+
 ## 8. How to Run Demos
 
 ```powershell
@@ -299,8 +317,16 @@ python ai-worker/scripts/demo_final_ai_output.py
 python ai-worker/scripts/demo_backend_webhook_payload.py
 python ai-worker/scripts/demo_cnn_attention_context_scorer.py
 python ai-worker/scripts/demo_context_mfa_aligned_inference.py --dry-run
+python ai-worker/scripts/demo_mfa_backend_payload.py --dry-run
 python ai-worker/scripts/demo_worker_end_to_end.py --dry-run
 python ai-worker/scripts/demo_backend_integration.py --job-id demo-job-id --dry-run
+```
+
+Real local MFA backend payload validation with explicit checkpoint guidance:
+
+```powershell
+$env:CNN_ATTENTION_CONTEXT_CHECKPOINT_PATH="C:\path\to\l2_arctic_cnn_attention_context_0_10.pt"
+.\ai-worker\.venv\Scripts\python.exe ai-worker\scripts\demo_mfa_backend_payload.py --audio-path path\to\architecture.wav --transcript "Architecture" --checkpoint-path "$env:CNN_ATTENTION_CONTEXT_CHECKPOINT_PATH"
 ```
 
 Optional backend POST:

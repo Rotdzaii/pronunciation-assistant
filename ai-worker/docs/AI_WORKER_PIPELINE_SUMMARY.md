@@ -335,6 +335,21 @@ Recorded safe real MFA PGMQ once validation also passed with:
 - `response_status=200`
 - `archive_success=true`
 
+The next production-like validation step is running `ai-worker/worker.py` with `WORKER_MODE=once` using the same `cnn_attention_context` and MFA alignment path.
+
+For the real `worker.py` once path, invalid webhook payloads must be treated as a hard stop: no backend POST and no queue archive. Checkpoint env vars must point to real local `.pt` files, not placeholders, and checkpoint files must never be committed.
+
+Recorded safe real `worker.py` once validation also passed with:
+
+- `worker_mode=once`
+- `scorer_mode=cnn_attention_context`
+- `msg_id=31`
+- `job_id=df0d1ee4-f376-417b-bbf4-1f2a4edf1003`
+- `target_word=Architecture`
+- `model_confidence=0.883476734161377`
+- `webhook_status_code=200`
+- `archive_success=true`
+
 ## 8. How to Run Demos
 
 ```powershell

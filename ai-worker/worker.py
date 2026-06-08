@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import re
 import sys
 import time
 from pathlib import Path
@@ -23,6 +24,19 @@ DEFAULT_VISIBILITY_TIMEOUT_SECONDS = 60
 DEFAULT_WORKER_POLL_INTERVAL_SECONDS = 1.0
 DEFAULT_WORKER_IDLE_BACKOFF_MAX_SECONDS = 10.0
 SUPPORTED_SCORER_MODES = ("mock", "wav2vec2", "cnn_attention", "cnn_attention_context")
+SENSITIVE_VALUE_MARKERS = (
+    "c:\\",
+    "/tmp/",
+    "appdata\\local\\temp",
+    ".textgrid",
+    ".wav",
+    ".webm",
+    ".m4a",
+    "x-amz-signature=",
+    "token=",
+    "sig=",
+    "signature=",
+)
 
 
 def _load_env() -> dict[str, Any]:
@@ -230,14 +244,43 @@ def _score(job: dict[str, Any], scorer_mode: str, confidence_threshold: float) -
     )
 
 
+def _sanitize_error_text(value: str) -> str:
+    sanitized = str(value or "")
+    sanitized = re.sub(r"[A-Za-z]:\\[^:;\r\n]+", "[redacted-local-path]", sanitized)
+    sanitized = re.sub(r"/tmp/[^\s:;]+", "[redacted-local-path]", sanitized, flags=re.IGNORECASE)
+    sanitized = re.sub(r"https?://\S+", "[redacted-url]", sanitized, flags=re.IGNORECASE)
+    normalized = sanitized.lower()
+    if any(marker in normalized for marker in SENSITIVE_VALUE_MARKERS):
+        return (
+            "AI worker encountered a local-artifact or signed-URL related error. "
+            "Inspect local configuration without exposing local paths or secrets."
+        )
+    return sanitized
+
+
+def _checkpoint_status() -> dict[str, Any]:
+    configured_value = str(os.getenv("CNN_ATTENTION_CONTEXT_CHECKPOINT_PATH") or "").strip()
+    checkpoint_exists = False
+    if configured_value:
+        try:
+            checkpoint_exists = Path(configured_value).expanduser().exists()
+        except OSError:
+            checkpoint_exists = False
+    return {
+        "checkpoint_configured": bool(configured_value),
+        "checkpoint_exists": checkpoint_exists,
+    }
+
+
 def _build_failed_result(
     job: dict[str, Any],
     scorer_mode: str,
     confidence_threshold: float,
     error: Exception,
 ) -> dict[str, Any]:
+    sanitized_error = _sanitize_error_text(str(error))
     result = build_failed_ai_result(
-        error=str(error),
+        error=sanitized_error,
         scorer={
             "name": scorer_mode,
             "type": "phone_error_classifier" if scorer_mode in {"cnn_attention", "cnn_attention_context"} else scorer_mode,
@@ -250,6 +293,7 @@ def _build_failed_result(
         metadata={
             "confidence_threshold": confidence_threshold,
             "target_word": str(job.get("target_word") or ""),
+            "error": sanitized_error,
         },
     )
     result["feedback"]["diagnosis"] = result["diagnosis"]
@@ -282,12 +326,18 @@ def _process_one_job(client: Client, config: dict[str, Any]) -> bool:
     try:
         result = _score(job, config["scorer_mode"], config["confidence_threshold"])
     except Exception as exc:
-        print(f"Scoring failed for job_id={job['job_id']} scorer_mode={config['scorer_mode']}: {exc}")
+        sanitized_error = _sanitize_error_text(str(exc))
+        print(f"Scoring failed for job_id={job['job_id']} scorer_mode={config['scorer_mode']}: {sanitized_error}")
+        if config["scorer_mode"] == "cnn_attention_context":
+            checkpoint_status = _checkpoint_status()
+            print(f"checkpoint_configured={checkpoint_status['checkpoint_configured']}")
+            print(f"checkpoint_exists={checkpoint_status['checkpoint_exists']}")
+            print(f"checkpoint_error={sanitized_error}")
         result = _build_failed_result(
             job,
             config["scorer_mode"],
             config["confidence_threshold"],
-            exc,
+            RuntimeError(sanitized_error),
         )
 
     confidence = (
@@ -299,7 +349,7 @@ def _process_one_job(client: Client, config: dict[str, Any]) -> bool:
     if result.get("status") == "failed":
         webhook_payload = build_failed_webhook_payload(
             job["job_id"],
-            str(result.get("metadata", {}).get("error") or "AI scoring failed."),
+            _sanitize_error_text(str(result.get("metadata", {}).get("error") or "AI scoring failed.")),
             result,
         )
     else:
@@ -308,11 +358,11 @@ def _process_one_job(client: Client, config: dict[str, Any]) -> bool:
     payload_is_valid, payload_issues = validate_webhook_payload(webhook_payload)
     if not payload_is_valid:
         print("Webhook payload validation failed: " + " | ".join(payload_issues))
-        webhook_payload = build_failed_webhook_payload(
-            job["job_id"],
-            "AI worker produced an invalid webhook payload: " + " | ".join(payload_issues),
-            result,
-        )
+        print("webhook_payload_valid=false")
+        print("post_attempted=false")
+        print("archive_attempted=false")
+        print("reason=payload_validation_failed")
+        return False
 
     try:
         response = _post_webhook(

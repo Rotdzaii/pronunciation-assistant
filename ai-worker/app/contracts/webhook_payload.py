@@ -113,13 +113,14 @@ def build_failed_webhook_payload(
     error_message: str,
     ai_result: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
+    sanitized_error_message = _sanitize_for_webhook(error_message)
     failed_result = ai_result or build_failed_ai_result(error=error_message)
     failed_result = _sanitize_for_webhook(deepcopy(failed_result))
     failed_result["status"] = "failed"
     failed_result["score"] = None
     failed_result["problem_phonemes"] = []
     metadata = _metadata(failed_result)
-    metadata["error"] = error_message
+    metadata["error"] = sanitized_error_message
 
     feedback = _feedback_with_ai_result(failed_result)
     feedback.setdefault("summary", "AI worker khong tao duoc ket qua chan doan phat am.")
@@ -131,7 +132,7 @@ def build_failed_webhook_payload(
         "score": None,
         "problem_phonemes": [],
         "feedback": feedback,
-        "error_message": error_message,
+        "error_message": sanitized_error_message,
         "predicted_error_type": failed_result.get("predicted_error_type"),
         "diagnosis": failed_result.get("diagnosis") if isinstance(failed_result.get("diagnosis"), dict) else {},
         "scorer": failed_result.get("scorer") if isinstance(failed_result.get("scorer"), dict) else {},

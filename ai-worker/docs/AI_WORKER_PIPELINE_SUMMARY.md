@@ -247,6 +247,23 @@ When `ALIGNMENT_MODE=mfa` succeeds, final metadata should also preserve:
 
 If MFA fails and fallback is allowed, final metadata should preserve the fallback reason without exposing local TextGrid or temporary paths.
 
+Recorded safe local validation for this path passed with:
+
+- `alignment_status=success`
+- `alignment_method=mfa`
+- `is_forced_alignment=true`
+- `mfa_used=true`
+- `mfa_exit_code=0`
+- `textgrid_parse_success=true`
+- `fallback_alignment=false`
+- `word_segments_count=1`
+- `phone_segments_count=9`
+- `score=67.1`
+- `predicted_error_type=deletion`
+- `context_mode=context_0_10`
+- `location_reliability=forced_alignment`
+- `ai_result_valid=true`
+
 ## 7. Backend Webhook
 
 Route:

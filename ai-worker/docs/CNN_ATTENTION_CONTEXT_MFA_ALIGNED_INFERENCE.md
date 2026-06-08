@@ -85,6 +85,51 @@ On MFA success, the alignment summary should show:
 
 If the AI result validator is available, `VALIDATION` also reports whether the normalized AI result passes contract and safety checks.
 
+## Recorded Validation Result
+
+Safe local validation passed for `cnn_attention_context` with MFA alignment.
+
+Validated configuration:
+
+- `SCORER_MODE=cnn_attention_context`
+- `ALIGNMENT_MODE=mfa`
+- `MFA_CONDA_ENV=mfa`
+- `MFA_DICTIONARY_PATH=english_us_mfa`
+- `MFA_ACOUSTIC_MODEL_PATH=english_mfa`
+
+Validated alignment summary:
+
+- `alignment_status=success`
+- `alignment_method=mfa`
+- `is_forced_alignment=true`
+- `mfa_used=true`
+- `mfa_exit_code=0`
+- `textgrid_parse_success=true`
+- `fallback_alignment=false`
+- `word_segments_count=1`
+- `phone_segments_count=9`
+
+Validated scorer result summary:
+
+- `status=completed`
+- `score=67.1`
+- `score_note=Heuristic/demo score, not production GOP.`
+- `pronunciation_score_source=heuristic_gop`
+- `predicted_error_type=deletion`
+- `diagnosis_confidence=0.6575304269790649`
+- `segments_count=9`
+- `context_mode=context_0_10`
+- `context_used=true`
+- `location_reliability=forced_alignment`
+
+Validated safety summary:
+
+- `ai_result_valid=true`
+- `metadata_safety_check=passed`
+- `sensitive_paths_found=[]`
+
+This validation confirms that the context scorer consumed real MFA timing instead of fallback timing for the tested local run.
+
 ## Metadata Fields
 
 Important final AI result metadata fields:

@@ -264,6 +264,22 @@ Recorded safe local validation for this path passed with:
 - `location_reliability=forced_alignment`
 - `ai_result_valid=true`
 
+Recorded safe real local backend payload validation also passed with:
+
+- `execution_mode=real_mfa_inference`
+- `payload_valid=true`
+- `problem_phonemes=["ɹ", "tʰ", "k"]`
+- `score=67.1`
+- `score_note=Heuristic/demo score, not production GOP.`
+- `pronunciation_score_source=heuristic_gop`
+- `predicted_error_type=deletion`
+- `diagnosis_confidence=0.6575304269790649`
+- `segments_count=9`
+- `metadata_safety_check passed=true`
+- `post_attempted=false`
+
+For real local validation, set `CNN_ATTENTION_CONTEXT_CHECKPOINT_PATH` or pass `--checkpoint-path`. Do not commit checkpoint files.
+
 ## 7. Backend Webhook
 
 Route:
@@ -304,6 +320,13 @@ python ai-worker/scripts/demo_context_mfa_aligned_inference.py --dry-run
 python ai-worker/scripts/demo_mfa_backend_payload.py --dry-run
 python ai-worker/scripts/demo_worker_end_to_end.py --dry-run
 python ai-worker/scripts/demo_backend_integration.py --job-id demo-job-id --dry-run
+```
+
+Real local MFA backend payload validation with explicit checkpoint guidance:
+
+```powershell
+$env:CNN_ATTENTION_CONTEXT_CHECKPOINT_PATH="C:\path\to\l2_arctic_cnn_attention_context_0_10.pt"
+.\ai-worker\.venv\Scripts\python.exe ai-worker\scripts\demo_mfa_backend_payload.py --audio-path path\to\architecture.wav --transcript "Architecture" --checkpoint-path "$env:CNN_ATTENTION_CONTEXT_CHECKPOINT_PATH"
 ```
 
 Optional backend POST:

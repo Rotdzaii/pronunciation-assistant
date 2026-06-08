@@ -57,10 +57,13 @@ Dry-run only:
 Local audio validation:
 
 ```powershell
-.\ai-worker\.venv\Scripts\python.exe ai-worker\scripts\demo_context_mfa_aligned_inference.py --audio-path path\to\architecture.wav --transcript "Architecture"
+$env:CNN_ATTENTION_CONTEXT_CHECKPOINT_PATH="C:\path\to\l2_arctic_cnn_attention_context_0_10.pt"
+.\ai-worker\.venv\Scripts\python.exe ai-worker\scripts\demo_context_mfa_aligned_inference.py --audio-path path\to\architecture.wav --transcript "Architecture" --checkpoint-path "$env:CNN_ATTENTION_CONTEXT_CHECKPOINT_PATH"
 ```
 
 The demo does not run real MFA when `--dry-run` is used or when `--audio-path` is omitted.
+
+For real local validation, set `CNN_ATTENTION_CONTEXT_CHECKPOINT_PATH` or pass `--checkpoint-path`. Do not commit checkpoint files.
 
 ## Expected Output
 
@@ -137,6 +140,29 @@ Validated safety summary:
 - `sensitive_paths_found=[]`
 
 This validation confirms that the context scorer consumed real MFA timing instead of fallback timing for the tested local run.
+
+Real local backend payload validation for the same MFA-aligned path also passed with:
+
+- `script=ai-worker/scripts/demo_mfa_backend_payload.py`
+- `execution_mode=real_mfa_inference`
+- `payload_valid=true`
+- `problem_phonemes=["ɹ", "tʰ", "k"]`
+- `score=67.1`
+- `score_note=Heuristic/demo score, not production GOP.`
+- `pronunciation_score_source=heuristic_gop`
+- `predicted_error_type=deletion`
+- `diagnosis_confidence=0.6575304269790649`
+- `segments_count=9`
+- `metadata_safety_check passed=true`
+- `metadata_safety_check findings=[]`
+- `post_requested=false`
+- `post_attempted=false`
+
+Checkpoint note for real local validation:
+
+- the first run failed because the default checkpoint path was missing
+- the successful run used `--checkpoint-path "$env:CNN_ATTENTION_CONTEXT_CHECKPOINT_PATH"`
+- checkpoint files are local artifacts and must not be committed
 
 ## Metadata Fields
 

@@ -54,17 +54,20 @@ Dry-run does not execute MFA, does not run the scorer, and does not POST. It bui
 ## Real Local Audio Command
 
 ```powershell
-.\ai-worker\.venv\Scripts\python.exe ai-worker\scripts\demo_mfa_backend_payload.py --audio-path path\to\architecture.wav --transcript "Architecture"
+$env:CNN_ATTENTION_CONTEXT_CHECKPOINT_PATH="C:\path\to\l2_arctic_cnn_attention_context_0_10.pt"
+.\ai-worker\.venv\Scripts\python.exe ai-worker\scripts\demo_mfa_backend_payload.py --audio-path path\to\architecture.wav --transcript "Architecture" --checkpoint-path "$env:CNN_ATTENTION_CONTEXT_CHECKPOINT_PATH"
 ```
 
 This command runs real local MFA-aligned context inference when local dependencies, checkpoint, and MFA resources are available.
+
+For real local validation, set `CNN_ATTENTION_CONTEXT_CHECKPOINT_PATH` or pass `--checkpoint-path`. Do not commit checkpoint files.
 
 ## Optional POST Command
 
 POST is opt-in only:
 
 ```powershell
-.\ai-worker\.venv\Scripts\python.exe ai-worker\scripts\demo_mfa_backend_payload.py --audio-path path\to\architecture.wav --transcript "Architecture" --job-id <existing-practice-history-uuid> --post --webhook-url http://localhost:8000/practice/webhook/ai-result --secret <local-ai-webhook-secret>
+.\ai-worker\.venv\Scripts\python.exe ai-worker\scripts\demo_mfa_backend_payload.py --audio-path path\to\architecture.wav --transcript "Architecture" --checkpoint-path "$env:CNN_ATTENTION_CONTEXT_CHECKPOINT_PATH" --job-id <existing-practice-history-uuid> --post --webhook-url http://localhost:8000/practice/webhook/ai-result --secret <local-ai-webhook-secret>
 ```
 
 Do not run `--post` unless:
@@ -116,6 +119,45 @@ Typical supporting metadata also includes:
 - `context_mode=context_0_10`
 - `context_used=true`
 
+## Recorded Safe Real Local Validation Result
+
+Real local MFA backend payload validation passed with:
+
+- `script=ai-worker/scripts/demo_mfa_backend_payload.py`
+- `execution_mode=real_mfa_inference`
+- `transcript=Architecture`
+- `SCORER_MODE=cnn_attention_context`
+- `ALIGNMENT_MODE=mfa`
+- `context_mode=context_0_10`
+- `alignment_status=success`
+- `alignment_method=mfa`
+- `is_forced_alignment=true`
+- `mfa_used=true`
+- `textgrid_parse_success=true`
+- `fallback_alignment=false`
+- `word_segments_count=1`
+- `phone_segments_count=9`
+- `segments_count=9`
+- `location_reliability=forced_alignment`
+- `score=67.1`
+- `score_note=Heuristic/demo score, not production GOP.`
+- `pronunciation_score_source=heuristic_gop`
+- `predicted_error_type=deletion`
+- `diagnosis_confidence=0.6575304269790649`
+- `problem_phonemes=["ɹ", "tʰ", "k"]`
+- `ai_result_valid=true`
+- `payload_valid=true`
+- `metadata_safety_check passed=true`
+- `metadata_safety_check findings=[]`
+- `post_requested=false`
+- `post_attempted=false`
+
+Checkpoint note for this validation:
+
+- the first run failed because the default checkpoint path was missing
+- the successful run used `--checkpoint-path "$env:CNN_ATTENTION_CONTEXT_CHECKPOINT_PATH"`
+- checkpoint files are local artifacts and must not be committed
+
 ## Safety Notes
 
 - No local paths should appear in the backend webhook payload.
@@ -144,6 +186,7 @@ If any marker is found, the safety check fails and POST must be skipped.
 Missing checkpoint:
 
 - Provide `--checkpoint-path` or set `CNN_ATTENTION_CONTEXT_CHECKPOINT_PATH`.
+- For real local validation, prefer setting `CNN_ATTENTION_CONTEXT_CHECKPOINT_PATH` and passing `--checkpoint-path "$env:CNN_ATTENTION_CONTEXT_CHECKPOINT_PATH"` explicitly.
 - Do not commit checkpoint files.
 
 Missing MFA:

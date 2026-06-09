@@ -137,4 +137,10 @@ using (
       and vs.is_active = true
       and vs.is_public = true
   )
+  and exists (
+    select 1
+    from public.vocabulary_items as vi
+    where vi.id = vocabulary_set_items.item_id
+      and vi.is_active = true
+  )
 );

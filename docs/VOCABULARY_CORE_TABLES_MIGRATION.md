@@ -59,7 +59,7 @@ Policies added:
 
 - Authenticated users can select active `vocabulary_items`.
 - Authenticated users can select active public `vocabulary_sets`.
-- Authenticated users can select `vocabulary_set_items` only when the related set is active and public.
+- Authenticated users can select `vocabulary_set_items` only when the related set is active and public, and the related item is active.
 
 No INSERT, UPDATE, or DELETE policies are added in DB1.
 

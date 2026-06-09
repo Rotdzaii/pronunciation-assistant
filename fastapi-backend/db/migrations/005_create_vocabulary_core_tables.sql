@@ -35,8 +35,12 @@ comment on table public.vocabulary_items is
 comment on column public.vocabulary_items.updated_at is
   'TODO: maintain with a shared updated_at trigger only after project-wide trigger conventions are confirmed.';
 
-create unique index vocabulary_items_lower_word_unique_idx
-on public.vocabulary_items (lower(word));
+create unique index vocabulary_items_word_pronunciation_unique_idx
+on public.vocabulary_items (
+  lower(btrim(word)),
+  coalesce(phonetic, ''),
+  coalesce(stress_pattern, '')
+);
 
 create index vocabulary_items_topic_idx
 on public.vocabulary_items (topic);

@@ -22,6 +22,8 @@ DB1 creates:
 
 `vocabulary_items` stores pronunciation-focused word metadata such as `word`, `phonetic`, `meaning_vi`, `sample_sentence`, `target_phonemes`, `common_mistake_tags`, `stress_pattern`, topic, level, and difficulty.
 
+The same word may appear multiple times when pronunciation metadata differs. DB1 prevents exact duplicate `word` + `phonetic` + `stress_pattern` combinations, while allowing pronunciation-focused distinctions such as noun/verb stress differences.
+
 `vocabulary_sets` stores public active word collections that can later represent topics, lessons, or pronunciation drills.
 
 `vocabulary_set_items` links sets to items and preserves order with `sort_order`.

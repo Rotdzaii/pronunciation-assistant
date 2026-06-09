@@ -4,7 +4,7 @@ from typing import Any, Literal
 
 import httpx
 from fastapi import Depends, HTTPException, Request, status
-from pydantic import BaseModel
+from pydantic import BaseModel, PrivateAttr
 from supabase import Client, create_client
 
 from app.core.config import Settings, get_settings
@@ -16,6 +16,8 @@ AppRole = Literal["student", "teacher", "admin"]
 
 
 class CurrentUser(BaseModel):
+    _access_token: str = PrivateAttr(default="")
+
     id: str
     email: str | None = None
     auth_role: str | None = None
@@ -78,6 +80,15 @@ def get_supabase_service_client(settings: Settings) -> Client:
         raise _settings_error()
 
     return create_client(settings.supabase_url, settings.supabase_service_role_key)
+
+
+def get_supabase_authenticated_client(settings: Settings, token: str) -> Client:
+    if not settings.supabase_url or not settings.supabase_anon_key:
+        raise _settings_error()
+
+    client = create_client(settings.supabase_url, settings.supabase_anon_key)
+    client.postgrest.auth(token)
+    return client
 
 
 def get_profile_app_role(client: Client, user_id: str) -> AppRole | None:
@@ -147,7 +158,7 @@ async def get_current_user(
 
     app_role = get_profile_app_role(supabase_client, user_id)
 
-    return CurrentUser(
+    current_user = CurrentUser(
         id=user_id,
         email=user_data.get("email"),
         auth_role=auth_role,
@@ -157,6 +168,8 @@ async def get_current_user(
         can_use_student=app_role in ("student", "admin"),
         can_use_teacher=app_role in ("teacher", "admin"),
     )
+    current_user._access_token = token
+    return current_user
 
 
 def require_roles(roles: Sequence[str]) -> Callable[[CurrentUser], CurrentUser]:

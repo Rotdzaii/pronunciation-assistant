@@ -91,6 +91,29 @@ The verification file checks:
 
 All verification queries are read-only `SELECT` queries.
 
+## DB1 Apply Result
+
+The DB1 migration file was applied manually through the Supabase SQL Editor:
+
+```text
+fastapi-backend/db/migrations/005_create_vocabulary_core_tables.sql
+```
+
+Verification used:
+
+```text
+docs/vocabulary_core_tables_verification.sql
+```
+
+Confirmed results:
+
+- Tables verified: `public.vocabulary_items`, `public.vocabulary_sets`, and `public.vocabulary_set_items`.
+- RLS verified as enabled on all three DB1 tables.
+- Expected SELECT policies verified.
+- Expected indexes verified.
+- Pronunciation-aware unique index verified: `vocabulary_items_word_pronunciation_unique_idx`.
+- Set/item uniqueness verified: `vocabulary_set_items_set_item_unique`.
+
 ## Rollback Notes
 
 If DB1 must be rolled back before seed data or app usage exists, the core rollback concept is to drop the DB1 objects in dependency order:

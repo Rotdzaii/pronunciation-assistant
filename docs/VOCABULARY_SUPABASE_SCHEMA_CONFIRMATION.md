@@ -119,8 +119,118 @@ Before creating the vocabulary migration, confirm and record:
 - Whether vocabulary seed content should be system-owned with `created_by null`.
 - Whether future vocabulary tables should reference `auth.users(id)` or `profiles(id)` for `created_by`, `teacher_id`, and `student_id`.
 
+## Confirmed Supabase Results
+
+These results were confirmed by running the read-only schema confirmation queries against the deployed Supabase project.
+
+### Existing Columns
+
+`public.profiles`:
+
+- `id uuid not null`
+- `email text nullable`
+- `app_role text not null default 'student'`
+- `created_at timestamptz not null default now()`
+- `updated_at timestamptz not null default now()`
+
+`public.practice_history`:
+
+- `id uuid not null`
+- `student_id uuid not null`
+- `target_word text not null`
+- `audio_url text not null`
+- `status text not null default 'processing'`
+- `score double precision nullable`
+- `problem_phonemes jsonb not null default '[]'`
+- `created_at timestamptz not null default now()`
+- `updated_at timestamptz not null default now()`
+- `feedback jsonb not null default '{}'`
+
+`public.practice_history_legacy`:
+
+- `id bigint not null`
+- `created_at timestamptz not null default now()`
+- `target_word text nullable`
+- `overall_score double precision nullable`
+- `phoneme_details jsonb nullable`
+
+### Foreign Keys
+
+The foreign key query for `public.profiles` and `public.practice_history` returned no rows.
+
+Confirmed interpretation:
+
+- No foreign key constraint was confirmed for `profiles.id`.
+- No foreign key constraint was confirmed for `practice_history.student_id`.
+- The target identity relationship is still a convention, not a confirmed database constraint.
+
+### RLS Status
+
+Confirmed RLS status:
+
+- `public.profiles`: `rls_enabled = true`
+- `public.practice_history`: `rls_enabled = true`
+
+### Existing Policies
+
+The existing policies query for `public.profiles` and `public.practice_history` returned no rows.
+
+Confirmed interpretation:
+
+- No active policy was confirmed in `pg_policies` for `public.profiles`.
+- No active policy was confirmed in `pg_policies` for `public.practice_history`.
+- RLS is enabled, but no policy style was confirmed for these tables.
+
+### Class-Related Tables
+
+The class-related table query returned no rows.
+
+No class-related table was confirmed for:
+
+- `classes`
+- `class_members`
+- `classrooms`
+- `teacher_students`
+- `student_classes`
+- `enrollments`
+
+### Functions
+
+Confirmed functions:
+
+- `auth.role()`
+- `public.archive_practice_job(p_msg_id bigint)`
+- `public.enqueue_practice_job(p_job_id uuid, p_student_id uuid, p_target_word text, p_audio_url text)`
+
+Not confirmed:
+
+- Generic `updated_at` trigger function.
+- SQL role helper function for app roles such as student, teacher, or admin.
+
 ## Recommendation
 
-Do not create the vocabulary migration until the Supabase confirmation result is reviewed.
+Do not create `vocabulary_assignments` yet because no class-related table exists.
 
-The safest next step is to run the read-only confirmation queries, paste the results back for review, and then decide the Phase DB1 migration shape based on the deployed schema rather than repository assumptions.
+Do not create `class_id` yet.
+
+Do not create `vocabulary_practice_history` with a foreign key to `practice_history` yet. `practice_history.student_id` and `profiles.id` have no confirmed foreign key constraints, and RLS is enabled without confirmed active policies. The FK/RLS conventions need a separate review before linking vocabulary attempt history to existing pronunciation attempt history.
+
+DB1 should only create the core vocabulary tables:
+
+- `vocabulary_items`
+- `vocabulary_sets`
+- `vocabulary_set_items`
+
+DB1 should avoid foreign keys to `auth.users`, `profiles`, or `practice_history`. Keep ownership and attempt-history links out of DB1 until identity and RLS conventions are confirmed.
+
+DB1 should be minimal and reversible:
+
+- Store pronunciation-focused vocabulary metadata.
+- Store vocabulary set metadata.
+- Store set-to-item membership.
+- Use soft activation fields such as `is_active` instead of relying on destructive deletes.
+- Avoid teacher assignment, class assignment, and practice-history linkage.
+
+RLS policy design needs a separate review because RLS is enabled on existing tables, but no policies were confirmed. Any vocabulary RLS design should be aligned with the final project policy style before migration SQL is created.
+
+Do not create the vocabulary migration until this confirmed schema result is reviewed and the DB1 table boundaries are accepted.

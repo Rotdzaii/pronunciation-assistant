@@ -91,6 +91,31 @@ The verification file checks:
 
 All verification queries are read-only `SELECT` queries.
 
+## Seed Apply Result
+
+The seed file applied was:
+
+```text
+docs/vocabulary_seed_insert.sql
+```
+
+The seed was applied manually through the Supabase SQL Editor. `Run without enabling RLS` was selected because RLS was already enabled on the DB1 vocabulary tables.
+
+Verified result:
+
+- 46 vocabulary items were inserted into `public.vocabulary_items`.
+- 5 vocabulary sets were inserted into `public.vocabulary_sets`.
+- Set-item links were verified in `public.vocabulary_set_items`.
+- RLS remained enabled on `public.vocabulary_items`.
+- RLS remained enabled on `public.vocabulary_sets`.
+- RLS remained enabled on `public.vocabulary_set_items`.
+
+Verification used:
+
+```text
+docs/vocabulary_seed_insert_verification.sql
+```
+
 ## Rollback Notes
 
 If the seed draft must be rolled back before application usage, remove seed data in dependency order:

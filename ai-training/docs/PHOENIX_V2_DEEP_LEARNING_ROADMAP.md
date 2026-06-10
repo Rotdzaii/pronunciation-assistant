@@ -47,6 +47,9 @@ These topics can be future research directions, but they should not define Phoen
 
 ## E. Current Candidate Model/Pipeline
 
+Repository inventory for these candidates is recorded in
+[PHOENIX_V2_MODEL_INVENTORY.md](PHOENIX_V2_MODEL_INVENTORY.md).
+
 Current possible candidates:
 
 - `wav2vec2` baseline: useful as an ASR baseline and pipeline validation path, but not the final pronunciation correctness scorer. ASR transcript confidence and text similarity do not reliably measure phoneme-level pronunciation quality.

@@ -163,6 +163,25 @@ python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 6. Confirm requests without `Authorization` return `401`.
 7. Confirm `limit=101` and negative `offset` return validation errors.
 
+## Manual Validation Result
+
+Validation was performed with:
+
+- `Authorization: Bearer <supabase-access-token>`
+- Supabase authenticated RLS
+- No service role access
+
+Expected seed data:
+
+- 46 vocabulary items
+- 5 vocabulary sets
+
+Checklist:
+
+- [x] `GET /vocabulary/items` returned active seeded vocabulary items.
+- [x] `GET /vocabulary/sets` returned the expected 5 active public vocabulary sets.
+- [x] `GET /vocabulary/sets/{set_id}` returned one active public set with its active items.
+
 ## Next Steps
 
 - Add frontend vocabulary screens.

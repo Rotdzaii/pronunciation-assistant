@@ -3,7 +3,7 @@ import type { AnalyzeResponse } from '../types';
 const DEFAULT_API_BASE_URL = 'http://127.0.0.1:8000';
 
 export function getApiBaseUrl() {
-  return import.meta.env.VITE_API_BASE_URL || DEFAULT_API_BASE_URL;
+  return process.env.EXPO_PUBLIC_API_BASE_URL || DEFAULT_API_BASE_URL;
 }
 
 export async function uploadAudio(file: File): Promise<AnalyzeResponse> {

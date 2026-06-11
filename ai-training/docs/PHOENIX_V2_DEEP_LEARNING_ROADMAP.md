@@ -69,6 +69,9 @@ audio preprocessing
 
 ## F. Output Contract
 
+The canonical Phoenix v2 output contract is recorded in
+[PHOENIX_V2_OUTPUT_CONTRACT.md](PHOENIX_V2_OUTPUT_CONTRACT.md).
+
 Expected Phoenix v2 output:
 
 ```json

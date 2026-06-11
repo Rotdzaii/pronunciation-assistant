@@ -23,7 +23,19 @@ from scorers.mock_scorer import score_pronunciation as score_mock_pronunciation
 DEFAULT_VISIBILITY_TIMEOUT_SECONDS = 60
 DEFAULT_WORKER_POLL_INTERVAL_SECONDS = 1.0
 DEFAULT_WORKER_IDLE_BACKOFF_MAX_SECONDS = 10.0
+DEFAULT_MODEL_VERSION = "phoenix_v2_stable"
 SUPPORTED_SCORER_MODES = ("mock", "wav2vec2", "cnn_attention", "cnn_attention_context")
+STANDARD_ERROR_TYPES = {
+    "audio_decode_failed",
+    "audio_preprocess_failed",
+    "alignment_failed",
+    "checkpoint_missing",
+    "checkpoint_incompatible",
+    "scorer_timeout",
+    "scorer_failed",
+    "webhook_failed",
+    "unknown_error",
+}
 SENSITIVE_VALUE_MARKERS = (
     "c:\\",
     "/tmp/",
@@ -37,6 +49,14 @@ SENSITIVE_VALUE_MARKERS = (
     "sig=",
     "signature=",
 )
+
+
+class PhoenixWorkerError(RuntimeError):
+    """Worker-level failure with a Phoenix v2 output-contract error type."""
+
+    def __init__(self, message: str, error_type: str = "unknown_error") -> None:
+        super().__init__(message)
+        self.error_type = error_type if error_type in STANDARD_ERROR_TYPES else "unknown_error"
 
 
 def _load_env() -> dict[str, Any]:
@@ -100,6 +120,8 @@ def _load_env() -> dict[str, Any]:
         "webhook_secret": os.environ["AI_WEBHOOK_SECRET"],
         "queue_name": os.getenv("QUEUE_NAME", "practice_jobs"),
         "scorer_mode": scorer_mode,
+        "alignment_mode": os.getenv("ALIGNMENT_MODE", "fallback").strip().lower() or "fallback",
+        "model_version": os.getenv("MODEL_VERSION", DEFAULT_MODEL_VERSION).strip() or DEFAULT_MODEL_VERSION,
         "confidence_threshold": confidence_threshold,
         "worker_mode": worker_mode,
         "poll_interval_seconds": poll_interval_seconds,
@@ -244,6 +266,32 @@ def _score(job: dict[str, Any], scorer_mode: str, confidence_threshold: float) -
     )
 
 
+def _classify_exception(exc: Exception) -> str:
+    if isinstance(exc, PhoenixWorkerError):
+        return exc.error_type
+    if isinstance(exc, TimeoutError):
+        return "scorer_timeout"
+
+    text = str(exc).lower()
+    if "checkpoint" in text and any(term in text for term in ("not found", "missing", "no such file")):
+        return "checkpoint_missing"
+    if any(term in text for term in ("state_dict", "size mismatch", "missing key", "unexpected key")):
+        return "checkpoint_incompatible"
+    if "checkpoint" in text and any(term in text for term in ("invalid", "incompatible")):
+        return "checkpoint_incompatible"
+    if any(term in text for term in ("decode", "ffmpeg", "could not be decoded", "unable to decode")):
+        return "audio_decode_failed"
+    if any(term in text for term in ("preprocess", "feature", "log-mel", "melspectrogram", "librosa", "numpy")):
+        return "audio_preprocess_failed"
+    if any(term in text for term in ("alignment", "mfa", "textgrid", "forced-alignment")):
+        return "alignment_failed"
+    if any(term in text for term in ("timeout", "timed out")):
+        return "scorer_timeout"
+    if any(term in text for term in ("scorer", "inference", "torch", "model")):
+        return "scorer_failed"
+    return "unknown_error"
+
+
 def _sanitize_error_text(value: str) -> str:
     sanitized = str(value or "")
     sanitized = re.sub(r"[A-Za-z]:\\[^:;\r\n]+", "[redacted-local-path]", sanitized)
@@ -272,13 +320,137 @@ def _checkpoint_status() -> dict[str, Any]:
     }
 
 
+def _preflight_scorer_config(config: dict[str, Any]) -> None:
+    if config["scorer_mode"] != "cnn_attention_context":
+        return
+
+    checkpoint_path = str(os.getenv("CNN_ATTENTION_CONTEXT_CHECKPOINT_PATH") or "").strip()
+    if not checkpoint_path:
+        raise PhoenixWorkerError(
+            "CNN_ATTENTION_CONTEXT_CHECKPOINT_PATH is required for SCORER_MODE=cnn_attention_context.",
+            "checkpoint_missing",
+        )
+
+    try:
+        checkpoint_exists = Path(checkpoint_path).expanduser().exists()
+    except OSError as exc:
+        raise PhoenixWorkerError(
+            "CNN_ATTENTION_CONTEXT_CHECKPOINT_PATH could not be resolved.",
+            "checkpoint_missing",
+        ) from exc
+
+    if not checkpoint_exists:
+        raise PhoenixWorkerError(
+            "CNN_ATTENTION_CONTEXT_CHECKPOINT_PATH does not point to an existing local checkpoint.",
+            "checkpoint_missing",
+        )
+
+
+def _extract_model_confidence(result: dict[str, Any]) -> Any:
+    feedback_confidence = result.get("feedback", {}).get("model_confidence")
+    if isinstance(feedback_confidence, dict):
+        return feedback_confidence.get("value")
+    if feedback_confidence is not None:
+        return feedback_confidence
+    return result.get("diagnosis", {}).get("diagnosis_confidence")
+
+
+def _details_from_result(result: dict[str, Any]) -> list[Any]:
+    feedback_details = result.get("feedback", {}).get("details")
+    if isinstance(feedback_details, list):
+        return feedback_details
+    diagnosis = result.get("diagnosis") if isinstance(result.get("diagnosis"), dict) else {}
+    top_issues = diagnosis.get("top_issues")
+    if isinstance(top_issues, list):
+        return top_issues
+    segments = result.get("segments")
+    if isinstance(segments, list):
+        return segments[:5]
+    return []
+
+
+def _warnings_from_result(result: dict[str, Any]) -> list[str]:
+    feedback_warnings = result.get("feedback", {}).get("warnings")
+    if isinstance(feedback_warnings, list):
+        return [str(warning) for warning in feedback_warnings]
+    metadata = result.get("metadata") if isinstance(result.get("metadata"), dict) else {}
+    warnings = metadata.get("warnings")
+    if isinstance(warnings, list):
+        return [str(warning) for warning in warnings]
+    warning = metadata.get("warning") or metadata.get("alignment_note")
+    return [str(warning)] if warning else []
+
+
+def _normalize_result_for_webhook(
+    result: dict[str, Any],
+    *,
+    config: dict[str, Any],
+    error_type: str | None = None,
+) -> dict[str, Any]:
+    normalized = dict(result)
+    status = normalized.get("status")
+    if status not in {"completed", "failed"}:
+        status = "failed"
+        error_type = error_type or "scorer_failed"
+    normalized["status"] = status
+    normalized["problem_phonemes"] = list(normalized.get("problem_phonemes") or [])
+
+    metadata = normalized.get("metadata") if isinstance(normalized.get("metadata"), dict) else {}
+    scorer = normalized.get("scorer") if isinstance(normalized.get("scorer"), dict) else {}
+    feedback = normalized.get("feedback") if isinstance(normalized.get("feedback"), dict) else {}
+
+    alignment_method = (
+        metadata.get("alignment_method")
+        or metadata.get("requested_alignment_method")
+        or metadata.get("requested_alignment_mode")
+        or config["alignment_mode"]
+    )
+    is_forced_alignment = metadata.get("is_forced_alignment")
+    if is_forced_alignment is None:
+        is_forced_alignment = bool(metadata.get("mfa_used") and alignment_method == "mfa")
+
+    feedback.setdefault("model_version", config["model_version"])
+    feedback.setdefault("scorer_mode", scorer.get("name") or config["scorer_mode"])
+    feedback.setdefault("alignment_method", alignment_method)
+    feedback.setdefault("is_forced_alignment", is_forced_alignment)
+    feedback.setdefault("summary", "Phoenix v2 completed pronunciation scoring.")
+    feedback.setdefault("details", _details_from_result(normalized))
+    feedback.setdefault("warnings", _warnings_from_result(normalized))
+
+    model_confidence = _extract_model_confidence(normalized)
+    if model_confidence is not None:
+        feedback.setdefault("model_confidence", model_confidence)
+
+    if status == "failed":
+        resolved_error_type = error_type or metadata.get("error_type") or feedback.get("error_type") or "unknown_error"
+        if resolved_error_type not in STANDARD_ERROR_TYPES:
+            resolved_error_type = "unknown_error"
+        normalized["score"] = None
+        normalized["problem_phonemes"] = []
+        feedback["error_type"] = resolved_error_type
+        feedback.setdefault("summary", "Phoenix v2 could not produce a model score for this attempt.")
+        feedback.setdefault("details", [])
+        feedback.setdefault("warnings", ["No fallback score was generated."])
+        metadata["error_type"] = resolved_error_type
+
+    metadata.setdefault("model_version", config["model_version"])
+    metadata.setdefault("scorer_mode", config["scorer_mode"])
+    metadata.setdefault("alignment_method", alignment_method)
+    metadata.setdefault("is_forced_alignment", is_forced_alignment)
+    normalized["metadata"] = metadata
+    normalized["feedback"] = feedback
+    return normalized
+
+
 def _build_failed_result(
     job: dict[str, Any],
-    scorer_mode: str,
+    config: dict[str, Any],
     confidence_threshold: float,
     error: Exception,
 ) -> dict[str, Any]:
     sanitized_error = _sanitize_error_text(str(error))
+    error_type = _classify_exception(error)
+    scorer_mode = config["scorer_mode"]
     result = build_failed_ai_result(
         error=sanitized_error,
         scorer={
@@ -294,12 +466,25 @@ def _build_failed_result(
             "confidence_threshold": confidence_threshold,
             "target_word": str(job.get("target_word") or ""),
             "error": sanitized_error,
+            "error_type": error_type,
+            "model_version": config["model_version"],
+            "scorer_mode": scorer_mode,
+            "alignment_method": config["alignment_mode"],
+            "is_forced_alignment": False,
         },
     )
+    result["feedback"]["model_version"] = config["model_version"]
+    result["feedback"]["scorer_mode"] = scorer_mode
+    result["feedback"]["alignment_method"] = config["alignment_mode"]
+    result["feedback"]["is_forced_alignment"] = False
+    result["feedback"]["error_type"] = error_type
+    result["feedback"]["summary"] = "Phoenix v2 could not produce a model score for this attempt."
+    result["feedback"]["details"] = []
+    result["feedback"]["warnings"] = ["No fallback score was generated."]
     result["feedback"]["diagnosis"] = result["diagnosis"]
     result["feedback"]["scorer"] = result["scorer"]
     result["feedback"]["metadata"] = result["metadata"]
-    return result
+    return _normalize_result_for_webhook(result, config=config, error_type=error_type)
 
 
 def _post_webhook(webhook_url: str, webhook_secret: str, payload: dict[str, Any]) -> requests.Response:
@@ -322,12 +507,19 @@ def _process_one_job(client: Client, config: dict[str, Any]) -> bool:
     print(f"job_id={job['job_id']}")
     print(f"target_word={job['target_word']}")
     print(f"scorer_mode={config['scorer_mode']}")
+    print(f"alignment_mode={config['alignment_mode']}")
+    print(f"model_version={config['model_version']}")
 
     try:
+        _preflight_scorer_config(config)
         result = _score(job, config["scorer_mode"], config["confidence_threshold"])
     except Exception as exc:
         sanitized_error = _sanitize_error_text(str(exc))
-        print(f"Scoring failed for job_id={job['job_id']} scorer_mode={config['scorer_mode']}: {sanitized_error}")
+        error_type = _classify_exception(exc)
+        print(
+            f"Scoring failed for job_id={job['job_id']} "
+            f"scorer_mode={config['scorer_mode']} error_type={error_type}: {sanitized_error}"
+        )
         if config["scorer_mode"] == "cnn_attention_context":
             checkpoint_status = _checkpoint_status()
             print(f"checkpoint_configured={checkpoint_status['checkpoint_configured']}")
@@ -335,16 +527,18 @@ def _process_one_job(client: Client, config: dict[str, Any]) -> bool:
             print(f"checkpoint_error={sanitized_error}")
         result = _build_failed_result(
             job,
-            config["scorer_mode"],
+            config,
             config["confidence_threshold"],
-            RuntimeError(sanitized_error),
+            PhoenixWorkerError(sanitized_error, error_type),
         )
+    else:
+        result = _normalize_result_for_webhook(result, config=config)
 
-    confidence = (
-        result.get("feedback", {}).get("model_confidence", {}).get("value")
-        or result.get("diagnosis", {}).get("diagnosis_confidence")
-    )
+    confidence = _extract_model_confidence(result)
     print(f"model_confidence={confidence if confidence is not None else 'unavailable'}")
+    print(f"result_status={result.get('status')}")
+    if result.get("status") == "failed":
+        print(f"error_type={result.get('feedback', {}).get('error_type', 'unknown_error')}")
 
     if result.get("status") == "failed":
         webhook_payload = build_failed_webhook_payload(
@@ -363,6 +557,7 @@ def _process_one_job(client: Client, config: dict[str, Any]) -> bool:
         print("archive_attempted=false")
         print("reason=payload_validation_failed")
         return False
+    print("webhook_payload_valid=true")
 
     try:
         response = _post_webhook(
@@ -371,17 +566,26 @@ def _process_one_job(client: Client, config: dict[str, Any]) -> bool:
             webhook_payload,
         )
     except requests.RequestException as exc:
-        print(f"Webhook request failed. Message {msg_id} was not archived. error={exc}")
+        sanitized_error = _sanitize_error_text(str(exc))
+        print(
+            f"Webhook request failed. Message {msg_id} was not archived. "
+            f"error_type=webhook_failed error={sanitized_error}"
+        )
         return False
 
     print(f"webhook_status_code={response.status_code}")
 
     if not 200 <= response.status_code < 300:
-        print(f"Webhook failed. Message {msg_id} was not archived.")
-        print(response.text)
+        print(f"Webhook failed. Message {msg_id} was not archived. error_type=webhook_failed")
+        print(_sanitize_error_text(response.text))
         return False
 
-    _archive_job(client, config["queue_name"], msg_id)
+    try:
+        _archive_job(client, config["queue_name"], msg_id)
+    except Exception as exc:
+        print(f"archive_success=false msg_id={msg_id} error={_sanitize_error_text(str(exc))}")
+        return False
+    print(f"archive_success=true msg_id={msg_id}")
     print(f"Processed job {job['job_id']} and archived message {msg_id}.")
     return True
 
@@ -392,9 +596,14 @@ def main() -> int:
     print(f"Supported scorer modes: {', '.join(SUPPORTED_SCORER_MODES)}")
     print(f"worker_mode={config['worker_mode']}")
     print(f"scorer_mode={config['scorer_mode']}")
+    print(f"alignment_mode={config['alignment_mode']}")
+    print(f"model_version={config['model_version']}")
 
     if config["worker_mode"] == "once":
-        _process_one_job(client, config)
+        try:
+            _process_one_job(client, config)
+        except Exception as exc:
+            print(f"Worker once job failed without archive. error={_sanitize_error_text(str(exc))}")
         return 0
 
     print(
@@ -406,7 +615,11 @@ def main() -> int:
 
     idle_sleep_seconds = config["poll_interval_seconds"]
     while True:
-        processed = _process_one_job(client, config)
+        try:
+            processed = _process_one_job(client, config)
+        except Exception as exc:
+            print(f"Worker loop job failed without archive. error={_sanitize_error_text(str(exc))}")
+            processed = False
         if processed:
             idle_sleep_seconds = config["poll_interval_seconds"]
             continue

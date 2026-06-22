@@ -1,7 +1,10 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { type Href, useRouter } from 'expo-router';
+import { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { AppCard, AppScreen, StatusBadge, colors } from '../../components/AppUI';
+import { AppCard, AppScreen, ErrorState, LoadingState, StatusBadge, colors } from '../../components/AppUI';
+import { fetchStudentClassDetail, fetchStudentClasses } from '../../lib/api';
+import type { ClassDetail, ClassSummary } from '../../types';
 
 type IconName = keyof typeof MaterialCommunityIcons.glyphMap;
 
@@ -70,6 +73,45 @@ const learningModes: LearningMode[] = [
 
 export default function HomeScreen() {
   const router = useRouter();
+  const [classes, setClasses] = useState<ClassSummary[]>([]);
+  const [selectedClass, setSelectedClass] = useState<ClassDetail | null>(null);
+  const [classLoading, setClassLoading] = useState(true);
+  const [classDetailLoading, setClassDetailLoading] = useState(false);
+  const [classError, setClassError] = useState<string | null>(null);
+
+  useEffect(() => {
+    console.debug('[StudentHome] class list effect');
+    const loadClasses = async () => {
+      setClassLoading(true);
+      setClassError(null);
+      try {
+        const response = await fetchStudentClasses();
+        setClasses(response);
+        if (response[0]) {
+          const detail = await fetchStudentClassDetail(response[0].id);
+          setSelectedClass(detail);
+        }
+      } catch (err) {
+        setClassError(err instanceof Error ? err.message : 'Chưa thể tải danh sách lớp.');
+      } finally {
+        setClassLoading(false);
+      }
+    };
+
+    void loadClasses();
+  }, []);
+
+  const openClassDetail = async (classId: string) => {
+    setClassDetailLoading(true);
+    setClassError(null);
+    try {
+      setSelectedClass(await fetchStudentClassDetail(classId));
+    } catch (err) {
+      setClassError(err instanceof Error ? err.message : 'Chưa thể tải chi tiết lớp.');
+    } finally {
+      setClassDetailLoading(false);
+    }
+  };
 
   return (
     <AppScreen maxWidth={1200}>
@@ -152,7 +194,16 @@ export default function HomeScreen() {
           </AppCard>
         </View>
 
-        <View style={styles.sideColumn}>
+          <View style={styles.sideColumn}>
+          <StudentClassesCard
+            classes={classes}
+            selectedClass={selectedClass}
+            loading={classLoading}
+            detailLoading={classDetailLoading}
+            error={classError}
+            onSelectClass={openClassDetail}
+          />
+
           <AppCard style={styles.profileCard}>
             <View style={styles.avatar}>
               <Text style={styles.avatarText}>PA</Text>
@@ -250,6 +301,116 @@ function LearningModeCard({
   );
 }
 
+function StudentClassesCard({
+  classes,
+  selectedClass,
+  loading,
+  detailLoading,
+  error,
+  onSelectClass,
+}: {
+  classes: ClassSummary[];
+  selectedClass: ClassDetail | null;
+  loading: boolean;
+  detailLoading: boolean;
+  error: string | null;
+  onSelectClass: (classId: string) => void;
+}) {
+  if (loading) {
+    return <LoadingState title="Đang tải lớp của tôi" message="Hệ thống đang lấy các lớp học mà bạn đang tham gia." />;
+  }
+
+  return (
+    <AppCard style={styles.classCard}>
+      <View style={styles.classHeader}>
+        <View>
+          <Text style={styles.classKicker}>Lớp của tôi</Text>
+          <Text style={styles.classTitle}>Các lớp học mà bạn đang tham gia.</Text>
+        </View>
+        <StatusBadge label={`${classes.length} lớp`} tone="primary" />
+      </View>
+
+      {error ? <ErrorState title="Chưa thể tải lớp" message={error} /> : null}
+
+      <View style={styles.classList}>
+        {classes.length > 0 ? (
+          classes.map((classItem) => {
+            const active = selectedClass?.id === classItem.id;
+            return (
+              <Pressable
+                key={classItem.id}
+                accessibilityRole="button"
+                onPress={() => onSelectClass(classItem.id)}
+                style={[styles.classRow, active ? styles.classRowActive : null]}
+              >
+                <View style={styles.classRowMain}>
+                  <Text style={styles.classCode}>{classItem.code ?? 'Chưa có mã'}</Text>
+                  <Text style={styles.className}>{classItem.name}</Text>
+                  {classItem.description ? (
+                    <Text style={styles.classDescription} numberOfLines={2}>{classItem.description}</Text>
+                  ) : null}
+                  <View style={styles.classMetaRow}>
+                    <Text style={styles.classMetaText}>{classItem.student_count} học sinh</Text>
+                    <Text style={styles.classMetaText}>{classItem.teacher_count} giảng viên</Text>
+                  </View>
+                  <View style={styles.teacherList}>
+                    {(classItem.teachers ?? []).slice(0, 3).map((teacher) => (
+                      <View key={teacher.id} style={styles.teacherPill}>
+                        <MaterialCommunityIcons name="account-tie-outline" size={15} color={colors.primary} />
+                        <Text style={styles.teacherPillText}>{teacher.display_name}</Text>
+                      </View>
+                    ))}
+                  </View>
+                </View>
+                <View style={styles.classAction}>
+                  <Text style={styles.classActionText}>Xem chi tiết</Text>
+                  <MaterialCommunityIcons name="chevron-right" size={18} color={colors.primary} />
+                </View>
+              </Pressable>
+            );
+          })
+        ) : (
+          <Text style={styles.classEmptyText}>Bạn chưa tham gia lớp nào. Vui lòng liên hệ giảng viên để được thêm vào lớp.</Text>
+        )}
+      </View>
+
+      {detailLoading ? (
+        <Text style={styles.classEmptyText}>Đang tải chi tiết lớp...</Text>
+      ) : selectedClass ? (
+        <View style={styles.classDetailBox}>
+          <Text style={styles.classDetailKicker}>Thông tin lớp</Text>
+          <Text style={styles.classDetailTitle}>{selectedClass.name}</Text>
+          {selectedClass.description ? (
+            <Text style={styles.classDetailText}>{selectedClass.description}</Text>
+          ) : null}
+          <View style={styles.classStatRow}>
+            <ClassMiniStat label="Học sinh" value={selectedClass.student_count} />
+            <ClassMiniStat label="Giảng viên" value={selectedClass.teacher_count} />
+          </View>
+          <Text style={styles.classDetailKicker}>Giảng viên phụ trách</Text>
+          <View style={styles.teacherList}>
+            {(selectedClass.teachers ?? []).slice(0, 3).map((teacher) => (
+              <View key={teacher.id} style={styles.teacherPill}>
+                <MaterialCommunityIcons name="account-tie-outline" size={15} color={colors.primary} />
+                <Text style={styles.teacherPillText}>{teacher.display_name}</Text>
+              </View>
+            ))}
+          </View>
+        </View>
+      ) : null}
+    </AppCard>
+  );
+}
+
+function ClassMiniStat({ label, value }: { label: string; value: number }) {
+  return (
+    <View style={styles.classMiniStat}>
+      <Text style={styles.classMiniValue}>{value}</Text>
+      <Text style={styles.classMiniLabel}>{label}</Text>
+    </View>
+  );
+}
+
 function SmallStatCard({
   icon,
   value,
@@ -326,6 +487,161 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     flexBasis: 300,
     gap: 18,
+  },
+  classCard: {
+    borderRadius: 20,
+    gap: 14,
+  },
+  classHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    gap: 12,
+  },
+  classKicker: {
+    color: colors.primary,
+    fontSize: 12,
+    fontWeight: '900',
+    textTransform: 'uppercase',
+  },
+  classTitle: {
+    color: colors.text,
+    fontSize: 18,
+    fontWeight: '900',
+    marginTop: 3,
+  },
+  classList: {
+    gap: 8,
+  },
+  classRow: {
+    minHeight: 68,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: '#FFFFFF',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 12,
+    gap: 10,
+  },
+  classRowActive: {
+    borderColor: colors.primary,
+    backgroundColor: colors.softBlue,
+  },
+  classRowMain: {
+    flex: 1,
+    gap: 3,
+  },
+  classCode: {
+    color: colors.primary,
+    fontSize: 12,
+    fontWeight: '900',
+  },
+  className: {
+    color: colors.text,
+    fontSize: 15,
+    fontWeight: '900',
+  },
+  classDescription: {
+    color: colors.muted,
+    fontSize: 13,
+    lineHeight: 19,
+  },
+  classMetaRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+  },
+  classMetaText: {
+    color: colors.muted,
+    fontSize: 12,
+    fontWeight: '800',
+  },
+  classAction: {
+    alignSelf: 'flex-start',
+    borderRadius: 999,
+    backgroundColor: colors.softBlue,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingHorizontal: 10,
+    paddingVertical: 7,
+  },
+  classActionText: {
+    color: colors.primary,
+    fontSize: 12,
+    fontWeight: '900',
+  },
+  classEmptyText: {
+    color: colors.muted,
+    fontSize: 13,
+    lineHeight: 19,
+  },
+  classDetailBox: {
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: '#BFDBFE',
+    backgroundColor: '#F8FBFF',
+    padding: 14,
+    gap: 10,
+  },
+  classDetailTitle: {
+    color: colors.text,
+    fontSize: 17,
+    fontWeight: '900',
+  },
+  classDetailKicker: {
+    color: colors.primary,
+    fontSize: 12,
+    fontWeight: '900',
+    textTransform: 'uppercase',
+  },
+  classDetailText: {
+    color: colors.muted,
+    fontSize: 13,
+    lineHeight: 19,
+  },
+  classStatRow: {
+    flexDirection: 'row',
+    gap: 8,
+  },
+  classMiniStat: {
+    flex: 1,
+    borderRadius: 10,
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: colors.border,
+    padding: 10,
+  },
+  classMiniValue: {
+    color: colors.text,
+    fontSize: 22,
+    fontWeight: '900',
+  },
+  classMiniLabel: {
+    color: colors.muted,
+    fontSize: 12,
+    fontWeight: '800',
+  },
+  teacherList: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+  },
+  teacherPill: {
+    borderRadius: 999,
+    backgroundColor: colors.softBlue,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+  },
+  teacherPillText: {
+    color: colors.primary,
+    fontSize: 12,
+    fontWeight: '900',
   },
   heroCard: {
     minHeight: 318,

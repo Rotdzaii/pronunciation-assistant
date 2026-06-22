@@ -2,14 +2,27 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AuthProvider } from '../lib/auth';
+import { ThemeProvider, useTheme } from '../lib/theme';
 
 export default function RootLayout() {
   return (
     <SafeAreaProvider>
-      <AuthProvider>
-        <StatusBar style="dark" backgroundColor="#F8FAFC" />
-        <Stack screenOptions={{ headerShown: false }} />
-      </AuthProvider>
+      <ThemeProvider>
+        <AuthProvider>
+          <ThemedRootStack />
+        </AuthProvider>
+      </ThemeProvider>
     </SafeAreaProvider>
+  );
+}
+
+function ThemedRootStack() {
+  const { mode, theme } = useTheme();
+
+  return (
+    <>
+      <StatusBar style={mode === 'dark' ? 'light' : 'dark'} backgroundColor={theme.background} />
+      <Stack screenOptions={{ headerShown: false }} />
+    </>
   );
 }

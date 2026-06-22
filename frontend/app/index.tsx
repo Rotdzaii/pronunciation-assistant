@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { LoadingState, colors } from '../components/AppUI';
@@ -6,18 +6,27 @@ import { useAuth } from '../lib/auth';
 
 export default function Index() {
   const router = useRouter();
-  const { session, loading } = useAuth();
+  const didRouteRef = useRef(false);
+  const { appRole, session, loading, roleLoading } = useAuth();
 
   useEffect(() => {
-    if (loading) {
+    if (didRouteRef.current || loading || roleLoading) {
       return;
     }
+
+    didRouteRef.current = true;
     if (session) {
-      router.replace('/(tabs)');
+      if (appRole === 'admin') {
+        router.replace('/(tabs)/admin');
+      } else if (appRole === 'teacher') {
+        router.replace('/(tabs)/teacher');
+      } else {
+        router.replace('/(tabs)');
+      }
     } else {
       router.replace('/welcome');
     }
-  }, [loading, session, router]);
+  }, [appRole, loading, roleLoading, session?.user?.id, router]);
 
   return (
     <View style={styles.container}>

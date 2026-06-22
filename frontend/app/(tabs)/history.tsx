@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import {
   AppCard,
   EmptyState,
@@ -10,7 +10,8 @@ import {
   colors,
 } from '../../components/AppUI';
 import { ScreenContainer } from '../../components/ScreenContainer';
-import { fetchPracticeHistory } from '../../lib/api';
+import { fetchPracticeHistory, reportStudentPracticeResult } from '../../lib/api';
+import { formatReviewReason, formatReviewStatus } from '../../lib/format';
 import { useAuth } from '../../lib/auth';
 import {
   clampScore,
@@ -18,7 +19,7 @@ import {
   formatProblemPhonemes,
   getScoreTone,
 } from '../../lib/practiceFormatters';
-import type { PracticeHistoryItem, PracticeJobStatus } from '../../types';
+import type { PracticeHistoryItem, PracticeJobStatus, ReportPracticeResultPayload, StudentReviewRequest } from '../../types';
 
 const SCORE_RING_SEGMENTS = 40;
 
@@ -82,6 +83,12 @@ export default function HistoryScreen() {
 }
 
 function HistoryCard({ item }: { item: PracticeHistoryItem }) {
+  const [reportOpen, setReportOpen] = useState(false);
+  const [reportReason, setReportReason] = useState<ReportPracticeResultPayload['reason']>('ai_scored_wrong');
+  const [reportNote, setReportNote] = useState('');
+  const [reviewRequest, setReviewRequest] = useState<StudentReviewRequest | null>(null);
+  const [reporting, setReporting] = useState(false);
+  const [reportError, setReportError] = useState<string | null>(null);
   const scoreTone = getScoreTone(item.score);
   const problemLines = formatProblemPhonemes(item.problem_phonemes);
   const feedbackLines = formatFeedbackLines(item.feedback);
@@ -122,9 +129,80 @@ function HistoryCard({ item }: { item: PracticeHistoryItem }) {
           </Text>
         ))}
       </View>
+
+      <View style={styles.reportBox}>
+        {reviewRequest ? (
+          <View style={styles.reportSubmitted}>
+            <Text style={styles.reportTitle}>Đã gửi yêu cầu xem lại</Text>
+            <Text style={styles.feedbackText}>{formatReviewStatus(reviewRequest.status)} - {formatReviewReason(reviewRequest.reason)}</Text>
+          </View>
+        ) : (
+          <Pressable accessibilityRole="button" onPress={() => setReportOpen((value) => !value)} style={styles.reportButton}>
+            <Text style={styles.reportButtonText}>Báo cáo kết quả</Text>
+          </Pressable>
+        )}
+
+        {reportOpen && !reviewRequest ? (
+          <View style={styles.reportForm}>
+            <Text style={styles.reportTitle}>Yêu cầu giảng viên xem lại</Text>
+            <View style={styles.reasonGrid}>
+              {reportReasons.map((reason) => (
+                <Pressable
+                  key={reason}
+                  accessibilityRole="button"
+                  onPress={() => setReportReason(reason)}
+                  style={[styles.reasonButton, reportReason === reason ? styles.reasonButtonActive : null]}
+                >
+                  <Text style={[styles.reasonButtonText, reportReason === reason ? styles.reasonButtonTextActive : null]}>
+                    {formatReviewReason(reason)}
+                  </Text>
+                </Pressable>
+              ))}
+            </View>
+            <TextInput
+              value={reportNote}
+              onChangeText={setReportNote}
+              placeholder="Ghi chú ngắn cho giảng viên"
+              placeholderTextColor="#94A3B8"
+              style={styles.reportInput}
+            />
+            {reportError ? <Text style={styles.reportError}>{reportError}</Text> : null}
+            <Pressable
+              accessibilityRole="button"
+              disabled={reporting}
+              onPress={async () => {
+                setReporting(true);
+                setReportError(null);
+                try {
+                  const response = await reportStudentPracticeResult(item.id, {
+                    reason: reportReason,
+                    student_note: reportNote.trim() || null,
+                  });
+                  setReviewRequest(response);
+                  setReportOpen(false);
+                } catch (err) {
+                  setReportError(err instanceof Error ? err.message : 'Chưa thể gửi yêu cầu xem lại.');
+                } finally {
+                  setReporting(false);
+                }
+              }}
+              style={[styles.submitReportButton, reporting ? styles.disabledButton : null]}
+            >
+              <Text style={styles.submitReportText}>{reporting ? 'Đang gửi...' : 'Gửi yêu cầu xem lại'}</Text>
+            </Pressable>
+          </View>
+        ) : null}
+      </View>
     </AppCard>
   );
 }
+
+const reportReasons: ReportPracticeResultPayload['reason'][] = [
+  'ai_scored_wrong',
+  'audio_issue',
+  'result_mismatch',
+  'other',
+];
 
 function ScoreRing({ score }: { score: number | null }) {
   const clampedScore = clampScore(score);
@@ -304,5 +382,101 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '700',
     lineHeight: 20,
+  },
+  reportBox: {
+    gap: 10,
+  },
+  reportButton: {
+    alignSelf: 'flex-start',
+    minHeight: 40,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.surface,
+    justifyContent: 'center',
+    paddingHorizontal: 12,
+  },
+  reportButtonText: {
+    color: colors.primary,
+    fontSize: 13,
+    fontWeight: '900',
+  },
+  reportSubmitted: {
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#BFDBFE',
+    backgroundColor: colors.softBlue,
+    padding: 12,
+    gap: 4,
+  },
+  reportForm: {
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.surface,
+    padding: 12,
+    gap: 10,
+  },
+  reportTitle: {
+    color: colors.text,
+    fontSize: 14,
+    fontWeight: '900',
+  },
+  reasonGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+  },
+  reasonButton: {
+    minHeight: 34,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.surface,
+    justifyContent: 'center',
+    paddingHorizontal: 10,
+  },
+  reasonButtonActive: {
+    borderColor: colors.primary,
+    backgroundColor: colors.primary,
+  },
+  reasonButtonText: {
+    color: colors.muted,
+    fontSize: 12,
+    fontWeight: '900',
+  },
+  reasonButtonTextActive: {
+    color: '#FFFFFF',
+  },
+  reportInput: {
+    minHeight: 44,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: '#FFFFFF',
+    color: colors.text,
+    fontSize: 14,
+    paddingHorizontal: 12,
+  },
+  reportError: {
+    color: colors.error,
+    fontSize: 13,
+    fontWeight: '800',
+  },
+  submitReportButton: {
+    minHeight: 42,
+    borderRadius: 10,
+    backgroundColor: colors.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 12,
+  },
+  submitReportText: {
+    color: '#FFFFFF',
+    fontSize: 13,
+    fontWeight: '900',
+  },
+  disabledButton: {
+    opacity: 0.58,
   },
 });

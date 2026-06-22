@@ -95,7 +95,7 @@ function ProfileCard({
       <Text style={styles.profileMeta}>
         {hasStudent
           ? [level, className].filter(Boolean).join(' • ') || 'Thông tin lớp chưa có'
-          : 'Thông tin hồ sơ sẽ hiển thị khi có dữ liệu thật'}
+          : 'Chưa có thông tin hồ sơ'}
       </Text>
 
       <View style={styles.profileStats}>
@@ -139,7 +139,7 @@ function CommonMistakesCard({ hasStudent }: { hasStudent: boolean }) {
       <Text style={styles.cardText}>
         {hasStudent
           ? 'Chưa có dữ liệu lỗi phát âm gần đây cho học viên này.'
-          : 'Các âm vị thường gặp khó khăn sẽ xuất hiện tại đây sau khi chọn học viên.'}
+          : 'Chưa có lỗi nổi bật cho học viên được chọn.'}
       </Text>
       <View style={styles.chipRow}>
         <EmptyChip tone="red" />

@@ -1,10 +1,10 @@
-import { Redirect, Stack } from 'expo-router';
+import { Stack } from 'expo-router';
 import { View } from 'react-native';
 import { LoadingState, colors } from '../../components/AppUI';
 import { useAuth } from '../../lib/auth';
 
 export default function AuthLayout() {
-  const { session, loading } = useAuth();
+  const { loading } = useAuth();
 
   if (loading) {
     return (
@@ -23,10 +23,6 @@ export default function AuthLayout() {
         />
       </View>
     );
-  }
-
-  if (session) {
-    return <Redirect href="/(tabs)" />;
   }
 
   return <Stack screenOptions={{ headerShown: false }} />;

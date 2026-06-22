@@ -1,8 +1,9 @@
-import { Redirect, Tabs, usePathname, useRouter } from 'expo-router';
+import { Tabs, usePathname } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Pressable, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { AppSidebar, ErrorState, LoadingState, colors } from '../../components/AppUI';
 import { useAuth } from '../../lib/auth';
+import { useTheme } from '../../lib/theme';
 
 type IconName = keyof typeof MaterialCommunityIcons.glyphMap;
 
@@ -11,11 +12,12 @@ type TabIconProps = {
   name: IconName;
 };
 
+
 export default function TabsLayout() {
-  const router = useRouter();
   const { width } = useWindowDimensions();
   const pathname = usePathname();
-  const { appRole, loading, roleError, roleLoading, session } = useAuth();
+  const { appRole, loading, roleError, roleLoading } = useAuth();
+  const { theme } = useTheme();
   const isDesktop = width >= 768;
   const isTeacherRoute = [
     '/teacher',
@@ -25,35 +27,12 @@ export default function TabsLayout() {
     '/student-detail',
     '/(tabs)/student-detail',
   ].includes(pathname);
-  const isStudentOnlyRoute = [
-    '/',
-    '/practice',
-    '/(tabs)/practice',
-    '/mistakes',
-    '/(tabs)/mistakes',
-    '/history',
-    '/(tabs)/history',
-    '/practice-mode',
-    '/(tabs)/practice-mode',
-    '/sentence',
-    '/(tabs)/sentence',
-    '/processing',
-    '/(tabs)/processing',
-    '/result',
-    '/(tabs)/result',
-    '/progress',
-    '/(tabs)/progress',
-    '/vocabulary',
-    '/(tabs)/vocabulary',
-    '/quiz',
-    '/(tabs)/quiz',
-    '/quiz-results',
-    '/(tabs)/quiz-results',
-  ].includes(pathname);
+  const isAdminRoute = ['/admin', '/(tabs)/admin'].includes(pathname);
+  console.debug('[TabsLayout] render', { role: appRole, pathname });
 
   if (loading || (roleLoading && !appRole)) {
     return (
-      <View style={styles.loadingShell}>
+      <View style={[styles.loadingShell, { backgroundColor: theme.background }]}>
         <LoadingState
           title="Đang kiểm tra phiên đăng nhập"
           message="Vui lòng chờ trong giây lát."
@@ -62,13 +41,10 @@ export default function TabsLayout() {
     );
   }
 
-  if (!session) {
-    return <Redirect href="/welcome" />;
-  }
 
   if (roleError || !appRole) {
     return (
-      <View style={styles.loadingShell}>
+      <View style={[styles.loadingShell, { backgroundColor: theme.background }]}>
         <ErrorState
           title="Không thể mở khu vực học tập"
           message={roleError ?? 'Không thể xác định vai trò tài khoản từ backend.'}
@@ -77,46 +53,30 @@ export default function TabsLayout() {
     );
   }
 
-  if (appRole === 'student' && isTeacherRoute) {
-    console.log('Route decision app_role', appRole);
-    return <Redirect href="/(tabs)" />;
-  }
-
-  if (appRole === 'teacher' && isStudentOnlyRoute) {
-    console.log('Route decision app_role', appRole);
-    return <Redirect href="/(tabs)/teacher" />;
-  }
-
-  const canUseStudent = appRole === 'student' || appRole === 'admin';
-  const canUseTeacher = appRole === 'teacher' || appRole === 'admin';
-  const sidebarVariant = appRole === 'admin' ? (isTeacherRoute ? 'teacher' : 'student') : appRole;
+  const canUseStudent = appRole === 'student';
+  const canUseTeacher = appRole === 'teacher';
+  const canUseAdmin = appRole === 'admin';
+  const sidebarVariant = appRole;
 
   return (
-    <View style={styles.shell}>
+    <View style={[styles.shell, { backgroundColor: theme.background }]}>
       {isDesktop ? <AppSidebar variant={sidebarVariant} /> : null}
       <View style={styles.content}>
-        {appRole === 'admin' ? (
-          <AdminModeSwitch
-            isTeacherRoute={isTeacherRoute}
-            onStudentMode={() => router.replace('/(tabs)')}
-            onTeacherMode={() => router.replace('/(tabs)/teacher')}
-          />
-        ) : null}
         <Tabs
           screenOptions={{
             headerShown: !isDesktop,
             headerStyle: {
-              backgroundColor: colors.background,
+              backgroundColor: theme.background,
             },
             headerShadowVisible: false,
             headerTitleAlign: 'center',
             headerTitleStyle: {
-              color: colors.text,
+              color: theme.text,
               fontSize: 18,
               fontWeight: '800',
             },
-            tabBarActiveTintColor: colors.primary,
-            tabBarInactiveTintColor: colors.muted,
+            tabBarActiveTintColor: theme.primary,
+            tabBarInactiveTintColor: theme.textMuted,
             tabBarLabelStyle: {
               fontSize: 12,
               fontWeight: '800',
@@ -124,7 +84,12 @@ export default function TabsLayout() {
             },
             tabBarStyle: [
               styles.tabBar,
-              isDesktop || isTeacherRoute ? styles.hiddenTabBar : null,
+              {
+                backgroundColor: theme.surface,
+                borderTopColor: theme.border,
+                shadowColor: theme.shadow,
+              },
+              isDesktop || isTeacherRoute || isAdminRoute ? styles.hiddenTabBar : null,
             ],
           }}
         >
@@ -186,6 +151,13 @@ export default function TabsLayout() {
               href: canUseTeacher ? '/(tabs)/teacher' : null,
             }}
           />
+          <Tabs.Screen
+            name="admin"
+            options={{
+              title: 'Quản trị Phoenix',
+              href: canUseAdmin ? '/(tabs)/admin' : null,
+            }}
+          />
           <Tabs.Screen name="students" options={{ title: 'Danh sách học viên', href: null }} />
           <Tabs.Screen name="student-detail" options={{ title: 'Chi tiết học viên', href: null }} />
         </Tabs>
@@ -195,12 +167,13 @@ export default function TabsLayout() {
 }
 
 function TabIcon({ focused, name }: TabIconProps) {
+  const { theme } = useTheme();
   return (
-    <View style={[styles.tabIcon, focused ? styles.tabIconActive : null]}>
+    <View style={[styles.tabIcon, { backgroundColor: theme.surfaceAlt }, focused ? styles.tabIconActive : null, focused ? { backgroundColor: theme.softBlue } : null]}>
       <MaterialCommunityIcons
         name={name}
         size={22}
-        color={focused ? colors.primary : colors.muted}
+        color={focused ? theme.primary : theme.textMuted}
       />
     </View>
   );

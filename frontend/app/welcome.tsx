@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Redirect, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import type { ReactNode } from 'react';
 import {
   Pressable,
@@ -35,9 +35,14 @@ const benefits = [
 
 const modes = ['Luyện từ', 'Luyện câu', 'Chủ đề giao tiếp', 'Thư viện lỗi', 'Ôn tập từ vựng'];
 
+function getHomePathForRole(role: string | null) {
+  if (role === 'admin') return '/(tabs)/admin';
+  if (role === 'teacher') return '/(tabs)/teacher';
+  return '/(tabs)';
+}
 export default function WelcomeScreen() {
   const router = useRouter();
-  const { session, loading } = useAuth();
+  const { appRole, session, loading } = useAuth();
   const { width } = useWindowDimensions();
   const isWide = width >= 900;
 
@@ -50,7 +55,18 @@ export default function WelcomeScreen() {
   }
 
   if (session) {
-    return <Redirect href="/(tabs)" />;
+    return (
+      <View style={styles.loadingShell}>
+        <LoadingState title="Bạn đã đăng nhập" message="Chọn tiếp tục để vào khu vực học tập phù hợp với tài khoản." />
+        <Pressable
+          accessibilityRole="button"
+          onPress={() => router.replace(getHomePathForRole(appRole))}
+          style={styles.primaryButton}
+        >
+          <Text style={styles.primaryButtonText}>Tiếp tục</Text>
+        </Pressable>
+      </View>
+    );
   }
 
   return (

@@ -1,11 +1,29 @@
 import type {
   AudioUploadResponse,
+  AdminClassUpdatePayload,
+  AdminDeleteUserResponse,
+  AdminUser,
+  ClassDetail,
+  ClassStudent,
+  ClassSummary,
+  ClassTeacher,
   CreatePracticeJobResponse,
   CurrentUser,
+  DemoReadinessResponse,
   PracticeHistoryQuery,
   PracticeHistoryResponse,
   PracticeJob,
+  ProfileAvatarUploadResponse,
+  ReportPracticeResultPayload,
+  StudentReviewRequest,
+  StudentReviewRequestDetail,
   TeacherAnalyticsResponse,
+  TeacherClassScoresResponse,
+  TeacherReviewRequestDetail,
+  TeacherReviewRequestsResponse,
+  TeacherStudentScoresResponse,
+  UpdateProfilePayload,
+  UserProfile,
 } from '../types';
 import { Platform } from 'react-native';
 import { supabase } from './supabase';
@@ -13,9 +31,36 @@ import { supabase } from './supabase';
 const BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL || 'http://127.0.0.1:8000';
 const SESSION_EXPIRED_MESSAGE = 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.';
 
+export class ApiError extends Error {
+  status: number;
+
+  constructor(message: string, status: number) {
+    super(message);
+    this.name = 'ApiError';
+    this.status = status;
+  }
+}
+
 type CreatePracticeJobPayload = {
   target_word: string;
   audio_url: string;
+};
+
+type TeacherReviewRequestQuery = {
+  class_id?: string | null;
+  status?: string | null;
+  source?: string | null;
+  q?: string | null;
+  limit?: number;
+  offset?: number;
+};
+
+type TeacherScoresQuery = {
+  class_id?: string | null;
+  limit?: number;
+  offset?: number;
+  date_from?: string | null;
+  date_to?: string | null;
 };
 
 async function parseError(response: Response): Promise<string> {
@@ -50,7 +95,7 @@ async function apiFetch<T>(
   const currentAccessToken = data.session?.access_token ?? null;
 
   if (!currentAccessToken) {
-    throw new Error(SESSION_EXPIRED_MESSAGE);
+    throw new ApiError(SESSION_EXPIRED_MESSAGE, 401);
   }
 
   const response = await fetch(`${BASE_URL}${path}`, {
@@ -63,7 +108,7 @@ async function apiFetch<T>(
   });
 
   if (!response.ok) {
-    throw new Error(await parseError(response));
+    throw new ApiError(await parseError(response), response.status);
   }
 
   return response.json() as Promise<T>;
@@ -71,6 +116,30 @@ async function apiFetch<T>(
 
 export async function getMe(accessToken: string | null): Promise<CurrentUser> {
   return apiFetch<CurrentUser>('/auth/me', accessToken);
+}
+
+export async function fetchMyProfile(): Promise<UserProfile> {
+  return apiFetch<UserProfile>('/profile/me', null);
+}
+
+export async function updateMyProfile(payload: UpdateProfilePayload): Promise<UserProfile> {
+  return apiFetch<UserProfile>('/profile/me', null, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function uploadMyAvatar(file: File): Promise<ProfileAvatarUploadResponse> {
+  const formData = new FormData();
+  formData.append('file', file);
+
+  return apiFetch<ProfileAvatarUploadResponse>('/profile/avatar', null, {
+    method: 'POST',
+    body: formData,
+  });
 }
 
 export async function uploadPracticeAudio(
@@ -148,8 +217,167 @@ export async function fetchPracticeHistory(
   return response.items;
 }
 
+export async function reportStudentPracticeResult(
+  practiceHistoryId: string,
+  payload: ReportPracticeResultPayload,
+): Promise<StudentReviewRequest> {
+  return apiFetch<StudentReviewRequest>(`/student/practice-history/${practiceHistoryId}/report`, null, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function fetchStudentReviewRequests(): Promise<StudentReviewRequest[]> {
+  return apiFetch<StudentReviewRequest[]>('/student/review-requests', null);
+}
+
+export async function fetchStudentReviewRequestDetail(
+  id: string,
+): Promise<StudentReviewRequestDetail> {
+  return apiFetch<StudentReviewRequestDetail>(`/student/review-requests/${id}`, null);
+}
+
 export async function fetchTeacherAnalytics(
   accessToken: string | null,
 ): Promise<TeacherAnalyticsResponse> {
   return apiFetch<TeacherAnalyticsResponse>('/teacher/analytics', accessToken);
+}
+
+function buildQuery(params: Record<string, string | number | null | undefined>): string {
+  const search = new URLSearchParams();
+  Object.entries(params).forEach(([key, value]) => {
+    if (value !== undefined && value !== null && value !== '') {
+      search.set(key, String(value));
+    }
+  });
+  const query = search.toString();
+  return query ? `?${query}` : '';
+}
+
+export async function fetchTeacherReviewRequests(
+  params: TeacherReviewRequestQuery = {},
+): Promise<TeacherReviewRequestsResponse> {
+  return apiFetch<TeacherReviewRequestsResponse>(
+    `/teacher/review-requests${buildQuery(params)}`,
+    null,
+  );
+}
+
+export async function fetchTeacherReviewRequestDetail(
+  id: string,
+): Promise<TeacherReviewRequestDetail> {
+  return apiFetch<TeacherReviewRequestDetail>(`/teacher/review-requests/${id}`, null);
+}
+
+export async function addTeacherReviewNote(
+  id: string,
+  payload: { teacher_note: string },
+): Promise<TeacherReviewRequestDetail> {
+  return apiFetch<TeacherReviewRequestDetail>(`/teacher/review-requests/${id}/note`, null, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function resolveTeacherReviewRequest(
+  id: string,
+  payload: { status: 'resolved' | 'rejected'; teacher_resolution: string; teacher_note?: string | null },
+): Promise<TeacherReviewRequestDetail> {
+  return apiFetch<TeacherReviewRequestDetail>(`/teacher/review-requests/${id}/resolve`, null, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function requestTeacherReviewReanalysis(
+  id: string,
+): Promise<TeacherReviewRequestDetail> {
+  return apiFetch<TeacherReviewRequestDetail>(`/teacher/review-requests/${id}/request-reanalysis`, null, {
+    method: 'POST',
+  });
+}
+
+export async function fetchTeacherStudentScores(
+  studentId: string,
+  params: TeacherScoresQuery = {},
+): Promise<TeacherStudentScoresResponse> {
+  return apiFetch<TeacherStudentScoresResponse>(
+    `/teacher/students/${studentId}/scores${buildQuery(params)}`,
+    null,
+  );
+}
+
+export async function fetchTeacherClassScores(
+  classId: string,
+): Promise<TeacherClassScoresResponse> {
+  return apiFetch<TeacherClassScoresResponse>(`/teacher/classes/${classId}/scores`, null);
+}
+
+export async function fetchStudentClasses(): Promise<ClassSummary[]> {
+  return apiFetch<ClassSummary[]>('/student/classes', null);
+}
+
+export async function fetchStudentClassDetail(classId: string): Promise<ClassDetail> {
+  return apiFetch<ClassDetail>(`/student/classes/${classId}`, null);
+}
+
+export async function fetchTeacherClasses(): Promise<ClassSummary[]> {
+  return apiFetch<ClassSummary[]>('/teacher/classes', null);
+}
+
+export async function fetchTeacherClassDetail(classId: string): Promise<ClassDetail> {
+  return apiFetch<ClassDetail>(`/teacher/classes/${classId}`, null);
+}
+
+export async function fetchTeacherClassStudents(classId: string): Promise<ClassStudent[]> {
+  return apiFetch<ClassStudent[]>(`/teacher/classes/${classId}/students`, null);
+}
+
+export async function fetchTeacherClassTeachers(classId: string): Promise<ClassTeacher[]> {
+  return apiFetch<ClassTeacher[]>(`/teacher/classes/${classId}/teachers`, null);
+}
+
+export async function fetchAdminUsers(): Promise<AdminUser[]> {
+  return expectArray(await apiFetch<unknown>('/admin/users', null), '/admin/users');
+}
+
+export async function fetchAdminClasses(): Promise<ClassSummary[]> {
+  return expectArray(await apiFetch<unknown>('/admin/classes', null), '/admin/classes');
+}
+
+export async function fetchAdminClassDetail(classId: string): Promise<ClassDetail> {
+  return apiFetch<ClassDetail>(`/admin/classes/${classId}`, null);
+}
+
+export async function fetchAdminDemoReadiness(): Promise<DemoReadinessResponse> {
+  return apiFetch<DemoReadinessResponse>('/admin/demo/readiness', null);
+}
+
+export async function updateAdminClass(
+  classId: string,
+  payload: AdminClassUpdatePayload,
+): Promise<ClassDetail> {
+  return apiFetch<ClassDetail>(`/admin/classes/${classId}`, null, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function deleteAdminUser(userId: string): Promise<AdminDeleteUserResponse> {
+  return apiFetch<AdminDeleteUserResponse>(`/admin/users/${userId}`, null, {
+    method: 'DELETE',
+  });
+}
+
+function expectArray<T>(payload: unknown, endpoint: string): T[] {
+  if (!Array.isArray(payload)) {
+    throw new ApiError(`Phản hồi ${endpoint} không phải danh sách dữ liệu.`, 500);
+  }
+  return payload as T[];
 }

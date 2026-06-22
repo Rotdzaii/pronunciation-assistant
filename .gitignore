@@ -16,12 +16,28 @@ dist/
 .env
 .env.*
 !.env.example
+.tokens.local.env
 
 # Local audio samples
 data/samples/*.wav
+*.wav
+*.mp3
+*.webm
+
+# Local model checkpoints
+*.pt
+*.pth
+*.ckpt
+*.onnx
+*checkpoint*.pt
+*checkpoint*.pth
+*checkpoint*.ckpt
+*checkpoint*.onnx
 
 # Codex CLI Documentation
 docs/
+!fastapi-backend/docs/
+!fastapi-backend/docs/demo-data.md
 
 # Local quarantine files
 _quarantine/

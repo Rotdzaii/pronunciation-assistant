@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useRef, useState } from 'react';
+import { forwardRef, useRef, useState } from 'react';
 import type { ComponentProps, ReactNode } from 'react';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Link, useRouter } from 'expo-router';
@@ -18,7 +18,7 @@ import { supabase } from '../../lib/supabase';
 
 export default function LoginScreen() {
   const router = useRouter();
-  const { appRole, loading: authLoading, refreshCurrentUser, roleError, session } = useAuth();
+  const { refreshCurrentUser, roleError } = useAuth();
   const { width } = useWindowDimensions();
   const isWide = width >= 860;
   const [email, setEmail] = useState('');
@@ -51,7 +51,13 @@ export default function LoginScreen() {
       } else {
         const user = await refreshCurrentUser();
         const backendRole = user?.app_role;
-        if (backendRole === 'teacher' || backendRole === 'admin') {
+        console.debug('[Login] post-login route decision', {
+          role: backendRole,
+          userId: user?.id,
+        });
+        if (backendRole === 'admin') {
+          router.replace('/(tabs)/admin');
+        } else if (backendRole === 'teacher') {
           router.replace('/(tabs)/teacher');
         } else if (backendRole === 'student') {
           router.replace('/(tabs)');
@@ -63,19 +69,6 @@ export default function LoginScreen() {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    if (authLoading || !session) {
-      return;
-    }
-    if (appRole === 'teacher' || appRole === 'admin') {
-      console.log('Login existing session route decision app_role', appRole);
-      router.replace('/(tabs)/teacher');
-    } else if (appRole === 'student') {
-      console.log('Login existing session route decision app_role', appRole);
-      router.replace('/(tabs)');
-    }
-  }, [appRole, authLoading, session, router]);
 
   return (
     <SafeAreaView style={styles.safeArea}>

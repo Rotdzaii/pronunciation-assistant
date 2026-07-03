@@ -1,11 +1,27 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { AppCard, AppScreen, SectionHeader, colors } from '../../components/AppUI';
-import { vocabularyQuestions } from '../../lib/vocabularyQuiz';
+import { useEffect, useState } from 'react';
+import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
+import { AppCard, AppScreen, ErrorState, SectionHeader, colors } from '../../components/AppUI';
+import { fetchVocabularyItems } from '../../lib/api';
+import type { VocabularyItem } from '../../types';
 
 export default function VocabularyScreen() {
   const router = useRouter();
+  const [items, setItems] = useState<VocabularyItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [fetchError, setFetchError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+    setFetchError(null);
+    fetchVocabularyItems(20, 0)
+      .then(data => { if (!cancelled) setItems(data.items); })
+      .catch(err => { if (!cancelled) setFetchError(err instanceof Error ? err.message : 'Không tải được danh sách từ.'); })
+      .finally(() => { if (!cancelled) setLoading(false); });
+    return () => { cancelled = true; };
+  }, []);
 
   return (
     <AppScreen maxWidth={980}>
@@ -30,15 +46,21 @@ export default function VocabularyScreen() {
         </Pressable>
       </AppCard>
 
-      <View style={styles.wordGrid}>
-        {vocabularyQuestions.map((item) => (
-          <AppCard key={item.id} style={styles.wordCard}>
-            <Text style={styles.word}>{item.word}</Text>
-            <Text style={styles.meaning}>{item.answer}</Text>
-            <Text style={styles.explanation}>{item.explanation}</Text>
-          </AppCard>
-        ))}
-      </View>
+      {loading ? (
+        <ActivityIndicator color={colors.primary} style={styles.loader} />
+      ) : fetchError ? (
+        <ErrorState title="Không tải được từ vựng" message={fetchError} />
+      ) : (
+        <View style={styles.wordGrid}>
+          {items.map((item) => (
+            <AppCard key={item.id} style={styles.wordCard}>
+              <Text style={styles.word}>{item.word}</Text>
+              <Text style={styles.meaning}>{item.meaning_vi ?? ''}</Text>
+              <Text style={styles.explanation}>{item.phonetic ?? ''}</Text>
+            </AppCard>
+          ))}
+        </View>
+      )}
     </AppScreen>
   );
 }
@@ -85,6 +107,9 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 14,
     fontWeight: '900',
+  },
+  loader: {
+    marginTop: 40,
   },
   wordGrid: {
     flexDirection: 'row',

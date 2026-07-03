@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Dimensions, Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View } from 'react-native';
 import {
   AppCard,
   AppScreen,
@@ -10,7 +10,9 @@ import {
   colors,
 } from '../../components/AppUI';
 import {
+  createAssignment,
   fetchTeacherAnalytics,
+  fetchTeacherAssignments,
   fetchTeacherClassDetail,
   fetchTeacherClassScores,
   fetchTeacherClassStudents,
@@ -18,6 +20,7 @@ import {
   fetchTeacherReviewRequestDetail,
   fetchTeacherReviewRequests,
   fetchTeacherStudentScores,
+  fetchVocabularySets,
   addTeacherReviewNote,
   requestTeacherReviewReanalysis,
   resolveTeacherReviewRequest,
@@ -26,10 +29,11 @@ import {
   WeekInMonth,
   formatDateRange,
   getCurrentWeekOfMonth,
+  getWeeksInMonth,
+  startOfMondayWeek,
 } from '../../lib/dateRange';
 import { exportCsv } from '../../lib/exportCsv';
 import { useAuth } from '../../lib/auth';
-import { WeekSelector } from '../../components/WeekSelector';
 import {
   formatPracticeStatus,
   formatReviewReason,
@@ -38,6 +42,7 @@ import {
   formatReviewStatus,
 } from '../../lib/format';
 import type {
+  Assignment,
   ClassDetail,
   ClassStudent,
   ClassSummary,
@@ -50,6 +55,7 @@ import type {
   TeacherReviewRequestsResponse,
   TeacherStudentScoresResponse,
   TeacherStudentSummary,
+  VocabularySet,
 } from '../../types';
 
 type IconName = keyof typeof MaterialCommunityIcons.glyphMap;
@@ -111,7 +117,7 @@ const assignmentStatuses = [
 ];
 
 const reportKinds: Array<{ key: ReportKind; label: string }> = [
-  { key: 'learning', label: 'Kết quả học tập' },
+  
   { key: 'progress', label: 'Tiến độ luyện tập' },
   { key: 'errors', label: 'Lỗi phát âm' },
   { key: 'assignments', label: 'Bài luyện đã giao' },
@@ -484,7 +490,7 @@ function HeaderActions({
   if (section === 'overview') {
     return (
       <View style={styles.headerActions}>
-        <WeekSelector selectedWeek={selectedWeek} onChange={onWeekChange} />
+        <WeekPickerButton selectedWeek={selectedWeek} onChange={onWeekChange} />
         <ActionButton icon="file-eye-outline" label="Xem báo cáo" primary onPress={onReports} />
       </View>
     );
@@ -493,7 +499,7 @@ function HeaderActions({
   if (section === 'reports') {
     return (
       <View style={styles.headerActions}>
-        <WeekSelector selectedWeek={selectedWeek} onChange={onWeekChange} />
+        <WeekPickerButton selectedWeek={selectedWeek} onChange={onWeekChange} />
       </View>
     );
   }
@@ -598,7 +604,7 @@ function OverviewSection({
                 <Text style={styles.classCode}>{classItem.code ?? 'Chưa có mã'}</Text>
                 <Text style={styles.className}>{classItem.name}</Text>
                 <Text style={styles.mutedText}>{classItem.student_count} học sinh</Text>
-                <Text style={styles.mutedText}>Điểm TB: {averageScore === null ? 'Chưa có điểm' : `${Math.round(averageScore)}%`}</Text>
+                <Text style={styles.mutedText}>Điểm TB: {averageScore === null ? 'Chưa có điểm' : `${Math.round(averageScore)}/100`}</Text>
                 <Text style={styles.mutedText}>Lượt luyện: {practiceCount === null ? 'Chưa tải' : String(practiceCount)}</Text>
                 <Pressable accessibilityRole="button" onPress={() => onViewClass(classItem.id)} style={styles.smallButton}>
                   <Text style={styles.smallButtonText}>Xem lớp</Text>
@@ -785,7 +791,7 @@ function ReviewDetailPanel({
       {detail.audit_logs.length > 0 ? detail.audit_logs.map((log) => (
         <View key={log.id} style={styles.classSummaryRow}>
           <Text style={styles.className}>{log.action_type}</Text>
-          <Text style={styles.mutedText}>{log.created_at ?? ''}</Text>
+          <Text style={styles.mutedText}>{formatDate(log.created_at)}</Text>
         </View>
       )) : <Text style={styles.mutedText}>Chưa có audit log.</Text>}
       <View style={styles.disabledActionRow}>
@@ -904,9 +910,9 @@ function StudentsSection({
         </View>
         {selectedClassId ? (
           <View style={styles.classHeaderStats}>
-            <StatusBadge label={`${students.length} học sinh`} tone="primary" />
-            <StatusBadge label={`Điểm TB: ${averageScore === null ? 'Chưa có điểm' : `${averageScore}%`}`} tone="processing" />
-            <StatusBadge label={`${reviewData?.pending_count ?? 0} yêu cầu chờ`} tone={(reviewData?.pending_count ?? 0) > 0 ? 'warning' : 'success'} />
+            <Text style={styles.classHeaderStatLine}>
+              {students.length} học sinh · Điểm TB: {averageScore === null ? 'Chưa có điểm' : `${averageScore}/100`} · {reviewData?.pending_count ?? 0} yêu cầu chờ
+            </Text>
           </View>
         ) : null}
       </View>
@@ -973,16 +979,15 @@ function StudentsSection({
           <ClassWorkspaceOverview
             students={students}
             classScores={classScores}
-            onSelectStudent={onSelectStudent}
+            classId={selectedClassId}
           />
-          {selectedScoreStudent ? (
-            <StudentScoresPanel student={selectedScoreStudent} scores={studentScores} loading={loadingScores} error={scoreError} />
-          ) : null}
         </View>
       ) : null}
 
       {selectedClassId && workspaceTab === 'assignments' ? (
         <AssignmentSection
+          classId={selectedClassId}
+          className={selectedClass?.name || ''}
           students={students}
           selectedWeek={selectedWeek}
           onWeekChange={onWeekChange}
@@ -1020,20 +1025,42 @@ function StudentsSection({
 function ClassWorkspaceOverview({
   students,
   classScores,
-  onSelectStudent,
+  classId,
 }: {
   students: ClassStudent[];
   classScores: TeacherClassScoresResponse | null;
-  onSelectStudent: (student: ClassStudent) => void;
+  classId: string;
 }) {
+  const [modalStudent, setModalStudent] = useState<ClassStudent | null>(null);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalScores, setModalScores] = useState<TeacherStudentScoresResponse | null>(null);
+  const [modalLoading, setModalLoading] = useState(false);
+  const [modalError, setModalError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!modalStudent) return;
+    setModalScores(null);
+    setModalError(null);
+    setModalLoading(true);
+    fetchTeacherStudentScores(modalStudent.id, { class_id: classId })
+      .then(setModalScores)
+      .catch((err) => setModalError(err instanceof Error ? err.message : 'Chưa thể tải điểm.'))
+      .finally(() => setModalLoading(false));
+  }, [modalStudent, classId]);
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+    setModalStudent(null);
+    setModalScores(null);
+    setModalError(null);
+  };
+
   const scoredStudents = classScores?.students.filter((student) => student.average_score !== null) ?? [];
   const averageScore = scoredStudents.length
     ? Math.round(scoredStudents.reduce((sum, student) => sum + (student.average_score ?? 0), 0) / scoredStudents.length)
     : null;
-  const highestScore = scoredStudents.length
-    ? Math.max(...scoredStudents.map((student) => Math.round(student.average_score ?? 0)))
-    : null;
   const needsImprovementCount = scoredStudents.filter((student) => (student.average_score ?? 0) < 70).length;
+  const notPracticedCount = (classScores?.students ?? []).filter((s) => s.completed_attempts === 0).length;
   const studentsById = new Map(students.map((student) => [student.id, student]));
 
   return (
@@ -1045,67 +1072,140 @@ function ClassWorkspaceOverview({
         </View>
       </View>
       <View style={styles.classScoreSummary}>
-        <View style={styles.scoreSummaryItem}>
-          <Text style={styles.metricValue}>{averageScore === null ? '--' : `${averageScore}%`}</Text>
-          <Text style={styles.metricLabel}>Điểm trung bình lớp</Text>
+        <View style={[styles.scoreSummaryItem, styles.scoreSummaryItemLarge]}>
+          <Text style={styles.metricValue}>{averageScore === null ? '--' : `${averageScore}/100`}</Text>
+          <Text style={styles.metricLabel}>Điểm TB lớp</Text>
         </View>
-        <View style={styles.scoreSummaryItem}>
-          <Text style={styles.metricValue}>{scoredStudents.length}</Text>
-          <Text style={styles.metricLabel}>Học sinh đã có điểm</Text>
+        <View style={[styles.scoreSummaryItem, styles.scoreSummaryItemSmall, needsImprovementCount > 0 ? styles.scoreSummaryItemRed : null]}>
+          <Text style={[styles.metricValue, needsImprovementCount > 0 ? styles.metricValueRed : null]}>{needsImprovementCount}</Text>
+          <Text style={[styles.metricLabel, needsImprovementCount > 0 ? styles.metricLabelRed : null]}>Cần cải thiện</Text>
         </View>
-        <View style={styles.scoreSummaryItem}>
-          <Text style={styles.metricValue}>{highestScore === null ? '--' : `${highestScore}%`}</Text>
-          <Text style={styles.metricLabel}>Điểm cao nhất</Text>
-        </View>
-        <View style={styles.scoreSummaryItem}>
-          <Text style={styles.metricValue}>{needsImprovementCount}</Text>
-          <Text style={styles.metricLabel}>Cần cải thiện</Text>
+        <View style={[styles.scoreSummaryItem, styles.scoreSummaryItemSmall, notPracticedCount > 0 ? styles.scoreSummaryItemOrange : null]}>
+          <Text style={[styles.metricValue, notPracticedCount > 0 ? styles.metricValueOrange : null]}>{notPracticedCount}</Text>
+          <Text style={[styles.metricLabel, notPracticedCount > 0 ? styles.metricLabelOrange : null]}>Chưa luyện</Text>
         </View>
       </View>
       <Text style={styles.cardTitle}>Bảng điểm theo học sinh</Text>
       <View style={styles.studentRows}>
+        <View style={styles.scoreTableHeader}>
+          <View style={{ width: 40 }} />
+          <View style={styles.scoreColName}>
+            <Text style={styles.scoreTableHeaderCell}>Học sinh</Text>
+          </View>
+          <View style={styles.scoreColScore}>
+            <Text style={[styles.scoreTableHeaderCell, { textAlign: 'center' }]}>Điểm TB</Text>
+          </View>
+          <View style={styles.scoreColComment}>
+            <Text style={[styles.scoreTableHeaderCell, { textAlign: 'center' }]}>Nhận xét</Text>
+          </View>
+          <View style={styles.scoreColBtn} />
+        </View>
         {(classScores?.students ?? []).map((student) => (
           <View key={student.student_id} style={styles.scoreTableRow}>
             <View style={styles.avatar}>
               <Text style={styles.avatarText}>{student.student_name.slice(0, 1).toUpperCase()}</Text>
             </View>
-            <View style={styles.scoreStudentIdentity}>
+            <View style={styles.scoreColName}>
               <Text style={styles.studentName}>{student.student_name}</Text>
-              <Text style={styles.mutedText}>{student.student_email ?? 'Chưa có email'}</Text>
+              {!isInternalEmail(student.student_email) ? <Text style={styles.mutedText}>{student.student_email ?? 'Chưa có email'}</Text> : null}
             </View>
-            <View style={styles.scoreCell}>
-              <Text style={styles.reportLabel}>Điểm trung bình</Text>
-              <Text style={styles.reportValue}>{student.average_score === null ? 'Chưa có điểm' : `${Math.round(student.average_score)}%`}</Text>
+            <View style={styles.scoreColScore}>
+              <View style={[
+                styles.scorePill,
+                student.average_score === null ? styles.scorePillNeutral
+                  : student.average_score >= 80 ? styles.scorePillGreen
+                  : student.average_score >= 60 ? styles.scorePillYellow
+                  : styles.scorePillRed,
+              ]}>
+                <Text style={[styles.scorePillText, student.average_score !== null && student.average_score < 60 ? styles.scorePillTextRed : null]}>
+                  {student.average_score === null ? '--' : `${Math.round(student.average_score)}/100`}
+                </Text>
+              </View>
             </View>
-            <View style={styles.scoreCell}>
-              <Text style={styles.reportLabel}>Điểm lần gần nhất</Text>
-              <Text style={styles.reportValue}>Chưa có dữ liệu</Text>
+            <View style={styles.scoreColComment}>
+              <Text style={[styles.reportValue, { textAlign: 'center' }]}>{scoreComment(student.average_score)}</Text>
             </View>
-            <View style={styles.scoreCell}>
-              <Text style={styles.reportLabel}>Bài đã có điểm</Text>
-              <Text style={styles.reportValue}>{student.completed_attempts}</Text>
+            <View style={styles.scoreColBtn}>
+              <Pressable
+                accessibilityRole="button"
+                onPress={() => {
+                  const matchedStudent = studentsById.get(student.student_id);
+                  if (matchedStudent) { setModalStudent(matchedStudent); setModalVisible(true); }
+                }}
+                disabled={!studentsById.has(student.student_id)}
+                style={[styles.smallButton, !studentsById.has(student.student_id) ? styles.disabledAction : null]}
+              >
+                <Text style={styles.smallButtonText}>Xem chi tiết</Text>
+              </Pressable>
             </View>
-            <View style={styles.scoreCell}>
-              <Text style={styles.reportLabel}>Nhận xét</Text>
-              <Text style={styles.reportValue}>{scoreComment(student.average_score)}</Text>
-            </View>
-            <Pressable
-              accessibilityRole="button"
-              onPress={() => {
-                const matchedStudent = studentsById.get(student.student_id);
-                if (matchedStudent) onSelectStudent(matchedStudent);
-              }}
-              disabled={!studentsById.has(student.student_id)}
-              style={[styles.smallButton, !studentsById.has(student.student_id) ? styles.disabledAction : null]}
-            >
-              <Text style={styles.smallButtonText}>Xem chi tiết</Text>
-            </Pressable>
           </View>
         ))}
         {!classScores || classScores.students.length === 0 ? (
           <EmptyPanel icon="chart-box-outline" title="Chưa có dữ liệu điểm của lớp" message="Khi học sinh hoàn thành bài luyện và Phoenix trả score, kết quả sẽ hiển thị tại đây." />
         ) : null}
       </View>
+      <Modal visible={modalVisible} transparent animationType="fade" onRequestClose={handleCloseModal}>
+        <TouchableWithoutFeedback onPress={handleCloseModal}>
+          <View style={styles.studentDetailBackdrop}>
+            <TouchableWithoutFeedback>
+              <View style={styles.studentDetailModal}>
+                <View style={styles.modalHeader}>
+                  <Text style={styles.cardTitle}>{modalStudent?.display_name}</Text>
+                  <Pressable accessibilityRole="button" onPress={handleCloseModal} style={styles.modalCloseBtn}>
+                    <MaterialCommunityIcons name="close" size={20} color={colors.muted} />
+                  </Pressable>
+                </View>
+                {!isInternalEmail(modalStudent?.email) ? <Text style={styles.cardDescription}>{modalStudent?.email ?? 'Chưa có email'}</Text> : null}
+                <ScrollView>
+                  {modalLoading ? <Text style={styles.mutedText}>Đang tải kết quả luyện tập...</Text> : null}
+                  {modalError ? <ErrorState title="Chưa thể tải điểm" message={modalError} /> : null}
+                  {modalScores ? (
+                    <View style={styles.reportRows}>
+                      <ReportRow label="Tổng lượt luyện" value={String(modalScores.summary.total_attempts)} />
+                      <ReportRow label="Đã có kết quả" value={String(modalScores.summary.completed_attempts)} />
+                      <ReportRow label="Điểm trung bình" value={modalScores.summary.average_score === null ? 'Chưa có điểm' : `${Math.round(modalScores.summary.average_score)}/100`} />
+                      <ReportRow label="Lần luyện gần nhất" value={formatDate(modalScores.summary.last_practice_at)} />
+                    </View>
+                  ) : null}
+                  {modalScores ? (
+                    <View style={styles.assignmentDetailSection}>
+                      <Text style={styles.cardTitle}>Lỗi phát âm cần chú ý</Text>
+                      {buildStudentPronunciationIssues(modalScores).length > 0 ? (
+                        <View style={styles.errorRows}>
+                          {buildStudentPronunciationIssues(modalScores).map((issue) => (
+                            <View key={issue.label} style={styles.errorRow}>
+                              <View style={styles.pronunciationIssueCopy}>
+                                <Text style={styles.errorLabel}>{formatMistakeLabel(issue.label)}</Text>
+                                <Text style={styles.mutedText}>{issue.count} lần xuất hiện</Text>
+                                {issue.examples.length > 0 ? <Text style={styles.mutedText}>Ví dụ: {issue.examples.slice(0, 2).join(', ')}</Text> : null}
+                              </View>
+                              <StatusBadge label={mistakeSeverity(issue.count)} tone={issue.count >= 10 ? 'error' : issue.count >= 4 ? 'warning' : 'primary'} />
+                            </View>
+                          ))}
+                        </View>
+                      ) : (
+                        <EmptyPanel icon="microphone-off" title="Chưa có đủ dữ liệu lỗi phát âm." message="Phoenix sẽ hiển thị lỗi khi học sinh có kết quả luyện tập hoàn tất." />
+                      )}
+                    </View>
+                  ) : null}
+                  {modalScores?.items && modalScores.items.length > 0 ? (
+                    <View style={styles.studentRows}>
+                      {modalScores.items.map((item) => (
+                        <View key={item.practice_history_id} style={styles.classSummaryRow}>
+                          <Text style={styles.className}>{item.target_word ?? 'Bài luyện'}</Text>
+                          <Text style={styles.mutedText}>{formatPracticeStatus(item.status)}</Text>
+                          <Text style={styles.reportValue}>{item.score === null ? 'Chưa có điểm' : `${Math.round(item.score)}/100`}</Text>
+                          {item.needs_review ? <StatusBadge label="Cần xem lại" tone="warning" /> : null}
+                        </View>
+                      ))}
+                    </View>
+                  ) : null}
+                </ScrollView>
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
     </AppCard>
   );
 }
@@ -1199,7 +1299,7 @@ function AiReviewSection({ items }: { items: TeacherReviewRequest[] }) {
               <View style={styles.aiReviewMain}>
                 <Text style={styles.studentName}>{item.student_name}</Text>
                 <Text style={styles.mutedText}>{item.class_code ?? item.class_name ?? 'Chưa rõ lớp'} - {item.target_word ?? 'Bài luyện'}</Text>
-                <Text style={styles.mutedText}>{item.created_at ?? 'Chưa rõ thời gian'} - {formatReviewStatus(item.status)}</Text>
+                <Text style={styles.mutedText}>{formatDate(item.created_at)} - {formatReviewStatus(item.status)}</Text>
                 <Text style={styles.reviewReason}>{formatReviewReason(item.reason)}</Text>
               </View>
               <Pressable accessibilityRole="button" disabled style={[styles.smallButton, styles.disabledAction]}>
@@ -1289,11 +1389,15 @@ function PronunciationErrorsSection({ errors, onExport }: { errors: TeacherCommo
 }
 
 function AssignmentSection({
+  classId,
+  className,
   students,
   selectedWeek,
   onWeekChange,
   onExport,
 }: {
+  classId: string;
+  className: string;
   students: ClassStudent[];
   selectedWeek: WeekInMonth;
   onWeekChange: (week: WeekInMonth) => void;
@@ -1301,38 +1405,105 @@ function AssignmentSection({
 }) {
   const [assignmentStudentSearch, setAssignmentStudentSearch] = useState('');
   const [selectedAssignmentStudentId, setSelectedAssignmentStudentId] = useState<string | null>(null);
+  const [assignments, setAssignments] = useState<Assignment[]>([]);
+  const [assignmentsLoading, setAssignmentsLoading] = useState(false);
+  const [showCreate, setShowCreate] = useState(false);
+  const [vocabSets, setVocabSets] = useState<VocabularySet[]>([]);
+  const [vocabSetsLoading, setVocabSetsLoading] = useState(false);
+  const [createTitle, setCreateTitle] = useState('');
+  const [createSetId, setCreateSetId] = useState<string | null>(null);
+  const [createTarget, setCreateTarget] = useState<'class' | 'student'>('class');
+  const [createDueDate, setCreateDueDate] = useState('');
+  const [createIsAssessment, setCreateIsAssessment] = useState(false);
+  const [createDeadline, setCreateDeadline] = useState('');
+  const [createTimer, setCreateTimer] = useState('60');
+  const [createLoading, setCreateLoading] = useState(false);
+  const [createError, setCreateError] = useState<string | null>(null);
+  const [createSuccess, setCreateSuccess] = useState<string | null>(null);
+
+  useEffect(() => {
+    void loadAssignments();
+  }, [classId]);
+
+  useEffect(() => {
+    if (!createSuccess) return;
+    const timer = setTimeout(() => setCreateSuccess(null), 3000);
+    return () => clearTimeout(timer);
+  }, [createSuccess]);
+
+  const loadAssignments = async () => {
+    setAssignmentsLoading(true);
+    try {
+      const data = await fetchTeacherAssignments({ class_id: classId });
+      setAssignments(data.items);
+    } catch {
+      // silently fail; teacher sees empty list
+    } finally {
+      setAssignmentsLoading(false);
+    }
+  };
+
+  const openCreate = async () => {
+    setShowCreate(true);
+    setCreateTitle('');
+    setCreateSetId(null);
+    setCreateTarget(selectedAssignmentStudentId ? 'student' : 'class');
+    setCreateDueDate('');
+    setCreateIsAssessment(false);
+    setCreateDeadline('');
+    setCreateTimer('60');
+    setCreateError(null);
+    if (vocabSets.length === 0) {
+      setVocabSetsLoading(true);
+      try {
+        const data = await fetchVocabularySets(50, 0);
+        setVocabSets(data.items);
+        if (data.items[0]) setCreateSetId(data.items[0].id);
+      } catch {
+        // silently fail
+      } finally {
+        setVocabSetsLoading(false);
+      }
+    }
+  };
+
+  const submitCreate = async () => {
+    if (!createTitle.trim() || !createSetId) return;
+    setCreateLoading(true);
+    setCreateError(null);
+    try {
+      await createAssignment({
+        title: createTitle.trim(),
+        content_type: 'vocabulary_set',
+        content_id: createSetId,
+        class_id: createTarget === 'class' ? classId : null,
+        student_id: createTarget === 'student' ? selectedAssignmentStudentId : null,
+        due_date: createDueDate.trim() || null,
+        is_assessment: createIsAssessment,
+        deadline: createIsAssessment && createDeadline.trim() ? createDeadline.trim() : null,
+        timer_per_word_seconds: createIsAssessment ? (parseInt(createTimer, 10) || 60) : 60,
+      });
+      setShowCreate(false);
+      await loadAssignments();
+      const targetName = createTarget === 'class' ? className : (selectedStudent?.display_name || 'học sinh');
+      setCreateSuccess(`Đã giao bài cho ${targetName}`);
+    } catch (err) {
+      setCreateError(err instanceof Error ? err.message : 'Không thể tạo bài tập.');
+    } finally {
+      setCreateLoading(false);
+    }
+  };
+
   const filteredAssignmentStudents = students.filter((student) => {
     const needle = assignmentStudentSearch.trim().toLowerCase();
     if (!needle) return true;
     return student.display_name.toLowerCase().includes(needle) || (student.email ?? '').toLowerCase().includes(needle);
   });
-  const selectedStudent = students.find((student) => student.id === selectedAssignmentStudentId) ?? null;
-  const assignableTopics = [
-    {
-      type: 'Phát âm',
-      title: 'Luyện âm cuối /t/ và /d/',
-      description: 'Tập trung phát âm rõ phụ âm cuối trong từ ngắn.',
-      icon: 'book-open-page-variant-outline' as IconName,
-    },
-    {
-      type: 'Câu',
-      title: 'Luyện trọng âm từ trong câu ngắn',
-      description: 'Luyện nhấn trọng âm khi đọc câu ngắn.',
-      icon: 'comment-text-outline' as IconName,
-    },
-    {
-      type: 'Lỗi phát âm',
-      title: 'Cụm phụ âm /str/ và /spl/',
-      description: 'Luyện đọc liền cụm phụ âm khó ở tốc độ chậm.',
-      icon: 'microphone-off' as IconName,
-    },
-    {
-      type: 'Quiz',
-      title: 'Ôn tập lỗi phát âm tuần này',
-      description: 'Kiểm tra nhanh các lỗi học sinh thường mắc trong tuần.',
-      icon: 'clipboard-check-outline' as IconName,
-    },
-  ];
+  const selectedStudent = students.find((s) => s.id === selectedAssignmentStudentId) ?? null;
+
+  const visibleAssignments = selectedAssignmentStudentId
+    ? assignments.filter((a) => a.class_id === classId || a.student_id === selectedAssignmentStudentId)
+    : assignments;
 
   return (
     <View style={styles.assignmentPanel}>
@@ -1341,12 +1512,19 @@ function AssignmentSection({
           <Text style={styles.cardTitle}>Bài giao</Text>
           <Text style={styles.cardDescription}>Chọn học sinh để xem bài đã giao và chuẩn bị bài luyện phù hợp.</Text>
         </View>
-        <WeekSelector selectedWeek={selectedWeek} onChange={onWeekChange} />
+        <WeekPickerButton selectedWeek={selectedWeek} onChange={onWeekChange} />
         <View style={styles.assignmentToolbarActions}>
           <ActionButton icon="download-outline" label="Xuất danh sách" onPress={onExport} />
-          <ActionButton icon="plus" label="Sắp có" primary disabled onPress={() => undefined} />
+          <ActionButton icon="plus" label="Giao bài mới" primary onPress={openCreate} />
         </View>
       </View>
+
+      {createSuccess ? (
+        <View style={styles.successBanner}>
+          <MaterialCommunityIcons name="check-circle" size={20} color={colors.success} />
+          <Text style={styles.successBannerText}>{createSuccess}</Text>
+        </View>
+      ) : null}
 
       <View style={styles.assignmentWorkspaceGrid}>
         <AppCard style={[styles.panel, styles.assignmentStudentColumn]}>
@@ -1365,27 +1543,32 @@ function AssignmentSection({
             style={styles.assignmentSearchInput}
           />
           <View style={styles.assignmentStudentList}>
-            {filteredAssignmentStudents.map((student) => (
-              <Pressable
-                key={student.id}
-                accessibilityRole="button"
-                onPress={() => setSelectedAssignmentStudentId(student.id)}
-                style={[
-                  styles.assignmentStudentRow,
-                  selectedAssignmentStudentId === student.id ? styles.assignmentStudentRowActive : null,
-                ]}
-              >
-                <View style={styles.avatar}>
-                  <Text style={styles.avatarText}>{student.display_name.slice(0, 1).toUpperCase()}</Text>
-                </View>
-                <View style={styles.studentInfo}>
-                  <Text style={styles.studentName}>{student.display_name}</Text>
-                  <Text style={styles.mutedText}>{student.email ?? 'Chưa có email'}</Text>
-                  <Text style={styles.mutedText}>0 bài đã giao</Text>
-                </View>
-                <StatusBadge label="Chưa giao" tone="idle" />
-              </Pressable>
-            ))}
+            {filteredAssignmentStudents.map((student) => {
+              const count = assignments.filter(
+                (a) => a.class_id === classId || a.student_id === student.id
+              ).length;
+              return (
+                <Pressable
+                  key={student.id}
+                  accessibilityRole="button"
+                  onPress={() => setSelectedAssignmentStudentId(student.id)}
+                  style={[
+                    styles.assignmentStudentRow,
+                    selectedAssignmentStudentId === student.id ? styles.assignmentStudentRowActive : null,
+                  ]}
+                >
+                  <View style={styles.avatar}>
+                    <Text style={styles.avatarText}>{student.display_name.slice(0, 1).toUpperCase()}</Text>
+                  </View>
+                  <View style={styles.studentInfo}>
+                    <Text style={styles.studentName}>{student.display_name}</Text>
+                    <Text style={styles.mutedText}>{student.email ?? 'Chưa có email'}</Text>
+                    <Text style={styles.mutedText}>{count} bài đã giao</Text>
+                  </View>
+                  <StatusBadge label={count > 0 ? `${count} bài` : 'Chưa giao'} tone={count > 0 ? 'primary' : 'idle'} />
+                </Pressable>
+              );
+            })}
             {filteredAssignmentStudents.length === 0 ? (
               <EmptyPanel icon="account-search-outline" title="Không tìm thấy học sinh" message="Thử nhập tên hoặc email khác." />
             ) : null}
@@ -1394,67 +1577,220 @@ function AssignmentSection({
 
         <AppCard style={[styles.panel, styles.assignmentDetailColumn]}>
           {!selectedStudent ? (
-            <EmptyPanel icon="account-arrow-right-outline" title="Chọn một học sinh để xem bài đã giao." message="Danh sách bài và chủ đề có thể giao sẽ hiển thị ở đây." />
+            <EmptyPanel icon="account-arrow-right-outline" title="Chọn một học sinh để xem bài đã giao." message="Danh sách bài đã giao sẽ hiển thị ở đây." />
           ) : (
             <>
               <View style={styles.panelHeader}>
                 <View>
                   <Text style={styles.cardTitle}>{selectedStudent.display_name}</Text>
-                  <Text style={styles.cardDescription}>{selectedStudent.email ?? 'Chưa có email'} - 0 bài đã giao trong tuần này</Text>
+                  <Text style={styles.cardDescription}>{selectedStudent.email ?? 'Chưa có email'} — {visibleAssignments.length} bài đã giao</Text>
                 </View>
                 <StatusBadge label={selectedWeek.label} tone="primary" />
               </View>
 
               <View style={styles.assignmentDetailSection}>
                 <Text style={styles.cardTitle}>Bài đã giao</Text>
-                <EmptyPanel
-                  icon="clipboard-text-outline"
-                  title="Học sinh này chưa có bài được giao trong tuần này."
-                  message="Backend assignment creation chưa hoàn thiện, nên không ghi dữ liệu giao bài giả."
-                />
-              </View>
-
-              <View style={styles.assignmentDetailSection}>
-                <Text style={styles.cardTitle}>Chủ đề có thể giao</Text>
-                <View style={styles.assignmentTopicList}>
-                  {assignableTopics.map((topic) => (
-                    <AssignmentTopicRow key={topic.title} topic={topic} />
-                  ))}
-                </View>
+                {assignmentsLoading ? (
+                  <LoadingState title="" message="Đang tải bài đã giao..." />
+                ) : visibleAssignments.length === 0 ? (
+                  <EmptyPanel
+                    icon="clipboard-text-outline"
+                    title="Học sinh này chưa có bài được giao."
+                    message="Nhấn 'Giao bài mới' để tạo bài tập đầu tiên."
+                  />
+                ) : (
+                  <View style={styles.assignmentTopicList}>
+                    {visibleAssignments.map((a) => (
+                      <AssignmentRow key={a.id} assignment={a} />
+                    ))}
+                  </View>
+                )}
               </View>
             </>
           )}
         </AppCard>
       </View>
+
+      <Modal visible={showCreate} transparent animationType="fade" onRequestClose={() => setShowCreate(false)}>
+        <TouchableWithoutFeedback onPress={() => setShowCreate(false)}>
+          <View style={styles.studentDetailBackdrop}>
+            <TouchableWithoutFeedback onPress={() => undefined}>
+              <View style={styles.createAssignmentModal}>
+                <View style={styles.modalHeader}>
+                  <Text style={styles.cardTitle}>Giao bài tập mới</Text>
+                  <Pressable accessibilityRole="button" onPress={() => setShowCreate(false)} style={styles.modalCloseBtn}>
+                    <MaterialCommunityIcons name="close" size={20} color={colors.muted} />
+                  </Pressable>
+                </View>
+
+                <ScrollView showsVerticalScrollIndicator={false}>
+                  <View style={styles.createFormGroup}>
+                    <Text style={styles.createFormLabel}>Tiêu đề *</Text>
+                    <TextInput
+                      value={createTitle}
+                      onChangeText={setCreateTitle}
+                      placeholder="Nhập tiêu đề bài tập..."
+                      placeholderTextColor="#94A3B8"
+                      style={styles.createFormInput}
+                    />
+                  </View>
+
+                  <View style={styles.createFormGroup}>
+                    <Text style={styles.createFormLabel}>Bộ từ vựng *</Text>
+                    {vocabSetsLoading ? (
+                      <Text style={styles.mutedText}>Đang tải bộ từ...</Text>
+                    ) : (
+                      <View style={styles.setPickerList}>
+                        {vocabSets.slice(0, 8).map((s) => (
+                          <Pressable
+                            key={s.id}
+                            accessibilityRole="button"
+                            onPress={() => setCreateSetId(s.id)}
+                            style={[styles.setPickerItem, createSetId === s.id ? styles.setPickerItemActive : null]}
+                          >
+                            <Text style={[styles.setPickerText, createSetId === s.id ? styles.setPickerTextActive : null]}>
+                              {s.title}
+                            </Text>
+                            {s.item_count != null ? (
+                              <Text style={styles.mutedText}>{s.item_count} từ</Text>
+                            ) : null}
+                          </Pressable>
+                        ))}
+                        {vocabSets.length === 0 ? (
+                          <Text style={styles.mutedText}>Không có bộ từ nào.</Text>
+                        ) : null}
+                      </View>
+                    )}
+                  </View>
+
+                  <View style={styles.createFormGroup}>
+                    <Text style={styles.createFormLabel}>Giao cho</Text>
+                    <View style={styles.createTargetRow}>
+                      <Pressable
+                        accessibilityRole="button"
+                        onPress={() => setCreateTarget('class')}
+                        style={[styles.createTargetBtn, createTarget === 'class' ? styles.createTargetBtnActive : null]}
+                      >
+                        <Text style={[styles.createTargetBtnText, createTarget === 'class' ? styles.createTargetBtnTextActive : null]}>
+                          Cả lớp
+                        </Text>
+                      </Pressable>
+                      <Pressable
+                        accessibilityRole="button"
+                        onPress={() => setCreateTarget('student')}
+                        disabled={!selectedAssignmentStudentId}
+                        style={[
+                          styles.createTargetBtn,
+                          createTarget === 'student' ? styles.createTargetBtnActive : null,
+                          !selectedAssignmentStudentId ? styles.disabledAction : null,
+                        ]}
+                      >
+                        <Text style={[styles.createTargetBtnText, createTarget === 'student' ? styles.createTargetBtnTextActive : null]}>
+                          {selectedStudent ? selectedStudent.display_name : 'Học sinh cụ thể'}
+                        </Text>
+                      </Pressable>
+                    </View>
+                  </View>
+
+                  <View style={styles.createFormGroup}>
+                    <Text style={styles.createFormLabel}>Hạn nộp (tùy chọn, YYYY-MM-DD)</Text>
+                    <TextInput
+                      value={createDueDate}
+                      onChangeText={setCreateDueDate}
+                      placeholder="2026-12-31"
+                      placeholderTextColor="#94A3B8"
+                      style={styles.createFormInput}
+                    />
+                  </View>
+
+                  <View style={styles.createFormGroup}>
+                    <Pressable
+                      accessibilityRole="button"
+                      onPress={() => setCreateIsAssessment(prev => !prev)}
+                      style={[styles.createTargetBtn, createIsAssessment ? styles.createTargetBtnActive : null, { flex: 0, alignSelf: 'flex-start', paddingHorizontal: 16 }]}
+                    >
+                      <Text style={[styles.createTargetBtnText, createIsAssessment ? styles.createTargetBtnTextActive : null]}>
+                        {createIsAssessment ? '✓ Chế độ kiểm tra' : 'Chế độ kiểm tra'}
+                      </Text>
+                    </Pressable>
+                  </View>
+
+                  {createIsAssessment ? (
+                    <>
+                      <View style={styles.createFormGroup}>
+                        <Text style={styles.createFormLabel}>Hạn nộp bài (ISO 8601, bắt buộc cho kiểm tra)</Text>
+                        <TextInput
+                          value={createDeadline}
+                          onChangeText={setCreateDeadline}
+                          placeholder="2026-12-31T23:59:00+07:00"
+                          placeholderTextColor="#94A3B8"
+                          style={styles.createFormInput}
+                        />
+                      </View>
+                      <View style={styles.createFormGroup}>
+                        <Text style={styles.createFormLabel}>Thời gian mỗi từ (giây, mặc định 60)</Text>
+                        <TextInput
+                          value={createTimer}
+                          onChangeText={setCreateTimer}
+                          placeholder="60"
+                          placeholderTextColor="#94A3B8"
+                          keyboardType="numeric"
+                          style={styles.createFormInput}
+                        />
+                      </View>
+                    </>
+                  ) : null}
+
+                  {createError ? (
+                    <Text style={styles.createErrorText}>{createError}</Text>
+                  ) : null}
+
+                  <View style={styles.createModalActions}>
+                    <Pressable accessibilityRole="button" onPress={() => setShowCreate(false)} style={styles.createCancelBtn}>
+                      <Text style={styles.createCancelBtnText}>Hủy</Text>
+                    </Pressable>
+                    <Pressable
+                      accessibilityRole="button"
+                      onPress={submitCreate}
+                      disabled={createLoading || !createTitle.trim() || !createSetId}
+                      style={[
+                        styles.createSubmitBtn,
+                        (createLoading || !createTitle.trim() || !createSetId) ? styles.disabledAction : null,
+                      ]}
+                    >
+                      <Text style={styles.createSubmitBtnText}>{createLoading ? 'Đang giao...' : 'Giao bài'}</Text>
+                    </Pressable>
+                  </View>
+                </ScrollView>
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
     </View>
   );
 }
 
-function AssignmentTopicRow({
-  topic,
-}: {
-  topic: {
-    type: string;
-    title: string;
-    description: string;
-    icon: IconName;
-  };
-}) {
+function AssignmentRow({ assignment }: { assignment: Assignment }) {
+  const contentLabel = assignment.content_type === 'vocabulary_set' ? 'Từ vựng' : 'Câu';
   return (
     <View style={styles.assignmentRow}>
       <View style={styles.assignmentIcon}>
-        <MaterialCommunityIcons name={topic.icon} size={22} color={colors.primary} />
+        <MaterialCommunityIcons name="book-open-page-variant-outline" size={22} color={colors.primary} />
       </View>
       <View style={styles.assignmentMain}>
         <View style={styles.assignmentTitleRow}>
-          <StatusBadge label={topic.type} tone="primary" />
-          <Text style={styles.assignmentTitle}>{topic.title}</Text>
+          <StatusBadge label={contentLabel} tone="primary" />
+          <Text style={styles.assignmentTitle}>{assignment.title}</Text>
         </View>
-        <Text style={styles.mutedText}>{topic.description}</Text>
+        <Text style={styles.mutedText}>
+          {assignment.due_date
+            ? `Hạn: ${assignment.due_date.slice(0, 10)}`
+            : assignment.class_id
+            ? 'Giao cho cả lớp'
+            : 'Giao cho cá nhân'}
+        </Text>
       </View>
-      <Pressable accessibilityRole="button" disabled style={[styles.smallButton, styles.disabledAction]}>
-        <Text style={styles.smallButtonText}>Sắp có</Text>
-      </Pressable>
     </View>
   );
 }
@@ -1578,10 +1914,10 @@ function StudentRosterRow({
       </View>
       <View style={styles.studentInfo}>
         <Text style={styles.studentName}>{student.display_name}</Text>
-        <Text style={styles.mutedText}>{student.email ?? 'Chưa có email'}</Text>
+        {!isInternalEmail(student.email) ? <Text style={styles.mutedText}>{student.email ?? 'Chưa có email'}</Text> : null}
         {scoreSummary ? (
           <Text style={styles.mutedText}>
-            {scoreSummary.total_attempts} lượt luyện - {scoreSummary.average_score === null ? 'Chưa có điểm' : `${Math.round(scoreSummary.average_score)}%`} - {scoreSummary.last_practice_at ?? 'Chưa có lần luyện'}
+            {scoreSummary.total_attempts} lượt luyện - {scoreSummary.average_score === null ? 'Chưa có điểm' : `${Math.round(scoreSummary.average_score)}/100`} - {formatDate(scoreSummary.last_practice_at)}
           </Text>
         ) : null}
       </View>
@@ -1590,10 +1926,9 @@ function StudentRosterRow({
           <Text style={styles.smallButtonText}>Xem điểm</Text>
         </Pressable>
       ) : null}
-      <StatusBadge
-        label={scoreSummary?.needs_review_count ? 'Cần xem lại' : scoreSummary ? 'Đang luyện tập' : classStatusLabel(student.status)}
-        tone={scoreSummary?.needs_review_count ? 'warning' : scoreSummary ? 'processing' : 'success'}
-      />
+      {scoreSummary?.needs_review_count ? (
+        <StatusBadge label="Cần xem lại" tone="warning" />
+      ) : null}
     </View>
   );
 }
@@ -1623,15 +1958,15 @@ function StudentScoresPanel({
   return (
     <AppCard style={styles.panel}>
       <Text style={styles.cardTitle}>{student.display_name}</Text>
-      <Text style={styles.cardDescription}>{student.email ?? 'Chưa có email'}</Text>
+      {!isInternalEmail(student.email) ? <Text style={styles.cardDescription}>{student.email ?? 'Chưa có email'}</Text> : null}
       {loading ? <Text style={styles.mutedText}>Đang tải kết quả luyện tập...</Text> : null}
       {error ? <ErrorState title="Chưa thể tải điểm" message={error} /> : null}
       {scores ? (
         <View style={styles.reportRows}>
           <ReportRow label="Tổng lượt luyện" value={String(scores.summary.total_attempts)} />
           <ReportRow label="Đã có kết quả" value={String(scores.summary.completed_attempts)} />
-          <ReportRow label="Điểm trung bình" value={scores.summary.average_score === null ? 'Chưa có điểm' : `${Math.round(scores.summary.average_score)}%`} />
-          <ReportRow label="Lần luyện gần nhất" value={scores.summary.last_practice_at ?? 'Chưa có dữ liệu'} />
+          <ReportRow label="Điểm trung bình" value={scores.summary.average_score === null ? 'Chưa có điểm' : `${Math.round(scores.summary.average_score)}/100`} />
+          <ReportRow label="Lần luyện gần nhất" value={formatDate(scores.summary.last_practice_at)} />
         </View>
       ) : null}
       <View style={styles.assignmentDetailSection}>
@@ -1663,7 +1998,7 @@ function StudentScoresPanel({
           <View key={item.practice_history_id} style={styles.classSummaryRow}>
             <Text style={styles.className}>{item.target_word ?? 'Bài luyện'}</Text>
             <Text style={styles.mutedText}>{formatPracticeStatus(item.status)}</Text>
-            <Text style={styles.reportValue}>{item.score === null ? 'Chưa có điểm' : `${Math.round(item.score)}%`}</Text>
+            <Text style={styles.reportValue}>{item.score === null ? 'Chưa có điểm' : `${Math.round(item.score)}/100`}</Text>
             {item.needs_review ? <StatusBadge label="Cần xem lại" tone="warning" /> : null}
           </View>
         ))}
@@ -2042,6 +2377,145 @@ function getPendingTeacherSection(): TeacherSection {
 
   const pendingSection = (window as Window & { __phoenixTeacherSection?: string }).__phoenixTeacherSection;
   return normalizeTeacherSection(pendingSection) ?? 'overview';
+}
+
+function formatDate(iso: string | null | undefined): string {
+  if (!iso) return 'Chưa có';
+  try {
+    const d = new Date(iso);
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    return `${day}/${month}/${d.getFullYear()}`;
+  } catch {
+    return iso;
+  }
+}
+
+function isInternalEmail(email: string | null | undefined): boolean {
+  if (!email) return false;
+  return email.includes('@phoenix-demo.local') || email.includes('@phoenix.edu.vn');
+}
+
+const WEEK_DAY_HEADERS = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
+const WEEK_DAY_MS = 86400000;
+
+function WeekPickerButton({ selectedWeek, onChange }: { selectedWeek: WeekInMonth; onChange: (week: WeekInMonth) => void }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [viewMonth, setViewMonth] = useState(() => new Date(selectedWeek.start));
+  const [btnRect, setBtnRect] = useState<{ top: number; right: number } | null>(null);
+  const btnRef = useRef<View>(null);
+
+  const weeks = useMemo(() => getWeeksInMonth(viewMonth), [viewMonth]);
+
+  const calendarWeeks = useMemo(() => {
+    const y = viewMonth.getFullYear();
+    const m = viewMonth.getMonth();
+    const firstMonday = startOfMondayWeek(new Date(y, m, 1));
+    return weeks.map((week) => {
+      const monday = new Date(firstMonday.getTime() + (week.index - 1) * 7 * WEEK_DAY_MS);
+      const days = Array.from({ length: 7 }, (_, i) => {
+        const d = new Date(monday.getTime() + i * WEEK_DAY_MS);
+        return { n: d.getDate(), inMonth: d.getMonth() === m };
+      });
+      return { week, days };
+    });
+  }, [weeks, viewMonth]);
+
+  const monthLabel = useMemo(() => {
+    const m = viewMonth.getMonth() + 1;
+    const y = viewMonth.getFullYear();
+    return `Tháng ${m}/${y}`;
+  }, [viewMonth]);
+
+  const shiftMonth = (delta: number) => {
+    setViewMonth((d) => new Date(d.getFullYear(), d.getMonth() + delta, 1));
+  };
+
+  const handleToggle = () => {
+    if (!isOpen) {
+      setViewMonth(new Date(selectedWeek.start));
+      btnRef.current?.measure((_fx, _fy, w, h, px, py) => {
+        const winWidth = Dimensions.get('window').width;
+        setBtnRect({ top: py + h + 4, right: winWidth - px - w });
+        setIsOpen(true);
+      });
+    } else {
+      setIsOpen(false);
+    }
+  };
+
+  const handleSelect = (week: WeekInMonth) => {
+    onChange(week);
+    setIsOpen(false);
+  };
+
+  const calendarContent = (
+    <View style={[styles.weekPickerDropdown, btnRect ? { top: btnRect.top, right: btnRect.right } : { top: 0, right: 0 }]}>
+      <View style={styles.weekPickerHeader}>
+        <Pressable accessibilityRole="button" onPress={() => shiftMonth(-1)} style={styles.weekPickerNav}>
+          <MaterialCommunityIcons name="chevron-left" size={20} color={colors.primary} />
+        </Pressable>
+        <Text style={styles.weekPickerMonthLabel}>{monthLabel}</Text>
+        <Pressable accessibilityRole="button" onPress={() => shiftMonth(1)} style={styles.weekPickerNav}>
+          <MaterialCommunityIcons name="chevron-right" size={20} color={colors.primary} />
+        </Pressable>
+      </View>
+      <View style={styles.weekPickerDayHeader}>
+        <View style={styles.weekPickerWeekCell} />
+        {WEEK_DAY_HEADERS.map((d) => (
+          <Text key={d} style={styles.weekPickerDayLabel}>{d}</Text>
+        ))}
+      </View>
+      {calendarWeeks.map(({ week, days }) => {
+        const active = week.value === selectedWeek.value;
+        return (
+          <Pressable
+            key={week.value}
+            accessibilityRole="button"
+            onPress={() => handleSelect(week)}
+            style={[styles.weekPickerRow, active ? styles.weekPickerRowActive : null]}
+          >
+            <Text style={[styles.weekPickerWeekLabel, active ? styles.weekPickerWeekLabelActive : null]}>
+              {week.label}
+            </Text>
+            {days.map(({ n, inMonth }, i) => (
+              <Text
+                key={i}
+                style={[
+                  styles.weekPickerDayNum,
+                  !inMonth ? styles.weekPickerDayNumOut : null,
+                  active ? styles.weekPickerDayNumActive : null,
+                ]}
+              >
+                {n}
+              </Text>
+            ))}
+          </Pressable>
+        );
+      })}
+    </View>
+  );
+
+  return (
+    <View ref={btnRef} style={styles.weekPickerWrap}>
+      <Pressable accessibilityRole="button" onPress={handleToggle} style={[styles.actionButton, isOpen ? styles.actionButtonPrimary : null]}>
+        <MaterialCommunityIcons name="calendar-week" size={17} color={isOpen ? '#FFFFFF' : colors.primary} />
+        <Text style={[styles.actionButtonText, isOpen ? styles.actionButtonTextPrimary : null]}>
+          {selectedWeek.label} ({formatDateRange(selectedWeek)})
+        </Text>
+        <MaterialCommunityIcons name={isOpen ? 'chevron-up' : 'chevron-down'} size={15} color={isOpen ? '#FFFFFF' : colors.muted} />
+      </Pressable>
+      <Modal visible={isOpen} transparent animationType="none" onRequestClose={() => setIsOpen(false)}>
+        <TouchableWithoutFeedback onPress={() => setIsOpen(false)}>
+          <View style={styles.weekPickerBackdrop}>
+            <TouchableWithoutFeedback>
+              {calendarContent}
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
+    </View>
+  );
 }
 
 const metricToneStyles = StyleSheet.create({
@@ -2488,6 +2962,74 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 4,
   },
+  scoreTableHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#e2e8f0',
+    gap: 12,
+  },
+  scoreTableHeaderCell: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: colors.muted,
+  },
+  scoreColName: {
+    flex: 3,
+    borderRightWidth: 1,
+    borderRightColor: '#f1f5f9',
+    paddingRight: 8,
+  },
+  scoreColScore: {
+    flex: 1,
+    alignItems: 'center',
+    borderRightWidth: 1,
+    borderRightColor: '#f1f5f9',
+  },
+  scoreColComment: {
+    flex: 1,
+    alignItems: 'center',
+    borderRightWidth: 1,
+    borderRightColor: '#f1f5f9',
+  },
+  scoreColBtn: {
+    flex: 1,
+    alignItems: 'flex-end',
+  },
+  studentDetailBackdrop: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 24,
+  },
+  studentDetailModal: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    padding: 24,
+    width: '100%',
+    maxWidth: 600,
+    maxHeight: '80%',
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 16,
+    paddingBottom: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
+  },
+  modalCloseBtn: {
+    width: 32,
+    height: 32,
+    borderRadius: 8,
+    backgroundColor: '#F1F5F9',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   scoreTableRow: {
     minHeight: 76,
     borderRadius: 10,
@@ -2509,6 +3051,48 @@ const styles = StyleSheet.create({
     flexBasis: 120,
     gap: 2,
   },
+  scorePill: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 999,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  scorePillNeutral: { backgroundColor: '#F1F5F9' },
+  scorePillGreen: { backgroundColor: '#D1FAE5' },
+  scorePillYellow: { backgroundColor: '#FEF3C7' },
+  scorePillRed: { backgroundColor: '#FEE2E2' },
+  scorePillText: {
+    fontSize: 13,
+    fontWeight: '800',
+    color: '#065F46',
+  },
+  scorePillTextRed: { color: '#991B1B' },
+  classHeaderStatLine: {
+    color: colors.muted,
+    fontSize: 13,
+    fontWeight: '500',
+  },
+  scoreSummaryItemLarge: {
+    flexBasis: 200,
+    minHeight: 104,
+  },
+  scoreSummaryItemSmall: {
+    flexBasis: 120,
+    minHeight: 80,
+  },
+  scoreSummaryItemRed: {
+    backgroundColor: '#FEE2E2',
+    borderColor: '#FECACA',
+  },
+  scoreSummaryItemOrange: {
+    backgroundColor: '#FEF3C7',
+    borderColor: '#FDE68A',
+  },
+  metricValueRed: { color: '#DC2626' },
+  metricLabelRed: { color: '#DC2626' },
+  metricValueOrange: { color: '#D97706' },
+  metricLabelOrange: { color: '#D97706' },
   studentRow: {
     minHeight: 68,
     borderRadius: 10,
@@ -2747,6 +3331,23 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     gap: 8,
   },
+  successBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    backgroundColor: '#F0FDF4',
+    borderRadius: 8,
+    padding: 12,
+    marginTop: 12,
+    borderLeftWidth: 4,
+    borderLeftColor: colors.success,
+  },
+  successBannerText: {
+    color: '#15803D',
+    fontSize: 14,
+    fontWeight: '500',
+    flex: 1,
+  },
   assignmentList: {
     gap: 12,
   },
@@ -2946,5 +3547,210 @@ const styles = StyleSheet.create({
     color: colors.primary,
     fontSize: 13,
     fontWeight: '800',
+  },
+  weekPickerWrap: {},
+  weekPickerBackdrop: {
+    flex: 1,
+  },
+  weekPickerDropdown: {
+    position: 'absolute',
+    width: 320,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#e2e8f0',
+    backgroundColor: '#FFFFFF',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.12,
+    shadowRadius: 12,
+    elevation: 16,
+    overflow: 'hidden',
+  },
+  weekPickerHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
+    backgroundColor: '#F8FAFC',
+  },
+  weekPickerNav: {
+    width: 30,
+    height: 30,
+    borderRadius: 8,
+    backgroundColor: colors.softBlue,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  weekPickerMonthLabel: {
+    color: colors.text,
+    fontSize: 16,
+    fontWeight: '900',
+  },
+  weekPickerDayHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 8,
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#F1F5F9',
+    backgroundColor: '#F8FAFC',
+  },
+  weekPickerWeekCell: {
+    width: 52,
+  },
+  weekPickerDayLabel: {
+    flex: 1,
+    textAlign: 'center',
+    fontSize: 11,
+    fontWeight: '700',
+    color: colors.muted,
+  },
+  weekPickerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 8,
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#F1F5F9',
+  },
+  weekPickerRowActive: {
+    backgroundColor: '#EEF2FF',
+  },
+  weekPickerWeekLabel: {
+    width: 52,
+    fontSize: 12,
+    fontWeight: '700',
+    color: colors.muted,
+  },
+  weekPickerWeekLabelActive: {
+    color: colors.primary,
+  },
+  weekPickerDayNum: {
+    flex: 1,
+    textAlign: 'center',
+    fontSize: 13,
+    fontWeight: '600',
+    color: colors.text,
+  },
+  weekPickerDayNumOut: {
+    color: '#cbd5e1',
+  },
+  weekPickerDayNumActive: {
+    color: colors.primary,
+  },
+  createAssignmentModal: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    padding: 24,
+    width: '100%',
+    maxWidth: 520,
+    maxHeight: '85%',
+    gap: 4,
+  },
+  createFormGroup: {
+    gap: 8,
+    marginTop: 16,
+  },
+  createFormLabel: {
+    color: colors.text,
+    fontSize: 13,
+    fontWeight: '700',
+  },
+  createFormInput: {
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: 10,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    fontSize: 14,
+    color: colors.text,
+    backgroundColor: '#FAFAFA',
+  },
+  setPickerList: {
+    gap: 6,
+  },
+  setPickerItem: {
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: 10,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    backgroundColor: '#FAFAFA',
+  },
+  setPickerItemActive: {
+    borderColor: colors.primary,
+    backgroundColor: colors.softBlue,
+  },
+  setPickerText: {
+    color: colors.text,
+    fontSize: 14,
+    fontWeight: '700',
+  },
+  setPickerTextActive: {
+    color: colors.primary,
+  },
+  createTargetRow: {
+    flexDirection: 'row',
+    gap: 10,
+  },
+  createTargetBtn: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    alignItems: 'center',
+    backgroundColor: '#FAFAFA',
+  },
+  createTargetBtnActive: {
+    borderColor: colors.primary,
+    backgroundColor: colors.softBlue,
+  },
+  createTargetBtnText: {
+    color: colors.muted,
+    fontSize: 13,
+    fontWeight: '700',
+  },
+  createTargetBtnTextActive: {
+    color: colors.primary,
+  },
+  createErrorText: {
+    color: '#DC2626',
+    fontSize: 13,
+    marginTop: 8,
+  },
+  createModalActions: {
+    flexDirection: 'row',
+    gap: 10,
+    marginTop: 20,
+  },
+  createCancelBtn: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: 10,
+    paddingVertical: 12,
+    alignItems: 'center',
+  },
+  createCancelBtnText: {
+    color: colors.text,
+    fontSize: 14,
+    fontWeight: '700',
+  },
+  createSubmitBtn: {
+    flex: 1,
+    borderRadius: 10,
+    backgroundColor: colors.primary,
+    paddingVertical: 12,
+    alignItems: 'center',
+  },
+  createSubmitBtnText: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: '700',
   },
 });

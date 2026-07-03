@@ -1,0 +1,19 @@
+
+==================================================================================================================
+  MODEL EVALUATION COMPARISON  (Test Split)
+==================================================================================================================
+  Model                                      Acc  MacroF1   AddF1   DelF1   SubF1  Note
+  ------------------------------------------------------------------------------------------------------------------
+  CNN (Baseline)                          0.6966   0.4657  0.0000  0.6341  0.7631  addition always fails
+  CNN + Temporal Attention  (seed 42)     0.6126   0.4913  0.1754  0.6667  0.6893  selected model, 4-speaker mixed test
+  CNN + Attention + Context  (seed 42, HQTV)  0.6848   0.5489  0.1729  0.7200  0.7539  speaker-disjoint, HQTV held-out
+  ------------------------------------------------------------------------------------------------------------------
+
+Notes
+-----
+• CNN Baseline: test set = 4 Vietnamese speakers (HQTV/PNV/THV/TLV), mixed train/val/test
+• CNN + Attention: same 4-speaker test set, seed 42 run (best epoch 1, val macro F1 0.5388)
+• CNN + Attention + Context: speaker-disjoint — HQTV fully held out from training,
+  context window 0.1 s prepended, seed 42 (best epoch 3, val macro F1 0.5660)
+• Macro F1 gain:  CNN → CNN+Att: +0.0256   CNN+Att → CNN+Att+Ctx: +0.0576
+• Addition F1 improvement over baseline:  CNN+Att ×∞ (0→0.175), CNN+Att+Ctx ×∞ (0→0.173)

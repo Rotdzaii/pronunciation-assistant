@@ -332,3 +332,134 @@ export type DemoReadinessResponse = {
   passed: boolean;
   checks: DemoReadinessCheck[];
 };
+
+export type VocabularyItem = {
+  id: string;
+  word: string;
+  phonetic: string | null;
+  meaning_vi: string | null;
+  topic: string | null;
+  level: string | null;
+  difficulty: number | null;
+  sample_sentence: string | null;
+  target_phonemes: unknown[];
+  common_mistake_tags: unknown[];
+  stress_pattern: string | null;
+};
+
+export type AssignmentProgress = {
+  id: string;
+  assignment_id: string;
+  student_id: string;
+  status: 'not_started' | 'in_progress' | 'completed' | 'overdue';
+  completed_items: number;
+  total_items: number;
+  completed_at: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type Assignment = {
+  id: string;
+  title: string;
+  description: string | null;
+  content_type: 'vocabulary_set' | 'sentence_set';
+  content_id: string;
+  class_id: string | null;
+  student_id: string | null;
+  assigned_by: string;
+  due_date: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type AssignmentDetail = Assignment & {
+  progress: AssignmentProgress[];
+};
+
+export type AssignmentsListResponse = {
+  items: Assignment[];
+  total: number;
+};
+
+export type StudentAssignment = {
+  id: string;
+  title: string;
+  description: string | null;
+  content_type: string;
+  content_id: string;
+  class_id: string | null;
+  assigned_by: string;
+  due_date: string | null;
+  created_at: string;
+  progress_status: 'not_started' | 'in_progress' | 'completed' | 'overdue';
+  completed_items: number;
+  total_items: number;
+  completed_at: string | null;
+};
+
+export type AssessmentSubmissionRecording = {
+  item_id: string;
+  word: string;
+  audio_url: string;
+  practice_job_id: string | null;
+  recorded_at: string;
+};
+
+export type AssessmentSubmission = {
+  id: string;
+  assignment_id: string;
+  student_id: string;
+  recordings: AssessmentSubmissionRecording[];
+  started_at: string;
+  submitted_at: string | null;
+  is_locked: boolean;
+  created_at: string;
+  updated_at: string;
+};
+
+export type AssignmentStatus = {
+  can_start: boolean;
+  is_locked: boolean;
+  started_at: string | null;
+  submitted_at: string | null;
+  deadline: string | null;
+  timer_per_word_seconds: number;
+};
+
+export type AssignmentWords = {
+  assignment_id: string;
+  title: string;
+  timer_per_word_seconds: number;
+  deadline: string | null;
+  items: {
+    id: string;
+    word: string;
+    phonetic: string | null;
+    meaning_vi: string | null;
+    topic: string | null;
+    level: string | null;
+  }[];
+};
+
+export type VocabularySet = {
+  id: string;
+  title: string;
+  description: string | null;
+  topic: string | null;
+  level: string | null;
+  is_public: boolean;
+  is_active: boolean;
+  item_count: number | null;
+};
+
+export type VocabularySetDetail = {
+  id: string;
+  title: string;
+  description: string | null;
+  topic: string | null;
+  level: string | null;
+  is_public: boolean;
+  is_active: boolean;
+  items: VocabularyItem[];
+};

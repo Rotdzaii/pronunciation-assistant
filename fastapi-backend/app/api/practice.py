@@ -27,6 +27,34 @@ from app.core.config import Settings, get_settings
 
 router = APIRouter(prefix="/practice", tags=["Practice"])
 
+
+def _maybe_auto_finalize_submission(supabase_client, assignment: dict, submission: dict) -> dict:
+    """Lazily finalizes an in-progress submission if past deadline."""
+    deadline = assignment.get("deadline")
+    if not deadline:
+        return submission
+    if submission.get("is_locked") or not submission.get("started_at") or submission.get("submitted_at"):
+        return submission
+    try:
+        now = datetime.now(timezone.utc)
+        deadline_dt = datetime.fromisoformat(deadline.replace("Z", "+00:00"))
+        if deadline_dt < now:
+            updated = (
+                supabase_client.table("assessment_submissions")
+                .update({
+                    "submitted_at": deadline_dt.isoformat(),
+                    "is_locked": True,
+                    "updated_at": now.isoformat(),
+                })
+                .eq("id", submission["id"])
+                .execute()
+                .data
+            )
+            return updated[0] if updated else submission
+    except (ValueError, KeyError):
+        pass
+    return submission
+
 ALLOWED_AUDIO_TYPES = {
     "audio/wav",
     "audio/mpeg",
@@ -49,6 +77,8 @@ class AudioUploadResponse(BaseModel):
 class PracticeJobCreate(BaseModel):
     target_word: str = Field(..., min_length=1)
     audio_url: str = Field(..., min_length=1)
+    assignment_id: str | None = None
+    item_id: str | None = None
 
 
 class PracticeJobCreateResponse(BaseModel):
@@ -156,6 +186,23 @@ def create_practice_job(
 
     job_id = uuid4()
     supabase_client = get_supabase_service_client(settings)
+
+    # If this is an assessment recording, validate before proceeding
+    assessment_sub = None
+    assessment_assignment = None
+    if payload.assignment_id and payload.item_id:
+        asgn_rows = supabase_client.table("assignments").select("*").eq("id", payload.assignment_id).execute().data
+        if asgn_rows:
+            assessment_assignment = asgn_rows[0]
+            sub_rows = supabase_client.table("assessment_submissions").select("*").eq("assignment_id", payload.assignment_id).eq("student_id", current_user.id).execute().data
+            if sub_rows:
+                assessment_sub = _maybe_auto_finalize_submission(supabase_client, assessment_assignment, sub_rows[0])
+                if assessment_sub.get("is_locked"):
+                    raise HTTPException(
+                        status_code=status.HTTP_403_FORBIDDEN,
+                        detail="Assessment deadline passed",
+                    )
+
     row = {
         "id": str(job_id),
         "student_id": current_user.id,
@@ -197,6 +244,25 @@ def create_practice_job(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Practice job was created but could not be queued",
         ) from exc
+
+    # Upsert assessment recording if applicable
+    if payload.assignment_id and payload.item_id and assessment_sub:
+        try:
+            existing_recordings = list(assessment_sub.get("recordings") or [])
+            existing_recordings = [r for r in existing_recordings if r.get("item_id") != payload.item_id]
+            existing_recordings.append({
+                "item_id": payload.item_id,
+                "word": payload.target_word,
+                "audio_url": payload.audio_url,
+                "practice_job_id": str(job_id),
+                "recorded_at": datetime.now(timezone.utc).isoformat(),
+            })
+            supabase_client.table("assessment_submissions").update({
+                "recordings": existing_recordings,
+                "updated_at": datetime.now(timezone.utc).isoformat(),
+            }).eq("id", assessment_sub["id"]).execute()
+        except Exception:
+            pass  # recording upsert failure must not fail the whole job
 
     return PracticeJobCreateResponse(
         job_id=str(job_id),

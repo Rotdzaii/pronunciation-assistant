@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { AppCard, AppScreen, colors } from '../../components/AppUI';
 import { BackButton } from '../../components/BackButton';
@@ -10,13 +10,16 @@ type StudentRouteParams = {
   name?: string;
   className?: string;
   level?: string;
+  student_id?: string;
 };
 
 export default function StudentDetailScreen() {
+  const router = useRouter();
   const params = useLocalSearchParams<StudentRouteParams>();
   const studentName = normalizeParam(params.name);
   const className = normalizeParam(params.className);
   const level = normalizeParam(params.level);
+  const studentId = normalizeParam(params.student_id);
   const hasStudent = Boolean(studentName);
 
   return (
@@ -58,7 +61,7 @@ export default function StudentDetailScreen() {
         </View>
 
         <View style={styles.rightColumn}>
-          <AIInterventionCard hasStudent={hasStudent} />
+          <AIInterventionCard hasStudent={hasStudent} studentId={studentId} onAssign={() => router.push('/(tabs)/teacher')} />
           <ScoreTrendCard hasStudent={hasStudent} />
           <RecentHistoryCard hasStudent={hasStudent} />
         </View>
@@ -150,7 +153,16 @@ function CommonMistakesCard({ hasStudent }: { hasStudent: boolean }) {
   );
 }
 
-function AIInterventionCard({ hasStudent }: { hasStudent: boolean }) {
+function AIInterventionCard({
+  hasStudent,
+  studentId,
+  onAssign,
+}: {
+  hasStudent: boolean;
+  studentId: string | null;
+  onAssign: () => void;
+}) {
+  const canAssign = hasStudent && Boolean(studentId);
   return (
     <AppCard style={styles.aiCard}>
       <View style={styles.aiContent}>
@@ -169,7 +181,12 @@ function AIInterventionCard({ hasStudent }: { hasStudent: boolean }) {
               ? 'Chưa có đề xuất can thiệp từ dữ liệu luyện tập thật của học viên này.'
               : 'AI sẽ đề xuất bài tập mục tiêu khi có hồ sơ học viên và dữ liệu luyện tập.'}
           </Text>
-          <Pressable accessibilityRole="button" disabled style={styles.aiButton}>
+          <Pressable
+            accessibilityRole="button"
+            disabled={!canAssign}
+            onPress={canAssign ? onAssign : undefined}
+            style={[styles.aiButton, !canAssign ? styles.aiButtonDisabled : null]}
+          >
             <MaterialCommunityIcons name="clipboard-plus-outline" size={18} color="#FFFFFF" />
             <Text style={styles.aiButtonText}>Giao bài tập mục tiêu</Text>
           </Pressable>
@@ -651,5 +668,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: 'center',
     marginTop: 8,
+  },
+  aiButtonDisabled: {
+    opacity: 0.5,
   },
 });

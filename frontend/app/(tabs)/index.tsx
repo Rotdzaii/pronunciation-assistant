@@ -3,8 +3,8 @@ import { type Href, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { AppCard, AppScreen, ErrorState, LoadingState, StatusBadge, colors } from '../../components/AppUI';
-import { fetchStudentClassDetail, fetchStudentClasses } from '../../lib/api';
-import type { ClassDetail, ClassSummary } from '../../types';
+import { fetchStudentAssignments, fetchStudentClassDetail, fetchStudentClasses } from '../../lib/api';
+import type { ClassDetail, ClassSummary, StudentAssignment } from '../../types';
 
 type IconName = keyof typeof MaterialCommunityIcons.glyphMap;
 
@@ -78,6 +78,7 @@ export default function HomeScreen() {
   const [classLoading, setClassLoading] = useState(true);
   const [classDetailLoading, setClassDetailLoading] = useState(false);
   const [classError, setClassError] = useState<string | null>(null);
+  const [assignments, setAssignments] = useState<StudentAssignment[]>([]);
 
   useEffect(() => {
     console.debug('[StudentHome] class list effect');
@@ -99,6 +100,10 @@ export default function HomeScreen() {
     };
 
     void loadClasses();
+  }, []);
+
+  useEffect(() => {
+    fetchStudentAssignments().then(setAssignments).catch(() => undefined);
   }, []);
 
   const openClassDetail = async (classId: string) => {
@@ -227,12 +232,22 @@ export default function HomeScreen() {
             </View>
             <Text style={styles.progressTitle}>Bắt đầu tuần học mới</Text>
             <ProgressLine label="Thời gian học" value="0/30p" percent={0} />
-            <ProgressLine label="Bài tập hoàn thành" value="0/5" percent={0} />
-            <View style={styles.progressNoteBox}>
-              <Text style={styles.progressNoteText}>
-                Hoàn thành bài luyện đầu tiên để cập nhật tiến độ thật từ hệ thống.
-              </Text>
-            </View>
+            <ProgressLine
+              label="Bài tập hoàn thành"
+              value={assignments.length > 0
+                ? `${assignments.filter((a) => a.progress_status === 'completed').length}/${assignments.length}`
+                : '0/0'}
+              percent={assignments.length > 0
+                ? Math.round((assignments.filter((a) => a.progress_status === 'completed').length / assignments.length) * 100)
+                : 0}
+            />
+            {assignments.length === 0 ? (
+              <View style={styles.progressNoteBox}>
+                <Text style={styles.progressNoteText}>
+                  Hoàn thành bài luyện đầu tiên để cập nhật tiến độ thật từ hệ thống.
+                </Text>
+              </View>
+            ) : null}
           </AppCard>
 
           <AppCard style={styles.goalCard}>

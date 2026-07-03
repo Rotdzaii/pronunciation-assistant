@@ -1,3 +1,6 @@
+-- NOTE: This migration references public.classes(id).
+-- On a fresh database, run 008_create_class_tables.sql BEFORE this file.
+
 create table if not exists public.review_requests (
   id uuid primary key default gen_random_uuid(),
   practice_history_id uuid not null references public.practice_history(id) on delete cascade,

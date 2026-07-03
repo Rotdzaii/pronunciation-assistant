@@ -1,0 +1,2 @@
+context_mode,context_seconds,held_out_speaker,train_rows,validation_rows,test_rows,best_epoch,best_val_macro_f1,test_accuracy,test_macro_f1,test_weighted_f1,test_addition_f1,test_deletion_f1,test_substitution_f1
+context_0_10,0.1,HQTV,18739,1195,1358,12,0.5746295778722676,0.7083946980854198,0.5518593877856204,0.7195328040601671,0.15544041450777202,0.7460168697282099,0.7541208791208791

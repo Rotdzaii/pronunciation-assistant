@@ -160,6 +160,7 @@ export default function TabsLayout() {
           />
           <Tabs.Screen name="students" options={{ title: 'Danh sách học viên', href: null }} />
           <Tabs.Screen name="student-detail" options={{ title: 'Chi tiết học viên', href: null }} />
+          <Tabs.Screen name="assessment/index" options={{ title: 'Kiểm tra', href: null }} />
         </Tabs>
       </View>
     </View>

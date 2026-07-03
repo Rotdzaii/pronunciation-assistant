@@ -44,6 +44,24 @@ def _mfa_command_prefix(command: str, conda_env: str | None) -> list[str]:
     return [_mfa_command(command)]
 
 
+def _win_to_wsl_path(path: Path) -> str:
+    """Convert a Windows absolute path (C:\\...) to a WSL mount path (/mnt/c/...)."""
+    drive = path.drive  # e.g. 'C:'
+    if not drive:
+        return path.as_posix()
+    letter = drive[0].lower()
+    rest = path.as_posix()[len(drive):]  # everything after 'C:'
+    return f"/mnt/{letter}{rest}"
+
+
+def _to_wsl_arg(value: str) -> str:
+    """Convert value to WSL path only if it looks like a Windows absolute path."""
+    p = Path(value)
+    if p.drive:
+        return _win_to_wsl_path(p)
+    return value
+
+
 def _write_lab_file(path: Path, prompt_text: str) -> None:
     text = " ".join(str(prompt_text or "").split())
     if not text:
@@ -108,9 +126,20 @@ def run_mfa_alignment(
     if not source_audio.exists():
         raise AlignmentError(f"Audio file not found for MFA alignment: {source_audio}")
 
-    command_name = os.getenv("MFA_COMMAND", "mfa")
-    conda_env = os.getenv("MFA_CONDA_ENV")
-    command_prefix = _mfa_command_prefix(command_name, conda_env)
+    wsl_distro = os.getenv("MFA_WSL_DISTRO")
+    use_wsl = bool(wsl_distro)
+
+    if use_wsl:
+        wsl_user = os.getenv("MFA_WSL_USER", "phoenix")
+        wsl_binary = os.getenv("MFA_WSL_BINARY", "/home/phoenix/miniforge3/envs/mfa/bin/mfa")
+        command_name = wsl_binary
+        conda_env = None
+        print(f"[INFO] MFA WSL mode active: distro={wsl_distro!r} user={wsl_user!r} binary={wsl_binary!r}")
+    else:
+        command_name = os.getenv("MFA_COMMAND", "mfa")
+        conda_env = os.getenv("MFA_CONDA_ENV")
+        command_prefix = _mfa_command_prefix(command_name, conda_env)
+
     dictionary = _configured_model(str(dictionary_path or os.getenv("MFA_DICTIONARY_PATH") or ""), "MFA_DICTIONARY_PATH")
     acoustic_model = _configured_model(
         str(acoustic_model_path or os.getenv("MFA_ACOUSTIC_MODEL_PATH") or ""),
@@ -130,16 +159,34 @@ def run_mfa_alignment(
         working_audio = _prepare_audio_for_mfa(source_audio, corpus_dir)
         _write_lab_file(working_audio.with_suffix(".lab"), prompt_text)
 
-        command_args = [
-            *command_prefix,
-            "align",
-            str(corpus_dir),
-            str(dictionary),
-            str(acoustic_model),
-            str(align_output_dir),
-            "--clean",
-            "--single_speaker",
-        ]
+        if use_wsl:
+            wsl_env_bin = str(Path(wsl_binary).parent)
+            wsl_path = f"{wsl_env_bin}:/usr/bin:/bin"
+            command_args = [
+                "wsl", "-d", wsl_distro, "-u", wsl_user, "--",
+                "env", f"PATH={wsl_path}",
+                wsl_binary,
+                "align",
+                _win_to_wsl_path(corpus_dir),
+                _to_wsl_arg(dictionary),
+                _to_wsl_arg(acoustic_model),
+                _win_to_wsl_path(align_output_dir),
+                "--clean",
+                "--single_speaker",
+            ]
+        else:
+            command_args = [
+                *command_prefix,
+                "align",
+                str(corpus_dir),
+                str(dictionary),
+                str(acoustic_model),
+                str(align_output_dir),
+                "--clean",
+                "--single_speaker",
+            ]
+
+        print(f"[INFO] MFA command: {' '.join(command_args)}")
         completed = subprocess.run(
             command_args,
             capture_output=True,
@@ -149,6 +196,7 @@ def run_mfa_alignment(
         )
         if completed.returncode != 0:
             stderr = (completed.stderr or completed.stdout or "").strip()
+            print(f"[ERROR] MFA failed (exit {completed.returncode}): {stderr}")
             raise AlignmentError(f"MFA alignment failed with exit code {completed.returncode}: {stderr}")
 
         textgrid_candidates = sorted(align_output_dir.rglob(f"{working_audio.stem}.TextGrid"))
@@ -159,6 +207,10 @@ def run_mfa_alignment(
 
         result = parse_textgrid(textgrid_candidates[0])
         result["metadata"]["mfa_exit_code"] = completed.returncode
-        result["metadata"]["mfa_command"] = command_name
-        result["metadata"]["mfa_conda_env"] = conda_env
+        if use_wsl:
+            result["metadata"]["mfa_wsl_distro"] = wsl_distro
+            result["metadata"]["mfa_wsl_binary"] = wsl_binary
+        else:
+            result["metadata"]["mfa_command"] = command_name
+            result["metadata"]["mfa_conda_env"] = conda_env
         return result

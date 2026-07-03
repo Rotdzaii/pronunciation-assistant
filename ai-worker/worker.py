@@ -99,6 +99,16 @@ def _load_env() -> dict[str, Any]:
     except ValueError as exc:
         raise RuntimeError("WORKER_IDLE_BACKOFF_MAX_SECONDS must be a number") from exc
 
+    try:
+        visibility_timeout = int(
+            os.getenv("QUEUE_VISIBILITY_TIMEOUT_SECONDS", str(DEFAULT_VISIBILITY_TIMEOUT_SECONDS))
+        )
+    except ValueError as exc:
+        raise RuntimeError("QUEUE_VISIBILITY_TIMEOUT_SECONDS must be an integer") from exc
+
+    if visibility_timeout <= 0:
+        raise RuntimeError("QUEUE_VISIBILITY_TIMEOUT_SECONDS must be greater than 0")
+
     if poll_interval_seconds <= 0:
         raise RuntimeError("WORKER_POLL_INTERVAL_SECONDS must be greater than 0")
     if idle_backoff_max_seconds < poll_interval_seconds:
@@ -126,6 +136,7 @@ def _load_env() -> dict[str, Any]:
         "worker_mode": worker_mode,
         "poll_interval_seconds": poll_interval_seconds,
         "idle_backoff_max_seconds": idle_backoff_max_seconds,
+        "visibility_timeout": visibility_timeout,
     }
 
 
@@ -151,13 +162,13 @@ def _first_row(data: Any) -> dict[str, Any] | None:
     return None
 
 
-def _read_one_job(client: Client, queue_name: str) -> dict[str, Any] | None:
+def _read_one_job(client: Client, queue_name: str, visibility_timeout: int) -> dict[str, Any] | None:
     rpc_attempts = [
         (
             "read_practice_job",
             {
                 "p_queue_name": queue_name,
-                "p_vt": DEFAULT_VISIBILITY_TIMEOUT_SECONDS,
+                "p_vt": visibility_timeout,
                 "p_qty": 1,
             },
         ),
@@ -166,7 +177,7 @@ def _read_one_job(client: Client, queue_name: str) -> dict[str, Any] | None:
             "pgmq_read",
             {
                 "queue_name": queue_name,
-                "vt": DEFAULT_VISIBILITY_TIMEOUT_SECONDS,
+                "vt": visibility_timeout,
                 "qty": 1,
             },
         ),
@@ -174,7 +185,7 @@ def _read_one_job(client: Client, queue_name: str) -> dict[str, Any] | None:
             "pgmq_read",
             {
                 "p_queue_name": queue_name,
-                "p_vt": DEFAULT_VISIBILITY_TIMEOUT_SECONDS,
+                "p_vt": visibility_timeout,
                 "p_qty": 1,
             },
         ),
@@ -186,6 +197,7 @@ def _read_one_job(client: Client, queue_name: str) -> dict[str, Any] | None:
             row = _first_row(_rpc_data(_call_rpc(client, rpc_name, params)))
             if row:
                 return row
+            print(f"[WARN] {rpc_name} returned no messages from {queue_name!r} (queue empty or message within visibility window).")
             return None
         except Exception as exc:
             errors.append(f"{rpc_name}: {exc}")
@@ -497,7 +509,7 @@ def _post_webhook(webhook_url: str, webhook_secret: str, payload: dict[str, Any]
 
 
 def _process_one_job(client: Client, config: dict[str, Any]) -> bool:
-    row = _read_one_job(client, config["queue_name"])
+    row = _read_one_job(client, config["queue_name"], config["visibility_timeout"])
     if not row:
         print(f"No job found in {config['queue_name']} queue.")
         return False

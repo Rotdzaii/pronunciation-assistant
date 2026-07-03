@@ -127,6 +127,7 @@ def align_audio(
             result["metadata"]["requested_alignment_method"] = mode
             return result
         except AlignmentError as exc:
+            print(f"[WARN] MFA alignment failed, falling back: {exc}")
             if allow_fallback:
                 result = _fallback_alignment(audio_path, prompt_text, canonical_phones, fallback_reason=str(exc))
                 result["metadata"]["requested_alignment_mode"] = mode

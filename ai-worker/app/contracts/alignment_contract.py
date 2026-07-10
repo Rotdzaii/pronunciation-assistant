@@ -10,7 +10,21 @@ MFA_ALIGNMENT_NOTE = "MFA TextGrid forced alignment parsed successfully."
 
 
 class AlignmentError(RuntimeError):
-    """Raised when an alignment provider cannot produce a valid alignment."""
+    """A recoverable alignment failure with a stable error category."""
+
+    def __init__(
+        self,
+        message: str,
+        *,
+        code: str = "alignment_failed",
+        details: dict[str, Any] | None = None,
+    ) -> None:
+        super().__init__(message)
+        self.code = code
+        self.details = dict(details or {})
+
+    def as_dict(self) -> dict[str, Any]:
+        return {"code": self.code, "message": str(self), "details": self.details}
 
 
 def build_alignment_segment(
@@ -22,13 +36,16 @@ def build_alignment_segment(
     index: int | None = None,
     segment_type: str = "phone",
 ) -> dict[str, Any]:
+    normalized_start = round(float(start), 3)
+    normalized_end = round(float(end), 3)
     return {
         "index": index,
         "type": segment_type,
         "phone": phone,
         "word": word,
-        "start": round(float(start), 3),
-        "end": round(float(end), 3),
+        "start": normalized_start,
+        "end": normalized_end,
+        "duration": round(normalized_end - normalized_start, 3),
     }
 
 
@@ -41,6 +58,8 @@ def build_alignment_result(
     metadata: dict[str, Any] | None = None,
     words: list[dict[str, Any]] | None = None,
     phones: list[dict[str, Any]] | None = None,
+    quality: dict[str, Any] | None = None,
+    error: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     result_words = list(words or [segment for segment in segments if segment.get("type") == "word"])
     result_phones = list(phones or [segment for segment in segments if segment.get("type") == "phone"])
@@ -54,6 +73,9 @@ def build_alignment_result(
         "phones": result_phones,
         "note": note,
         "metadata": dict(metadata or {}),
+        "alignment_source": "mfa" if method == "mfa" else ("fallback" if method.startswith("fallback") else "none"),
+        "quality": dict(quality or {}),
+        "error": dict(error) if error else None,
     }
 
 

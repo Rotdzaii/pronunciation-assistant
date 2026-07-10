@@ -14,6 +14,8 @@ SENSITIVE_KEYS = {
     "mfa_temp_dir",
     "local_path",
     "audio_path",
+    "debug_artifact_dir",
+    "mfa_debug_dir",
 }
 SENSITIVE_VALUE_MARKERS = (
     "c:\\",

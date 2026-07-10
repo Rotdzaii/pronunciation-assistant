@@ -39,6 +39,7 @@ SENSITIVE_ALIGNMENT_METADATA_KEYS = {
     "mfa_temp_dir",
     "temp_dir",
     "textgrid_path",
+    "debug_artifact_dir",
 }
 
 
@@ -635,7 +636,7 @@ def _aggregate_segment_predictions(
 def _safe_alignment_metadata(alignment_result: dict[str, Any]) -> dict[str, Any]:
     metadata = alignment_result.get("metadata") if isinstance(alignment_result.get("metadata"), dict) else {}
     alignment_status = str(alignment_result.get("status") or "")
-    used_mfa = alignment_result.get("method") == "mfa" and alignment_status == "success"
+    used_mfa = alignment_result.get("method") == "mfa" and alignment_status in {"success", "warning"}
     is_fallback = bool(
         metadata.get("fallback_alignment")
         or metadata.get("is_fallback")
@@ -644,8 +645,14 @@ def _safe_alignment_metadata(alignment_result: dict[str, Any]) -> dict[str, Any]
     safe_metadata = {
         key: value
         for key, value in metadata.items()
-        if str(key).lower() not in SENSITIVE_ALIGNMENT_METADATA_KEYS
+        if str(key).lower() not in SENSITIVE_ALIGNMENT_METADATA_KEYS | {"mfa_error"}
     }
+    mfa_error = metadata.get("mfa_error")
+    if isinstance(mfa_error, dict):
+        safe_metadata["mfa_error"] = {
+            "code": mfa_error.get("code"),
+            "message": mfa_error.get("message"),
+        }
     words = alignment_result.get("words") if isinstance(alignment_result.get("words"), list) else []
     phones = alignment_result.get("phones") if isinstance(alignment_result.get("phones"), list) else []
     safe_metadata.setdefault("word_segments_count", len(words))
@@ -670,6 +677,7 @@ def score_aligned_audio(
     checkpoint_path: str | Path | None = None,
     confidence_threshold: float | None = None,
 ) -> dict[str, Any]:
+    _require_usable_alignment(alignment_result)
     segments = get_alignment_segments(alignment_result)
     segment_predictions = predict_segments(audio_path, segments, checkpoint_path)
     return _aggregate_segment_predictions(
@@ -685,6 +693,7 @@ def score_aligned_audio_context(
     checkpoint_path: str | Path | None = None,
     confidence_threshold: float | None = None,
 ) -> dict[str, Any]:
+    _require_usable_alignment(alignment_result)
     segments = get_alignment_segments(alignment_result)
     segment_predictions = predict_context_segments(audio_path, segments, checkpoint_path)
     context_config = _context_config()
@@ -720,6 +729,15 @@ def _job_canonical_phones(job: dict[str, Any]) -> list[str]:
     return []
 
 
+def _require_usable_alignment(alignment_result: dict[str, Any]) -> None:
+    status = str(alignment_result.get("alignment_status") or alignment_result.get("status") or "")
+    segments = get_alignment_segments(alignment_result)
+    if status == "failed" or not segments:
+        error = alignment_result.get("error") if isinstance(alignment_result.get("error"), dict) else {}
+        error_code = error.get("code") or (alignment_result.get("metadata") or {}).get("error_code") or "alignment_failed"
+        raise CNNAttentionScorerError(f"Alignment is unavailable for segment inference: {error_code}.")
+
+
 def score_pronunciation(job: dict[str, Any], confidence_threshold: float | None = None) -> dict[str, Any]:
     temp_audio_path: Path | None = None
     try:
@@ -733,6 +751,7 @@ def score_pronunciation(job: dict[str, Any], confidence_threshold: float | None 
                 audio_path,
                 prompt_text=prompt_text,
                 canonical_phones=_job_canonical_phones(job),
+                job_id=str(job.get("job_id") or ""),
             )
             return score_aligned_audio(audio_path, alignment_result, confidence_threshold=confidence_threshold)
 
@@ -791,6 +810,7 @@ def score_pronunciation_context(job: dict[str, Any], confidence_threshold: float
             audio_path,
             prompt_text=prompt_text,
             canonical_phones=_job_canonical_phones(job),
+            job_id=str(job.get("job_id") or ""),
         )
         return score_aligned_audio_context(
             audio_path,

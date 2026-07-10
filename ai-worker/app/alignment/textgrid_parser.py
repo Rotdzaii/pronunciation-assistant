@@ -1,122 +1,123 @@
 from __future__ import annotations
 
 import re
+import unicodedata
 from pathlib import Path
 from typing import Any
 
-from app.contracts.alignment_contract import (
-    AlignmentError,
-    MFA_ALIGNMENT_NOTE,
-    build_alignment_result,
-    build_alignment_segment,
-)
+from app.contracts.alignment_contract import AlignmentError, MFA_ALIGNMENT_NOTE, build_alignment_result, build_alignment_segment
 
 
-WORD_TIER_NAMES = {"word", "words"}
-PHONE_TIER_NAMES = {"phone", "phones"}
+WORD_TIER_NAMES = {"word", "words", "orthography", "transcript"}
+PHONE_TIER_NAMES = {"phone", "phones", "phoneme", "phonemes", "segment", "segments"}
 
 
 def _unquote(value: str) -> str:
     value = value.strip()
-    if len(value) >= 2 and value[0] == '"' and value[-1] == '"':
-        return value[1:-1].replace('""', '"')
-    return value
+    return value[1:-1].replace('""', '"') if len(value) >= 2 and value[0] == '"' and value[-1] == '"' else value
 
 
 def _extract_value(line: str) -> str | None:
-    if "=" not in line:
-        return None
-    return line.split("=", 1)[1].strip()
+    return line.split("=", 1)[1].strip() if "=" in line else None
 
 
 def _tier_kind(name: str | None) -> str | None:
-    normalized = (name or "").strip().lower()
-    if normalized in WORD_TIER_NAMES:
+    normalized = unicodedata.normalize("NFKC", name or "").strip().casefold()
+    if normalized in WORD_TIER_NAMES or "word" in normalized:
         return "word"
-    if normalized in PHONE_TIER_NAMES:
+    if normalized in PHONE_TIER_NAMES or "phone" in normalized or "phon" in normalized:
         return "phone"
     return None
 
 
-def _parse_float(raw_value: str | None, field_name: str, path: Path) -> float:
+def _parse_float(value: str | None, field: str, path: Path) -> float:
     try:
-        return float(str(raw_value).strip())
+        return float(str(value).strip())
     except (TypeError, ValueError) as exc:
-        raise AlignmentError(f"Invalid TextGrid {field_name} in {path}") from exc
+        raise AlignmentError(f"Invalid TextGrid {field}.", code="textgrid_invalid") from exc
+
+
+def normalize_phone(phone: str) -> str:
+    return unicodedata.normalize("NFKC", phone).strip()
+
+
+def _word_for_phone(phone: dict[str, Any], words: list[dict[str, Any]]) -> str | None:
+    start = float(phone["start"])
+    end = float(phone["end"])
+    for word in words:
+        if start >= float(word["start"]) - 0.001 and end <= float(word["end"]) + 0.001:
+            return word.get("word")
+    return None
 
 
 def parse_textgrid(textgrid_path: str | Path) -> dict[str, Any]:
-    """Parse common long-form Praat/MFA TextGrid interval tiers.
-
-    The parser intentionally avoids external dependencies. It supports common
-    MFA TextGrid files with IntervalTier names such as words/Words and
-    phones/Phones.
-    """
+    """Parse long-form MFA/Praat TextGrid interval tiers into normalized timings."""
 
     path = Path(textgrid_path)
-    if not path.exists():
-        raise AlignmentError(f"TextGrid file not found: {path}")
-
+    if not path.is_file():
+        raise AlignmentError("TextGrid file was not found.", code="textgrid_missing")
     try:
-        lines = path.read_text(encoding="utf-8").splitlines()
+        lines = path.read_text(encoding="utf-8-sig").splitlines()
     except UnicodeDecodeError:
-        lines = path.read_text(encoding="utf-16").splitlines()
+        try:
+            lines = path.read_text(encoding="utf-16").splitlines()
+        except (OSError, UnicodeDecodeError) as exc:
+            raise AlignmentError("TextGrid could not be decoded.", code="textgrid_invalid") from exc
     except OSError as exc:
-        raise AlignmentError(f"Unable to read TextGrid file: {path}") from exc
+        raise AlignmentError("TextGrid could not be read.", code="textgrid_invalid") from exc
 
-    tiers: dict[str, list[dict[str, Any]]] = {"word": [], "phone": []}
-    current_tier_name: str | None = None
-    current_tier_kind: str | None = None
-    pending_interval: dict[str, Any] | None = None
-
+    raw_tiers: dict[str, list[tuple[float, float, str]]] = {"word": [], "phone": []}
+    current_kind: str | None = None
+    pending: dict[str, Any] | None = None
+    empty_intervals = 0
     for raw_line in lines:
         line = raw_line.strip()
         value = _extract_value(line)
         if line.startswith("name") and value is not None:
-            current_tier_name = _unquote(value)
-            current_tier_kind = _tier_kind(current_tier_name)
-            pending_interval = None
+            current_kind = _tier_kind(_unquote(value))
+            pending = None
             continue
-
-        if current_tier_kind is None:
+        if current_kind is None:
             continue
-
         if re.match(r"intervals\s*\[\d+\]:", line):
-            pending_interval = {}
+            pending = {}
             continue
-
-        if pending_interval is None or value is None:
+        if pending is None or value is None:
             continue
-
         if line.startswith("xmin"):
-            pending_interval["start"] = _parse_float(value, "xmin", path)
+            pending["start"] = _parse_float(value, "xmin", path)
         elif line.startswith("xmax"):
-            pending_interval["end"] = _parse_float(value, "xmax", path)
+            pending["end"] = _parse_float(value, "xmax", path)
         elif line.startswith("text"):
             label = _unquote(value).strip()
-            if label and {"start", "end"} <= pending_interval.keys():
-                index = len(tiers[current_tier_kind])
-                segment = build_alignment_segment(
-                    index=index,
-                    segment_type=current_tier_kind,
-                    phone=label if current_tier_kind == "phone" else None,
-                    word=label if current_tier_kind == "word" else None,
-                    start=pending_interval["start"],
-                    end=pending_interval["end"],
-                )
-                tiers[current_tier_kind].append(segment)
-            pending_interval = None
+            if not label:
+                empty_intervals += 1
+            elif {"start", "end"} <= pending.keys():
+                raw_tiers[current_kind].append((pending["start"], pending["end"], label))
+            pending = None
 
-    words = tiers["word"]
-    phones = tiers["phone"]
-    if not words and not phones:
-        raise AlignmentError(
-            f"No word or phone intervals found in TextGrid {path}. Expected tiers named words/word or phones/phone."
+    if not raw_tiers["word"] and not raw_tiers["phone"]:
+        raise AlignmentError("TextGrid contains no recognized word or phone intervals.", code="textgrid_invalid")
+
+    words = [
+        build_alignment_segment(index=index, segment_type="word", word=label, start=start, end=end)
+        for index, (start, end, label) in enumerate(sorted(raw_tiers["word"]))
+    ]
+    phones = [
+        build_alignment_segment(
+            index=index,
+            segment_type="phone",
+            phone=normalize_phone(label),
+            start=start,
+            end=end,
         )
+        for index, (start, end, label) in enumerate(sorted(raw_tiers["phone"]))
+    ]
+    for phone in phones:
+        phone["word"] = _word_for_phone(phone, words)
 
-    segments = phones or words
     return build_alignment_result(
-        segments=segments,
+        segments=phones or words,
         status="success",
         method="mfa",
         note=MFA_ALIGNMENT_NOTE,
@@ -130,5 +131,6 @@ def parse_textgrid(textgrid_path: str | Path) -> dict[str, Any]:
             "fallback_alignment": False,
             "word_segments_count": len(words),
             "phone_segments_count": len(phones),
+            "empty_interval_count": empty_intervals,
         },
     )

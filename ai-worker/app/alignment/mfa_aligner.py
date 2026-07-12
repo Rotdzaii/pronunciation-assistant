@@ -553,6 +553,7 @@ def run_mfa_alignment(
             phones=result["phones"],
             audio_duration=working_audio.duration_seconds,
             expected_word_count=len(transcript.words),
+            expected_words=transcript.words,
             oov_count=len(transcript.oov_words),
             empty_interval_count=int(result["metadata"].get("empty_interval_count", 0)),
         )
@@ -567,6 +568,9 @@ def run_mfa_alignment(
             {
                 "alignment_source": "mfa",
                 "alignment_confidence": quality["quality_score"],
+                "alignment_quality_status": quality["alignment_quality_status"],
+                "alignment_quality_warnings": quality["alignment_quality_warnings"],
+                "alignment_quality_failures": quality["alignment_quality_failures"],
                 "audio_duration_seconds": round(working_audio.duration_seconds, 3),
                 "mfa_runtime_seconds": round(runtime, 3),
                 "mfa_exit_code": completed.returncode,
@@ -577,12 +581,31 @@ def run_mfa_alignment(
                 "oov_words": transcript.oov_words,
                 "dictionary_vocabulary_checked": transcript.dictionary_checked,
                 "textgrid_path": str(textgrid_path),
+                **{
+                    key: value
+                    for key, value in quality["metrics"].items()
+                    if key
+                    in {
+                        "raw_audio_coverage_ratio",
+                        "phone_span_fill_ratio",
+                        "aligned_word_duration_seconds",
+                        "aligned_phone_duration_seconds",
+                        "aligned_span_seconds",
+                        "leading_silence_seconds",
+                        "trailing_silence_seconds",
+                    }
+                },
             }
         )
         print(
             "alignment_event=mfa_complete "
             f"job_id={job_id or 'unknown'} runtime_seconds={runtime:.3f} words={len(result['words'])} "
-            f"phones={len(result['phones'])} oov={len(transcript.oov_words)} quality_status={quality['status']}"
+            f"phones={len(result['phones'])} oov={len(transcript.oov_words)} "
+            f"quality_status={quality['alignment_quality_status']} "
+            f"raw_coverage={quality['metrics']['raw_audio_coverage_ratio']:.3f} "
+            f"phone_span_fill={quality['metrics']['phone_span_fill_ratio']:.3f} "
+            f"warnings={','.join(quality['alignment_quality_warnings']) or 'none'} "
+            f"failures={','.join(quality['alignment_quality_failures']) or 'none'}"
         )
         succeeded = True
         return result

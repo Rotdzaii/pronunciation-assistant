@@ -59,7 +59,8 @@ Record the output of `mfa version`, `mfa model inspect acoustic english_mfa`, an
   "metrics": {
     "audio_duration": 1.2,
     "aligned_duration": 1.1,
-    "speech_coverage_ratio": 0.917,
+    "raw_audio_coverage_ratio": 0.917,
+    "phone_span_fill_ratio": 1.0,
     "number_of_words": 1,
     "number_of_phones": 3,
     "oov_count": 0,
@@ -72,7 +73,11 @@ Record the output of `mfa version`, `mfa model inspect acoustic english_mfa`, an
 }
 ```
 
-The status is `failed` for no phones/words, non-positive phone duration, overlaps, out-of-bounds boundaries, or coverage below `MFA_MIN_COVERAGE_RATIO`. It is `warning` for moderate coverage, OOV, long phones, or too many very short phones. Thresholds live in `.env.example`, not in scorer code.
+Raw audio coverage is `union(phone intervals) / full audio duration`; it is diagnostic only, because leading/trailing silence is common for short recordings. `MFA_MIN_COVERAGE_RATIO` remains for compatibility and creates a warning rather than a hard rejection.
+
+`phone_span_fill_ratio` is `union(phone intervals) / (last aligned end - first aligned start)`. It measures how fully valid phone intervals fill the aligned span; it is not detected-speech coverage. `speech_relative_coverage_ratio` remains only as a deprecated alias in the internal quality metrics. Alignment metadata publishes `phone_span_fill_ratio` as the primary field.
+
+Hard failures are no phones/words, non-positive phone duration, overlap, out-of-bounds boundaries, transcript mismatch, aligned phone duration below `MFA_MIN_ALIGNED_DURATION_SECONDS`, or phone-union/span fill below `MFA_MIN_SPEECH_COVERAGE_RATIO` (the legacy variable name is retained for compatibility). The report distinguishes `valid`, `valid_with_warning`, and `invalid`; it is not a pronunciation score.
 
 When `ALLOW_ALIGNMENT_FALLBACK=true`, a failed MFA attempt returns the existing `fallback_even_split` result with `alignment_source=fallback`, quality warning, zero alignment confidence, and a limitation note. It is not forced alignment. With fallback disabled, the context scorer stops before inference and the worker emits a normal failed webhook result instead of inventing phone boundaries.
 

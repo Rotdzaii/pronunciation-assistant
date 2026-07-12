@@ -227,6 +227,8 @@ class MfaAlignmentUnitTests(unittest.TestCase):
         self.assertEqual(len(result["phones"]), 3)
         self.assertEqual(result["metadata"]["mfa_runtime"], "conda")
         self.assertEqual(result["metadata"]["mfa_command_mode"], "conda_run")
+        self.assertEqual(result["metadata"]["phone_span_fill_ratio"], 1.0)
+        self.assertNotIn("speech_relative_coverage_ratio", result["metadata"])
 
     def test_nonzero_diagnostic_keeps_mfa_error_and_redacts_paths_and_urls(self) -> None:
         diagnostic = build_mfa_process_diagnostic(
@@ -419,13 +421,79 @@ class MfaAlignmentUnitTests(unittest.TestCase):
 
     def test_low_coverage_is_a_warning(self) -> None:
         quality = validate_alignment_quality(
-            words=[{"start": 0.1, "end": 0.2, "word": "cat"}],
-            phones=[{"start": 0.1, "end": 0.2, "phone": "K"}],
-            audio_duration=0.2,
+            words=[{"start": 0.03, "end": 0.16, "word": "cat"}],
+            phones=[{"start": 0.03, "end": 0.16, "phone": "K"}],
+            audio_duration=0.25,
             expected_word_count=1,
         )
         self.assertEqual(quality["status"], "warning")
-        self.assertIn("speech_coverage_low", quality["issues"])
+        self.assertEqual(quality["decision"], "valid_with_warning")
+        self.assertIn("raw_audio_coverage_low", quality["warnings"])
+
+    def test_single_word_leading_and_trailing_silence_is_usable_with_warning(self) -> None:
+        words = [{"start": 0.76, "end": 1.43, "word": "family"}]
+        phones = [
+            {"start": 0.76, "end": 0.92, "phone": "f"},
+            {"start": 0.92, "end": 1.01, "phone": "ae"},
+            {"start": 1.01, "end": 1.05, "phone": "m"},
+            {"start": 1.05, "end": 1.22, "phone": "l"},
+            {"start": 1.22, "end": 1.43, "phone": "i"},
+        ]
+        quality = validate_alignment_quality(
+            words=words,
+            phones=phones,
+            audio_duration=1.68,
+            expected_word_count=1,
+            expected_words=["family"],
+        )
+        self.assertEqual(quality["status"], "warning")
+        self.assertEqual(quality["decision"], "valid_with_warning")
+        self.assertEqual(quality["metrics"]["raw_audio_coverage_ratio"], 0.399)
+        self.assertEqual(quality["metrics"]["phone_span_fill_ratio"], 1.0)
+        # Deprecated alias remains available to existing local consumers.
+        self.assertEqual(quality["metrics"]["speech_relative_coverage_ratio"], 1.0)
+        self.assertIn("raw_audio_coverage_below_minimum", quality["warnings"])
+        self.assertIn("leading_silence_high", quality["warnings"])
+        self.assertEqual(quality["failures"], [])
+
+    def test_few_milliseconds_of_alignment_is_invalid(self) -> None:
+        quality = validate_alignment_quality(
+            words=[{"start": 0.10, "end": 0.13, "word": "cat"}],
+            phones=[{"start": 0.10, "end": 0.13, "phone": "K"}],
+            audio_duration=1.0,
+            expected_word_count=1,
+            expected_words=["cat"],
+        )
+        self.assertEqual(quality["status"], "failed")
+        self.assertIn("aligned_duration_too_short", quality["failures"])
+
+    def test_overlapping_phones_are_invalid(self) -> None:
+        quality = validate_alignment_quality(
+            words=[{"start": 0.1, "end": 0.6, "word": "cat"}],
+            phones=[
+                {"start": 0.1, "end": 0.4, "phone": "K"},
+                {"start": 0.35, "end": 0.6, "phone": "AE"},
+            ],
+            audio_duration=0.7,
+            expected_word_count=1,
+        )
+        self.assertEqual(quality["status"], "failed")
+        self.assertIn("overlapping_phone_segments", quality["failures"])
+
+    def test_clean_high_coverage_alignment_is_valid(self) -> None:
+        quality = validate_alignment_quality(
+            words=[{"start": 0.0, "end": 0.8, "word": "cat"}],
+            phones=[
+                {"start": 0.0, "end": 0.3, "phone": "K"},
+                {"start": 0.3, "end": 0.55, "phone": "AE"},
+                {"start": 0.55, "end": 0.8, "phone": "T"},
+            ],
+            audio_duration=0.8,
+            expected_word_count=1,
+            expected_words=["cat"],
+        )
+        self.assertEqual(quality["status"], "ok")
+        self.assertEqual(quality["decision"], "valid")
 
 
 @unittest.skipUnless(os.getenv("RUN_MFA_INTEGRATION_TESTS") == "1", "set RUN_MFA_INTEGRATION_TESTS=1 to run MFA locally")

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import shutil
 import subprocess
 import tempfile
 import unittest
@@ -10,11 +11,19 @@ from unittest.mock import patch
 
 from app.alignment.audio_preparation import PreparedMfaAudio, prepare_audio_for_mfa
 from app.alignment.alignment_service import align_audio
-from app.alignment.mfa_aligner import _mfa_command_prefix, run_mfa_alignment
+from app.alignment.mfa_aligner import (
+    _mfa_command_context,
+    _mfa_command_prefix,
+    _write_debug_artifacts,
+    build_mfa_process_diagnostic,
+    run_mfa_alignment,
+    run_mfa_preflight,
+)
 from app.alignment.quality import validate_alignment_quality
 from app.alignment.textgrid_parser import parse_textgrid
 from app.alignment.transcript import normalize_and_check_transcript
 from app.contracts.alignment_contract import AlignmentError
+from app.contracts.webhook_payload import build_failed_webhook_payload
 from app.scorers.cnn_attention_scorer import CNNAttentionScorerError, score_aligned_audio_context
 
 
@@ -34,7 +43,91 @@ def write_tone(path: Path, seconds: float = 1.0) -> None:
         wav_file.writeframes(bytes(samples))
 
 
+def prepare_test_audio(source: Path, destination: Path) -> PreparedMfaAudio:
+    shutil.copy2(source, destination)
+    return PreparedMfaAudio(destination, 1.0, 16000, 16000, 0.2, 0.1)
+
+
 class MfaAlignmentUnitTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.runtime_environment = patch.dict(
+            os.environ,
+            {"MFA_RUNTIME": "conda", "MFA_CONDA_ENV": "aligner"},
+            clear=False,
+        )
+        self.runtime_environment.start()
+
+    def tearDown(self) -> None:
+        self.runtime_environment.stop()
+
+    def test_conda_runtime_uses_conda_run_and_ignores_wsl_variables(self) -> None:
+        with patch.dict(
+            os.environ,
+            {
+                "MFA_RUNTIME": "conda",
+                "MFA_CONDA_ENV": "aligner",
+                "MFA_WSL_DISTRO": "Ubuntu",
+                "MFA_WSL_USER": "phoenix",
+                "MFA_WSL_BINARY": "/home/phoenix/run_mfa.sh",
+            },
+            clear=False,
+        ), patch(
+            "app.alignment.mfa_aligner._mfa_command_prefix",
+            return_value=["conda", "run", "-n", "aligner", "mfa"],
+        ):
+            use_wsl, command, context = _mfa_command_context()
+        self.assertFalse(use_wsl)
+        self.assertEqual(command, ["conda", "run", "-n", "aligner", "mfa"])
+        self.assertEqual(context["mfa_runtime"], "conda")
+        self.assertEqual(context["command_mode"], "conda_run")
+
+    def test_wsl_runtime_requires_explicit_selection_and_builds_wsl_command(self) -> None:
+        with patch.dict(
+            os.environ,
+            {
+                "MFA_RUNTIME": "wsl",
+                "MFA_WSL_DISTRO": "Ubuntu",
+                "MFA_WSL_USER": "phoenix",
+                "MFA_WSL_BINARY": "/home/phoenix/run_mfa.sh",
+            },
+            clear=False,
+        ):
+            use_wsl, command, context = _mfa_command_context()
+        self.assertTrue(use_wsl)
+        self.assertEqual(command, ["wsl", "-d", "Ubuntu", "-u", "phoenix", "--", "/home/phoenix/run_mfa.sh"])
+        self.assertEqual(context["mfa_runtime"], "wsl")
+
+    def test_wsl_runtime_with_missing_configuration_fails_without_conda_fallback(self) -> None:
+        with patch.dict(
+            os.environ,
+            {"MFA_RUNTIME": "wsl", "MFA_WSL_DISTRO": "", "MFA_WSL_USER": "", "MFA_WSL_BINARY": ""},
+            clear=False,
+        ):
+            with self.assertRaises(AlignmentError) as context:
+                _mfa_command_context()
+        self.assertEqual(context.exception.code, "mfa_wsl_configuration_invalid")
+
+    def test_invalid_runtime_is_rejected_without_fallback(self) -> None:
+        with patch.dict(os.environ, {"MFA_RUNTIME": "docker"}, clear=False):
+            with self.assertRaises(AlignmentError) as context:
+                _mfa_command_context()
+        self.assertEqual(context.exception.code, "mfa_runtime_invalid")
+
+    def test_conda_runtime_does_not_fallback_to_wsl_when_conda_env_is_missing(self) -> None:
+        with patch.dict(
+            os.environ,
+            {
+                "MFA_RUNTIME": "conda",
+                "MFA_CONDA_ENV": "",
+                "MFA_WSL_DISTRO": "Ubuntu",
+                "MFA_WSL_USER": "phoenix",
+                "MFA_WSL_BINARY": "/home/phoenix/run_mfa.sh",
+            },
+            clear=False,
+        ):
+            with self.assertRaises(AlignmentError) as context:
+                _mfa_command_context()
+        self.assertEqual(context.exception.code, "mfa_conda_configuration_invalid")
     def test_valid_audio_and_transcript_are_normalized_for_mfa(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             source = Path(temp) / "source.wav"
@@ -112,6 +205,154 @@ class MfaAlignmentUnitTests(unittest.TestCase):
                     run_mfa_alignment(audio, "cat", dictionary_path=dictionary, acoustic_model_path="english_mfa")
         self.assertEqual(context.exception.code, "textgrid_missing")
 
+    def test_mfa_returncode_zero_parses_generated_textgrid(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            audio = root / "input.wav"
+            dictionary = root / "dictionary.txt"
+            write_tone(audio)
+            dictionary.write_text("cat K AE T\n", encoding="utf-8")
+
+            def complete_alignment(command: list[str], **_: object) -> subprocess.CompletedProcess[str]:
+                output_dir = Path(command[5])
+                output_dir.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(FIXTURES / "valid.TextGrid", output_dir / "input.TextGrid")
+                return subprocess.CompletedProcess(command, 0, "MFA completed", "")
+
+            with patch("app.alignment.mfa_aligner._mfa_command_prefix", return_value=["mfa"]), patch(
+                "app.alignment.mfa_aligner.prepare_audio_for_mfa", side_effect=prepare_test_audio
+            ), patch("app.alignment.mfa_aligner.subprocess.run", side_effect=complete_alignment):
+                result = run_mfa_alignment(audio, "cat", dictionary_path=dictionary, acoustic_model_path="english_mfa")
+        self.assertEqual(result["alignment_status"], "success")
+        self.assertEqual(len(result["phones"]), 3)
+        self.assertEqual(result["metadata"]["mfa_runtime"], "conda")
+        self.assertEqual(result["metadata"]["mfa_command_mode"], "conda_run")
+
+    def test_nonzero_diagnostic_keeps_mfa_error_and_redacts_paths_and_urls(self) -> None:
+        diagnostic = build_mfa_process_diagnostic(
+            stage="align",
+            command_args=["conda", "run", "-n", "aligner", "mfa", "align", r"C:\\temp\\corpus", "english_us_mfa", "english_mfa", r"C:\\temp\\out"],
+            command_context={"command_mode": "conda_run", "conda_env": "aligner"},
+            return_code=1,
+            stdout="",
+            stderr=(
+                "Traceback (most recent call last):\n"
+                r"ValueError: KaldiError at C:\\Users\\Admin\\AppData\\Local\\Temp\\mfa\\log.txt "
+                "https://example.test/file?token=secret-value"
+            ),
+            dictionary="english_us_mfa",
+            acoustic_model="english_mfa",
+            corpus_dir=Path(r"C:\\temp\\corpus"),
+            output_dir=Path(r"C:\\temp\\out"),
+        )
+        rendered = str(diagnostic)
+        self.assertIn("ValueError: KaldiError", rendered)
+        self.assertIn("Traceback", diagnostic["exception_or_traceback_tail"])
+        self.assertNotIn("C:\\Users", rendered)
+        self.assertNotIn("secret-value", rendered)
+        self.assertNotIn("https://example.test", rendered)
+        self.assertEqual(diagnostic["command_mode"], "conda_run")
+
+    def test_nonzero_diagnostic_uses_stdout_when_stderr_is_empty(self) -> None:
+        diagnostic = build_mfa_process_diagnostic(
+            stage="align",
+            command_args=["mfa", "align"],
+            command_context={"command_mode": "mfa_direct", "conda_env": None},
+            return_code=1,
+            stdout="MFAException: dictionary mismatch",
+            stderr="",
+        )
+        self.assertEqual(diagnostic["primary_output_tail"], "MFAException: dictionary mismatch")
+
+    def test_wsl_corpus_and_output_paths_are_redacted_from_diagnostic(self) -> None:
+        diagnostic = build_mfa_process_diagnostic(
+            stage="align",
+            command_args=["wsl", "--", "mfa", "align", "/mnt/c/Users/Admin/AppData/Local/Temp/corpus", "english_us_mfa", "english_mfa", "/mnt/c/Users/Admin/AppData/Local/Temp/aligned"],
+            command_context={"command_mode": "wsl", "conda_env": None},
+            return_code=2,
+            stdout="",
+            stderr="Model path /mnt/c/Users/Admin/AppData/Local/Temp/models is unavailable.",
+            dictionary="english_us_mfa",
+            acoustic_model="english_mfa",
+            corpus_dir=Path(r"C:\\Users\\Admin\\AppData\\Local\\Temp\\corpus"),
+            output_dir=Path(r"C:\\Users\\Admin\\AppData\\Local\\Temp\\aligned"),
+        )
+        rendered = str(diagnostic)
+        self.assertNotIn("/mnt/c/Users", rendered)
+        self.assertIn("<corpus-dir>", diagnostic["command"])
+        self.assertIn("<output-dir>", diagnostic["command"])
+
+    def test_debug_artifacts_are_only_created_for_configured_directory(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            prepared = root / "prepared.wav"
+            transcript = root / "transcript.lab"
+            write_tone(prepared)
+            transcript.write_text("cat\n", encoding="utf-8")
+            diagnostic = {"command": ["mfa", "align", "<corpus-dir>"], "stderr_tail": "KaldiError"}
+            self.assertFalse(
+                _write_debug_artifacts(
+                    None,
+                    job_id="job-1",
+                    prepared_audio=prepared,
+                    transcript_lab=transcript,
+                    stdout="",
+                    stderr="C:\\temp\\bad",
+                    diagnostic=diagnostic,
+                )
+            )
+            debug_root = root / "debug"
+            self.assertTrue(
+                _write_debug_artifacts(
+                    debug_root,
+                    job_id="job-1",
+                    prepared_audio=prepared,
+                    transcript_lab=transcript,
+                    stdout="",
+                    stderr="C:\\temp\\bad",
+                    diagnostic=diagnostic,
+                )
+            )
+            artifact_dir = next(debug_root.iterdir())
+            self.assertTrue((artifact_dir / "prepared.wav").is_file())
+            self.assertTrue((artifact_dir / "transcript.lab").is_file())
+            self.assertNotIn("C:\\temp", (artifact_dir / "stderr.txt").read_text(encoding="utf-8"))
+
+    def test_debug_runner_cleans_temp_work_directory_without_debug_directory(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            audio = root / "input.wav"
+            dictionary = root / "dictionary.txt"
+            mfa_temp = root / "mfa-temp"
+            write_tone(audio)
+            dictionary.write_text("cat K AE T\n", encoding="utf-8")
+            completed = subprocess.CompletedProcess(["mfa"], 1, "", "KaldiError")
+            with patch.dict(
+                os.environ,
+                {"MFA_DEBUG": "true", "MFA_DEBUG_DIR": "", "MFA_TEMP_DIR": str(mfa_temp)},
+                clear=False,
+            ), patch("app.alignment.mfa_aligner._mfa_command_prefix", return_value=["mfa"]), patch(
+                "app.alignment.mfa_aligner.prepare_audio_for_mfa", side_effect=prepare_test_audio
+            ), patch("app.alignment.mfa_aligner.subprocess.run", return_value=completed):
+                with self.assertRaises(AlignmentError) as context:
+                    run_mfa_alignment(audio, "cat", dictionary_path=dictionary, acoustic_model_path="english_mfa")
+        self.assertEqual(context.exception.code, "mfa_nonzero_exit")
+        self.assertEqual(list(mfa_temp.glob("mfa-align-*")), [])
+
+    def test_mfa_preflight_lists_version_and_models(self) -> None:
+        responses = [
+            subprocess.CompletedProcess(["mfa", "version"], 0, "3.3.8", ""),
+            subprocess.CompletedProcess(["mfa", "model", "list", "dictionary"], 0, "english_us_mfa\n", ""),
+            subprocess.CompletedProcess(["mfa", "model", "list", "acoustic"], 0, "english_mfa\n", ""),
+        ]
+        with patch.dict(os.environ, {"MFA_CONDA_ENV": "aligner"}, clear=False), patch(
+            "app.alignment.mfa_aligner._mfa_command_prefix", return_value=["conda", "run", "-n", "aligner", "mfa"]
+        ), patch("app.alignment.mfa_aligner.subprocess.run", side_effect=responses):
+            result = run_mfa_preflight("english_us_mfa", "english_mfa")
+        self.assertEqual(result["status"], "ok")
+        self.assertTrue(result["dictionary_listed"])
+        self.assertTrue(result["acoustic_model_listed"])
+
     def test_mfa_failure_returns_explicit_fallback_contract(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             audio = Path(temp) / "input.wav"
@@ -125,6 +366,30 @@ class MfaAlignmentUnitTests(unittest.TestCase):
         self.assertEqual(result["alignment_source"], "fallback")
         self.assertEqual(result["metadata"]["mfa_error"]["code"], "mfa_not_installed")
         self.assertEqual(result["quality"]["status"], "warning")
+
+    def test_public_alignment_contract_does_not_include_raw_mfa_stderr(self) -> None:
+        raw_stderr = r"KaldiError C:\\Users\\Admin\\AppData\\Local\\Temp\\mfa.log token=secret-value"
+        with patch.dict(os.environ, {"ALIGNMENT_MODE": "mfa", "ALLOW_ALIGNMENT_FALLBACK": "false"}), patch(
+            "app.alignment.alignment_service.run_mfa_alignment",
+            side_effect=AlignmentError("MFA returned exit code 1.", code="mfa_nonzero_exit", details={"stderr": raw_stderr}),
+        ):
+            result = align_audio("not-used.wav", "cat")
+        self.assertEqual(result["error"]["code"], "mfa_nonzero_exit")
+        self.assertNotIn("KaldiError", str(result))
+        self.assertNotIn("secret-value", str(result))
+        payload = build_failed_webhook_payload(
+            "job-1",
+            "Alignment failed.",
+            {
+                "status": "failed",
+                "score": None,
+                "problem_phonemes": [],
+                "feedback": {},
+                "metadata": result["metadata"],
+            },
+        )
+        self.assertNotIn("KaldiError", str(payload))
+        self.assertNotIn("secret-value", str(payload))
 
     def test_context_scorer_does_not_infer_from_failed_alignment(self) -> None:
         with self.assertRaises(CNNAttentionScorerError):

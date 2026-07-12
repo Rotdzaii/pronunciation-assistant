@@ -70,6 +70,15 @@ def _sanitize_alignment_reason(reason: str | None) -> str | None:
     return sanitized
 
 
+def _public_alignment_error(error: AlignmentError) -> dict[str, str]:
+    """Keep local subprocess diagnostics out of worker and webhook metadata."""
+
+    return {
+        "code": error.code,
+        "message": _sanitize_alignment_reason(str(error)) or "MFA alignment failed.",
+    }
+
+
 def _fallback_alignment(
     audio_path: str | Path,
     prompt_text: str | None,
@@ -148,13 +157,13 @@ def align_audio(
                 result["metadata"]["requested_alignment_mode"] = mode
                 result["metadata"]["requested_alignment_method"] = mode
                 result["metadata"]["mfa_attempted"] = True
-                result["metadata"]["mfa_error"] = exc.as_dict()
+                result["metadata"]["mfa_error"] = _public_alignment_error(exc)
                 return result
             result = _failed_alignment("mfa", str(exc), exc.code)
             result["metadata"]["requested_alignment_mode"] = mode
             result["metadata"]["requested_alignment_method"] = mode
             result["metadata"]["mfa_attempted"] = True
-            result["metadata"]["mfa_error"] = exc.as_dict()
+            result["metadata"]["mfa_error"] = _public_alignment_error(exc)
             return result
 
     error = f"Unsupported ALIGNMENT_MODE={mode!r}. Use mfa, fallback, or none."

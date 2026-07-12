@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from audio.preprocessing import AudioPreprocessingConfig, AudioPreprocessingError, preprocess_audio
+from app.audio.preprocessing import AudioPreprocessingConfig, AudioPreprocessingError, preprocess_audio
 from app.contracts.alignment_contract import AlignmentError
 
 

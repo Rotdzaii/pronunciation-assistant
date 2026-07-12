@@ -4,7 +4,7 @@ Lightweight worker for the demo pronunciation pipeline. In demo loop mode, it ke
 
 Supported scorer modes are `mock`, `wav2vec2`, `cnn_attention`, and `cnn_attention_context`. The Wav2Vec2 and CNN scorers import their heavier dependencies only when the corresponding scorer mode is used.
 
-Wav2Vec2 audio is preprocessed through `audio/preprocessing.py`: uploaded WebM, M4A, MP3, and related browser audio formats are converted with FFmpeg to mono 16 kHz PCM WAV, then loaded with `soundfile`. The scorer does not directly decode WebM with `librosa`.
+Wav2Vec2 audio is preprocessed through `app/audio/preprocessing.py`: uploaded WebM, M4A, MP3, and related browser audio formats are converted with FFmpeg to mono 16 kHz PCM WAV, then loaded with `soundfile`. The scorer does not directly decode WebM with `librosa`.
 
 ## Setup
 

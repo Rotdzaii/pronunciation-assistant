@@ -9,6 +9,7 @@ import wave
 from pathlib import Path
 from unittest.mock import patch
 
+from app.audio import preprocessing as audio_preprocessing
 from app.alignment.audio_preparation import PreparedMfaAudio, prepare_audio_for_mfa
 from app.alignment.alignment_service import align_audio
 from app.scorers import cnn_attention_scorer
@@ -60,6 +61,11 @@ class MfaAlignmentUnitTests(unittest.TestCase):
 
     def tearDown(self) -> None:
         self.runtime_environment.stop()
+
+    def test_audio_preprocessing_is_imported_from_tracked_app_package(self) -> None:
+        self.assertEqual(audio_preprocessing.__name__, "app.audio.preprocessing")
+        self.assertTrue(callable(audio_preprocessing.preprocess_audio))
+        self.assertTrue(callable(prepare_audio_for_mfa))
 
     def test_conda_runtime_uses_conda_run_and_ignores_wsl_variables(self) -> None:
         with patch.dict(

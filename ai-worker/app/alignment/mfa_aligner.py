@@ -10,7 +10,7 @@ import time
 from pathlib import Path
 from typing import Any
 
-from app.alignment.audio_preparation import PreparedMfaAudio, prepare_audio_for_mfa
+from app.alignment.audio_preparation import PreparedMfaAudio, prepare_audio_for_mfa, validate_prepared_mfa_wav
 from app.alignment.quality import validate_alignment_quality
 from app.alignment.textgrid_parser import parse_textgrid
 from app.alignment.transcript import normalize_and_check_transcript
@@ -402,6 +402,7 @@ def run_mfa_alignment(
     dictionary_path: str | Path | None = None,
     acoustic_model_path: str | Path | None = None,
     *,
+    prepared_audio: PreparedMfaAudio | None = None,
     job_id: str | None = None,
     keep_debug_artifacts: bool | None = None,
     debug: bool | None = None,
@@ -455,7 +456,23 @@ def run_mfa_alignment(
             align_output_dir.mkdir(parents=True, exist_ok=True)
         except OSError as exc:
             raise AlignmentError("MFA output directory is not writable.", code="mfa_output_unavailable") from exc
-        working_audio = prepare_audio_for_mfa(source_audio, corpus_dir / f"{source_audio.stem}.wav")
+        corpus_audio_path = corpus_dir / f"{source_audio.stem}.wav"
+        if prepared_audio is None:
+            working_audio = prepare_audio_for_mfa(source_audio, corpus_audio_path)
+        else:
+            validate_prepared_mfa_wav(prepared_audio.path)
+            try:
+                shutil.copy2(prepared_audio.path, corpus_audio_path)
+            except OSError as exc:
+                raise AlignmentError("Prepared WAV could not be copied into the MFA corpus.", code="audio_invalid") from exc
+            working_audio = PreparedMfaAudio(
+                path=corpus_audio_path,
+                duration_seconds=prepared_audio.duration_seconds,
+                sample_rate=prepared_audio.sample_rate,
+                samples=prepared_audio.samples,
+                peak_amplitude=prepared_audio.peak_amplitude,
+                rms_energy=prepared_audio.rms_energy,
+            )
         transcript_lab = working_audio.path.with_suffix(".lab")
         _write_lab_file(transcript_lab, transcript.text)
 

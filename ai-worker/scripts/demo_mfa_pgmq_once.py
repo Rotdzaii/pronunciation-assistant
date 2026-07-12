@@ -298,10 +298,12 @@ def post_payload(webhook_url: str, secret: str, payload: dict[str, Any]) -> tupl
 
 def print_section(title: str, payload: Any) -> None:
     print(title)
-    if isinstance(payload, str):
-        print(payload)
-    else:
-        print(json.dumps(payload, indent=2, ensure_ascii=False))
+    rendered = payload if isinstance(payload, str) else json.dumps(payload, indent=2, ensure_ascii=False)
+    try:
+        print(rendered)
+    except UnicodeEncodeError:
+        # Windows consoles configured with cp1252 cannot print IPA symbols.
+        print(payload if isinstance(payload, str) else json.dumps(payload, indent=2, ensure_ascii=True))
     print()
 
 
@@ -567,12 +569,15 @@ def main() -> int:
                 "pronunciation_score_source": ai_result.get("metadata", {}).get("pronunciation_score_source"),
                 "predicted_error_type": ai_result.get("predicted_error_type"),
                 "problem_phonemes": ai_result.get("problem_phonemes"),
+                "global_diagnosis_selection": ai_result.get("metadata", {}).get("global_diagnosis_selection"),
+                "problem_phonemes_order": ai_result.get("metadata", {}).get("problem_phonemes_order"),
                 "diagnosis_confidence": ai_result.get("diagnosis", {}).get("diagnosis_confidence"),
                 "top_segment": {
                     "phone": top.get("phone"),
                     "word": top.get("word"),
                     "predicted_error_type": top.get("predicted_error_type"),
                     "diagnosis_confidence": top.get("diagnosis_confidence"),
+                    "selection": "highest_classifier_diagnosis_confidence",
                 },
             },
         )

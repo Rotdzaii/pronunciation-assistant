@@ -2,12 +2,14 @@ from __future__ import annotations
 
 import os
 import tempfile
+import wave
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse
 
+from app.alignment.audio_preparation import prepare_audio_for_mfa, validate_prepared_mfa_wav
 from app.contracts.ai_result_contract import build_ai_result, estimate_demo_score
-from app.contracts.alignment_contract import FALLBACK_ALIGNMENT_NOTE, get_alignment_segments
+from app.contracts.alignment_contract import AlignmentError, FALLBACK_ALIGNMENT_NOTE, get_alignment_segments
 
 
 SAMPLE_RATE = 16000
@@ -224,8 +226,35 @@ def _audio_path_from_job(job: dict[str, Any]) -> tuple[Path, bool]:
     return Path(audio_url), False
 
 
-def _feature_from_audio_path(
-    audio_path: Path,
+def _load_prepared_wav(audio_path: str | Path) -> tuple[Any, int]:
+    """Load a verified MFA WAV once, without allowing codec fallback decoding."""
+
+    try:
+        import numpy as np
+    except ImportError as exc:
+        raise CNNAttentionScorerError(
+            "CNN Attention scorer requires numpy for prepared WAV loading."
+        ) from exc
+
+    path = Path(audio_path).expanduser()
+    try:
+        validate_prepared_mfa_wav(path)
+        with wave.open(str(path), "rb") as wav_file:
+            raw_frames = wav_file.readframes(wav_file.getnframes())
+            sample_rate = wav_file.getframerate()
+    except AlignmentError as exc:
+        raise CNNAttentionScorerError("CNN segment inference requires a prepared 16 kHz mono PCM WAV.") from exc
+    except (OSError, wave.Error) as exc:
+        raise CNNAttentionScorerError("Prepared WAV could not be loaded for CNN segment inference.") from exc
+
+    audio = np.frombuffer(raw_frames, dtype="<i2").astype(np.float32) / 32768.0
+    if audio.size == 0:
+        raise CNNAttentionScorerError("Prepared WAV has no samples for CNN segment inference.")
+    return audio, sample_rate
+
+
+def _feature_from_waveform(
+    waveform: Any,
     start_time: float | None = None,
     end_time: float | None = None,
 ) -> tuple[Any, dict[str, Any]]:
@@ -237,7 +266,7 @@ def _feature_from_audio_path(
             "CNN Attention scorer requires librosa and numpy for log-mel preprocessing."
         ) from exc
 
-    audio, sample_rate = librosa.load(str(audio_path), sr=SAMPLE_RATE, mono=True)
+    audio = np.asarray(waveform, dtype=np.float32)
     full_duration_seconds = len(audio) / SAMPLE_RATE if SAMPLE_RATE else 0.0
     segment_start = max(float(start_time or 0.0), 0.0)
     segment_end = float(end_time) if end_time is not None else full_duration_seconds
@@ -258,7 +287,7 @@ def _feature_from_audio_path(
     log_mel = librosa.power_to_db(mel, ref=np.max)
     feature = torch.tensor(log_mel, dtype=torch.float32).unsqueeze(0).unsqueeze(0)
     return feature, {
-        "sample_rate": sample_rate,
+        "sample_rate": SAMPLE_RATE,
         "target_sample_rate": SAMPLE_RATE,
         "original_duration_seconds": round(original_samples / SAMPLE_RATE, 3),
         "full_duration_seconds": round(full_duration_seconds, 3),
@@ -271,6 +300,15 @@ def _feature_from_audio_path(
     }
 
 
+def _feature_from_audio_path(
+    audio_path: Path,
+    start_time: float | None = None,
+    end_time: float | None = None,
+) -> tuple[Any, dict[str, Any]]:
+    waveform, _ = _load_prepared_wav(audio_path)
+    return _feature_from_waveform(waveform, start_time, end_time)
+
+
 def _predict_with_model(
     model: Any,
     index_to_label: dict[int, str],
@@ -279,8 +317,11 @@ def _predict_with_model(
     audio_path: str | Path,
     start_time: float | None = None,
     end_time: float | None = None,
+    waveform: Any | None = None,
 ) -> dict[str, Any]:
-    feature, audio_metadata = _feature_from_audio_path(Path(audio_path), start_time, end_time)
+    if waveform is None:
+        waveform, _ = _load_prepared_wav(audio_path)
+    feature, audio_metadata = _feature_from_waveform(waveform, start_time, end_time)
     with torch.no_grad():
         logits = model(feature.to(device))
         probabilities = torch.softmax(logits, dim=1).squeeze(0).cpu()
@@ -336,22 +377,16 @@ def _context_config() -> dict[str, Any]:
 
 
 def _audio_duration_seconds(audio_path: str | Path) -> float:
-    try:
-        import librosa
-    except ImportError as exc:
-        raise CNNAttentionScorerError("CNN Attention context scorer requires librosa for audio duration.") from exc
-
-    audio, _ = librosa.load(str(audio_path), sr=SAMPLE_RATE, mono=True)
+    audio, _ = _load_prepared_wav(audio_path)
     return len(audio) / SAMPLE_RATE if SAMPLE_RATE else 0.0
 
 
-def _context_crop_metadata(
-    audio_path: str | Path,
+def _context_crop_metadata_for_duration(
+    audio_duration: float,
     segment_start_time: float,
     segment_end_time: float,
     context_config: dict[str, Any],
 ) -> dict[str, Any]:
-    audio_duration = _audio_duration_seconds(audio_path)
     segment_start = max(float(segment_start_time), 0.0)
     segment_end = max(float(segment_end_time), segment_start)
     crop_start = max(0.0, segment_start - float(context_config["context_left_seconds"]))
@@ -367,6 +402,20 @@ def _context_crop_metadata(
     }
 
 
+def _context_crop_metadata(
+    audio_path: str | Path,
+    segment_start_time: float,
+    segment_end_time: float,
+    context_config: dict[str, Any],
+) -> dict[str, Any]:
+    return _context_crop_metadata_for_duration(
+        _audio_duration_seconds(audio_path),
+        segment_start_time,
+        segment_end_time,
+        context_config,
+    )
+
+
 def _predict_context_with_model(
     model: Any,
     index_to_label: dict[int, str],
@@ -376,8 +425,13 @@ def _predict_context_with_model(
     start_time: float,
     end_time: float,
     context_config: dict[str, Any],
+    waveform: Any | None = None,
+    audio_duration: float | None = None,
 ) -> dict[str, Any]:
-    context_metadata = _context_crop_metadata(audio_path, start_time, end_time, context_config)
+    if waveform is None:
+        waveform, _ = _load_prepared_wav(audio_path)
+    duration = audio_duration if audio_duration is not None else len(waveform) / SAMPLE_RATE
+    context_metadata = _context_crop_metadata_for_duration(duration, start_time, end_time, context_config)
     prediction = _predict_with_model(
         model,
         index_to_label,
@@ -386,6 +440,7 @@ def _predict_context_with_model(
         audio_path,
         context_metadata["crop_start_time"],
         context_metadata["crop_end_time"],
+        waveform,
     )
     prediction["audio"]["context"] = context_metadata
     return prediction
@@ -443,6 +498,7 @@ def predict_segments(
     checkpoint_path: str | Path | None = None,
 ) -> list[dict[str, Any]]:
     model, index_to_label, checkpoint_file, device = _load_model(checkpoint_path)
+    waveform, _ = _load_prepared_wav(audio_path)
     predictions = []
     for fallback_index, segment in enumerate(segments):
         start_time = float(segment.get("start") or 0.0)
@@ -457,6 +513,7 @@ def predict_segments(
             audio_path,
             start_time,
             end_time,
+            waveform,
         )
         predictions.append(
             _format_segment_prediction(
@@ -479,6 +536,8 @@ def predict_context_segments(
 ) -> list[dict[str, Any]]:
     model, index_to_label, checkpoint_file, device = _load_context_model(checkpoint_path)
     context_config = _context_config()
+    waveform, _ = _load_prepared_wav(audio_path)
+    audio_duration = len(waveform) / SAMPLE_RATE if SAMPLE_RATE else 0.0
     predictions = []
     for fallback_index, segment in enumerate(segments):
         start_time = float(segment.get("start") or 0.0)
@@ -494,6 +553,8 @@ def predict_context_segments(
             start_time,
             end_time,
             context_config,
+            waveform,
+            audio_duration,
         )
         predictions.append(
             _format_segment_prediction(
@@ -520,25 +581,34 @@ def _aggregate_segment_predictions(
     from app.scoring.scoring_service import score_pronunciation_segments
 
     threshold = 0.5 if confidence_threshold is None else float(confidence_threshold)
+    ordered_predictions = sorted(
+        segment_predictions,
+        key=lambda segment: (
+            float(segment.get("start") or 0.0),
+            float(segment.get("end") or 0.0),
+            int(segment.get("index") or 0),
+        ),
+    )
     issue_segments = [
         segment
-        for segment in segment_predictions
+        for segment in ordered_predictions
         if segment.get("predicted_error_type") not in {None, "unknown"}
     ]
     issue_segments.sort(key=lambda segment: float(segment.get("diagnosis_confidence") or 0.0), reverse=True)
     top_segment = issue_segments[0] if issue_segments else None
+    primary_selection_rule = "highest_classifier_diagnosis_confidence"
+    problem_phonemes = []
     predicted_error_type = top_segment.get("predicted_error_type") if top_segment else "unknown"
     class_probabilities = top_segment.get("class_probabilities") if top_segment else None
     diagnosis_confidence = top_segment.get("diagnosis_confidence") if top_segment else None
-    problem_phonemes = []
-    for segment in issue_segments:
-        confidence = float(segment.get("diagnosis_confidence") or 0.0)
-        phone = segment.get("phone")
-        if phone and confidence >= threshold and phone not in problem_phonemes:
-            problem_phonemes.append(phone)
+    problem_segments = [
+        segment
+        for segment in issue_segments
+        if float(segment.get("diagnosis_confidence") or 0.0) >= threshold
+    ]
 
     demo_score = estimate_demo_score(predicted_error_type, diagnosis_confidence)
-    scoring_result = score_pronunciation_segments(alignment_result, segment_predictions)
+    scoring_result = score_pronunciation_segments(alignment_result, ordered_predictions)
     hybrid_result = None
     try:
         from app.hybrid.hybrid_diagnosis import build_hybrid_diagnosis
@@ -551,10 +621,29 @@ def _aggregate_segment_predictions(
 
     if hybrid_result and hybrid_result.get("primary_error_type") not in {None, "unknown"}:
         predicted_error_type = hybrid_result["primary_error_type"]
-        problem_phonemes = hybrid_result.get("problem_phonemes") or problem_phonemes
-        primary_issue = (hybrid_result.get("top_issues") or [{}])[0]
+        problem_segments = list(hybrid_result.get("top_issues") or problem_segments)
+        primary_issue = problem_segments[0] if problem_segments else {}
         class_probabilities = primary_issue.get("class_probabilities") or class_probabilities
         diagnosis_confidence = primary_issue.get("diagnosis_confidence", diagnosis_confidence)
+        primary_selection_rule = "hybrid_severity_then_heuristic_phone_score_then_classifier_diagnosis_confidence"
+        top_segment = next(
+            (
+                segment
+                for segment in ordered_predictions
+                if segment.get("phone") == primary_issue.get("phone")
+                and segment.get("word") == primary_issue.get("word")
+                and float(segment.get("start") or 0.0) == float(primary_issue.get("start") or 0.0)
+            ),
+            top_segment,
+        )
+
+    for segment in sorted(
+        problem_segments,
+        key=lambda item: (float(item.get("start") or 0.0), float(item.get("end") or 0.0)),
+    ):
+        phone = segment.get("phone")
+        if phone and phone not in problem_phonemes:
+            problem_phonemes.append(phone)
 
     segmental_score = scoring_result.get("utterance_segmental_score")
     scoring_method = scoring_result.get("scoring_method")
@@ -613,7 +702,10 @@ def _aggregate_segment_predictions(
             "scoring_is_heuristic": scoring_is_heuristic,
             "scoring_status": scoring_result.get("scoring_status"),
             "confidence_threshold": confidence_threshold,
-            "segments_count": len(segment_predictions),
+            "segments_count": len(ordered_predictions),
+            "global_diagnosis_selection": primary_selection_rule,
+            "problem_phonemes_order": "alignment_time",
+            "top_issue_segments_order": "classifier_diagnosis_confidence_desc",
             "limitation": (
                 "Segment boundaries come from approximate fallback alignment unless an external aligner supplies "
                 "the alignment_result. Heuristic GOP-like scoring is not production GOP. Classifier confidence is "
@@ -623,7 +715,7 @@ def _aggregate_segment_predictions(
             **(extra_metadata or {}),
         },
     )
-    result["segments"] = segment_predictions
+    result["segments"] = ordered_predictions
     result["metadata"]["top_issue_segments"] = issue_segments[:5]
     if top_segment and top_segment.get("context"):
         result["metadata"].update(top_segment["context"])
@@ -747,15 +839,24 @@ def score_pronunciation(job: dict[str, Any], confidence_threshold: float | None 
         if prompt_text:
             from app.alignment.alignment_service import align_audio
 
-            alignment_result = align_audio(
-                audio_path,
-                prompt_text=prompt_text,
-                canonical_phones=_job_canonical_phones(job),
-                job_id=str(job.get("job_id") or ""),
-            )
-            return score_aligned_audio(audio_path, alignment_result, confidence_threshold=confidence_threshold)
+            with tempfile.TemporaryDirectory(prefix="cnn-prepared-") as prepared_directory:
+                prepared_audio = prepare_audio_for_mfa(audio_path, Path(prepared_directory) / "prepared.wav")
+                alignment_result = align_audio(
+                    audio_path,
+                    prompt_text=prompt_text,
+                    canonical_phones=_job_canonical_phones(job),
+                    job_id=str(job.get("job_id") or ""),
+                    prepared_audio=prepared_audio,
+                )
+                return score_aligned_audio(
+                    prepared_audio.path,
+                    alignment_result,
+                    confidence_threshold=confidence_threshold,
+                )
 
-        prediction = predict_audio(audio_path)
+        with tempfile.TemporaryDirectory(prefix="cnn-prepared-") as prepared_directory:
+            prepared_audio = prepare_audio_for_mfa(audio_path, Path(prepared_directory) / "prepared.wav")
+            prediction = predict_audio(prepared_audio.path)
     finally:
         if temp_audio_path is not None:
             temp_audio_path.unlink(missing_ok=True)
@@ -806,17 +907,20 @@ def score_pronunciation_context(job: dict[str, Any], confidence_threshold: float
 
         from app.alignment.alignment_service import align_audio
 
-        alignment_result = align_audio(
-            audio_path,
-            prompt_text=prompt_text,
-            canonical_phones=_job_canonical_phones(job),
-            job_id=str(job.get("job_id") or ""),
-        )
-        return score_aligned_audio_context(
-            audio_path,
-            alignment_result,
-            confidence_threshold=confidence_threshold,
-        )
+        with tempfile.TemporaryDirectory(prefix="cnn-prepared-") as prepared_directory:
+            prepared_audio = prepare_audio_for_mfa(audio_path, Path(prepared_directory) / "prepared.wav")
+            alignment_result = align_audio(
+                audio_path,
+                prompt_text=prompt_text,
+                canonical_phones=_job_canonical_phones(job),
+                job_id=str(job.get("job_id") or ""),
+                prepared_audio=prepared_audio,
+            )
+            return score_aligned_audio_context(
+                prepared_audio.path,
+                alignment_result,
+                confidence_threshold=confidence_threshold,
+            )
     finally:
         if temp_audio_path is not None:
             temp_audio_path.unlink(missing_ok=True)

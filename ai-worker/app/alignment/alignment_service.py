@@ -5,6 +5,7 @@ import re
 from pathlib import Path
 from typing import Any
 
+from app.alignment.audio_preparation import PreparedMfaAudio
 from app.alignment.fallback_aligner import align_prompt_fallback
 from app.alignment.mfa_aligner import run_mfa_alignment
 from app.contracts.alignment_contract import (
@@ -118,6 +119,7 @@ def align_audio(
     audio_duration: float | None = None,
     canonical_phones: list[str] | tuple[str, ...] | None = None,
     job_id: str | None = None,
+    prepared_audio: PreparedMfaAudio | None = None,
 ) -> dict[str, Any]:
     """Select an alignment provider and return the normalized alignment contract."""
 
@@ -146,6 +148,7 @@ def align_audio(
                 dictionary_path=os.getenv("MFA_DICTIONARY_PATH"),
                 acoustic_model_path=os.getenv("MFA_ACOUSTIC_MODEL_PATH"),
                 job_id=job_id,
+                prepared_audio=prepared_audio,
             )
             result["metadata"]["requested_alignment_mode"] = mode
             result["metadata"]["requested_alignment_method"] = mode

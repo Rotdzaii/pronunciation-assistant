@@ -210,7 +210,10 @@ def build_hybrid_diagnosis(
     primary_error_type = primary_issue.get("predicted_error_type") if primary_issue else "unknown"
 
     problem_phonemes = []
-    for issue in top_issues:
+    for issue in sorted(
+        top_issues,
+        key=lambda item: (float(item.get("start") or 0.0), float(item.get("end") or 0.0)),
+    ):
         phone = issue.get("phone")
         if phone and phone not in problem_phonemes:
             problem_phonemes.append(phone)
@@ -224,6 +227,8 @@ def build_hybrid_diagnosis(
         "severity": severity,
         "top_issues": top_issues,
         "problem_phonemes": problem_phonemes,
+        "problem_phonemes_order": "alignment_time",
+        "primary_error_selection": "severity_then_heuristic_phone_score_then_classifier_diagnosis_confidence",
         "feedback": feedback,
         "location_reliability": _location_reliability(alignment_result),
         "scoring_is_heuristic": bool(scoring_metadata.get("is_heuristic")),

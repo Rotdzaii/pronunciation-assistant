@@ -114,3 +114,27 @@ def prepare_audio_for_mfa(source_audio: str | Path, output_path: str | Path) -> 
         raise AlignmentError("Unable to write or verify MFA-ready WAV audio.", code="audio_invalid") from exc
 
     return PreparedMfaAudio(destination, duration, TARGET_SAMPLE_RATE, int(samples.size), peak, rms)
+
+
+def validate_prepared_mfa_wav(audio_path: str | Path) -> None:
+    """Verify that an existing file is safe to reuse for MFA and CNN crops."""
+
+    path = Path(audio_path).expanduser()
+    if path.suffix.lower() != ".wav":
+        raise AlignmentError("Prepared audio must be a WAV file.", code="audio_invalid")
+    if not path.is_file() or path.stat().st_size == 0:
+        raise AlignmentError("Prepared WAV audio is missing or empty.", code="audio_missing")
+    try:
+        with wave.open(str(path), "rb") as wav_file:
+            if wav_file.getcomptype() != "NONE":
+                raise AlignmentError("Prepared WAV must use uncompressed PCM.", code="audio_invalid")
+            if (wav_file.getframerate(), wav_file.getnchannels(), wav_file.getsampwidth()) != (
+                TARGET_SAMPLE_RATE,
+                TARGET_CHANNELS,
+                TARGET_SAMPLE_WIDTH_BYTES,
+            ):
+                raise AlignmentError("Prepared WAV has an unexpected format.", code="audio_invalid")
+            if wav_file.getnframes() <= 0:
+                raise AlignmentError("Prepared WAV has no frames.", code="audio_empty")
+    except (OSError, wave.Error) as exc:
+        raise AlignmentError("Prepared WAV could not be verified.", code="audio_invalid") from exc

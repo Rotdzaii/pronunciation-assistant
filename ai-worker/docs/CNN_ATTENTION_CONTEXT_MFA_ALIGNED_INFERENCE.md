@@ -179,6 +179,9 @@ Important final AI result metadata fields:
 - `textgrid_parse_success`
 - `fallback_alignment`
 - `fallback_reason`
+- `global_diagnosis_selection`: the deterministic rule used for `predicted_error_type`
+- `problem_phonemes_order=alignment_time`: phone names are ordered by MFA segment start time, not severity
+- `top_issue_segments_order=classifier_diagnosis_confidence_desc`: diagnostic ranking only; it can differ from the hybrid primary diagnosis
 - `word_segments_count`
 - `phone_segments_count`
 - `context_mode`

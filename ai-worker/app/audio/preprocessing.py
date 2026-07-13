@@ -414,6 +414,18 @@ class HybridVadConfig:
     min_voiced_prob: float = 0.70
     energy_margin_db: float = 6.0
     hangover_ms: float = 120.0
+    unvoiced_only_min_ratio: float = 0.10
+    unvoiced_only_min_run_seconds: float = 0.30
+    unvoiced_only_max_gap_seconds: float = 0.12
+
+    @classmethod
+    def from_env(cls) -> "HybridVadConfig":
+        """Load provisional pitch-degraded fallback thresholds from the environment."""
+        return cls(
+            unvoiced_only_min_ratio=_env_float("VAD_UNVOICED_ONLY_MIN_RATIO", 0.10),
+            unvoiced_only_min_run_seconds=_env_float("VAD_UNVOICED_ONLY_MIN_RUN_SECONDS", 0.30),
+            unvoiced_only_max_gap_seconds=_env_float("VAD_UNVOICED_ONLY_MAX_GAP_SECONDS", 0.12),
+        )
 
 
 def _frames_to_segments(mask: Any, times: Any) -> list[tuple[float, float]]:
@@ -431,6 +443,204 @@ def _frames_to_segments(mask: Any, times: Any) -> list[tuple[float, float]]:
     if start_idx is not None:
         segments.append((float(times[start_idx]), float(times[-1]) if len(times) else 0.0))
     return segments
+
+
+def _close_short_gaps(mask: Any, max_gap_frames: int, np: Any) -> Any:
+    """Fill false gaps bounded by speech frames without extending edge noise."""
+    closed = np.asarray(mask, dtype=bool).copy()
+    if max_gap_frames <= 0 or closed.size < 3:
+        return closed
+
+    index = 0
+    while index < closed.size:
+        if closed[index]:
+            index += 1
+            continue
+        start = index
+        while index < closed.size and not closed[index]:
+            index += 1
+        end = index
+        if start > 0 and end < closed.size and (end - start) <= max_gap_frames:
+            closed[start:end] = True
+    return closed
+
+
+def _largest_run_seconds(mask: Any, sample_rate: int, hop_length: int, np: Any) -> float:
+    if sample_rate <= 0 or hop_length <= 0:
+        return 0.0
+    values = np.asarray(mask, dtype=bool)
+    longest = 0
+    current = 0
+    for is_active in values:
+        if is_active:
+            current += 1
+            longest = max(longest, current)
+        else:
+            current = 0
+    return float(longest * hop_length) / sample_rate
+
+
+def _resolve_speech_mask(
+    voiced_candidate: Any,
+    unvoiced_candidate: Any,
+    *,
+    sample_rate: int,
+    hop_length: int,
+    cfg: HybridVadConfig,
+    np: Any,
+) -> dict[str, Any]:
+    """Apply normal voiced-anchor or provisional pitch-degraded VAD policy."""
+    voiced_candidate_count = int(np.sum(voiced_candidate))
+    unvoiced_candidate_count = int(np.sum(unvoiced_candidate))
+    frame_count = len(unvoiced_candidate)
+    unvoiced_frames_ratio = float(unvoiced_candidate_count) / frame_count if frame_count else 0.0
+
+    if voiced_candidate_count:
+        # Existing voiced-anchor behavior remains unchanged.
+        hangover_frames = max(1, int(cfg.hangover_ms / cfg.hop_ms))
+        kernel = np.ones(2 * hangover_frames + 1, dtype=np.int32)
+        voiced_neighborhood = np.convolve(voiced_candidate.astype(np.int32), kernel, mode="same") > 0
+        speech_mask = voiced_candidate | (unvoiced_candidate & voiced_neighborhood)
+        speech_mask = np.convolve(speech_mask.astype(np.int32), kernel, mode="same") > 0
+        return {
+            "speech_mask": speech_mask,
+            "speech_detection_mode": "voiced_anchor",
+            "audio_quality_status": "ok",
+            "warning": None,
+            "voiced_candidate_count": voiced_candidate_count,
+            "unvoiced_candidate_count": unvoiced_candidate_count,
+            "unvoiced_frames_ratio": unvoiced_frames_ratio,
+            "largest_unvoiced_run_seconds": _largest_run_seconds(unvoiced_candidate, sample_rate, hop_length, np),
+        }
+
+    max_gap_frames = max(0, int(round(cfg.unvoiced_only_max_gap_seconds * sample_rate / hop_length)))
+    sustained_unvoiced = _close_short_gaps(unvoiced_candidate, max_gap_frames, np)
+    largest_unvoiced_run_seconds = _largest_run_seconds(sustained_unvoiced, sample_rate, hop_length, np)
+    has_sustained_unvoiced_activity = (
+        unvoiced_frames_ratio >= cfg.unvoiced_only_min_ratio
+        and largest_unvoiced_run_seconds >= cfg.unvoiced_only_min_run_seconds
+    )
+    if has_sustained_unvoiced_activity:
+        return {
+            "speech_mask": sustained_unvoiced,
+            "speech_detection_mode": "pitch_degraded_unvoiced_only",
+            "audio_quality_status": "warning",
+            "warning": "pitch_degraded_unvoiced_only",
+            "voiced_candidate_count": 0,
+            "unvoiced_candidate_count": unvoiced_candidate_count,
+            "unvoiced_frames_ratio": unvoiced_frames_ratio,
+            "largest_unvoiced_run_seconds": largest_unvoiced_run_seconds,
+        }
+    return {
+        "speech_mask": np.zeros(frame_count, dtype=bool),
+        "speech_detection_mode": "no_voiced_anchor",
+        "audio_quality_status": "invalid",
+        "warning": None,
+        "voiced_candidate_count": 0,
+        "unvoiced_candidate_count": unvoiced_candidate_count,
+        "unvoiced_frames_ratio": unvoiced_frames_ratio,
+        "largest_unvoiced_run_seconds": largest_unvoiced_run_seconds,
+    }
+
+
+def _detect_human_speech_waveform(
+    y: Any,
+    sr: int,
+    cfg: HybridVadConfig,
+) -> dict[str, Any]:
+    """Run VAD on an already-decoded mono waveform to avoid repeat decoding."""
+    import librosa
+    import numpy as np
+
+    y = np.asarray(y, dtype=np.float32)
+    if y.size == 0:
+        raise ValueError("Audio file appears to be empty.")
+    if sr <= 0:
+        raise ValueError("Audio sample rate must be positive.")
+    y = y - np.mean(y)
+
+    frame_length = max(256, int(sr * cfg.frame_ms / 1000.0))
+    hop_length = max(64, int(sr * cfg.hop_ms / 1000.0))
+
+    rms = librosa.feature.rms(y=y, frame_length=frame_length, hop_length=hop_length)[0]
+    rms_db = librosa.amplitude_to_db(np.maximum(rms, 1e-8), ref=np.max)
+    noise_floor_db = float(np.percentile(rms_db, 20))
+    energetic = rms_db >= (noise_floor_db + cfg.energy_margin_db)
+
+    f0, voiced_flag, voiced_prob = librosa.pyin(
+        y,
+        sr=sr,
+        fmin=cfg.fmin,
+        fmax=cfg.fmax,
+        frame_length=frame_length,
+        hop_length=hop_length,
+        center=True,
+    )
+    zcr = librosa.feature.zero_crossing_rate(
+        y,
+        frame_length=frame_length,
+        hop_length=hop_length,
+        center=True,
+    )[0]
+
+    n = min(len(rms_db), len(voiced_flag), len(voiced_prob), len(zcr), len(f0))
+    rms_db = rms_db[:n]
+    energetic = energetic[:n]
+    f0 = f0[:n]
+    voiced_flag = np.asarray(voiced_flag[:n], dtype=bool)
+    voiced_prob = np.asarray(voiced_prob[:n], dtype=np.float32)
+    zcr = zcr[:n]
+
+    finite_f0 = np.isfinite(f0)
+    human_f0 = finite_f0 & (f0 >= cfg.fmin) & (f0 <= cfg.fmax)
+    voiced_candidate = energetic & voiced_flag & human_f0 & (voiced_prob >= cfg.min_voiced_prob)
+    zcr_thr = float(np.percentile(zcr[energetic], 60)) if np.any(energetic) else float(np.percentile(zcr, 60))
+    unvoiced_candidate = energetic & (zcr >= zcr_thr)
+
+    mask_result = _resolve_speech_mask(
+        voiced_candidate,
+        unvoiced_candidate,
+        sample_rate=sr,
+        hop_length=hop_length,
+        cfg=cfg,
+        np=np,
+    )
+    speech_mask = mask_result["speech_mask"]
+
+    times = librosa.times_like(rms_db, sr=sr, hop_length=hop_length)
+    segments = _frames_to_segments(speech_mask, times)
+    finite_values = f0[finite_f0]
+    voiced_anchor_duration_seconds = float(mask_result["voiced_candidate_count"] * hop_length) / sr
+
+    return {
+        "sr": sr,
+        "hop_length": hop_length,
+        "times": times,
+        "speech_mask": speech_mask,
+        "segments": segments,
+        "voiced_candidate": voiced_candidate,
+        "unvoiced_candidate": unvoiced_candidate,
+        "rms_db": rms_db,
+        "zcr": zcr,
+        "f0": f0,
+        "voiced_flag": voiced_flag,
+        "voiced_prob": voiced_prob,
+        "noise_floor_db": noise_floor_db,
+        "zcr_threshold": zcr_thr,
+        "finite_f0_frames": int(np.sum(finite_f0)),
+        "finite_f0_ratio": float(np.sum(finite_f0)) / n if n else 0.0,
+        "f0_min_hz": float(np.min(finite_values)) if finite_values.size else None,
+        "f0_max_hz": float(np.max(finite_values)) if finite_values.size else None,
+        "pyin_voiced_flag_ratio": float(np.sum(voiced_flag)) / n if n else 0.0,
+        "voiced_candidate_count": mask_result["voiced_candidate_count"],
+        "unvoiced_candidate_count": mask_result["unvoiced_candidate_count"],
+        "unvoiced_frames_ratio": mask_result["unvoiced_frames_ratio"],
+        "largest_unvoiced_run_seconds": mask_result["largest_unvoiced_run_seconds"],
+        "voiced_anchor_duration_seconds": voiced_anchor_duration_seconds,
+        "speech_detection_mode": mask_result["speech_detection_mode"],
+        "audio_quality_status": mask_result["audio_quality_status"],
+        "warning": mask_result["warning"],
+    }
 
 
 def detect_human_speech(
@@ -457,78 +667,7 @@ def detect_human_speech(
         raise ValueError("`path` must be a non-empty string.")
 
     y, sr = librosa.load(path, sr=None, mono=True)
-    if y.size == 0:
-        raise ValueError("Audio file appears to be empty.")
-
-    y = y.astype(np.float32)
-    y = y - np.mean(y)
-
-    frame_length = max(256, int(sr * cfg.frame_ms / 1000.0))
-    hop_length = max(64, int(sr * cfg.hop_ms / 1000.0))
-
-    rms = librosa.feature.rms(y=y, frame_length=frame_length, hop_length=hop_length)[0]
-    rms_db = librosa.amplitude_to_db(np.maximum(rms, 1e-8), ref=np.max)
-
-    noise_floor_db = float(np.percentile(rms_db, 20))
-    energetic = rms_db >= (noise_floor_db + cfg.energy_margin_db)
-
-    f0, voiced_flag, voiced_prob = librosa.pyin(
-        y,
-        sr=sr,
-        fmin=cfg.fmin,
-        fmax=cfg.fmax,
-        frame_length=frame_length,
-        hop_length=hop_length,
-        center=True,
-    )
-
-    zcr = librosa.feature.zero_crossing_rate(
-        y,
-        frame_length=frame_length,
-        hop_length=hop_length,
-        center=True,
-    )[0]
-
-    n = min(len(rms_db), len(voiced_flag), len(voiced_prob), len(zcr))
-    rms_db = rms_db[:n]
-    energetic = energetic[:n]
-    f0 = f0[:n]
-    voiced_flag = voiced_flag[:n]
-    voiced_prob = voiced_prob[:n]
-    zcr = zcr[:n]
-
-    finite_f0 = np.isfinite(f0)
-    human_f0 = finite_f0 & (f0 >= cfg.fmin) & (f0 <= cfg.fmax)
-
-    voiced_candidate = energetic & voiced_flag & human_f0 & (voiced_prob >= cfg.min_voiced_prob)
-
-    zcr_thr = float(np.percentile(zcr[energetic], 60)) if np.any(energetic) else float(np.percentile(zcr, 60))
-    unvoiced_candidate = energetic & (zcr >= zcr_thr)
-
-    hangover_frames = max(1, int(cfg.hangover_ms / cfg.hop_ms))
-    kernel = np.ones(2 * hangover_frames + 1, dtype=np.int32)
-
-    voiced_neighborhood = np.convolve(voiced_candidate.astype(np.int32), kernel, mode="same") > 0
-    speech_mask = voiced_candidate | (unvoiced_candidate & voiced_neighborhood)
-    speech_mask = np.convolve(speech_mask.astype(np.int32), kernel, mode="same") > 0
-
-    times = librosa.times_like(rms_db, sr=sr, hop_length=hop_length)
-    segments = _frames_to_segments(speech_mask, times)
-
-    return {
-        "sr": sr,
-        "times": times,
-        "speech_mask": speech_mask,
-        "segments": segments,
-        "voiced_candidate": voiced_candidate,
-        "unvoiced_candidate": unvoiced_candidate,
-        "rms_db": rms_db,
-        "zcr": zcr,
-        "f0": f0,
-        "voiced_prob": voiced_prob,
-        "noise_floor_db": noise_floor_db,
-        "zcr_threshold": zcr_thr,
-    }
+    return _detect_human_speech_waveform(y, sr, cfg)
 
 
 # ---------------------------------------------------------------------------
@@ -556,12 +695,43 @@ def estimate_snr(audio_path: str | Path) -> dict[str, Any]:
     except ImportError as exc:
         raise AudioPreprocessingError("estimate_snr requires librosa and numpy.") from exc
 
-    # Fast SNR pass (cheap RMS, kept for diagnostics)
-    audio, sr = librosa.load(str(audio_path), sr=16000, mono=True)
+    # Prepared MFA WAVs are PCM mono 16 kHz. Read them directly so the VAD does
+    # not trigger librosa/audioread decoding after preparation.
+    path = Path(audio_path)
+    if path.suffix.lower() == ".wav":
+        import wave
+
+        with wave.open(str(path), "rb") as wav_file:
+            if wav_file.getnchannels() != 1 or wav_file.getsampwidth() != 2:
+                raise AudioPreprocessingError("VAD WAV input must be mono signed 16-bit PCM.")
+            sr = wav_file.getframerate()
+            audio = np.frombuffer(wav_file.readframes(wav_file.getnframes()), dtype="<i2").astype(np.float32)
+            audio /= 32768.0
+    else:
+        audio, sr = librosa.load(str(path), sr=16000, mono=True)
     rms = librosa.feature.rms(y=audio, frame_length=2048, hop_length=_SNR_HOP_LENGTH)[0]
 
-    _empty = {"snr_db": None, "voiced_duration_seconds": 0.0,
-               "voiced_frames_ratio": 0.0, "unvoiced_frames_ratio": 0.0, "mean_voiced_prob": 0.0}
+    _empty = {
+        "snr_db": None,
+        "file_duration_seconds": 0.0,
+        "voiced_anchor_duration_seconds": 0.0,
+        "detected_speech_duration_seconds": 0.0,
+        "voiced_duration_seconds": 0.0,
+        "voiced_frames_ratio": 0.0,
+        "unvoiced_frames_ratio": 0.0,
+        "mean_voiced_prob": 0.0,
+        "finite_f0_frames": 0,
+        "finite_f0_ratio": 0.0,
+        "f0_min_hz": None,
+        "f0_max_hz": None,
+        "pyin_voiced_flag_ratio": 0.0,
+        "voiced_candidate_count": 0,
+        "unvoiced_candidate_count": 0,
+        "largest_unvoiced_run_seconds": 0.0,
+        "speech_detection_mode": "no_voiced_anchor",
+        "audio_quality_status": "invalid",
+        "warning": None,
+    }
     if rms.size == 0 or float(np.max(rms)) < 1e-9:
         return _empty
 
@@ -574,13 +744,22 @@ def estimate_snr(audio_path: str | Path) -> dict[str, Any]:
 
     # Hybrid VAD pass (slower due to pyin, provides accurate speech duration)
     try:
-        vad = detect_human_speech(str(audio_path))
+        vad = _detect_human_speech_waveform(audio, sr, HybridVadConfig.from_env())
     except Exception:
         # If VAD fails, fall back to energy-only voiced duration
         voiced_frame_count = int(np.sum(rms > noise_floor_lin * VOICED_FLOOR_MULTIPLIER))
         voiced_duration = round(float(voiced_frame_count * _SNR_HOP_LENGTH) / sr, 3) if sr > 0 else 0.0
-        return {"snr_db": snr_db, "voiced_duration_seconds": voiced_duration,
-                "voiced_frames_ratio": 0.0, "unvoiced_frames_ratio": 0.0, "mean_voiced_prob": 0.0}
+        return {
+            **_empty,
+            "snr_db": snr_db,
+            "file_duration_seconds": round(float(audio.size) / sr, 3) if sr > 0 else 0.0,
+            "voiced_anchor_duration_seconds": voiced_duration,
+            "detected_speech_duration_seconds": voiced_duration,
+            "voiced_duration_seconds": voiced_duration,
+            "speech_detection_mode": "vad_unavailable_energy_fallback",
+            "audio_quality_status": "warning",
+            "warning": "vad_unavailable_energy_fallback",
+        }
 
     speech_duration = round(sum(end - start for start, end in vad["segments"]), 3)
 
@@ -599,10 +778,24 @@ def estimate_snr(audio_path: str | Path) -> dict[str, Any]:
 
     return {
         "snr_db": snr_db,
+        "file_duration_seconds": round(float(audio.size) / sr, 3) if sr > 0 else 0.0,
+        "voiced_anchor_duration_seconds": round(float(vad["voiced_anchor_duration_seconds"]), 3),
+        "detected_speech_duration_seconds": speech_duration,
         "voiced_duration_seconds": speech_duration,
         "voiced_frames_ratio": voiced_frames_ratio,
         "unvoiced_frames_ratio": unvoiced_frames_ratio,
         "mean_voiced_prob": mean_voiced_prob,
+        "finite_f0_frames": int(vad["finite_f0_frames"]),
+        "finite_f0_ratio": round(float(vad["finite_f0_ratio"]), 3),
+        "f0_min_hz": round(float(vad["f0_min_hz"]), 2) if vad["f0_min_hz"] is not None else None,
+        "f0_max_hz": round(float(vad["f0_max_hz"]), 2) if vad["f0_max_hz"] is not None else None,
+        "pyin_voiced_flag_ratio": round(float(vad["pyin_voiced_flag_ratio"]), 3),
+        "voiced_candidate_count": int(vad["voiced_candidate_count"]),
+        "unvoiced_candidate_count": int(vad["unvoiced_candidate_count"]),
+        "largest_unvoiced_run_seconds": round(float(vad["largest_unvoiced_run_seconds"]), 3),
+        "speech_detection_mode": vad["speech_detection_mode"],
+        "audio_quality_status": vad["audio_quality_status"],
+        "warning": vad["warning"],
     }
 
 

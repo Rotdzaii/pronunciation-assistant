@@ -3,7 +3,9 @@ from __future__ import annotations
 import os
 import re
 import sys
+import tempfile
 import time
+from contextlib import contextmanager
 from pathlib import Path
 from typing import Any
 
@@ -28,6 +30,7 @@ SUPPORTED_SCORER_MODES = ("mock", "wav2vec2", "cnn_attention", "cnn_attention_co
 STANDARD_ERROR_TYPES = {
     "audio_decode_failed",
     "audio_preprocess_failed",
+    "audio_quality_rejected",
     "alignment_failed",
     "checkpoint_missing",
     "checkpoint_incompatible",
@@ -36,6 +39,9 @@ STANDARD_ERROR_TYPES = {
     "webhook_failed",
     "unknown_error",
 }
+
+AUDIO_SNR_REJECT_THRESHOLD_DB = 15.0
+AUDIO_MIN_VOICED_DURATION_SECONDS = 0.3
 SENSITIVE_VALUE_MARKERS = (
     "c:\\",
     "/tmp/",
@@ -438,6 +444,7 @@ def _normalize_result_for_webhook(
         if resolved_error_type not in STANDARD_ERROR_TYPES:
             resolved_error_type = "unknown_error"
         normalized["score"] = None
+        normalized["score_type"] = "unavailable"
         normalized["problem_phonemes"] = []
         feedback["error_type"] = resolved_error_type
         feedback.setdefault("summary", "Phoenix v2 could not produce a model score for this attempt.")
@@ -508,6 +515,137 @@ def _post_webhook(webhook_url: str, webhook_secret: str, payload: dict[str, Any]
     )
 
 
+@contextmanager
+def _prepared_audio_for_job(job: dict[str, Any]):
+    """Download/decode once and retain the prepared WAV through MFA/CNN scoring."""
+    from app.alignment.audio_preparation import prepare_audio_for_mfa
+
+    audio_reference = str(job.get("audio_path") or job.get("audio_url") or "").strip()
+    if not audio_reference:
+        raise PhoenixWorkerError("Job has no audio reference.", "audio_preprocess_failed")
+
+    with tempfile.TemporaryDirectory(prefix="worker-prepared-") as directory:
+        root = Path(directory)
+        from urllib.parse import urlparse as _urlparse
+
+        parsed = _urlparse(audio_reference)
+        if parsed.scheme in {"http", "https"}:
+            response = requests.get(audio_reference, timeout=30)
+            response.raise_for_status()
+            source = root / f"source{Path(parsed.path).suffix or '.audio'}"
+            source.write_bytes(response.content)
+        else:
+            source = Path(audio_reference)
+
+        prepared = prepare_audio_for_mfa(source, root / "prepared.wav")
+        yield prepared
+
+
+def _audio_quality_gate(audio_path: Path, config: dict[str, Any]) -> tuple[dict[str, Any] | None, dict[str, Any]]:
+    """Check audio quality before running the scorer.
+
+    Returns a pre-built failed result plus safe diagnostics if quality is below
+    threshold, otherwise ``None`` plus diagnostics for downstream metadata.
+    Any exception raised here is caught by the caller, which logs a warning
+    and falls through to normal scoring rather than failing the job entirely.
+    """
+    if config.get("scorer_mode") == "mock":
+        return None, {"audio_quality_status": "not_checked"}
+
+    try:
+        snr_threshold = float(os.getenv("AUDIO_SNR_REJECT_THRESHOLD_DB", str(AUDIO_SNR_REJECT_THRESHOLD_DB)))
+    except ValueError:
+        snr_threshold = AUDIO_SNR_REJECT_THRESHOLD_DB
+    try:
+        min_voiced = float(os.getenv("AUDIO_MIN_VOICED_DURATION_SECONDS", str(AUDIO_MIN_VOICED_DURATION_SECONDS)))
+    except ValueError:
+        min_voiced = AUDIO_MIN_VOICED_DURATION_SECONDS
+
+    from app.audio.preprocessing import estimate_snr
+
+    gate_start = time.monotonic()
+    quality = estimate_snr(audio_path)
+    gate_elapsed = time.monotonic() - gate_start
+
+    snr_db = quality.get("snr_db")
+    voiced_duration = float(quality.get("voiced_duration_seconds") or 0.0)
+    voiced_frames_ratio = float(quality.get("voiced_frames_ratio") or 0.0)
+    unvoiced_frames_ratio = float(quality.get("unvoiced_frames_ratio") or 0.0)
+    mean_voiced_prob = float(quality.get("mean_voiced_prob") or 0.0)
+    speech_detection_mode = str(quality.get("speech_detection_mode") or "unknown")
+    audio_quality_status = str(quality.get("audio_quality_status") or "invalid")
+    largest_unvoiced_run = float(quality.get("largest_unvoiced_run_seconds") or 0.0)
+
+    # Primary gate: VAD-derived speech duration. SNR remains diagnostic only.
+    rejection_reason: str | None = None
+    if audio_quality_status == "invalid":
+        if speech_detection_mode == "no_voiced_anchor" and unvoiced_frames_ratio > 0:
+            rejection_reason = "insufficient_sustained_unvoiced_activity"
+        elif speech_detection_mode == "no_voiced_anchor":
+            rejection_reason = "no_voiced_anchor"
+        else:
+            rejection_reason = "insufficient_detected_speech"
+    elif speech_detection_mode != "pitch_degraded_unvoiced_only" and voiced_duration < min_voiced:
+        rejection_reason = "insufficient_detected_speech"
+
+    print(
+        f"audio_quality_check snr_db={snr_db} "
+        f"file_duration={float(quality.get('file_duration_seconds') or 0.0):.3f}s "
+        f"voiced_anchor_duration={float(quality.get('voiced_anchor_duration_seconds') or 0.0):.3f}s "
+        f"detected_speech_duration={voiced_duration:.3f}s "
+        f"voiced_frames_ratio={voiced_frames_ratio:.3f} "
+        f"unvoiced_frames_ratio={unvoiced_frames_ratio:.3f} "
+        f"mean_voiced_prob={mean_voiced_prob:.3f} "
+        f"finite_f0_frames={int(quality.get('finite_f0_frames') or 0)} "
+        f"finite_f0_ratio={float(quality.get('finite_f0_ratio') or 0.0):.3f} "
+        f"f0_min_hz={quality.get('f0_min_hz')} f0_max_hz={quality.get('f0_max_hz')} "
+        f"pyin_voiced_flag_ratio={float(quality.get('pyin_voiced_flag_ratio') or 0.0):.3f} "
+        f"voiced_candidate_count={int(quality.get('voiced_candidate_count') or 0)} "
+        f"unvoiced_candidate_count={int(quality.get('unvoiced_candidate_count') or 0)} "
+        f"largest_unvoiced_run_seconds={largest_unvoiced_run:.3f} "
+        f"speech_detection_mode={speech_detection_mode} audio_quality_status={audio_quality_status} "
+        f"gate_elapsed_s={gate_elapsed:.2f} "
+        f"min_voiced={min_voiced}s snr_threshold_diag={snr_threshold} "
+        f"rejected={rejection_reason is not None} reason={rejection_reason}"
+    )
+
+    if rejection_reason is None:
+        quality["gate_elapsed_seconds"] = round(gate_elapsed, 3)
+        return None, quality
+
+    scorer_mode = config.get("scorer_mode", "unknown")
+    from app.contracts.ai_result_contract import build_failed_ai_result as _build_failed
+    failed = _build_failed(
+        error=f"audio_quality_rejected:{rejection_reason}",
+        scorer={
+            "name": scorer_mode,
+            "type": "phone_error_classifier",
+            "version": "audio_quality_gate_v3",
+        },
+        metadata={
+            "error_type": "audio_quality_rejected",
+            "rejection_reason": rejection_reason,
+            "snr_db": snr_db,
+            **quality,
+            "snr_threshold_db": snr_threshold,
+            "min_voiced_duration_seconds": min_voiced,
+            "gate_elapsed_seconds": round(gate_elapsed, 3),
+            "model_version": config.get("model_version", "unknown"),
+            "scorer_mode": scorer_mode,
+            "alignment_method": config.get("alignment_mode", "unknown"),
+            "is_forced_alignment": False,
+        },
+    )
+    failed["feedback"]["error_type"] = "audio_quality_rejected"
+    failed["feedback"]["summary"] = "Âm thanh không rõ, vui lòng thu âm lại ở nơi yên tĩnh hơn."
+    failed["feedback"]["tips"] = [
+        "Di chuyển đến nơi yên tĩnh hơn và thử lại.",
+        "Giữ micro gần miệng và nói rõ ràng hơn.",
+        "Đảm bảo không có tiếng ồn lớn xung quanh khi ghi âm.",
+    ]
+    return failed, quality
+
+
 def _process_one_job(client: Client, config: dict[str, Any]) -> bool:
     row = _read_one_job(client, config["queue_name"], config["visibility_timeout"])
     if not row:
@@ -524,7 +662,40 @@ def _process_one_job(client: Client, config: dict[str, Any]) -> bool:
 
     try:
         _preflight_scorer_config(config)
-        result = _score(job, config["scorer_mode"], config["confidence_threshold"])
+        quality_rejection = None
+        scored_result: dict[str, Any] | None = None
+        if config["scorer_mode"] == "mock":
+            quality_rejection, _ = _audio_quality_gate(Path(), config)
+        else:
+            with _prepared_audio_for_job(job) as prepared_audio:
+                scoring_job = {
+                    **job,
+                    "audio_path": str(prepared_audio.path),
+                    "_prepared_audio": prepared_audio,
+                }
+                try:
+                    quality_rejection, audio_quality = _audio_quality_gate(prepared_audio.path, config)
+                except Exception as qe:
+                    print(f"[WARN] Audio quality gate failed, proceeding with scoring. error={_sanitize_error_text(str(qe))}")
+                    audio_quality = {"audio_quality_status": "not_checked"}
+                if quality_rejection is None:
+                    scoring_job["_audio_quality_warnings"] = [audio_quality["warning"]] if audio_quality.get("warning") else []
+                    scored_result = _score(
+                        scoring_job,
+                        config["scorer_mode"],
+                        config["confidence_threshold"],
+                    )
+        if quality_rejection is not None:
+            result = _normalize_result_for_webhook(
+                quality_rejection, config=config, error_type="audio_quality_rejected"
+            )
+        elif scored_result is not None:
+            result = _normalize_result_for_webhook(scored_result, config=config)
+        else:
+            result = _normalize_result_for_webhook(
+                _score(job, config["scorer_mode"], config["confidence_threshold"]),
+                config=config,
+            )
     except Exception as exc:
         sanitized_error = _sanitize_error_text(str(exc))
         error_type = _classify_exception(exc)
@@ -543,8 +714,6 @@ def _process_one_job(client: Client, config: dict[str, Any]) -> bool:
             config["confidence_threshold"],
             PhoenixWorkerError(sanitized_error, error_type),
         )
-    else:
-        result = _normalize_result_for_webhook(result, config=config)
 
     confidence = _extract_model_confidence(result)
     print(f"model_confidence={confidence if confidence is not None else 'unavailable'}")

@@ -376,6 +376,53 @@ class MfaAlignmentUnitTests(unittest.TestCase):
         self.assertEqual(result["metadata"]["mfa_error"]["code"], "mfa_not_installed")
         self.assertEqual(result["quality"]["status"], "warning")
 
+    def test_pitch_degraded_warning_is_preserved_after_successful_mfa(self) -> None:
+        mfa_result = {
+            "status": "success",
+            "alignment_status": "success",
+            "metadata": {"alignment_quality_warnings": []},
+            "phones": [{"phone": "B", "start": 0.1, "end": 0.2}],
+        }
+        with patch.dict(os.environ, {"ALIGNMENT_MODE": "mfa", "ALLOW_ALIGNMENT_FALLBACK": "false"}), patch(
+            "app.alignment.alignment_service.run_mfa_alignment", return_value=mfa_result
+        ):
+            result = align_audio(
+                "prepared.wav",
+                "book",
+                upstream_quality_warnings=["pitch_degraded_unvoiced_only"],
+            )
+        self.assertEqual(result["metadata"]["audio_quality_status"], "warning")
+        self.assertIn("pitch_degraded_unvoiced_only", result["metadata"]["alignment_quality_warnings"])
+
+    def test_prepared_pitch_degraded_job_reuses_wav_for_mfa_and_cnn(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            prepared_wav = Path(temp) / "prepared.wav"
+            write_tone(prepared_wav)
+            prepared = PreparedMfaAudio(prepared_wav, 1.0, 16000, 16000, 0.2, 0.1)
+            alignment = {
+                "status": "success",
+                "alignment_status": "success",
+                "method": "mfa",
+                "segments": [{"index": 0, "type": "phone", "phone": "B", "start": 0.1, "end": 0.2}],
+            }
+            with patch("app.scorers.cnn_attention_scorer.prepare_audio_for_mfa") as prepare_mock, patch(
+                "app.alignment.alignment_service.align_audio", return_value=alignment
+            ) as align_mock, patch(
+                "app.scorers.cnn_attention_scorer.score_aligned_audio_context", return_value={"status": "completed"}
+            ) as score_mock:
+                result = cnn_attention_scorer.score_pronunciation_context({
+                    "audio_path": str(prepared_wav),
+                    "target_word": "book",
+                    "job_id": "job-1",
+                    "_prepared_audio": prepared,
+                    "_audio_quality_warnings": ["pitch_degraded_unvoiced_only"],
+                })
+        self.assertEqual(result["status"], "completed")
+        prepare_mock.assert_not_called()
+        self.assertIs(align_mock.call_args.kwargs["prepared_audio"], prepared)
+        self.assertEqual(align_mock.call_args.kwargs["upstream_quality_warnings"], ["pitch_degraded_unvoiced_only"])
+        self.assertEqual(Path(score_mock.call_args.args[0]), prepared_wav)
+
     def test_public_alignment_contract_does_not_include_raw_mfa_stderr(self) -> None:
         raw_stderr = r"KaldiError C:\\Users\\Admin\\AppData\\Local\\Temp\\mfa.log token=secret-value"
         with patch.dict(os.environ, {"ALIGNMENT_MODE": "mfa", "ALLOW_ALIGNMENT_FALLBACK": "false"}), patch(
@@ -464,16 +511,16 @@ class MfaAlignmentUnitTests(unittest.TestCase):
 
     def test_problem_phonemes_and_segments_are_ordered_by_alignment_time(self) -> None:
         predictions = [
-            {"index": 2, "phone": "B", "word": "book", "start": 0.5, "end": 0.7, "predicted_error_type": "deletion", "diagnosis_confidence": 0.7, "class_probabilities": {"deletion": 0.7}},
+            {"index": 2, "phone": "K", "word": "book", "start": 0.5, "end": 0.7, "predicted_error_type": "deletion", "diagnosis_confidence": 0.7, "class_probabilities": {"deletion": 0.7}},
             {"index": 1, "phone": "UH", "word": "book", "start": 0.3, "end": 0.5, "predicted_error_type": "substitution", "diagnosis_confidence": 0.9, "class_probabilities": {"substitution": 0.9}},
-            {"index": 0, "phone": "K", "word": "book", "start": 0.1, "end": 0.3, "predicted_error_type": "addition", "diagnosis_confidence": 0.8, "class_probabilities": {"addition": 0.8}},
+            {"index": 0, "phone": "B", "word": "book", "start": 0.1, "end": 0.3, "predicted_error_type": "addition", "diagnosis_confidence": 0.8, "class_probabilities": {"addition": 0.8}},
         ]
         hybrid = {
             "primary_error_type": "deletion",
             "top_issues": [
-                {"phone": "B", "word": "book", "start": 0.5, "end": 0.7, "predicted_error_type": "deletion", "diagnosis_confidence": 0.7, "class_probabilities": {"deletion": 0.7}},
+                {"phone": "K", "word": "book", "start": 0.5, "end": 0.7, "predicted_error_type": "deletion", "diagnosis_confidence": 0.7, "class_probabilities": {"deletion": 0.7}},
                 {"phone": "UH", "word": "book", "start": 0.3, "end": 0.5, "predicted_error_type": "substitution", "diagnosis_confidence": 0.9, "class_probabilities": {"substitution": 0.9}},
-                {"phone": "K", "word": "book", "start": 0.1, "end": 0.3, "predicted_error_type": "addition", "diagnosis_confidence": 0.8, "class_probabilities": {"addition": 0.8}},
+                {"phone": "B", "word": "book", "start": 0.1, "end": 0.3, "predicted_error_type": "addition", "diagnosis_confidence": 0.8, "class_probabilities": {"addition": 0.8}},
             ],
             "feedback": {"summary": "test", "tips": []},
             "severity": "high",
@@ -482,20 +529,58 @@ class MfaAlignmentUnitTests(unittest.TestCase):
             "location_reliability": "forced_alignment",
         }
         scoring = {"utterance_segmental_score": 70.0, "scoring_method": "heuristic_gop", "scoring_status": "heuristic", "metadata": {"is_heuristic": True}}
-        alignment = {"status": "success", "method": "mfa", "metadata": {}, "words": [], "phones": []}
+        alignment = {
+            "status": "success",
+            "method": "mfa",
+            "metadata": {"is_forced_alignment": True, "mfa_used": True},
+            "words": [],
+            "phones": [
+                {"phone": "B", "start": 0.1, "end": 0.3},
+                {"phone": "UH", "start": 0.3, "end": 0.5},
+                {"phone": "K", "start": 0.5, "end": 0.7},
+            ],
+        }
         with patch("app.scoring.scoring_service.score_pronunciation_segments", return_value=scoring), patch(
             "app.hybrid.hybrid_diagnosis.build_hybrid_diagnosis", return_value=hybrid
         ):
             result = cnn_attention_scorer._aggregate_segment_predictions(predictions, alignment_result=alignment)  # noqa: SLF001
         self.assertEqual(result["predicted_error_type"], "deletion")
-        self.assertEqual([segment["phone"] for segment in result["segments"]], ["K", "UH", "B"])
-        self.assertEqual(result["problem_phonemes"], ["K", "UH", "B"])
+        self.assertEqual([segment["phone"] for segment in result["segments"]], ["b", "ʊ", "k"])
+        self.assertEqual(result["problem_phonemes"], ["b", "ʊ", "k"])
         self.assertEqual(
             result["metadata"]["global_diagnosis_selection"],
             "hybrid_severity_then_heuristic_phone_score_then_classifier_diagnosis_confidence",
         )
         payload = build_success_webhook_payload("job-1", result)
         self.assertNotIn("prepared.wav", str(payload))
+
+    def test_invalid_reliability_suppresses_score_feedback_and_problem_phones(self) -> None:
+        predictions = [{
+            "index": 0, "phone": "B", "word": "book", "start": 0.1, "end": 0.3,
+            "predicted_error_type": "substitution", "diagnosis_confidence": 0.9,
+            "class_probabilities": {"substitution": 0.9},
+        }]
+        alignment = {
+            "status": "failed",
+            "method": "fallback_even_split",
+            "metadata": {"fallback_alignment": True},
+            "words": [],
+            "phones": [{"phone": "B", "start": 0.1, "end": 0.3}],
+        }
+        scoring = {"utterance_segmental_score": 70.0, "scoring_method": "heuristic_gop", "scoring_status": "heuristic", "metadata": {"is_heuristic": True}}
+        with patch("app.scoring.scoring_service.score_pronunciation_segments", return_value=scoring):
+            result = cnn_attention_scorer._aggregate_segment_predictions(predictions, alignment_result=alignment)  # noqa: SLF001
+        self.assertEqual(result["reliability"]["status"], "invalid")
+        self.assertIsNone(result["score"])
+        self.assertEqual(result["score_type"], "unavailable")
+        self.assertIsNone(result["primary_feedback"])
+        self.assertEqual(result["problem_phonemes"], [])
+        self.assertNotIn("needs_improvement", [phone["status"] for phone in result["phone_results"]])
+
+        payload = build_success_webhook_payload("job-1", result)
+        self.assertIsNone(payload["score"])
+        self.assertEqual(payload["problem_phonemes"], [])
+        self.assertNotIn("stderr", str(payload).lower())
 
     def test_valid_textgrid_parses_phone_word_and_duration(self) -> None:
         result = parse_textgrid(FIXTURES / "valid.TextGrid")

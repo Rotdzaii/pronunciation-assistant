@@ -120,6 +120,7 @@ def align_audio(
     canonical_phones: list[str] | tuple[str, ...] | None = None,
     job_id: str | None = None,
     prepared_audio: PreparedMfaAudio | None = None,
+    upstream_quality_warnings: list[str] | tuple[str, ...] | None = None,
 ) -> dict[str, Any]:
     """Select an alignment provider and return the normalized alignment contract."""
 
@@ -152,6 +153,13 @@ def align_audio(
             )
             result["metadata"]["requested_alignment_mode"] = mode
             result["metadata"]["requested_alignment_method"] = mode
+            if upstream_quality_warnings:
+                warnings = list(result["metadata"].get("alignment_quality_warnings") or [])
+                for warning in upstream_quality_warnings:
+                    if warning and warning not in warnings:
+                        warnings.append(warning)
+                result["metadata"]["alignment_quality_warnings"] = warnings
+                result["metadata"]["audio_quality_status"] = "warning"
             return result
         except AlignmentError as exc:
             print(f"alignment_event=mfa_fallback job_id={job_id or 'unknown'} error_category={exc.code}")

@@ -7,9 +7,15 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse
 
-from app.alignment.audio_preparation import prepare_audio_for_mfa, validate_prepared_mfa_wav
+from app.alignment.audio_preparation import PreparedMfaAudio, prepare_audio_for_mfa, validate_prepared_mfa_wav
 from app.contracts.ai_result_contract import build_ai_result, estimate_demo_score
 from app.contracts.alignment_contract import AlignmentError, FALLBACK_ALIGNMENT_NOTE, get_alignment_segments
+from app.phonetics.canonicalization import (
+    build_phone_results as _build_phone_results,
+    canonicalize_phones as _canonicalize_phones,
+    check_inventory_guard as _check_inventory_guard,
+    compute_reliability as _compute_reliability,
+)
 
 
 SAMPLE_RATE = 16000
@@ -637,6 +643,8 @@ def _aggregate_segment_predictions(
             top_segment,
         )
 
+    # Public problem-phone lists follow alignment time, never hybrid severity.
+    # Severity remains available only through the explicit top-segment metadata.
     for segment in sorted(
         problem_segments,
         key=lambda item: (float(item.get("start") or 0.0), float(item.get("end") or 0.0)),
@@ -722,6 +730,111 @@ def _aggregate_segment_predictions(
     result["feedback"]["diagnosis"] = result["diagnosis"]
     result["feedback"]["scorer"] = result["scorer"]
     result["feedback"]["metadata"] = result["metadata"]
+
+    # ── Canonical phone contract ──────────────────────────────────────────────
+    phone_raw_list = [
+        str(seg.get("phone") or "")
+        for seg in (alignment_result.get("phones") or [])
+    ]
+    canon_result = _canonicalize_phones(phone_raw_list)
+
+    primary_phone: str | None = None
+    primary_err_type: str | None = None
+    if hybrid_result:
+        top_issues = hybrid_result.get("top_issues") or []
+        if top_issues:
+            primary_phone = str(top_issues[0].get("phone") or "").strip() or None
+            primary_err_type = str(
+                top_issues[0].get("predicted_error_type") or predicted_error_type or ""
+            ).strip() or None
+    if primary_phone is None and top_segment:
+        primary_phone = str(top_segment.get("phone") or "").strip() or None
+        primary_err_type = str(top_segment.get("predicted_error_type") or "").strip() or None
+
+    diagnosis_invalid = False
+    guard_reason: str | None = None
+    for issue in problem_segments:
+        invalid, reason = _check_inventory_guard(
+            str(issue.get("phone") or "").strip() or None,
+            str(issue.get("predicted_error_type") or predicted_error_type or "").strip() or None,
+            canon_result["canonical_phones"],
+        )
+        if invalid:
+            diagnosis_invalid, guard_reason = True, reason
+            break
+    if not diagnosis_invalid:
+        diagnosis_invalid, guard_reason = _check_inventory_guard(
+            primary_phone,
+            primary_err_type,
+            canon_result["canonical_phones"],
+        )
+    reliability = _compute_reliability(
+        alignment_result,
+        canon_result,
+        diagnosis_invalid=diagnosis_invalid,
+        guard_reason=guard_reason,
+    )
+
+    canonical_problem_phones: list[str] = []
+    for raw_phone in problem_phonemes:
+        canonical = _canonicalize_phones([str(raw_phone)]).get("canonical_phones") or []
+        if canonical and canonical[0] not in canonical_problem_phones:
+            canonical_problem_phones.append(canonical[0])
+
+    if reliability["status"] == "invalid":
+        result["score"] = None
+        result["score_type"] = "unavailable"
+        result["score_note"] = "Score unavailable: alignment or diagnosis validation failed."
+        result["problem_phonemes"] = []
+        result["primary_feedback"] = None
+    else:
+        result["problem_phonemes"] = canonical_problem_phones
+        result["primary_feedback"] = result["feedback"].get("summary")
+
+    phone_results = _build_phone_results(
+        alignment_result,
+        ordered_predictions,
+        canon_result,
+        reliability_status=reliability["status"],
+    )
+
+    result["reliability"] = reliability
+    # MFA is an alignment source, not the authoritative pronunciation source.
+    # The backend replaces these fields from stored vocabulary_items data before
+    # persisting a result for the frontend.
+    result["display_pronunciation"] = None
+    result["pronunciation_variant"] = None
+    result["expected_phones"] = []
+    result["pronunciation_source"] = "unavailable"
+    result["phone_results"] = phone_results
+
+    # Segment diagnostics are public contract data too. Preserve their temporal
+    # order while replacing raw MFA/ARPABET symbols with safe canonical IPA.
+    public_segments: list[dict[str, Any]] = []
+    for segment in ordered_predictions:
+        canonical = _canonicalize_phones([str(segment.get("phone") or "")]).get("canonical_phones")
+        public_segments.append({
+            **segment,
+            "phone": canonical[0] if canonical else None,
+        })
+    result["segments"] = public_segments
+    result["metadata"]["top_issue_segments"] = [
+        segment for segment in public_segments
+        if segment.get("predicted_error_type") not in {None, "unknown"}
+    ][:5]
+    top_issues = result.get("diagnosis", {}).get("top_issues")
+    if isinstance(top_issues, list):
+        public_top_issues: list[dict[str, Any]] = []
+        for issue in top_issues:
+            if not isinstance(issue, dict):
+                continue
+            canonical = _canonicalize_phones([str(issue.get("phone") or "")]).get("canonical_phones")
+            public_top_issues.append({
+                **issue,
+                "phone": canonical[0] if canonical else None,
+            })
+        result["diagnosis"]["top_issues"] = public_top_issues
+
     return result
 
 
@@ -821,6 +934,18 @@ def _job_canonical_phones(job: dict[str, Any]) -> list[str]:
     return []
 
 
+def _job_prepared_audio(job: dict[str, Any]) -> PreparedMfaAudio | None:
+    prepared = job.get("_prepared_audio")
+    return prepared if isinstance(prepared, PreparedMfaAudio) else None
+
+
+def _job_audio_quality_warnings(job: dict[str, Any]) -> list[str]:
+    warnings = job.get("_audio_quality_warnings")
+    if not isinstance(warnings, (list, tuple)):
+        return []
+    return [str(warning) for warning in warnings if str(warning).strip()]
+
+
 def _require_usable_alignment(alignment_result: dict[str, Any]) -> None:
     status = str(alignment_result.get("alignment_status") or alignment_result.get("status") or "")
     segments = get_alignment_segments(alignment_result)
@@ -839,14 +964,16 @@ def score_pronunciation(job: dict[str, Any], confidence_threshold: float | None 
         if prompt_text:
             from app.alignment.alignment_service import align_audio
 
+            prepared_from_job = _job_prepared_audio(job)
             with tempfile.TemporaryDirectory(prefix="cnn-prepared-") as prepared_directory:
-                prepared_audio = prepare_audio_for_mfa(audio_path, Path(prepared_directory) / "prepared.wav")
+                prepared_audio = prepared_from_job or prepare_audio_for_mfa(audio_path, Path(prepared_directory) / "prepared.wav")
                 alignment_result = align_audio(
                     audio_path,
                     prompt_text=prompt_text,
                     canonical_phones=_job_canonical_phones(job),
                     job_id=str(job.get("job_id") or ""),
                     prepared_audio=prepared_audio,
+                    upstream_quality_warnings=_job_audio_quality_warnings(job),
                 )
                 return score_aligned_audio(
                     prepared_audio.path,
@@ -854,8 +981,9 @@ def score_pronunciation(job: dict[str, Any], confidence_threshold: float | None 
                     confidence_threshold=confidence_threshold,
                 )
 
+        prepared_from_job = _job_prepared_audio(job)
         with tempfile.TemporaryDirectory(prefix="cnn-prepared-") as prepared_directory:
-            prepared_audio = prepare_audio_for_mfa(audio_path, Path(prepared_directory) / "prepared.wav")
+            prepared_audio = prepared_from_job or prepare_audio_for_mfa(audio_path, Path(prepared_directory) / "prepared.wav")
             prediction = predict_audio(prepared_audio.path)
     finally:
         if temp_audio_path is not None:
@@ -907,14 +1035,16 @@ def score_pronunciation_context(job: dict[str, Any], confidence_threshold: float
 
         from app.alignment.alignment_service import align_audio
 
+        prepared_from_job = _job_prepared_audio(job)
         with tempfile.TemporaryDirectory(prefix="cnn-prepared-") as prepared_directory:
-            prepared_audio = prepare_audio_for_mfa(audio_path, Path(prepared_directory) / "prepared.wav")
+            prepared_audio = prepared_from_job or prepare_audio_for_mfa(audio_path, Path(prepared_directory) / "prepared.wav")
             alignment_result = align_audio(
                 audio_path,
                 prompt_text=prompt_text,
                 canonical_phones=_job_canonical_phones(job),
                 job_id=str(job.get("job_id") or ""),
                 prepared_audio=prepared_audio,
+                upstream_quality_warnings=_job_audio_quality_warnings(job),
             )
             return score_aligned_audio_context(
                 prepared_audio.path,

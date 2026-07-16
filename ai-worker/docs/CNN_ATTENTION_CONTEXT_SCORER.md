@@ -114,8 +114,9 @@ ai-worker/docs/CNN_ATTENTION_CONTEXT_MFA_ALIGNED_INFERENCE.md
 - Fallback alignment is approximate and not real forced alignment.
 - MFA-aligned context inference depends on local MFA setup and TextGrid parsing.
 - Context quality depends on alignment boundary quality.
-- Real GOP/CaGOP is not implemented.
-- Heuristic score is not real GOP.
+- GOP/CaGOP is not the Phoenix v2 roadmap.
+- Public score is unavailable until a learned quality scorer is trained and
+  validated.
 - Classifier confidence is not pronunciation correctness.
 - The context checkpoint is local only and must not be committed.
 - Vietnamese speaker coverage remains limited.

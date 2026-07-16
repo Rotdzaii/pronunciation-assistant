@@ -22,7 +22,7 @@ admin_router = APIRouter(prefix="/admin", tags=["Admin"])
 logger = logging.getLogger(__name__)
 
 
-PROFILE_SELECT = "id,email,app_role,display_name"
+PROFILE_SELECT = "id,email,app_role,display_name,avatar_url"
 ADMIN_PROFILE_SELECT = "id,email,app_role,display_name,created_at,updated_at"
 CLASS_SELECT = "id,code,name,description,status,teacher_id"
 ADMIN_LIST_RANGE_END = 9999
@@ -45,6 +45,7 @@ class StudentBrief(BaseModel):
     id: str
     email: str | None = None
     display_name: str
+    avatar_url: str | None = None
     joined_at: str | None = None
     status: str | None = None
 
@@ -61,7 +62,7 @@ class StudentClassListItem(BaseModel):
 
 
 class StudentClassDetail(StudentClassListItem):
-    pass
+    students: list[StudentBrief] = []
 
 
 class TeacherClassListItem(BaseModel):
@@ -445,6 +446,7 @@ def _students_for_class(
                 id=student_id,
                 email=profile.get("email"),
                 display_name=_display_name(profile),
+                avatar_url=profile.get("avatar_url"),
                 joined_at=membership.get("joined_at"),
                 status=membership.get("status"),
             )
@@ -557,6 +559,7 @@ def get_student_class(
         student_count=detail.student_count,
         teacher_count=detail.teacher_count,
         teachers=detail.teachers,
+        students=detail.students,
     )
 
 

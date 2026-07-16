@@ -8,14 +8,13 @@ set "ROOT=%~dp0"
 set "BACKEND_DIR=%ROOT%fastapi-backend"
 set "FRONTEND_DIR=%ROOT%frontend"
 set "AI_WORKER_DIR=%ROOT%ai-worker"
-set "API_BASE_URL=http://localhost:8000"
+if not defined API_BASE_URL set "API_BASE_URL=http://localhost:8000"
 
 rem Dispatch to child window entry points and special flags.
 if /I "%~1"=="backend"       goto backend
 if /I "%~1"=="frontend"      goto frontend
 if /I "%~1"=="ai-worker"     goto ai_worker
 if /I "%~1"=="--force-kill"  goto force_kill
-if /I "%~1"=="--with-tunnel" goto main_with_tunnel
 
 goto main
 
@@ -69,9 +68,9 @@ rem Backend: check if port 8000 already occupied.
 set "BACKEND_STATUS=skipped"
 call :check_port_pid 8000
 if defined PORT_PID (
-    echo [INFO] Port 8000 in use by PID %PORT_PID% ^(%PORT_PROC%^). Skipping backend start.
-    echo        Run reset_demo_ports.bat to free the port.
-    set "BACKEND_STATUS=already running - port 8000 PID %PORT_PID%"
+    echo [INFO] Port 8000 in use by PID !PORT_PID! ^(!PORT_PROC!^). Skipping backend start.
+    echo        Run this script with --force-kill to free the port.
+    set "BACKEND_STATUS=already running - port 8000 PID !PORT_PID!"
 ) else (
     start "FastAPI Backend" cmd /k call "%~f0" backend
     set "BACKEND_STATUS=started"
@@ -87,9 +86,9 @@ for %%P in (8081 8082 8083) do (
     )
 )
 if defined FE_PORT_USED (
-    echo [INFO] Frontend port already in use: %FE_PORT_USED%
-    echo        Run reset_demo_ports.bat to free the port.
-    set "FRONTEND_STATUS=already running - %FE_PORT_USED%"
+    echo [INFO] Frontend port already in use: !FE_PORT_USED!
+    echo        Run this script with --force-kill to free the port.
+    set "FRONTEND_STATUS=already running - !FE_PORT_USED!"
 ) else (
     start "Expo Frontend" cmd /k call "%~f0" frontend
     set "FRONTEND_STATUS=started"
@@ -112,54 +111,14 @@ echo.
 echo ------------------------------------------------------------
 echo  Summary
 echo ------------------------------------------------------------
-echo  Backend   : %BACKEND_STATUS%
-echo  Frontend  : %FRONTEND_STATUS%
-echo  AI Worker : %AI_WORKER_STATUS%
+echo  Backend   : !BACKEND_STATUS!
+echo  Frontend  : !FRONTEND_STATUS!
+echo  AI Worker : !AI_WORKER_STATUS!
 echo.
-echo  Keep all service windows open during the demo.
-echo  Run check_demo_health.bat to verify all services.
-echo  Run reset_demo_ports.bat to kill stuck processes on demo ports.
+echo  Keep all service windows open during development.
+echo  Run this script with --force-kill to kill stuck processes on demo ports.
+echo  Need public access for a real demo? Run run_deploy.bat instead.
 echo ------------------------------------------------------------
-pause
-exit /b 0
-
-rem ---------------------------------------------------------------------------
-rem MAIN --with-tunnel
-rem ---------------------------------------------------------------------------
-:main_with_tunnel
-call "%~f0"
-
-where cloudflared >nul 2>nul
-if errorlevel 1 (
-    echo.
-    echo [ERROR] cloudflared not found in PATH.
-    echo         Install from: https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/
-    pause & exit /b 1
-)
-
-set "CF_CONFIG=%USERPROFILE%\.cloudflared\config.yml"
-if not exist "%CF_CONFIG%" (
-    echo.
-    echo [ERROR] Cloudflare config not found at %CF_CONFIG%
-    echo         Run: cloudflared tunnel login
-    echo         Run: cloudflared tunnel create phoenix-demo
-    echo         Then configure %CF_CONFIG%
-    pause & exit /b 1
-)
-
-echo.
-echo [Cloudflare Tunnel]
-echo   Starting tunnel phoenix-demo...
-echo   app.myphoenix.me  -^>  http://localhost:8081 (frontend)
-echo   api.myphoenix.me  -^>  http://localhost:8000 (backend)
-start "Cloudflare Tunnel" cmd /k cloudflared tunnel --config "%CF_CONFIG%" run phoenix-demo
-echo [OK] Tunnel window opened.
-echo.
-echo   Frontend : https://app.myphoenix.me
-echo   Backend  : https://api.myphoenix.me
-echo.
-echo   NOTE: Set EXPO_PUBLIC_API_BASE_URL=https://api.myphoenix.me in
-echo         frontend/.env if you want the frontend to call the public API.
 pause
 exit /b 0
 
@@ -322,6 +281,16 @@ python -m pip install --quiet --disable-pip-version-check -r requirements.txt
 if errorlevel 1 (
     echo [ERROR] pip install failed. Check ai-worker/requirements.txt.
     pause & exit /b 1
+)
+
+findstr /I /B /C:"SCORER_MODE=cnn_attention" ".env" >nul 2>nul
+if not errorlevel 1 (
+    python -c "import torch" >nul 2>nul
+    if errorlevel 1 (
+        echo [ERROR] The configured CNN worker scorer requires PyTorch, but it is not available in ai-worker/.venv.
+        echo         ai-worker/requirements.txt does not declare this inference dependency. Provision the approved local inference environment, then retry.
+        pause & exit /b 1
+    )
 )
 
 echo.

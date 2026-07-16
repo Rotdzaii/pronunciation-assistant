@@ -102,7 +102,8 @@ AI result contract
 - Path: `ai-worker/app/contracts/ai_result_contract.py`
 - Role: builds normalized completed/failed AI results.
 - Status: implemented.
-- Limitation: score can still be demo/heuristic until real GOP/CaGOP exists.
+- Limitation: the current three-class classifier has no correctness or learned
+  quality head, so public score is unavailable.
 
 CNN Attention scorer
 
@@ -152,7 +153,8 @@ Scoring contract
 - Path: `ai-worker/app/contracts/scoring_contract.py`
 - Role: defines phone/word/utterance segmental scoring output.
 - Status: implemented.
-- Limitation: contract supports real GOP later, but current scorer is heuristic.
+- Limitation: the contract reserves a future learned quality score; current
+  heuristic values are internal diagnostics only.
 
 Heuristic GOP scorer
 
@@ -258,7 +260,7 @@ Recorded safe local validation for this path passed with:
 - `fallback_alignment=false`
 - `word_segments_count=1`
 - `phone_segments_count=9`
-- `score=67.1`
+- historical `score=67.1` (not valid under the current public contract)
 - `predicted_error_type=deletion`
 - `context_mode=context_0_10`
 - `location_reliability=forced_alignment`
@@ -269,14 +271,18 @@ Recorded safe real local backend payload validation also passed with:
 - `execution_mode=real_mfa_inference`
 - `payload_valid=true`
 - `problem_phonemes=["ɹ", "tʰ", "k"]`
-- `score=67.1`
-- `score_note=Heuristic/demo score, not production GOP.`
-- `pronunciation_score_source=heuristic_gop`
+- historical `score=67.1` (not a current public pronunciation score)
+- current public output: `score=null`, `score_type=unavailable`
 - `predicted_error_type=deletion`
 - `diagnosis_confidence=0.6575304269790649`
 - `segments_count=9`
 - `metadata_safety_check passed=true`
 - `post_attempted=false`
+
+This recorded validation predates the accepted Deep Learning First scoring
+decision. It remains useful for MFA/CNN integration evidence, but its
+heuristic-score fields are historical only and must not be used as current
+roadmap or contract examples.
 
 For real local validation, set `CNN_ATTENTION_CONTEXT_CHECKPOINT_PATH` or pass `--checkpoint-path`. Do not commit checkpoint files.
 
@@ -405,7 +411,8 @@ Once-only MFA PGMQ validation:
 - Run a real backend POST test with an existing `practice_history` job.
 - Configure `torch` and the CNN Attention checkpoint in the AI Worker virtual environment.
 - Configure MFA locally with dictionary and acoustic model.
-- Implement real GOP/CaGOP scoring.
-- Calibrate hybrid severity and score thresholds.
+- Add audited correct samples and train a learned correctness head.
+- Collect quality labels before training a learned quality/scoring head.
+- Calibrate hybrid reliability/severity separately from pronunciation quality.
 - Run speaker-independent evaluation.
 - Add frontend display mapping for `diagnosis.top_issues`, `problem_phonemes`, and `feedback`.

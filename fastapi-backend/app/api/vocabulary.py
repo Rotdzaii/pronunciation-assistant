@@ -1,8 +1,12 @@
 import csv
 import io
+import json
+import logging
+from pathlib import Path
 from typing import Any
 from uuid import UUID
 
+import httpx
 from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile, status
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
@@ -17,7 +21,34 @@ from app.core.auth import (
 from app.core.config import Settings, get_settings
 
 
+logger = logging.getLogger(__name__)
+
 router = APIRouter(prefix="/vocabulary", tags=["Vocabulary"])
+
+# ── Pronunciation manifest (populated by scripts/download_audio.py) ───────────
+
+def _load_pronunciation_manifest() -> dict:
+    path = Path(__file__).parent.parent / "data" / "pronunciation_manifest.json"
+    try:
+        if path.exists():
+            data = json.loads(path.read_text(encoding="utf-8"))
+            logger.info(
+                "Pronunciation manifest loaded: %d phonemes, %d words, %d failures",
+                len(data.get("phonemes", {})),
+                len(data.get("words", {})),
+                len(data.get("failures", [])),
+            )
+            return data
+    except Exception:
+        logger.warning("Could not load pronunciation manifest from %s", path, exc_info=True)
+    return {"phonemes": {}, "words": {}, "bucket": "pronunciation-audio"}
+
+
+_pronunciation_manifest = _load_pronunciation_manifest()
+
+# In-memory cache for live fallback calls (only used when
+# ENABLE_LIVE_PRONUNCIATION_FALLBACK=true and word is absent from manifest).
+_live_pronunciation_cache: dict[str, str | None] = {}
 
 VOCABULARY_ITEM_COLUMNS = (
     "id,word,phonetic,meaning_vi,topic,level,difficulty,sample_sentence,"
@@ -27,6 +58,78 @@ VOCABULARY_ITEM_COLUMNS = (
 VOCABULARY_SET_COLUMNS = (
     "id,title,description,topic,level,is_public,is_active"
 )
+
+
+def _normalize_expected_phones(phones: list[str], *, variant: str | None) -> list[str]:
+    """Use one en-US rhotic-vowel target for the public pronunciation contract."""
+    canonical = ["ɹ" if phone == "r" else phone for phone in phones]
+    if str(variant or "").replace("_", "-").casefold() != "en-us":
+        return canonical
+
+    normalized: list[str] = []
+    index = 0
+    while index < len(canonical):
+        if canonical[index] == "ə" and index + 1 < len(canonical) and canonical[index + 1] == "ɹ":
+            normalized.append("ɚ")
+            index += 2
+            continue
+        normalized.append(canonical[index])
+        index += 1
+    return normalized
+
+
+def resolve_stored_pronunciation(supabase_client: Any, word: str) -> dict[str, Any]:
+    """Resolve the public pronunciation contract from stored vocabulary data.
+
+    MFA output is intentionally not a source here: it aligns the learner audio,
+    while ``vocabulary_items.phonetic`` and ``target_phonemes`` define the
+    expected pronunciation displayed to learners.
+    """
+    unavailable = {
+        "display_pronunciation": None,
+        "expected_phones": [],
+        "pronunciation_variant": None,
+        "pronunciation_source": "unavailable",
+    }
+    normalized_word = word.strip()
+    if not normalized_word:
+        return unavailable
+
+    try:
+        rows = (
+            supabase_client.table("vocabulary_items")
+            .select("phonetic,target_phonemes")
+            .eq("word", normalized_word)
+            .limit(1)
+            .execute()
+            .data
+            or []
+        )
+    except Exception:
+        logger.warning("Unable to resolve stored pronunciation for practice result", exc_info=True)
+        return unavailable
+
+    if not rows:
+        return unavailable
+
+    row = rows[0]
+    phonetic = row.get("phonetic")
+    display_pronunciation = phonetic.strip() if isinstance(phonetic, str) and phonetic.strip() else None
+    raw_phones = row.get("target_phonemes")
+    expected_phones = _normalize_expected_phones([
+        phone.strip()
+        for phone in raw_phones
+        if isinstance(phone, str) and phone.strip()
+    ] if isinstance(raw_phones, list) else [], variant="en-US")
+    if not display_pronunciation and not expected_phones:
+        return unavailable
+
+    return {
+        "display_pronunciation": display_pronunciation,
+        "expected_phones": expected_phones,
+        "pronunciation_variant": "en-US",
+        "pronunciation_source": "vocabulary_items",
+    }
 
 
 class VocabularyItemResponse(BaseModel):
@@ -616,3 +719,60 @@ def delete_vocabulary_item(
         supabase_client.table("vocabulary_items").update({"is_active": False}).eq("id", str(item_id)).execute()
     except Exception as exc:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Unable to delete vocabulary item") from exc
+
+
+@router.get("/pronunciation/{word}")
+async def get_word_pronunciation(
+    word: str,
+    current_user: CurrentUser = Depends(get_current_user),
+    settings: Settings = Depends(get_settings),
+) -> dict[str, str | None]:
+    """Return a Supabase Storage URL for the pre-downloaded pronunciation of
+    *word*.  Falls back to a live Free Dictionary API call only when
+    ENABLE_LIVE_PRONUNCIATION_FALLBACK=true (disabled by default for demo).
+    """
+    word_lower = word.strip().lower()
+
+    # ── Manifest lookup (no network, always attempted first) ──────────────────
+    word_entry = _pronunciation_manifest.get("words", {}).get(word_lower)
+    if word_entry:
+        base   = (settings.supabase_url or "").rstrip("/")
+        bucket = _pronunciation_manifest.get("bucket", settings.pronunciation_audio_bucket)
+        url    = f"{base}/storage/v1/object/public/{bucket}/{word_entry['storage_path']}"
+        return {"audio_url": url}
+
+    # ── Live fallback: opt-in only ────────────────────────────────────────────
+    if not settings.enable_live_pronunciation_fallback:
+        return {"audio_url": None}
+
+    if word_lower in _live_pronunciation_cache:
+        return {"audio_url": _live_pronunciation_cache[word_lower]}
+
+    try:
+        async with httpx.AsyncClient(timeout=8.0) as client:
+            response = await client.get(
+                f"https://api.dictionaryapi.dev/api/v2/entries/en/{word_lower}"
+            )
+
+        if response.status_code == 404:
+            _live_pronunciation_cache[word_lower] = None
+            return {"audio_url": None}
+
+        if response.status_code != 200:
+            return {"audio_url": None}
+
+        audio_url: str | None = None
+        for entry in response.json():
+            for phonetic in entry.get("phonetics", []):
+                url = phonetic.get("audio") or ""
+                if url:
+                    audio_url = ("https:" + url) if url.startswith("//") else url
+                    break
+            if audio_url:
+                break
+
+        _live_pronunciation_cache[word_lower] = audio_url
+        return {"audio_url": audio_url}
+
+    except Exception:
+        return {"audio_url": None}

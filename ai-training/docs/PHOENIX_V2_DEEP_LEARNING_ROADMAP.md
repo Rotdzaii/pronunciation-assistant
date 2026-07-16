@@ -2,7 +2,9 @@
 
 ## A. Goal
 
-Phoenix v2 Stable is a Deep Learning-based pronunciation scoring pipeline for deploy/demo. The model is responsible for the main pronunciation score and the main pronunciation error detection result.
+Phoenix v2 Stable is a Deep Learning-first pronunciation diagnosis pipeline for
+deploy/demo. The current model is responsible for the main error-type diagnosis;
+it is not yet a correctness or 0-100 pronunciation scorer.
 
 The stable deploy goal is not to train a new model in this phase. The goal is to select the strongest available stable Deep Learning scorer, expose its output through a clear contract, and protect the deployment path with validation, timeouts, and safe failure behavior.
 
@@ -12,11 +14,27 @@ Phoenix v2 Stable should be described as a deployable baseline for automatic Eng
 
 Deep Learning-first, production-safe.
 
-Deep Learning is the scoring core. The selected model must be the primary source of the pronunciation score and the primary source of pronunciation error diagnosis.
+Deep Learning is the modeling core. A future learned scorer must be the primary
+source of any public pronunciation score and the primary source of
+pronunciation error diagnosis. The current three-class CNN only provides
+addition/deletion/substitution diagnosis.
 
 The production safety layer protects deployment stability. It can validate inputs and outputs, enforce runtime limits, catch exceptions, preserve webhook compatibility, and return safe failed results when inference cannot complete.
 
 The safety layer does not replace model scoring. It must not fabricate a fake model score, convert classifier confidence into pronunciation correctness, or silently replace the Deep Learning scorer with rule-based scoring as the main output.
+
+GOP/CaGOP was considered and rejected as the Phoenix v2 scoring roadmap.
+Heuristic scoring, GOP/CaGOP, and classifier confidence must not be published
+as a pronunciation score. Until a learned quality head is trained and
+validated, the public contract uses `score: null` and
+`score_type: "unavailable"`.
+
+## 7.1 Architecture Decision
+
+The binding architecture decision is
+[Deep Learning First Pronunciation Scoring](ADR_DEEP_LEARNING_FIRST_PRONUNCIATION_SCORING.md):
+MFA is forced alignment only, rules are safety/runtime only, and the current
+three-class CNN is not a correctness or 0-100 scorer.
 
 ## C. Scope In
 
@@ -24,7 +42,9 @@ The safety layer does not replace model scoring. It must not fabricate a fake mo
 - Stable Deep Learning scorer selection: choose the scorer that has the strongest current evidence and can run reliably in the AI Worker.
 - CNN Attention Context scorer: use `cnn_attention_context` as the preferred candidate if checkpoint compatibility and worker runtime are stable.
 - Model checkpoint selection: identify the local checkpoint family, required metadata, loader compatibility, and configuration variables without committing checkpoint files.
-- Model output contract: define stable fields for status, score, problem phonemes, scorer metadata, confidence metadata, alignment metadata, summaries, details, and failure information.
+- Model output contract: define stable fields for status, nullable score,
+  `score_type`, problem phonemes, scorer metadata, confidence metadata,
+  alignment metadata, summaries, details, and failure information.
 - `problem_phonemes` generation: derive affected phoneme candidates from model diagnosis and available alignment or segment metadata, while preserving source and reliability notes.
 - AI Worker integration: keep scorer mode, environment configuration, validation, and final result building explicit.
 - Webhook compatibility: preserve backend-compatible fields while retaining rich model output under feedback metadata.
@@ -54,7 +74,9 @@ Current possible candidates:
 
 - `wav2vec2` baseline: useful as an ASR baseline and pipeline validation path, but not the final pronunciation correctness scorer. ASR transcript confidence and text similarity do not reliably measure phoneme-level pronunciation quality.
 - `cnn_attention` / `cnn_attention_context`: preferred Deep Learning candidate family for Phoenix v2 Stable if the checkpoint and AI Worker runtime are stable. Existing docs identify `cnn_attention_context` with `context_0_10` as the leading integrated research candidate, with the important caveat that classifier confidence is diagnosis confidence, not pronunciation correctness.
-- MFA: alignment support, not the scoring core. MFA can provide phone timing to support segment selection and output localization, but timing quality is not pronunciation correctness and must not replace model scoring.
+- MFA: forced-alignment support, not the scoring core. MFA provides phone
+  timing for segment selection and output localization; timing quality is not
+  pronunciation correctness and must not replace model scoring.
 
 Recommended stable direction:
 
@@ -62,7 +84,7 @@ Recommended stable direction:
 audio preprocessing
 -> optional alignment support
 -> Deep Learning scorer inference
--> model-derived score and diagnosis
+-> model-derived diagnosis
 -> output validation and production safety layer
 -> backend-compatible webhook payload
 ```
@@ -77,7 +99,8 @@ Expected Phoenix v2 output:
 ```json
 {
   "status": "completed",
-  "score": 82.4,
+  "score": null,
+  "score_type": "unavailable",
   "problem_phonemes": ["EH", "K"],
   "feedback": {
     "model_version": "phoenix-v2-cnn-attention-context",
@@ -101,7 +124,8 @@ Expected Phoenix v2 output:
 Required top-level fields:
 
 - `status`
-- `score`
+- `score` (nullable until a learned quality scorer is available)
+- `score_type`
 - `problem_phonemes`
 
 Required feedback fields:
@@ -126,7 +150,7 @@ Failure behavior:
     "scorer_mode": "cnn_attention_context",
     "model_confidence": null,
     "alignment_method": null,
-    "summary": "Phoenix v2 could not produce a model score for this attempt.",
+    "summary": "Phoenix v2 could not produce a reliable diagnosis for this attempt.",
     "details": [],
     "error_type": "model_inference_failed"
   }
@@ -152,7 +176,9 @@ If the model fails, fallback should return a safe failed status, not a fake mode
 
 4. `phoenix-v2-output-contract`
    - Implement or update the Phoenix v2 output contract.
-   - Ensure model version, scorer mode, confidence metadata, alignment metadata, details, and safe failure fields are represented.
+   - Ensure nullable score, `score_type`, model version, scorer mode,
+     confidence metadata, alignment metadata, details, and safe failure fields
+     are represented.
 
 5. `phoenix-v2-worker-hardening`
    - Add timeout handling, exception handling, safe failed results, payload sanitization, and webhook compatibility checks.
@@ -170,6 +196,8 @@ If the model fails, fallback should return a safe failed status, not a fake mode
 
 - Model confidence is not pronunciation correctness.
 - Forced alignment timing is not pronunciation correctness.
+- The current CNN has only addition, deletion, and substitution classes; it
+  has no correctness or learned quality head.
 - Dataset size is limited.
 - Phoenix v2 Stable is a deployable baseline, not the final research-optimized model.
 - Vietnamese-specific accent modeling is deferred.

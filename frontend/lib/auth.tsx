@@ -6,11 +6,12 @@ import { supabase } from './supabase';
 import type { AppRole, CurrentUser } from '../types';
 
 type DemoAppRole = 'student' | 'teacher' | 'admin';
+export type RoleLoadFailure = 'profile_pending' | 'backend_unavailable' | 'session_expired' | 'access_denied' | null;
+export type RoleLoadResult = { user: CurrentUser | null; failure: RoleLoadFailure };
 
-const PROFILE_MISSING_MESSAGE = 'Không tìm thấy hồ sơ người dùng. Vui lòng kiểm tra profile trong Supabase.';
 const SESSION_EXPIRED_MESSAGE = 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.';
 const ACCESS_DENIED_MESSAGE = 'Tài khoản không có quyền truy cập khu vực này.';
-const PROFILE_LOAD_MESSAGE = 'Không thể tải hồ sơ người dùng.';
+const PROFILE_LOAD_MESSAGE = 'Hồ sơ tài khoản chưa sẵn sàng. Vui lòng thử lại hoặc đăng nhập lại.';
 
 function normalizeAppRole(role: AppRole | null | undefined): DemoAppRole | null {
   return role === 'student' || role === 'teacher' || role === 'admin' ? role : null;
@@ -24,7 +25,8 @@ type AuthState = {
   currentUser: CurrentUser | null;
   appRole: DemoAppRole | null;
   roleError: string | null;
-  refreshCurrentUser: () => Promise<CurrentUser | null>;
+  refreshCurrentUser: (accessToken?: string | null) => Promise<CurrentUser | null>;
+  refreshCurrentUserWithRetry: (accessToken?: string | null, attempts?: number) => Promise<RoleLoadResult>;
   signOut: () => Promise<void>;
 };
 
@@ -49,6 +51,7 @@ const AuthContext = createContext<AuthState>({
   appRole: null,
   roleError: null,
   refreshCurrentUser: async () => null,
+  refreshCurrentUserWithRetry: async () => ({ user: null, failure: 'backend_unavailable' }),
   signOut: async () => {},
 });
 
@@ -63,47 +66,69 @@ export function AuthProvider({ children }: PropsWithChildren) {
   const sessionRef = useRef<Session | null>(cachedAuthSnapshot.session);
   const currentUserRef = useRef<CurrentUser | null>(cachedAuthSnapshot.currentUser);
   const appRoleRef = useRef<DemoAppRole | null>(cachedAuthSnapshot.appRole);
+  const profileRequestRef = useRef(0);
+  const roleFailureRef = useRef<RoleLoadFailure>(null);
 
   const cacheAuthState = useCallback((
     nextSession: Session | null,
     nextUser: CurrentUser | null,
     nextRole: DemoAppRole | null,
   ) => {
-    cachedAuthSnapshot = {
-      session: nextSession,
-      currentUser: nextUser,
-      appRole: nextRole,
-    };
+    cachedAuthSnapshot = { session: nextSession, currentUser: nextUser, appRole: nextRole };
     sessionRef.current = nextSession;
     currentUserRef.current = nextUser;
     appRoleRef.current = nextRole;
   }, []);
 
-  const updateSession = useCallback((nextSession: Session | null) => {
-    setSession(nextSession);
-    cacheAuthState(nextSession, currentUserRef.current, appRoleRef.current);
-  }, [cacheAuthState]);
-
-  const clearBackendUser = useCallback(() => {
+  const clearBackendUser = useCallback((nextSession = sessionRef.current) => {
     setCurrentUser(null);
     setAppRole(null);
     setRoleError(null);
     setRoleLoading(false);
-    cacheAuthState(sessionRef.current, null, null);
+    roleFailureRef.current = null;
+    cacheAuthState(nextSession, null, null);
   }, [cacheAuthState]);
 
-  const refreshCurrentUser = useCallback(async () => {
+  const updateSession = useCallback((nextSession: Session | null) => {
+    const previousUserId = sessionRef.current?.user.id;
+    const nextUserId = nextSession?.user.id;
+    setSession(nextSession);
+
+    if (!nextSession || previousUserId !== nextUserId) {
+      clearBackendUser(nextSession);
+      return;
+    }
+
+    cacheAuthState(nextSession, currentUserRef.current, appRoleRef.current);
+  }, [cacheAuthState, clearBackendUser]);
+
+  const refreshCurrentUser = useCallback(async (accessToken?: string | null) => {
+    const requestId = ++profileRequestRef.current;
+    const token = accessToken ?? sessionRef.current?.access_token ?? null;
+
+    if (!token) {
+      if (requestId === profileRequestRef.current) {
+        clearBackendUser();
+      }
+      return null;
+    }
+
     setRoleLoading(true);
     setRoleError(null);
+    roleFailureRef.current = null;
 
     try {
-      const user = await getMe(sessionRef.current?.access_token ?? null);
+      const user = await getMe(token);
       const backendRole = normalizeAppRole(user.app_role);
+      if (requestId !== profileRequestRef.current) {
+        return user;
+      }
 
       if (!backendRole) {
         setCurrentUser(user);
         setAppRole(null);
-        setRoleError(PROFILE_MISSING_MESSAGE);
+        setRoleError(PROFILE_LOAD_MESSAGE);
+        roleFailureRef.current = 'profile_pending';
         cacheAuthState(sessionRef.current, user, null);
         return null;
       }
@@ -113,87 +138,100 @@ export function AuthProvider({ children }: PropsWithChildren) {
       cacheAuthState(sessionRef.current, user, backendRole);
       return user;
     } catch (err) {
+      if (requestId !== profileRequestRef.current) {
+        return null;
+      }
+
       if (err instanceof ApiError && err.status === 401) {
+        roleFailureRef.current = 'session_expired';
         setRoleError(SESSION_EXPIRED_MESSAGE);
         await supabase.auth.signOut();
         setSession(null);
         cacheAuthState(null, null, null);
         router.replace('/(auth)/login');
       } else if (err instanceof ApiError && err.status === 403) {
+        roleFailureRef.current = 'access_denied';
         setCurrentUser(null);
         setAppRole(null);
         setRoleError(ACCESS_DENIED_MESSAGE);
         cacheAuthState(sessionRef.current, null, null);
-      } else if (err instanceof ApiError && err.status === 404) {
+      } else {
+        roleFailureRef.current = err instanceof ApiError && err.status === 503 && /profile.*prepar/i.test(err.message)
+          ? 'profile_pending'
+          : 'backend_unavailable';
         setCurrentUser(null);
         setAppRole(null);
-        setRoleError(PROFILE_MISSING_MESSAGE);
+        setRoleError(PROFILE_LOAD_MESSAGE);
         cacheAuthState(sessionRef.current, null, null);
-      } else {
-        setRoleError(err instanceof Error ? err.message : PROFILE_LOAD_MESSAGE);
       }
-
       return null;
     } finally {
-      setRoleLoading(false);
+      if (requestId === profileRequestRef.current) {
+        setRoleLoading(false);
+      }
     }
-  }, [cacheAuthState, router]);
+  }, [cacheAuthState, clearBackendUser, router]);
+
+  const refreshCurrentUserWithRetry = useCallback(async (
+    accessToken?: string | null,
+    attempts = 3,
+  ): Promise<RoleLoadResult> => {
+    const safeAttempts = Math.max(1, Math.min(attempts, 4));
+    for (let attempt = 0; attempt < safeAttempts; attempt += 1) {
+      const user = await refreshCurrentUser(accessToken);
+      if (user) return { user, failure: null };
+
+      const failure = roleFailureRef.current;
+      if (failure !== 'profile_pending' || attempt === safeAttempts - 1) {
+        return { user: null, failure };
+      }
+      await new Promise<void>((resolve) => setTimeout(resolve, 250 * (attempt + 1)));
+    }
+    return { user: null, failure: roleFailureRef.current };
+  }, [refreshCurrentUser]);
 
   const signOut = useCallback(async () => {
     const { error } = await supabase.auth.signOut();
-    if (error) {
-      throw error;
-    }
+    if (error) throw error;
+    profileRequestRef.current += 1;
     setSession(null);
-    cacheAuthState(null, null, null);
-    clearBackendUser();
+    clearBackendUser(null);
     router.replace('/welcome');
-  }, [cacheAuthState, clearBackendUser, router]);
+  }, [clearBackendUser, router]);
 
   useEffect(() => {
     let mounted = true;
 
     const loadSession = async () => {
       const { data } = await supabase.auth.getSession();
-      if (!mounted) {
-        return;
-      }
+      if (!mounted) return;
 
       const restoredSession = data.session ?? null;
       updateSession(restoredSession);
       if (restoredSession) {
-        await refreshCurrentUser();
-      } else {
-        clearBackendUser();
+        await refreshCurrentUser(restoredSession.access_token);
       }
-
-      if (mounted) {
-        setLoading(false);
-      }
+      if (mounted) setLoading(false);
     };
 
     void loadSession();
 
-    const { data } = supabase.auth.onAuthStateChange((event, currentSession) => {
-      updateSession(currentSession);
+    const { data } = supabase.auth.onAuthStateChange((event, nextSession) => {
+      updateSession(nextSession);
 
-      if (event === 'SIGNED_OUT' || !currentSession) {
-        clearBackendUser();
+      if (event === 'SIGNED_OUT' || !nextSession) {
+        profileRequestRef.current += 1;
+        clearBackendUser(null);
         setLoading(false);
         return;
       }
 
-      if (event === 'SIGNED_IN') {
-        if (!appRoleRef.current || currentUserRef.current?.id !== currentSession.user.id) {
-          void refreshCurrentUser();
-        }
-        setLoading(false);
-        return;
+      if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+        // Pass the event's token directly: AsyncStorage may still contain the
+        // previous session during a signup/signin callback.
+        void refreshCurrentUser(nextSession.access_token);
       }
-
-      if (event === 'TOKEN_REFRESHED') {
-        setLoading(false);
-      }
+      setLoading(false);
     });
 
     return () => {
@@ -202,20 +240,18 @@ export function AuthProvider({ children }: PropsWithChildren) {
     };
   }, [clearBackendUser, refreshCurrentUser, updateSession]);
 
-  const value = useMemo<AuthState>(
-    () => ({
-      session,
-      loading,
-      roleLoading,
-      accessToken: session?.access_token ?? null,
-      currentUser,
-      appRole,
-      roleError,
-      refreshCurrentUser,
-      signOut,
-    }),
-    [session, loading, roleLoading, currentUser, appRole, roleError, refreshCurrentUser, signOut],
-  );
+  const value = useMemo<AuthState>(() => ({
+    session,
+    loading,
+    roleLoading,
+    accessToken: session?.access_token ?? null,
+    currentUser,
+    appRole,
+    roleError,
+    refreshCurrentUser,
+    refreshCurrentUserWithRetry,
+    signOut,
+  }), [session, loading, roleLoading, currentUser, appRole, roleError, refreshCurrentUser, refreshCurrentUserWithRetry, signOut]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

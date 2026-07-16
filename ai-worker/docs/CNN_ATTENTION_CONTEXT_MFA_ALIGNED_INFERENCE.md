@@ -2,6 +2,11 @@
 
 ## Purpose
 
+Historical scoring note: this validation predates the Deep Learning First
+scoring decision. Any `heuristic_gop` score shown below is an archived
+diagnostic example, not a current public score; the current contract uses
+`score: null` and `score_type: "unavailable"`.
+
 This document validates `SCORER_MODE=cnn_attention_context` with `ALIGNMENT_MODE=mfa` so the context scorer uses real MFA word and phone timing when MFA succeeds.
 
 The goal is to keep fallback alignment available while making the metadata explicit about whether timing came from MFA or fallback scaffolding.
@@ -28,7 +33,7 @@ Alignment timing is evidence about estimated segment location only. It is not pr
 SCORER_MODE=cnn_attention_context
 ALIGNMENT_MODE=mfa
 ALLOW_ALIGNMENT_FALLBACK=true
-MFA_CONDA_ENV=mfa
+MFA_CONDA_ENV=aligner
 MFA_DICTIONARY_PATH=english_us_mfa
 MFA_ACOUSTIC_MODEL_PATH=english_mfa
 CNN_ATTENTION_CONTEXT_MODE=context_0_10
@@ -104,7 +109,7 @@ Validated configuration:
 
 - `SCORER_MODE=cnn_attention_context`
 - `ALIGNMENT_MODE=mfa`
-- `MFA_CONDA_ENV=mfa`
+- `MFA_CONDA_ENV=aligner`
 - `MFA_DICTIONARY_PATH=english_us_mfa`
 - `MFA_ACOUSTIC_MODEL_PATH=english_mfa`
 
@@ -178,10 +183,10 @@ Important final AI result metadata fields:
 - `mfa_exit_code`
 - `textgrid_parse_success`
 - `fallback_alignment`
-- `fallback_reason`
 - `global_diagnosis_selection`: the deterministic rule used for `predicted_error_type`
 - `problem_phonemes_order=alignment_time`: phone names are ordered by MFA segment start time, not severity
 - `top_issue_segments_order=classifier_diagnosis_confidence_desc`: diagnostic ranking only; it can differ from the hybrid primary diagnosis
+- `fallback_reason`
 - `word_segments_count`
 - `phone_segments_count`
 - `context_mode`
@@ -205,6 +210,7 @@ When fallback is used, the result must not claim forced alignment.
 ## Limitations
 
 - MFA timing is alignment evidence, not pronunciation correctness.
-- Heuristic score is not real GOP.
+- Heuristic score is internal diagnostic data, not a public score.
 - Classifier confidence is not pronunciation correctness.
-- Real GOP/CaGOP remains Phase 4B.
+- The next model work is audited correct samples and a learned correctness
+  head; learned quality scoring requires its own supervised labels.

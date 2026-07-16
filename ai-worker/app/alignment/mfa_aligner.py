@@ -247,17 +247,59 @@ def _write_debug_artifacts(
     stdout: str | None,
     stderr: str | None,
     diagnostic: dict[str, Any] | None,
+    textgrid_path: Path | None = None,
+    phones: list[dict[str, Any]] | None = None,
+    words: list[dict[str, Any]] | None = None,
+    status: str = "failed",
 ) -> bool:
+    """Copy local-only MFA artifacts without retaining the temporary work path."""
     if not debug_dir:
         return False
     try:
         safe_job_id = re.sub(r"[^A-Za-z0-9_.-]+", "-", job_id or "unknown").strip(".-") or "unknown"
         artifact_dir = Path(debug_dir).expanduser() / f"mfa-{safe_job_id}-{int(time.time())}"
         artifact_dir.mkdir(parents=True, exist_ok=False)
+        textgrid_saved = False
         if prepared_audio and prepared_audio.is_file():
             shutil.copy2(prepared_audio, artifact_dir / "prepared.wav")
         if transcript_lab and transcript_lab.is_file():
             shutil.copy2(transcript_lab, artifact_dir / "transcript.lab")
+        if textgrid_path and textgrid_path.is_file():
+            shutil.copy2(textgrid_path, artifact_dir / "alignment.TextGrid")
+            textgrid_saved = True
+        raw_phone_rows = [
+            {
+                "label": str(phone.get("phone") or "").replace("\n", " ").replace("\r", " ")[:128],
+                "start": phone.get("start"),
+                "end": phone.get("end"),
+                "word": str(phone.get("word") or "").replace("\n", " ").replace("\r", " ")[:128] or None,
+            }
+            for phone in (phones or [])
+            if isinstance(phone, dict)
+        ]
+        word_rows = [
+            {
+                "word": str(word.get("word") or "").replace("\n", " ").replace("\r", " ")[:256],
+                "start": word.get("start"),
+                "end": word.get("end"),
+            }
+            for word in (words or [])
+            if isinstance(word, dict)
+        ]
+        (artifact_dir / "manifest.json").write_text(
+            json.dumps(
+                {
+                    "schema_version": 1,
+                    "job_id": safe_job_id,
+                    "status": status,
+                    "raw_phones": raw_phone_rows,
+                    "words": word_rows,
+                },
+                ensure_ascii=False,
+                indent=2,
+            ) + "\n",
+            encoding="utf-8",
+        )
         (artifact_dir / "stdout.txt").write_text(_diagnostic_tail(stdout) + "\n", encoding="utf-8")
         (artifact_dir / "stderr.txt").write_text(_diagnostic_tail(stderr) + "\n", encoding="utf-8")
         (artifact_dir / "diagnostic.json").write_text(
@@ -269,11 +311,16 @@ def _write_debug_artifacts(
             encoding="utf-8",
         )
         print("MFA_DEBUG_ARTIFACTS")
-        print(json.dumps({"saved": True, "directory": "<configured-mfa-debug-dir>"}, ensure_ascii=False))
+        print("saved=true")
+        print(f"textgrid_saved={'true' if textgrid_saved else 'false'}")
+        print("raw_phones=" + json.dumps([row["label"] for row in raw_phone_rows], ensure_ascii=False))
         return True
     except OSError as exc:
         print("MFA_DEBUG_ARTIFACTS")
-        print(json.dumps({"saved": False, "error": sanitize_mfa_diagnostic(str(exc))}, ensure_ascii=False))
+        print("saved=false")
+        print("textgrid_saved=false")
+        print("raw_phones=[]")
+        print("error=" + sanitize_mfa_diagnostic(str(exc)))
         return False
 
 
@@ -444,6 +491,7 @@ def run_mfa_alignment(
     succeeded = False
     working_audio: PreparedMfaAudio | None = None
     transcript_lab: Path | None = None
+    textgrid_path: Path | None = None
     last_stdout = ""
     last_stderr = ""
     last_diagnostic: dict[str, Any] | None = None
@@ -614,6 +662,20 @@ def run_mfa_alignment(
                 },
             }
         )
+        if debug_enabled and configured_debug_dir:
+            _write_debug_artifacts(
+                configured_debug_dir,
+                job_id=job_id,
+                prepared_audio=working_audio.path if working_audio else None,
+                transcript_lab=transcript_lab,
+                textgrid_path=textgrid_path,
+                phones=result["phones"],
+                words=result["words"],
+                status=result["status"],
+                stdout=last_stdout,
+                stderr=last_stderr,
+                diagnostic=last_diagnostic,
+            )
         print(
             "alignment_event=mfa_complete "
             f"job_id={job_id or 'unknown'} runtime_seconds={runtime:.3f} words={len(result['words'])} "
@@ -634,6 +696,7 @@ def run_mfa_alignment(
                 job_id=job_id,
                 prepared_audio=working_audio.path if working_audio else None,
                 transcript_lab=transcript_lab,
+                textgrid_path=textgrid_path,
                 stdout=last_stdout,
                 stderr=last_stderr,
                 diagnostic=last_diagnostic,

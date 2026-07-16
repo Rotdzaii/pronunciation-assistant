@@ -26,19 +26,24 @@ $env:MFA_DICTIONARY_PATH = "C:\path\to\dictionary.dict"
 $env:MFA_ACOUSTIC_MODEL_PATH = "C:\path\to\acoustic-model.zip"
 ```
 
-Dictionary and acoustic model arguments may also be MFA model names, for example `english_us_mfa` and `english_mfa`.
+Dictionary and acoustic model arguments may also be MFA model names, for example
+`english_us_mfa` and `english_mfa`.
 
 Audio should be a local WAV file. Prefer 16 kHz mono WAV if the local MFA setup requires that format. The validation script does not convert audio unless an existing local setup has already prepared it.
 
 On Windows, directly invoking `mfa.exe` can fail when DLL paths are not resolved by the shell, including `libsndfile.dll` / `soundfile` loading failures. Prefer checking MFA through conda:
 
+**PowerShell**
+
 ```powershell
-conda run -n mfa mfa version
+conda run -n aligner mfa version
 ```
 
 ## Dry Run
 
 Use dry-run first to check configuration without running MFA:
+
+**PowerShell**
 
 ```powershell
 .\ai-worker\.venv\Scripts\python.exe ai-worker\scripts\validate_mfa_local_alignment.py --dry-run --transcript Architecture
@@ -50,9 +55,11 @@ Dry-run prints MFA availability, configured dictionary/model status, and setup i
 
 Recommended Windows command when MFA is installed in a conda environment:
 
+**PowerShell**
+
 ```powershell
 .\ai-worker\.venv\Scripts\python.exe ai-worker\scripts\validate_mfa_local_alignment.py `
-  --conda-env mfa `
+  --conda-env aligner `
   --audio-path "C:\path\to\local_sample.wav" `
   --transcript "Architecture" `
   --dictionary-path english_us_mfa `
@@ -60,6 +67,8 @@ Recommended Windows command when MFA is installed in a conda environment:
 ```
 
 You can also run real validation with a direct MFA command and local model files:
+
+**PowerShell**
 
 ```powershell
 .\ai-worker\.venv\Scripts\python.exe ai-worker\scripts\validate_mfa_local_alignment.py `
@@ -71,7 +80,7 @@ You can also run real validation with a direct MFA command and local model files
 
 Optional arguments:
 
-- `--conda-env mfa` to run MFA as `conda run -n mfa mfa`.
+- `--conda-env aligner` to run MFA as `conda run -n aligner mfa`.
 - `--mfa-command "C:\path\to\mfa.exe"` to override the direct MFA command, or the command used after `conda run -n <env>`.
 - `--output-dir "C:\path\to\scratch"` to choose where the temporary validation folder is created.
 - `--keep-temp` to keep generated local files for inspection.
@@ -145,11 +154,11 @@ Never commit generated validation artifacts, including:
 
 `MFA command not found`
 
-Install MFA locally outside this repository, pass the command path using `--mfa-command`, or use `--conda-env mfa` when MFA is installed in a conda environment.
+Install MFA locally outside this repository, pass the command path using `--mfa-command`, or use `--conda-env aligner` for the documented Windows Conda environment.
 
 `Direct mfa.exe fails on Windows with DLL loading errors`
 
-Use `conda run -n mfa mfa version` to verify MFA and pass `--conda-env mfa` to the validation script. This lets conda set the environment DLL paths before MFA starts.
+Use `conda run -n aligner mfa version` to verify MFA and pass `--conda-env aligner` to the validation script. This lets conda set the environment DLL paths before MFA starts. If Smart App Control blocks an unsigned `_kalpy.pyd`, resolve the Windows policy/trust block before retrying.
 
 `Dictionary model/path is not configured` or `Acoustic model/path is not configured`
 

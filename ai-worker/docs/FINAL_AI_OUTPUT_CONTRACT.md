@@ -9,9 +9,11 @@ This document defines the stable AI Worker output shape for backend and frontend
 Core fields:
 
 - `status`: `completed`
-- `score`: pronunciation score or demo/heuristic score
+- `score`: nullable; unavailable until a learned quality scorer is trained and
+  validated
+- `score_type`: `unavailable` for the current three-class model
 - `score_note`: explanation of score source and limitations
-- `pronunciation_score_source`: source such as `heuristic_gop`
+- `pronunciation_score_source`: `null` until a learned quality scorer exists
 - `problem_phonemes`: list of affected phones
 - `predicted_error_type`: primary diagnosis label
 - `diagnosis`: classifier and hybrid diagnosis details
@@ -25,9 +27,10 @@ Example:
 ```json
 {
   "status": "completed",
-  "score": 61.2,
-  "score_note": "Heuristic/demo score, not production GOP.",
-  "pronunciation_score_source": "heuristic_gop",
+  "score": null,
+  "score_type": "unavailable",
+  "score_note": "A learned pronunciation score is not available for the current model.",
+  "pronunciation_score_source": null,
   "problem_phonemes": ["EH"],
   "predicted_error_type": "deletion",
   "diagnosis": {
@@ -46,7 +49,6 @@ Example:
         "word": "example",
         "predicted_error_type": "deletion",
         "diagnosis_confidence": 0.84,
-        "phone_score": 55.1,
         "severity": "high"
       }
     ]
@@ -66,7 +68,7 @@ Example:
     "alignment_method": "fallback_even_split",
     "gop_used": false,
     "hybrid_used": true,
-    "scoring_is_heuristic": true,
+    "score_type": "unavailable",
     "location_reliability": "limited_fallback_alignment"
   }
 }
@@ -114,7 +116,10 @@ Example:
 
 ## Field Meanings
 
-`score` is the pronunciation score field. In the current scaffold it can come from `heuristic_gop`, which is not production GOP.
+`score` is reserved for a learned pronunciation quality scorer. The current CNN
+only classifies `addition`, `deletion`, and `substitution`; it has no correct
+class or learned quality head. Therefore public output uses `score: null` and
+`score_type: "unavailable"`.
 
 `diagnosis_confidence` is classifier confidence for diagnosis. It is not pronunciation correctness and must not be displayed as the pronunciation score.
 
@@ -126,25 +131,30 @@ Example:
 
 `metadata.alignment_used` indicates whether segment alignment was used.
 
-`metadata.gop_used` should be true only for real acoustic GOP/CaGOP. With `heuristic_gop`, it remains false.
+`metadata.gop_used` remains false. GOP/CaGOP was considered and rejected as
+the Phoenix v2 scoring roadmap.
 
 `metadata.hybrid_used` indicates that the hybrid issue-selection layer was applied.
 
-`metadata.scoring_is_heuristic` marks demo scoring that must not be presented as real GOP.
+Internal heuristic data, when retained for diagnostics, must not be published
+as a score or presented as pronunciation correctness.
 
 ## Current Status
 
 - CNN Attention is the selected real classifier.
 - Fallback alignment is approximate and not real forced alignment.
 - MFA execution is scaffolded and requires local configuration.
-- `heuristic_gop` is a scaffold and not real GOP/CaGOP.
+- `heuristic_gop` is internal diagnostic scaffolding, not a public score.
+- MFA supplies forced-alignment timing only.
+- The selected future path is a learned correctness head followed by a learned
+  quality/scoring head when appropriate supervised labels exist.
 - Hybrid diagnosis is a logic layer that combines available signals.
 
 ## Backend And Frontend Notes
 
 The frontend can display:
 
-- `score`
+- `score` only when it is not `null`; otherwise show that a score is unavailable
 - `score_note`
 - `feedback.summary`
 - `feedback.tips`

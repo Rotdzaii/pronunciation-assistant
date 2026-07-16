@@ -5,6 +5,7 @@ import { Audio } from 'expo-av';
 import {
   ActivityIndicator,
   Image,
+  KeyboardAvoidingView,
   Modal,
   Platform,
   Pressable,
@@ -18,7 +19,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { fetchMyProfile, updateMyProfile, uploadMyAvatar } from '../lib/api';
 import { useAuth } from '../lib/auth';
 import { formatUserRole } from '../lib/format';
@@ -97,14 +98,8 @@ const MAX_AVATAR_BYTES = 2 * 1024 * 1024;
 const studentSidebarItems: SidebarItemConfig[] = [
   { label: 'Trang chủ', href: '/(tabs)', icon: 'home-outline', match: ['/', '/(tabs)'] },
   { label: 'Luyện tập', href: '/(tabs)/practice', icon: 'microphone-outline', match: ['/practice', '/(tabs)/practice'] },
+  { label: 'Bài tập', href: '/(tabs)/assignments', icon: 'clipboard-text-outline', match: ['/assignments', '/(tabs)/assignments'] },
   { label: 'Lịch sử', href: '/(tabs)/history', icon: 'history', match: ['/history', '/(tabs)/history'] },
-  { label: 'Lỗi phổ biến', href: '/(tabs)/mistakes', icon: 'alert-circle-outline', match: ['/mistakes', '/(tabs)/mistakes'] },
-  {
-    label: 'Ôn tập',
-    href: '/(tabs)/vocabulary',
-    icon: 'cards-outline',
-    match: ['/vocabulary', '/(tabs)/vocabulary', '/quiz', '/(tabs)/quiz', '/quiz-results', '/(tabs)/quiz-results'],
-  },
   { label: 'Hỗ trợ', href: '/(tabs)', icon: 'lifebuoy', match: [], section: 'support' },
 ];
 
@@ -685,6 +680,12 @@ function AccountSettingsModal({
   onSignOut: () => Promise<void>;
 }) {
   const { theme, mode, setThemeMode } = useTheme();
+  const { width: windowWidth, height: windowHeight } = useWindowDimensions();
+  const insets = useSafeAreaInsets();
+  const isCompactLayout = windowWidth < 1024;
+  const modalTopInset = Math.max(12, insets.top + 8);
+  const modalBottomInset = Math.max(12, insets.bottom + 8);
+  const compactModalHeight = Math.max(0, windowHeight - modalTopInset - modalBottomInset);
   const [activeTab, setActiveTab] = useState('account');
   const [displayName, setDisplayName] = useState(profile?.display_name ?? '');
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
@@ -831,9 +832,33 @@ function AccountSettingsModal({
 
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
-      <View style={styles.settingsOverlay}>
-        <View style={[styles.settingsModal, { backgroundColor: theme.card, borderColor: theme.border }]}>
-          <View style={[styles.settingsNav, { borderRightColor: theme.border }]}>
+      <KeyboardAvoidingView
+        style={[
+          styles.settingsOverlay,
+          isCompactLayout
+            ? { paddingTop: modalTopInset, paddingBottom: modalBottomInset, paddingHorizontal: 12 }
+            : null,
+        ]}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      >
+        <View
+          style={[
+            styles.settingsModal,
+            isCompactLayout ? styles.settingsModalCompact : null,
+            isCompactLayout ? { width: Math.max(0, windowWidth - 24), height: compactModalHeight } : null,
+            { backgroundColor: theme.card, borderColor: theme.border },
+          ]}
+        >
+          <ScrollView
+            horizontal={isCompactLayout}
+            style={[
+              isCompactLayout ? styles.settingsNavCompact : styles.settingsNav,
+              isCompactLayout ? { borderBottomColor: theme.border } : { borderRightColor: theme.border },
+            ]}
+            contentContainerStyle={isCompactLayout ? styles.settingsNavCompactContent : styles.settingsNavContent}
+            showsHorizontalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled"
+          >
             <Text style={[styles.settingsNavTitle, { color: theme.textMuted }]}>Cài đặt Phoenix</Text>
             {navItems.map((item) => {
               const selected = activeTab === item.key;
@@ -849,14 +874,20 @@ function AccountSettingsModal({
                 </Pressable>
               );
             })}
-          </View>
+          </ScrollView>
           <View style={styles.settingsContent}>
             <View style={styles.settingsHeader}>
               <Text style={[styles.settingsTitle, { color: theme.text }]}>{navItems.find((item) => item.key === activeTab)?.label}</Text>
-              <Pressable accessibilityRole="button" onPress={onClose} style={styles.settingsCloseButton}>
+              <Pressable accessibilityRole="button" accessibilityLabel="Đóng cài đặt" onPress={onClose} style={styles.settingsCloseButton}>
                 <MaterialCommunityIcons name="close" size={24} color={theme.textMuted} />
               </Pressable>
             </View>
+            <ScrollView
+              style={styles.settingsContentScroll}
+              contentContainerStyle={styles.settingsContentScrollInner}
+              showsVerticalScrollIndicator={false}
+              keyboardShouldPersistTaps="handled"
+            >
             {error ? <ErrorState title="Không thể xử lý cài đặt" message={error} /> : null}
             {notice ? <NoticeInline message={notice} /> : null}
             {activeTab === 'account' ? (
@@ -868,7 +899,7 @@ function AccountSettingsModal({
             ) : null}
             {activeTab === 'profile' ? (
               <SettingsPanel>
-                <View style={styles.settingsAvatarRow}>
+                <View style={[styles.settingsAvatarRow, isCompactLayout ? styles.settingsAvatarRowCompact : null]}>
                   <Avatar initials={initials} avatarUrl={avatarUrl} size={82} />
                   <View style={styles.settingsAvatarActions}>
                     <AppButton title="Chọn ảnh" onPress={handlePickAvatar} variant="secondary" />
@@ -918,9 +949,10 @@ function AccountSettingsModal({
                 <AppButton title={signingOut ? 'Đang đăng xuất...' : 'Đăng xuất'} onPress={handleSignOut} loading={signingOut} variant="secondary" />
               </SettingsPanel>
             ) : null}
+            </ScrollView>
           </View>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </Modal>
   );
 }
@@ -1373,11 +1405,28 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     flexDirection: 'row',
   },
+  settingsModalCompact: {
+    flexDirection: 'column',
+  },
   settingsNav: {
     width: 238,
     borderRightWidth: 1,
+  },
+  settingsNavContent: {
     padding: 16,
     gap: 6,
+  },
+  settingsNavCompact: {
+    flexGrow: 0,
+    minHeight: 64,
+    borderBottomWidth: 1,
+  },
+  settingsNavCompactContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
   },
   settingsNavTitle: {
     fontSize: 12,
@@ -1386,12 +1435,13 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   settingsNavItem: {
-    minHeight: 42,
+    minHeight: 44,
     borderRadius: 10,
     paddingHorizontal: 10,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 9,
+    flexShrink: 0,
   },
   settingsNavText: {
     fontSize: 13,
@@ -1401,6 +1451,14 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 22,
     gap: 14,
+    minWidth: 0,
+  },
+  settingsContentScroll: {
+    flex: 1,
+  },
+  settingsContentScrollInner: {
+    gap: 14,
+    paddingBottom: 8,
   },
   settingsHeader: {
     flexDirection: 'row',
@@ -1413,9 +1471,9 @@ const styles = StyleSheet.create({
     fontWeight: '900',
   },
   settingsCloseButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -1443,6 +1501,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 16,
+  },
+  settingsAvatarRowCompact: {
+    alignItems: 'stretch',
+    flexDirection: 'column',
   },
   settingsAvatarActions: {
     flex: 1,

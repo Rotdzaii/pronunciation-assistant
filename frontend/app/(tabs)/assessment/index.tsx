@@ -131,6 +131,10 @@ export default function AssessmentScreen() {
       const next = prev + 1;
       if (assignmentWords && next < assignmentWords.items.length) {
         startWordTimer(assignmentWords.timer_per_word_seconds);
+      } else if (assignmentWords) {
+        // The backend submit endpoint is idempotent; this also prevents an
+        // unfinished assessment from remaining open after the final timer.
+        void handleSubmit();
       }
       return next;
     });
@@ -174,6 +178,7 @@ export default function AssessmentScreen() {
           audio_url: upload.audio_url || upload.storage_path,
           assignment_id,
           item_id: currentWord.id,
+          audio_storage_path: upload.storage_path,
         },
         accessToken,
       );

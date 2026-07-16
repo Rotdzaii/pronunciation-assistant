@@ -8,13 +8,13 @@ from typing import Any
 from urllib.parse import urlparse
 
 from app.alignment.audio_preparation import PreparedMfaAudio, prepare_audio_for_mfa, validate_prepared_mfa_wav
-from app.contracts.ai_result_contract import build_ai_result, estimate_demo_score
+from app.contracts.ai_result_contract import build_ai_result
 from app.contracts.alignment_contract import AlignmentError, FALLBACK_ALIGNMENT_NOTE, get_alignment_segments
 from app.phonetics.canonicalization import (
-    build_phone_results as _build_phone_results,
     canonicalize_phones as _canonicalize_phones,
     check_inventory_guard as _check_inventory_guard,
     compute_reliability as _compute_reliability,
+    normalize_expected_phones as _normalize_expected_phones,
 )
 
 
@@ -491,6 +491,7 @@ def _format_segment_prediction(
         "class_probabilities": prediction["class_probabilities"],
         "diagnosis_confidence": prediction["diagnosis_confidence"],
         "confidence_note": "Classifier confidence, not pronunciation correctness.",
+        "is_confirmed_error": False,
     }
     context_metadata = (prediction.get("audio") or {}).get("context")
     if context_metadata:
@@ -576,6 +577,84 @@ def predict_context_segments(
     return predictions
 
 
+def _alignment_phone_for_prediction(
+    prediction: dict[str, Any],
+    alignment_phones: list[dict[str, Any]],
+) -> dict[str, Any] | None:
+    """Return the MFA phone segment that produced a prediction.
+
+    An index match is preferred when both sides provide one.  Otherwise match
+    the exact MFA time span (and word when available).  Do not fall back to a
+    list position: alignment results can include word segments or omit a phone,
+    and positional matching would attach a prediction to the wrong phone.
+    """
+    prediction_index = prediction.get("index")
+    if prediction_index is not None:
+        indexed = [
+            segment
+            for segment in alignment_phones
+            if segment.get("index") is not None and segment.get("index") == prediction_index
+        ]
+        if len(indexed) == 1:
+            return indexed[0]
+
+    try:
+        start = round(float(prediction.get("start") or 0.0), 3)
+        end = round(float(prediction.get("end") or 0.0), 3)
+    except (TypeError, ValueError):
+        return None
+    matching_span = []
+    for segment in alignment_phones:
+        try:
+            segment_start = round(float(segment.get("start") or 0.0), 3)
+            segment_end = round(float(segment.get("end") or 0.0), 3)
+        except (TypeError, ValueError):
+            continue
+        if segment_start == start and segment_end == end:
+            matching_span.append(segment)
+    if len(matching_span) == 1:
+        return matching_span[0]
+
+    prediction_word = prediction.get("word")
+    if prediction_word:
+        word_matches = [segment for segment in matching_span if segment.get("word") == prediction_word]
+        if len(word_matches) == 1:
+            return word_matches[0]
+    return None
+
+
+def canonicalize_prediction_segments(
+    ordered_predictions: list[dict[str, Any]],
+    alignment_result: dict[str, Any],
+) -> list[dict[str, Any]]:
+    """Attach canonical MFA phones before diagnosis and reliability checks.
+
+    The source phone is resolved from the corresponding MFA ``phones`` segment
+    by stable index or time span.  A prediction's own phone is used only as a
+    backwards-compatible fallback when the alignment payload has no matching
+    phone segment; no positional association is ever fabricated.
+    """
+    alignment_phones = [
+        segment
+        for segment in (alignment_result.get("phones") or [])
+        if isinstance(segment, dict)
+    ]
+    canonical_segments: list[dict[str, Any]] = []
+    for prediction in ordered_predictions:
+        alignment_phone = _alignment_phone_for_prediction(prediction, alignment_phones)
+        raw_phone = (
+            alignment_phone.get("phone")
+            if alignment_phone is not None
+            else prediction.get("phone")
+        )
+        canonical = _canonicalize_phones([str(raw_phone or "")]).get("canonical_phones")
+        canonical_segments.append({
+            **prediction,
+            "phone": canonical[0] if canonical else None,
+        })
+    return canonical_segments
+
+
 def _aggregate_segment_predictions(
     segment_predictions: list[dict[str, Any]],
     *,
@@ -584,8 +663,6 @@ def _aggregate_segment_predictions(
     scorer_metadata: dict[str, Any] | None = None,
     extra_metadata: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    from app.scoring.scoring_service import score_pronunciation_segments
-
     threshold = 0.5 if confidence_threshold is None else float(confidence_threshold)
     ordered_predictions = sorted(
         segment_predictions,
@@ -595,6 +672,15 @@ def _aggregate_segment_predictions(
             int(segment.get("index") or 0),
         ),
     )
+    # Canonicalize immediately after associating each model prediction with its
+    # MFA phone timing segment.  All downstream diagnosis/reliability logic
+    # must see canonical phones, never raw MFA labels such as ``tj``.
+    ordered_predictions = canonicalize_prediction_segments(ordered_predictions, alignment_result)
+    phone_raw_list = [
+        str(seg.get("phone") or "")
+        for seg in (alignment_result.get("phones") or [])
+    ]
+    canon_result = _canonicalize_phones(phone_raw_list)
     issue_segments = [
         segment
         for segment in ordered_predictions
@@ -613,38 +699,9 @@ def _aggregate_segment_predictions(
         if float(segment.get("diagnosis_confidence") or 0.0) >= threshold
     ]
 
-    demo_score = estimate_demo_score(predicted_error_type, diagnosis_confidence)
-    scoring_result = score_pronunciation_segments(alignment_result, ordered_predictions)
-    hybrid_result = None
-    try:
-        from app.hybrid.hybrid_diagnosis import build_hybrid_diagnosis
-
-        hybrid_result = build_hybrid_diagnosis(alignment_result, segment_predictions, scoring_result)
-    except Exception as exc:
-        hybrid_error = str(exc)
-    else:
-        hybrid_error = None
-
-    if hybrid_result and hybrid_result.get("primary_error_type") not in {None, "unknown"}:
-        predicted_error_type = hybrid_result["primary_error_type"]
-        problem_segments = list(hybrid_result.get("top_issues") or problem_segments)
-        primary_issue = problem_segments[0] if problem_segments else {}
-        class_probabilities = primary_issue.get("class_probabilities") or class_probabilities
-        diagnosis_confidence = primary_issue.get("diagnosis_confidence", diagnosis_confidence)
-        primary_selection_rule = "hybrid_severity_then_heuristic_phone_score_then_classifier_diagnosis_confidence"
-        top_segment = next(
-            (
-                segment
-                for segment in ordered_predictions
-                if segment.get("phone") == primary_issue.get("phone")
-                and segment.get("word") == primary_issue.get("word")
-                and float(segment.get("start") or 0.0) == float(primary_issue.get("start") or 0.0)
-            ),
-            top_segment,
-        )
-
-    # Public problem-phone lists follow alignment time, never hybrid severity.
-    # Severity remains available only through the explicit top-segment metadata.
+    # Phoenix v2 has only three error-type classes. It does not use a
+    # heuristic/GOP path to upgrade this classifier output into a confirmed
+    # diagnosis or a score.
     for segment in sorted(
         problem_segments,
         key=lambda item: (float(item.get("start") or 0.0), float(item.get("end") or 0.0)),
@@ -653,16 +710,7 @@ def _aggregate_segment_predictions(
         if phone and phone not in problem_phonemes:
             problem_phonemes.append(phone)
 
-    segmental_score = scoring_result.get("utterance_segmental_score")
-    scoring_method = scoring_result.get("scoring_method")
-    scoring_is_heuristic = bool((scoring_result.get("metadata") or {}).get("is_heuristic"))
-    score = segmental_score if segmental_score is not None else demo_score["score"]
-    score_note = (
-        "Heuristic/demo score, not production GOP."
-        if segmental_score is not None and scoring_is_heuristic
-        else demo_score["score_note"]
-    )
-    pronunciation_score_source = scoring_method if segmental_score is not None else "demo_error_type_heuristic"
+    score_note = "Pronunciation score unavailable: Phoenix v2 classifies possible error types only."
     alignment_method = alignment_result.get("method")
     alignment_note = alignment_result.get("note")
     is_fallback = str(alignment_method or "").startswith("fallback")
@@ -671,20 +719,18 @@ def _aggregate_segment_predictions(
     alignment_metadata = _safe_alignment_metadata(alignment_result)
 
     result = build_ai_result(
-        score=score,
+        score=None,
         problem_phonemes=problem_phonemes,
         predicted_error_type=predicted_error_type,
         class_probabilities=class_probabilities,
         diagnosis_confidence=diagnosis_confidence,
-        feedback=(hybrid_result or {}).get("feedback") if hybrid_result else None,
         scorer=scorer_metadata or SCORER_METADATA,
-        scoring=scoring_result,
         score_note=score_note,
-        pronunciation_score_source=pronunciation_score_source,
+        score_type="unavailable",
         diagnosis_extra={
-            "top_issues": (hybrid_result or {}).get("top_issues", []),
-            "severity": (hybrid_result or {}).get("severity", "unknown"),
-        } if hybrid_result else None,
+            "suspected_segments": problem_segments,
+            "is_confirmed_error": False,
+        },
         metadata={
             **DEFAULT_METADATA,
             "alignment_used": True,
@@ -692,33 +738,22 @@ def _aggregate_segment_predictions(
             "alignment_method": alignment_method,
             "alignment_note": alignment_note,
             "gop_used": False,
-            "hybrid_used": hybrid_result is not None,
-            "hybrid_method": (hybrid_result or {}).get("hybrid_method"),
-            "hybrid_status": (hybrid_result or {}).get("hybrid_status"),
-            "hybrid_error": hybrid_error,
+            "hybrid_used": False,
             "model_output_is_scoring": False,
             "segment_level_inference": True,
             "fallback_alignment": is_fallback,
-            "location_reliability": (hybrid_result or {}).get(
-                "location_reliability",
-                "limited_fallback_alignment" if is_fallback else "unknown",
-            ),
-            "is_demo_score": True,
+            "location_reliability": "limited_fallback_alignment" if is_fallback else "unknown",
+            "is_demo_score": False,
+            "public_pronunciation_score_available": False,
+            "score_availability_reason": "error_type_classifier_only",
             "score_note": score_note,
-            "pronunciation_score_source": pronunciation_score_source,
-            "scoring_method": scoring_method,
-            "scoring_is_heuristic": scoring_is_heuristic,
-            "scoring_status": scoring_result.get("scoring_status"),
             "confidence_threshold": confidence_threshold,
             "segments_count": len(ordered_predictions),
             "global_diagnosis_selection": primary_selection_rule,
             "problem_phonemes_order": "alignment_time",
             "top_issue_segments_order": "classifier_diagnosis_confidence_desc",
-            "limitation": (
-                "Segment boundaries come from approximate fallback alignment unless an external aligner supplies "
-                "the alignment_result. Heuristic GOP-like scoring is not production GOP. Classifier confidence is "
-                "diagnosis confidence, not pronunciation scoring."
-            ),
+            "model_capability": "error_type_classifier_only",
+            "limitation": "The model only classifies possible addition, deletion, or substitution error types; it cannot determine pronunciation correctness.",
             **alignment_metadata,
             **(extra_metadata or {}),
         },
@@ -731,23 +766,9 @@ def _aggregate_segment_predictions(
     result["feedback"]["scorer"] = result["scorer"]
     result["feedback"]["metadata"] = result["metadata"]
 
-    # ── Canonical phone contract ──────────────────────────────────────────────
-    phone_raw_list = [
-        str(seg.get("phone") or "")
-        for seg in (alignment_result.get("phones") or [])
-    ]
-    canon_result = _canonicalize_phones(phone_raw_list)
-
     primary_phone: str | None = None
     primary_err_type: str | None = None
-    if hybrid_result:
-        top_issues = hybrid_result.get("top_issues") or []
-        if top_issues:
-            primary_phone = str(top_issues[0].get("phone") or "").strip() or None
-            primary_err_type = str(
-                top_issues[0].get("predicted_error_type") or predicted_error_type or ""
-            ).strip() or None
-    if primary_phone is None and top_segment:
+    if top_segment:
         primary_phone = str(top_segment.get("phone") or "").strip() or None
         primary_err_type = str(top_segment.get("predicted_error_type") or "").strip() or None
 
@@ -776,27 +797,30 @@ def _aggregate_segment_predictions(
     )
 
     canonical_problem_phones: list[str] = []
-    for raw_phone in problem_phonemes:
-        canonical = _canonicalize_phones([str(raw_phone)]).get("canonical_phones") or []
-        if canonical and canonical[0] not in canonical_problem_phones:
-            canonical_problem_phones.append(canonical[0])
+    for phone in problem_phonemes:
+        if phone and phone not in canonical_problem_phones:
+            canonical_problem_phones.append(phone)
 
     if reliability["status"] == "invalid":
         result["score"] = None
         result["score_type"] = "unavailable"
-        result["score_note"] = "Score unavailable: alignment or diagnosis validation failed."
+        result["score_note"] = "Pronunciation score unavailable. Record the audio again before requesting a diagnosis."
         result["problem_phonemes"] = []
         result["primary_feedback"] = None
+        result["predicted_error_type"] = None
+        result["diagnosis"].update({
+            "predicted_error_type": None,
+            "suspected_problem_phone": None,
+            "diagnosis_confidence": None,
+            "class_probabilities": {},
+            "is_confirmed_error": False,
+            "suspected_segments": [],
+        })
+        result["feedback"]["summary"] = "Không thể phân tích bản ghi này. Vui lòng ghi âm lại rõ ràng hơn."
     else:
         result["problem_phonemes"] = canonical_problem_phones
+        result["diagnosis"]["suspected_problem_phone"] = canonical_problem_phones[0] if canonical_problem_phones else None
         result["primary_feedback"] = result["feedback"].get("summary")
-
-    phone_results = _build_phone_results(
-        alignment_result,
-        ordered_predictions,
-        canon_result,
-        reliability_status=reliability["status"],
-    )
 
     result["reliability"] = reliability
     # MFA is an alignment source, not the authoritative pronunciation source.
@@ -806,34 +830,36 @@ def _aggregate_segment_predictions(
     result["pronunciation_variant"] = None
     result["expected_phones"] = []
     result["pronunciation_source"] = "unavailable"
-    result["phone_results"] = phone_results
+    # This classifier has no correct class, so it must not publish per-phone
+    # ok/needs-improvement labels as though correctness had been evaluated.
+    result["phone_results"] = []
 
-    # Segment diagnostics are public contract data too. Preserve their temporal
-    # order while replacing raw MFA/ARPABET symbols with safe canonical IPA.
+    # Segments are already canonicalized before diagnosis. Preserve that same
+    # canonical form for the public contract, without exposing raw MFA labels.
     public_segments: list[dict[str, Any]] = []
     for segment in ordered_predictions:
-        canonical = _canonicalize_phones([str(segment.get("phone") or "")]).get("canonical_phones")
         public_segments.append({
             **segment,
-            "phone": canonical[0] if canonical else None,
+            "phone": segment.get("phone"),
+            "is_confirmed_error": False,
         })
     result["segments"] = public_segments
     result["metadata"]["top_issue_segments"] = [
         segment for segment in public_segments
         if segment.get("predicted_error_type") not in {None, "unknown"}
     ][:5]
-    top_issues = result.get("diagnosis", {}).get("top_issues")
-    if isinstance(top_issues, list):
-        public_top_issues: list[dict[str, Any]] = []
-        for issue in top_issues:
+    suspected_segments = result.get("diagnosis", {}).get("suspected_segments")
+    if isinstance(suspected_segments, list):
+        public_suspected_segments: list[dict[str, Any]] = []
+        for issue in suspected_segments:
             if not isinstance(issue, dict):
                 continue
-            canonical = _canonicalize_phones([str(issue.get("phone") or "")]).get("canonical_phones")
-            public_top_issues.append({
+            public_suspected_segments.append({
                 **issue,
-                "phone": canonical[0] if canonical else None,
+                "phone": issue.get("phone"),
+                "is_confirmed_error": False,
             })
-        result["diagnosis"]["top_issues"] = public_top_issues
+        result["diagnosis"]["suspected_segments"] = public_suspected_segments
 
     return result
 
@@ -928,9 +954,11 @@ def _job_prompt_text(job: dict[str, Any]) -> str | None:
 def _job_canonical_phones(job: dict[str, Any]) -> list[str]:
     raw_phones = job.get("canonical_phones") or job.get("phones")
     if isinstance(raw_phones, str):
-        return [phone for phone in raw_phones.split() if phone]
+        phones = [phone for phone in raw_phones.split() if phone]
+        return _normalize_expected_phones(phones, variant=str(job.get("pronunciation_variant") or ""))
     if isinstance(raw_phones, (list, tuple)):
-        return [str(phone).strip() for phone in raw_phones if str(phone).strip()]
+        phones = [str(phone).strip() for phone in raw_phones if str(phone).strip()]
+        return _normalize_expected_phones(phones, variant=str(job.get("pronunciation_variant") or ""))
     return []
 
 
@@ -989,12 +1017,8 @@ def score_pronunciation(job: dict[str, Any], confidence_threshold: float | None 
         if temp_audio_path is not None:
             temp_audio_path.unlink(missing_ok=True)
 
-    demo_score = estimate_demo_score(
-        prediction["predicted_error_type"],
-        prediction["diagnosis_confidence"],
-    )
     result = build_ai_result(
-        score=demo_score["score"],
+        score=None,
         problem_phonemes=[],
         predicted_error_type=prediction["predicted_error_type"],
         class_probabilities=prediction["class_probabilities"],
@@ -1002,9 +1026,11 @@ def score_pronunciation(job: dict[str, Any], confidence_threshold: float | None 
         scorer=SCORER_METADATA,
         metadata={
             **DEFAULT_METADATA,
-            "is_demo_score": demo_score["is_demo_score"],
-            "score_note": demo_score["score_note"],
-            "pronunciation_score_source": "demo_error_type_heuristic",
+            "is_demo_score": False,
+            "score_note": "Pronunciation score unavailable: the CNN classifies error type and has no correct class.",
+            "public_pronunciation_score_available": False,
+            "score_availability_reason": "error_type_classifier_only",
+            "model_capability": "error_type_classifier_only",
             "confidence_threshold": confidence_threshold,
             "device": prediction["device"],
             "checkpoint_path": prediction["checkpoint_path"],
@@ -1014,6 +1040,8 @@ def score_pronunciation(job: dict[str, Any], confidence_threshold: float | None 
                 "inference over the first/whole submitted audio segment, not final phone-localized diagnosis."
             ),
         },
+        score_note="Pronunciation score unavailable: the CNN classifies error type and has no correct class.",
+        score_type="unavailable",
     )
     result["feedback"]["diagnosis"] = result["diagnosis"]
     result["feedback"]["scorer"] = result["scorer"]

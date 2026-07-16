@@ -1,7 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
-  Modal,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -10,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Audio } from 'expo-av';
 import { MaterialIcons } from '@expo/vector-icons';
 import { ErrorState } from '../../../components/AppUI';
@@ -25,9 +24,11 @@ import { colors, radius, spacing, typography } from '../../../constants/theme';
 import {
   createPracticeJob,
   fetchPracticeStatus,
+  fetchAssignmentWords,
   fetchVocabularyItems,
   fetchVocabularySets,
   fetchVocabularySetDetail,
+  fetchWordPronunciation,
   uploadPracticeAudio,
 } from '../../../lib/api';
 import { useAuth } from '../../../lib/auth';
@@ -53,6 +54,7 @@ export default function PracticeScreen() {
   const isDesktop = width >= 768;
   const { accessToken } = useAuth();
   const router = useRouter();
+  const { assignment_id: assignmentId } = useLocalSearchParams<{ assignment_id?: string }>();
 
   // ── select-screen state ──────────────────────────────────────────────────
   const [mode, setMode] = useState<'select' | 'practice'>('select');
@@ -61,6 +63,8 @@ export default function PracticeScreen() {
   const [sets, setSets] = useState<VocabularySet[]>([]);
   const [setsLoading, setSetsLoading] = useState(true);
   const [startLoading, setStartLoading] = useState(false);
+  const [assignmentWords, setAssignmentWords] = useState<VocabularyItem[]>([]);
+  const [assignmentWordIndex, setAssignmentWordIndex] = useState(0);
 
   // ── practice state ───────────────────────────────────────────────────────
   const [practiceTarget, setPracticeTarget] = useState<VocabularyItem | null>(null);
@@ -74,8 +78,11 @@ export default function PracticeScreen() {
   const [loading, setLoading] = useState(false);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
 
-  // ── phoneme modal state ──────────────────────────────────────────────────
-  const [phonemeModalVisible, setPhonemeModalVisible] = useState(false);
+  // ── word sample audio state (replaces phoneme modal) ────────────────────
+  const [wordSampleUrl, setWordSampleUrl] = useState<string | null>(null);
+  const [wordSampleLoading, setWordSampleLoading] = useState(false);
+  const [isPlayingWordSample, setIsPlayingWordSample] = useState(false);
+  const wordSampleSoundRef = useRef<Audio.Sound | null>(null);
 
   // ── streak state ─────────────────────────────────────────────────────────
   // streak = consecutive words with score > 80 in this session.
@@ -97,11 +104,76 @@ export default function PracticeScreen() {
     };
   }, []);
 
+  // Assignment practice deliberately bypasses the free-practice picker: only
+  // the word IDs returned by the server for this assignment can be submitted.
+  useEffect(() => {
+    if (!assignmentId) return;
+    let cancelled = false;
+    fetchAssignmentWords(assignmentId)
+      .then((data) => {
+        if (cancelled) return;
+        const items = data.items.map((item) => ({
+          ...item, difficulty: null, sample_sentence: null, target_phonemes: [], common_mistake_tags: [], stress_pattern: null,
+        }));
+        if (items.length === 0) throw new Error('Bài tập này chưa có từ để luyện.');
+        setAssignmentWords(items);
+        setPracticeTarget(items[0]);
+        setMode('practice');
+      })
+      .catch((err) => { if (!cancelled) setError(err instanceof Error ? err.message : 'Không thể tải bài tập.'); });
+    return () => { cancelled = true; };
+  }, [assignmentId]);
+
   useEffect(() => {
     return () => {
       if (sound) void sound.unloadAsync();
     };
   }, [sound]);
+
+  useEffect(() => {
+    return () => { void wordSampleSoundRef.current?.unloadAsync(); };
+  }, []);
+
+  // ── fetch word sample audio when target changes ───────────────────────────
+  useEffect(() => {
+    setWordSampleUrl(null);
+    void wordSampleSoundRef.current?.unloadAsync();
+    wordSampleSoundRef.current = null;
+    setIsPlayingWordSample(false);
+    if (!practiceTarget?.word || !accessToken) return;
+    let cancelled = false;
+    fetchWordPronunciation(practiceTarget.word, accessToken)
+      .then(data => { if (!cancelled) setWordSampleUrl(data.audio_url ?? null); })
+      .catch(() => {});
+    return () => { cancelled = true; };
+  }, [practiceTarget?.word, accessToken]);
+
+  const toggleWordSamplePlayback = useCallback(async () => {
+    if (!wordSampleUrl) return;
+    if (isPlayingWordSample) {
+      await wordSampleSoundRef.current?.pauseAsync();
+      setIsPlayingWordSample(false);
+      return;
+    }
+    setWordSampleLoading(true);
+    try {
+      await Audio.setAudioModeAsync({ allowsRecordingIOS: false, playsInSilentModeIOS: true });
+      if (!wordSampleSoundRef.current) {
+        const { sound: ws } = await Audio.Sound.createAsync(
+          { uri: wordSampleUrl },
+          {},
+          (s) => { if (s.isLoaded && s.didJustFinish) setIsPlayingWordSample(false); },
+        );
+        wordSampleSoundRef.current = ws;
+      }
+      await wordSampleSoundRef.current.playAsync();
+      setIsPlayingWordSample(true);
+    } catch {
+      setIsPlayingWordSample(false);
+    } finally {
+      setWordSampleLoading(false);
+    }
+  }, [wordSampleUrl, isPlayingWordSample]);
 
   // ── fetch sets for select screen ─────────────────────────────────────────
   useEffect(() => {
@@ -117,6 +189,20 @@ export default function PracticeScreen() {
   useEffect(() => {
     if (jobStatus !== 'completed' || !job || !practiceTarget) return;
 
+    if (assignmentId) {
+      setAssignmentWordIndex((current) => {
+        const next = assignmentWords.length ? (current + 1) % assignmentWords.length : 0;
+        setPracticeTarget(assignmentWords[next] ?? practiceTarget);
+        return next;
+      });
+      setAudioUri(null);
+      setJob(null);
+      setJobId(null);
+      setJobStatus(null);
+      setElapsedSeconds(0);
+      return;
+    }
+
     // Update streak using a ref to always have the latest value.
     const score = job.score ?? 0;
     const newStreak = score > 80 ? streakRef.current + 1 : 0;
@@ -125,14 +211,7 @@ export default function PracticeScreen() {
     const doNavigate = () => {
       router.push({
         pathname: '/practice/result' as any,
-        params: {
-          score: String(job.score ?? 0),
-          word: practiceTarget.word,
-          phonetic: practiceTarget.phonetic ?? '',
-          audio_url: job.audio_url ?? '',
-          problem_phonemes: JSON.stringify(job.problem_phonemes ?? []),
-          feedback: JSON.stringify(job.feedback ?? null),
-        },
+        params: { id: jobId },
       });
     };
 
@@ -162,7 +241,10 @@ export default function PracticeScreen() {
     try {
       let item: VocabularyItem | null = null;
 
-      if (selectedSetId) {
+      if (assignmentId) {
+        item = assignmentWords[assignmentWordIndex] ?? null;
+        if (!item) throw new Error('Bài tập này chưa có từ để luyện.');
+      } else if (selectedSetId) {
         const detail = await fetchVocabularySetDetail(selectedSetId);
         if (detail.items.length === 0) throw new Error('Bộ từ này chưa có từ nào.');
         item = detail.items[Math.floor(Math.random() * detail.items.length)];
@@ -190,9 +272,15 @@ export default function PracticeScreen() {
   };
 
   const handleBackToSelect = () => {
+    if (assignmentId) { router.back(); return; }
     if (timerRef.current)    { clearInterval(timerRef.current);  timerRef.current = null; }
     if (pollingRef.current)  { clearInterval(pollingRef.current); pollingRef.current = null; }
     if (navTimerRef.current) { clearTimeout(navTimerRef.current); navTimerRef.current = null; }
+    void Audio.setAudioModeAsync({ allowsRecordingIOS: false, playsInSilentModeIOS: true });
+    void wordSampleSoundRef.current?.unloadAsync();
+    wordSampleSoundRef.current = null;
+    setWordSampleUrl(null);
+    setIsPlayingWordSample(false);
     setMode('select');
     setPracticeTarget(null);
     setAudioUri(null);
@@ -243,6 +331,7 @@ export default function PracticeScreen() {
       timerRef.current = null;
     }
     await recording.stopAndUnloadAsync();
+    await Audio.setAudioModeAsync({ allowsRecordingIOS: false, playsInSilentModeIOS: true });
     const uri = recording.getURI();
     setAudioUri(uri ?? null);
     setRecording(null);
@@ -265,6 +354,9 @@ export default function PracticeScreen() {
         {
           target_word: practiceTarget.word,
           audio_url: uploadResponse.audio_url || uploadResponse.storage_path,
+          assignment_id: assignmentId ?? null,
+          item_id: assignmentId ? practiceTarget.id : null,
+          audio_storage_path: uploadResponse.storage_path,
         },
         accessToken,
       );
@@ -285,6 +377,14 @@ export default function PracticeScreen() {
     } else {
       await startRecording();
     }
+  };
+
+  const handleSkipWord = () => {
+    if (timerRef.current)    { clearInterval(timerRef.current);  timerRef.current = null; }
+    if (pollingRef.current)  { clearInterval(pollingRef.current); pollingRef.current = null; }
+    if (navTimerRef.current) { clearTimeout(navTimerRef.current); navTimerRef.current = null; }
+    if (recording) { void recording.stopAndUnloadAsync(); }
+    void handleStartPractice();
   };
 
   const playRecording = async () => {
@@ -323,6 +423,9 @@ export default function PracticeScreen() {
   const ss = String(elapsedSeconds % 60).padStart(2, '0');
   const canStart = (!!selectedTopic || !!selectedSetId) && !startLoading;
   const isPolling = !!jobStatus && jobStatus !== 'completed' && jobStatus !== 'failed';
+  const guideText = practiceTarget?.phonetic
+    ? (PHONEME_GUIDES[practiceTarget.phonetic] ?? null)
+    : null;
 
   // ── select screen ─────────────────────────────────────────────────────────
   if (mode === 'select') {
@@ -441,12 +544,6 @@ export default function PracticeScreen() {
           <Pressable style={styles.backBtn} onPress={handleBackToSelect}>
             <Text style={styles.backBtnText}>← Quay lại</Text>
           </Pressable>
-          {recording && (
-            <View style={styles.recordingPill}>
-              <View style={styles.recDot} />
-              <Text style={styles.recTimerText}>{mm}:{ss}</Text>
-            </View>
-          )}
         </View>
 
         {/* Phrase header */}
@@ -455,39 +552,81 @@ export default function PracticeScreen() {
             <Text style={styles.badgeText}>MASTER THIS PHRASE</Text>
           </View>
           <Text style={styles.phraseText}>"{practiceTarget?.word ?? ''}"</Text>
-          {practiceTarget?.phonetic ? (
-            <View style={styles.ipaRow}>
-              <Pressable
-                accessibilityRole="button"
-                onPress={() => setPhonemeModalVisible(true)}
-                style={styles.ipaPill}
-              >
-                <Text style={styles.ipaText}>{practiceTarget.phonetic}</Text>
-                <MaterialIcons name="info-outline" size={14} color={colors.outline} style={{ marginLeft: 4 }} />
-              </Pressable>
-            </View>
-          ) : null}
         </View>
 
-        {/* Central mic module — waveform behind MicButton */}
-        <View style={styles.micModule}>
-          <View style={styles.waveformAbsolute}>
-            <WaveformBars
-              heights={WAVEFORM_BARS}
-              color={colors.micActive}
-              barWidth={8}
-              gap={4}
-              opacity={recording ? 0.5 : 0.18}
-              align="center"
+        {/* Practice area: desktop=row (mic absolute center, guide right), mobile=column */}
+        <View style={[styles.practiceArea, !isDesktop && styles.practiceAreaMobile]}>
+
+          {/* Waveform + mic */}
+          <View style={[styles.micCol, isDesktop ? styles.micColDesktop : styles.micColMobile]}>
+            <View style={styles.waveformAbsolute}>
+              <WaveformBars
+                heights={WAVEFORM_BARS}
+                color={colors.micActive}
+                barWidth={8}
+                gap={4}
+                opacity={recording ? 0.5 : 0.18}
+                align="center"
+              />
+            </View>
+            <MicButton
+              isRecording={!!recording}
+              onPress={handleMicPress}
             />
           </View>
-          <MicButton
-            isRecording={!!recording}
-            onPress={handleMicPress}
-          />
+
+          {/* Word pronunciation guide */}
+          <View style={[styles.guideCol, isDesktop ? styles.guideColDesktop : styles.guideColMobile]}>
+            {practiceTarget?.phonetic ? (
+              <Text style={styles.guideIpa}>{practiceTarget.phonetic}</Text>
+            ) : null}
+            {practiceTarget?.meaning_vi ? (
+              <Text style={styles.guideMeaning}>{practiceTarget.meaning_vi}</Text>
+            ) : null}
+            {practiceTarget?.sample_sentence ? (
+              <Text style={styles.guideSample} numberOfLines={2}>
+                {practiceTarget.sample_sentence}
+              </Text>
+            ) : null}
+            {guideText ? (
+              <Text style={styles.guideBody} numberOfLines={3}>{guideText}</Text>
+            ) : null}
+            <Pressable
+              style={[
+                styles.wordSampleBtn,
+                (!wordSampleUrl || wordSampleLoading) && styles.wordSampleBtnDisabled,
+              ]}
+              onPress={() => void toggleWordSamplePlayback()}
+              disabled={!wordSampleUrl || wordSampleLoading}
+            >
+              {wordSampleLoading ? (
+                <ActivityIndicator size="small" color={colors.white} />
+              ) : (
+                <MaterialIcons
+                  name={isPlayingWordSample ? 'pause' : 'volume-up'}
+                  size={16}
+                  color={colors.white}
+                />
+              )}
+              <Text style={styles.wordSampleBtnText} numberOfLines={1}>
+                {wordSampleUrl ? 'Phát âm chuẩn' : 'Chưa có mẫu'}
+              </Text>
+            </Pressable>
+            {wordSampleUrl ? (
+              <Text style={styles.guideAttr}>Free Dictionary API, CC BY-SA 3.0</Text>
+            ) : null}
+          </View>
         </View>
 
-        {/* Status hint below mic */}
+        {/* Timer — visible only while recording */}
+        {recording && (
+          <View style={[styles.recordingPill, { alignSelf: 'center', marginBottom: spacing.md }]}>
+            <View style={styles.recDot} />
+            <Text style={styles.recTimerText}>{mm}:{ss}</Text>
+          </View>
+        )}
+
+        {/* Status hints */}
         {!recording && !audioUri && !isPolling && (
           <Text style={styles.hintText}>Chạm micro để bắt đầu ghi âm</Text>
         )}
@@ -505,9 +644,21 @@ export default function PracticeScreen() {
 
         {/* Failed status */}
         {jobStatus === 'failed' && (
-          <View style={styles.processingRow}>
-            <Text style={styles.failedText}>Chấm điểm thất bại. Vui lòng thử lại.</Text>
-          </View>
+          job?.feedback?.error_type === 'audio_quality_rejected' ? (
+            <View style={styles.audioWarningBox}>
+              <MaterialIcons name="warning" size={22} color={colors.warning} />
+              <View style={styles.audioWarningContent}>
+                <Text style={styles.audioWarningTitle}>Âm thanh không rõ</Text>
+                <Text style={styles.audioWarningText}>
+                  Âm thanh không rõ, vui lòng thu âm lại ở nơi yên tĩnh hơn.
+                </Text>
+              </View>
+            </View>
+          ) : (
+            <View style={styles.processingRow}>
+              <Text style={styles.failedText}>Chấm điểm thất bại. Vui lòng thử lại.</Text>
+            </View>
+          )
         )}
 
         {/* Error */}
@@ -517,21 +668,33 @@ export default function PracticeScreen() {
           </View>
         ) : null}
 
-        {/* Replay + Submit row */}
+        {/* Replay + Gửi | divider | Bỏ qua — centered as one group */}
         <View style={styles.circleRow}>
+          <View style={styles.circleMainBtns}>
+            <CircleIconButton
+              icon={<MaterialIcons name="play-arrow" size={30} color={colors.white} />}
+              label="Replay"
+              bgColor={colors.secondaryContainer}
+              onPress={playRecording}
+              disabled={!audioUri || !!recording}
+            />
+            <CircleIconButton
+              icon={<MaterialIcons name="send" size={28} color={colors.white} />}
+              label="Gửi"
+              bgColor={colors.secondaryContainer}
+              onPress={() => handleCreateJob()}
+              disabled={!audioUri || loading || !!recording}
+            />
+          </View>
+          <View style={styles.circleDividerArea}>
+            <View style={styles.circleDivider} />
+          </View>
           <CircleIconButton
-            icon={<MaterialIcons name="play-arrow" size={30} color={colors.white} />}
-            label="Replay"
-            bgColor={colors.secondaryContainer}
-            onPress={playRecording}
-            disabled={!audioUri || !!recording}
-          />
-          <CircleIconButton
-            icon={<MaterialIcons name="send" size={28} color={colors.white} />}
-            label="Gửi"
-            bgColor={colors.secondaryContainer}
-            onPress={() => handleCreateJob()}
-            disabled={!audioUri || loading || !!recording}
+            icon={<MaterialIcons name="skip-next" size={28} color={colors.onSurfaceVariant} />}
+            label="Bỏ qua"
+            bgColor={colors.surfaceContainerHigh}
+            onPress={handleSkipWord}
+            disabled={loading}
           />
         </View>
 
@@ -543,17 +706,8 @@ export default function PracticeScreen() {
           description="Chạm micro để thu âm, chạm lần nữa để dừng. Bấm nút Gửi để AI chấm điểm."
         />
 
-        {/* Skip link */}
-        <Pressable style={styles.skipLink} onPress={handleBackToSelect}>
-          <Text style={styles.skipLinkText}>Bỏ qua từ này</Text>
-        </Pressable>
+
       </ScrollView>
-      <PhonemeDetailModal
-        visible={phonemeModalVisible}
-        phoneme={practiceTarget?.phonetic ?? null}
-        word={practiceTarget?.word ?? null}
-        onClose={() => setPhonemeModalVisible(false)}
-      />
     </SafeAreaView>
   );
 }
@@ -612,186 +766,6 @@ const PHONEME_GUIDES: Record<string, string> = {
   '/w/':   'Môi tròn chặt rồi nhanh chóng mở ra. Như "w" trong "water".',
 };
 
-function PhonemeDetailModal({
-  visible,
-  phoneme,
-  word,
-  onClose,
-}: {
-  visible: boolean;
-  phoneme: string | null;
-  word: string | null;
-  onClose: () => void;
-}) {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const soundRef = useRef<Audio.Sound | null>(null);
-
-  useEffect(() => {
-    return () => { void soundRef.current?.unloadAsync(); };
-  }, []);
-
-  const guideText = phoneme ? (PHONEME_GUIDES[phoneme] ?? `Chưa có hướng dẫn chi tiết cho âm ${phoneme}.`) : '';
-
-  const playReference = async (url: string) => {
-    if (isPlaying) {
-      await soundRef.current?.pauseAsync();
-      setIsPlaying(false);
-      return;
-    }
-    try {
-      await Audio.setAudioModeAsync({ allowsRecordingIOS: false, playsInSilentModeIOS: true });
-      if (!soundRef.current) {
-        const { sound } = await Audio.Sound.createAsync({ uri: url }, {}, (s) => {
-          if (s.isLoaded && s.didJustFinish) setIsPlaying(false);
-        });
-        soundRef.current = sound;
-      }
-      await soundRef.current.playAsync();
-      setIsPlaying(true);
-    } catch { setIsPlaying(false); }
-  };
-
-  return (
-    <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
-      <Pressable style={phonemeModalStyles.backdrop} onPress={onClose}>
-        <Pressable style={phonemeModalStyles.sheet} onPress={() => undefined}>
-          {/* Handle */}
-          <View style={phonemeModalStyles.handle} />
-
-          {/* Header */}
-          <View style={phonemeModalStyles.header}>
-            <View>
-              {word ? <Text style={phonemeModalStyles.wordLabel}>{word}</Text> : null}
-              {phoneme ? <Text style={phonemeModalStyles.phonemeLabel}>{phoneme}</Text> : null}
-            </View>
-            <Pressable accessibilityRole="button" onPress={onClose} style={phonemeModalStyles.closeBtn}>
-              <MaterialIcons name="close" size={20} color={colors.onSurfaceVariant} />
-            </Pressable>
-          </View>
-
-          {/* Guide section */}
-          <View style={phonemeModalStyles.section}>
-            <Text style={phonemeModalStyles.sectionTitle}>HƯỚNG DẪN PHÁT ÂM</Text>
-            <Text style={phonemeModalStyles.guideText}>{guideText}</Text>
-          </View>
-
-          {/* Reference audio section */}
-          <View style={phonemeModalStyles.section}>
-            <Text style={phonemeModalStyles.sectionTitle}>ÂM MẪU</Text>
-            <View style={phonemeModalStyles.audioRow}>
-              <Pressable
-                style={[phonemeModalStyles.playBtn, phonemeModalStyles.playBtnDisabled]}
-                disabled
-              >
-                <MaterialIcons name="play-arrow" size={22} color="#ffffff" />
-              </Pressable>
-              <View style={phonemeModalStyles.audioMeta}>
-                <Text style={phonemeModalStyles.audioLabel}>Phát âm chuẩn</Text>
-                <Text style={phonemeModalStyles.audioNote}>Âm mẫu chưa khả dụng — sẽ cập nhật sau</Text>
-              </View>
-            </View>
-          </View>
-        </Pressable>
-      </Pressable>
-    </Modal>
-  );
-}
-
-const phonemeModalStyles = StyleSheet.create({
-  backdrop: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.45)',
-    justifyContent: 'flex-end',
-  },
-  sheet: {
-    backgroundColor: colors.surfaceLowest,
-    borderTopLeftRadius: radius.xxl,
-    borderTopRightRadius: radius.xxl,
-    paddingHorizontal: spacing.lg,
-    paddingBottom: spacing.xxl,
-    paddingTop: spacing.sm,
-    gap: spacing.md,
-  },
-  handle: {
-    width: 40,
-    height: 4,
-    borderRadius: 2,
-    backgroundColor: colors.outlineVariant,
-    alignSelf: 'center',
-    marginBottom: spacing.xs,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    justifyContent: 'space-between',
-  },
-  wordLabel: {
-    fontSize: 22,
-    fontWeight: '700',
-    color: colors.onSurface,
-  },
-  phonemeLabel: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: colors.outline,
-    marginTop: 2,
-  },
-  closeBtn: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: colors.surfaceContainerHigh,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  section: {
-    gap: spacing.xs,
-  },
-  sectionTitle: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: colors.slate400,
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-  },
-  guideText: {
-    fontSize: 15,
-    lineHeight: 24,
-    color: colors.onSurface,
-  },
-  audioRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.sm,
-    backgroundColor: colors.surfaceContainerHigh,
-    borderRadius: radius.lg,
-    padding: spacing.sm,
-  },
-  playBtn: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: colors.primary,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  playBtnDisabled: {
-    opacity: 0.4,
-  },
-  audioMeta: {
-    flex: 1,
-    gap: 2,
-  },
-  audioLabel: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: colors.onSurface,
-  },
-  audioNote: {
-    fontSize: 12,
-    color: colors.outlineVariant,
-  },
-});
 
 const styles = StyleSheet.create({
   // ── shared roots ──────────────────────────────────────────────────────────
@@ -996,7 +970,7 @@ const styles = StyleSheet.create({
   phraseHeader: {
     alignItems: 'center',
     gap: spacing.sm,
-    marginBottom: spacing.md,
+    marginBottom: spacing.sm,
   },
   badge: {
     backgroundColor: `${colors.secondaryContainer}33`,
@@ -1016,28 +990,34 @@ const styles = StyleSheet.create({
     color: colors.onSurface,
     textAlign: 'center',
   },
-  ipaRow: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-  ipaPill: {
-    backgroundColor: colors.surfaceContainerHigh,
-    borderRadius: radius.md,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: 4,
-  },
-  ipaText: {
-    fontSize: 13,
-    fontWeight: '500',
-    color: colors.outline,
-  },
 
-  micModule: {
-    width: '100%',
-    height: 260,
+  // ── practice area ─────────────────────────────────────────────────────────
+  // Desktop: row — mic absolute-centered over full width, guide floated right
+  // Mobile:  column — mic first (full-width), guide stacked below
+  practiceArea: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    minHeight: 240,
+    marginTop: spacing.lg,
+    marginBottom: spacing.sm,
+  },
+  practiceAreaMobile: {
+    flexDirection: 'column',
+    alignItems: 'stretch',
+    minHeight: 0,
+  },
+  micCol: {
+    height: 240,
     alignItems: 'center',
     justifyContent: 'center',
-    marginVertical: spacing.xl,
+  },
+  micColDesktop: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+  },
+  micColMobile: {
+    width: '100%',
   },
   waveformAbsolute: {
     position: 'absolute',
@@ -1047,6 +1027,73 @@ const styles = StyleSheet.create({
     bottom: 0,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  // Shared card shell
+  guideCol: {
+    justifyContent: 'center',
+    backgroundColor: colors.surfaceLowest,
+    borderRadius: radius.xl,
+    borderWidth: 1,
+    borderColor: colors.slate100,
+    padding: spacing.md,
+    gap: spacing.sm,
+  },
+  // Desktop: right-edge card ~250px
+  guideColDesktop: {
+    marginLeft: 'auto',
+    width: 250,
+    alignSelf: 'center',
+  },
+  // Mobile: full-width below mic
+  guideColMobile: {
+    alignSelf: 'stretch',
+    marginTop: spacing.md,
+  },
+  guideIpa: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: colors.outline,
+    letterSpacing: 0.5,
+  },
+  guideMeaning: {
+    fontSize: 13,
+    fontWeight: '500',
+    color: colors.onSurface,
+    lineHeight: 18,
+  },
+  guideSample: {
+    fontSize: 12,
+    color: colors.onSurfaceVariant,
+    fontStyle: 'italic',
+    lineHeight: 19,
+  },
+  guideBody: {
+    fontSize: 12,
+    color: colors.onSurfaceVariant,
+    lineHeight: 19,
+  },
+  wordSampleBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    backgroundColor: colors.primary,
+    borderRadius: radius.md,
+    paddingHorizontal: spacing.sm,
+    height: 40,
+  },
+  wordSampleBtnDisabled: {
+    opacity: 0.45,
+  },
+  wordSampleBtnText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: colors.white,
+  },
+  guideAttr: {
+    fontSize: 10,
+    color: colors.slate400,
+    fontStyle: 'italic',
   },
 
   hintText: {
@@ -1082,28 +1129,57 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 
+  audioWarningBox: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: spacing.sm,
+    backgroundColor: colors.warningLight,
+    borderRadius: radius.lg,
+    borderLeftWidth: 4,
+    borderLeftColor: colors.warning,
+    padding: spacing.md,
+    marginBottom: spacing.sm,
+  },
+  audioWarningContent: {
+    flex: 1,
+    gap: 4,
+  },
+  audioWarningTitle: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: colors.tertiary,
+  },
+  audioWarningText: {
+    fontSize: 13,
+    color: colors.onTertiaryFixedVariant,
+    lineHeight: 19,
+  },
+
   errorWrap: {
     marginBottom: spacing.md,
   },
 
-  // Replay + Submit side by side, centred
+  // Replay + Gửi | divider | Bỏ qua — centered as one group
   circleRow: {
     flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'center',
-    gap: spacing.xxl,
     marginBottom: spacing.lg,
   },
+  circleMainBtns: {
+    flexDirection: 'row',
+    gap: spacing.md,
+  },
+  circleDividerArea: {
+    paddingHorizontal: 24,
+    alignSelf: 'stretch',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  circleDivider: {
+    width: 1,
+    height: 36,
+    backgroundColor: colors.outlineVariant,
+  },
 
-  skipLink: {
-    alignSelf: 'center',
-    marginTop: spacing.md,
-    paddingVertical: spacing.sm,
-    paddingHorizontal: spacing.lg,
-  },
-  skipLinkText: {
-    fontSize: 13,
-    color: colors.onSurfaceVariant,
-    textDecorationLine: 'underline',
-    textAlign: 'center',
-  },
 });

@@ -13,6 +13,7 @@ def score_pronunciation_segments(
 ) -> dict[str, Any]:
     mode = os.getenv("SCORING_MODE", "heuristic_gop").strip().lower()
     if mode == "heuristic_gop":
+        # Diagnostic inputs for error prioritization only, never a public score.
         return score_heuristic_gop(alignment_result, segment_predictions)
     if mode == "none":
         return build_failed_scoring_result(

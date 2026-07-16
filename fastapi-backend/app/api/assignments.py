@@ -11,6 +11,13 @@ from app.core.auth import (
     require_roles,
 )
 from app.core.config import Settings, get_settings
+from app.services.assignment_grading import (
+    assignment_item_rows,
+    is_past_deadline,
+    is_recipient,
+    recalculate_assignment_grade,
+    sweep_assignment_state,
+)
 
 router = APIRouter(prefix="/assignments", tags=["Assignments"])
 
@@ -66,6 +73,11 @@ class AssignmentProgressUpdatePayload(BaseModel):
     completed_items: int
 
 
+class AssignmentGradeOverridePayload(BaseModel):
+    score: float
+    override_reason: str
+
+
 class AssignmentProgressResponse(BaseModel):
     id: str
     assignment_id: str
@@ -106,6 +118,7 @@ class AssignmentsListResponse(BaseModel):
 
 class StudentAssignmentResponse(BaseModel):
     id: str
+    assignment_id: str
     title: str
     description: str | None = None
     content_type: str
@@ -113,11 +126,26 @@ class StudentAssignmentResponse(BaseModel):
     class_id: str | None = None
     assigned_by: str
     due_date: str | None = None
+    deadline: str | None = None
+    is_assessment: bool
+    timer_per_word_seconds: int
+    class_name: str | None = None
+    teacher_name: str | None = None
     created_at: str
     progress_status: str
     completed_items: int
     total_items: int
     completed_at: str | None = None
+    work_status: str
+    grading_status: str
+    auto_score: float | None = None
+    final_score: float | None = None
+    is_overdue: bool
+    can_start: bool
+    can_continue: bool
+    started_at: str | None = None
+    submitted_at: str | None = None
+    is_locked: bool = False
 
 
 class AssessmentSubmissionRecording(BaseModel):
@@ -147,6 +175,25 @@ class AssignmentStatusResponse(BaseModel):
     submitted_at: str | None = None
     deadline: str | None = None
     timer_per_word_seconds: int
+    work_status: str = "not_started"
+    grading_status: str = "pending"
+    can_continue: bool = False
+
+
+class AssignmentGradebookItem(BaseModel):
+    student_id: str
+    student_name: str | None = None
+    work_status: str
+    completed_items: int
+    total_items: int
+    submitted_at: str | None = None
+    is_locked: bool = False
+    grading_status: str
+    auto_score: float | None = None
+    final_score: float | None = None
+    teacher_override_score: float | None = None
+    recordings: list[AssessmentSubmissionRecording] = []
+    details: dict = {}
 
 
 class AssignmentWordsResponse(BaseModel):
@@ -187,6 +234,29 @@ def _get_active_class_students(supabase_client, class_id: str) -> list[str]:
     return [r["student_id"] for r in rows]
 
 
+def _teacher_can_assign(supabase_client, teacher_id: str, class_id: str | None, student_id: str | None) -> bool:
+    if class_id:
+        rows = (
+            supabase_client.table("teacher_classes").select("class_id")
+            .eq("class_id", class_id).eq("teacher_id", teacher_id).eq("status", "active").limit(1).execute().data or []
+        )
+        return bool(rows)
+    if not student_id:
+        return False
+    student_classes = (
+        supabase_client.table("student_classes").select("class_id")
+        .eq("student_id", student_id).eq("status", "active").execute().data or []
+    )
+    for membership in student_classes:
+        rows = (
+            supabase_client.table("teacher_classes").select("class_id")
+            .eq("class_id", membership["class_id"]).eq("teacher_id", teacher_id).eq("status", "active").limit(1).execute().data or []
+        )
+        if rows:
+            return True
+    return False
+
+
 @router.post("/", response_model=AssignmentDetailResponse, status_code=status.HTTP_201_CREATED)
 def create_assignment(
     payload: AssignmentCreatePayload,
@@ -199,6 +269,8 @@ def create_assignment(
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Provide class_id or student_id, not both")
 
     supabase_client = get_supabase_service_client(settings)
+    if not _teacher_can_assign(supabase_client, current_user.id, payload.class_id, payload.student_id):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="You can only assign work to students in your active classes")
     total_items = _validate_content(supabase_client, payload.content_type, payload.content_id)
 
     try:
@@ -233,13 +305,28 @@ def create_assignment(
     progress_rows: list[dict] = []
     if student_ids:
         try:
+            recipient_data = [
+                {"assignment_id": assignment_id, "student_id": sid}
+                for sid in student_ids if sid
+            ]
+            if recipient_data:
+                supabase_client.table("assignment_recipients").upsert(
+                    recipient_data, on_conflict="assignment_id,student_id"
+                ).execute()
             progress_data = [
                 {"assignment_id": assignment_id, "student_id": sid, "total_items": total_items}
-                for sid in student_ids
+                for sid in student_ids if sid
             ]
-            progress_rows = supabase_client.table("assignment_progress").insert(progress_data).execute().data
+            if progress_data:
+                progress_rows = supabase_client.table("assignment_progress").upsert(
+                    progress_data, on_conflict="assignment_id,student_id"
+                ).execute().data or []
+                supabase_client.table("assignment_grades").upsert(
+                    [{"assignment_id": assignment_id, "student_id": sid, "grading_status": "pending"} for sid in student_ids if sid],
+                    on_conflict="assignment_id,student_id",
+                ).execute()
         except Exception as exc:
-            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Assignment created but failed to create progress records") from exc
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Assignment created but failed to create recipients") from exc
 
     return AssignmentDetailResponse(
         **assignment_row,
@@ -277,39 +364,62 @@ def list_student_assignments(
 ) -> list[StudentAssignmentResponse]:
     supabase_client = get_supabase_service_client(settings)
     rows = (
-        supabase_client.table("assignment_progress")
-        .select("*, assignments(*)")
+        supabase_client.table("assignment_recipients")
+        .select("assignment_id,assigned_at,assignments(*)")
         .eq("student_id", current_user.id)
         .execute()
         .data
+        or []
     )
-    now = datetime.now(timezone.utc)
     result: list[StudentAssignmentResponse] = []
     for row in rows:
         assignment = row.get("assignments") or {}
-        prog_status = row["status"]
-        due_date = assignment.get("due_date")
-        if due_date and prog_status != "completed":
-            try:
-                dt = datetime.fromisoformat(due_date.replace("Z", "+00:00"))
-                if dt < now:
-                    prog_status = "overdue"
-            except ValueError:
-                pass
+        if not assignment:
+            continue
+        assignment_id = str(assignment["id"])
+        submission = sweep_assignment_state(supabase_client, assignment, current_user.id)
+        progress_rows = supabase_client.table("assignment_progress").select("*").eq("assignment_id", assignment_id).eq("student_id", current_user.id).limit(1).execute().data or []
+        grade_rows = supabase_client.table("assignment_grades").select("*").eq("assignment_id", assignment_id).eq("student_id", current_user.id).limit(1).execute().data or []
+        class_rows = []
+        if assignment.get("class_id"):
+            class_rows = supabase_client.table("classes").select("name").eq("id", assignment["class_id"]).limit(1).execute().data or []
+        teacher_rows = supabase_client.table("profiles").select("display_name").eq("id", assignment["assigned_by"]).limit(1).execute().data or []
+        progress = progress_rows[0] if progress_rows else {}
+        grade = grade_rows[0] if grade_rows else {}
+        locked = bool(submission and submission.get("is_locked"))
+        overdue = is_past_deadline(assignment)
+        work_status = progress.get("status", "not_started")
+        can_start = not overdue and (not assignment.get("is_assessment") or not locked)
         result.append(StudentAssignmentResponse(
-            id=assignment["id"],
+            id=assignment_id,
+            assignment_id=assignment_id,
             title=assignment["title"],
             description=assignment.get("description"),
             content_type=assignment["content_type"],
             content_id=str(assignment["content_id"]),
             class_id=str(assignment["class_id"]) if assignment.get("class_id") else None,
             assigned_by=str(assignment["assigned_by"]),
-            due_date=due_date,
+            class_name=class_rows[0].get("name") if class_rows else None,
+            teacher_name=teacher_rows[0].get("display_name") if teacher_rows else None,
+            due_date=assignment.get("due_date"),
+            deadline=assignment.get("deadline"),
+            is_assessment=bool(assignment.get("is_assessment")),
+            timer_per_word_seconds=assignment.get("timer_per_word_seconds", 60),
             created_at=assignment["created_at"],
-            progress_status=prog_status,
-            completed_items=row["completed_items"],
-            total_items=row["total_items"],
-            completed_at=row.get("completed_at"),
+            progress_status=work_status,
+            work_status=work_status,
+            completed_items=progress.get("completed_items", 0),
+            total_items=progress.get("total_items", 0),
+            completed_at=progress.get("completed_at"),
+            grading_status=grade.get("grading_status", "pending"),
+            auto_score=grade.get("auto_score"),
+            final_score=grade.get("final_score"),
+            is_overdue=overdue,
+            can_start=can_start,
+            can_continue=can_start and work_status in {"not_started", "in_progress"},
+            started_at=submission.get("started_at") if submission else None,
+            submitted_at=submission.get("submitted_at") if submission else None,
+            is_locked=locked,
         ))
     return result
 
@@ -390,44 +500,12 @@ def update_student_progress(
     current_user: CurrentUser = Depends(require_roles(["student"])),
     settings: Settings = Depends(get_settings),
 ) -> AssignmentProgressResponse:
-    supabase_client = get_supabase_service_client(settings)
-    rows = (
-        supabase_client.table("assignment_progress")
-        .select("*")
-        .eq("assignment_id", str(assignment_id))
-        .eq("student_id", current_user.id)
-        .execute()
-        .data
+    # Kept as a compatibility route, but clients cannot manufacture progress.
+    # Derived progress is written only by the verified AI-result webhook.
+    raise HTTPException(
+        status_code=status.HTTP_403_FORBIDDEN,
+        detail="Assignment progress is calculated from verified practice results",
     )
-    if not rows:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Progress record not found")
-    progress = rows[0]
-    completed = max(0, min(payload.completed_items, progress["total_items"]))
-
-    completed_at = progress.get("completed_at")
-    if completed == 0:
-        new_status = "not_started"
-    elif progress["total_items"] > 0 and completed >= progress["total_items"]:
-        new_status = "completed"
-        if not completed_at:
-            completed_at = datetime.now(timezone.utc).isoformat()
-    else:
-        new_status = "in_progress"
-
-    try:
-        updated = (
-            supabase_client.table("assignment_progress")
-            .update({"completed_items": completed, "status": new_status, "completed_at": completed_at})
-            .eq("assignment_id", str(assignment_id))
-            .eq("student_id", current_user.id)
-            .execute()
-            .data
-        )
-    except Exception as exc:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Unable to update progress") from exc
-    if not updated:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Progress record not found")
-    return AssignmentProgressResponse(**updated[0])
 
 
 @router.get("/{assignment_id}/words", response_model=AssignmentWordsResponse)
@@ -441,10 +519,9 @@ def get_assessment_words(
     if not rows:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Assignment not found")
     assignment = rows[0]
-    # Access check: student must have a progress row, teacher must own it
+    # Recipients, not the legacy progress table, define student access.
     if current_user.app_role == "student":
-        prog = supabase_client.table("assignment_progress").select("id").eq("assignment_id", str(assignment_id)).eq("student_id", current_user.id).execute().data
-        if not prog:
+        if not is_recipient(supabase_client, str(assignment_id), current_user.id):
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not enrolled in this assignment")
     elif current_user.app_role == "teacher":
         if assignment.get("assigned_by") != current_user.id:
@@ -453,15 +530,7 @@ def get_assessment_words(
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Insufficient role")
     if assignment.get("content_type") != "vocabulary_set":
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Only vocabulary_set assignments have a word list")
-    set_id = str(assignment["content_id"])
-    set_item_rows = (
-        supabase_client.table("vocabulary_set_items")
-        .select("item_id, sort_order, vocabulary_items(id,word,phonetic,meaning_vi,topic,level)")
-        .eq("set_id", set_id)
-        .order("sort_order")
-        .execute()
-        .data
-    ) or []
+    set_item_rows = assignment_item_rows(supabase_client, assignment)
     items = []
     for r in set_item_rows:
         vi = r.get("vocabulary_items") or {}
@@ -495,19 +564,11 @@ def start_assessment(
     assignment = rows[0]
     if not assignment.get("is_assessment"):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Not an assessment assignment")
-    prog = supabase_client.table("assignment_progress").select("id").eq("assignment_id", str(assignment_id)).eq("student_id", current_user.id).execute().data
-    if not prog:
+    if not is_recipient(supabase_client, str(assignment_id), current_user.id):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not enrolled in this assignment")
-    # Check deadline
-    deadline = assignment.get("deadline")
-    if deadline:
-        try:
-            now = datetime.now(timezone.utc)
-            dl = datetime.fromisoformat(deadline.replace("Z", "+00:00"))
-            if dl < now:
-                raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Assessment deadline has passed")
-        except ValueError:
-            pass
+    if is_past_deadline(assignment):
+        sweep_assignment_state(supabase_client, assignment, current_user.id)
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Assessment deadline has passed")
     # Check existing submission
     existing = supabase_client.table("assessment_submissions").select("*").eq("assignment_id", str(assignment_id)).eq("student_id", current_user.id).execute().data
     if existing:
@@ -523,7 +584,12 @@ def start_assessment(
             "started_at": now_iso,
         }).execute().data[0]
     except Exception as exc:
+        # Unique(assignment_id, student_id) is the concurrent-start guard.
+        existing = supabase_client.table("assessment_submissions").select("*").eq("assignment_id", str(assignment_id)).eq("student_id", current_user.id).limit(1).execute().data or []
+        if existing and not existing[0].get("is_locked"):
+            return AssessmentStartResponse(submission_id=existing[0]["id"], started_at=existing[0]["started_at"])
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Unable to start assessment") from exc
+    recalculate_assignment_grade(supabase_client, assignment, current_user.id, submission=new_sub)
     return AssessmentStartResponse(submission_id=new_sub["id"], started_at=new_sub["started_at"])
 
 
@@ -538,12 +604,15 @@ def get_assignment_status(
     if not rows:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Assignment not found")
     assignment = rows[0]
+    if not is_recipient(supabase_client, str(assignment_id), current_user.id):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not enrolled in this assignment")
     deadline = assignment.get("deadline")
     timer = assignment.get("timer_per_word_seconds", 60)
     existing = supabase_client.table("assessment_submissions").select("*").eq("assignment_id", str(assignment_id)).eq("student_id", current_user.id).execute().data
     if existing:
-        sub = _maybe_auto_finalize(supabase_client, assignment, existing[0])
-        can_start = not sub.get("is_locked", False)
+        sub = sweep_assignment_state(supabase_client, assignment, current_user.id) or existing[0]
+        state = recalculate_assignment_grade(supabase_client, assignment, current_user.id, submission=sub)
+        can_start = not is_past_deadline(assignment) and not sub.get("is_locked", False)
         return AssignmentStatusResponse(
             can_start=can_start,
             is_locked=sub.get("is_locked", False),
@@ -551,6 +620,9 @@ def get_assignment_status(
             submitted_at=sub.get("submitted_at"),
             deadline=deadline,
             timer_per_word_seconds=timer,
+            work_status=state["progress"].get("status", "not_started"),
+            grading_status=state["grade"].get("grading_status", "pending"),
+            can_continue=can_start and not sub.get("submitted_at"),
         )
     # No submission yet — check if deadline allows starting
     can_start = True
@@ -561,6 +633,7 @@ def get_assignment_status(
                 can_start = False
         except ValueError:
             pass
+    state = recalculate_assignment_grade(supabase_client, assignment, current_user.id)
     return AssignmentStatusResponse(
         can_start=can_start,
         is_locked=False,
@@ -568,6 +641,9 @@ def get_assignment_status(
         submitted_at=None,
         deadline=deadline,
         timer_per_word_seconds=timer,
+        work_status=state["progress"].get("status", "not_started"),
+        grading_status=state["grade"].get("grading_status", "pending"),
+        can_continue=False,
     )
 
 
@@ -582,13 +658,19 @@ def submit_assessment(
     if not rows:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Assignment not found")
     assignment = rows[0]
+    if not assignment.get("is_assessment") or not is_recipient(supabase_client, str(assignment_id), current_user.id):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Assessment is not available to this student")
     existing = supabase_client.table("assessment_submissions").select("*").eq("assignment_id", str(assignment_id)).eq("student_id", current_user.id).execute().data
     if not existing:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Assessment not started")
-    sub = _maybe_auto_finalize(supabase_client, assignment, existing[0])
+    sub = sweep_assignment_state(supabase_client, assignment, current_user.id) or existing[0]
     if sub.get("is_locked"):
-        detail = "Assessment auto-finalized at deadline" if sub.get("submitted_at") == assignment.get("deadline") else "Already submitted"
-        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=detail)
+        recordings = [AssessmentSubmissionRecording(**r) for r in (sub.get("recordings") or [])]
+        return AssessmentSubmissionResponse(
+            id=sub["id"], assignment_id=str(assignment_id), student_id=current_user.id,
+            recordings=recordings, started_at=sub["started_at"], submitted_at=sub.get("submitted_at"),
+            is_locked=True, created_at=sub["created_at"], updated_at=sub["updated_at"],
+        )
     try:
         now = datetime.now(timezone.utc)
         updated = supabase_client.table("assessment_submissions").update({
@@ -599,6 +681,7 @@ def submit_assessment(
         sub = updated[0] if updated else sub
     except Exception as exc:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Unable to submit assessment") from exc
+    recalculate_assignment_grade(supabase_client, assignment, current_user.id, submission=sub)
     recordings = [AssessmentSubmissionRecording(**r) for r in (sub.get("recordings") or [])]
     return AssessmentSubmissionResponse(
         id=sub["id"],
@@ -613,31 +696,77 @@ def submit_assessment(
     )
 
 
-@router.get("/{assignment_id}/submissions", response_model=list[AssessmentSubmissionResponse])
+@router.get("/{assignment_id}/submissions", response_model=list[AssignmentGradebookItem])
 def get_assessment_submissions(
     assignment_id: UUID,
-    current_user: CurrentUser = Depends(require_roles(["teacher"])),
+    current_user: CurrentUser = Depends(require_roles(["teacher", "admin"])),
     settings: Settings = Depends(get_settings),
-) -> list[AssessmentSubmissionResponse]:
+) -> list[AssignmentGradebookItem]:
     supabase_client = get_supabase_service_client(settings)
-    rows = supabase_client.table("assignments").select("*").eq("id", str(assignment_id)).eq("assigned_by", current_user.id).execute().data
-    if not rows:
+    rows = supabase_client.table("assignments").select("*").eq("id", str(assignment_id)).execute().data
+    if not rows or (current_user.app_role != "admin" and rows[0].get("assigned_by") != current_user.id):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Assignment not found")
     assignment = rows[0]
-    subs = supabase_client.table("assessment_submissions").select("*").eq("assignment_id", str(assignment_id)).execute().data or []
-    result = []
-    for sub in subs:
-        sub = _maybe_auto_finalize(supabase_client, assignment, sub)
-        recordings = [AssessmentSubmissionRecording(**r) for r in (sub.get("recordings") or [])]
-        result.append(AssessmentSubmissionResponse(
-            id=sub["id"],
-            assignment_id=str(assignment_id),
-            student_id=sub["student_id"],
-            recordings=recordings,
-            started_at=sub["started_at"],
-            submitted_at=sub.get("submitted_at"),
-            is_locked=sub.get("is_locked", False),
-            created_at=sub["created_at"],
-            updated_at=sub["updated_at"],
+    recipients = supabase_client.table("assignment_recipients").select("student_id").eq("assignment_id", str(assignment_id)).execute().data or []
+    result: list[AssignmentGradebookItem] = []
+    for recipient in recipients:
+        student_id = str(recipient["student_id"])
+        submission = sweep_assignment_state(supabase_client, assignment, student_id)
+        state = recalculate_assignment_grade(supabase_client, assignment, student_id, submission=submission)
+        profile_rows = supabase_client.table("profiles").select("display_name").eq("id", student_id).limit(1).execute().data or []
+        grade = state["grade"]
+        progress = state["progress"]
+        result.append(AssignmentGradebookItem(
+            student_id=student_id,
+            student_name=profile_rows[0].get("display_name") if profile_rows else None,
+            work_status=progress.get("status", "not_started"),
+            completed_items=progress.get("completed_items", 0),
+            total_items=progress.get("total_items", 0),
+            submitted_at=submission.get("submitted_at") if submission else None,
+            is_locked=bool(submission and submission.get("is_locked")),
+            grading_status=grade.get("grading_status", "pending"),
+            auto_score=grade.get("auto_score"),
+            final_score=grade.get("final_score"),
+            teacher_override_score=grade.get("teacher_override_score"),
+            recordings=[AssessmentSubmissionRecording(**recording) for recording in (submission.get("recordings") or [])] if submission else [],
+            details=grade.get("details") or {},
         ))
     return result
+
+
+@router.patch("/{assignment_id}/grades/{student_id}", response_model=AssignmentGradebookItem)
+def override_assignment_grade(
+    assignment_id: UUID,
+    student_id: UUID,
+    payload: AssignmentGradeOverridePayload,
+    current_user: CurrentUser = Depends(require_roles(["teacher", "admin"])),
+    settings: Settings = Depends(get_settings),
+) -> AssignmentGradebookItem:
+    if not payload.override_reason.strip():
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="override_reason is required")
+    if not 0 <= payload.score <= 100:
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="score must be between 0 and 100")
+    supabase_client = get_supabase_service_client(settings)
+    rows = supabase_client.table("assignments").select("*").eq("id", str(assignment_id)).execute().data or []
+    if not rows or (current_user.app_role != "admin" and rows[0].get("assigned_by") != current_user.id):
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Assignment not found")
+    assignment = rows[0]
+    if not is_recipient(supabase_client, str(assignment_id), str(student_id)):
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Student is not an assignment recipient")
+    state = recalculate_assignment_grade(supabase_client, assignment, str(student_id))
+    grade = state["grade"]
+    updated = supabase_client.table("assignment_grades").update({
+        "teacher_override_score": payload.score,
+        "final_score": payload.score,
+        "grading_status": "graded",
+        "graded_by": current_user.id,
+        "graded_at": datetime.now(timezone.utc).isoformat(),
+        "override_reason": payload.override_reason.strip(),
+        "updated_at": datetime.now(timezone.utc).isoformat(),
+    }).eq("id", grade["id"]).execute().data or []
+    grade = updated[0] if updated else grade
+    progress = state["progress"]
+    submission_rows = supabase_client.table("assessment_submissions").select("*").eq("assignment_id", str(assignment_id)).eq("student_id", str(student_id)).limit(1).execute().data or []
+    submission = submission_rows[0] if submission_rows else None
+    profile_rows = supabase_client.table("profiles").select("display_name").eq("id", str(student_id)).limit(1).execute().data or []
+    return AssignmentGradebookItem(student_id=str(student_id), student_name=profile_rows[0].get("display_name") if profile_rows else None, work_status=progress.get("status", "not_started"), completed_items=progress.get("completed_items", 0), total_items=progress.get("total_items", 0), submitted_at=submission.get("submitted_at") if submission else None, is_locked=bool(submission and submission.get("is_locked")), grading_status="graded", auto_score=grade.get("auto_score"), final_score=grade.get("final_score"), teacher_override_score=grade.get("teacher_override_score"), recordings=[AssessmentSubmissionRecording(**recording) for recording in (submission.get("recordings") or [])] if submission else [], details=grade.get("details") or {})

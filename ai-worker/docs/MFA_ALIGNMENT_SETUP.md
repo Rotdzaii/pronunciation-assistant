@@ -11,6 +11,8 @@ Acoustic model: english_mfa
 
 This repository does not include MFA, acoustic models, dictionaries, audio, TextGrids, or checkpoints. The current development environment used for the Phase 4A unit tests did not have an `mfa` executable, so an end-to-end MFA version must be recorded when it is run locally:
 
+**PowerShell**
+
 ```powershell
 mfa version
 ```
@@ -20,6 +22,8 @@ MFA 3.3 and 3.4 documentation uses the same `mfa align` workflow. MFA 4 changes 
 ## Local install
 
 Install MFA with Conda, then download the required models:
+
+**PowerShell**
 
 ```powershell
 conda create -n aligner -c conda-forge montreal-forced-aligner
@@ -35,6 +39,7 @@ Set `ai-worker/.env` after the command succeeds:
 ```dotenv
 ALIGNMENT_MODE=mfa
 ALLOW_ALIGNMENT_FALLBACK=true
+MFA_RUNTIME=conda
 MFA_COMMAND=mfa
 MFA_CONDA_ENV=aligner
 MFA_DICTIONARY_PATH=english_us_mfa
@@ -45,13 +50,18 @@ MFA_KEEP_DEBUG_ARTIFACTS=false
 
 `MFA_DICTIONARY_PATH` and `MFA_ACOUSTIC_MODEL_PATH` may be MFA model names or local files. For a local dictionary file, the worker checks OOV words before invoking MFA. For an MFA registry name, it preserves the MFA-reported OOV error because the vocabulary is owned by MFA.
 
-On Windows, either activate the Conda environment before starting the worker or set `MFA_CONDA_ENV`. Existing WSL mode remains supported with `MFA_WSL_DISTRO`, `MFA_WSL_USER`, and `MFA_WSL_BINARY`; its dictionary and acoustic-model paths must be valid inside WSL.
+On Windows, use the `aligner` Conda runtime through `MFA_RUNTIME=conda` and
+`MFA_CONDA_ENV=aligner`. The documented local workflow does not use WSL. Windows
+Smart App Control can block an unsigned `_kalpy.pyd`; resolve that policy/trust
+block before retrying MFA.
 
 ## Docker validation
 
 The repository's current shared Docker image installs FFmpeg and worker dependencies but does not install MFA. Its compose file deliberately sets `ALIGNMENT_MODE=fallback`, so it must not be presented as MFA validation.
 
 Use the official MFA container for a separate alignment readiness check. Prepare `/data/corpus/example.wav` and `/data/corpus/example.lab`, then run:
+
+**PowerShell**
 
 ```powershell
 docker image pull mmcauliffe/montreal-forced-aligner:latest

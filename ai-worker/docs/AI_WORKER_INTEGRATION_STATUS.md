@@ -30,7 +30,8 @@ These pieces are intentionally marked as scaffold or heuristic where appropriate
 ## Future Work
 
 - Real MFA setup and validation on safe local audio.
-- Real GOP/CaGOP acoustic posterior or likelihood scoring.
+- Audited correct samples, a learned correctness head, and later a learned
+  quality/scoring head when appropriate supervised labels exist.
 - Calibration of score and severity thresholds.
 - Backend migration for a dedicated `ai_result` JSONB column if needed.
 - Frontend display mapping for top issues and segment feedback.

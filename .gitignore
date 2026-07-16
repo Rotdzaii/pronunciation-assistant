@@ -38,6 +38,10 @@ data/samples/*.wav
 docs/
 !fastapi-backend/docs/
 !fastapi-backend/docs/demo-data.md
+!ai-worker/docs/
+!ai-worker/docs/*.md
+!ai-training/docs/
+!ai-training/docs/*.md
 
 # Local quarantine files
 _quarantine/

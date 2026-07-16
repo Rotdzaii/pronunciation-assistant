@@ -2,19 +2,25 @@
 
 ## Purpose
 
-The hybrid diagnosis layer combines alignment, CNN Attention segment diagnosis, and segmental scoring into a clearer AI Worker output for the app.
+The hybrid diagnosis layer combines alignment and CNN Attention segment
+diagnosis into a clearer AI Worker output for the app.
 
-It does not train a model, implement real GOP, or turn classifier confidence into a pronunciation score.
+It does not train a model, add a GOP runtime, or turn classifier confidence
+into a pronunciation score.
 
 ## Why Hybrid Is Needed
 
-CNN Attention predicts error type. Alignment provides approximate or forced locations. Scoring provides pronunciation score/severity evidence. A single app response needs all three, but each signal has different meaning and reliability.
+CNN Attention predicts error type. Alignment provides approximate or forced
+locations. The current model does not provide pronunciation score/severity
+evidence. A single app response needs diagnosis and location reliability, and
+must keep those signals separate.
 
 Hybrid diagnosis keeps these roles separate:
 
 - diagnosis confidence: confidence in a predicted error class
-- pronunciation score: segmental score from scoring output
-- severity: user-facing issue level derived from score and diagnosis evidence
+- pronunciation score: unavailable until a learned quality head is trained
+- severity: advisory issue level derived from diagnosis and reliability, not a
+  pronunciation score
 - feedback: practice guidance generated from the selected top issues
 
 ## Current Inputs
@@ -23,12 +29,11 @@ The current scaffold uses:
 
 - alignment result from `alignment_service`
 - CNN Attention segment predictions
-- `heuristic_gop` scoring result
+- optional heuristic diagnostic data, never a public score
 
 The hybrid layer selects top issues by combining:
 
 - predicted error type is not `unknown`
-- lower phone score when available
 - higher diagnosis confidence
 
 ## Current Output
@@ -51,7 +56,8 @@ Aligned CNN Attention results include these fields under `diagnosis` and `metada
 
 Fallback alignment is approximate and limits location reliability.
 
-`heuristic_gop` is not real GOP. It is a temporary scaffold without acoustic posterior or phone likelihood scoring.
+`heuristic_gop` is internal diagnostic scaffolding, not a public pronunciation
+score. GOP/CaGOP is not the Phoenix v2 roadmap.
 
 Classifier confidence remains diagnosis confidence. It must not be displayed as pronunciation correctness.
 
@@ -60,8 +66,8 @@ Classifier confidence remains diagnosis confidence. It must not be displayed as 
 Planned upgrades:
 
 - replace fallback alignment with MFA phone boundaries where available
-- replace `heuristic_gop` with real GOP/CaGOP scoring
-- calibrate severity thresholds with validation data
-- tune hybrid issue ranking using real alignment and scoring reliability
+- add audited correct samples and a learned correctness head
+- research a learned quality head after obtaining suitable quality labels
+- tune hybrid issue ranking using alignment and learned-output reliability
 
 Until those pieces exist, hybrid output must continue to label fallback and heuristic components honestly.

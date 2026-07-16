@@ -64,12 +64,12 @@ export default function WordToken({ word, status }: Props) {
     <View
       style={[
         styles.wrapper,
-        cfg.bgColor && {
+        cfg.bgColor ? {
           backgroundColor: cfg.bgColor,
           paddingHorizontal: 8,
           paddingVertical: 4,
           borderRadius: radius.sm,   // 8 dp — rounded-lg
-        },
+        } : undefined,
       ]}
     >
       <Text style={[styles.word, { color: cfg.textColor }]}>

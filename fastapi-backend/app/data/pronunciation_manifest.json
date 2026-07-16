@@ -1,0 +1,582 @@
+{
+  "generated_at": "2026-07-11T05:42:17.848277+00:00",
+  "supabase_url": "https://wlvmuuktpzficbaugwqw.supabase.co",
+  "bucket": "pronunciation-audio",
+  "phonemes": {
+    "/l/": {
+      "storage_path": "phonemes/Alveolar_lateral_approximant.ogg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Alveolar_lateral_approximant.ogg",
+      "direct_url": "https://upload.wikimedia.org/wikipedia/commons/b/bc/Alveolar_lateral_approximant.ogg",
+      "license": "CC BY-SA 3.0"
+    },
+    "/n/": {
+      "storage_path": "phonemes/Alveolar_nasal.ogg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Alveolar_nasal.ogg",
+      "direct_url": "https://upload.wikimedia.org/wikipedia/commons/2/29/Alveolar_nasal.ogg",
+      "license": "CC BY-SA 3.0"
+    },
+    "/m/": {
+      "storage_path": "phonemes/Bilabial_nasal.ogg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Bilabial_nasal.ogg",
+      "direct_url": "https://upload.wikimedia.org/wikipedia/commons/a/a9/Bilabial_nasal.ogg",
+      "license": "CC BY-SA 3.0"
+    },
+    "/e/": {
+      "storage_path": "phonemes/Close-mid_front_unrounded_vowel.ogg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Close-mid_front_unrounded_vowel.ogg",
+      "direct_url": "https://upload.wikimedia.org/wikipedia/commons/6/6c/Close-mid_front_unrounded_vowel.ogg",
+      "license": "CC BY-SA 3.0"
+    },
+    "/uː/": {
+      "storage_path": "phonemes/Close_back_rounded_vowel.ogg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Close_back_rounded_vowel.ogg",
+      "direct_url": "https://upload.wikimedia.org/wikipedia/commons/5/5d/Close_back_rounded_vowel.ogg",
+      "license": "CC BY-SA 3.0"
+    },
+    "/iː/": {
+      "storage_path": "phonemes/Close_front_unrounded_vowel.ogg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Close_front_unrounded_vowel.ogg",
+      "direct_url": "https://upload.wikimedia.org/wikipedia/commons/9/91/Close_front_unrounded_vowel.ogg",
+      "license": "CC BY-SA 3.0"
+    },
+    "/ə/": {
+      "storage_path": "phonemes/Mid-central_vowel.ogg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Mid-central_vowel.ogg",
+      "direct_url": "https://upload.wikimedia.org/wikipedia/commons/d/d9/Mid-central_vowel.ogg",
+      "license": "CC BY-SA 3.0"
+    },
+    "/ʊ/": {
+      "storage_path": "phonemes/Near-close_near-back_rounded_vowel.ogg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Near-close_near-back_rounded_vowel.ogg",
+      "direct_url": "https://upload.wikimedia.org/wikipedia/commons/d/d5/Near-close_near-back_rounded_vowel.ogg",
+      "license": "CC BY-SA 3.0"
+    },
+    "/ɪ/": {
+      "storage_path": "phonemes/Near-close_near-front_unrounded_vowel.ogg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Near-close_near-front_unrounded_vowel.ogg",
+      "direct_url": "https://upload.wikimedia.org/wikipedia/commons/4/4c/Near-close_near-front_unrounded_vowel.ogg",
+      "license": "CC BY-SA 3.0"
+    },
+    "/æ/": {
+      "storage_path": "phonemes/Near-open_front_unrounded_vowel.ogg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Near-open_front_unrounded_vowel.ogg",
+      "direct_url": "https://upload.wikimedia.org/wikipedia/commons/c/c9/Near-open_front_unrounded_vowel.ogg",
+      "license": "CC BY-SA 3.0"
+    },
+    "/ɔː/": {
+      "storage_path": "phonemes/Open-mid_back_rounded_vowel.ogg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Open-mid_back_rounded_vowel.ogg",
+      "direct_url": "https://upload.wikimedia.org/wikipedia/commons/0/02/Open-mid_back_rounded_vowel.ogg",
+      "license": "CC BY-SA 3.0"
+    },
+    "/ʌ/": {
+      "storage_path": "phonemes/Open-mid_back_unrounded_vowel.ogg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Open-mid_back_unrounded_vowel.ogg",
+      "direct_url": "https://upload.wikimedia.org/wikipedia/commons/9/92/Open-mid_back_unrounded_vowel.ogg",
+      "license": "CC BY-SA 3.0"
+    },
+    "/ɜː/": {
+      "storage_path": "phonemes/Open-mid_central_unrounded_vowel.ogg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Open-mid_central_unrounded_vowel.ogg",
+      "direct_url": "https://upload.wikimedia.org/wikipedia/commons/0/01/Open-mid_central_unrounded_vowel.ogg",
+      "license": "CC BY-SA 3.0"
+    },
+    "/ɒ/": {
+      "storage_path": "phonemes/Open_back_rounded_vowel.ogg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Open_back_rounded_vowel.ogg",
+      "direct_url": "https://upload.wikimedia.org/wikipedia/commons/0/0a/Open_back_rounded_vowel.ogg",
+      "license": "CC BY-SA 3.0"
+    },
+    "/ɑː/": {
+      "storage_path": "phonemes/Open_back_unrounded_vowel.ogg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Open_back_unrounded_vowel.ogg",
+      "direct_url": "https://upload.wikimedia.org/wikipedia/commons/e/e5/Open_back_unrounded_vowel.ogg",
+      "license": "CC BY-SA 3.0"
+    },
+    "/j/": {
+      "storage_path": "phonemes/Palatal_approximant.ogg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Palatal_approximant.ogg",
+      "direct_url": "https://upload.wikimedia.org/wikipedia/commons/e/e8/Palatal_approximant.ogg",
+      "license": "CC BY-SA 3.0"
+    },
+    "/ŋ/": {
+      "storage_path": "phonemes/Velar_nasal.ogg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Velar_nasal.ogg",
+      "direct_url": "https://upload.wikimedia.org/wikipedia/commons/3/39/Velar_nasal.ogg",
+      "license": "CC BY-SA 3.0"
+    },
+    "/d/": {
+      "storage_path": "phonemes/Voiced_alveolar_plosive.ogg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Voiced_alveolar_plosive.ogg",
+      "direct_url": "https://upload.wikimedia.org/wikipedia/commons/0/01/Voiced_alveolar_plosive.ogg",
+      "license": "CC BY-SA 3.0"
+    },
+    "/z/": {
+      "storage_path": "phonemes/Voiced_alveolar_sibilant.ogg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Voiced_alveolar_sibilant.ogg",
+      "direct_url": "https://upload.wikimedia.org/wikipedia/commons/c/c0/Voiced_alveolar_sibilant.ogg",
+      "license": "CC BY-SA 3.0"
+    },
+    "/b/": {
+      "storage_path": "phonemes/Voiced_bilabial_plosive.ogg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Voiced_bilabial_plosive.ogg",
+      "direct_url": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Voiced_bilabial_plosive.ogg",
+      "license": "CC BY-SA 3.0"
+    },
+    "/ð/": {
+      "storage_path": "phonemes/Voiced_dental_fricative.ogg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Voiced_dental_fricative.ogg",
+      "direct_url": "https://upload.wikimedia.org/wikipedia/commons/6/6a/Voiced_dental_fricative.ogg",
+      "license": "CC BY-SA 3.0"
+    },
+    "/w/": {
+      "storage_path": "phonemes/Voiced_labio-velar_approximant.ogg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Voiced_labio-velar_approximant.ogg",
+      "direct_url": "https://upload.wikimedia.org/wikipedia/commons/f/f2/Voiced_labio-velar_approximant.ogg",
+      "license": "CC BY-SA 3.0"
+    },
+    "/v/": {
+      "storage_path": "phonemes/Voiced_labiodental_fricative.ogg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Voiced_labiodental_fricative.ogg",
+      "direct_url": "https://upload.wikimedia.org/wikipedia/commons/8/85/Voiced_labiodental_fricative.ogg",
+      "license": "CC BY-SA 3.0"
+    },
+    "/dʒ/": {
+      "storage_path": "phonemes/Voiced_palato-alveolar_affricate.ogg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Voiced_palato-alveolar_affricate.ogg",
+      "direct_url": "https://upload.wikimedia.org/wikipedia/commons/e/e6/Voiced_palato-alveolar_affricate.ogg",
+      "license": "CC BY-SA 3.0"
+    },
+    "/ʒ/": {
+      "storage_path": "phonemes/Voiced_palato-alveolar_sibilant.ogg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Voiced_palato-alveolar_sibilant.ogg",
+      "direct_url": "https://upload.wikimedia.org/wikipedia/commons/3/30/Voiced_palato-alveolar_sibilant.ogg",
+      "license": "CC BY-SA 3.0"
+    },
+    "/ɡ/": {
+      "storage_path": "phonemes/Voiced_velar_plosive.ogg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Voiced_velar_plosive.ogg",
+      "direct_url": "https://upload.wikimedia.org/wikipedia/commons/b/b4/Voiced_velar_plosive.ogg",
+      "license": "CC BY-SA 3.0"
+    },
+    "/t/": {
+      "storage_path": "phonemes/Voiceless_alveolar_plosive.ogg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Voiceless_alveolar_plosive.ogg",
+      "direct_url": "https://upload.wikimedia.org/wikipedia/commons/0/02/Voiceless_alveolar_plosive.ogg",
+      "license": "CC BY-SA 3.0"
+    },
+    "/s/": {
+      "storage_path": "phonemes/Voiceless_alveolar_sibilant.ogg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Voiceless_alveolar_sibilant.ogg",
+      "direct_url": "https://upload.wikimedia.org/wikipedia/commons/a/ac/Voiceless_alveolar_sibilant.ogg",
+      "license": "CC BY-SA 3.0"
+    },
+    "/p/": {
+      "storage_path": "phonemes/Voiceless_bilabial_plosive.ogg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Voiceless_bilabial_plosive.ogg",
+      "direct_url": "https://upload.wikimedia.org/wikipedia/commons/5/51/Voiceless_bilabial_plosive.ogg",
+      "license": "CC BY-SA 3.0"
+    },
+    "/θ/": {
+      "storage_path": "phonemes/Voiceless_dental_fricative.ogg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Voiceless_dental_fricative.ogg",
+      "direct_url": "https://upload.wikimedia.org/wikipedia/commons/8/80/Voiceless_dental_fricative.ogg",
+      "license": "CC BY-SA 3.0"
+    },
+    "/h/": {
+      "storage_path": "phonemes/Voiceless_glottal_fricative.ogg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Voiceless_glottal_fricative.ogg",
+      "direct_url": "https://upload.wikimedia.org/wikipedia/commons/d/da/Voiceless_glottal_fricative.ogg",
+      "license": "CC BY-SA 3.0"
+    },
+    "/f/": {
+      "storage_path": "phonemes/Voiceless_labiodental_fricative.ogg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Voiceless_labiodental_fricative.ogg",
+      "direct_url": "https://upload.wikimedia.org/wikipedia/commons/3/33/Voiceless_labiodental_fricative.ogg",
+      "license": "CC BY-SA 3.0"
+    },
+    "/tʃ/": {
+      "storage_path": "phonemes/Voiceless_palato-alveolar_affricate.ogg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Voiceless_palato-alveolar_affricate.ogg",
+      "direct_url": "https://upload.wikimedia.org/wikipedia/commons/9/97/Voiceless_palato-alveolar_affricate.ogg",
+      "license": "CC BY-SA 3.0"
+    },
+    "/ʃ/": {
+      "storage_path": "phonemes/Voiceless_palato-alveolar_sibilant.ogg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Voiceless_palato-alveolar_sibilant.ogg",
+      "direct_url": "https://upload.wikimedia.org/wikipedia/commons/c/cc/Voiceless_palato-alveolar_sibilant.ogg",
+      "license": "CC BY-SA 3.0"
+    },
+    "/r/": {
+      "storage_path": "phonemes/Alveolar_approximant.ogg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Alveolar_approximant.ogg",
+      "direct_url": "https://upload.wikimedia.org/wikipedia/commons/1/1f/Alveolar_approximant.ogg",
+      "license": "CC BY-SA 3.0"
+    },
+    "/k/": {
+      "storage_path": "phonemes/Voiceless_velar_plosive.ogg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Voiceless_velar_plosive.ogg",
+      "direct_url": "https://upload.wikimedia.org/wikipedia/commons/e/e3/Voiceless_velar_plosive.ogg",
+      "license": "CC BY-SA 3.0"
+    }
+  },
+  "words": {
+    "architecture": {
+      "storage_path": "words/architecture.mp3",
+      "source_url": "https://api.dictionaryapi.dev/api/v2/entries/en/architecture",
+      "audio_source_url": "https://api.dictionaryapi.dev/media/pronunciations/en/architecture-us.mp3",
+      "license": "CC BY-SA 3.0"
+    },
+    "bag": {
+      "storage_path": "words/bag.mp3",
+      "source_url": "https://api.dictionaryapi.dev/api/v2/entries/en/bag",
+      "audio_source_url": "https://api.dictionaryapi.dev/media/pronunciations/en/bag-au.mp3",
+      "license": "CC BY-SA 3.0"
+    },
+    "book": {
+      "storage_path": "words/book.mp3",
+      "source_url": "https://api.dictionaryapi.dev/api/v2/entries/en/book",
+      "audio_source_url": "https://api.dictionaryapi.dev/media/pronunciations/en/book-uk.mp3",
+      "license": "CC BY-SA 3.0"
+    },
+    "boy": {
+      "storage_path": "words/boy.mp3",
+      "source_url": "https://api.dictionaryapi.dev/api/v2/entries/en/boy",
+      "audio_source_url": "https://api.dictionaryapi.dev/media/pronunciations/en/boy-us.mp3",
+      "license": "CC BY-SA 3.0"
+    },
+    "breakfast": {
+      "storage_path": "words/breakfast.mp3",
+      "source_url": "https://api.dictionaryapi.dev/api/v2/entries/en/breakfast",
+      "audio_source_url": "https://api.dictionaryapi.dev/media/pronunciations/en/breakfast-uk.mp3",
+      "license": "CC BY-SA 3.0"
+    },
+    "chat": {
+      "storage_path": "words/chat.mp3",
+      "source_url": "https://api.dictionaryapi.dev/api/v2/entries/en/chat",
+      "audio_source_url": "https://api.dictionaryapi.dev/media/pronunciations/en/chat-au.mp3",
+      "license": "CC BY-SA 3.0"
+    },
+    "cheap": {
+      "storage_path": "words/cheap.mp3",
+      "source_url": "https://api.dictionaryapi.dev/api/v2/entries/en/cheap",
+      "audio_source_url": "https://api.dictionaryapi.dev/media/pronunciations/en/cheap-uk.mp3",
+      "license": "CC BY-SA 3.0"
+    },
+    "chip": {
+      "storage_path": "words/chip.mp3",
+      "source_url": "https://api.dictionaryapi.dev/api/v2/entries/en/chip",
+      "audio_source_url": "https://api.dictionaryapi.dev/media/pronunciations/en/chip-au.mp3",
+      "license": "CC BY-SA 3.0"
+    },
+    "class": {
+      "storage_path": "words/class.mp3",
+      "source_url": "https://api.dictionaryapi.dev/api/v2/entries/en/class",
+      "audio_source_url": "https://api.dictionaryapi.dev/media/pronunciations/en/class-uk.mp3",
+      "license": "CC BY-SA 3.0"
+    },
+    "click": {
+      "storage_path": "words/click.mp3",
+      "source_url": "https://api.dictionaryapi.dev/api/v2/entries/en/click",
+      "audio_source_url": "https://api.dictionaryapi.dev/media/pronunciations/en/click-uk.mp3",
+      "license": "CC BY-SA 3.0"
+    },
+    "clock": {
+      "storage_path": "words/clock.mp3",
+      "source_url": "https://api.dictionaryapi.dev/api/v2/entries/en/clock",
+      "audio_source_url": "https://api.dictionaryapi.dev/media/pronunciations/en/clock-uk.mp3",
+      "license": "CC BY-SA 3.0"
+    },
+    "day": {
+      "storage_path": "words/day.mp3",
+      "source_url": "https://api.dictionaryapi.dev/api/v2/entries/en/day",
+      "audio_source_url": "https://api.dictionaryapi.dev/media/pronunciations/en/day-us.mp3",
+      "license": "CC BY-SA 3.0"
+    },
+    "desk": {
+      "storage_path": "words/desk.mp3",
+      "source_url": "https://api.dictionaryapi.dev/api/v2/entries/en/desk",
+      "audio_source_url": "https://api.dictionaryapi.dev/media/pronunciations/en/desk-us.mp3",
+      "license": "CC BY-SA 3.0"
+    },
+    "email": {
+      "storage_path": "words/email.mp3",
+      "source_url": "https://api.dictionaryapi.dev/api/v2/entries/en/email",
+      "audio_source_url": "https://api.dictionaryapi.dev/media/pronunciations/en/email-1-us.mp3",
+      "license": "CC BY-SA 3.0"
+    },
+    "family": {
+      "storage_path": "words/family.mp3",
+      "source_url": "https://api.dictionaryapi.dev/api/v2/entries/en/family",
+      "audio_source_url": "https://api.dictionaryapi.dev/media/pronunciations/en/family-uk.mp3",
+      "license": "CC BY-SA 3.0"
+    },
+    "glass": {
+      "storage_path": "words/glass.mp3",
+      "source_url": "https://api.dictionaryapi.dev/api/v2/entries/en/glass",
+      "audio_source_url": "https://api.dictionaryapi.dev/media/pronunciations/en/glass-uk.mp3",
+      "license": "CC BY-SA 3.0"
+    },
+    "go": {
+      "storage_path": "words/go.mp3",
+      "source_url": "https://api.dictionaryapi.dev/api/v2/entries/en/go",
+      "audio_source_url": "https://api.dictionaryapi.dev/media/pronunciations/en/go-1-au.mp3",
+      "license": "CC BY-SA 3.0"
+    },
+    "here": {
+      "storage_path": "words/here.mp3",
+      "source_url": "https://api.dictionaryapi.dev/api/v2/entries/en/here",
+      "audio_source_url": "https://api.dictionaryapi.dev/media/pronunciations/en/here-uk.mp3",
+      "license": "CC BY-SA 3.0"
+    },
+    "hotel": {
+      "storage_path": "words/hotel.mp3",
+      "source_url": "https://api.dictionaryapi.dev/api/v2/entries/en/hotel",
+      "audio_source_url": "https://api.dictionaryapi.dev/media/pronunciations/en/hotel-us.mp3",
+      "license": "CC BY-SA 3.0"
+    },
+    "kitchen": {
+      "storage_path": "words/kitchen.mp3",
+      "source_url": "https://api.dictionaryapi.dev/api/v2/entries/en/kitchen",
+      "audio_source_url": "https://api.dictionaryapi.dev/media/pronunciations/en/kitchen-uk.mp3",
+      "license": "CC BY-SA 3.0"
+    },
+    "lesson": {
+      "storage_path": "words/lesson.mp3",
+      "source_url": "https://api.dictionaryapi.dev/api/v2/entries/en/lesson",
+      "audio_source_url": "https://api.dictionaryapi.dev/media/pronunciations/en/lesson-uk.mp3",
+      "license": "CC BY-SA 3.0"
+    },
+    "light": {
+      "storage_path": "words/light.mp3",
+      "source_url": "https://api.dictionaryapi.dev/api/v2/entries/en/light",
+      "audio_source_url": "https://api.dictionaryapi.dev/media/pronunciations/en/light-uk.mp3",
+      "license": "CC BY-SA 3.0"
+    },
+    "map": {
+      "storage_path": "words/map.mp3",
+      "source_url": "https://api.dictionaryapi.dev/api/v2/entries/en/map",
+      "audio_source_url": "https://api.dictionaryapi.dev/media/pronunciations/en/map-uk.mp3",
+      "license": "CC BY-SA 3.0"
+    },
+    "milk": {
+      "storage_path": "words/milk.mp3",
+      "source_url": "https://api.dictionaryapi.dev/api/v2/entries/en/milk",
+      "audio_source_url": "https://api.dictionaryapi.dev/media/pronunciations/en/milk-uk.mp3",
+      "license": "CC BY-SA 3.0"
+    },
+    "mother": {
+      "storage_path": "words/mother.mp3",
+      "source_url": "https://api.dictionaryapi.dev/api/v2/entries/en/mother",
+      "audio_source_url": "https://api.dictionaryapi.dev/media/pronunciations/en/mother-au.mp3",
+      "license": "CC BY-SA 3.0"
+    },
+    "now": {
+      "storage_path": "words/now.mp3",
+      "source_url": "https://api.dictionaryapi.dev/api/v2/entries/en/now",
+      "audio_source_url": "https://api.dictionaryapi.dev/media/pronunciations/en/now-uk.mp3",
+      "license": "CC BY-SA 3.0"
+    },
+    "pen": {
+      "storage_path": "words/pen.mp3",
+      "source_url": "https://api.dictionaryapi.dev/api/v2/entries/en/pen",
+      "audio_source_url": "https://api.dictionaryapi.dev/media/pronunciations/en/pen.mp3",
+      "license": "CC BY-SA 3.0"
+    },
+    "phone": {
+      "storage_path": "words/phone.mp3",
+      "source_url": "https://api.dictionaryapi.dev/api/v2/entries/en/phone",
+      "audio_source_url": "https://api.dictionaryapi.dev/media/pronunciations/en/phone-uk.mp3",
+      "license": "CC BY-SA 3.0"
+    },
+    "report": {
+      "storage_path": "words/report.mp3",
+      "source_url": "https://api.dictionaryapi.dev/api/v2/entries/en/report",
+      "audio_source_url": "https://api.dictionaryapi.dev/media/pronunciations/en/report-us.mp3",
+      "license": "CC BY-SA 3.0"
+    },
+    "rice": {
+      "storage_path": "words/rice.mp3",
+      "source_url": "https://api.dictionaryapi.dev/api/v2/entries/en/rice",
+      "audio_source_url": "https://api.dictionaryapi.dev/media/pronunciations/en/rice-uk.mp3",
+      "license": "CC BY-SA 3.0"
+    },
+    "right": {
+      "storage_path": "words/right.mp3",
+      "source_url": "https://api.dictionaryapi.dev/api/v2/entries/en/right",
+      "audio_source_url": "https://api.dictionaryapi.dev/media/pronunciations/en/right-au.mp3",
+      "license": "CC BY-SA 3.0"
+    },
+    "road": {
+      "storage_path": "words/road.mp3",
+      "source_url": "https://api.dictionaryapi.dev/api/v2/entries/en/road",
+      "audio_source_url": "https://api.dictionaryapi.dev/media/pronunciations/en/road-uk.mp3",
+      "license": "CC BY-SA 3.0"
+    },
+    "schedule": {
+      "storage_path": "words/schedule.mp3",
+      "source_url": "https://api.dictionaryapi.dev/api/v2/entries/en/schedule",
+      "audio_source_url": "https://api.dictionaryapi.dev/media/pronunciations/en/schedule-au.mp3",
+      "license": "CC BY-SA 3.0"
+    },
+    "screen": {
+      "storage_path": "words/screen.mp3",
+      "source_url": "https://api.dictionaryapi.dev/api/v2/entries/en/screen",
+      "audio_source_url": "https://api.dictionaryapi.dev/media/pronunciations/en/screen-au.mp3",
+      "license": "CC BY-SA 3.0"
+    },
+    "seat": {
+      "storage_path": "words/seat.mp3",
+      "source_url": "https://api.dictionaryapi.dev/api/v2/entries/en/seat",
+      "audio_source_url": "https://api.dictionaryapi.dev/media/pronunciations/en/seat-us.mp3",
+      "license": "CC BY-SA 3.0"
+    },
+    "sheep": {
+      "storage_path": "words/sheep.mp3",
+      "source_url": "https://api.dictionaryapi.dev/api/v2/entries/en/sheep",
+      "audio_source_url": "https://api.dictionaryapi.dev/media/pronunciations/en/sheep-uk.mp3",
+      "license": "CC BY-SA 3.0"
+    },
+    "ship": {
+      "storage_path": "words/ship.mp3",
+      "source_url": "https://api.dictionaryapi.dev/api/v2/entries/en/ship",
+      "audio_source_url": "https://api.dictionaryapi.dev/media/pronunciations/en/ship-us.mp3",
+      "license": "CC BY-SA 3.0"
+    },
+    "sit": {
+      "storage_path": "words/sit.mp3",
+      "source_url": "https://api.dictionaryapi.dev/api/v2/entries/en/sit",
+      "audio_source_url": "https://api.dictionaryapi.dev/media/pronunciations/en/sit-au.mp3",
+      "license": "CC BY-SA 3.0"
+    },
+    "station": {
+      "storage_path": "words/station.mp3",
+      "source_url": "https://api.dictionaryapi.dev/api/v2/entries/en/station",
+      "audio_source_url": "https://api.dictionaryapi.dev/media/pronunciations/en/station-au.mp3",
+      "license": "CC BY-SA 3.0"
+    },
+    "street": {
+      "storage_path": "words/street.mp3",
+      "source_url": "https://api.dictionaryapi.dev/api/v2/entries/en/street",
+      "audio_source_url": "https://api.dictionaryapi.dev/media/pronunciations/en/street-uk.mp3",
+      "license": "CC BY-SA 3.0"
+    },
+    "student": {
+      "storage_path": "words/student.mp3",
+      "source_url": "https://api.dictionaryapi.dev/api/v2/entries/en/student",
+      "audio_source_url": "https://api.dictionaryapi.dev/media/pronunciations/en/student-uk.mp3",
+      "license": "CC BY-SA 3.0"
+    },
+    "sure": {
+      "storage_path": "words/sure.mp3",
+      "source_url": "https://api.dictionaryapi.dev/api/v2/entries/en/sure",
+      "audio_source_url": "https://api.dictionaryapi.dev/media/pronunciations/en/sure-us.mp3",
+      "license": "CC BY-SA 3.0"
+    },
+    "teacher": {
+      "storage_path": "words/teacher.mp3",
+      "source_url": "https://api.dictionaryapi.dev/api/v2/entries/en/teacher",
+      "audio_source_url": "https://api.dictionaryapi.dev/media/pronunciations/en/teacher-uk.mp3",
+      "license": "CC BY-SA 3.0"
+    },
+    "there": {
+      "storage_path": "words/there.mp3",
+      "source_url": "https://api.dictionaryapi.dev/api/v2/entries/en/there",
+      "audio_source_url": "https://api.dictionaryapi.dev/media/pronunciations/en/there-uk.mp3",
+      "license": "CC BY-SA 3.0"
+    },
+    "think": {
+      "storage_path": "words/think.mp3",
+      "source_url": "https://api.dictionaryapi.dev/api/v2/entries/en/think",
+      "audio_source_url": "https://api.dictionaryapi.dev/media/pronunciations/en/think-us.mp3",
+      "license": "CC BY-SA 3.0"
+    },
+    "this": {
+      "storage_path": "words/this.mp3",
+      "source_url": "https://api.dictionaryapi.dev/api/v2/entries/en/this",
+      "audio_source_url": "https://api.dictionaryapi.dev/media/pronunciations/en/this-us.mp3",
+      "license": "CC BY-SA 3.0"
+    },
+    "three": {
+      "storage_path": "words/three.mp3",
+      "source_url": "https://api.dictionaryapi.dev/api/v2/entries/en/three",
+      "audio_source_url": "https://api.dictionaryapi.dev/media/pronunciations/en/three-us.mp3",
+      "license": "CC BY-SA 3.0"
+    },
+    "ticket": {
+      "storage_path": "words/ticket.mp3",
+      "source_url": "https://api.dictionaryapi.dev/api/v2/entries/en/ticket",
+      "audio_source_url": "https://api.dictionaryapi.dev/media/pronunciations/en/ticket-us.mp3",
+      "license": "CC BY-SA 3.0"
+    },
+    "time": {
+      "storage_path": "words/time.mp3",
+      "source_url": "https://api.dictionaryapi.dev/api/v2/entries/en/time",
+      "audio_source_url": "https://api.dictionaryapi.dev/media/pronunciations/en/time-au.mp3",
+      "license": "CC BY-SA 3.0"
+    },
+    "train": {
+      "storage_path": "words/train.mp3",
+      "source_url": "https://api.dictionaryapi.dev/api/v2/entries/en/train",
+      "audio_source_url": "https://api.dictionaryapi.dev/media/pronunciations/en/train-1-au.mp3",
+      "license": "CC BY-SA 3.0"
+    },
+    "travel": {
+      "storage_path": "words/travel.mp3",
+      "source_url": "https://api.dictionaryapi.dev/api/v2/entries/en/travel",
+      "audio_source_url": "https://api.dictionaryapi.dev/media/pronunciations/en/travel-us.mp3",
+      "license": "CC BY-SA 3.0"
+    },
+    "video": {
+      "storage_path": "words/video.mp3",
+      "source_url": "https://api.dictionaryapi.dev/api/v2/entries/en/video",
+      "audio_source_url": "https://api.dictionaryapi.dev/media/pronunciations/en/video-us.mp3",
+      "license": "CC BY-SA 3.0"
+    },
+    "world": {
+      "storage_path": "words/world.mp3",
+      "source_url": "https://api.dictionaryapi.dev/api/v2/entries/en/world",
+      "audio_source_url": "https://api.dictionaryapi.dev/media/pronunciations/en/world-ca.mp3",
+      "license": "CC BY-SA 3.0"
+    }
+  },
+  "failures": [
+    "phoneme:/iː/",
+    "phoneme:/ɪ/",
+    "phoneme:/e/",
+    "phoneme:/æ/",
+    "phoneme:/ɑː/",
+    "phoneme:/ɒ/",
+    "phoneme:/ɔː/",
+    "phoneme:/ʊ/",
+    "phoneme:/uː/",
+    "phoneme:/ʌ/",
+    "phoneme:/ɜː/",
+    "phoneme:/ə/",
+    "phoneme:/p/",
+    "phoneme:/b/",
+    "phoneme:/t/",
+    "phoneme:/d/",
+    "phoneme:/k/",
+    "phoneme:/ɡ/",
+    "phoneme:/f/",
+    "phoneme:/v/",
+    "phoneme:/θ/",
+    "phoneme:/ð/",
+    "phoneme:/s/",
+    "phoneme:/z/",
+    "phoneme:/ʃ/",
+    "phoneme:/ʒ/",
+    "phoneme:/h/",
+    "phoneme:/tʃ/",
+    "phoneme:/dʒ/",
+    "phoneme:/m/",
+    "phoneme:/n/",
+    "phoneme:/ŋ/",
+    "phoneme:/l/",
+    "phoneme:/r/",
+    "phoneme:/j/",
+    "phoneme:/w/",
+    "word:project"
+  ]
+}

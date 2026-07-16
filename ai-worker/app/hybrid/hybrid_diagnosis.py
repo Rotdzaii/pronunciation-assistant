@@ -209,14 +209,8 @@ def build_hybrid_diagnosis(
     severity = str(primary_issue.get("severity")) if primary_issue else "unknown"
     primary_error_type = primary_issue.get("predicted_error_type") if primary_issue else "unknown"
 
-    problem_phonemes = []
-    for issue in sorted(
-        top_issues,
-        key=lambda item: (float(item.get("start") or 0.0), float(item.get("end") or 0.0)),
-    ):
-        phone = issue.get("phone")
-        if phone and phone not in problem_phonemes:
-            problem_phonemes.append(phone)
+    primary_phone = primary_issue.get("phone") if primary_issue else None
+    problem_phonemes = [primary_phone] if primary_phone else []
 
     return {
         "hybrid_status": "success",

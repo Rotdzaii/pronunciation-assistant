@@ -63,6 +63,26 @@ class DemoMfaPgmqOnceTests(unittest.TestCase):
                 self.module.parse_args()
         self.assertEqual(context.exception.code, 2)
 
+    def test_storage_object_path_is_not_reported_as_local_path(self) -> None:
+        bucket = Mock()
+        bucket.download.return_value = b"queue-audio"
+        client = SimpleNamespace(storage=Mock())
+        client.storage.from_.return_value = bucket
+
+        prepared, download_status, resolved = self.module.prepare_scoring_job(
+            {"audio_url": "student-1/uuid-recording.webm"},
+            storage_client=client,
+            practice_audio_bucket="practice-audios",
+        )
+        try:
+            self.assertEqual(download_status, "storage_object_path")
+            self.assertEqual(prepared["audio_reference_type"], "storage_object_path")
+            self.assertNotEqual(download_status, "local_path")
+            self.assertTrue(Path(prepared["audio_path"]).is_file())
+            bucket.download.assert_called_once_with("student-1/uuid-recording.webm")
+        finally:
+            resolved.cleanup()
+
 
 if __name__ == "__main__":
     unittest.main()

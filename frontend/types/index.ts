@@ -37,6 +37,11 @@ export type AudioUploadResponse = {
   size: number;
 };
 
+export type PracticeHistoryAudioResponse = {
+  audio_url: string;
+  expires_in: number;
+};
+
 export type CreatePracticeJobResponse = {
   job_id: string;
   status: FastApiPracticeJobStatus;
@@ -53,11 +58,41 @@ export type ProblemPhoneme = string | {
   description?: unknown;
 };
 
+export type PhoneResult = {
+  phone: string;
+  status: 'ok' | 'needs_improvement' | 'unknown';
+  error_type?: string | null;
+  start_time?: number | null;
+  end_time?: number | null;
+  diagnosis_confidence?: number | null;
+};
+
+export type ReliabilityStatus = 'valid' | 'valid_with_warning' | 'invalid';
+
+export type PracticeReliability = {
+  status: ReliabilityStatus;
+  forced_alignment: boolean;
+  alignment_method: string | null;
+  warnings: string[];
+  failures: string[];
+};
+
 export type PracticeFeedback = {
   summary?: unknown;
   tips?: unknown;
   message?: unknown;
   text?: unknown;
+  reliability?: PracticeReliability;
+  score_type?: string;
+  primary_feedback?: string | null;
+  display_pronunciation?: string | null;
+  pronunciation_variant?: string | null;
+  expected_phones?: string[];
+  pronunciation_source?: string;
+  phone_results?: PhoneResult[];
+  model_capability?: ModelCapability;
+  diagnosis?: PracticeDiagnosis;
+  predicted_error_type?: PracticeDiagnosis['predicted_error_type'];
   [key: string]: unknown;
 };
 
@@ -274,6 +309,7 @@ export type ClassStudent = {
   id: string;
   email: string | null;
   display_name: string;
+  avatar_url: string | null;
   joined_at: string | null;
   status: string | null;
 };
@@ -351,7 +387,7 @@ export type AssignmentProgress = {
   id: string;
   assignment_id: string;
   student_id: string;
-  status: 'not_started' | 'in_progress' | 'completed' | 'overdue';
+  status: 'not_started' | 'in_progress' | 'completed' | 'submitted' | 'overdue' | 'locked';
   completed_items: number;
   total_items: number;
   completed_at: string | null;
@@ -371,6 +407,9 @@ export type Assignment = {
   due_date: string | null;
   created_at: string;
   updated_at: string;
+  is_assessment?: boolean;
+  deadline?: string | null;
+  timer_per_word_seconds?: number;
 };
 
 export type AssignmentDetail = Assignment & {
@@ -384,6 +423,7 @@ export type AssignmentsListResponse = {
 
 export type StudentAssignment = {
   id: string;
+  assignment_id: string;
   title: string;
   description: string | null;
   content_type: string;
@@ -391,11 +431,26 @@ export type StudentAssignment = {
   class_id: string | null;
   assigned_by: string;
   due_date: string | null;
+  deadline: string | null;
+  is_assessment: boolean;
+  timer_per_word_seconds: number;
+  class_name: string | null;
+  teacher_name: string | null;
   created_at: string;
-  progress_status: 'not_started' | 'in_progress' | 'completed' | 'overdue';
+  progress_status: 'not_started' | 'in_progress' | 'completed' | 'submitted' | 'overdue' | 'locked';
   completed_items: number;
   total_items: number;
   completed_at: string | null;
+  work_status: 'not_started' | 'in_progress' | 'completed' | 'submitted' | 'overdue' | 'locked';
+  grading_status: 'pending' | 'provisional' | 'processing' | 'graded' | 'needs_review';
+  auto_score: number | null;
+  final_score: number | null;
+  is_overdue: boolean;
+  can_start: boolean;
+  can_continue: boolean;
+  started_at: string | null;
+  submitted_at: string | null;
+  is_locked: boolean;
 };
 
 export type AssessmentSubmissionRecording = {
@@ -425,6 +480,35 @@ export type AssignmentStatus = {
   submitted_at: string | null;
   deadline: string | null;
   timer_per_word_seconds: number;
+  work_status: StudentAssignment['work_status'];
+  grading_status: StudentAssignment['grading_status'];
+  can_continue: boolean;
+};
+
+export type ModelCapability = 'error_type_classifier_only' | string;
+
+export type PracticeDiagnosis = {
+  predicted_error_type?: 'addition' | 'deletion' | 'substitution' | 'unknown' | null;
+  suspected_problem_phone?: string | null;
+  diagnosis_confidence?: number | null;
+  confidence_note?: string;
+  is_confirmed_error?: boolean;
+};
+
+export type AssignmentGradebookItem = {
+  student_id: string;
+  student_name: string | null;
+  work_status: StudentAssignment['work_status'];
+  completed_items: number;
+  total_items: number;
+  submitted_at: string | null;
+  is_locked: boolean;
+  grading_status: StudentAssignment['grading_status'];
+  auto_score: number | null;
+  final_score: number | null;
+  teacher_override_score: number | null;
+  recordings: AssessmentSubmissionRecording[];
+  details: Record<string, unknown>;
 };
 
 export type AssignmentWords = {

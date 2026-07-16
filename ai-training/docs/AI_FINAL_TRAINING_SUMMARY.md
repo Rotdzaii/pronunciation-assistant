@@ -99,4 +99,19 @@ These files are local artifacts and must not be committed.
 
 Phase 2 selected `context_0_10` CNN Attention as the current research candidate, and later validation integrated it into the AI Worker flow for the demo pipeline.
 
-Phase 4 should now address the remaining modeling limitations: real forced alignment, real GOP/CaGOP scoring, broader datasets, stronger acoustic models or fine-tuning, score/confidence calibration, and runtime/audio preprocessing optimization.
+Phoenix v2 follows the Deep Learning First decision recorded in
+[ADR: Deep Learning First Pronunciation Scoring](ADR_DEEP_LEARNING_FIRST_PRONUNCIATION_SCORING.md).
+The next modeling phase continues the CNN + Attention + Context line of work,
+adds audited correct-phone samples, and trains a correctness head. A learned
+quality/scoring head is a separate research task and is appropriate only after
+collecting suitable phone- or word-level quality labels.
+
+MFA is the forced-alignment component: it supplies timing for segment
+selection, not pronunciation correctness. Rule-based logic remains limited to
+safety, runtime validation, and reliability handling. GOP/CaGOP was considered
+and rejected as the Phoenix v2 scoring roadmap; neither GOP, heuristic logic,
+nor classifier confidence may be published as a pronunciation score.
+
+Until a learned scorer is trained and validated, public output must use
+`score: null` and `score_type: "unavailable"` while retaining the three-class
+diagnosis where reliability is valid.

@@ -55,7 +55,7 @@ It was selected because it improved speaker-disjoint macro F1 and addition F1 co
 ## 6. What The Current AI Cannot Fully Do Yet
 
 - Cannot claim full Vietnamese-accent pronunciation diagnosis
-- Cannot provide real GOP/CaGOP scoring yet
+- Cannot determine pronunciation correctness or a user-facing 0-100 score
 - Cannot rely on fallback alignment as precise phone timing
 - Cannot treat classifier confidence as pronunciation correctness
 - Cannot fully explain all pronunciation errors
@@ -82,13 +82,12 @@ GPU runtime is future work if inference becomes the bottleneck later.
 ## 9. Missing Pieces For A More Complete Pronunciation Model
 
 1. Real forced alignment
-2. Real GOP/CaGOP
-3. Better phoneme-level scoring
+2. Audited correct-phone samples and a learned correctness head
+3. Quality labels suitable for a learned quality/scoring head
 4. Larger and more diverse datasets
-5. Speaker-independent evaluation with more speakers
-6. Calibration of score/confidence
-7. Stronger acoustic models or fine-tuning
-8. Real user evaluation
+5. Speaker-independent and sentence-safe evaluation with more speakers
+6. Stronger acoustic models or fine-tuning
+7. Real user or teacher-reviewed evaluation
 
 ## 10. Recommended Phase 4 Roadmap
 
@@ -98,29 +97,43 @@ GPU runtime is future work if inference becomes the bottleneck later.
 - TextGrid parsing
 - Phone-level timing reliability
 
-### Phase 4B — Real GOP/CaGOP scoring
+### Phase 4B — Learned correctness modeling
 
-- Acoustic likelihood or posterior-based scoring
-- Calibration
-- Replace `heuristic_gop`
+- Add correct examples alongside addition, deletion, and substitution labels.
+- Train and validate a correctness head while keeping the CNN + Attention +
+  Context architecture family as the baseline.
+- Do not publish heuristic, GOP/CaGOP, or classifier confidence as a score.
 
-### Phase 4C — Dataset expansion
+### Phase 4C — Learned quality/scoring research
+
+- Collect phone- or word-level quality labels with a defined rubric.
+- Train and validate an ordinal or regression quality head only when those
+  labels and a leakage-safe evaluation protocol exist.
+- Until then, publish `score: null` and `score_type: "unavailable"`.
+
+### Phase 4D — Dataset expansion
 
 - Add more public pronunciation datasets if available
 - Normalize schema
 - Avoid simply mixing incompatible labels
 
-### Phase 4D — Stronger model experiment
+### Phase 4E — Stronger model experiment
 
 - Wav2Vec2/HuBERT/Whisper encoder fine-tuning or feature extraction
 - Compare against current CNN Attention context candidate
 
-### Phase 4E — Runtime optimization
+### Phase 4F — Runtime optimization
 
 - Audio decode/preprocessing improvement
 - Local audio vs signed URL benchmark
 - GPU only if inference becomes bottleneck
 
 ## 11. Capstone-Friendly Summary
+
+Architecture update: the legacy paragraph below predates the accepted Deep
+Learning First decision. GOP/CaGOP is not the current roadmap. MFA is forced
+alignment only; current public output uses `score: null` and
+`score_type: "unavailable"` until a learned quality scorer is trained and
+validated.
 
 Mô hình AI hiện tại của hệ thống là một ứng viên nghiên cứu đã được kiểm chứng và tích hợp end-to-end vào quy trình ứng dụng, từ hàng đợi xử lý, AI Worker, webhook backend đến kết quả hiển thị cho người dùng. Ứng viên hiện tại sử dụng CNN Attention với ngữ cảnh `context_0_10` và cho kết quả ổn định hơn baseline trong đánh giá speaker-disjoint trên nhóm người học tiếng Việt. Tuy nhiên, mô hình này chưa được tuyên bố là mô hình chẩn đoán phát âm hoàn chỉnh ở mức production. Các hướng phát triển tiếp theo cần tập trung vào forced alignment thật, GOP/CaGOP thật, mở rộng dữ liệu, thử nghiệm mô hình âm học mạnh hơn và tối ưu hóa runtime, đặc biệt là bước giải mã và tiền xử lý âm thanh.

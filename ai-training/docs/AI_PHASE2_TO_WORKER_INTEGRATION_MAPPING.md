@@ -138,7 +138,7 @@ Do not claim:
 Safe phrasing:
 
 - "Classifier confidence, not pronunciation correctness."
-- "Heuristic/demo score, not production GOP."
+- "Pronunciation score unavailable until a learned quality scorer is trained and validated."
 - "Location reliability depends on alignment quality."
 
 ## Recommended Worker Strategy

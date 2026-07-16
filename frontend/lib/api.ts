@@ -1,6 +1,7 @@
 import type {
   Assignment,
   AssignmentDetail,
+  AssignmentGradebookItem,
   AssignmentsListResponse,
   AssignmentStatus,
   AssignmentWords,
@@ -18,6 +19,7 @@ import type {
   DemoReadinessResponse,
   PracticeHistoryQuery,
   PracticeHistoryResponse,
+  PracticeHistoryAudioResponse,
   PracticeJob,
   ProfileAvatarUploadResponse,
   ReportPracticeResultPayload,
@@ -56,6 +58,7 @@ type CreatePracticeJobPayload = {
   audio_url: string;
   assignment_id?: string | null;
   item_id?: string | null;
+  audio_storage_path?: string | null;
 };
 
 type TeacherReviewRequestQuery = {
@@ -100,11 +103,17 @@ async function parseError(response: Response): Promise<string> {
 
 async function apiFetch<T>(
   path: string,
-  _accessToken: string | null,
+  accessToken: string | null,
   options: RequestInit = {},
 ): Promise<T> {
-  const { data } = await supabase.auth.getSession();
-  const currentAccessToken = data.session?.access_token ?? null;
+  // A just-created Supabase session can arrive before persisted storage and the
+  // auth-state listener have caught up. Prefer the explicitly supplied token
+  // so `/auth/me` never authenticates the signup request as a previous user.
+  let currentAccessToken = accessToken;
+  if (!currentAccessToken) {
+    const { data } = await supabase.auth.getSession();
+    currentAccessToken = data.session?.access_token ?? null;
+  }
 
   if (!currentAccessToken) {
     throw new ApiError(SESSION_EXPIRED_MESSAGE, 401);
@@ -209,6 +218,16 @@ export async function fetchPracticeStatus(
   accessToken: string | null,
 ): Promise<PracticeJob> {
   return apiFetch<PracticeJob>(`/practice/${jobId}`, accessToken);
+}
+
+export async function fetchPracticeHistoryAudio(
+  practiceId: string,
+  accessToken: string | null,
+): Promise<PracticeHistoryAudioResponse> {
+  return apiFetch<PracticeHistoryAudioResponse>(
+    `/practice/history/${encodeURIComponent(practiceId)}/audio`,
+    accessToken,
+  );
 }
 
 export async function fetchPracticeHistory(
@@ -463,17 +482,6 @@ export async function fetchStudentAssignments(): Promise<StudentAssignment[]> {
   return apiFetch<StudentAssignment[]>('/assignments/student', null);
 }
 
-export async function updateStudentAssignmentProgress(
-  assignmentId: string,
-  completedItems: number,
-): Promise<Assignment> {
-  return apiFetch<Assignment>(`/assignments/student/${assignmentId}/progress`, null, {
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ completed_items: completedItems }),
-  });
-}
-
 export async function fetchAssignmentWords(assignmentId: string): Promise<AssignmentWords> {
   return apiFetch<AssignmentWords>(`/assignments/${assignmentId}/words`, null);
 }
@@ -490,6 +498,18 @@ export async function submitAssessment(assignmentId: string): Promise<Assessment
   return apiFetch<AssessmentSubmission>(`/assignments/${assignmentId}/submit`, null, { method: 'POST' });
 }
 
-export async function fetchAssessmentSubmissions(assignmentId: string): Promise<AssessmentSubmission[]> {
-  return apiFetch<AssessmentSubmission[]>(`/assignments/${assignmentId}/submissions`, null);
+export async function fetchAssignmentGradebook(assignmentId: string): Promise<AssignmentGradebookItem[]> {
+  return apiFetch<AssignmentGradebookItem[]>(`/assignments/${assignmentId}/submissions`, null);
+}
+
+export async function overrideAssignmentGrade(assignmentId: string, studentId: string, score: number, overrideReason: string): Promise<AssignmentGradebookItem> {
+  return apiFetch<AssignmentGradebookItem>(`/assignments/${assignmentId}/grades/${studentId}`, null, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ score, override_reason: overrideReason }),
+  });
+}
+
+export async function fetchWordPronunciation(word: string, token: string | null): Promise<{ audio_url: string | null }> {
+  return apiFetch<{ audio_url: string | null }>(`/vocabulary/pronunciation/${encodeURIComponent(word)}`, token);
 }

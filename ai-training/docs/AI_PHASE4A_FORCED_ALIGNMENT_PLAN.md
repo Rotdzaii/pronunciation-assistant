@@ -4,7 +4,10 @@
 
 Phase 4A addresses the current alignment limitation before adding more advanced pronunciation scoring. The existing fallback alignment is approximate: it splits audio duration across prompt words or canonical phones without detecting speech boundaries from the audio signal. Because of that, phone-level location reliability is limited.
 
-Reliable GOP/CaGOP scoring requires dependable phone boundaries. Without real forced alignment, a GOP-like score may evaluate the wrong time window for a target phone, making phone-level diagnosis and feedback unreliable.
+Reliable learned phone-level modeling requires dependable phone boundaries.
+Without real forced alignment, the CNN + Attention + Context pipeline may
+evaluate the wrong time window for a target phone, making diagnosis and
+feedback unreliable. MFA is timing support only, not pronunciation scoring.
 
 ## 2. Current Alignment State
 
@@ -150,7 +153,8 @@ The recorded result excludes audio files, TextGrid files, temporary folders, loc
 - A word-only prompt may not provide enough transcript context for robust alignment.
 - Learner mispronunciation can reduce forced-alignment quality.
 - Alignment is not the same as pronunciation correctness.
-- Forced alignment still needs a scoring model, GOP, CaGOP, or hybrid scoring layer after this phase.
+- Forced alignment still needs a learned correctness or quality model after
+  this phase; it cannot itself provide pronunciation correctness.
 
 ## 10. Recommended Implementation Branches
 
@@ -160,4 +164,4 @@ The recorded result excludes audio files, TextGrid files, temporary folders, loc
 
 ## 11. Capstone-Friendly Summary
 
-Phase 4A giải quyết hạn chế hiện tại của hệ thống là alignment fallback chỉ mang tính xấp xỉ, chưa phải forced alignment thật. Việc lập kế hoạch tích hợp forced alignment bằng MFA hoặc công cụ tương đương là bước cần thiết để xác định ranh giới từ và âm vị đáng tin cậy hơn, từ đó tạo nền tảng cho chấm điểm phoneme-level và GOP/CaGOP trong các giai đoạn tiếp theo.
+Phase 4A giải quyết hạn chế hiện tại của hệ thống là alignment fallback chỉ mang tính xấp xỉ, chưa phải forced alignment thật. Việc lập kế hoạch tích hợp forced alignment bằng MFA hoặc công cụ tương đương là bước cần thiết để xác định ranh giới từ và âm vị đáng tin cậy hơn, từ đó tạo nền tảng cho learned correctness head và learned quality/scoring head trong các giai đoạn tiếp theo.

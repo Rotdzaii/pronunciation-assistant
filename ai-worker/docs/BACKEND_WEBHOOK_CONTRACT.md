@@ -46,8 +46,9 @@ Because the current FastAPI request model only requires legacy fields, existing 
 {
   "job_id": "11111111-1111-1111-1111-111111111111",
   "status": "completed",
-  "score": 60.0,
-  "score_note": "Heuristic/demo score, not production GOP.",
+  "score": null,
+  "score_type": "unavailable",
+  "score_note": "A learned pronunciation score is not available for the current model.",
   "problem_phonemes": ["EH", "G"],
   "feedback": {
     "summary": "He thong phat hien kha nang co loi bo am tai EH.",
@@ -66,8 +67,7 @@ Because the current FastAPI request model only requires legacy fields, existing 
     "alignment_used": true,
     "alignment_method": "fallback_even_split",
     "gop_used": false,
-    "scoring_method": "heuristic_gop",
-    "scoring_is_heuristic": true,
+    "score_type": "unavailable",
     "hybrid_used": true
   },
   "ai_result": {}
@@ -96,7 +96,9 @@ Because the current FastAPI request model only requires legacy fields, existing 
 
 Classifier confidence is diagnosis confidence, not pronunciation score. Frontend and backend code must not map `diagnosis.diagnosis_confidence` into `score`.
 
-`heuristic_gop` is not real GOP. With heuristic scoring, `metadata.gop_used` remains `false` and `metadata.scoring_is_heuristic` is `true`.
+`heuristic_gop` is internal diagnostic scaffolding, not a public pronunciation
+score. GOP/CaGOP is not the Phoenix v2 roadmap. `metadata.gop_used` remains
+`false`.
 
 Fallback alignment is approximate. Payload metadata must preserve `alignment_method`, `alignment_note`, or `location_reliability` so the UI does not overstate location precision.
 
@@ -123,7 +125,9 @@ The current backend can preserve the full result through `feedback.ai_result`. A
 
 ## Current Limitations
 
-- `heuristic_gop` is scaffold scoring, not production GOP.
+- The current CNN has no correctness or learned quality head, so public score
+  is `null` with `score_type="unavailable"`.
 - Fallback alignment is approximate.
 - MFA execution is scaffolded and requires local installation/configuration.
-- Real GOP/CaGOP is not implemented.
+- The selected future path is a learned correctness head, followed by a
+  learned quality/scoring head when appropriate labels exist.

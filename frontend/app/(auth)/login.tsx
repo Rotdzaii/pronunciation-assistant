@@ -1,7 +1,7 @@
-import { forwardRef, useRef, useState } from 'react';
+import { forwardRef, useEffect, useRef, useState } from 'react';
 import type { ComponentProps, ReactNode } from 'react';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Link, useRouter } from 'expo-router';
+import { Link, useLocalSearchParams, useRouter } from 'expo-router';
 import {
   Pressable,
   ScrollView,
@@ -12,13 +12,24 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ErrorState, colors } from '../../components/AppUI';
+import { AppButton, ErrorState, colors } from '../../components/AppUI';
 import { useAuth } from '../../lib/auth';
-import { supabase } from '../../lib/supabase';
+import { resendSignupConfirmation, type ConfirmationFeedback } from '../../lib/emailConfirmation';
+import {
+  attemptLogin,
+  createLoginRequestGate,
+  isEmailNotConfirmedError,
+  type LoginFeedback,
+  type LoginFieldErrors,
+  validateLoginCredentials,
+} from '../../lib/login';
+import { FORGOT_PASSWORD_ROUTE } from '../../lib/passwordRecovery';
+import { getEmailConfirmationRedirectUrl, supabase } from '../../lib/supabase';
 
 export default function LoginScreen() {
   const router = useRouter();
-  const { refreshCurrentUser, roleError } = useAuth();
+  const { passwordReset } = useLocalSearchParams<{ passwordReset?: string | string[] }>();
+  const { refreshCurrentUserWithRetry } = useAuth();
   const { width } = useWindowDimensions();
   const isWide = width >= 860;
   const [email, setEmail] = useState('');
@@ -26,48 +37,157 @@ export default function LoginScreen() {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [remember, setRemember] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<LoginFieldErrors>({});
+  const [loginFeedback, setLoginFeedback] = useState<LoginFeedback | null>(null);
+  const [profilePreparing, setProfilePreparing] = useState(false);
+  const [unconfirmedEmail, setUnconfirmedEmail] = useState<string | null>(null);
+  const [resending, setResending] = useState(false);
+  const [resendCooldown, setResendCooldown] = useState(0);
+  const [resendFeedback, setResendFeedback] = useState<ConfirmationFeedback | null>(null);
   const passwordInputRef = useRef<TextInput>(null);
+  const requestGateRef = useRef(createLoginRequestGate());
+
+  useEffect(() => {
+    if (resendCooldown <= 0) return;
+    const timer = setInterval(() => setResendCooldown((seconds) => Math.max(0, seconds - 1)), 1000);
+    return () => clearInterval(timer);
+  }, [resendCooldown]);
+
+  const clearFieldError = (field: keyof LoginFieldErrors) => {
+    setFieldErrors((currentErrors) => {
+      if (!currentErrors[field]) {
+        return currentErrors;
+      }
+
+      return { ...currentErrors, [field]: undefined };
+    });
+  };
+
+  const handleEmailChange = (value: string) => {
+    setEmail(value);
+    setUnconfirmedEmail(null);
+    setResendFeedback(null);
+    clearFieldError('email');
+  };
+
+  const handlePasswordChange = (value: string) => {
+    setPassword(value);
+    clearFieldError('password');
+  };
 
   const handleLogin = async () => {
-    if (loading) {
+    if (loading || !requestGateRef.current.start()) {
       return;
     }
-    if (!email.trim() || !password) {
-      setError('Vui lòng nhập email và mật khẩu.');
+
+    const validationErrors = validateLoginCredentials({ email, password });
+    if (Object.keys(validationErrors).length > 0) {
+      setFieldErrors(validationErrors);
+      setLoginFeedback(null);
+      requestGateRef.current.finish();
       return;
     }
 
     setLoading(true);
-    setError(null);
+    setFieldErrors({});
+    setLoginFeedback(null);
+    setProfilePreparing(false);
+    setUnconfirmedEmail(null);
+    setResendFeedback(null);
     try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email: email.trim(),
-        password,
-      });
+      let signInAccessToken: string | null = null;
+      let emailRequiresConfirmation = false;
+      const result = await attemptLogin(
+        { email, password },
+        (credentials) => supabase.auth.signInWithPassword(credentials),
+        ({ data, error }) => {
+          signInAccessToken = data?.session?.access_token ?? null;
+          emailRequiresConfirmation = isEmailNotConfirmedError(error);
+          if (__DEV__) {
+            const authError = error as { name?: unknown; code?: unknown; status?: unknown; message?: unknown } | null | undefined;
+            console.debug('[Signin] result', {
+              hasSession: Boolean(data?.session),
+              hasUser: Boolean(data?.user),
+              errorName: typeof authError?.name === 'string' ? authError.name : undefined,
+              errorCode: typeof authError?.code === 'string' ? authError.code : undefined,
+              errorStatus: typeof authError?.status === 'number' ? authError.status : undefined,
+              errorMessage: typeof authError?.message === 'string' ? authError.message : undefined,
+            });
+          }
+        },
+      );
 
-      if (error) {
-        setError(error.message);
-      } else {
-        const user = await refreshCurrentUser();
-        const backendRole = user?.app_role;
-        console.debug('[Login] post-login route decision', {
-          role: backendRole,
-          userId: user?.id,
-        });
-        if (backendRole === 'admin') {
-          router.replace('/(tabs)/admin');
-        } else if (backendRole === 'teacher') {
-          router.replace('/(tabs)/teacher');
-        } else if (backendRole === 'student') {
-          router.replace('/(tabs)');
-        } else {
-          setError('Không tìm thấy hồ sơ người dùng. Vui lòng kiểm tra profile trong Supabase.');
+      if (result.status === 'error') {
+        setLoginFeedback(result.feedback);
+        if (emailRequiresConfirmation) {
+          setUnconfirmedEmail(email.trim().toLowerCase());
         }
+        return;
+      }
+
+      if (result.status === 'validation_error') {
+        setFieldErrors(result.fieldErrors);
+        return;
+      }
+
+      setProfilePreparing(true);
+      const { data } = await supabase.auth.getSession();
+      const profileResult = await refreshCurrentUserWithRetry(
+        signInAccessToken ?? data.session?.access_token ?? null,
+        3,
+      );
+      setProfilePreparing(false);
+      const backendRole = profileResult.user?.app_role;
+      if (backendRole === 'admin') {
+        router.replace('/(tabs)/admin');
+      } else if (backendRole === 'teacher') {
+        router.replace('/(tabs)/teacher');
+      } else if (backendRole === 'student') {
+        router.replace('/(tabs)');
+      } else if (profileResult.failure === 'profile_pending') {
+        setLoginFeedback({
+          title: 'Đăng nhập thành công',
+          message: 'Hồ sơ đang được chuẩn bị, vui lòng chờ trong giây lát.',
+        });
+      } else if (profileResult.failure === 'backend_unavailable') {
+        setLoginFeedback({
+          title: 'Đã xác thực tài khoản',
+          message: 'Đã xác thực tài khoản nhưng chưa thể kết nối đến máy chủ. Vui lòng thử lại.',
+        });
+      } else if (profileResult.failure === 'session_expired') {
+        setLoginFeedback({
+          title: 'Phiên đăng nhập đã hết hạn',
+          message: 'Vui lòng đăng nhập lại.',
+        });
+      } else {
+        setLoginFeedback({
+          title: 'Không thể đăng nhập',
+          message: 'Đã xảy ra lỗi. Vui lòng thử lại sau.',
+        });
       }
     } finally {
+      setProfilePreparing(false);
       setLoading(false);
+      requestGateRef.current.finish();
     }
+  };
+
+  const handleResendConfirmation = async () => {
+    if (!unconfirmedEmail || resending || resendCooldown > 0) return;
+    setResending(true);
+    setResendFeedback(null);
+    const result = await resendSignupConfirmation(
+      unconfirmedEmail,
+      getEmailConfirmationRedirectUrl(),
+      (normalizedEmail, redirectTo) => supabase.auth.resend({
+        type: 'signup',
+        email: normalizedEmail,
+        options: { emailRedirectTo: redirectTo },
+      }),
+    );
+    setResendFeedback(result);
+    if (result.tone === 'success') setResendCooldown(60);
+    setResending(false);
   };
 
   return (
@@ -96,7 +216,8 @@ export default function LoginScreen() {
                   autoCapitalize="none"
                   keyboardType="email-address"
                   value={email}
-                  onChangeText={setEmail}
+                  onChangeText={handleEmailChange}
+                  error={fieldErrors.email}
                   returnKeyType="next"
                   blurOnSubmit={false}
                   onSubmitEditing={() => passwordInputRef.current?.focus()}
@@ -107,7 +228,8 @@ export default function LoginScreen() {
                   placeholder="Nhập mật khẩu"
                   secureTextEntry={!passwordVisible}
                   value={password}
-                  onChangeText={setPassword}
+                  onChangeText={handlePasswordChange}
+                  error={fieldErrors.password}
                   returnKeyType="done"
                   onSubmitEditing={handleLogin}
                   rightElement={
@@ -134,11 +256,43 @@ export default function LoginScreen() {
                   </View>
                   <Text style={styles.metaText}>Ghi nhớ đăng nhập</Text>
                 </Pressable>
-                <Text style={styles.forgotLink}>Quên mật khẩu?</Text>
+                <Pressable
+                  accessibilityRole="button"
+                  accessibilityLabel="Quên mật khẩu"
+                  onPress={() => router.push(FORGOT_PASSWORD_ROUTE)}
+                  style={styles.forgotButton}
+                >
+                  <Text style={styles.forgotLink}>Quên mật khẩu?</Text>
+                </Pressable>
               </View>
 
-              {error || roleError ? (
-                <ErrorState title="Không thể đăng nhập" message={error ?? roleError ?? ''} />
+              {passwordReset === '1' ? (
+                <View style={styles.passwordResetNotice}>
+                  <Text style={styles.passwordResetNoticeText}>Mật khẩu đã được cập nhật. Vui lòng đăng nhập bằng mật khẩu mới.</Text>
+                </View>
+              ) : null}
+              {loginFeedback ? (
+                <ErrorState title={loginFeedback.title} message={loginFeedback.message} />
+              ) : null}
+              {unconfirmedEmail ? (
+                <View style={styles.confirmationNotice}>
+                  <Text style={styles.confirmationTitle}>Email chưa được xác nhận</Text>
+                  <Text style={styles.confirmationText}>Tài khoản đã được tạo nhưng email chưa được xác nhận. Vui lòng kiểm tra hộp thư hoặc gửi lại email xác nhận.</Text>
+                  <AppButton
+                    title={resending ? 'Đang gửi...' : resendCooldown > 0 ? `Gửi lại email xác nhận (${resendCooldown}s)` : 'Gửi lại email xác nhận'}
+                    variant="secondary"
+                    onPress={handleResendConfirmation}
+                    loading={resending}
+                    disabled={resending || resendCooldown > 0}
+                  />
+                  {resendFeedback ? <Text style={resendFeedback.tone === 'success' ? styles.confirmationSuccess : styles.confirmationError}>{resendFeedback.message}</Text> : null}
+                </View>
+              ) : null}
+              {profilePreparing ? (
+                <View style={styles.profilePreparingNotice}>
+                  <Text style={styles.profilePreparingTitle}>Đăng nhập thành công</Text>
+                  <Text style={styles.profilePreparingText}>Hồ sơ đang được chuẩn bị, vui lòng chờ trong giây lát.</Text>
+                </View>
               ) : null}
 
               <Pressable
@@ -201,9 +355,13 @@ function BrandPanel({ wide }: { wide: boolean }) {
   );
 }
 
-const LabeledInput = forwardRef<TextInput, ComponentProps<typeof TextInput> & { label: string; rightElement?: ReactNode }>(
+const LabeledInput = forwardRef<TextInput, ComponentProps<typeof TextInput> & {
+  label: string;
+  error?: string;
+  rightElement?: ReactNode;
+}>(
   function LabeledInput(props, ref) {
-  const { label, rightElement, style, ...inputProps } = props;
+  const { label, error, rightElement, style, ...inputProps } = props;
 
   return (
     <View style={styles.field}>
@@ -212,11 +370,12 @@ const LabeledInput = forwardRef<TextInput, ComponentProps<typeof TextInput> & { 
         <TextInput
           ref={ref}
           {...inputProps}
-          style={[styles.input, rightElement ? styles.inputWithAction : null, style]}
+          style={[styles.input, error ? styles.inputError : null, rightElement ? styles.inputWithAction : null, style]}
           placeholderTextColor="#94A3B8"
         />
         {rightElement}
       </View>
+      {error ? <Text style={styles.fieldError}>{error}</Text> : null}
     </View>
   );
   },
@@ -455,6 +614,72 @@ const styles = StyleSheet.create({
     color: colors.text,
     fontSize: 15,
   },
+  inputError: {
+    borderColor: colors.error,
+  },
+  fieldError: {
+    color: '#B91C1C',
+    fontSize: 13,
+    fontWeight: '700',
+    lineHeight: 18,
+  },
+  profilePreparingNotice: {
+    borderWidth: 1,
+    borderColor: '#86EFAC',
+    backgroundColor: '#F0FDF4',
+    borderRadius: 14,
+    padding: 14,
+    gap: 4,
+  },
+  profilePreparingTitle: {
+    color: '#166534',
+    fontSize: 14,
+    fontWeight: '900',
+  },
+  profilePreparingText: {
+    color: '#166534',
+    fontSize: 13,
+    lineHeight: 19,
+  },
+  confirmationNotice: {
+    borderWidth: 1,
+    borderColor: '#FDE68A',
+    backgroundColor: '#FFFBEB',
+    borderRadius: 14,
+    padding: 14,
+    gap: 8,
+  },
+  confirmationTitle: {
+    color: '#92400E',
+    fontSize: 14,
+    fontWeight: '900',
+  },
+  confirmationText: {
+    color: '#92400E',
+    fontSize: 13,
+    lineHeight: 19,
+  },
+  confirmationSuccess: {
+    color: '#166534',
+    fontSize: 13,
+    fontWeight: '700',
+  },
+  confirmationError: {
+    color: '#B91C1C',
+    fontSize: 13,
+    fontWeight: '700',
+  },
+  passwordResetNotice: {
+    backgroundColor: '#DCFCE7',
+    borderRadius: 12,
+    padding: 12,
+  },
+  passwordResetNoticeText: {
+    color: '#166534',
+    fontSize: 14,
+    fontWeight: '700',
+    lineHeight: 20,
+  },
   inputWrap: {
     position: 'relative',
   },
@@ -512,6 +737,11 @@ const styles = StyleSheet.create({
     color: colors.primary,
     fontSize: 13,
     fontWeight: '800',
+  },
+  forgotButton: {
+    minHeight: 44,
+    justifyContent: 'center',
+    paddingHorizontal: 4,
   },
   submitButton: {
     minHeight: 56,

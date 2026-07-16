@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Dimensions, Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View } from 'react-native';
+import { KeyboardAvoidingView, Modal, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, TouchableWithoutFeedback, useWindowDimensions, View } from 'react-native';
 import {
   AppCard,
   AppScreen,
@@ -13,6 +13,8 @@ import {
   createAssignment,
   fetchTeacherAnalytics,
   fetchTeacherAssignments,
+  fetchAssignmentGradebook,
+  overrideAssignmentGrade,
   fetchTeacherClassDetail,
   fetchTeacherClassScores,
   fetchTeacherClassStudents,
@@ -43,6 +45,7 @@ import {
 } from '../../lib/format';
 import type {
   Assignment,
+  AssignmentGradebookItem,
   ClassDetail,
   ClassStudent,
   ClassSummary,
@@ -397,6 +400,7 @@ export default function TeacherScreen() {
             setReviewDetail(null);
           }}
           onSelectStudent={setSelectedScoreStudent}
+          onCloseStudentScores={() => { setSelectedScoreStudent(null); setStudentScores(null); }}
           onOpenReviewDetail={async (requestId) => {
             setReviewError(null);
             try {
@@ -839,6 +843,7 @@ function StudentsSection({
   onChangeTab,
   onSelectClass,
   onSelectStudent,
+  onCloseStudentScores,
   onOpenReviewDetail,
   onCloseReviewDetail,
   onSaveReviewNote,
@@ -863,12 +868,15 @@ function StudentsSection({
   onChangeTab: (tab: ClassWorkspaceTab) => void;
   onSelectClass: (classId: string) => void;
   onSelectStudent: (student: ClassStudent) => void;
+  onCloseStudentScores: () => void;
   onOpenReviewDetail: (requestId: string) => void;
   onCloseReviewDetail: () => void;
   onSaveReviewNote: (requestId: string, teacherNote: string) => void;
   onResolveReview: (requestId: string, status: 'resolved' | 'rejected', resolution: string, teacherNote?: string | null) => void;
   onRequestReviewReanalysis: (requestId: string) => void;
 }) {
+  const { width: windowWidth, height: windowHeight } = useWindowDimensions();
+  const isCompact = windowWidth < 600;
   const [studentSearch, setStudentSearch] = useState('');
   const selectedClassName = selectedClass?.name ?? classes.find((item) => item.id === selectedClassId)?.name ?? 'Lớp học';
   const selectedClassCode = selectedClass?.code ?? classes.find((item) => item.id === selectedClassId)?.code ?? 'Phoenix';
@@ -968,9 +976,6 @@ function StudentsSection({
               ) : null}
             </View>
           </AppCard>
-          {selectedScoreStudent ? (
-            <StudentScoresPanel student={selectedScoreStudent} scores={studentScores} loading={loadingScores} error={scoreError} />
-          ) : null}
         </View>
       ) : null}
 
@@ -1018,6 +1023,76 @@ function StudentsSection({
           />
         </View>
       ) : null}
+
+      <Modal visible={!!selectedScoreStudent} transparent animationType="fade" onRequestClose={onCloseStudentScores}>
+        <KeyboardAvoidingView style={styles.modalKeyboardRoot} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+          <TouchableWithoutFeedback onPress={onCloseStudentScores}>
+            <View style={styles.studentDetailBackdrop}>
+              <TouchableWithoutFeedback>
+                <View style={[styles.studentDetailModal, {
+                  width: Math.max(0, Math.min(600, windowWidth - 24)),
+                  maxHeight: Math.max(0, windowHeight - 24),
+                  padding: isCompact ? 16 : 24,
+                }]}>
+                  <View style={styles.modalHeader}>
+                    <Text style={styles.cardTitle}>{selectedScoreStudent?.display_name}</Text>
+                    <Pressable accessibilityRole="button" accessibilityLabel="Đóng chi tiết học sinh" onPress={onCloseStudentScores} style={styles.modalCloseBtn}>
+                      <MaterialCommunityIcons name="close" size={20} color={colors.muted} />
+                    </Pressable>
+                  </View>
+                  {!isInternalEmail(selectedScoreStudent?.email) ? <Text style={styles.cardDescription}>{selectedScoreStudent?.email ?? 'Chưa có email'}</Text> : null}
+                  <ScrollView keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
+                    {loadingScores ? <Text style={styles.mutedText}>Đang tải kết quả luyện tập...</Text> : null}
+                    {scoreError ? <ErrorState title="Chưa thể tải điểm" message={scoreError} /> : null}
+                    {studentScores ? (
+                      <View style={styles.reportRows}>
+                        <ReportRow label="Tổng lượt luyện" value={String(studentScores.summary.total_attempts)} />
+                        <ReportRow label="Đã có kết quả" value={String(studentScores.summary.completed_attempts)} />
+                        <ReportRow label="Điểm trung bình" value={studentScores.summary.average_score === null ? 'Chưa có điểm' : `${Math.round(studentScores.summary.average_score)}/100`} />
+                        <ReportRow label="Lần luyện gần nhất" value={formatDate(studentScores.summary.last_practice_at)} />
+                      </View>
+                    ) : null}
+                    {studentScores ? (
+                      <View style={styles.assignmentDetailSection}>
+                        <Text style={styles.cardTitle}>Lỗi phát âm cần chú ý</Text>
+                        {buildStudentPronunciationIssues(studentScores).length > 0 ? (
+                          <View style={styles.errorRows}>
+                            {buildStudentPronunciationIssues(studentScores).map((issue) => (
+                              <View key={issue.label} style={styles.errorRow}>
+                                <View style={styles.pronunciationIssueCopy}>
+                                  <Text style={styles.errorLabel}>{formatMistakeLabel(issue.label)}</Text>
+                                  <Text style={styles.mutedText}>{issue.count} lần xuất hiện</Text>
+                                  {issue.examples.length > 0 ? <Text style={styles.mutedText}>Ví dụ: {issue.examples.slice(0, 2).join(', ')}</Text> : null}
+                                  <Text style={styles.mutedText}>Nên luyện lại với tốc độ chậm và nghe mẫu trước khi ghi âm.</Text>
+                                </View>
+                                <StatusBadge label={mistakeSeverity(issue.count)} tone={issue.count >= 10 ? 'error' : issue.count >= 4 ? 'warning' : 'primary'} />
+                              </View>
+                            ))}
+                          </View>
+                        ) : (
+                          <EmptyPanel icon="microphone-off" title="Chưa có đủ dữ liệu lỗi phát âm." message="Phoenix sẽ hiển thị lỗi khi học sinh có kết quả luyện tập hoàn tất." />
+                        )}
+                      </View>
+                    ) : null}
+                    {studentScores?.items && studentScores.items.length > 0 ? (
+                      <View style={styles.studentRows}>
+                        {studentScores.items.map((item) => (
+                          <View key={item.practice_history_id} style={styles.classSummaryRow}>
+                            <Text style={styles.className}>{item.target_word ?? 'Bài luyện'}</Text>
+                            <Text style={styles.mutedText}>{formatPracticeStatus(item.status)}</Text>
+                            <Text style={styles.reportValue}>{item.score === null ? 'Chưa có điểm' : `${Math.round(item.score)}/100`}</Text>
+                            {item.needs_review ? <StatusBadge label="Cần xem lại" tone="warning" /> : null}
+                          </View>
+                        ))}
+                      </View>
+                    ) : null}
+                  </ScrollView>
+                </View>
+              </TouchableWithoutFeedback>
+            </View>
+          </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
+      </Modal>
     </View>
   );
 }
@@ -1031,6 +1106,9 @@ function ClassWorkspaceOverview({
   classScores: TeacherClassScoresResponse | null;
   classId: string;
 }) {
+  const { width: windowWidth, height: windowHeight } = useWindowDimensions();
+  const useScrollableScoreTable = windowWidth < 1024;
+  const isCompact = windowWidth < 600;
   const [modalStudent, setModalStudent] = useState<ClassStudent | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalScores, setModalScores] = useState<TeacherStudentScoresResponse | null>(null);
@@ -1086,7 +1164,12 @@ function ClassWorkspaceOverview({
         </View>
       </View>
       <Text style={styles.cardTitle}>Bảng điểm theo học sinh</Text>
-      <View style={styles.studentRows}>
+      <ScrollView
+        horizontal={useScrollableScoreTable}
+        showsHorizontalScrollIndicator={useScrollableScoreTable}
+        contentContainerStyle={useScrollableScoreTable ? styles.scoreTableScrollContent : undefined}
+      >
+      <View style={[styles.studentRows, useScrollableScoreTable ? styles.scoreTableScrollable : null]}>
         <View style={styles.scoreTableHeader}>
           <View style={{ width: 40 }} />
           <View style={styles.scoreColName}>
@@ -1144,19 +1227,25 @@ function ClassWorkspaceOverview({
           <EmptyPanel icon="chart-box-outline" title="Chưa có dữ liệu điểm của lớp" message="Khi học sinh hoàn thành bài luyện và Phoenix trả score, kết quả sẽ hiển thị tại đây." />
         ) : null}
       </View>
+      </ScrollView>
       <Modal visible={modalVisible} transparent animationType="fade" onRequestClose={handleCloseModal}>
-        <TouchableWithoutFeedback onPress={handleCloseModal}>
-          <View style={styles.studentDetailBackdrop}>
-            <TouchableWithoutFeedback>
-              <View style={styles.studentDetailModal}>
+        <KeyboardAvoidingView style={styles.modalKeyboardRoot} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+          <TouchableWithoutFeedback onPress={handleCloseModal}>
+            <View style={styles.studentDetailBackdrop}>
+              <TouchableWithoutFeedback>
+                <View style={[styles.studentDetailModal, {
+                  width: Math.max(0, Math.min(600, windowWidth - 24)),
+                  maxHeight: Math.max(0, windowHeight - 24),
+                  padding: isCompact ? 16 : 24,
+                }]}>
                 <View style={styles.modalHeader}>
                   <Text style={styles.cardTitle}>{modalStudent?.display_name}</Text>
-                  <Pressable accessibilityRole="button" onPress={handleCloseModal} style={styles.modalCloseBtn}>
+                  <Pressable accessibilityRole="button" accessibilityLabel="Đóng chi tiết học sinh" onPress={handleCloseModal} style={styles.modalCloseBtn}>
                     <MaterialCommunityIcons name="close" size={20} color={colors.muted} />
                   </Pressable>
                 </View>
                 {!isInternalEmail(modalStudent?.email) ? <Text style={styles.cardDescription}>{modalStudent?.email ?? 'Chưa có email'}</Text> : null}
-                <ScrollView>
+                <ScrollView keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
                   {modalLoading ? <Text style={styles.mutedText}>Đang tải kết quả luyện tập...</Text> : null}
                   {modalError ? <ErrorState title="Chưa thể tải điểm" message={modalError} /> : null}
                   {modalScores ? (
@@ -1201,10 +1290,11 @@ function ClassWorkspaceOverview({
                     </View>
                   ) : null}
                 </ScrollView>
-              </View>
-            </TouchableWithoutFeedback>
-          </View>
-        </TouchableWithoutFeedback>
+                </View>
+              </TouchableWithoutFeedback>
+            </View>
+          </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
       </Modal>
     </AppCard>
   );
@@ -1403,10 +1493,21 @@ function AssignmentSection({
   onWeekChange: (week: WeekInMonth) => void;
   onExport: () => void;
 }) {
+  const { width: windowWidth, height: windowHeight } = useWindowDimensions();
+  const isCompact = windowWidth < 600;
+  const stackAssignmentWorkspace = windowWidth < 1024;
   const [assignmentStudentSearch, setAssignmentStudentSearch] = useState('');
   const [selectedAssignmentStudentId, setSelectedAssignmentStudentId] = useState<string | null>(null);
   const [assignments, setAssignments] = useState<Assignment[]>([]);
   const [assignmentsLoading, setAssignmentsLoading] = useState(false);
+  const [gradebookAssignment, setGradebookAssignment] = useState<Assignment | null>(null);
+  const [gradebook, setGradebook] = useState<AssignmentGradebookItem[]>([]);
+  const [gradebookLoading, setGradebookLoading] = useState(false);
+  const [gradebookError, setGradebookError] = useState<string | null>(null);
+  const [gradebookStudent, setGradebookStudent] = useState<AssignmentGradebookItem | null>(null);
+  const [overrideScore, setOverrideScore] = useState('');
+  const [overrideReason, setOverrideReason] = useState('');
+  const [overrideLoading, setOverrideLoading] = useState(false);
   const [showCreate, setShowCreate] = useState(false);
   const [vocabSets, setVocabSets] = useState<VocabularySet[]>([]);
   const [vocabSetsLoading, setVocabSetsLoading] = useState(false);
@@ -1415,14 +1516,15 @@ function AssignmentSection({
   const [createTarget, setCreateTarget] = useState<'class' | 'student'>('class');
   const [createDueDate, setCreateDueDate] = useState('');
   const [createIsAssessment, setCreateIsAssessment] = useState(false);
-  const [createDeadline, setCreateDeadline] = useState('');
   const [createTimer, setCreateTimer] = useState('60');
   const [createLoading, setCreateLoading] = useState(false);
   const [createError, setCreateError] = useState<string | null>(null);
   const [createSuccess, setCreateSuccess] = useState<string | null>(null);
+  const [createAssessmentDate, setCreateAssessmentDate] = useState('');
+  const [createAssessmentTime, setCreateAssessmentTime] = useState('23:59');
 
   useEffect(() => {
-    void loadAssignments();
+    void loadAssignments(selectedAssignmentStudentId);
   }, [classId]);
 
   useEffect(() => {
@@ -1431,15 +1533,52 @@ function AssignmentSection({
     return () => clearTimeout(timer);
   }, [createSuccess]);
 
-  const loadAssignments = async () => {
+  const loadAssignments = async (studentId?: string | null) => {
     setAssignmentsLoading(true);
     try {
-      const data = await fetchTeacherAssignments({ class_id: classId });
-      setAssignments(data.items);
+      const [classData, studentData] = await Promise.all([
+        fetchTeacherAssignments({ class_id: classId }),
+        studentId ? fetchTeacherAssignments({ student_id: studentId }) : Promise.resolve({ items: [], total: 0 }),
+      ]);
+      const seen = new Set<string>();
+      const merged = [...classData.items, ...studentData.items].filter((a) => {
+        if (seen.has(a.id)) return false;
+        seen.add(a.id);
+        return true;
+      });
+      setAssignments(merged);
     } catch {
       // silently fail; teacher sees empty list
     } finally {
       setAssignmentsLoading(false);
+    }
+  };
+
+  const openGradebook = async (assignment: Assignment) => {
+    setGradebookAssignment(assignment);
+    setGradebookStudent(null);
+    setGradebookLoading(true);
+    setGradebookError(null);
+    try {
+      setGradebook(await fetchAssignmentGradebook(assignment.id));
+    } catch (err) {
+      setGradebookError(err instanceof Error ? err.message : 'Không thể tải bảng điểm bài giao.');
+    } finally {
+      setGradebookLoading(false);
+    }
+  };
+
+  const submitGradeOverride = async () => {
+    if (!gradebookAssignment || !gradebookStudent || !overrideReason.trim()) return;
+    const score = Number(overrideScore);
+    if (!Number.isFinite(score) || score < 0 || score > 100) return;
+    setOverrideLoading(true);
+    try {
+      await overrideAssignmentGrade(gradebookAssignment.id, gradebookStudent.student_id, score, overrideReason.trim());
+      await openGradebook(gradebookAssignment);
+      setGradebookStudent(null);
+    } finally {
+      setOverrideLoading(false);
     }
   };
 
@@ -1450,7 +1589,8 @@ function AssignmentSection({
     setCreateTarget(selectedAssignmentStudentId ? 'student' : 'class');
     setCreateDueDate('');
     setCreateIsAssessment(false);
-    setCreateDeadline('');
+    setCreateAssessmentDate('');
+    setCreateAssessmentTime('');
     setCreateTimer('60');
     setCreateError(null);
     if (vocabSets.length === 0) {
@@ -1464,6 +1604,8 @@ function AssignmentSection({
       } finally {
         setVocabSetsLoading(false);
       }
+    } else {
+      if (vocabSets[0]) setCreateSetId(vocabSets[0].id);
     }
   };
 
@@ -1472,19 +1614,32 @@ function AssignmentSection({
     setCreateLoading(true);
     setCreateError(null);
     try {
+      let deadline: string | null = null;
+      if (createIsAssessment && createAssessmentDate) {
+        const isoDate = parseDDMMYYYY(createAssessmentDate);
+        const timeStr = createAssessmentTime.trim() || '23:59';
+        if (!isoDate) {
+          setCreateError('Ngày không hợp lệ. Vui lòng nhập theo định dạng DD/MM/YYYY.');
+          return;
+        }
+        deadline = `${isoDate}T${timeStr}:00+07:00`;
+      }
+      const dueDateIso = !createIsAssessment && createDueDate.trim()
+        ? parseDDMMYYYY(createDueDate.trim())
+        : null;
       await createAssignment({
         title: createTitle.trim(),
         content_type: 'vocabulary_set',
         content_id: createSetId,
         class_id: createTarget === 'class' ? classId : null,
         student_id: createTarget === 'student' ? selectedAssignmentStudentId : null,
-        due_date: createDueDate.trim() || null,
+        due_date: dueDateIso,
         is_assessment: createIsAssessment,
-        deadline: createIsAssessment && createDeadline.trim() ? createDeadline.trim() : null,
+        deadline,
         timer_per_word_seconds: createIsAssessment ? (parseInt(createTimer, 10) || 60) : 60,
       });
       setShowCreate(false);
-      await loadAssignments();
+      await loadAssignments(selectedAssignmentStudentId);
       const targetName = createTarget === 'class' ? className : (selectedStudent?.display_name || 'học sinh');
       setCreateSuccess(`Đã giao bài cho ${targetName}`);
     } catch (err) {
@@ -1526,7 +1681,7 @@ function AssignmentSection({
         </View>
       ) : null}
 
-      <View style={styles.assignmentWorkspaceGrid}>
+      <View style={[styles.assignmentWorkspaceGrid, stackAssignmentWorkspace ? styles.assignmentWorkspaceGridStacked : null]}>
         <AppCard style={[styles.panel, styles.assignmentStudentColumn]}>
           <View style={styles.panelHeader}>
             <View>
@@ -1601,29 +1756,49 @@ function AssignmentSection({
                 ) : (
                   <View style={styles.assignmentTopicList}>
                     {visibleAssignments.map((a) => (
-                      <AssignmentRow key={a.id} assignment={a} />
+                      <AssignmentRow key={a.id} assignment={a} onPress={() => void openGradebook(a)} />
                     ))}
                   </View>
                 )}
               </View>
+              {gradebookAssignment ? (
+                <View style={styles.assignmentDetailSection}>
+                  <View style={styles.panelHeader}>
+                    <View><Text style={styles.cardTitle}>Bảng điểm: {gradebookAssignment.title}</Text><Text style={styles.cardDescription}>Điểm Assignment được tách khỏi điểm luyện tự do.</Text></View>
+                    <Pressable onPress={() => setGradebookAssignment(null)} style={styles.smallButton}><Text style={styles.smallButtonText}>Đóng</Text></Pressable>
+                  </View>
+                  {gradebookLoading ? <LoadingState title="" message="Đang tải bảng điểm..." /> : null}
+                  {gradebookError ? <ErrorState title="Chưa thể tải bảng điểm" message={gradebookError} /> : null}
+                  {!gradebookLoading && !gradebookError ? <View style={styles.gradebookRows}>
+                    {gradebook.map((row) => <Pressable key={row.student_id} onPress={() => { setGradebookStudent(row); setOverrideScore(row.final_score == null ? '' : String(row.final_score)); setOverrideReason(''); }} style={styles.gradebookRow}><View style={styles.gradebookName}><Text style={styles.studentName}>{row.student_name ?? 'Học sinh'}</Text><Text style={styles.mutedText}>{row.completed_items}/{row.total_items} từ · {row.submitted_at ? 'Đã nộp' : 'Chưa nộp'}</Text></View><StatusBadge label={formatAssignmentWorkStatus(row.work_status)} tone={row.is_locked ? 'idle' : row.work_status === 'completed' ? 'success' : 'primary'} /><StatusBadge label={formatAssignmentGrade(row.grading_status, row.final_score)} tone={row.grading_status === 'needs_review' ? 'warning' : row.grading_status === 'graded' ? 'success' : 'processing'} /></Pressable>)}
+                    {gradebook.length === 0 ? <EmptyPanel icon="clipboard-text-outline" title="Chưa có học sinh nhận bài" message="Danh sách recipient sẽ hiển thị khi bài được giao." /> : null}
+                  </View> : null}
+                  {gradebookStudent ? <View style={styles.gradebookDetail}><Text style={styles.cardTitle}>Chi tiết: {gradebookStudent.student_name ?? 'Học sinh'}</Text><Text style={styles.mutedText}>AI: {gradebookStudent.auto_score == null ? 'Chưa có điểm tự động' : `${Math.round(gradebookStudent.auto_score)}/100`} · Điểm cuối: {gradebookStudent.final_score == null ? '—' : `${Math.round(gradebookStudent.final_score)}/100`}</Text><Text style={styles.mutedText}>Điểm từng từ: {Object.entries((gradebookStudent.details.best_scores as Record<string, number> | undefined) ?? {}).map(([itemId, score]) => `${itemId.slice(0, 8)}: ${Math.round(score)}`).join(' · ') || 'Chưa có kết quả AI'}</Text>{gradebookStudent.recordings.map((recording) => <Text key={recording.item_id} style={styles.mutedText}>Bản thu: {recording.word} · job {recording.practice_job_id?.slice(0, 8) ?? '—'}</Text>)}<TextInput value={overrideScore} onChangeText={setOverrideScore} keyboardType="numeric" placeholder="Điểm ghi đè 0–100" placeholderTextColor="#94A3B8" style={styles.createFormInput} /><TextInput value={overrideReason} onChangeText={setOverrideReason} placeholder="Lý do ghi đè (bắt buộc)" placeholderTextColor="#94A3B8" style={styles.createFormInput} /><Pressable onPress={() => void submitGradeOverride()} disabled={overrideLoading || !overrideReason.trim()} style={[styles.createSubmitBtn, (overrideLoading || !overrideReason.trim()) ? styles.disabledAction : null]}><Text style={styles.createSubmitBtnText}>{overrideLoading ? 'Đang lưu...' : 'Lưu điểm ghi đè'}</Text></Pressable></View> : null}
+                </View>
+              ) : null}
             </>
           )}
         </AppCard>
       </View>
 
       <Modal visible={showCreate} transparent animationType="fade" onRequestClose={() => setShowCreate(false)}>
-        <TouchableWithoutFeedback onPress={() => setShowCreate(false)}>
-          <View style={styles.studentDetailBackdrop}>
-            <TouchableWithoutFeedback onPress={() => undefined}>
-              <View style={styles.createAssignmentModal}>
+        <KeyboardAvoidingView style={styles.modalKeyboardRoot} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+          <TouchableWithoutFeedback onPress={() => setShowCreate(false)}>
+            <View style={styles.studentDetailBackdrop}>
+              <TouchableWithoutFeedback onPress={() => undefined}>
+                <View style={[styles.createAssignmentModal, {
+                  width: Math.max(0, Math.min(520, windowWidth - 24)),
+                  maxHeight: Math.max(0, windowHeight - 24),
+                  padding: isCompact ? 16 : 24,
+                }]}>
                 <View style={styles.modalHeader}>
                   <Text style={styles.cardTitle}>Giao bài tập mới</Text>
-                  <Pressable accessibilityRole="button" onPress={() => setShowCreate(false)} style={styles.modalCloseBtn}>
+                  <Pressable accessibilityRole="button" accessibilityLabel="Đóng tạo bài tập" onPress={() => setShowCreate(false)} style={styles.modalCloseBtn}>
                     <MaterialCommunityIcons name="close" size={20} color={colors.muted} />
                   </Pressable>
                 </View>
 
-                <ScrollView showsVerticalScrollIndicator={false}>
+                <ScrollView keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
                   <View style={styles.createFormGroup}>
                     <Text style={styles.createFormLabel}>Tiêu đề *</Text>
                     <TextInput
@@ -1661,11 +1836,14 @@ function AssignmentSection({
                         ) : null}
                       </View>
                     )}
+                    {!vocabSetsLoading && vocabSets.length > 0 && !createSetId ? (
+                      <Text style={styles.createHintText}>Vui lòng chọn bộ từ vựng</Text>
+                    ) : null}
                   </View>
 
                   <View style={styles.createFormGroup}>
                     <Text style={styles.createFormLabel}>Giao cho</Text>
-                    <View style={styles.createTargetRow}>
+                  <View style={[styles.createTargetRow, isCompact ? styles.createTargetRowCompact : null]}>
                       <Pressable
                         accessibilityRole="button"
                         onPress={() => setCreateTarget('class')}
@@ -1692,16 +1870,18 @@ function AssignmentSection({
                     </View>
                   </View>
 
-                  <View style={styles.createFormGroup}>
-                    <Text style={styles.createFormLabel}>Hạn nộp (tùy chọn, YYYY-MM-DD)</Text>
-                    <TextInput
-                      value={createDueDate}
-                      onChangeText={setCreateDueDate}
-                      placeholder="2026-12-31"
-                      placeholderTextColor="#94A3B8"
-                      style={styles.createFormInput}
-                    />
-                  </View>
+                  {!createIsAssessment ? (
+                    <View style={styles.createFormGroup}>
+                      <Text style={styles.createFormLabel}>Hạn nộp (DD/MM/YYYY, tùy chọn)</Text>
+                      <TextInput
+                        value={createDueDate}
+                        onChangeText={setCreateDueDate}
+                        placeholder="Chọn ngày"
+                        placeholderTextColor="#94A3B8"
+                        style={styles.createFormInput}
+                      />
+                    </View>
+                  ) : null}
 
                   <View style={styles.createFormGroup}>
                     <Pressable
@@ -1718,11 +1898,21 @@ function AssignmentSection({
                   {createIsAssessment ? (
                     <>
                       <View style={styles.createFormGroup}>
-                        <Text style={styles.createFormLabel}>Hạn nộp bài (ISO 8601, bắt buộc cho kiểm tra)</Text>
+                        <Text style={styles.createFormLabel}>Ngày/Tháng/Năm (DD/MM/YYYY, bắt buộc)</Text>
                         <TextInput
-                          value={createDeadline}
-                          onChangeText={setCreateDeadline}
-                          placeholder="2026-12-31T23:59:00+07:00"
+                          value={createAssessmentDate}
+                          onChangeText={setCreateAssessmentDate}
+                          placeholder="Chọn ngày"
+                          placeholderTextColor="#94A3B8"
+                          style={styles.createFormInput}
+                        />
+                      </View>
+                      <View style={styles.createFormGroup}>
+                        <Text style={styles.createFormLabel}>Giờ : Phút (HH:MM, mặc định 23:59)</Text>
+                        <TextInput
+                          value={createAssessmentTime}
+                          onChangeText={setCreateAssessmentTime}
+                          placeholder="Chọn giờ"
                           placeholderTextColor="#94A3B8"
                           style={styles.createFormInput}
                         />
@@ -1745,7 +1935,7 @@ function AssignmentSection({
                     <Text style={styles.createErrorText}>{createError}</Text>
                   ) : null}
 
-                  <View style={styles.createModalActions}>
+                  <View style={[styles.createModalActions, isCompact ? styles.createModalActionsCompact : null]}>
                     <Pressable accessibilityRole="button" onPress={() => setShowCreate(false)} style={styles.createCancelBtn}>
                       <Text style={styles.createCancelBtnText}>Hủy</Text>
                     </Pressable>
@@ -1762,19 +1952,20 @@ function AssignmentSection({
                     </Pressable>
                   </View>
                 </ScrollView>
-              </View>
-            </TouchableWithoutFeedback>
-          </View>
-        </TouchableWithoutFeedback>
+                </View>
+              </TouchableWithoutFeedback>
+            </View>
+          </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
       </Modal>
     </View>
   );
 }
 
-function AssignmentRow({ assignment }: { assignment: Assignment }) {
+function AssignmentRow({ assignment, onPress }: { assignment: Assignment; onPress: () => void }) {
   const contentLabel = assignment.content_type === 'vocabulary_set' ? 'Từ vựng' : 'Câu';
   return (
-    <View style={styles.assignmentRow}>
+    <Pressable accessibilityRole="button" onPress={onPress} style={styles.assignmentRow}>
       <View style={styles.assignmentIcon}>
         <MaterialCommunityIcons name="book-open-page-variant-outline" size={22} color={colors.primary} />
       </View>
@@ -1791,8 +1982,17 @@ function AssignmentRow({ assignment }: { assignment: Assignment }) {
             : 'Giao cho cá nhân'}
         </Text>
       </View>
-    </View>
+    </Pressable>
   );
+}
+
+function formatAssignmentWorkStatus(status: AssignmentGradebookItem['work_status']): string {
+  return ({ not_started: 'Chưa làm', in_progress: 'Đang làm', completed: 'Hoàn thành', submitted: 'Đã nộp', overdue: 'Quá hạn', locked: 'Đã khóa' } as const)[status];
+}
+
+function formatAssignmentGrade(status: AssignmentGradebookItem['grading_status'], score: number | null): string {
+  if (score != null) return `${Math.round(score)}/100`;
+  return ({ pending: 'Chờ chấm', provisional: 'Tạm tính', processing: 'Đang chấm', graded: 'Đã chấm', needs_review: 'Cần xem lại' } as const)[status];
 }
 
 function ReportsSection({
@@ -1930,87 +2130,6 @@ function StudentRosterRow({
         <StatusBadge label="Cần xem lại" tone="warning" />
       ) : null}
     </View>
-  );
-}
-
-function StudentScoresPanel({
-  student,
-  scores,
-  loading,
-  error,
-}: {
-  student: ClassStudent | null;
-  scores: TeacherStudentScoresResponse | null;
-  loading: boolean;
-  error: string | null;
-}) {
-  if (!student) {
-    return (
-      <AppCard style={styles.panel}>
-        <Text style={styles.cardTitle}>Điểm và kết quả luyện tập</Text>
-        <Text style={styles.cardDescription}>Chọn một học sinh rồi bấm Xem điểm để xem kết quả luyện tập gần đây.</Text>
-      </AppCard>
-    );
-  }
-
-  const pronunciationIssues = buildStudentPronunciationIssues(scores);
-
-  return (
-    <AppCard style={styles.panel}>
-      <Text style={styles.cardTitle}>{student.display_name}</Text>
-      {!isInternalEmail(student.email) ? <Text style={styles.cardDescription}>{student.email ?? 'Chưa có email'}</Text> : null}
-      {loading ? <Text style={styles.mutedText}>Đang tải kết quả luyện tập...</Text> : null}
-      {error ? <ErrorState title="Chưa thể tải điểm" message={error} /> : null}
-      {scores ? (
-        <View style={styles.reportRows}>
-          <ReportRow label="Tổng lượt luyện" value={String(scores.summary.total_attempts)} />
-          <ReportRow label="Đã có kết quả" value={String(scores.summary.completed_attempts)} />
-          <ReportRow label="Điểm trung bình" value={scores.summary.average_score === null ? 'Chưa có điểm' : `${Math.round(scores.summary.average_score)}/100`} />
-          <ReportRow label="Lần luyện gần nhất" value={formatDate(scores.summary.last_practice_at)} />
-        </View>
-      ) : null}
-      <View style={styles.assignmentDetailSection}>
-        <Text style={styles.cardTitle}>Lỗi phát âm cần chú ý</Text>
-        {pronunciationIssues.length > 0 ? (
-          <View style={styles.errorRows}>
-            {pronunciationIssues.map((issue) => (
-              <View key={issue.label} style={styles.errorRow}>
-                <View style={styles.pronunciationIssueCopy}>
-                  <Text style={styles.errorLabel}>{formatMistakeLabel(issue.label)}</Text>
-                  <Text style={styles.mutedText}>{issue.count} lần xuất hiện</Text>
-                  {issue.examples.length > 0 ? <Text style={styles.mutedText}>Ví dụ: {issue.examples.slice(0, 2).join(', ')}</Text> : null}
-                  <Text style={styles.mutedText}>Nên luyện lại với tốc độ chậm và nghe mẫu trước khi ghi âm.</Text>
-                </View>
-                <StatusBadge label={mistakeSeverity(issue.count)} tone={issue.count >= 10 ? 'error' : issue.count >= 4 ? 'warning' : 'primary'} />
-              </View>
-            ))}
-          </View>
-        ) : (
-          <EmptyPanel
-            icon="microphone-off"
-            title="Chưa có đủ dữ liệu để tổng hợp lỗi phát âm của học sinh này."
-            message="Phoenix sẽ hiển thị lỗi cần chú ý khi học sinh có kết quả luyện tập hoàn tất."
-          />
-        )}
-      </View>
-      <View style={styles.studentRows}>
-        {scores?.items.map((item) => (
-          <View key={item.practice_history_id} style={styles.classSummaryRow}>
-            <Text style={styles.className}>{item.target_word ?? 'Bài luyện'}</Text>
-            <Text style={styles.mutedText}>{formatPracticeStatus(item.status)}</Text>
-            <Text style={styles.reportValue}>{item.score === null ? 'Chưa có điểm' : `${Math.round(item.score)}/100`}</Text>
-            {item.needs_review ? <StatusBadge label="Cần xem lại" tone="warning" /> : null}
-          </View>
-        ))}
-        {!loading && scores && scores.items.length === 0 ? (
-          <EmptyPanel
-            icon="chart-box-outline"
-            title="Học sinh chưa có kết quả luyện tập hoàn tất"
-            message="Khi học sinh hoàn thành bài luyện và AI trả kết quả, danh sách sẽ hiển thị tại đây."
-          />
-        ) : null}
-      </View>
-    </AppCard>
   );
 }
 
@@ -2391,6 +2510,13 @@ function formatDate(iso: string | null | undefined): string {
   }
 }
 
+function parseDDMMYYYY(value: string): string | null {
+  const match = value.trim().match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+  if (!match) return null;
+  const [, dd, mm, yyyy] = match;
+  return `${yyyy}-${mm}-${dd}`;
+}
+
 function isInternalEmail(email: string | null | undefined): boolean {
   if (!email) return false;
   return email.includes('@phoenix-demo.local') || email.includes('@phoenix.edu.vn');
@@ -2400,6 +2526,7 @@ const WEEK_DAY_HEADERS = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
 const WEEK_DAY_MS = 86400000;
 
 function WeekPickerButton({ selectedWeek, onChange }: { selectedWeek: WeekInMonth; onChange: (week: WeekInMonth) => void }) {
+  const { width: windowWidth } = useWindowDimensions();
   const [isOpen, setIsOpen] = useState(false);
   const [viewMonth, setViewMonth] = useState(() => new Date(selectedWeek.start));
   const [btnRect, setBtnRect] = useState<{ top: number; right: number } | null>(null);
@@ -2435,8 +2562,10 @@ function WeekPickerButton({ selectedWeek, onChange }: { selectedWeek: WeekInMont
     if (!isOpen) {
       setViewMonth(new Date(selectedWeek.start));
       btnRef.current?.measure((_fx, _fy, w, h, px, py) => {
-        const winWidth = Dimensions.get('window').width;
-        setBtnRect({ top: py + h + 4, right: winWidth - px - w });
+        const popupWidth = Math.min(320, Math.max(0, windowWidth - 24));
+        const desiredRight = windowWidth - px - w;
+        const right = Math.max(12, Math.min(windowWidth - popupWidth - 12, desiredRight));
+        setBtnRect({ top: py + h + 4, right });
         setIsOpen(true);
       });
     } else {
@@ -2450,13 +2579,13 @@ function WeekPickerButton({ selectedWeek, onChange }: { selectedWeek: WeekInMont
   };
 
   const calendarContent = (
-    <View style={[styles.weekPickerDropdown, btnRect ? { top: btnRect.top, right: btnRect.right } : { top: 0, right: 0 }]}>
+    <View style={[styles.weekPickerDropdown, { width: Math.min(320, Math.max(0, windowWidth - 24)) }, btnRect ? { top: btnRect.top, right: btnRect.right } : { top: 0, right: 0 }]}>
       <View style={styles.weekPickerHeader}>
-        <Pressable accessibilityRole="button" onPress={() => shiftMonth(-1)} style={styles.weekPickerNav}>
+        <Pressable accessibilityRole="button" accessibilityLabel="Tháng trước" onPress={() => shiftMonth(-1)} style={styles.weekPickerNav}>
           <MaterialCommunityIcons name="chevron-left" size={20} color={colors.primary} />
         </Pressable>
         <Text style={styles.weekPickerMonthLabel}>{monthLabel}</Text>
-        <Pressable accessibilityRole="button" onPress={() => shiftMonth(1)} style={styles.weekPickerNav}>
+        <Pressable accessibilityRole="button" accessibilityLabel="Tháng sau" onPress={() => shiftMonth(1)} style={styles.weekPickerNav}>
           <MaterialCommunityIcons name="chevron-right" size={20} color={colors.primary} />
         </Pressable>
       </View>
@@ -2753,6 +2882,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     flexBasis: 320,
     maxWidth: 520,
+    minWidth: 0,
     borderRadius: 14,
     borderWidth: 1,
     borderColor: colors.border,
@@ -2772,6 +2902,8 @@ const styles = StyleSheet.create({
   metricCard: {
     flexGrow: 1,
     flexBasis: 180,
+    flexShrink: 1,
+    minWidth: 0,
     minHeight: 132,
     borderRadius: 12,
     gap: 8,
@@ -2794,11 +2926,15 @@ const styles = StyleSheet.create({
   mainColumn: {
     flexGrow: 2,
     flexBasis: 620,
+    flexShrink: 1,
+    minWidth: 0,
     gap: 16,
   },
   sideColumn: {
     flexGrow: 1,
     flexBasis: 320,
+    flexShrink: 1,
+    minWidth: 0,
     gap: 16,
   },
   panel: {
@@ -2971,6 +3107,12 @@ const styles = StyleSheet.create({
     borderBottomColor: '#e2e8f0',
     gap: 12,
   },
+  scoreTableScrollContent: {
+    flexGrow: 1,
+  },
+  scoreTableScrollable: {
+    minWidth: 720,
+  },
   scoreTableHeaderCell: {
     fontSize: 12,
     fontWeight: '600',
@@ -3003,7 +3145,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.4)',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 24,
+    padding: 12,
+  },
+  modalKeyboardRoot: {
+    flex: 1,
   },
   studentDetailModal: {
     backgroundColor: '#FFFFFF',
@@ -3023,8 +3168,8 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.border,
   },
   modalCloseBtn: {
-    width: 32,
-    height: 32,
+    width: 44,
+    height: 44,
     borderRadius: 8,
     backgroundColor: '#F1F5F9',
     alignItems: 'center',
@@ -3219,7 +3364,7 @@ const styles = StyleSheet.create({
     fontWeight: '900',
   },
   smallButton: {
-    minHeight: 36,
+    minHeight: 44,
     borderRadius: 8,
     backgroundColor: colors.softBlue,
     justifyContent: 'center',
@@ -3354,20 +3499,24 @@ const styles = StyleSheet.create({
   assignmentWorkspaceGrid: {
     width: '100%',
     flexDirection: 'row',
+    flexWrap: 'wrap',
     alignItems: 'flex-start',
     gap: 18,
+  },
+  assignmentWorkspaceGridStacked: {
+    flexDirection: 'column',
   },
   assignmentStudentColumn: {
     flexGrow: 0,
     flexShrink: 1,
     flexBasis: '36%',
-    minWidth: 300,
+    minWidth: 0,
   },
   assignmentDetailColumn: {
     flexGrow: 1,
     flexShrink: 1,
     flexBasis: '62%',
-    minWidth: 420,
+    minWidth: 0,
   },
   assignmentSearchInput: {
     height: 42,
@@ -3403,6 +3552,31 @@ const styles = StyleSheet.create({
   },
   assignmentTopicList: {
     gap: 10,
+  },
+  gradebookRows: {
+    gap: 8,
+  },
+  gradebookRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    gap: 8,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: 10,
+    padding: 10,
+  },
+  gradebookName: {
+    flexGrow: 1,
+    minWidth: 160,
+    gap: 3,
+  },
+  gradebookDetail: {
+    gap: 8,
+    marginTop: 12,
+    paddingTop: 12,
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
   },
   assignmentRow: {
     minHeight: 90,
@@ -3577,8 +3751,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#F8FAFC',
   },
   weekPickerNav: {
-    width: 30,
-    height: 30,
+    width: 44,
+    height: 44,
     borderRadius: 8,
     backgroundColor: colors.softBlue,
     alignItems: 'center',
@@ -3647,8 +3821,8 @@ const styles = StyleSheet.create({
     padding: 24,
     width: '100%',
     maxWidth: 520,
-    maxHeight: '85%',
     gap: 4,
+    overflow: 'hidden',
   },
   createFormGroup: {
     gap: 8,
@@ -3694,7 +3868,11 @@ const styles = StyleSheet.create({
   },
   createTargetRow: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
     gap: 10,
+  },
+  createTargetRowCompact: {
+    flexDirection: 'column',
   },
   createTargetBtn: {
     flex: 1,
@@ -3723,10 +3901,19 @@ const styles = StyleSheet.create({
     fontSize: 13,
     marginTop: 8,
   },
+  createHintText: {
+    color: '#F59E0B',
+    fontSize: 12,
+    marginTop: 6,
+  },
   createModalActions: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
     gap: 10,
     marginTop: 20,
+  },
+  createModalActionsCompact: {
+    flexDirection: 'column-reverse',
   },
   createCancelBtn: {
     flex: 1,

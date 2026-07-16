@@ -81,7 +81,7 @@ if not errorlevel 1 (
     set /a PASS+=1
 ) else (
     echo   [WARN] Cloudflare tunnel not running.
-    echo          Run run_demo_with_tunnel.bat to start it.
+    echo          Run run_deploy.bat to start it.
     set /a WARN+=1
 )
 

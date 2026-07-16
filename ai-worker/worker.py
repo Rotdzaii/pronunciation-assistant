@@ -14,6 +14,7 @@ from dotenv import load_dotenv
 from supabase import Client, create_client
 
 from app.contracts.ai_result_contract import build_failed_ai_result
+from app.audio.storage_resolver import AudioReferenceError, resolve_audio_reference
 from app.contracts.webhook_payload import (
     build_failed_webhook_payload,
     build_success_webhook_payload,
@@ -135,6 +136,7 @@ def _load_env() -> dict[str, Any]:
         "webhook_url": os.environ["NODE_WEBHOOK_URL"],
         "webhook_secret": os.environ["AI_WEBHOOK_SECRET"],
         "queue_name": os.getenv("QUEUE_NAME", "practice_jobs"),
+        "practice_audio_bucket": os.getenv("PRACTICE_AUDIO_BUCKET", "practice-audios").strip() or "practice-audios",
         "scorer_mode": scorer_mode,
         "alignment_mode": os.getenv("ALIGNMENT_MODE", "fallback").strip().lower() or "fallback",
         "model_version": os.getenv("MODEL_VERSION", DEFAULT_MODEL_VERSION).strip() or DEFAULT_MODEL_VERSION,
@@ -506,6 +508,19 @@ def _build_failed_result(
     return _normalize_result_for_webhook(result, config=config, error_type=error_type)
 
 
+def _build_validation_failure_webhook_payload(job_id: str) -> dict[str, Any]:
+    """Return a static terminal payload even when an internal result is invalid.
+
+    Do not reuse the invalid scorer result here: its metadata may be exactly
+    what made validation fail.  The minimal failed contract is safe for the
+    backend and keeps the queue from leaving the student's job in processing.
+    """
+    return build_failed_webhook_payload(
+        job_id,
+        "AI worker could not validate the scoring result. Please retry.",
+    )
+
+
 def _post_webhook(webhook_url: str, webhook_secret: str, payload: dict[str, Any]) -> requests.Response:
     return requests.post(
         webhook_url,
@@ -516,28 +531,28 @@ def _post_webhook(webhook_url: str, webhook_secret: str, payload: dict[str, Any]
 
 
 @contextmanager
-def _prepared_audio_for_job(job: dict[str, Any]):
-    """Download/decode once and retain the prepared WAV through MFA/CNN scoring."""
+def _prepared_audio_for_job(
+    job: dict[str, Any],
+    *,
+    storage_client: Client | None = None,
+    practice_audio_bucket: str = "practice-audios",
+):
+    """Prepare queued audio, supporting stable Storage keys and legacy URLs."""
     from app.alignment.audio_preparation import prepare_audio_for_mfa
-
-    audio_reference = str(job.get("audio_path") or job.get("audio_url") or "").strip()
-    if not audio_reference:
-        raise PhoenixWorkerError("Job has no audio reference.", "audio_preprocess_failed")
 
     with tempfile.TemporaryDirectory(prefix="worker-prepared-") as directory:
         root = Path(directory)
-        from urllib.parse import urlparse as _urlparse
+        try:
+            resolved = resolve_audio_reference(
+                job,
+                storage_client=storage_client,
+                practice_audio_bucket=practice_audio_bucket,
+                temp_dir=root,
+            )
+        except AudioReferenceError as exc:
+            raise PhoenixWorkerError(str(exc), "audio_preprocess_failed") from exc
 
-        parsed = _urlparse(audio_reference)
-        if parsed.scheme in {"http", "https"}:
-            response = requests.get(audio_reference, timeout=30)
-            response.raise_for_status()
-            source = root / f"source{Path(parsed.path).suffix or '.audio'}"
-            source.write_bytes(response.content)
-        else:
-            source = Path(audio_reference)
-
-        prepared = prepare_audio_for_mfa(source, root / "prepared.wav")
+        prepared = prepare_audio_for_mfa(resolved.path, root / "prepared.wav")
         yield prepared
 
 
@@ -667,7 +682,11 @@ def _process_one_job(client: Client, config: dict[str, Any]) -> bool:
         if config["scorer_mode"] == "mock":
             quality_rejection, _ = _audio_quality_gate(Path(), config)
         else:
-            with _prepared_audio_for_job(job) as prepared_audio:
+            with _prepared_audio_for_job(
+                job,
+                storage_client=client,
+                practice_audio_bucket=config["practice_audio_bucket"],
+            ) as prepared_audio:
                 scoring_job = {
                     **job,
                     "audio_path": str(prepared_audio.path),
@@ -724,21 +743,80 @@ def _process_one_job(client: Client, config: dict[str, Any]) -> bool:
     if result.get("status") == "failed":
         webhook_payload = build_failed_webhook_payload(
             job["job_id"],
-            _sanitize_error_text(str(result.get("metadata", {}).get("error") or "AI scoring failed.")),
+            _sanitize_error_text(
+                str(
+                    result.get("metadata", {}).get("error")
+                    or "AI scoring failed."
+                )
+            ),
             result,
         )
     else:
-        webhook_payload = build_success_webhook_payload(job["job_id"], result)
+        webhook_payload = build_success_webhook_payload(
+            job["job_id"],
+            result,
+        )
 
-    payload_is_valid, payload_issues = validate_webhook_payload(webhook_payload)
+    result_metadata = (
+        result.get("metadata")
+        if isinstance(result.get("metadata"), dict)
+        else {}
+    )
+    webhook_feedback = (
+        webhook_payload.get("feedback")
+        if isinstance(webhook_payload.get("feedback"), dict)
+        else {}
+    )
+    webhook_ai_result = (
+        webhook_feedback.get("ai_result")
+        if isinstance(webhook_feedback.get("ai_result"), dict)
+        else {}
+    )
+
+    print(
+        "score_trace "
+        f"job_id={job['job_id']} "
+        f"result_status={result.get('status')!r} "
+        f"result_score={result.get('score')!r} "
+        f"result_score_type={result.get('score_type')!r} "
+        f"webhook_status={webhook_payload.get('status')!r} "
+        f"webhook_score={webhook_payload.get('score')!r} "
+        f"feedback_ai_result_score={webhook_ai_result.get('score')!r} "
+        f"pronunciation_score_source="
+        f"{result.get('pronunciation_score_source') or result_metadata.get('pronunciation_score_source')!r} "
+        f"model_confidence={_extract_model_confidence(result)!r}"
+    )
+
+    payload_is_valid, payload_issues = validate_webhook_payload(
+        webhook_payload
+    )
     if not payload_is_valid:
-        print("Webhook payload validation failed: " + " | ".join(payload_issues))
+        print(
+            "Webhook payload validation failed: "
+            + " | ".join(payload_issues)
+        )
         print("webhook_payload_valid=false")
-        print("post_attempted=false")
-        print("archive_attempted=false")
-        print("reason=payload_validation_failed")
-        return False
-    print("webhook_payload_valid=true")
+        print(
+            "reason=payload_validation_failed; "
+            "sending terminal safety payload"
+        )
+        webhook_payload = _build_validation_failure_webhook_payload(
+            job["job_id"]
+        )
+        safety_payload_is_valid, safety_payload_issues = (
+            validate_webhook_payload(webhook_payload)
+        )
+        print(
+            "safety_webhook_payload_valid="
+            f"{'true' if safety_payload_is_valid else 'false'}"
+        )
+        if not safety_payload_is_valid:
+            print(
+                "Safety payload validation unexpectedly failed: "
+                + " | ".join(safety_payload_issues)
+            )
+    else:
+        print("webhook_payload_valid=true")
 
     try:
         response = _post_webhook(
@@ -755,10 +833,17 @@ def _process_one_job(client: Client, config: dict[str, Any]) -> bool:
         return False
 
     print(f"webhook_status_code={response.status_code}")
+    response_preview = _sanitize_error_text(
+        str(response.text or "")[:500]
+    )
+    print(f"webhook_response_body={response_preview}")
 
     if not 200 <= response.status_code < 300:
-        print(f"Webhook failed. Message {msg_id} was not archived. error_type=webhook_failed")
-        print(_sanitize_error_text(response.text))
+        print(
+            f"Webhook failed. Message {msg_id} was not archived. "
+            "error_type=webhook_failed"
+        )
+        print(response_preview)
         return False
 
     try:

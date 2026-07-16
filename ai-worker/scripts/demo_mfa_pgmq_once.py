@@ -4,10 +4,9 @@ import argparse
 import json
 import os
 import sys
-import tempfile
 from pathlib import Path
 from typing import Any
-from urllib.parse import urlparse, urlsplit, urlunsplit
+from urllib.parse import urlsplit, urlunsplit
 
 
 AI_WORKER_ROOT = Path(__file__).resolve().parents[1]
@@ -18,6 +17,7 @@ if str(AI_WORKER_ROOT) not in sys.path:
 import worker  # noqa: E402
 from app.contracts.ai_result_validator import validate_ai_result  # noqa: E402
 from app.alignment.mfa_aligner import run_mfa_preflight  # noqa: E402
+from app.audio.storage_resolver import ResolvedAudioReference, resolve_audio_reference  # noqa: E402
 from app.contracts.webhook_payload import (  # noqa: E402
     build_failed_webhook_payload,
     build_success_webhook_payload,
@@ -116,7 +116,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--mfa-debug-dir",
         default=None,
-        help="Optional local directory for sanitized MFA failure artifacts. Requires --mfa-debug.",
+        help="Optional local directory for sanitized MFA success/failure artifacts. Requires --mfa-debug.",
     )
     args = parser.parse_args()
     if args.mfa_debug and (args.post or args.archive):
@@ -239,42 +239,24 @@ def top_segment(ai_result: dict[str, Any]) -> dict[str, Any]:
     return max(segments, key=lambda item: float(item.get("diagnosis_confidence") or 0.0))
 
 
-def _download_audio_to_temp(audio_url: str) -> Path:
-    try:
-        import requests
-    except ImportError as exc:
-        raise RuntimeError(f"Downloading queue audio_url requires requests: {exc}") from exc
-
-    response = requests.get(audio_url, timeout=60)
-    response.raise_for_status()
-    suffix = Path(urlparse(audio_url).path).suffix or ".audio"
-    temp_file = tempfile.NamedTemporaryFile(delete=False, suffix=suffix)
-    temp_path = Path(temp_file.name)
-    try:
-        temp_file.write(response.content)
-    finally:
-        temp_file.close()
-    return temp_path
-
-
-def prepare_scoring_job(job: dict[str, Any]) -> tuple[dict[str, Any], str, bool]:
-    audio_url = str(job.get("audio_url") or "").strip()
-    if not audio_url:
-        raise RuntimeError("Queue message audio_url is required.")
-
-    parsed = urlparse(audio_url)
-    if parsed.scheme in {"http", "https"}:
-        temp_audio_path = _download_audio_to_temp(audio_url)
-        prepared = dict(job)
-        prepared["audio_path"] = str(temp_audio_path)
-        prepared["audio_url"] = ""
-        return prepared, "downloaded_to_temp", True
-
-    local_path = Path(audio_url).expanduser()
+def prepare_scoring_job(
+    job: dict[str, Any],
+    *,
+    storage_client: Any,
+    practice_audio_bucket: str,
+) -> tuple[dict[str, Any], str, ResolvedAudioReference]:
+    """Resolve legacy URLs and stable Storage paths with the worker's resolver."""
+    resolved = resolve_audio_reference(
+        job,
+        storage_client=storage_client,
+        practice_audio_bucket=practice_audio_bucket,
+        request_timeout_seconds=60,
+    )
     prepared = dict(job)
-    prepared["audio_path"] = str(local_path)
+    prepared["audio_path"] = str(resolved.path)
     prepared["audio_url"] = ""
-    return prepared, "local_path", False
+    prepared["audio_reference_type"] = resolved.reference_type
+    return prepared, resolved.reference_type, resolved
 
 
 def post_payload(webhook_url: str, secret: str, payload: dict[str, Any]) -> tuple[bool, str]:
@@ -411,7 +393,7 @@ def main() -> int:
         )
         return 1
 
-    temp_audio_path: Path | None = None
+    audio_resolution: ResolvedAudioReference | None = None
     post_attempted = False
     archive_attempted = False
     post_success = False
@@ -423,9 +405,11 @@ def main() -> int:
 
     try:
         try:
-            scoring_job, download_status, uses_temp_audio = prepare_scoring_job(job)
-            temp_audio_value = str(scoring_job.get("audio_path") or "").strip()
-            temp_audio_path = Path(temp_audio_value) if temp_audio_value and uses_temp_audio else None
+            scoring_job, download_status, audio_resolution = prepare_scoring_job(
+                job,
+                storage_client=client,
+                practice_audio_bucket=os.getenv("PRACTICE_AUDIO_BUCKET", "practice-audios").strip() or "practice-audios",
+            )
         except Exception as exc:
             print_section(
                 "DOWNLOAD_RESULT",
@@ -455,7 +439,7 @@ def main() -> int:
                     "download_status": download_status,
                     "queue_audio_prepared_for_local_scoring": True,
                     "audio_url": "<audio-url-redacted>",
-                    "local_temp_path_redacted": temp_audio_path is not None,
+                    "local_temp_path_redacted": bool(audio_resolution and audio_resolution.cleanup_required),
                 },
         )
 
@@ -691,8 +675,8 @@ def main() -> int:
         )
         return 0 if ai_result_valid and payload_valid and safety_passed and (not post_attempted or post_success) and (not archive_attempted or archive_success) else 1
     finally:
-        if temp_audio_path is not None:
-            temp_audio_path.unlink(missing_ok=True)
+        if audio_resolution is not None:
+            audio_resolution.cleanup()
 
 
 if __name__ == "__main__":

@@ -2,6 +2,11 @@
 
 ## Purpose
 
+Historical scoring note: any heuristic score in this validation record predates
+the Deep Learning First scoring decision. It is not a current contract example;
+public score is now `null` with `score_type: "unavailable"` until a learned
+quality scorer is trained and validated.
+
 This document validates that an MFA-aligned `cnn_attention_context` AI result can be converted into a backend webhook payload compatible with:
 
 ```text

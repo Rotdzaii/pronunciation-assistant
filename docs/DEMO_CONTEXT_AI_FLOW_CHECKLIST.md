@@ -47,7 +47,9 @@ Before starting, close any old backend, frontend, or worker terminals from previ
 
 ## Backend Startup
 
-From the repo root:
+From the repository root:
+
+**PowerShell**
 
 ```powershell
 cd fastapi-backend
@@ -57,6 +59,8 @@ python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 
 Check health:
 
+**PowerShell**
+
 ```powershell
 Invoke-RestMethod http://localhost:8000/health
 ```
@@ -65,12 +69,14 @@ Expected: backend returns a healthy response.
 
 ## Frontend Startup
 
-Open a second terminal from the repo root:
+Open a second terminal. Expo must run from `frontend/`, not repository root.
 
-```powershell
-cd frontend
-$env:EXPO_PUBLIC_API_BASE_URL="http://localhost:8000"
-npm run web
+**Windows CMD**
+
+```cmd
+cd /d C:\Users\Admin\Documents\KLTN\pronunciation-assistant\frontend
+npm install
+npx expo start -c
 ```
 
 Open the Expo Web URL, usually:
@@ -79,27 +85,32 @@ Open the Expo Web URL, usually:
 http://localhost:8081
 ```
 
-## AI Worker Env Setup
+## AI Worker Setup
 
-Open a third terminal from the repo root:
+Open Terminal 3 in `ai-worker/`. Create `ai-worker/.env` from its example and
+set local values there; do not pass or print secrets on the command line. Keep
+`QUEUE_NAME=practice_jobs` and set `NODE_WEBHOOK_URL` to
+`http://localhost:8000/practice/webhook/ai-result` for the local backend. This
+context workflow needs the approved local inference environment because
+`ai-worker/requirements.txt` does not declare PyTorch.
 
-```powershell
-$env:SUPABASE_URL="https://your-project.supabase.co"
-$env:SUPABASE_SERVICE_ROLE_KEY="<local-service-role-key>"
-$env:QUEUE_NAME="practice_jobs"
+For MFA alignment, use the official Windows Conda runtime from the worker env:
+`MFA_RUNTIME=conda` and `MFA_CONDA_ENV=aligner`. Do not use WSL for this
+workflow. Smart App Control can block an unsigned `_kalpy.pyd`; resolve that
+Windows trust/policy issue before running MFA.
 
-$env:SCORER_MODE="cnn_attention_context"
-$env:CNN_ATTENTION_CONTEXT_CHECKPOINT_PATH="C:\path\to\context-checkpoint.pt"
-$env:CNN_ATTENTION_CONTEXT_MODE="context_0_10"
-$env:CNN_ATTENTION_CONTEXT_LEFT_SECONDS="0.10"
-$env:CNN_ATTENTION_CONTEXT_RIGHT_SECONDS="0.10"
+**Windows CMD**
 
-$env:NODE_WEBHOOK_URL="http://localhost:8000/practice/webhook/ai-result"
-$env:AI_WEBHOOK_SECRET="<local-ai-webhook-secret>"
-$env:WORKER_MODE="once"
+```cmd
+cd /d C:\Users\Admin\Documents\KLTN\pronunciation-assistant\ai-worker
+copy .env.example .env
+python -m venv .venv
+.venv\Scripts\python.exe -m pip install -r requirements.txt
 ```
 
-Do not print or commit real service-role keys, webhook secrets, or checkpoint files.
+Set the context checkpoint path and `SCORER_MODE=cnn_attention_context` in the
+local `ai-worker/.env`. Do not commit or print real service-role keys, webhook
+secrets, or checkpoint files.
 
 ## Create Practice Job From Frontend
 
@@ -183,10 +194,14 @@ Confirm the message payload contains the expected `job_id`, `student_id`, `targe
 
 ## Run Worker Once
 
-From the AI Worker terminal at the repo root:
+From Terminal 3 in `ai-worker/`, set one-shot mode only for that PowerShell
+session, then run the worker with that directory's virtual environment:
+
+**PowerShell**
 
 ```powershell
-.\ai-worker\.venv\Scripts\python.exe ai-worker\worker.py
+$env:WORKER_MODE = "once"
+.\.venv\Scripts\python.exe worker.py
 ```
 
 Expected output:

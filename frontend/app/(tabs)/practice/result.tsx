@@ -12,96 +12,213 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Audio } from 'expo-av';
 import { MaterialIcons } from '@expo/vector-icons';
-import { ScoreRing, TipCard, WaveformBars, WordToken } from '../../../components/practice';
+import { TipCard, WaveformBars, WordToken } from '../../../components/practice';
 import type { WordStatus } from '../../../components/practice';
 import { colors, radius, spacing, typography } from '../../../constants/theme';
-import {
-  clampScore,
-  formatFeedbackLines,
-  formatProblemPhonemes,
-} from '../../../lib/practiceFormatters';
-import type { PracticeFeedback, ProblemPhoneme } from '../../../types';
+import { fetchPracticeHistoryAudio, fetchPracticeStatus } from '../../../lib/api';
+import { useAuth } from '../../../lib/auth';
+import type { PracticeFeedback, PracticeJob, ReliabilityStatus } from '../../../types';
 
-const BREAKPOINT_TABLET = 768;
+const COMPACT_BREAKPOINT = 768;
+const WIDE_BREAKPOINT = 1200;
 
 // Static waveform bar heights (decorative, matching result.html proportions)
 const STUDENT_WAVEFORM   = [6, 10, 16, 12, 8, 4, 10, 14, 6, 10, 4, 8, 14, 10, 4];
-const REFERENCE_WAVEFORM = [8, 12, 16, 16, 12, 8, 12, 16, 16, 12, 8, 6];
 
-function getScoreTitle(score: number): string {
-  if (score >= 90) return 'Xuất sắc! Phát âm hoàn hảo!';
-  if (score >= 75) return 'Tốt lắm! Bạn đang tiến bộ!';
-  if (score >= 60) return 'Khá ổn, tiếp tục cố gắng!';
-  if (score >= 40) return 'Cần cải thiện thêm';
-  return 'Hãy luyện tập nhiều hơn!';
+function formatPronunciation(value: string | null): string | null {
+  if (!value) return null;
+
+  const phonetic = value.trim().replace(/^[\s/\[\]]+|[\s/\[\]]+$/g, '').trim();
+  return phonetic ? `/${phonetic}/` : null;
+}
+
+function asRecord(value: unknown): Record<string, unknown> | null {
+  return value && typeof value === 'object' && !Array.isArray(value) ? value as Record<string, unknown> : null;
+}
+
+function asRecordList(value: unknown): Record<string, unknown>[] {
+  return Array.isArray(value)
+    ? value.map(asRecord).filter((item): item is Record<string, unknown> => item !== null)
+    : [];
+}
+
+type DiagnosisPhoneCandidate = {
+  phone: string;
+  confidence: number | null;
+};
+
+function diagnosisPhoneCandidate(value: unknown): DiagnosisPhoneCandidate | null {
+  const segment = asRecord(value);
+  const phone = typeof segment?.phone === 'string' ? segment.phone.trim() : '';
+  if (!phone) return null;
+  return {
+    phone,
+    confidence: typeof segment?.diagnosis_confidence === 'number' ? segment.diagnosis_confidence : null,
+  };
+}
+
+function selectSuspectedPhone(
+  diagnosis: Record<string, unknown> | null,
+  feedback: PracticeFeedback | null,
+  aiResult: Record<string, unknown> | null,
+  problemPhonemes: unknown,
+): DiagnosisPhoneCandidate | null {
+  // Priority 1: explicit suspected_problem_phone on diagnosis
+  const diagnosisPhone = typeof diagnosis?.suspected_problem_phone === 'string'
+    ? diagnosis.suspected_problem_phone.trim()
+    : '';
+  if (diagnosisPhone) {
+    return {
+      phone: diagnosisPhone,
+      confidence: typeof diagnosis?.diagnosis_confidence === 'number'
+        ? diagnosis.diagnosis_confidence
+        : null,
+    };
+  }
+
+  // Priority 2: top_segment (singular) inside diagnosis paired with diagnosis-level confidence
+  const topSegment = asRecord(diagnosis?.top_segment);
+  const topSegmentPhone = typeof topSegment?.phone === 'string' ? topSegment.phone.trim() : '';
+  if (topSegmentPhone) {
+    return {
+      phone: topSegmentPhone,
+      confidence: typeof diagnosis?.diagnosis_confidence === 'number'
+        ? diagnosis.diagnosis_confidence
+        : typeof topSegment?.diagnosis_confidence === 'number'
+          ? topSegment.diagnosis_confidence
+          : null,
+    };
+  }
+
+  // Priority 3: segment lists sorted by confidence
+  const feedbackMetadata = asRecord(feedback?.metadata);
+  const aiMetadata = asRecord(aiResult?.metadata);
+  const topSegmentCandidates = [
+    ...asRecordList(feedbackMetadata?.top_issue_segments),
+    ...asRecordList(aiMetadata?.top_issue_segments),
+    ...asRecordList(diagnosis?.suspected_segments),
+    ...asRecordList(feedback?.segments),
+    ...asRecordList(aiResult?.segments),
+  ]
+    .map(diagnosisPhoneCandidate)
+    .filter((candidate): candidate is DiagnosisPhoneCandidate => candidate !== null)
+    .sort((left, right) => (right.confidence ?? -1) - (left.confidence ?? -1));
+  if (topSegmentCandidates.length > 0) return topSegmentCandidates[0];
+
+  // Priority 4 (last resort): problem_phonemes[0]
+  for (const phoneme of Array.isArray(problemPhonemes) ? problemPhonemes : []) {
+    if (typeof phoneme === 'string' && phoneme.trim()) {
+      return { phone: phoneme.trim(), confidence: null };
+    }
+    const record = asRecord(phoneme);
+    const phone = typeof record?.phoneme === 'string'
+      ? record.phoneme.trim()
+      : typeof record?.phone === 'string'
+        ? record.phone.trim()
+        : '';
+    if (phone) return { phone, confidence: null };
+  }
+  return null;
+}
+
+function errorTypeLabel(errorType: unknown): string | null {
+  if (errorType === 'addition') return 'Thêm âm';
+  if (errorType === 'deletion') return 'Bỏ âm';
+  if (errorType === 'substitution') return 'Thay thế âm';
+  return null;
 }
 
 export default function ResultScreen() {
   const { width } = useWindowDimensions();
-  const isTablet = width >= BREAKPOINT_TABLET;
+  const isWide = width >= WIDE_BREAKPOINT;
+  const stackStatCards = width < 360;
   const router = useRouter();
-  const { score, word, problem_phonemes, feedback, audio_url } =
-    useLocalSearchParams<{
-      score?: string;
-      word?: string;
-      problem_phonemes?: string;
-      feedback?: string;
-      audio_url?: string;
-    }>();
+  const { id } = useLocalSearchParams<{ id?: string }>();
+  const { accessToken } = useAuth();
 
-  // ── parse route params ───────────────────────────────────────────────────
-  const scoreNum = clampScore(parseInt(score ?? '0', 10));
+  // ── fetch practice job by id ─────────────────────────────────────────────
+  const [job, setJob] = useState<PracticeJob | null>(null);
+  const [fetchError, setFetchError] = useState<string | null>(null);
 
-  const parsedProblems: ProblemPhoneme[] = (() => {
-    try {
-      const p = JSON.parse(problem_phonemes ?? '[]');
-      return Array.isArray(p) ? p : [];
-    } catch { return []; }
-  })();
+  useEffect(() => {
+    if (!id) { setFetchError('Không tìm thấy kết quả.'); return; }
+    let cancelled = false;
+    fetchPracticeStatus(id, accessToken)
+      .then(data => { if (!cancelled) setJob(data); })
+      .catch(() => { if (!cancelled) setFetchError('Không tải được kết quả. Vui lòng thử lại.'); });
+    return () => { cancelled = true; };
+  }, [id, accessToken]);
 
-  const parsedFeedback: PracticeFeedback | null = (() => {
-    try {
-      const f = JSON.parse(feedback ?? 'null');
-      if (f && !Array.isArray(f) && typeof f === 'object') return f as PracticeFeedback;
-      return null;
-    } catch { return null; }
-  })();
+  // ── derive display values from fetched job ───────────────────────────────
+  const word = job?.target_word ?? '';
 
-  const feedbackLines = formatFeedbackLines(parsedFeedback);
-  const problemLines  = formatProblemPhonemes(parsedProblems);
+  const parsedFeedback: PracticeFeedback | null =
+    job?.feedback && !Array.isArray(job.feedback) && typeof job.feedback === 'object'
+      ? (job.feedback as PracticeFeedback)
+      : null;
 
-  const wordStatus: WordStatus =
-    scoreNum >= 70 ? 'correct' : scoreNum >= 40 ? 'warning' : 'incorrect';
+  // ── reliability state (new canonical contract; defaults to 'valid' for old records) ──
+  const reliabilityStatus: ReliabilityStatus =
+    (parsedFeedback?.reliability as { status?: ReliabilityStatus } | undefined)?.status ?? 'valid';
+  const isInvalid  = reliabilityStatus === 'invalid';
+  const hasWarning = reliabilityStatus === 'valid_with_warning';
+  const aiResult = asRecord(parsedFeedback?.ai_result);
+  const diagnosis = asRecord(parsedFeedback?.diagnosis) ?? asRecord(aiResult?.diagnosis);
+  const modelCapability =
+    (typeof parsedFeedback?.model_capability === 'string' ? parsedFeedback.model_capability : null)
+    ?? (typeof aiResult?.model_capability === 'string' ? aiResult.model_capability : null)
+    ?? 'error_type_classifier_only';
+  const isClassifierOnly = modelCapability === 'error_type_classifier_only';
+  const predictedErrorType = diagnosis?.predicted_error_type ?? parsedFeedback?.predicted_error_type;
+  const predictedErrorLabel = errorTypeLabel(predictedErrorType);
+  const suspectedDiagnosis = isInvalid
+    ? null
+    : selectSuspectedPhone(diagnosis, parsedFeedback, aiResult, job?.problem_phonemes);
+  const suspectedProblemPhone = suspectedDiagnosis ? formatPronunciation(suspectedDiagnosis.phone) : null;
+  const diagnosisConfidence = typeof suspectedDiagnosis?.confidence === 'number'
+    ? Math.round(Math.max(0, Math.min(1, suspectedDiagnosis.confidence)) * 100)
+    : null;
+  const hasSuspectedDiagnosis = !isInvalid && Boolean(predictedErrorLabel);
+  const displayPronunciation = formatPronunciation(
+    typeof parsedFeedback?.display_pronunciation === 'string'
+      ? parsedFeedback.display_pronunciation
+      : null,
+  );
+  const expectedPhones: string[] =
+    Array.isArray(parsedFeedback?.expected_phones)
+      ? parsedFeedback.expected_phones.filter((phone): phone is string => typeof phone === 'string')
+      : [];
+  const wordStatus: WordStatus = 'warning';
 
-  const hasMeaningfulProblems =
-    parsedProblems.length > 0 &&
-    problemLines[0] !== 'Chưa phát hiện lỗi nổi bật.';
-
-  // Tip: prefer feedback.tips[0], else first feedback line, else generic
   const tipText = (() => {
-    if (parsedFeedback && Array.isArray(parsedFeedback.tips) && parsedFeedback.tips.length > 0) {
+    if (isInvalid) return 'Hãy thử lại với bản ghi âm rõ ràng hơn.';
+    if (!isClassifierOnly && parsedFeedback && Array.isArray(parsedFeedback.tips) && parsedFeedback.tips.length > 0) {
       const t = parsedFeedback.tips[0];
       if (typeof t === 'string' && t.trim()) return t.trim();
     }
-    const first = feedbackLines[0];
-    if (first && first !== 'Chưa có nhận xét chi tiết.') return first;
     return 'Luyện tập đều đặn mỗi ngày để cải thiện phát âm nhanh nhất.';
   })();
 
   // ── student recording playback (expo-av Audio.Sound) ─────────────────────
   const [isPlayingStudent, setIsPlayingStudent] = useState(false);
   const [studentLoading, setStudentLoading]     = useState(false);
+  const [signedAudioUrl, setSignedAudioUrl]     = useState<string | null>(null);
+  const [audioError, setAudioError]             = useState<string | null>(null);
   const studentSoundRef = useRef<Audio.Sound | null>(null);
 
+  // Unload audio and reset playback state whenever the viewed result changes.
   useEffect(() => {
     return () => {
       void studentSoundRef.current?.unloadAsync();
+      studentSoundRef.current = null;
+      setSignedAudioUrl(null);
+      setIsPlayingStudent(false);
+      setAudioError(null);
     };
-  }, []);
+  }, [id]);
 
   const toggleStudentPlayback = useCallback(async () => {
-    const uri = Array.isArray(audio_url) ? audio_url[0] : audio_url;
-    if (!uri) return;
+    if (!job?.id) return;
 
     if (isPlayingStudent) {
       await studentSoundRef.current?.pauseAsync();
@@ -110,11 +227,20 @@ export default function ResultScreen() {
     }
 
     setStudentLoading(true);
+    setAudioError(null);
     try {
       await Audio.setAudioModeAsync({
         allowsRecordingIOS: false,
         playsInSilentModeIOS: true,
       });
+
+      // Fetch a short-lived signed URL on first play; reuse on subsequent plays.
+      let uri = signedAudioUrl;
+      if (!uri) {
+        const response = await fetchPracticeHistoryAudio(job.id, accessToken);
+        uri = response.audio_url;
+        setSignedAudioUrl(uri);
+      }
 
       if (!studentSoundRef.current) {
         const { sound } = await Audio.Sound.createAsync(
@@ -127,19 +253,47 @@ export default function ResultScreen() {
           },
         );
         studentSoundRef.current = sound;
+        await studentSoundRef.current.playAsync();
+      } else {
+        await studentSoundRef.current.replayAsync();
       }
-      await studentSoundRef.current.playAsync();
       setIsPlayingStudent(true);
     } catch {
       setIsPlayingStudent(false);
+      setAudioError('Không thể phát bản ghi âm. Vui lòng thử lại.');
     } finally {
       setStudentLoading(false);
     }
-  }, [audio_url, isPlayingStudent]);
+  }, [job?.id, accessToken, isPlayingStudent, signedAudioUrl]);
 
-  const hasStudentAudio = Boolean(
-    Array.isArray(audio_url) ? audio_url[0] : audio_url,
-  );
+  // A storage object path means there is audio to play (may not be an HTTP URL).
+  const hasStudentAudio = Boolean(job?.audio_url);
+
+  // ── loading / error gates ────────────────────────────────────────────────
+  if (!job && !fetchError) {
+    return (
+      <SafeAreaView style={styles.root}>
+        <View style={styles.centerState}>
+          <ActivityIndicator size="large" color={colors.primary} />
+          <Text style={styles.loadingText}>Đang tải kết quả...</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  if (fetchError) {
+    return (
+      <SafeAreaView style={styles.root}>
+        <View style={styles.centerState}>
+          <MaterialIcons name="error-outline" size={48} color={colors.error} />
+          <Text style={styles.errorText}>{fetchError}</Text>
+          <Pressable style={styles.retryBtn} onPress={() => router.back()}>
+            <Text style={styles.retryBtnText}>Quay lại</Text>
+          </Pressable>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.root}>
@@ -153,23 +307,50 @@ export default function ResultScreen() {
         </Pressable>
 
         {/* ── Two-column container ── */}
-        <View style={[styles.twoCol, isTablet && styles.twoColRow]}>
+        <View style={[styles.twoCol, isWide && styles.twoColRow]}>
 
           {/* LEFT COLUMN: Score Card + Analysis Card */}
-          <View style={[styles.leftCol, isTablet && styles.leftColTablet]}>
+          <View style={[styles.leftCol, isWide && styles.leftColWide]}>
 
             {/* Score & Welcome Card */}
             <View style={styles.scoreCard}>
-              <ScoreRing score={scoreNum} size={160} />
-              <Text style={styles.scoreTitle}>{getScoreTitle(scoreNum)}</Text>
-              <Text style={styles.scoreDesc}>{feedbackLines[0]}</Text>
+              {isInvalid ? (
+                <>
+                  <View style={styles.reliabilityBannerInvalid}>
+                    <MaterialIcons name="error-outline" size={20} color="#991b1b" />
+                    <Text style={styles.reliabilityBannerTextInvalid}>
+                      Không thể xác định chính xác vị trí từng âm. Vui lòng thử lại.
+                    </Text>
+                  </View>
+                </>
+              ) : (
+                <>
+                  {isClassifierOnly ? (
+                    <Text style={styles.capabilityNotice}>
+                      Mô hình hiện chỉ phân loại loại lỗi khi có lỗi và chưa xác định được bạn phát âm đúng hay sai.
+                    </Text>
+                  ) : null}
+                  {hasWarning && (
+                    <View style={styles.reliabilityBannerWarning}>
+                      <MaterialIcons name="warning-amber" size={16} color="#92400e" />
+                      <Text style={styles.reliabilityBannerTextWarning}>
+                        Chất lượng ghi âm thấp — kết quả có thể không chính xác.
+                      </Text>
+                    </View>
+                  )}
+                  {displayPronunciation && <Text style={styles.displayPronunciation}>{displayPronunciation}</Text>}
+                  {!displayPronunciation && expectedPhones.length > 0 && (
+                    <Text style={styles.displayPronunciation}>{formatPronunciation(expectedPhones.join(''))}</Text>
+                  )}
+                </>
+              )}
             </View>
 
             {/* Interactive Sentence / Analysis Result Card */}
             <View style={styles.analysisCard}>
               <View style={styles.analysisHeader}>
                 <MaterialIcons name="text-format" size={20} color={colors.primary} />
-                <Text style={styles.analysisLabel}>ANALYSIS RESULT</Text>
+                <Text style={styles.analysisLabel}>PHÂN TÍCH LOẠI LỖI KHẢ DĨ</Text>
               </View>
 
               {/* Single word token for target word */}
@@ -181,36 +362,49 @@ export default function ResultScreen() {
                 )}
               </View>
 
-              {/* Problem phonemes list (when meaningful) */}
-              {hasMeaningfulProblems && (
-                <View style={styles.phonemeList}>
-                  {problemLines.map((line, i) => (
-                    <Text key={i} style={styles.phonemeLine}>• {line}</Text>
-                  ))}
+              {/* Feedback box — invalid / green / red */}
+              {isInvalid ? (
+                <View style={styles.feedbackBoxInvalid}>
+                  <MaterialIcons name="mic-off" size={20} color="#991b1b" style={styles.feedbackIcon} />
+                  <View style={styles.feedbackBody}>
+                    <Text style={styles.feedbackTitleInvalid}>Không thể đánh giá</Text>
+                    <Text style={styles.feedbackTextInvalid}>
+                      Không thể xác định chính xác vị trí từng âm. Vui lòng thử lại.
+                    </Text>
+                  </View>
                 </View>
-              )}
-
-              {/* Detailed Feedback box (rose, left border) */}
+              ) : (
               <View style={styles.feedbackBox}>
                 <MaterialIcons
-                  name="error"
+                  name="warning-amber"
                   size={20}
-                  color={colors.danger}
+                  color={colors.warning}
                   style={styles.feedbackIcon}
                 />
                 <View style={styles.feedbackBody}>
-                  <Text style={styles.feedbackTitle}>Detailed Feedback</Text>
-                  {feedbackLines.map((line, i) => (
-                    <Text key={i} style={styles.feedbackText}>{line}</Text>
-                  ))}
+                  <Text style={styles.feedbackTitle}>
+                    {hasSuspectedDiagnosis ? 'Loại lỗi mô hình nghi ngờ' : 'Chưa có loại lỗi dự đoán'}
+                  </Text>
+                  {hasSuspectedDiagnosis ? (
+                    <>
+                      <Text style={styles.feedbackText}>Loại lỗi dự đoán: {predictedErrorLabel}</Text>
+                      {suspectedProblemPhone ? <Text style={styles.feedbackText}>Mô hình nghi ngờ lỗi tại âm {suspectedProblemPhone}.</Text> : null}
+                      {diagnosisConfidence !== null ? <Text style={styles.feedbackText}>Độ tin cậy phân loại lỗi: {diagnosisConfidence}%.</Text> : null}
+                    </>
+                  ) : (
+                    <Text style={styles.feedbackText}>
+                      Mô hình chưa có đủ tín hiệu để đưa ra loại lỗi dự đoán.
+                    </Text>
+                  )}
                 </View>
               </View>
+              )}
             </View>
 
           </View>
 
           {/* RIGHT COLUMN: Listen & Compare + CTA + Tip + Bento */}
-          <View style={[styles.rightCol, isTablet && styles.rightColTablet]}>
+          <View style={[styles.rightCol, isWide && styles.rightColWide]}>
 
             {/* Listen & Compare Card */}
             <View style={styles.listenCard}>
@@ -257,32 +451,10 @@ export default function ResultScreen() {
                 </View>
               </View>
 
-              {/* Reference audio player (no API endpoint — show disabled) */}
-              <View style={[styles.playerCard, styles.referenceCard]}>
-                <View style={styles.playerHeader}>
-                  <Text style={styles.playerLabel}>CORRECT PRONUNCIATION</Text>
-                  <MaterialIcons name="check-circle" size={16} color={colors.primary} />
-                </View>
-                <View style={styles.playerRow}>
-                  <Pressable
-                    style={[styles.playBtn, { backgroundColor: colors.secondaryContainer }, styles.playBtnDisabled]}
-                    disabled
-                  >
-                    <MaterialIcons name="play-arrow" size={22} color={colors.white} />
-                  </Pressable>
-                  <View style={styles.waveformBox}>
-                    <WaveformBars
-                      heights={REFERENCE_WAVEFORM}
-                      color={colors.secondaryContainer}
-                      barWidth={4}
-                      gap={2}
-                      opacity={0.25}
-                      align="center"
-                    />
-                  </View>
-                </View>
-                <Text style={styles.referenceNote}>Âm mẫu chưa khả dụng</Text>
-              </View>
+              {audioError ? (
+                <Text style={styles.audioErrorText}>{audioError}</Text>
+              ) : null}
+
             </View>
 
             {/* Practice Again CTA */}
@@ -300,18 +472,18 @@ export default function ResultScreen() {
             />
 
             {/* Mini stats bento — real data: score + error count */}
-            <View style={styles.bento}>
+            <View style={[styles.bento, stackStatCards && styles.bentoStack]}>
               <View style={styles.bentoCell}>
-                <Text style={[styles.bentoValue, { color: colors.primary }]}>
-                  {scoreNum}
+                <Text style={[styles.bentoValue, { color: isInvalid ? colors.slate400 : colors.primary }]}>
+                  {isInvalid || !hasSuspectedDiagnosis ? '—' : predictedErrorLabel}
                 </Text>
-                <Text style={styles.bentoLabel}>ĐIỂM SỐ</Text>
+                <Text style={styles.bentoLabel}>LOẠI LỖI MÔ HÌNH NGHI NGỜ</Text>
               </View>
               <View style={styles.bentoCell}>
-                <Text style={[styles.bentoValue, { color: colors.secondaryContainer }]}>
-                  {parsedProblems.length}
+                <Text style={[styles.bentoValue, { color: isInvalid ? colors.slate400 : colors.secondaryContainer }]}>
+                  {isInvalid || diagnosisConfidence === null ? '—' : `${diagnosisConfidence}%`}
                 </Text>
-                <Text style={styles.bentoLabel}>LỖI PHÁT ÂM</Text>
+                <Text style={styles.bentoLabel}>ĐỘ TIN CẬY PHÂN LOẠI</Text>
               </View>
             </View>
 
@@ -328,6 +500,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
   },
   scroll: {
+    width: '100%',
     paddingHorizontal: spacing.lg,
     paddingTop: spacing.sm,
     paddingBottom: spacing.xxl,
@@ -339,6 +512,7 @@ const styles = StyleSheet.create({
   twoCol: {
     flexDirection: 'column',
     gap: spacing.lg,
+    width: '100%',
   },
   // Tablet override: side-by-side with items anchored to their own top.
   twoColRow: {
@@ -349,15 +523,17 @@ const styles = StyleSheet.create({
   // Left column (score + analysis) — full width on phone, flex:2 on tablet.
   leftCol: {
     gap: spacing.lg,
+    minWidth: 0,
   },
-  leftColTablet: {
+  leftColWide: {
     flex: 2,
   },
   // Right column (audio + cta + tip + bento) — full width on phone, flex:1 on tablet.
   rightCol: {
     gap: spacing.lg,
+    minWidth: 0,
   },
-  rightColTablet: {
+  rightColWide: {
     flex: 1,
   },
 
@@ -398,6 +574,12 @@ const styles = StyleSheet.create({
     ...typography.bodyMd,
     color: colors.onSurfaceVariant,
     textAlign: 'center',
+  },
+  capabilityNotice: {
+    ...typography.bodyMd,
+    color: colors.onSurfaceVariant,
+    textAlign: 'center',
+    lineHeight: 22,
   },
 
   // ── analysis card ────────────────────────────────────────────────────────
@@ -443,9 +625,15 @@ const styles = StyleSheet.create({
     gap: 4,
     paddingVertical: spacing.xs,
   },
+  phonemeLineRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
   phonemeLine: {
     ...typography.caption,
-    color: colors.onSurfaceVariant,
+    color: colors.danger,
+    fontWeight: '600',
     lineHeight: 18,
   },
   feedbackBox: {
@@ -472,6 +660,25 @@ const styles = StyleSheet.create({
   feedbackText: {
     fontSize: 14,
     color: colors.dangerDark,
+    lineHeight: 22,
+  },
+  feedbackBoxSuccess: {
+    flexDirection: 'row',
+    gap: spacing.md,
+    backgroundColor: colors.successLight,
+    borderRadius: radius.lg,
+    borderLeftWidth: 4,
+    borderLeftColor: colors.success,
+    padding: spacing.md,
+    marginTop: spacing.xs,
+  },
+  feedbackTitleSuccess: {
+    ...typography.labelBold,
+    color: colors.successDark,
+  },
+  feedbackTextSuccess: {
+    fontSize: 14,
+    color: colors.successDark,
     lineHeight: 22,
   },
 
@@ -546,6 +753,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  audioErrorText: {
+    ...typography.caption,
+    color: colors.error,
+    textAlign: 'center',
+    paddingHorizontal: spacing.xs,
+  },
   referenceNote: {
     ...typography.caption,
     color: colors.outlineVariant,
@@ -554,6 +767,7 @@ const styles = StyleSheet.create({
 
   // ── CTA button ───────────────────────────────────────────────────────────
   ctaButton: {
+    width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -577,6 +791,9 @@ const styles = StyleSheet.create({
   bento: {
     flexDirection: 'row',
     gap: spacing.md,
+  },
+  bentoStack: {
+    flexDirection: 'column',
   },
   bentoCell: {
     flex: 1,
@@ -604,5 +821,136 @@ const styles = StyleSheet.create({
     color: colors.slate400,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
+  },
+
+  // ── reliability banners ─────────────────────────────────────────────────
+  reliabilityBannerInvalid: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: spacing.sm,
+    backgroundColor: '#fee2e2',
+    borderRadius: radius.lg,
+    borderLeftWidth: 4,
+    borderLeftColor: '#ef4444',
+    padding: spacing.md,
+    marginVertical: spacing.sm,
+    width: '100%',
+  },
+  reliabilityBannerTextInvalid: {
+    flex: 1,
+    fontSize: 13,
+    color: '#991b1b',
+    lineHeight: 20,
+  },
+  reliabilityBannerWarning: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: spacing.sm,
+    backgroundColor: colors.warningLight,
+    borderRadius: radius.lg,
+    borderLeftWidth: 4,
+    borderLeftColor: colors.warning,
+    padding: spacing.sm,
+    width: '100%',
+  },
+  reliabilityBannerTextWarning: {
+    flex: 1,
+    fontSize: 12,
+    color: '#92400e',
+    lineHeight: 18,
+  },
+
+  // ── score type & display pronunciation ──────────────────────────────────
+  scoreTypeLabel: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: colors.slate400,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  displayPronunciation: {
+    ...typography.bodyMd,
+    color: colors.slate500,
+    fontStyle: 'italic',
+    letterSpacing: 0.5,
+  },
+
+  // ── phone results (canonical IPA chips) ──────────────────────────────────
+  phoneResultsRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 4,
+    paddingVertical: spacing.xs,
+  },
+  phoneChip: {
+    fontSize: 15,
+    fontWeight: '600',
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: radius.sm,
+    backgroundColor: colors.slate100,
+    color: colors.onSurface,
+    overflow: 'hidden',
+  },
+  phoneChipOk: {
+    backgroundColor: '#d1fae5',
+    color: '#065f46',
+  },
+  phoneChipBad: {
+    backgroundColor: colors.dangerLight,
+    color: colors.dangerDark,
+  },
+
+  // ── feedback box — invalid state ─────────────────────────────────────────
+  feedbackBoxInvalid: {
+    flexDirection: 'row',
+    gap: spacing.md,
+    backgroundColor: '#fee2e2',
+    borderRadius: radius.lg,
+    borderLeftWidth: 4,
+    borderLeftColor: '#ef4444',
+    padding: spacing.md,
+    marginTop: spacing.xs,
+  },
+  feedbackTitleInvalid: {
+    ...typography.labelBold,
+    color: '#991b1b',
+  },
+  feedbackTextInvalid: {
+    fontSize: 14,
+    color: '#991b1b',
+    lineHeight: 22,
+  },
+
+  // ── loading / error state ────────────────────────────────────────────────
+  centerState: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: spacing.md,
+    paddingHorizontal: spacing.xl,
+  },
+  loadingText: {
+    fontSize: 15,
+    color: colors.onSurfaceVariant,
+    textAlign: 'center',
+  },
+  errorText: {
+    fontSize: 15,
+    color: colors.error,
+    textAlign: 'center',
+    lineHeight: 22,
+  },
+  retryBtn: {
+    marginTop: spacing.sm,
+    paddingHorizontal: spacing.xl,
+    paddingVertical: spacing.md,
+    backgroundColor: colors.primary,
+    borderRadius: radius.xl,
+  },
+  retryBtnText: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: colors.white,
   },
 });

@@ -96,6 +96,9 @@ The context scorer validation entry point is:
 ai-worker/scripts/demo_context_mfa_aligned_inference.py
 ```
 
-## Future GOP/CaGOP
+## Future Learned Scoring
 
-Future GOP/CaGOP scoring should use MFA phone boundaries as the timing source for phone-level acoustic likelihood scoring. CNN Attention can continue to provide error-type diagnosis, while GOP/CaGOP or a hybrid layer provides pronunciation correctness evidence.
+MFA phone boundaries are the timing source for CNN + Attention + Context
+segment selection and localization. The selected future direction is an
+audited-correct-samples correctness head and, when quality labels exist, a
+learned quality/scoring head. GOP/CaGOP is not the Phoenix v2 roadmap.

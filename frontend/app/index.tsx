@@ -15,14 +15,16 @@ export default function Index() {
     }
 
     didRouteRef.current = true;
-    if (session) {
-      if (appRole === 'admin') {
-        router.replace('/(tabs)/admin');
-      } else if (appRole === 'teacher') {
-        router.replace('/(tabs)/teacher');
-      } else {
-        router.replace('/(tabs)');
-      }
+    if (session && appRole === 'admin') {
+      router.replace('/(tabs)/admin');
+    } else if (session && appRole === 'teacher') {
+      router.replace('/(tabs)/teacher');
+    } else if (session && appRole === 'student') {
+      router.replace('/(tabs)');
+    } else if (session) {
+      // A valid session without a resolved role is never allowed to enter a
+      // protected layout. Login/callback will finish bounded profile recovery.
+      router.replace('/(auth)/login');
     } else {
       router.replace('/welcome');
     }

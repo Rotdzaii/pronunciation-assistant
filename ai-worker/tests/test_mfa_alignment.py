@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import json
 import shutil
 import subprocess
 import tempfile
@@ -237,6 +238,76 @@ class MfaAlignmentUnitTests(unittest.TestCase):
         self.assertEqual(result["metadata"]["phone_span_fill_ratio"], 1.0)
         self.assertNotIn("speech_relative_coverage_ratio", result["metadata"])
 
+    def test_mfa_success_with_debug_dir_keeps_textgrid_and_safe_manifest(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            audio = root / "input.wav"
+            dictionary = root / "dictionary.txt"
+            debug_root = root / "debug"
+            write_tone(audio)
+            dictionary.write_text("cat K AE T\n", encoding="utf-8")
+
+            def complete_alignment(command: list[str], **_: object) -> subprocess.CompletedProcess[str]:
+                output_dir = Path(command[5])
+                output_dir.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(FIXTURES / "valid.TextGrid", output_dir / "input.TextGrid")
+                return subprocess.CompletedProcess(command, 0, "MFA completed", "")
+
+            with patch.dict(
+                os.environ,
+                {"MFA_DEBUG": "true", "MFA_DEBUG_DIR": str(debug_root)},
+                clear=False,
+            ), patch("app.alignment.mfa_aligner._mfa_command_prefix", return_value=["mfa"]), patch(
+                "app.alignment.mfa_aligner.prepare_audio_for_mfa", side_effect=prepare_test_audio
+            ), patch("app.alignment.mfa_aligner.subprocess.run", side_effect=complete_alignment):
+                result = run_mfa_alignment(
+                    audio,
+                    "cat",
+                    dictionary_path=dictionary,
+                    acoustic_model_path="english_mfa",
+                    job_id="job/debug",
+                )
+
+            artifact_dir = next(debug_root.iterdir())
+            self.assertTrue(artifact_dir.name.startswith("mfa-job-debug-"))
+            self.assertTrue((artifact_dir / "alignment.TextGrid").is_file())
+            self.assertTrue((artifact_dir / "transcript.lab").is_file())
+            self.assertTrue((artifact_dir / "prepared.wav").is_file())
+            manifest = json.loads((artifact_dir / "manifest.json").read_text(encoding="utf-8"))
+            self.assertEqual(manifest["status"], "success")
+            self.assertTrue(manifest["raw_phones"])
+            self.assertEqual(set(manifest["raw_phones"][0]), {"label", "start", "end", "word"})
+            payload = build_success_webhook_payload("job-debug", result)
+            self.assertNotIn(str(debug_root), str(payload))
+            self.assertNotIn("alignment.TextGrid", str(payload))
+
+    def test_mfa_success_without_debug_dir_cleans_work_directory(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            audio = root / "input.wav"
+            dictionary = root / "dictionary.txt"
+            mfa_temp = root / "mfa-temp"
+            write_tone(audio)
+            dictionary.write_text("cat K AE T\n", encoding="utf-8")
+
+            def complete_alignment(command: list[str], **_: object) -> subprocess.CompletedProcess[str]:
+                output_dir = Path(command[5])
+                output_dir.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(FIXTURES / "valid.TextGrid", output_dir / "input.TextGrid")
+                return subprocess.CompletedProcess(command, 0, "MFA completed", "")
+
+            with patch.dict(
+                os.environ,
+                {"MFA_DEBUG": "false", "MFA_DEBUG_DIR": "", "MFA_TEMP_DIR": str(mfa_temp)},
+                clear=False,
+            ), patch("app.alignment.mfa_aligner._mfa_command_prefix", return_value=["mfa"]), patch(
+                "app.alignment.mfa_aligner.prepare_audio_for_mfa", side_effect=prepare_test_audio
+            ), patch("app.alignment.mfa_aligner.subprocess.run", side_effect=complete_alignment):
+                result = run_mfa_alignment(audio, "cat", dictionary_path=dictionary, acoustic_model_path="english_mfa")
+
+            self.assertEqual(result["status"], "success")
+            self.assertEqual(list(mfa_temp.glob("mfa-align-*")), [])
+
     def test_nonzero_diagnostic_keeps_mfa_error_and_redacts_paths_and_urls(self) -> None:
         diagnostic = build_mfa_process_diagnostic(
             stage="align",
@@ -325,6 +396,7 @@ class MfaAlignmentUnitTests(unittest.TestCase):
             artifact_dir = next(debug_root.iterdir())
             self.assertTrue((artifact_dir / "prepared.wav").is_file())
             self.assertTrue((artifact_dir / "transcript.lab").is_file())
+            self.assertTrue((artifact_dir / "manifest.json").is_file())
             self.assertNotIn("C:\\temp", (artifact_dir / "stderr.txt").read_text(encoding="utf-8"))
 
     def test_debug_runner_cleans_temp_work_directory_without_debug_directory(self) -> None:
@@ -347,6 +419,44 @@ class MfaAlignmentUnitTests(unittest.TestCase):
                     run_mfa_alignment(audio, "cat", dictionary_path=dictionary, acoustic_model_path="english_mfa")
         self.assertEqual(context.exception.code, "mfa_nonzero_exit")
         self.assertEqual(list(mfa_temp.glob("mfa-align-*")), [])
+
+    def test_mfa_failure_with_debug_dir_keeps_failure_artifacts(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            audio = root / "input.wav"
+            dictionary = root / "dictionary.txt"
+            mfa_temp = root / "mfa-temp"
+            debug_root = root / "debug"
+            write_tone(audio)
+            dictionary.write_text("cat K AE T\n", encoding="utf-8")
+            completed = subprocess.CompletedProcess(["mfa"], 1, "", "KaldiError")
+            with patch.dict(
+                os.environ,
+                {
+                    "MFA_DEBUG": "true",
+                    "MFA_DEBUG_DIR": str(debug_root),
+                    "MFA_TEMP_DIR": str(mfa_temp),
+                },
+                clear=False,
+            ), patch("app.alignment.mfa_aligner._mfa_command_prefix", return_value=["mfa"]), patch(
+                "app.alignment.mfa_aligner.prepare_audio_for_mfa", side_effect=prepare_test_audio
+            ), patch("app.alignment.mfa_aligner.subprocess.run", return_value=completed):
+                with self.assertRaises(AlignmentError) as context:
+                    run_mfa_alignment(
+                        audio,
+                        "cat",
+                        dictionary_path=dictionary,
+                        acoustic_model_path="english_mfa",
+                        job_id="job-failure",
+                    )
+
+            self.assertEqual(context.exception.code, "mfa_nonzero_exit")
+            artifact_dir = next(debug_root.iterdir())
+            self.assertTrue((artifact_dir / "prepared.wav").is_file())
+            self.assertTrue((artifact_dir / "transcript.lab").is_file())
+            self.assertTrue((artifact_dir / "manifest.json").is_file())
+            self.assertFalse((artifact_dir / "alignment.TextGrid").exists())
+            self.assertEqual(list(mfa_temp.glob("mfa-align-*")), [])
 
     def test_mfa_preflight_lists_version_and_models(self) -> None:
         responses = [
@@ -515,20 +625,6 @@ class MfaAlignmentUnitTests(unittest.TestCase):
             {"index": 1, "phone": "UH", "word": "book", "start": 0.3, "end": 0.5, "predicted_error_type": "substitution", "diagnosis_confidence": 0.9, "class_probabilities": {"substitution": 0.9}},
             {"index": 0, "phone": "B", "word": "book", "start": 0.1, "end": 0.3, "predicted_error_type": "addition", "diagnosis_confidence": 0.8, "class_probabilities": {"addition": 0.8}},
         ]
-        hybrid = {
-            "primary_error_type": "deletion",
-            "top_issues": [
-                {"phone": "K", "word": "book", "start": 0.5, "end": 0.7, "predicted_error_type": "deletion", "diagnosis_confidence": 0.7, "class_probabilities": {"deletion": 0.7}},
-                {"phone": "UH", "word": "book", "start": 0.3, "end": 0.5, "predicted_error_type": "substitution", "diagnosis_confidence": 0.9, "class_probabilities": {"substitution": 0.9}},
-                {"phone": "B", "word": "book", "start": 0.1, "end": 0.3, "predicted_error_type": "addition", "diagnosis_confidence": 0.8, "class_probabilities": {"addition": 0.8}},
-            ],
-            "feedback": {"summary": "test", "tips": []},
-            "severity": "high",
-            "hybrid_method": "cnn_attention_plus_heuristic_scoring",
-            "hybrid_status": "success",
-            "location_reliability": "forced_alignment",
-        }
-        scoring = {"utterance_segmental_score": 70.0, "scoring_method": "heuristic_gop", "scoring_status": "heuristic", "metadata": {"is_heuristic": True}}
         alignment = {
             "status": "success",
             "method": "mfa",
@@ -540,16 +636,13 @@ class MfaAlignmentUnitTests(unittest.TestCase):
                 {"phone": "K", "start": 0.5, "end": 0.7},
             ],
         }
-        with patch("app.scoring.scoring_service.score_pronunciation_segments", return_value=scoring), patch(
-            "app.hybrid.hybrid_diagnosis.build_hybrid_diagnosis", return_value=hybrid
-        ):
-            result = cnn_attention_scorer._aggregate_segment_predictions(predictions, alignment_result=alignment)  # noqa: SLF001
-        self.assertEqual(result["predicted_error_type"], "deletion")
+        result = cnn_attention_scorer._aggregate_segment_predictions(predictions, alignment_result=alignment)  # noqa: SLF001
+        self.assertEqual(result["predicted_error_type"], "substitution")
         self.assertEqual([segment["phone"] for segment in result["segments"]], ["b", "ʊ", "k"])
         self.assertEqual(result["problem_phonemes"], ["b", "ʊ", "k"])
         self.assertEqual(
             result["metadata"]["global_diagnosis_selection"],
-            "hybrid_severity_then_heuristic_phone_score_then_classifier_diagnosis_confidence",
+            "highest_classifier_diagnosis_confidence",
         )
         payload = build_success_webhook_payload("job-1", result)
         self.assertNotIn("prepared.wav", str(payload))

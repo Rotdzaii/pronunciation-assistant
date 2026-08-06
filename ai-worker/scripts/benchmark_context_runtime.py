@@ -12,6 +12,7 @@ import wave
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlparse
 
 
 AI_WORKER_ROOT = Path(__file__).resolve().parents[1]
@@ -34,11 +35,14 @@ DEFAULT_CHECKPOINT = (
     / "l2_arctic_cnn_attention_speaker_disjoint_context_stability_seed_42_HQTV.pt"
 )
 DEFAULT_OUTPUT_JSON = AI_WORKER_ROOT / "docs" / "context_runtime_benchmark_latest.json"
+DEFAULT_REAL_AUDIO_OUTPUT_JSON = AI_WORKER_ROOT / "docs" / "context_runtime_real_audio_benchmark_latest.json"
 DEFAULT_PHONES = ["EH", "G", "Z", "AE", "M", "P", "AH", "L"]
 TIMING_FIELDS = [
     "total_runtime_seconds",
     "setup_time_seconds",
     "model_load_time_seconds",
+    "audio_download_time_seconds",
+    "audio_decode_time_seconds",
     "audio_prepare_time_seconds",
     "alignment_time_seconds",
     "inference_time_seconds",
@@ -52,6 +56,8 @@ TIMING_FIELDS = [
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Benchmark AI Worker context CNN Attention runtime.")
     parser.add_argument("--audio-path", default=None, help="Optional local audio file. Generates temp WAV if omitted.")
+    parser.add_argument("--audio-url", default=None, help="Optional signed or public audio URL. Downloads to temp file.")
+    parser.add_argument("--target-word", default="example", help='Prompt/target word for fallback alignment. Default: "example".')
     parser.add_argument("--job-id", default="benchmark-job-id", help="Job id used in the webhook payload.")
     parser.add_argument("--checkpoint-path", default=None, help="Optional local context checkpoint path.")
     parser.add_argument("--runs", type=int, default=3, help="Measured run count. Default: 3.")
@@ -59,7 +65,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--post", action="store_true", help="Explicitly POST the payload. Default never posts.")
     parser.add_argument("--webhook-url", default=None, help="Webhook URL used only with --post.")
     parser.add_argument("--secret", default=None, help="Webhook secret used only with --post. Never printed.")
-    parser.add_argument("--output-json", default=str(DEFAULT_OUTPUT_JSON), help="Small JSON report path.")
+    parser.add_argument("--redact-urls", action=argparse.BooleanOptionalAction, default=True, help="Keep audio URLs redacted in output. Default: true.")
+    parser.add_argument("--keep-downloaded-audio", action="store_true", help="Keep audio downloaded from --audio-url. Default deletes it.")
+    parser.add_argument("--output-json", default=None, help="Small JSON report path.")
     return parser.parse_args()
 
 
@@ -92,6 +100,56 @@ def write_temp_wav() -> Path:
     return temp_path
 
 
+def redacted_url(value: str | None, *, redact: bool = True) -> str | None:
+    if not value:
+        return None
+    parsed = urlparse(value)
+    if not parsed.scheme or not parsed.netloc:
+        return "<redacted-audio-url>"
+    suffix = Path(parsed.path).suffix
+    path_hint = f"...{suffix}" if suffix else "..."
+    return f"{parsed.scheme}://{parsed.netloc}/{path_hint}?<redacted>"
+
+
+def redacted_audio_source(
+    *,
+    input_type: str,
+    audio_url: str | None,
+    audio_path: Path | None,
+    redact_urls: bool,
+) -> str:
+    if input_type == "audio_url":
+        return redacted_url(audio_url, redact=redact_urls) or "<redacted-audio-url>"
+    if input_type == "local_audio_path" and audio_path:
+        return f"<local-audio-path:{audio_path.name}>"
+    if input_type == "generated_wav":
+        return "<generated-temporary-wav>"
+    return "<unknown-audio-source>"
+
+
+def download_audio_to_temp(audio_url: str) -> tuple[Path, float]:
+    try:
+        import requests
+    except ImportError as exc:
+        raise RuntimeError("Downloading --audio-url requires requests.") from exc
+
+    parsed = urlparse(audio_url)
+    suffix = Path(parsed.path).suffix or ".audio"
+    temp_file = tempfile.NamedTemporaryFile(delete=False, suffix=suffix)
+    temp_path = Path(temp_file.name)
+    temp_file.close()
+
+    download_start = monotonic()
+    try:
+        response = requests.get(audio_url, timeout=60)
+        response.raise_for_status()
+        temp_path.write_bytes(response.content)
+    except Exception:
+        temp_path.unlink(missing_ok=True)
+        raise
+    return temp_path, elapsed(download_start)
+
+
 def resolve_checkpoint_path(configured: str | None) -> Path:
     if configured:
         return Path(configured).expanduser()
@@ -122,13 +180,13 @@ def dependency_info() -> dict[str, Any]:
     }
 
 
-def build_job(job_id: str, audio_path: Path) -> dict[str, Any]:
+def build_job(job_id: str, audio_path: Path, target_word: str) -> dict[str, Any]:
     return {
         "job_id": job_id,
         "student_id": "benchmark-student",
-        "target_word": "example",
-        "target_text": "example",
-        "prompt_text": "example",
+        "target_word": target_word,
+        "target_text": target_word,
+        "prompt_text": target_word,
         "canonical_phones": DEFAULT_PHONES,
         "audio_path": str(audio_path),
     }
@@ -144,14 +202,17 @@ def timed_context_segment_prediction(
     segment: dict[str, Any],
     fallback_index: int,
     context_config: dict[str, Any],
-) -> tuple[dict[str, Any], float, float]:
+) -> tuple[dict[str, Any], float, float, float]:
     start_time = float(segment.get("start") or 0.0)
     end_time = float(segment.get("end") if segment.get("end") is not None else start_time)
     if end_time <= start_time:
         end_time = start_time + context_scorer.MAX_SECONDS
 
-    audio_prepare_start = monotonic()
+    decode_start = monotonic()
     context_metadata = context_scorer._context_crop_metadata(audio_path, start_time, end_time, context_config)  # noqa: SLF001
+    audio_decode_time = monotonic() - decode_start
+
+    audio_prepare_start = monotonic()
     feature, audio_metadata = context_scorer._feature_from_audio_path(  # noqa: SLF001
         audio_path,
         context_metadata["crop_start_time"],
@@ -190,6 +251,7 @@ def timed_context_segment_prediction(
             segment_type=segment.get("type"),
             index=segment.get("index", fallback_index),
         ),
+        audio_decode_time,
         audio_prepare_time,
         inference_time,
     )
@@ -220,6 +282,8 @@ def benchmark_once(
     job_id: str,
     audio_path: Path,
     checkpoint_path: Path,
+    target_word: str,
+    audio_download_time: float | None,
     post: bool,
     webhook_url: str | None,
     secret: str | None,
@@ -227,7 +291,7 @@ def benchmark_once(
     run_start = monotonic()
     setup_start = monotonic()
     configure_environment(checkpoint_path)
-    job = build_job(job_id, audio_path)
+    job = build_job(job_id, audio_path, target_word)
     context_config = context_scorer._context_config()  # noqa: SLF001
     setup_time = elapsed(setup_start)
 
@@ -243,11 +307,12 @@ def benchmark_once(
     )
     alignment_time = elapsed(alignment_start)
 
+    audio_decode_time = 0.0
     audio_prepare_time = 0.0
     inference_time = 0.0
     segment_predictions = []
     for fallback_index, segment in enumerate(get_alignment_segments(alignment_result)):
-        segment_prediction, segment_audio_prepare, segment_inference = timed_context_segment_prediction(
+        segment_prediction, segment_audio_decode, segment_audio_prepare, segment_inference = timed_context_segment_prediction(
             model=model,
             index_to_label=index_to_label,
             device=device,
@@ -258,6 +323,7 @@ def benchmark_once(
             context_config=context_config,
         )
         segment_predictions.append(segment_prediction)
+        audio_decode_time += segment_audio_decode
         audio_prepare_time += segment_audio_prepare
         inference_time += segment_inference
 
@@ -302,10 +368,15 @@ def benchmark_once(
             post_success, post_message = post_payload(webhook_url, secret, payload)
         post_time = elapsed(post_start)
 
+    total_runtime = elapsed(run_start)
+    if audio_download_time is not None:
+        total_runtime = round(total_runtime + audio_download_time, 6)
+
     timings = {
-        "total_runtime_seconds": elapsed(run_start),
+        "total_runtime_seconds": total_runtime,
         "setup_time_seconds": setup_time,
         "model_load_time_seconds": model_load_time,
+        "audio_decode_time_seconds": round(audio_decode_time, 6),
         "audio_prepare_time_seconds": round(audio_prepare_time, 6),
         "alignment_time_seconds": alignment_time,
         "inference_time_seconds": round(inference_time, 6),
@@ -313,6 +384,8 @@ def benchmark_once(
         "webhook_payload_build_time_seconds": payload_build_time,
         "webhook_payload_validation_time_seconds": payload_validation_time,
     }
+    if audio_download_time is not None:
+        timings["audio_download_time_seconds"] = audio_download_time
     if post:
         timings["post_time_seconds"] = post_time
     return {
@@ -331,6 +404,7 @@ def benchmark_once(
         "diagnosis_confidence": (ai_result.get("diagnosis") or {}).get("diagnosis_confidence"),
         "score": ai_result.get("score"),
         "score_note": ai_result.get("score_note"),
+        "target_word": target_word,
         "metadata": {
             "context_mode": (ai_result.get("metadata") or {}).get("context_mode"),
             "alignment_method": (ai_result.get("metadata") or {}).get("alignment_method"),
@@ -362,9 +436,11 @@ def aggregate_runs(runs: list[dict[str, Any]]) -> dict[str, Any]:
 
 def bottleneck_recommendation(aggregate: dict[str, Any]) -> str:
     candidates = {
+        "audio_download_time_seconds": "audio_download_time dominates: inspect network or Supabase Storage latency.",
         "model_load_time_seconds": "model_load_time dominates: prioritize model caching in the worker.",
         "inference_time_seconds": "inference_time dominates: evaluate GPU torch and batching/crop efficiency.",
-        "audio_prepare_time_seconds": "audio_prepare_time dominates: optimize audio decoding and log-mel preprocessing.",
+        "audio_prepare_time_seconds": "audio_prepare_time dominates: optimize audio conversion, decoding, and log-mel preprocessing.",
+        "audio_decode_time_seconds": "audio_decode_time dominates: optimize audio duration/decode handling.",
         "post_time_seconds": "post_time dominates: inspect backend/network latency.",
     }
     means = {
@@ -392,6 +468,9 @@ def write_json_report(path: Path, report: dict[str, Any]) -> None:
 
 def main() -> int:
     args = parse_args()
+    if args.audio_path and args.audio_url:
+        print("Use either --audio-path or --audio-url, not both.")
+        return 2
     if args.runs < 1:
         print("--runs must be at least 1")
         return 2
@@ -400,12 +479,32 @@ def main() -> int:
         return 2
 
     generated_audio = False
-    audio_path = Path(args.audio_path) if args.audio_path else write_temp_wav()
-    generated_audio = args.audio_path is None
+    downloaded_audio = False
+    audio_download_time = None
+    if args.audio_url:
+        try:
+            audio_path, audio_download_time = download_audio_to_temp(args.audio_url)
+        except Exception as exc:
+            print("Audio URL download failed.")
+            print(str(exc))
+            print(f"audio_url={redacted_url(args.audio_url, redact=args.redact_urls)}")
+            return 1
+        downloaded_audio = True
+        input_type = "audio_url"
+    elif args.audio_path:
+        audio_path = Path(args.audio_path)
+        input_type = "local_audio_path"
+    else:
+        audio_path = write_temp_wav()
+        generated_audio = True
+        input_type = "generated_wav"
     checkpoint_path = resolve_checkpoint_path(args.checkpoint_path)
     webhook_url = args.webhook_url or os.getenv("NODE_WEBHOOK_URL") or os.getenv("AI_WEBHOOK_URL")
     secret = args.secret or os.getenv("AI_WEBHOOK_SECRET")
-    output_json = Path(args.output_json)
+    output_json = Path(
+        args.output_json
+        or (DEFAULT_REAL_AUDIO_OUTPUT_JSON if input_type in {"audio_url", "local_audio_path"} else DEFAULT_OUTPUT_JSON)
+    )
 
     try:
         if not audio_path.exists():
@@ -425,6 +524,13 @@ def main() -> int:
         print("context_mode=context_0_10")
         print(f"runs={args.runs} warmup_runs={args.warmup_runs}")
         print(f"post_attempted={bool(args.post)}")
+        print(f"input_type={input_type}")
+        if args.audio_url:
+            print(f"audio_url={redacted_url(args.audio_url, redact=args.redact_urls)}")
+            print(f"audio_download_time_seconds={audio_download_time}")
+        elif args.audio_path:
+            print(f"audio_path={audio_path}")
+        print(f"target_word={args.target_word}")
 
         warmup_runs = [
             benchmark_once(
@@ -433,6 +539,8 @@ def main() -> int:
                 job_id=args.job_id,
                 audio_path=audio_path,
                 checkpoint_path=checkpoint_path,
+                target_word=args.target_word,
+                audio_download_time=None,
                 post=False,
                 webhook_url=None,
                 secret=None,
@@ -450,6 +558,8 @@ def main() -> int:
                 job_id=args.job_id,
                 audio_path=audio_path,
                 checkpoint_path=checkpoint_path,
+                target_word=args.target_word,
+                audio_download_time=audio_download_time if index == 0 else None,
                 post=bool(args.post),
                 webhook_url=webhook_url,
                 secret=secret,
@@ -466,6 +576,14 @@ def main() -> int:
         report = {
             "created_at_utc": datetime.now(timezone.utc).isoformat(),
             "environment": env_info,
+            "input_type": input_type,
+            "audio_source_redacted": redacted_audio_source(
+                input_type=input_type,
+                audio_url=args.audio_url,
+                audio_path=audio_path,
+                redact_urls=args.redact_urls,
+            ),
+            "target_word": args.target_word,
             "config": {
                 "scorer_mode": SCORER_MODE,
                 "context_mode": "context_0_10",
@@ -474,8 +592,22 @@ def main() -> int:
                 "runs": args.runs,
                 "warmup_runs": args.warmup_runs,
                 "post_attempted": bool(args.post),
+                "input_type": input_type,
                 "generated_audio": generated_audio,
-                "audio_path_source": "generated_temp_wav" if generated_audio else "provided_audio_path",
+                "downloaded_audio": downloaded_audio,
+                "keep_downloaded_audio": bool(args.keep_downloaded_audio),
+                "audio_source": {
+                    "type": input_type,
+                    "audio_url": redacted_url(args.audio_url, redact=args.redact_urls),
+                    "audio_path": (
+                        f"<local-audio-path:{audio_path.name}>"
+                        if input_type == "local_audio_path"
+                        else None
+                    ),
+                    "downloaded_temp_path": "<temporary-audio-file>" if downloaded_audio else None,
+                    "redacted": bool(args.redact_urls),
+                },
+                "target_word": args.target_word,
                 "checkpoint_path": str(checkpoint_path),
                 "output_json": str(output_json),
             },
@@ -488,6 +620,7 @@ def main() -> int:
                 "Classifier confidence is not pronunciation correctness.",
                 "Heuristic score is not real GOP.",
                 "Fallback alignment is approximate.",
+                "Signed URLs are redacted.",
                 "Default benchmark does not POST; post_time_seconds is present only when --post is passed.",
             ],
         }
@@ -496,6 +629,8 @@ def main() -> int:
         return 0 if all(run["ai_result_valid"] and run["payload_valid"] for run in measured_runs) else 1
     finally:
         if generated_audio:
+            audio_path.unlink(missing_ok=True)
+        if downloaded_audio and not args.keep_downloaded_audio:
             audio_path.unlink(missing_ok=True)
 
 

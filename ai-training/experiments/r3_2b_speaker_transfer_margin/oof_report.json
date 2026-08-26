@@ -1,0 +1,58 @@
+{
+  "rows": 28212,
+  "each_row_exactly_once": true,
+  "metrics": {
+    "rows": 28212,
+    "accuracy": 0.7742804480362966,
+    "balanced_accuracy": 0.6546561484366031,
+    "macro_f1": 0.5900679880945535,
+    "substitution_precision": 0.22938507275856673,
+    "substitution_recall": 0.5039532485390168,
+    "substitution_f1": 0.31526881720430106,
+    "confusion_matrix": [
+      [
+        20378,
+        4925
+      ],
+      [
+        1443,
+        1466
+      ]
+    ]
+  },
+  "hard_argmax": {
+    "rows": 28212,
+    "accuracy": 0.5678434708634623,
+    "balanced_accuracy": 0.665830471570098,
+    "macro_f1": 0.48301289296711397,
+    "substitution_precision": 0.16547747747747749,
+    "substitution_recall": 0.789274664833276,
+    "substitution_f1": 0.2735938989513823,
+    "confusion_matrix": [
+      [
+        13724,
+        11579
+      ],
+      [
+        613,
+        2296
+      ]
+    ]
+  },
+  "deltas": {
+    "accuracy": 0.20643697717283427,
+    "balanced_accuracy": -0.011174323133494868,
+    "macro_f1": 0.10705509512743955,
+    "substitution_precision": 0.06390759528108925,
+    "substitution_recall": -0.2853214162942592,
+    "substitution_f1": 0.04167491825291875
+  },
+  "gate": {
+    "A_macro_f1_improvement_at_least_0.05": true,
+    "B_oof_substitution_recall_at_least_0.50": true,
+    "C_substitution_f1_improvement_at_least_0.03": true,
+    "D_each_heldout_substitution_recall_at_least_0.35": true,
+    "E_at_least_4_of_6_speakers_improve_macro_f1": true,
+    "all_pass": true
+  }
+}

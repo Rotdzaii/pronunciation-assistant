@@ -1,0 +1,24 @@
+{
+  "threshold": -1.2939202785491943,
+  "macro_f1": 0.5884736601934054,
+  "substitution_precision": 0.227435697583788,
+  "substitution_recall": 0.5015469233413544,
+  "substitution_f1": 0.312955812955813,
+  "confusion_matrix": [
+    [
+      20347,
+      4956
+    ],
+    [
+      1450,
+      1459
+    ]
+  ],
+  "unique_thresholds": 28209,
+  "feasible_thresholds": 21807,
+  "label": "VALIDATION_CALIBRATED_CANDIDATE",
+  "markers": [
+    "NOT_TESTED",
+    "NOT_PRODUCTION_CALIBRATED"
+  ]
+}

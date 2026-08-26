@@ -1,0 +1,71 @@
+{
+  "speakers": {
+    "ABA": {
+      "clean_substitution_support": 251,
+      "excluded_substitutions": 151,
+      "retention_percentage": 62.43781094527363,
+      "exclusion_percentage": 37.56218905472637,
+      "high_exclusion_rate": true,
+      "heldout_macro_f1": 0.5526854219948849,
+      "heldout_substitution_recall": 0.5378486055776892,
+      "heldout_substitution_f1": 0.22058823529411767
+    },
+    "HKK": {
+      "clean_substitution_support": 304,
+      "excluded_substitutions": 14,
+      "retention_percentage": 95.59748427672956,
+      "exclusion_percentage": 4.40251572327044,
+      "high_exclusion_rate": false,
+      "heldout_macro_f1": 0.5406454568688611,
+      "heldout_substitution_recall": 0.45723684210526316,
+      "heldout_substitution_f1": 0.2087087087087087
+    },
+    "HQTV": {
+      "clean_substitution_support": 765,
+      "excluded_substitutions": 44,
+      "retention_percentage": 94.56118665018542,
+      "exclusion_percentage": 5.438813349814586,
+      "high_exclusion_rate": false,
+      "heldout_macro_f1": 0.6410853374504762,
+      "heldout_substitution_recall": 0.5215686274509804,
+      "heldout_substitution_f1": 0.4297253634894992
+    },
+    "LXC": {
+      "clean_substitution_support": 694,
+      "excluded_substitutions": 15,
+      "retention_percentage": 97.88434414668548,
+      "exclusion_percentage": 2.1156558533145273,
+      "high_exclusion_rate": false,
+      "heldout_macro_f1": 0.6295470890518164,
+      "heldout_substitution_recall": 0.5893371757925072,
+      "heldout_substitution_f1": 0.414387031408308
+    },
+    "MBMPS": {
+      "clean_substitution_support": 500,
+      "excluded_substitutions": 30,
+      "retention_percentage": 94.33962264150944,
+      "exclusion_percentage": 5.660377358490567,
+      "high_exclusion_rate": false,
+      "heldout_macro_f1": 0.5948743472091546,
+      "heldout_substitution_recall": 0.49,
+      "heldout_substitution_f1": 0.3169469598965071
+    },
+    "SVBI": {
+      "clean_substitution_support": 395,
+      "excluded_substitutions": 322,
+      "retention_percentage": 55.09065550906555,
+      "exclusion_percentage": 44.90934449093445,
+      "high_exclusion_rate": true,
+      "heldout_macro_f1": 0.5304967405409794,
+      "heldout_substitution_recall": 0.3518987341772152,
+      "heldout_substitution_f1": 0.2033650329188003
+    }
+  },
+  "correlations_descriptive_only_n_equals_6": {
+    "exclusion_vs_substitution_recall_pearson": -0.5487262128752708,
+    "exclusion_vs_substitution_recall_spearman": -0.48571428571428577,
+    "exclusion_vs_macro_f1_pearson": -0.6745733456601188,
+    "exclusion_vs_macro_f1_spearman": -0.5428571428571429
+  },
+  "causality_warning": "Descriptive association only; six speakers cannot establish causality."
+}

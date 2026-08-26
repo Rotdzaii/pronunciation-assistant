@@ -1,0 +1,83 @@
+{
+  "status": "PASS",
+  "checkpoint_sha256": "5C66860BBC50BA803F5BFE25417DF19BDF34B1C7BE36D507B0DDCA88D767EA5E",
+  "evidence_sha256": "E0C7DF574EAA61DEAB57C77C7E8459BB4306E938DAF6F7AB00B7D0D68DF0111F",
+  "rows": 28212,
+  "speakers": [
+    "ABA",
+    "HKK",
+    "HQTV",
+    "LXC",
+    "MBMPS",
+    "SVBI"
+  ],
+  "hard_argmax": {
+    "rows": 28212,
+    "accuracy": 0.5678434708634623,
+    "balanced_accuracy": 0.665830471570098,
+    "macro_f1": 0.48301289296711397,
+    "substitution_precision": 0.16547747747747749,
+    "substitution_recall": 0.789274664833276,
+    "substitution_f1": 0.2735938989513823,
+    "confusion_matrix": [
+      [
+        13724,
+        11579
+      ],
+      [
+        613,
+        2296
+      ]
+    ]
+  },
+  "hard_argmax_absolute_deltas": {
+    "accuracy": 0.0,
+    "balanced_accuracy": 0.0,
+    "macro_f1": 0.0,
+    "substitution_precision": 0.0,
+    "substitution_recall": 0.0,
+    "substitution_f1": 0.0
+  },
+  "expected_margin": {
+    "roc_auc_substitution": 0.7393839399377449,
+    "pr_auc_substitution": 0.2634816006011746,
+    "correct_origin": {
+      "mean": 0.10014067352796888,
+      "median": 0.1651739776134491,
+      "p10": -2.1697480797767636,
+      "p25": -0.9521937072277069,
+      "p75": 1.210776001214981,
+      "p90": 2.318403339385986,
+      "min": -15.002276122570038,
+      "max": 10.08065414428711
+    },
+    "substitution_origin": {
+      "mean": -1.7351318220555112,
+      "median": -1.2969944477081299,
+      "p10": -4.546632599830628,
+      "p25": -2.6932328939437866,
+      "p75": -0.21353864669799805,
+      "p90": 0.6333308145403863,
+      "min": -23.598849296569824,
+      "max": 4.196927309036255
+    }
+  },
+  "margin_absolute_deltas": {
+    "roc_auc_substitution": 0.0,
+    "pr_auc_substitution": 0.0,
+    "correct_origin.mean": 0.0,
+    "correct_origin.median": 0.0,
+    "correct_origin.p10": 0.0,
+    "correct_origin.p25": 0.0,
+    "correct_origin.p75": 0.0,
+    "correct_origin.p90": 0.0,
+    "substitution_origin.mean": 0.0,
+    "substitution_origin.median": 0.0,
+    "substitution_origin.p10": 0.0,
+    "substitution_origin.p25": 0.0,
+    "substitution_origin.p75": 0.0,
+    "substitution_origin.p90": 0.0
+  },
+  "failures": [],
+  "test_audio_accessed": false
+}

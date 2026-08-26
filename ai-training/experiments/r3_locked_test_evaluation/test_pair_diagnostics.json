@@ -1,0 +1,44 @@
+{
+  "TH->T": {
+    "support": 70,
+    "detected_substitutions": 44,
+    "detection_recall": 0.6285714285714286,
+    "false_negatives": 26,
+    "median_margin": -1.632900446653366
+  },
+  "DH->D": {
+    "support": 452,
+    "detected_substitutions": 49,
+    "detection_recall": 0.1084070796460177,
+    "false_negatives": 403,
+    "median_margin": 0.5062505602836609,
+    "known_validation_reference": {
+      "support": 300,
+      "detection_recall": 0.21666666666666667,
+      "false_negatives": 235,
+      "median_margin": 0.051110975444316864
+    },
+    "descriptive_classification": "DH_D_TEST_BEHAVIOR_WORSE_THAN_VALIDATION"
+  },
+  "R->L": {
+    "support": 6,
+    "detected_substitutions": 6,
+    "detection_recall": 1.0,
+    "false_negatives": 0,
+    "median_margin": -2.888643566519022
+  },
+  "V->W": {
+    "support": 24,
+    "detected_substitutions": 14,
+    "detection_recall": 0.5833333333333334,
+    "false_negatives": 10,
+    "median_margin": -2.099978029727936
+  },
+  "Z->S": {
+    "support": 430,
+    "detected_substitutions": 192,
+    "detection_recall": 0.44651162790697674,
+    "false_negatives": 238,
+    "median_margin": -1.1078359335660934
+  }
+}

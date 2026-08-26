@@ -1,0 +1,29 @@
+{
+  "status": "PASS",
+  "verified_before_test_audio_access": true,
+  "expected_sha256": {
+    "checkpoint": "5C66860BBC50BA803F5BFE25417DF19BDF34B1C7BE36D507B0DDCA88D767EA5E",
+    "manifest": "50AC3DC012191E2D401A5E7437B46F11F06356A5CC5EA931B916186B1C2B4576",
+    "protocol": "B2750BD8438A4759DE0F40C1A9B244DE78AF8494F5CDEB139F023C0C53F470DF",
+    "v4_dataset": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D"
+  },
+  "actual_sha256": {
+    "checkpoint": "5C66860BBC50BA803F5BFE25417DF19BDF34B1C7BE36D507B0DDCA88D767EA5E",
+    "manifest": "50AC3DC012191E2D401A5E7437B46F11F06356A5CC5EA931B916186B1C2B4576",
+    "protocol": "B2750BD8438A4759DE0F40C1A9B244DE78AF8494F5CDEB139F023C0C53F470DF",
+    "v4_dataset": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D"
+  },
+  "manifest_invariants": {
+    "manifest status": true,
+    "checkpoint SHA in manifest": true,
+    "dataset SHA in manifest": true,
+    "vocabulary": true,
+    "threshold": true,
+    "operator": true,
+    "test speakers": true,
+    "expected phone not neural input": true,
+    "no 0-100 mapping": true
+  },
+  "frozen_threshold": -1.29392,
+  "comparison_operator": "<="
+}

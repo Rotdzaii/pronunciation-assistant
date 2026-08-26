@@ -1,0 +1,217 @@
+{
+  "speakers": {
+    "ASI": {
+      "binary": {
+        "rows": 4504,
+        "correct_support": 4053,
+        "substitution_support": 451,
+        "accuracy": 0.7351243339253997,
+        "balanced_accuracy": 0.5296525581499675,
+        "macro_f1": 0.5066677280164483,
+        "correct_precision": 0.906712172923777,
+        "correct_recall": 0.7865778435726622,
+        "correct_f1": 0.8423834059981503,
+        "substitution_precision": 0.12449392712550607,
+        "substitution_recall": 0.2727272727272727,
+        "substitution_f1": 0.17095205003474634,
+        "confusion_matrix_labels": [
+          "correct",
+          "substitution"
+        ],
+        "confusion_matrix": [
+          [
+            3188,
+            865
+          ],
+          [
+            328,
+            123
+          ]
+        ]
+      },
+      "acoustic": {
+        "rows": 4504,
+        "top1_accuracy": 0.4877886323268206,
+        "macro_f1": 0.46150407120463255
+      }
+    },
+    "ERMS": {
+      "binary": {
+        "rows": 4722,
+        "correct_support": 4101,
+        "substitution_support": 621,
+        "accuracy": 0.7558238034731046,
+        "balanced_accuracy": 0.6073121083934989,
+        "macro_f1": 0.5780484302210818,
+        "correct_precision": 0.8998914812805209,
+        "correct_recall": 0.8088271153377226,
+        "correct_f1": 0.8519327083600874,
+        "substitution_precision": 0.24324324324324326,
+        "substitution_recall": 0.4057971014492754,
+        "substitution_f1": 0.3041641520820761,
+        "confusion_matrix_labels": [
+          "correct",
+          "substitution"
+        ],
+        "confusion_matrix": [
+          [
+            3317,
+            784
+          ],
+          [
+            369,
+            252
+          ]
+        ]
+      },
+      "acoustic": {
+        "rows": 4722,
+        "top1_accuracy": 0.5510376958915714,
+        "macro_f1": 0.48758137112658007
+      }
+    },
+    "SKA": {
+      "binary": {
+        "rows": 4783,
+        "correct_support": 4328,
+        "substitution_support": 455,
+        "accuracy": 0.7716914070666946,
+        "balanced_accuracy": 0.6899537384981008,
+        "macro_f1": 0.5958360958360959,
+        "correct_precision": 0.9481994459833795,
+        "correct_recall": 0.7908964879852126,
+        "correct_f1": 0.8624338624338624,
+        "substitution_precision": 0.22847399829497017,
+        "substitution_recall": 0.589010989010989,
+        "substitution_f1": 0.32923832923832924,
+        "confusion_matrix_labels": [
+          "correct",
+          "substitution"
+        ],
+        "confusion_matrix": [
+          [
+            3423,
+            905
+          ],
+          [
+            187,
+            268
+          ]
+        ]
+      },
+      "acoustic": {
+        "rows": 4783,
+        "top1_accuracy": 0.5218482124189839,
+        "macro_f1": 0.4763412188994983
+      }
+    },
+    "THV": {
+      "binary": {
+        "rows": 4571,
+        "correct_support": 3698,
+        "substitution_support": 873,
+        "accuracy": 0.7858236709691534,
+        "balanced_accuracy": 0.7048701908155053,
+        "macro_f1": 0.6845461996493571,
+        "correct_precision": 0.8925786889979787,
+        "correct_recall": 0.8358572201189832,
+        "correct_f1": 0.8632872503840247,
+        "substitution_precision": 0.45216606498194944,
+        "substitution_recall": 0.5738831615120275,
+        "substitution_f1": 0.5058051489146895,
+        "confusion_matrix_labels": [
+          "correct",
+          "substitution"
+        ],
+        "confusion_matrix": [
+          [
+            3091,
+            607
+          ],
+          [
+            372,
+            501
+          ]
+        ]
+      },
+      "acoustic": {
+        "rows": 4571,
+        "top1_accuracy": 0.5550207831984248,
+        "macro_f1": 0.4884422883467763
+      }
+    },
+    "TXHC": {
+      "binary": {
+        "rows": 4770,
+        "correct_support": 4322,
+        "substitution_support": 448,
+        "accuracy": 0.7618448637316562,
+        "balanced_accuracy": 0.6284871421960733,
+        "macro_f1": 0.5629139585667161,
+        "correct_precision": 0.9345335515548282,
+        "correct_recall": 0.7926885701064322,
+        "correct_f1": 0.8577866800200301,
+        "substitution_precision": 0.18840579710144928,
+        "substitution_recall": 0.4642857142857143,
+        "substitution_f1": 0.26804123711340205,
+        "confusion_matrix_labels": [
+          "correct",
+          "substitution"
+        ],
+        "confusion_matrix": [
+          [
+            3426,
+            896
+          ],
+          [
+            240,
+            208
+          ]
+        ]
+      },
+      "acoustic": {
+        "rows": 4770,
+        "top1_accuracy": 0.5222222222222223,
+        "macro_f1": 0.474606985190582
+      }
+    },
+    "YDCK": {
+      "binary": {
+        "rows": 4866,
+        "correct_support": 4421,
+        "substitution_support": 445,
+        "accuracy": 0.7657213316892725,
+        "balanced_accuracy": 0.5992456839039416,
+        "macro_f1": 0.5487877092063822,
+        "correct_precision": 0.9295627127520293,
+        "correct_recall": 0.8029857498303551,
+        "correct_f1": 0.8616504854368932,
+        "substitution_precision": 0.16809933142311365,
+        "substitution_recall": 0.3955056179775281,
+        "substitution_f1": 0.23592493297587128,
+        "confusion_matrix_labels": [
+          "correct",
+          "substitution"
+        ],
+        "confusion_matrix": [
+          [
+            3550,
+            871
+          ],
+          [
+            269,
+            176
+          ]
+        ]
+      },
+      "acoustic": {
+        "rows": 4866,
+        "top1_accuracy": 0.5454171804356761,
+        "macro_f1": 0.5069714824140423
+      }
+    }
+  },
+  "catastrophic_definition": "binary Macro-F1 < 0.35 OR substitution recall < 0.20",
+  "catastrophic_speakers": [],
+  "assessment": "NO_CATASTROPHIC_SPEAKER_COLLAPSE"
+}

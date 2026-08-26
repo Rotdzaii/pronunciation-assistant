@@ -79,7 +79,8 @@ MFA configuration:
 | Variable | Required for `ALIGNMENT_MODE=mfa` | Example | Notes |
 |---|---:|---|---|
 | `MFA_COMMAND` | No | `mfa` | Defaults to `mfa`. Can be an executable name or local path. |
-| `MFA_CONDA_ENV` | No | `mfa` | When set, the worker runs MFA through `conda run -n <env>`. |
+| `MFA_RUNTIME` | Yes | `conda` | The documented Windows local runtime. |
+| `MFA_CONDA_ENV` | Yes | `aligner` | The worker runs MFA through `conda run -n <env>`. |
 | `MFA_DICTIONARY_PATH` | Yes | `english_us_mfa` | MFA dictionary model name or local path. |
 | `MFA_ACOUSTIC_MODEL_PATH` | Yes | `english_mfa` | MFA acoustic model name or local path. |
 | `MFA_TEMP_DIR` | No | `/tmp/ai-worker-mfa` | Directory for temporary MFA corpus/output work. Defaults to the system temp directory. |
@@ -109,7 +110,8 @@ CNN_ATTENTION_CONTEXT_MODE=context_0_10
 CNN_ATTENTION_CONTEXT_LEFT_SECONDS=0.10
 CNN_ATTENTION_CONTEXT_RIGHT_SECONDS=0.10
 MFA_COMMAND=mfa
-MFA_CONDA_ENV=mfa
+MFA_RUNTIME=conda
+MFA_CONDA_ENV=aligner
 MFA_DICTIONARY_PATH=english_us_mfa
 MFA_ACOUSTIC_MODEL_PATH=english_mfa
 MFA_TEMP_DIR=

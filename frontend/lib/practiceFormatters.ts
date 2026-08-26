@@ -1,6 +1,36 @@
 import { colors } from '../components/AppUI';
 import type { PracticeFeedback, ProblemPhoneme } from '../types';
 
+const ARPABET_TO_IPA: Record<string, string> = {
+  // vowels
+  AA: 'ɑ', AA0: 'ɑ', AA1: 'ɑ', AA2: 'ɑ',
+  AE: 'æ', AE0: 'æ', AE1: 'æ', AE2: 'æ',
+  AH: 'ʌ', AH0: 'ə', AH1: 'ʌ', AH2: 'ʌ',
+  AO: 'ɔ', AO0: 'ɔ', AO1: 'ɔ', AO2: 'ɔ',
+  AW: 'aʊ', AW0: 'aʊ', AW1: 'aʊ', AW2: 'aʊ',
+  AY: 'aɪ', AY0: 'aɪ', AY1: 'aɪ', AY2: 'aɪ',
+  EH: 'ɛ', EH0: 'ɛ', EH1: 'ɛ', EH2: 'ɛ',
+  ER: 'ɜr', ER0: 'ər', ER1: 'ɜr', ER2: 'ɜr',
+  EY: 'eɪ', EY0: 'eɪ', EY1: 'eɪ', EY2: 'eɪ',
+  IH: 'ɪ', IH0: 'ɪ', IH1: 'ɪ', IH2: 'ɪ',
+  IY: 'iː', IY0: 'iː', IY1: 'iː', IY2: 'iː',
+  OW: 'oʊ', OW0: 'oʊ', OW1: 'oʊ', OW2: 'oʊ',
+  OY: 'ɔɪ', OY0: 'ɔɪ', OY1: 'ɔɪ', OY2: 'ɔɪ',
+  UH: 'ʊ', UH0: 'ʊ', UH1: 'ʊ', UH2: 'ʊ',
+  UW: 'uː', UW0: 'uː', UW1: 'uː', UW2: 'uː',
+  // consonants
+  B: 'b', CH: 'tʃ', D: 'd', DH: 'ð', F: 'f',
+  G: 'ɡ', HH: 'h', JH: 'dʒ', K: 'k', L: 'l',
+  M: 'm', N: 'n', NG: 'ŋ', P: 'p', R: 'r',
+  S: 's', SH: 'ʃ', T: 't', TH: 'θ', V: 'v',
+  W: 'w', WH: 'ʍ', Y: 'j', Z: 'z', ZH: 'ʒ',
+};
+
+function arpabetToIpa(code: string): string {
+  const ipa = ARPABET_TO_IPA[code.toUpperCase()] ?? ARPABET_TO_IPA[code] ?? null;
+  return ipa ? `/${ipa}/` : `/${code}/`;
+}
+
 export type ScoreTone = {
   color: string;
   softColor: string;
@@ -95,14 +125,16 @@ export function formatFeedbackLines(
 
 function formatProblemPhoneme(item: ProblemPhoneme): string | null {
   if (typeof item === 'string') {
-    return item.trim() || null;
+    const code = item.trim();
+    return code ? arpabetToIpa(code) : null;
   }
 
   if (!item || typeof item !== 'object') {
     return null;
   }
 
-  const phoneme = toDisplayText(item.phoneme);
+  const rawPhoneme = toDisplayText(item.phoneme);
+  const phoneme = rawPhoneme ? arpabetToIpa(rawPhoneme) : null;
   const word = toDisplayText(item.word);
   const type = toDisplayText(item.type);
   const severity = toDisplayText(item.severity);

@@ -2,6 +2,11 @@
 
 ## Purpose
 
+Historical scoring note: any heuristic score in this dry-run record predates
+the Deep Learning First scoring decision. It is not a current contract example;
+public score is now `null` with `score_type: "unavailable"` until a learned
+quality scorer is trained and validated.
+
 This document describes the safe dry-run flow for validating `SCORER_MODE=cnn_attention_context` through the AI Worker backend payload path.
 
 The dry run:

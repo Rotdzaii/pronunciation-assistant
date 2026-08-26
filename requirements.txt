@@ -1,0 +1,25 @@
+# Shared dependencies for fastapi-backend and ai-worker (single Docker image)
+# supabase upgraded from ==2.10.0 to >=2.11.0 to unify both services;
+# verified safe — worker only uses client.rpc().execute(), no breaking API changes.
+
+--extra-index-url https://download.pytorch.org/whl/cpu
+
+# --- fastapi-backend ---
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+pydantic-settings==2.7.1
+python-multipart==0.0.20
+
+# --- ai-worker ---
+requests==2.32.3
+
+# --- ai inference (CPU-only) ---
+torch==2.1.0+cpu
+librosa>=0.10.0
+numpy>=1.24.0,<2.0.0
+soundfile>=0.12.0
+
+# --- shared ---
+python-dotenv==1.0.1
+httpx>=0.26.0,<0.29.0
+supabase==2.11.0

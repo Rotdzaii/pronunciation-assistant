@@ -1,12 +1,17 @@
-# GOP Scoring Plan
+# Historical GOP/CaGOP Proposal (Not Current Roadmap)
 
 ## Purpose
 
-Goodness of Pronunciation (GOP) is intended to provide pronunciation correctness evidence at phone, word, and utterance levels. It should be separate from CNN Attention classifier confidence.
+This document is retained as a historical/hypothetical GOP/CaGOP proposal. It
+is not the selected Phoenix v2 roadmap. The accepted direction is recorded in
+[Deep Learning First Pronunciation Scoring](../../ai-training/docs/ADR_DEEP_LEARNING_FIRST_PRONUNCIATION_SCORING.md).
+
+GOP/CaGOP was considered and rejected for Phoenix v2. It must not replace the
+CNN + Attention + Context research path or provide a public score.
 
 CNN Attention predicts an error type such as deletion, substitution, or addition. Its confidence is diagnosis confidence, not a pronunciation score.
 
-## Current Implementation
+## Historical Scaffold
 
 This feature adds a scaffold only:
 
@@ -15,7 +20,9 @@ This feature adds a scaffold only:
 - heuristic GOP-like scoring service
 - aligned CNN Attention integration
 
-The current method is `heuristic_gop`. It is not production GOP and does not use acoustic posterior probabilities or phone likelihoods.
+The historical method named `heuristic_gop` is not production GOP and does not
+use acoustic posterior probabilities or phone likelihoods. It may remain as
+internal diagnostic information, but its public score is unavailable.
 
 The heuristic uses:
 
@@ -51,7 +58,7 @@ Phone output includes:
 - `severity`
 - `source`
 
-## Real GOP/CaGOP Requirements
+## Historical GOP/CaGOP Requirements
 
 A production GOP or CaGOP implementation would require:
 
@@ -63,12 +70,15 @@ A production GOP or CaGOP implementation would require:
 
 No acoustic model or external GOP dependency is added by this scaffold.
 
-## Future Fusion With CNN Attention
+## Rejected Fusion Direction
 
-CNN Attention should continue to provide error-type diagnosis. GOP/CaGOP should provide pronunciation correctness evidence. A later hybrid diagnosis layer can combine:
+CNN Attention continues to provide error-type diagnosis. The selected future
+direction is a learned correctness head followed, only when supervised quality
+labels exist, by a learned quality head. GOP/CaGOP is not the selected fusion
+component.
 
 - aligned CNN Attention error type
-- GOP/CaGOP phone scores
+- learned correctness and quality outputs when trained and validated
 - alignment confidence and boundary source
 - duration and consistency signals
 
@@ -82,6 +92,9 @@ The fused output should keep diagnosis confidence and pronunciation score separa
 - no raw GOP likelihood is computed
 - no CaGOP calibration is implemented
 
-## Replacement Plan
+## Superseded Replacement Plan
 
-Replace `ai-worker/app/scoring/heuristic_gop_scorer.py` with real GOP/CaGOP scoring behind `score_pronunciation_segments(...)`. Preserve the scoring contract so downstream AI result formatting and future hybrid diagnosis do not need a shape change.
+Do not replace `ai-worker/app/scoring/heuristic_gop_scorer.py` with GOP/CaGOP
+as a Phoenix v2 roadmap item. Until a learned quality scorer is trained and
+validated, public output must use `score: null` and
+`score_type: "unavailable"`.

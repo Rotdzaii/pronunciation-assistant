@@ -1,0 +1,4 @@
+context_mode,held_out_speaker,actual_error_type,addition,deletion,substitution
+context_0_10,HQTV,addition,16,15,41
+context_0_10,HQTV,deletion,31,381,65
+context_0_10,HQTV,substitution,74,170,565

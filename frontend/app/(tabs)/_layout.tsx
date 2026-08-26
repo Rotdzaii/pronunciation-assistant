@@ -18,7 +18,10 @@ export default function TabsLayout() {
   const pathname = usePathname();
   const { appRole, loading, roleError, roleLoading } = useAuth();
   const { theme } = useTheme();
-  const isDesktop = width >= 768;
+  // The sidebar is intentionally wide, so only render it when the viewport
+  // can also accommodate the content without squeezing it.
+  const isDesktop = width >= 1200;
+  const isCompact = width < 500;
   const isTeacherRoute = [
     '/teacher',
     '/(tabs)/teacher',
@@ -28,8 +31,6 @@ export default function TabsLayout() {
     '/(tabs)/student-detail',
   ].includes(pathname);
   const isAdminRoute = ['/admin', '/(tabs)/admin'].includes(pathname);
-  console.debug('[TabsLayout] render', { role: appRole, pathname });
-
   if (loading || (roleLoading && !appRole)) {
     return (
       <View style={[styles.loadingShell, { backgroundColor: theme.background }]}>
@@ -47,7 +48,7 @@ export default function TabsLayout() {
       <View style={[styles.loadingShell, { backgroundColor: theme.background }]}>
         <ErrorState
           title="Không thể mở khu vực học tập"
-          message={roleError ?? 'Không thể xác định vai trò tài khoản từ backend.'}
+          message={roleError ?? 'Hồ sơ tài khoản chưa sẵn sàng. Vui lòng thử lại hoặc đăng nhập lại.'}
         />
       </View>
     );
@@ -78,12 +79,15 @@ export default function TabsLayout() {
             tabBarActiveTintColor: theme.primary,
             tabBarInactiveTintColor: theme.textMuted,
             tabBarLabelStyle: {
-              fontSize: 12,
+              fontSize: isCompact ? 10 : 12,
               fontWeight: '800',
               paddingBottom: 4,
             },
+            tabBarShowLabel: !isCompact,
+            tabBarItemStyle: styles.tabBarItem,
             tabBarStyle: [
               styles.tabBar,
+              isCompact ? styles.compactTabBar : null,
               {
                 backgroundColor: theme.surface,
                 borderTopColor: theme.border,
@@ -112,9 +116,17 @@ export default function TabsLayout() {
             }}
           />
           <Tabs.Screen
-            name="mistakes"
+            name="assignments/index"
             options={{
               href: canUseStudent ? undefined : null,
+              title: 'Bài tập',
+              tabBarIcon: ({ focused }) => <TabIcon focused={focused} name="clipboard-text-outline" />,
+            }}
+          />
+          <Tabs.Screen
+            name="mistakes"
+            options={{
+              href: null,
               title: 'Lỗi phổ biến',
               tabBarIcon: ({ focused }) => (
                 <TabIcon focused={focused} name="alert-circle-outline" />
@@ -160,6 +172,10 @@ export default function TabsLayout() {
           />
           <Tabs.Screen name="students" options={{ title: 'Danh sách học viên', href: null }} />
           <Tabs.Screen name="student-detail" options={{ title: 'Chi tiết học viên', href: null }} />
+          <Tabs.Screen name="assessment/index" options={{ title: 'Kiểm tra', href: null }} />
+          <Tabs.Screen name="class/[id]" options={{ title: 'Chi tiết lớp học', href: null }} />
+          <Tabs.Screen name="practice/result" options={{ title: 'Kết quả phát âm', href: null }} />
+          <Tabs.Screen name="assignments/[id]" options={{ title: 'Chi tiết bài tập', href: null }} />
         </Tabs>
       </View>
     </View>
@@ -227,6 +243,7 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
+    minWidth: 0,
   },
   adminSwitch: {
     position: 'absolute',
@@ -270,6 +287,13 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.07,
     shadowRadius: 12,
     elevation: 8,
+  },
+  compactTabBar: {
+    height: 64,
+    paddingTop: 6,
+  },
+  tabBarItem: {
+    minWidth: 0,
   },
   hiddenTabBar: {
     display: 'none',

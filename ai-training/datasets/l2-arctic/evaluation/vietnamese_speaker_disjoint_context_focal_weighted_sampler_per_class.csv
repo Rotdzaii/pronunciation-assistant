@@ -1,0 +1,4 @@
+context_mode,held_out_speaker,error_type,class_id,support,predicted_count,correct,precision,recall,f1
+context_0_10,HQTV,addition,0,72,136,17,0.125,0.2361111111111111,0.16346153846153846
+context_0_10,HQTV,deletion,1,477,562,379,0.6743772241992882,0.7945492662473794,0.7295476419634264
+context_0_10,HQTV,substitution,2,809,660,558,0.8454545454545455,0.6897404202719407,0.7597004765146358

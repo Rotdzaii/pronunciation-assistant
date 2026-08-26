@@ -175,6 +175,8 @@ This recommendation is conditional. The next branch should verify checkpoint com
 - Fallback alignment is approximate and should not be presented as precise phone timing.
 - Real JWT/backend runtime validation may still be needed.
 - The current `wav2vec2` scorer mode may fail at runtime because the referenced implementation file was not found.
-- Current scoring output may still include heuristic/demo score metadata; Phoenix v2 Stable must avoid presenting heuristic replacement scores as model scores.
+- Heuristic diagnostic metadata may exist internally, but Phoenix v2 Stable
+  publishes `score: null` and `score_type: "unavailable"` until a learned
+  quality scorer is trained and validated.
 - Dataset size and speaker coverage remain limited.
 - Human-level pronunciation diagnosis should not be claimed.

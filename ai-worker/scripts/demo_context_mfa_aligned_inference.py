@@ -52,13 +52,13 @@ def _parse_args() -> argparse.Namespace:
     parser.add_argument("--conda-env", default="mfa", help='MFA conda environment name. Default: "mfa".')
     parser.add_argument(
         "--dictionary-path",
-        default="english_us_mfa",
-        help='MFA dictionary model name/path. Default: "english_us_mfa".',
+        default="english_us_arpa",
+        help='MFA dictionary model name/path. Default: "english_us_arpa".',
     )
     parser.add_argument(
         "--acoustic-model-path",
-        default="english_mfa",
-        help='MFA acoustic model name/path. Default: "english_mfa".',
+        default="english_us_arpa",
+        help='MFA acoustic model name/path. Default: "english_us_arpa".',
     )
     parser.add_argument("--dry-run", action="store_true", help="Print config only. Do not run scorer or MFA.")
     return parser.parse_args()
@@ -70,8 +70,8 @@ def _set_env(args: argparse.Namespace) -> dict[str, str]:
         "ALIGNMENT_MODE": str(args.alignment_mode or "mfa"),
         "ALLOW_ALIGNMENT_FALLBACK": "true" if args.allow_fallback else "false",
         "MFA_CONDA_ENV": str(args.conda_env or "mfa"),
-        "MFA_DICTIONARY_PATH": str(args.dictionary_path or "english_us_mfa"),
-        "MFA_ACOUSTIC_MODEL_PATH": str(args.acoustic_model_path or "english_mfa"),
+        "MFA_DICTIONARY_PATH": str(args.dictionary_path or "english_us_arpa"),
+        "MFA_ACOUSTIC_MODEL_PATH": str(args.acoustic_model_path or "english_us_arpa"),
         "CNN_ATTENTION_CONTEXT_MODE": "context_0_10",
         "CNN_ATTENTION_CONTEXT_LEFT_SECONDS": "0.10",
         "CNN_ATTENTION_CONTEXT_RIGHT_SECONDS": "0.10",

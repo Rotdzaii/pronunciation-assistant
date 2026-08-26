@@ -1,0 +1,2 @@
+context_mode,context_seconds,fold_count,mean_accuracy,std_accuracy,mean_macro_f1,std_macro_f1,mean_weighted_f1,std_weighted_f1,mean_addition_f1,std_addition_f1,mean_deletion_f1,std_deletion_f1,mean_substitution_f1,std_substitution_f1,best_fold,best_fold_macro_f1,worst_fold,worst_fold_macro_f1
+context_0_10,0.1,1,0.29086892488954347,0.0,0.3035776253908086,0.0,0.33145785004954387,0.0,0.12627291242362526,0.0,0.5831325301204819,0.0,0.2013274336283186,0.0,HQTV,0.3035776253908086,HQTV,0.3035776253908086

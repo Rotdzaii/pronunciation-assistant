@@ -2,7 +2,9 @@
 
 ## Purpose
 
-The AI Worker returns a normalized result object before posting to the backend webhook. This contract separates phone error diagnosis from pronunciation scoring so CNN Attention, forced alignment, GOP/CaGOP, and hybrid scoring can be integrated without changing the app-facing shape each time.
+The AI Worker returns a normalized result object before posting to the backend
+webhook. This contract separates phone error diagnosis from a future learned
+pronunciation score so the app-facing shape remains stable.
 
 For the backend/frontend-ready final shape and examples, see `ai-worker/docs/FINAL_AI_OUTPUT_CONTRACT.md`.
 
@@ -19,16 +21,21 @@ The CNN Attention classifier predicts an error type and class probabilities. Its
 
 Classifier confidence is not pronunciation correctness. It must not be displayed as a pronunciation score.
 
-The `score` field is reserved for pronunciation scoring. Until forced alignment, GOP/CaGOP, or hybrid scoring is available, any demo score must be clearly marked as heuristic/demo metadata.
+The `score` field is reserved for a future learned pronunciation score. The
+current CNN has only addition/deletion/substitution classes, so public output
+uses `score: null` and `score_type: "unavailable"`. MFA supplies timing only;
+heuristic/GOP/CaGOP values and classifier confidence must not be published as
+pronunciation scores.
 
 ## Completed Result Example
 
 ```json
 {
   "status": "completed",
-  "score": 72.0,
-  "score_note": "Demo heuristic only. This is not real pronunciation scoring and must not be derived from classifier confidence in production.",
-  "pronunciation_score_source": "demo_error_type_heuristic",
+  "score": null,
+  "score_type": "unavailable",
+  "score_note": "A learned pronunciation score is not available for the current model.",
+  "pronunciation_score_source": null,
   "problem_phonemes": ["/t/"],
   "predicted_error_type": "deletion",
   "diagnosis": {
@@ -59,13 +66,14 @@ The `score` field is reserved for pronunciation scoring. Until forced alignment,
     "alignment_used": false,
     "gop_used": false,
     "hybrid_used": false,
-    "is_demo_score": true,
-    "score_note": "Demo heuristic only. This is not real pronunciation scoring and must not be derived from classifier confidence in production."
+    "score_type": "unavailable"
   }
 }
 ```
 
-Aligned inference can also include a `scoring` block. In the current scaffold, `scoring_method=heuristic_gop` is a demo placeholder and not production GOP.
+Aligned inference can include internal scoring diagnostics, but
+`scoring_method=heuristic_gop` is not a public pronunciation score. GOP/CaGOP
+is not the Phoenix v2 roadmap.
 
 Hybrid aligned inference can add `diagnosis.top_issues`, `diagnosis.severity`, `metadata.hybrid_method`, and `metadata.location_reliability`. These fields are advisory and must preserve the distinction between diagnosis confidence, pronunciation score, and location reliability.
 
@@ -113,9 +121,13 @@ Hybrid aligned inference can add `diagnosis.top_issues`, `diagnosis.severity`, `
 
 Forced alignment should populate `problem_phonemes` from aligned phone spans and set `metadata.alignment_used = true`.
 
-GOP/CaGOP should provide pronunciation scoring evidence and set `metadata.gop_used = true` only when real acoustic GOP/CaGOP is used. The current `heuristic_gop` scaffold keeps `metadata.gop_used = false` and marks `metadata.scoring_is_heuristic = true`.
+The selected future path is a learned correctness head and, only after quality
+labels exist, a learned quality/scoring head. The current `heuristic_gop`
+scaffold stays internal and keeps `metadata.gop_used = false`.
 
-Hybrid diagnosis combines alignment, scoring, and classifier diagnosis into clearer issue selection and feedback. With heuristic scoring, it may set `metadata.hybrid_used = true`, but it must still mark `metadata.scoring_is_heuristic = true` and avoid claiming real GOP/CaGOP.
+Hybrid diagnosis combines alignment and classifier diagnosis into clearer issue
+selection and feedback. It may retain heuristic diagnostics internally, but
+must not publish them as a score or claim GOP/CaGOP.
 
 ## Backend Webhook Compatibility
 

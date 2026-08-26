@@ -1,7 +1,7 @@
 ﻿import { useEffect, useMemo, useState } from 'react';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { usePathname } from 'expo-router';
-import { Alert, Platform, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Alert, KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, useWindowDimensions, View } from 'react-native';
 import {
   AppCard,
   AppScreen,
@@ -46,6 +46,8 @@ const protectedDemoEmails = new Set([
 ]);
 
 export default function AdminScreen() {
+  const { width: windowWidth } = useWindowDimensions();
+  const isCompact = windowWidth < 600;
   const pathname = usePathname();
   const { appRole, currentUser } = useAuth();
   const [users, setUsers] = useState<AdminUser[]>([]);
@@ -237,6 +239,7 @@ export default function AdminScreen() {
   };
 
   return (
+    <KeyboardAvoidingView style={styles.keyboardRoot} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
     <AppScreen maxWidth={1200}>
       <View style={styles.header}>
         <View>
@@ -257,6 +260,7 @@ export default function AdminScreen() {
 
       {notice ? <StatusNotice message={notice} /> : null}
 
+      <ScrollView horizontal={isCompact} showsHorizontalScrollIndicator={false} contentContainerStyle={isCompact ? styles.menuRowCompact : undefined}>
       <View style={styles.menuRow}>
         {adminMenus.map((item) => (
           <Pressable
@@ -272,6 +276,7 @@ export default function AdminScreen() {
           </Pressable>
         ))}
       </View>
+      </ScrollView>
 
       {activeMenu === 'overview' ? (
         <AdminOverviewSection
@@ -319,6 +324,7 @@ export default function AdminScreen() {
         <ExportReportsSection onExport={exportCsv} />
       ) : null}
     </AppScreen>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -853,6 +859,9 @@ function downloadCsv(filename: string, csv: string) {
 }
 
 const styles = StyleSheet.create({
+  keyboardRoot: {
+    flex: 1,
+  },
   header: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -900,6 +909,9 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     gap: 10,
   },
+  menuRowCompact: {
+    paddingRight: 12,
+  },
   menuButton: {
     minHeight: 42,
     borderRadius: 10,
@@ -932,6 +944,8 @@ const styles = StyleSheet.create({
   metricCard: {
     flexGrow: 1,
     flexBasis: 180,
+    flexShrink: 1,
+    minWidth: 0,
     borderRadius: 12,
     gap: 8,
   },
@@ -953,11 +967,15 @@ const styles = StyleSheet.create({
   mainColumn: {
     flexGrow: 2,
     flexBasis: 620,
+    flexShrink: 1,
+    minWidth: 0,
     gap: 16,
   },
   sideColumn: {
     flexGrow: 1,
     flexBasis: 360,
+    flexShrink: 1,
+    minWidth: 0,
     gap: 16,
   },
   panel: {
@@ -1164,7 +1182,7 @@ const styles = StyleSheet.create({
     fontWeight: '900',
   },
   dangerButton: {
-    minHeight: 38,
+    minHeight: 44,
     borderRadius: 10,
     backgroundColor: '#DC2626',
     flexDirection: 'row',
@@ -1207,6 +1225,7 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     backgroundColor: '#FFFFFF',
     flexDirection: 'row',
+    flexWrap: 'wrap',
     alignItems: 'center',
     gap: 10,
     padding: 12,
@@ -1232,6 +1251,8 @@ const styles = StyleSheet.create({
   },
   userInfo: {
     flex: 1,
+    flexBasis: 160,
+    minWidth: 0,
     gap: 3,
   },
   userName: {

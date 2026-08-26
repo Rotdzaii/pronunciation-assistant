@@ -80,7 +80,8 @@ Expected future path:
 - MFA generates phone-level boundaries from prompt text and audio
 - worker passes MFA `alignment_result` to CNN Attention scorer
 - fallback alignment remains only for demos or degraded operation
-- GOP/CaGOP or hybrid scoring supplies pronunciation correctness scores
+- a future learned correctness/quality head may supply pronunciation scoring
+  only after it has suitable supervised labels and validation
 
 ## Current Limitations
 

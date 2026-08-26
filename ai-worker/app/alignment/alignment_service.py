@@ -5,6 +5,7 @@ import re
 from pathlib import Path
 from typing import Any
 
+from app.alignment.audio_preparation import PreparedMfaAudio
 from app.alignment.fallback_aligner import align_prompt_fallback
 from app.alignment.mfa_aligner import run_mfa_alignment
 from app.contracts.alignment_contract import (
@@ -36,7 +37,7 @@ def _env_bool(name: str, default: bool) -> bool:
     return raw_value.strip().lower() in {"1", "true", "yes", "on"}
 
 
-def _failed_alignment(method: str, error: str) -> dict[str, Any]:
+def _failed_alignment(method: str, error: str, error_code: str = "alignment_failed") -> dict[str, Any]:
     return build_alignment_result(
         segments=[],
         status="failed",
@@ -49,7 +50,11 @@ def _failed_alignment(method: str, error: str) -> dict[str, Any]:
             "mfa_used": False,
             "textgrid_parse_success": False,
             "error": error,
+            "error_code": error_code,
+            "alignment_source": "none",
         },
+        quality={"status": "failed", "quality_score": 0.0, "issues": [error_code], "metrics": {}},
+        error={"code": error_code, "message": error},
     )
 
 
@@ -64,6 +69,15 @@ def _sanitize_alignment_reason(reason: str | None) -> str | None:
     if any(marker in normalized for marker in SENSITIVE_REASON_MARKERS):
         return "MFA alignment failed before a forced-alignment result was produced."
     return sanitized
+
+
+def _public_alignment_error(error: AlignmentError) -> dict[str, str]:
+    """Keep local subprocess diagnostics out of worker and webhook metadata."""
+
+    return {
+        "code": error.code,
+        "message": _sanitize_alignment_reason(str(error)) or "MFA alignment failed.",
+    }
 
 
 def _fallback_alignment(
@@ -84,6 +98,15 @@ def _fallback_alignment(
     result["metadata"]["alignment_status"] = "fallback"
     result["metadata"]["alignment_note"] = FALLBACK_ALIGNMENT_WARNING
     result["metadata"]["location_reliability"] = "limited_fallback_alignment"
+    result["metadata"]["alignment_source"] = "fallback"
+    result["metadata"]["alignment_confidence"] = 0.0
+    result["alignment_source"] = "fallback"
+    result["quality"] = {
+        "status": "warning",
+        "quality_score": 0.0,
+        "issues": ["fallback_alignment_not_forced"],
+        "metrics": {"number_of_phones": len(result.get("phones") or [])},
+    }
     if sanitized_reason:
         result["metadata"]["fallback_reason"] = sanitized_reason
     result["note"] = FALLBACK_ALIGNMENT_WARNING
@@ -95,6 +118,9 @@ def align_audio(
     prompt_text: str | None,
     audio_duration: float | None = None,
     canonical_phones: list[str] | tuple[str, ...] | None = None,
+    job_id: str | None = None,
+    prepared_audio: PreparedMfaAudio | None = None,
+    upstream_quality_warnings: list[str] | tuple[str, ...] | None = None,
 ) -> dict[str, Any]:
     """Select an alignment provider and return the normalized alignment contract."""
 
@@ -102,7 +128,7 @@ def align_audio(
     allow_fallback = _env_bool("ALLOW_ALIGNMENT_FALLBACK", True)
 
     if mode == "none":
-        result = _failed_alignment("none", "Alignment disabled by ALIGNMENT_MODE=none.")
+        result = _failed_alignment("none", "Alignment disabled by ALIGNMENT_MODE=none.", "alignment_disabled")
         result["metadata"]["requested_alignment_mode"] = mode
         result["metadata"]["requested_alignment_method"] = mode
         return result
@@ -122,21 +148,33 @@ def align_audio(
                 prompt_text or "",
                 dictionary_path=os.getenv("MFA_DICTIONARY_PATH"),
                 acoustic_model_path=os.getenv("MFA_ACOUSTIC_MODEL_PATH"),
+                job_id=job_id,
+                prepared_audio=prepared_audio,
             )
             result["metadata"]["requested_alignment_mode"] = mode
             result["metadata"]["requested_alignment_method"] = mode
+            if upstream_quality_warnings:
+                warnings = list(result["metadata"].get("alignment_quality_warnings") or [])
+                for warning in upstream_quality_warnings:
+                    if warning and warning not in warnings:
+                        warnings.append(warning)
+                result["metadata"]["alignment_quality_warnings"] = warnings
+                result["metadata"]["audio_quality_status"] = "warning"
             return result
         except AlignmentError as exc:
+            print(f"alignment_event=mfa_fallback job_id={job_id or 'unknown'} error_category={exc.code}")
             if allow_fallback:
                 result = _fallback_alignment(audio_path, prompt_text, canonical_phones, fallback_reason=str(exc))
                 result["metadata"]["requested_alignment_mode"] = mode
                 result["metadata"]["requested_alignment_method"] = mode
                 result["metadata"]["mfa_attempted"] = True
+                result["metadata"]["mfa_error"] = _public_alignment_error(exc)
                 return result
-            result = _failed_alignment("mfa", str(exc))
+            result = _failed_alignment("mfa", str(exc), exc.code)
             result["metadata"]["requested_alignment_mode"] = mode
             result["metadata"]["requested_alignment_method"] = mode
             result["metadata"]["mfa_attempted"] = True
+            result["metadata"]["mfa_error"] = _public_alignment_error(exc)
             return result
 
     error = f"Unsupported ALIGNMENT_MODE={mode!r}. Use mfa, fallback, or none."
@@ -145,7 +183,7 @@ def align_audio(
         result["metadata"]["requested_alignment_mode"] = mode
         result["metadata"]["requested_alignment_method"] = mode
         return result
-    result = _failed_alignment(mode, error)
+    result = _failed_alignment(mode, error, "alignment_mode_invalid")
     result["metadata"]["requested_alignment_mode"] = mode
     result["metadata"]["requested_alignment_method"] = mode
     return result

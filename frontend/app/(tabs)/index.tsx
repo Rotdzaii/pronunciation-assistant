@@ -1,10 +1,10 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { type Href, useRouter } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { type Href, useFocusEffect, useRouter } from 'expo-router';
+import { useCallback, useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { AppCard, AppScreen, ErrorState, LoadingState, StatusBadge, colors } from '../../components/AppUI';
-import { fetchStudentClassDetail, fetchStudentClasses } from '../../lib/api';
-import type { ClassDetail, ClassSummary } from '../../types';
+import { fetchStudentAssignments, fetchStudentClasses } from '../../lib/api';
+import type { ClassSummary, StudentAssignment } from '../../types';
 
 type IconName = keyof typeof MaterialCommunityIcons.glyphMap;
 
@@ -26,7 +26,6 @@ type LearningMode = {
 
 const quickActions: QuickAction[] = [
   { label: 'Luyện tập', icon: 'microphone-outline', href: '/(tabs)/practice' },
-  { label: 'Thư viện lỗi', icon: 'alert-circle-outline', href: '/(tabs)/mistakes' },
   { label: 'Lịch sử', icon: 'history', href: '/(tabs)/history' },
   { label: 'Hồ sơ', icon: 'account-outline', href: '/(tabs)/profile' },
 ];
@@ -52,15 +51,6 @@ const learningModes: LearningMode[] = [
     visualTone: 'teal',
   },
   {
-    title: 'Thư viện lỗi phổ biến',
-    description:
-      'Ôn lại các lỗi người Việt thường gặp: âm cuối, trọng âm, cụm phụ âm và nối âm.',
-    icon: 'alert-circle-outline',
-    href: '/(tabs)/mistakes',
-    tags: ['#Phoneme', '#Vietnamese learners'],
-    visualTone: 'red',
-  },
-  {
     title: 'Lịch sử và tiến độ',
     description:
       'Xem lại điểm số, phản hồi AI và các âm cần chú ý sau từng lượt luyện.',
@@ -74,44 +64,32 @@ const learningModes: LearningMode[] = [
 export default function HomeScreen() {
   const router = useRouter();
   const [classes, setClasses] = useState<ClassSummary[]>([]);
-  const [selectedClass, setSelectedClass] = useState<ClassDetail | null>(null);
   const [classLoading, setClassLoading] = useState(true);
-  const [classDetailLoading, setClassDetailLoading] = useState(false);
   const [classError, setClassError] = useState<string | null>(null);
+  const [assignments, setAssignments] = useState<StudentAssignment[]>([]);
+  const [assignmentError, setAssignmentError] = useState<string | null>(null);
 
   useEffect(() => {
-    console.debug('[StudentHome] class list effect');
-    const loadClasses = async () => {
-      setClassLoading(true);
-      setClassError(null);
-      try {
-        const response = await fetchStudentClasses();
-        setClasses(response);
-        if (response[0]) {
-          const detail = await fetchStudentClassDetail(response[0].id);
-          setSelectedClass(detail);
-        }
-      } catch (err) {
-        setClassError(err instanceof Error ? err.message : 'Chưa thể tải danh sách lớp.');
-      } finally {
-        setClassLoading(false);
-      }
-    };
-
-    void loadClasses();
+    setClassLoading(true);
+    setClassError(null);
+    fetchStudentClasses()
+      .then(setClasses)
+      .catch((err) => setClassError(err instanceof Error ? err.message : 'Chưa thể tải danh sách lớp.'))
+      .finally(() => setClassLoading(false));
   }, []);
 
-  const openClassDetail = async (classId: string) => {
-    setClassDetailLoading(true);
-    setClassError(null);
+  const loadAssignments = useCallback(async () => {
     try {
-      setSelectedClass(await fetchStudentClassDetail(classId));
+      setAssignmentError(null);
+      setAssignments(await fetchStudentAssignments());
     } catch (err) {
-      setClassError(err instanceof Error ? err.message : 'Chưa thể tải chi tiết lớp.');
-    } finally {
-      setClassDetailLoading(false);
+      setAssignmentError(err instanceof Error ? err.message : 'Unable to load assignments.');
     }
-  };
+  }, []);
+
+  useFocusEffect(useCallback(() => {
+    void loadAssignments();
+  }, [loadAssignments]));
 
   return (
     <AppScreen maxWidth={1200}>
@@ -197,11 +175,8 @@ export default function HomeScreen() {
           <View style={styles.sideColumn}>
           <StudentClassesCard
             classes={classes}
-            selectedClass={selectedClass}
             loading={classLoading}
-            detailLoading={classDetailLoading}
             error={classError}
-            onSelectClass={openClassDetail}
           />
 
           <AppCard style={styles.profileCard}>
@@ -227,12 +202,53 @@ export default function HomeScreen() {
             </View>
             <Text style={styles.progressTitle}>Bắt đầu tuần học mới</Text>
             <ProgressLine label="Thời gian học" value="0/30p" percent={0} />
-            <ProgressLine label="Bài tập hoàn thành" value="0/5" percent={0} />
-            <View style={styles.progressNoteBox}>
-              <Text style={styles.progressNoteText}>
-                Hoàn thành bài luyện đầu tiên để cập nhật tiến độ thật từ hệ thống.
-              </Text>
+            <ProgressLine
+              label="Bài tập hoàn thành"
+              value={assignments.length > 0
+                ? `${assignments.filter((a) => a.progress_status === 'completed').length}/${assignments.length}`
+                : '0/0'}
+              percent={assignments.length > 0
+                ? Math.round((assignments.filter((a) => a.progress_status === 'completed').length / assignments.length) * 100)
+                : 0}
+            />
+            {assignmentError ? (
+              <View style={styles.progressNoteBox}>
+                <Text style={styles.progressNoteText}>{assignmentError}</Text>
+                <Pressable onPress={() => void loadAssignments()}>
+                  <Text style={styles.assignmentPreviewLink}>Thử lại</Text>
+                </Pressable>
+              </View>
+            ) : assignments.length === 0 ? (
+              <View style={styles.progressNoteBox}>
+                <Text style={styles.progressNoteText}>
+                  Hoàn thành bài luyện đầu tiên để cập nhật tiến độ thật từ hệ thống.
+                </Text>
+              </View>
+            ) : null}
+          </AppCard>
+
+          <AppCard style={styles.assignmentPreviewCard}>
+            <View style={styles.assignmentPreviewHeader}>
+              <Text style={styles.goalTitle}>Bài cần làm</Text>
+              <Pressable onPress={() => router.push('/(tabs)/assignments')}>
+                <Text style={styles.assignmentPreviewLink}>Xem tất cả</Text>
+              </Pressable>
             </View>
+            {!assignmentError && assignments.filter((item) => !['completed', 'submitted', 'locked'].includes(item.work_status)).slice(0, 3).map((item) => (
+              <Pressable key={item.assignment_id} onPress={() => router.push(item.is_assessment ? { pathname: '/(tabs)/assessment', params: { assignment_id: item.assignment_id } } : { pathname: '/(tabs)/assignments/[id]', params: { id: item.assignment_id } } as any)} style={styles.assignmentPreviewRow}>
+                <View style={styles.assignmentPreviewCopy}>
+                  <Text numberOfLines={1} style={styles.assignmentPreviewTitle}>{item.title}</Text>
+                  <Text numberOfLines={1} style={styles.assignmentPreviewMeta}>{item.is_assessment ? 'Kiểm tra' : 'Luyện tập'} · {item.completed_items}/{item.total_items} từ</Text>
+                </View>
+                <MaterialCommunityIcons name="chevron-right" size={20} color={colors.primary} />
+              </Pressable>
+            ))}
+            {assignmentError ? (
+              <Pressable onPress={() => void loadAssignments()}>
+                <Text style={styles.assignmentPreviewMeta}>{assignmentError} Thử lại.</Text>
+              </Pressable>
+            ) : null}
+            {assignments.filter((item) => !['completed', 'submitted', 'locked'].includes(item.work_status)).length === 0 ? <Text style={styles.assignmentPreviewMeta}>Không có bài cần làm.</Text> : null}
           </AppCard>
 
           <AppCard style={styles.goalCard}>
@@ -303,19 +319,15 @@ function LearningModeCard({
 
 function StudentClassesCard({
   classes,
-  selectedClass,
   loading,
-  detailLoading,
   error,
-  onSelectClass,
 }: {
   classes: ClassSummary[];
-  selectedClass: ClassDetail | null;
   loading: boolean;
-  detailLoading: boolean;
   error: string | null;
-  onSelectClass: (classId: string) => void;
 }) {
+  const router = useRouter();
+
   if (loading) {
     return <LoadingState title="Đang tải lớp của tôi" message="Hệ thống đang lấy các lớp học mà bạn đang tham gia." />;
   }
@@ -334,80 +346,43 @@ function StudentClassesCard({
 
       <View style={styles.classList}>
         {classes.length > 0 ? (
-          classes.map((classItem) => {
-            const active = selectedClass?.id === classItem.id;
-            return (
-              <Pressable
-                key={classItem.id}
-                accessibilityRole="button"
-                onPress={() => onSelectClass(classItem.id)}
-                style={[styles.classRow, active ? styles.classRowActive : null]}
-              >
-                <View style={styles.classRowMain}>
-                  <Text style={styles.classCode}>{classItem.code ?? 'Chưa có mã'}</Text>
-                  <Text style={styles.className}>{classItem.name}</Text>
-                  {classItem.description ? (
-                    <Text style={styles.classDescription} numberOfLines={2}>{classItem.description}</Text>
-                  ) : null}
-                  <View style={styles.classMetaRow}>
-                    <Text style={styles.classMetaText}>{classItem.student_count} học sinh</Text>
-                    <Text style={styles.classMetaText}>{classItem.teacher_count} giảng viên</Text>
-                  </View>
-                  <View style={styles.teacherList}>
-                    {(classItem.teachers ?? []).slice(0, 3).map((teacher) => (
-                      <View key={teacher.id} style={styles.teacherPill}>
-                        <MaterialCommunityIcons name="account-tie-outline" size={15} color={colors.primary} />
-                        <Text style={styles.teacherPillText}>{teacher.display_name}</Text>
-                      </View>
-                    ))}
-                  </View>
+          classes.map((classItem) => (
+            <Pressable
+              key={classItem.id}
+              accessibilityRole="button"
+              onPress={() => router.push(`/class/${classItem.id}` as never)}
+              style={styles.classRow}
+            >
+              <View style={styles.classRowMain}>
+                <Text style={styles.classCode}>{classItem.code ?? 'Chưa có mã'}</Text>
+                <Text style={styles.className}>{classItem.name}</Text>
+                {classItem.description ? (
+                  <Text style={styles.classDescription} numberOfLines={2}>{classItem.description}</Text>
+                ) : null}
+                <View style={styles.classMetaRow}>
+                  <Text style={styles.classMetaText}>{classItem.student_count} học sinh</Text>
+                  <Text style={styles.classMetaText}>{classItem.teacher_count} giảng viên</Text>
                 </View>
-                <View style={styles.classAction}>
-                  <Text style={styles.classActionText}>Xem chi tiết</Text>
-                  <MaterialCommunityIcons name="chevron-right" size={18} color={colors.primary} />
+                <View style={styles.teacherList}>
+                  {(classItem.teachers ?? []).slice(0, 3).map((teacher) => (
+                    <View key={teacher.id} style={styles.teacherPill}>
+                      <MaterialCommunityIcons name="account-tie-outline" size={15} color={colors.primary} />
+                      <Text style={styles.teacherPillText}>{teacher.display_name}</Text>
+                    </View>
+                  ))}
                 </View>
-              </Pressable>
-            );
-          })
+              </View>
+              <View style={styles.classAction}>
+                <Text style={styles.classActionText}>Xem lớp</Text>
+                <MaterialCommunityIcons name="chevron-right" size={18} color={colors.primary} />
+              </View>
+            </Pressable>
+          ))
         ) : (
           <Text style={styles.classEmptyText}>Bạn chưa tham gia lớp nào. Vui lòng liên hệ giảng viên để được thêm vào lớp.</Text>
         )}
       </View>
-
-      {detailLoading ? (
-        <Text style={styles.classEmptyText}>Đang tải chi tiết lớp...</Text>
-      ) : selectedClass ? (
-        <View style={styles.classDetailBox}>
-          <Text style={styles.classDetailKicker}>Thông tin lớp</Text>
-          <Text style={styles.classDetailTitle}>{selectedClass.name}</Text>
-          {selectedClass.description ? (
-            <Text style={styles.classDetailText}>{selectedClass.description}</Text>
-          ) : null}
-          <View style={styles.classStatRow}>
-            <ClassMiniStat label="Học sinh" value={selectedClass.student_count} />
-            <ClassMiniStat label="Giảng viên" value={selectedClass.teacher_count} />
-          </View>
-          <Text style={styles.classDetailKicker}>Giảng viên phụ trách</Text>
-          <View style={styles.teacherList}>
-            {(selectedClass.teachers ?? []).slice(0, 3).map((teacher) => (
-              <View key={teacher.id} style={styles.teacherPill}>
-                <MaterialCommunityIcons name="account-tie-outline" size={15} color={colors.primary} />
-                <Text style={styles.teacherPillText}>{teacher.display_name}</Text>
-              </View>
-            ))}
-          </View>
-        </View>
-      ) : null}
     </AppCard>
-  );
-}
-
-function ClassMiniStat({ label, value }: { label: string; value: number }) {
-  return (
-    <View style={styles.classMiniStat}>
-      <Text style={styles.classMiniValue}>{value}</Text>
-      <Text style={styles.classMiniLabel}>{label}</Text>
-    </View>
   );
 }
 
@@ -525,10 +500,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     gap: 10,
   },
-  classRowActive: {
-    borderColor: colors.primary,
-    backgroundColor: colors.softBlue,
-  },
   classRowMain: {
     flex: 1,
     gap: 3,
@@ -577,52 +548,6 @@ const styles = StyleSheet.create({
     color: colors.muted,
     fontSize: 13,
     lineHeight: 19,
-  },
-  classDetailBox: {
-    borderRadius: 14,
-    borderWidth: 1,
-    borderColor: '#BFDBFE',
-    backgroundColor: '#F8FBFF',
-    padding: 14,
-    gap: 10,
-  },
-  classDetailTitle: {
-    color: colors.text,
-    fontSize: 17,
-    fontWeight: '900',
-  },
-  classDetailKicker: {
-    color: colors.primary,
-    fontSize: 12,
-    fontWeight: '900',
-    textTransform: 'uppercase',
-  },
-  classDetailText: {
-    color: colors.muted,
-    fontSize: 13,
-    lineHeight: 19,
-  },
-  classStatRow: {
-    flexDirection: 'row',
-    gap: 8,
-  },
-  classMiniStat: {
-    flex: 1,
-    borderRadius: 10,
-    backgroundColor: '#FFFFFF',
-    borderWidth: 1,
-    borderColor: colors.border,
-    padding: 10,
-  },
-  classMiniValue: {
-    color: colors.text,
-    fontSize: 22,
-    fontWeight: '900',
-  },
-  classMiniLabel: {
-    color: colors.muted,
-    fontSize: 12,
-    fontWeight: '800',
   },
   teacherList: {
     flexDirection: 'row',
@@ -966,6 +891,43 @@ const styles = StyleSheet.create({
   progressCard: {
     borderRadius: 20,
     gap: 16,
+  },
+  assignmentPreviewCard: {
+    borderRadius: 20,
+    gap: 10,
+  },
+  assignmentPreviewHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    gap: 8,
+  },
+  assignmentPreviewLink: {
+    color: colors.primary,
+    fontWeight: '800',
+    fontSize: 13,
+  },
+  assignmentPreviewRow: {
+    minHeight: 48,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 8,
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
+    paddingTop: 8,
+  },
+  assignmentPreviewCopy: {
+    flex: 1,
+    gap: 3,
+  },
+  assignmentPreviewTitle: {
+    color: colors.text,
+    fontWeight: '800',
+  },
+  assignmentPreviewMeta: {
+    color: colors.muted,
+    fontSize: 12,
   },
   progressHeader: {
     flexDirection: 'row',

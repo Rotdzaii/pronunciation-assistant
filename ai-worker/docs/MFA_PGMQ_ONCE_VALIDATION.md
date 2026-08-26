@@ -6,7 +6,7 @@ This document defines a safe once-only PGMQ validation workflow for:
 
 - `SCORER_MODE=cnn_attention_context`
 - `ALIGNMENT_MODE=mfa`
-- `MFA_CONDA_ENV=mfa`
+- `MFA_CONDA_ENV=aligner`
 - `MFA_DICTIONARY_PATH=english_us_mfa`
 - `MFA_ACOUSTIC_MODEL_PATH=english_mfa`
 
@@ -32,7 +32,7 @@ ai-worker/scripts/demo_mfa_pgmq_once.py
 - Supabase env is configured locally
 - queue `practice_jobs` has at least one message if you want a real once-run
 - `CNN_ATTENTION_CONTEXT_CHECKPOINT_PATH` is configured locally or `--checkpoint-path` is passed
-- MFA environment `mfa` is available locally
+- MFA environment `aligner` is available locally
 - MFA dictionary `english_us_mfa` is available locally
 - MFA acoustic model `english_mfa` is available locally
 
@@ -227,7 +227,7 @@ Checkpoint missing:
 
 MFA unavailable:
 
-- confirm `MFA_CONDA_ENV=mfa`
+- confirm `MFA_CONDA_ENV=aligner`
 - confirm MFA dictionary and acoustic model are available locally
 - confirm the queued audio could be decoded and prepared into a temporary WAV
 - if fallback is disabled, the run should fail instead of silently approximating alignment

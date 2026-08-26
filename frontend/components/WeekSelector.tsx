@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Modal, Pressable, ScrollView, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors } from './AppUI';
 import { useTheme } from '../lib/theme';
 import {
@@ -17,6 +18,8 @@ type WeekSelectorProps = {
 
 export function WeekSelector({ selectedWeek, onChange }: WeekSelectorProps) {
   const { theme, mode } = useTheme();
+  const { width: windowWidth, height: windowHeight } = useWindowDimensions();
+  const insets = useSafeAreaInsets();
   const [open, setOpen] = useState(false);
   const [visibleMonth, setVisibleMonth] = useState(() => ({
     year: selectedWeek.start.getFullYear(),
@@ -27,6 +30,15 @@ export function WeekSelector({ selectedWeek, onChange }: WeekSelectorProps) {
     () => getWeeksOfMonth(visibleMonth.year, visibleMonth.monthIndex),
     [visibleMonth.monthIndex, visibleMonth.year],
   );
+  const isCompact = windowWidth < 600;
+  const dropdownWidth = Math.min(330, Math.max(0, windowWidth - 24));
+  const dropdownRight = isCompact ? 12 : 24;
+  const dropdownTop = Math.max(96, insets.top + 12);
+  const dropdownMaxHeight = Math.min(
+    360,
+    Math.max(180, windowHeight - dropdownTop - Math.max(12, insets.bottom + 12)),
+  );
+  const weekListMaxHeight = Math.max(96, dropdownMaxHeight - 74);
 
   const changeMonth = (delta: number) => {
     const next = new Date(visibleMonth.year, visibleMonth.monthIndex + delta, 1);
@@ -69,20 +81,31 @@ export function WeekSelector({ selectedWeek, onChange }: WeekSelectorProps) {
       <Modal transparent visible={open} animationType="fade" onRequestClose={() => setOpen(false)}>
         <View style={styles.modalRoot}>
           <Pressable accessibilityRole="button" accessibilityLabel="Đóng chọn tuần" onPress={() => setOpen(false)} style={styles.modalBackdrop} />
-          <View style={[styles.dropdown, { backgroundColor: theme.surface, borderColor: theme.border, shadowColor: theme.shadow }]}>
+          <View style={[
+            styles.dropdown,
+            {
+              backgroundColor: theme.surface,
+              borderColor: theme.border,
+              shadowColor: theme.shadow,
+              width: dropdownWidth,
+              right: dropdownRight,
+              top: dropdownTop,
+              maxHeight: dropdownMaxHeight,
+            },
+          ]}>
             <View style={styles.monthRow}>
-              <Pressable accessibilityRole="button" onPress={() => changeMonth(-1)} style={[styles.monthButton, { backgroundColor: theme.softBlue }]}>
+              <Pressable accessibilityRole="button" accessibilityLabel="Tháng trước" onPress={() => changeMonth(-1)} style={[styles.monthButton, isCompact ? styles.monthButtonCompact : null, { backgroundColor: theme.softBlue }]}>
                 <MaterialCommunityIcons name="chevron-left" size={18} color={theme.primary} />
-                <Text style={[styles.monthButtonText, { color: theme.primary }]}>Tháng trước</Text>
+                <Text style={[styles.monthButtonText, isCompact ? styles.monthButtonTextCompact : null, { color: theme.primary }]}>Tháng trước</Text>
               </Pressable>
-              <Text style={[styles.monthTitle, { color: theme.text }]}>{formatMonthYear(new Date(visibleMonth.year, visibleMonth.monthIndex, 1))}</Text>
-              <Pressable accessibilityRole="button" onPress={() => changeMonth(1)} style={[styles.monthButton, { backgroundColor: theme.softBlue }]}>
-                <Text style={[styles.monthButtonText, { color: theme.primary }]}>Tháng sau</Text>
+              <Text numberOfLines={1} style={[styles.monthTitle, { color: theme.text }]}>{formatMonthYear(new Date(visibleMonth.year, visibleMonth.monthIndex, 1))}</Text>
+              <Pressable accessibilityRole="button" accessibilityLabel="Tháng sau" onPress={() => changeMonth(1)} style={[styles.monthButton, isCompact ? styles.monthButtonCompact : null, { backgroundColor: theme.softBlue }]}>
+                <Text style={[styles.monthButtonText, isCompact ? styles.monthButtonTextCompact : null, { color: theme.primary }]}>Tháng sau</Text>
                 <MaterialCommunityIcons name="chevron-right" size={18} color={theme.primary} />
               </Pressable>
             </View>
 
-            <ScrollView style={styles.weekScroll} contentContainerStyle={styles.weekList}>
+            <ScrollView style={[styles.weekScroll, { maxHeight: weekListMaxHeight }]} contentContainerStyle={styles.weekList}>
               {weeks.map((week) => {
                 const active = week.value === selectedWeek.value;
                 return (
@@ -189,10 +212,6 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     position: 'absolute',
-    top: 96,
-    right: 24,
-    width: 330,
-    maxHeight: 360,
     borderRadius: 16,
     borderWidth: 1,
     borderColor: '#DCE3F0',
@@ -213,7 +232,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   monthButton: {
-    minHeight: 34,
+    minHeight: 44,
     borderRadius: 8,
     backgroundColor: colors.softBlue,
     flexDirection: 'row',
@@ -221,15 +240,26 @@ const styles = StyleSheet.create({
     gap: 2,
     paddingHorizontal: 8,
   },
+  monthButtonCompact: {
+    width: 44,
+    justifyContent: 'center',
+    paddingHorizontal: 0,
+  },
   monthButtonText: {
     color: colors.primary,
     fontSize: 11,
     fontWeight: '900',
   },
+  monthButtonTextCompact: {
+    display: 'none',
+  },
   monthTitle: {
+    flex: 1,
+    minWidth: 0,
     color: colors.text,
     fontSize: 13,
     fontWeight: '900',
+    textAlign: 'center',
   },
   weekScroll: {
     maxHeight: 280,

@@ -1,5 +1,5 @@
 from collections import Counter, defaultdict
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta, timezone
 from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
@@ -10,6 +10,34 @@ from app.core.config import Settings, get_settings
 
 
 router = APIRouter(prefix="/teacher", tags=["Teacher"])
+
+
+def _auto_finalize_submission(supabase_client, assignment: dict, submission: dict) -> dict:
+    """Lazily finalizes an in-progress submission if past deadline."""
+    deadline = assignment.get("deadline")
+    if not deadline:
+        return submission
+    if submission.get("is_locked") or not submission.get("started_at") or submission.get("submitted_at"):
+        return submission
+    try:
+        now = datetime.now(timezone.utc)
+        deadline_dt = datetime.fromisoformat(deadline.replace("Z", "+00:00"))
+        if deadline_dt < now:
+            updated = (
+                supabase_client.table("assessment_submissions")
+                .update({
+                    "submitted_at": deadline_dt.isoformat(),
+                    "is_locked": True,
+                    "updated_at": now.isoformat(),
+                })
+                .eq("id", submission["id"])
+                .execute()
+                .data
+            )
+            return updated[0] if updated else submission
+    except (ValueError, KeyError):
+        pass
+    return submission
 
 
 class TeacherCommonError(BaseModel):
@@ -506,8 +534,7 @@ def list_teacher_review_requests(
     total = len(responses)
     paged = responses[offset: offset + limit]
     now = datetime.now(tz=UTC)
-    week_start = now.replace(hour=0, minute=0, second=0, microsecond=0)
-    week_start = week_start.replace(day=now.day - now.weekday())
+    week_start = (now - timedelta(days=now.weekday())).replace(hour=0, minute=0, second=0, microsecond=0)
     return TeacherReviewRequestListResponse(
         items=paged,
         total=total,
@@ -784,6 +811,31 @@ def get_teacher_class_scores(
     settings: Settings = Depends(get_settings),
 ) -> TeacherClassScoresResponse:
     supabase_client = get_supabase_service_client(settings)
+    # Auto-finalize any expired assessment submissions for this class before computing scores
+    try:
+        expired_assessments = (
+            supabase_client.table("assignments")
+            .select("*")
+            .eq("class_id", class_id)
+            .eq("is_assessment", True)
+            .lt("deadline", datetime.now(timezone.utc).isoformat())
+            .execute()
+            .data
+        ) or []
+        for asgn in expired_assessments:
+            unfinalized = (
+                supabase_client.table("assessment_submissions")
+                .select("*")
+                .eq("assignment_id", asgn["id"])
+                .eq("is_locked", False)
+                .not_.is_("started_at", "null")
+                .execute()
+                .data
+            ) or []
+            for sub in unfinalized:
+                _auto_finalize_submission(supabase_client, asgn, sub)
+    except Exception:
+        pass  # sweep failure must never break the scores endpoint
     memberships = _teacher_student_memberships(supabase_client, current_user.id, class_id)
     student_ids = [str(row["student_id"]) for row in memberships if row.get("student_id")]
     classes = _classes_by_id(supabase_client, [class_id])
@@ -963,7 +1015,6 @@ def get_teacher_analytics(
 
     students.sort(key=lambda student: student.display_name.lower())
     average_score = _score_average(all_scores)
-
     return TeacherAnalyticsResponse(
         total_students=len(students),
         total_practice_sessions=sum(student.practice_count for student in students),
@@ -979,4 +1030,58 @@ def get_teacher_analytics(
         ],
         progress_distribution=progress_distribution,
         students=students,
+    )
+
+
+class PhonemeHeatmapEntry(BaseModel):
+    phoneme: str
+    error_count: int
+
+
+class TeacherPhonemeHeatmapResponse(BaseModel):
+    class_id: str
+    phonemes: list[PhonemeHeatmapEntry]
+    student_count: int
+    session_count: int
+
+
+@router.get("/phoneme-heatmap/{class_id}", response_model=TeacherPhonemeHeatmapResponse)
+def get_teacher_phoneme_heatmap(
+    class_id: str,
+    current_user: CurrentUser = Depends(require_roles(["teacher"])),
+    settings: Settings = Depends(get_settings),
+) -> TeacherPhonemeHeatmapResponse:
+    supabase_client = get_supabase_service_client(settings)
+    memberships = _teacher_student_memberships(supabase_client, current_user.id, class_id)
+    student_ids = [str(row["student_id"]) for row in memberships if row.get("student_id")]
+    if not student_ids:
+        return TeacherPhonemeHeatmapResponse(class_id=class_id, phonemes=[], student_count=0, session_count=0)
+
+    try:
+        rows = (
+            supabase_client.table("practice_history")
+            .select("student_id,problem_phonemes")
+            .in_("student_id", student_ids)
+            .execute()
+            .data
+            or []
+        )
+    except Exception as exc:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Unable to load phoneme heatmap") from exc
+
+    counts: Counter[str] = Counter()
+    for row in rows:
+        phonemes = row.get("problem_phonemes")
+        if not isinstance(phonemes, list):
+            continue
+        for item in phonemes:
+            label = _extract_error_label(item)
+            if label:
+                counts[label] += 1
+
+    return TeacherPhonemeHeatmapResponse(
+        class_id=class_id,
+        phonemes=[PhonemeHeatmapEntry(phoneme=label, error_count=count) for label, count in counts.most_common()],
+        student_count=len(student_ids),
+        session_count=len(rows),
     )

@@ -1,4 +1,11 @@
 import type {
+  Assignment,
+  AssignmentDetail,
+  AssignmentGradebookItem,
+  AssignmentsListResponse,
+  AssignmentStatus,
+  AssignmentWords,
+  AssessmentSubmission,
   AudioUploadResponse,
   AdminClassUpdatePayload,
   AdminDeleteUserResponse,
@@ -12,9 +19,11 @@ import type {
   DemoReadinessResponse,
   PracticeHistoryQuery,
   PracticeHistoryResponse,
+  PracticeHistoryAudioResponse,
   PracticeJob,
   ProfileAvatarUploadResponse,
   ReportPracticeResultPayload,
+  StudentAssignment,
   StudentReviewRequest,
   StudentReviewRequestDetail,
   TeacherAnalyticsResponse,
@@ -24,6 +33,9 @@ import type {
   TeacherStudentScoresResponse,
   UpdateProfilePayload,
   UserProfile,
+  VocabularyItem,
+  VocabularySet,
+  VocabularySetDetail,
 } from '../types';
 import { Platform } from 'react-native';
 import { supabase } from './supabase';
@@ -44,6 +56,9 @@ export class ApiError extends Error {
 type CreatePracticeJobPayload = {
   target_word: string;
   audio_url: string;
+  assignment_id?: string | null;
+  item_id?: string | null;
+  audio_storage_path?: string | null;
 };
 
 type TeacherReviewRequestQuery = {
@@ -88,11 +103,17 @@ async function parseError(response: Response): Promise<string> {
 
 async function apiFetch<T>(
   path: string,
-  _accessToken: string | null,
+  accessToken: string | null,
   options: RequestInit = {},
 ): Promise<T> {
-  const { data } = await supabase.auth.getSession();
-  const currentAccessToken = data.session?.access_token ?? null;
+  // A just-created Supabase session can arrive before persisted storage and the
+  // auth-state listener have caught up. Prefer the explicitly supplied token
+  // so `/auth/me` never authenticates the signup request as a previous user.
+  let currentAccessToken = accessToken;
+  if (!currentAccessToken) {
+    const { data } = await supabase.auth.getSession();
+    currentAccessToken = data.session?.access_token ?? null;
+  }
 
   if (!currentAccessToken) {
     throw new ApiError(SESSION_EXPIRED_MESSAGE, 401);
@@ -197,6 +218,16 @@ export async function fetchPracticeStatus(
   accessToken: string | null,
 ): Promise<PracticeJob> {
   return apiFetch<PracticeJob>(`/practice/${jobId}`, accessToken);
+}
+
+export async function fetchPracticeHistoryAudio(
+  practiceId: string,
+  accessToken: string | null,
+): Promise<PracticeHistoryAudioResponse> {
+  return apiFetch<PracticeHistoryAudioResponse>(
+    `/practice/history/${encodeURIComponent(practiceId)}/audio`,
+    accessToken,
+  );
 }
 
 export async function fetchPracticeHistory(
@@ -380,4 +411,105 @@ function expectArray<T>(payload: unknown, endpoint: string): T[] {
     throw new ApiError(`Phản hồi ${endpoint} không phải danh sách dữ liệu.`, 500);
   }
   return payload as T[];
+}
+
+export async function fetchRandomVocabularyItem(): Promise<VocabularyItem | null> {
+  const data = await apiFetch<{ items: VocabularyItem[] }>('/vocabulary/items?limit=1', null);
+  return data.items[0] ?? null;
+}
+
+export async function fetchVocabularyItems(
+  limit = 20,
+  offset = 0,
+  topic?: string,
+): Promise<{ items: VocabularyItem[]; limit: number; offset: number }> {
+  const params = new URLSearchParams({ limit: String(limit), offset: String(offset) });
+  if (topic) params.set('topic', topic);
+  return apiFetch(`/vocabulary/items?${params.toString()}`, null);
+}
+
+export async function fetchVocabularySets(
+  limit = 50,
+  offset = 0,
+): Promise<{ items: VocabularySet[]; limit: number; offset: number }> {
+  return apiFetch(`/vocabulary/sets?limit=${limit}&offset=${offset}`, null);
+}
+
+export async function fetchVocabularySetDetail(id: string): Promise<VocabularySetDetail> {
+  return apiFetch(`/vocabulary/sets/${id}`, null);
+}
+
+export type AssignmentCreatePayload = {
+  title: string;
+  description?: string | null;
+  content_type: 'vocabulary_set' | 'sentence_set';
+  content_id: string;
+  class_id?: string | null;
+  student_id?: string | null;
+  due_date?: string | null;
+  is_assessment?: boolean;
+  deadline?: string | null;
+  timer_per_word_seconds?: number;
+};
+
+export async function fetchTeacherAssignments(params: {
+  class_id?: string | null;
+  student_id?: string | null;
+  limit?: number;
+  offset?: number;
+} = {}): Promise<AssignmentsListResponse> {
+  const q = new URLSearchParams();
+  if (params.class_id) q.set('class_id', params.class_id);
+  if (params.student_id) q.set('student_id', params.student_id);
+  if (params.limit != null) q.set('limit', String(params.limit));
+  if (params.offset != null) q.set('offset', String(params.offset));
+  return apiFetch<AssignmentsListResponse>(`/assignments?${q.toString()}`, null);
+}
+
+export async function createAssignment(payload: AssignmentCreatePayload): Promise<AssignmentDetail> {
+  return apiFetch<AssignmentDetail>('/assignments', null, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function deleteAssignment(id: string): Promise<void> {
+  await apiFetch<void>(`/assignments/${id}`, null, { method: 'DELETE' });
+}
+
+export async function fetchStudentAssignments(): Promise<StudentAssignment[]> {
+  return apiFetch<StudentAssignment[]>('/assignments/student', null);
+}
+
+export async function fetchAssignmentWords(assignmentId: string): Promise<AssignmentWords> {
+  return apiFetch<AssignmentWords>(`/assignments/${assignmentId}/words`, null);
+}
+
+export async function fetchAssignmentStatus(assignmentId: string): Promise<AssignmentStatus> {
+  return apiFetch<AssignmentStatus>(`/assignments/${assignmentId}/status`, null);
+}
+
+export async function startAssessment(assignmentId: string): Promise<{ submission_id: string; started_at: string }> {
+  return apiFetch(`/assignments/${assignmentId}/start`, null, { method: 'POST' });
+}
+
+export async function submitAssessment(assignmentId: string): Promise<AssessmentSubmission> {
+  return apiFetch<AssessmentSubmission>(`/assignments/${assignmentId}/submit`, null, { method: 'POST' });
+}
+
+export async function fetchAssignmentGradebook(assignmentId: string): Promise<AssignmentGradebookItem[]> {
+  return apiFetch<AssignmentGradebookItem[]>(`/assignments/${assignmentId}/submissions`, null);
+}
+
+export async function overrideAssignmentGrade(assignmentId: string, studentId: string, score: number, overrideReason: string): Promise<AssignmentGradebookItem> {
+  return apiFetch<AssignmentGradebookItem>(`/assignments/${assignmentId}/grades/${studentId}`, null, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ score, override_reason: overrideReason }),
+  });
+}
+
+export async function fetchWordPronunciation(word: string, token: string | null): Promise<{ audio_url: string | null }> {
+  return apiFetch<{ audio_url: string | null }>(`/vocabulary/pronunciation/${encodeURIComponent(word)}`, token);
 }

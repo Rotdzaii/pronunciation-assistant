@@ -2,12 +2,20 @@ from __future__ import annotations
 
 import os
 import tempfile
+import wave
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse
 
-from app.contracts.ai_result_contract import build_ai_result, estimate_demo_score
-from app.contracts.alignment_contract import FALLBACK_ALIGNMENT_NOTE, get_alignment_segments
+from app.alignment.audio_preparation import PreparedMfaAudio, prepare_audio_for_mfa, validate_prepared_mfa_wav
+from app.contracts.ai_result_contract import build_ai_result
+from app.contracts.alignment_contract import AlignmentError, FALLBACK_ALIGNMENT_NOTE, get_alignment_segments
+from app.phonetics.canonicalization import (
+    canonicalize_phones as _canonicalize_phones,
+    check_inventory_guard as _check_inventory_guard,
+    compute_reliability as _compute_reliability,
+    normalize_expected_phones as _normalize_expected_phones,
+)
 
 
 SAMPLE_RATE = 16000
@@ -39,6 +47,7 @@ SENSITIVE_ALIGNMENT_METADATA_KEYS = {
     "mfa_temp_dir",
     "temp_dir",
     "textgrid_path",
+    "debug_artifact_dir",
 }
 
 
@@ -223,8 +232,35 @@ def _audio_path_from_job(job: dict[str, Any]) -> tuple[Path, bool]:
     return Path(audio_url), False
 
 
-def _feature_from_audio_path(
-    audio_path: Path,
+def _load_prepared_wav(audio_path: str | Path) -> tuple[Any, int]:
+    """Load a verified MFA WAV once, without allowing codec fallback decoding."""
+
+    try:
+        import numpy as np
+    except ImportError as exc:
+        raise CNNAttentionScorerError(
+            "CNN Attention scorer requires numpy for prepared WAV loading."
+        ) from exc
+
+    path = Path(audio_path).expanduser()
+    try:
+        validate_prepared_mfa_wav(path)
+        with wave.open(str(path), "rb") as wav_file:
+            raw_frames = wav_file.readframes(wav_file.getnframes())
+            sample_rate = wav_file.getframerate()
+    except AlignmentError as exc:
+        raise CNNAttentionScorerError("CNN segment inference requires a prepared 16 kHz mono PCM WAV.") from exc
+    except (OSError, wave.Error) as exc:
+        raise CNNAttentionScorerError("Prepared WAV could not be loaded for CNN segment inference.") from exc
+
+    audio = np.frombuffer(raw_frames, dtype="<i2").astype(np.float32) / 32768.0
+    if audio.size == 0:
+        raise CNNAttentionScorerError("Prepared WAV has no samples for CNN segment inference.")
+    return audio, sample_rate
+
+
+def _feature_from_waveform(
+    waveform: Any,
     start_time: float | None = None,
     end_time: float | None = None,
 ) -> tuple[Any, dict[str, Any]]:
@@ -236,7 +272,7 @@ def _feature_from_audio_path(
             "CNN Attention scorer requires librosa and numpy for log-mel preprocessing."
         ) from exc
 
-    audio, sample_rate = librosa.load(str(audio_path), sr=SAMPLE_RATE, mono=True)
+    audio = np.asarray(waveform, dtype=np.float32)
     full_duration_seconds = len(audio) / SAMPLE_RATE if SAMPLE_RATE else 0.0
     segment_start = max(float(start_time or 0.0), 0.0)
     segment_end = float(end_time) if end_time is not None else full_duration_seconds
@@ -257,7 +293,7 @@ def _feature_from_audio_path(
     log_mel = librosa.power_to_db(mel, ref=np.max)
     feature = torch.tensor(log_mel, dtype=torch.float32).unsqueeze(0).unsqueeze(0)
     return feature, {
-        "sample_rate": sample_rate,
+        "sample_rate": SAMPLE_RATE,
         "target_sample_rate": SAMPLE_RATE,
         "original_duration_seconds": round(original_samples / SAMPLE_RATE, 3),
         "full_duration_seconds": round(full_duration_seconds, 3),
@@ -270,6 +306,15 @@ def _feature_from_audio_path(
     }
 
 
+def _feature_from_audio_path(
+    audio_path: Path,
+    start_time: float | None = None,
+    end_time: float | None = None,
+) -> tuple[Any, dict[str, Any]]:
+    waveform, _ = _load_prepared_wav(audio_path)
+    return _feature_from_waveform(waveform, start_time, end_time)
+
+
 def _predict_with_model(
     model: Any,
     index_to_label: dict[int, str],
@@ -278,8 +323,11 @@ def _predict_with_model(
     audio_path: str | Path,
     start_time: float | None = None,
     end_time: float | None = None,
+    waveform: Any | None = None,
 ) -> dict[str, Any]:
-    feature, audio_metadata = _feature_from_audio_path(Path(audio_path), start_time, end_time)
+    if waveform is None:
+        waveform, _ = _load_prepared_wav(audio_path)
+    feature, audio_metadata = _feature_from_waveform(waveform, start_time, end_time)
     with torch.no_grad():
         logits = model(feature.to(device))
         probabilities = torch.softmax(logits, dim=1).squeeze(0).cpu()
@@ -335,22 +383,16 @@ def _context_config() -> dict[str, Any]:
 
 
 def _audio_duration_seconds(audio_path: str | Path) -> float:
-    try:
-        import librosa
-    except ImportError as exc:
-        raise CNNAttentionScorerError("CNN Attention context scorer requires librosa for audio duration.") from exc
-
-    audio, _ = librosa.load(str(audio_path), sr=SAMPLE_RATE, mono=True)
+    audio, _ = _load_prepared_wav(audio_path)
     return len(audio) / SAMPLE_RATE if SAMPLE_RATE else 0.0
 
 
-def _context_crop_metadata(
-    audio_path: str | Path,
+def _context_crop_metadata_for_duration(
+    audio_duration: float,
     segment_start_time: float,
     segment_end_time: float,
     context_config: dict[str, Any],
 ) -> dict[str, Any]:
-    audio_duration = _audio_duration_seconds(audio_path)
     segment_start = max(float(segment_start_time), 0.0)
     segment_end = max(float(segment_end_time), segment_start)
     crop_start = max(0.0, segment_start - float(context_config["context_left_seconds"]))
@@ -366,6 +408,20 @@ def _context_crop_metadata(
     }
 
 
+def _context_crop_metadata(
+    audio_path: str | Path,
+    segment_start_time: float,
+    segment_end_time: float,
+    context_config: dict[str, Any],
+) -> dict[str, Any]:
+    return _context_crop_metadata_for_duration(
+        _audio_duration_seconds(audio_path),
+        segment_start_time,
+        segment_end_time,
+        context_config,
+    )
+
+
 def _predict_context_with_model(
     model: Any,
     index_to_label: dict[int, str],
@@ -375,8 +431,13 @@ def _predict_context_with_model(
     start_time: float,
     end_time: float,
     context_config: dict[str, Any],
+    waveform: Any | None = None,
+    audio_duration: float | None = None,
 ) -> dict[str, Any]:
-    context_metadata = _context_crop_metadata(audio_path, start_time, end_time, context_config)
+    if waveform is None:
+        waveform, _ = _load_prepared_wav(audio_path)
+    duration = audio_duration if audio_duration is not None else len(waveform) / SAMPLE_RATE
+    context_metadata = _context_crop_metadata_for_duration(duration, start_time, end_time, context_config)
     prediction = _predict_with_model(
         model,
         index_to_label,
@@ -385,6 +446,7 @@ def _predict_context_with_model(
         audio_path,
         context_metadata["crop_start_time"],
         context_metadata["crop_end_time"],
+        waveform,
     )
     prediction["audio"]["context"] = context_metadata
     return prediction
@@ -429,6 +491,7 @@ def _format_segment_prediction(
         "class_probabilities": prediction["class_probabilities"],
         "diagnosis_confidence": prediction["diagnosis_confidence"],
         "confidence_note": "Classifier confidence, not pronunciation correctness.",
+        "is_confirmed_error": False,
     }
     context_metadata = (prediction.get("audio") or {}).get("context")
     if context_metadata:
@@ -442,6 +505,7 @@ def predict_segments(
     checkpoint_path: str | Path | None = None,
 ) -> list[dict[str, Any]]:
     model, index_to_label, checkpoint_file, device = _load_model(checkpoint_path)
+    waveform, _ = _load_prepared_wav(audio_path)
     predictions = []
     for fallback_index, segment in enumerate(segments):
         start_time = float(segment.get("start") or 0.0)
@@ -456,6 +520,7 @@ def predict_segments(
             audio_path,
             start_time,
             end_time,
+            waveform,
         )
         predictions.append(
             _format_segment_prediction(
@@ -478,6 +543,8 @@ def predict_context_segments(
 ) -> list[dict[str, Any]]:
     model, index_to_label, checkpoint_file, device = _load_context_model(checkpoint_path)
     context_config = _context_config()
+    waveform, _ = _load_prepared_wav(audio_path)
+    audio_duration = len(waveform) / SAMPLE_RATE if SAMPLE_RATE else 0.0
     predictions = []
     for fallback_index, segment in enumerate(segments):
         start_time = float(segment.get("start") or 0.0)
@@ -493,6 +560,8 @@ def predict_context_segments(
             start_time,
             end_time,
             context_config,
+            waveform,
+            audio_duration,
         )
         predictions.append(
             _format_segment_prediction(
@@ -508,6 +577,84 @@ def predict_context_segments(
     return predictions
 
 
+def _alignment_phone_for_prediction(
+    prediction: dict[str, Any],
+    alignment_phones: list[dict[str, Any]],
+) -> dict[str, Any] | None:
+    """Return the MFA phone segment that produced a prediction.
+
+    An index match is preferred when both sides provide one.  Otherwise match
+    the exact MFA time span (and word when available).  Do not fall back to a
+    list position: alignment results can include word segments or omit a phone,
+    and positional matching would attach a prediction to the wrong phone.
+    """
+    prediction_index = prediction.get("index")
+    if prediction_index is not None:
+        indexed = [
+            segment
+            for segment in alignment_phones
+            if segment.get("index") is not None and segment.get("index") == prediction_index
+        ]
+        if len(indexed) == 1:
+            return indexed[0]
+
+    try:
+        start = round(float(prediction.get("start") or 0.0), 3)
+        end = round(float(prediction.get("end") or 0.0), 3)
+    except (TypeError, ValueError):
+        return None
+    matching_span = []
+    for segment in alignment_phones:
+        try:
+            segment_start = round(float(segment.get("start") or 0.0), 3)
+            segment_end = round(float(segment.get("end") or 0.0), 3)
+        except (TypeError, ValueError):
+            continue
+        if segment_start == start and segment_end == end:
+            matching_span.append(segment)
+    if len(matching_span) == 1:
+        return matching_span[0]
+
+    prediction_word = prediction.get("word")
+    if prediction_word:
+        word_matches = [segment for segment in matching_span if segment.get("word") == prediction_word]
+        if len(word_matches) == 1:
+            return word_matches[0]
+    return None
+
+
+def canonicalize_prediction_segments(
+    ordered_predictions: list[dict[str, Any]],
+    alignment_result: dict[str, Any],
+) -> list[dict[str, Any]]:
+    """Attach canonical MFA phones before diagnosis and reliability checks.
+
+    The source phone is resolved from the corresponding MFA ``phones`` segment
+    by stable index or time span.  A prediction's own phone is used only as a
+    backwards-compatible fallback when the alignment payload has no matching
+    phone segment; no positional association is ever fabricated.
+    """
+    alignment_phones = [
+        segment
+        for segment in (alignment_result.get("phones") or [])
+        if isinstance(segment, dict)
+    ]
+    canonical_segments: list[dict[str, Any]] = []
+    for prediction in ordered_predictions:
+        alignment_phone = _alignment_phone_for_prediction(prediction, alignment_phones)
+        raw_phone = (
+            alignment_phone.get("phone")
+            if alignment_phone is not None
+            else prediction.get("phone")
+        )
+        canonical = _canonicalize_phones([str(raw_phone or "")]).get("canonical_phones")
+        canonical_segments.append({
+            **prediction,
+            "phone": canonical[0] if canonical else None,
+        })
+    return canonical_segments
+
+
 def _aggregate_segment_predictions(
     segment_predictions: list[dict[str, Any]],
     *,
@@ -516,55 +663,54 @@ def _aggregate_segment_predictions(
     scorer_metadata: dict[str, Any] | None = None,
     extra_metadata: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    from app.scoring.scoring_service import score_pronunciation_segments
-
     threshold = 0.5 if confidence_threshold is None else float(confidence_threshold)
+    ordered_predictions = sorted(
+        segment_predictions,
+        key=lambda segment: (
+            float(segment.get("start") or 0.0),
+            float(segment.get("end") or 0.0),
+            int(segment.get("index") or 0),
+        ),
+    )
+    # Canonicalize immediately after associating each model prediction with its
+    # MFA phone timing segment.  All downstream diagnosis/reliability logic
+    # must see canonical phones, never raw MFA labels such as ``tj``.
+    ordered_predictions = canonicalize_prediction_segments(ordered_predictions, alignment_result)
+    phone_raw_list = [
+        str(seg.get("phone") or "")
+        for seg in (alignment_result.get("phones") or [])
+    ]
+    canon_result = _canonicalize_phones(phone_raw_list)
     issue_segments = [
         segment
-        for segment in segment_predictions
+        for segment in ordered_predictions
         if segment.get("predicted_error_type") not in {None, "unknown"}
     ]
     issue_segments.sort(key=lambda segment: float(segment.get("diagnosis_confidence") or 0.0), reverse=True)
     top_segment = issue_segments[0] if issue_segments else None
+    primary_selection_rule = "highest_classifier_diagnosis_confidence"
+    problem_phonemes = []
     predicted_error_type = top_segment.get("predicted_error_type") if top_segment else "unknown"
     class_probabilities = top_segment.get("class_probabilities") if top_segment else None
     diagnosis_confidence = top_segment.get("diagnosis_confidence") if top_segment else None
-    problem_phonemes = []
-    for segment in issue_segments:
-        confidence = float(segment.get("diagnosis_confidence") or 0.0)
+    problem_segments = [
+        segment
+        for segment in issue_segments
+        if float(segment.get("diagnosis_confidence") or 0.0) >= threshold
+    ]
+
+    # Phoenix v2 has only three error-type classes. It does not use a
+    # heuristic/GOP path to upgrade this classifier output into a confirmed
+    # diagnosis or a score.
+    for segment in sorted(
+        problem_segments,
+        key=lambda item: (float(item.get("start") or 0.0), float(item.get("end") or 0.0)),
+    ):
         phone = segment.get("phone")
-        if phone and confidence >= threshold and phone not in problem_phonemes:
+        if phone and phone not in problem_phonemes:
             problem_phonemes.append(phone)
 
-    demo_score = estimate_demo_score(predicted_error_type, diagnosis_confidence)
-    scoring_result = score_pronunciation_segments(alignment_result, segment_predictions)
-    hybrid_result = None
-    try:
-        from app.hybrid.hybrid_diagnosis import build_hybrid_diagnosis
-
-        hybrid_result = build_hybrid_diagnosis(alignment_result, segment_predictions, scoring_result)
-    except Exception as exc:
-        hybrid_error = str(exc)
-    else:
-        hybrid_error = None
-
-    if hybrid_result and hybrid_result.get("primary_error_type") not in {None, "unknown"}:
-        predicted_error_type = hybrid_result["primary_error_type"]
-        problem_phonemes = hybrid_result.get("problem_phonemes") or problem_phonemes
-        primary_issue = (hybrid_result.get("top_issues") or [{}])[0]
-        class_probabilities = primary_issue.get("class_probabilities") or class_probabilities
-        diagnosis_confidence = primary_issue.get("diagnosis_confidence", diagnosis_confidence)
-
-    segmental_score = scoring_result.get("utterance_segmental_score")
-    scoring_method = scoring_result.get("scoring_method")
-    scoring_is_heuristic = bool((scoring_result.get("metadata") or {}).get("is_heuristic"))
-    score = segmental_score if segmental_score is not None else demo_score["score"]
-    score_note = (
-        "Heuristic/demo score, not production GOP."
-        if segmental_score is not None and scoring_is_heuristic
-        else demo_score["score_note"]
-    )
-    pronunciation_score_source = scoring_method if segmental_score is not None else "demo_error_type_heuristic"
+    score_note = "Pronunciation score unavailable: Phoenix v2 classifies possible error types only."
     alignment_method = alignment_result.get("method")
     alignment_note = alignment_result.get("note")
     is_fallback = str(alignment_method or "").startswith("fallback")
@@ -573,20 +719,18 @@ def _aggregate_segment_predictions(
     alignment_metadata = _safe_alignment_metadata(alignment_result)
 
     result = build_ai_result(
-        score=score,
+        score=None,
         problem_phonemes=problem_phonemes,
         predicted_error_type=predicted_error_type,
         class_probabilities=class_probabilities,
         diagnosis_confidence=diagnosis_confidence,
-        feedback=(hybrid_result or {}).get("feedback") if hybrid_result else None,
         scorer=scorer_metadata or SCORER_METADATA,
-        scoring=scoring_result,
         score_note=score_note,
-        pronunciation_score_source=pronunciation_score_source,
+        score_type="unavailable",
         diagnosis_extra={
-            "top_issues": (hybrid_result or {}).get("top_issues", []),
-            "severity": (hybrid_result or {}).get("severity", "unknown"),
-        } if hybrid_result else None,
+            "suspected_segments": problem_segments,
+            "is_confirmed_error": False,
+        },
         metadata={
             **DEFAULT_METADATA,
             "alignment_used": True,
@@ -594,48 +738,136 @@ def _aggregate_segment_predictions(
             "alignment_method": alignment_method,
             "alignment_note": alignment_note,
             "gop_used": False,
-            "hybrid_used": hybrid_result is not None,
-            "hybrid_method": (hybrid_result or {}).get("hybrid_method"),
-            "hybrid_status": (hybrid_result or {}).get("hybrid_status"),
-            "hybrid_error": hybrid_error,
+            "hybrid_used": False,
             "model_output_is_scoring": False,
             "segment_level_inference": True,
             "fallback_alignment": is_fallback,
-            "location_reliability": (hybrid_result or {}).get(
-                "location_reliability",
-                "limited_fallback_alignment" if is_fallback else "unknown",
-            ),
-            "is_demo_score": True,
+            "location_reliability": "limited_fallback_alignment" if is_fallback else "unknown",
+            "is_demo_score": False,
+            "public_pronunciation_score_available": False,
+            "score_availability_reason": "error_type_classifier_only",
             "score_note": score_note,
-            "pronunciation_score_source": pronunciation_score_source,
-            "scoring_method": scoring_method,
-            "scoring_is_heuristic": scoring_is_heuristic,
-            "scoring_status": scoring_result.get("scoring_status"),
             "confidence_threshold": confidence_threshold,
-            "segments_count": len(segment_predictions),
-            "limitation": (
-                "Segment boundaries come from approximate fallback alignment unless an external aligner supplies "
-                "the alignment_result. Heuristic GOP-like scoring is not production GOP. Classifier confidence is "
-                "diagnosis confidence, not pronunciation scoring."
-            ),
+            "segments_count": len(ordered_predictions),
+            "global_diagnosis_selection": primary_selection_rule,
+            "problem_phonemes_order": "alignment_time",
+            "top_issue_segments_order": "classifier_diagnosis_confidence_desc",
+            "model_capability": "error_type_classifier_only",
+            "limitation": "The model only classifies possible addition, deletion, or substitution error types; it cannot determine pronunciation correctness.",
             **alignment_metadata,
             **(extra_metadata or {}),
         },
     )
-    result["segments"] = segment_predictions
+    result["segments"] = ordered_predictions
     result["metadata"]["top_issue_segments"] = issue_segments[:5]
     if top_segment and top_segment.get("context"):
         result["metadata"].update(top_segment["context"])
     result["feedback"]["diagnosis"] = result["diagnosis"]
     result["feedback"]["scorer"] = result["scorer"]
     result["feedback"]["metadata"] = result["metadata"]
+
+    primary_phone: str | None = None
+    primary_err_type: str | None = None
+    if top_segment:
+        primary_phone = str(top_segment.get("phone") or "").strip() or None
+        primary_err_type = str(top_segment.get("predicted_error_type") or "").strip() or None
+
+    diagnosis_invalid = False
+    guard_reason: str | None = None
+    for issue in problem_segments:
+        invalid, reason = _check_inventory_guard(
+            str(issue.get("phone") or "").strip() or None,
+            str(issue.get("predicted_error_type") or predicted_error_type or "").strip() or None,
+            canon_result["canonical_phones"],
+        )
+        if invalid:
+            diagnosis_invalid, guard_reason = True, reason
+            break
+    if not diagnosis_invalid:
+        diagnosis_invalid, guard_reason = _check_inventory_guard(
+            primary_phone,
+            primary_err_type,
+            canon_result["canonical_phones"],
+        )
+    reliability = _compute_reliability(
+        alignment_result,
+        canon_result,
+        diagnosis_invalid=diagnosis_invalid,
+        guard_reason=guard_reason,
+    )
+
+    canonical_problem_phones: list[str] = []
+    for phone in problem_phonemes:
+        if phone and phone not in canonical_problem_phones:
+            canonical_problem_phones.append(phone)
+
+    if reliability["status"] == "invalid":
+        result["score"] = None
+        result["score_type"] = "unavailable"
+        result["score_note"] = "Pronunciation score unavailable. Record the audio again before requesting a diagnosis."
+        result["problem_phonemes"] = []
+        result["primary_feedback"] = None
+        result["predicted_error_type"] = None
+        result["diagnosis"].update({
+            "predicted_error_type": None,
+            "suspected_problem_phone": None,
+            "diagnosis_confidence": None,
+            "class_probabilities": {},
+            "is_confirmed_error": False,
+            "suspected_segments": [],
+        })
+        result["feedback"]["summary"] = "Không thể phân tích bản ghi này. Vui lòng ghi âm lại rõ ràng hơn."
+    else:
+        result["problem_phonemes"] = canonical_problem_phones
+        result["diagnosis"]["suspected_problem_phone"] = canonical_problem_phones[0] if canonical_problem_phones else None
+        result["primary_feedback"] = result["feedback"].get("summary")
+
+    result["reliability"] = reliability
+    # MFA is an alignment source, not the authoritative pronunciation source.
+    # The backend replaces these fields from stored vocabulary_items data before
+    # persisting a result for the frontend.
+    result["display_pronunciation"] = None
+    result["pronunciation_variant"] = None
+    result["expected_phones"] = []
+    result["pronunciation_source"] = "unavailable"
+    # This classifier has no correct class, so it must not publish per-phone
+    # ok/needs-improvement labels as though correctness had been evaluated.
+    result["phone_results"] = []
+
+    # Segments are already canonicalized before diagnosis. Preserve that same
+    # canonical form for the public contract, without exposing raw MFA labels.
+    public_segments: list[dict[str, Any]] = []
+    for segment in ordered_predictions:
+        public_segments.append({
+            **segment,
+            "phone": segment.get("phone"),
+            "is_confirmed_error": False,
+        })
+    result["segments"] = public_segments
+    result["metadata"]["top_issue_segments"] = [
+        segment for segment in public_segments
+        if segment.get("predicted_error_type") not in {None, "unknown"}
+    ][:5]
+    suspected_segments = result.get("diagnosis", {}).get("suspected_segments")
+    if isinstance(suspected_segments, list):
+        public_suspected_segments: list[dict[str, Any]] = []
+        for issue in suspected_segments:
+            if not isinstance(issue, dict):
+                continue
+            public_suspected_segments.append({
+                **issue,
+                "phone": issue.get("phone"),
+                "is_confirmed_error": False,
+            })
+        result["diagnosis"]["suspected_segments"] = public_suspected_segments
+
     return result
 
 
 def _safe_alignment_metadata(alignment_result: dict[str, Any]) -> dict[str, Any]:
     metadata = alignment_result.get("metadata") if isinstance(alignment_result.get("metadata"), dict) else {}
     alignment_status = str(alignment_result.get("status") or "")
-    used_mfa = alignment_result.get("method") == "mfa" and alignment_status == "success"
+    used_mfa = alignment_result.get("method") == "mfa" and alignment_status in {"success", "warning"}
     is_fallback = bool(
         metadata.get("fallback_alignment")
         or metadata.get("is_fallback")
@@ -644,8 +876,14 @@ def _safe_alignment_metadata(alignment_result: dict[str, Any]) -> dict[str, Any]
     safe_metadata = {
         key: value
         for key, value in metadata.items()
-        if str(key).lower() not in SENSITIVE_ALIGNMENT_METADATA_KEYS
+        if str(key).lower() not in SENSITIVE_ALIGNMENT_METADATA_KEYS | {"mfa_error"}
     }
+    mfa_error = metadata.get("mfa_error")
+    if isinstance(mfa_error, dict):
+        safe_metadata["mfa_error"] = {
+            "code": mfa_error.get("code"),
+            "message": mfa_error.get("message"),
+        }
     words = alignment_result.get("words") if isinstance(alignment_result.get("words"), list) else []
     phones = alignment_result.get("phones") if isinstance(alignment_result.get("phones"), list) else []
     safe_metadata.setdefault("word_segments_count", len(words))
@@ -670,6 +908,7 @@ def score_aligned_audio(
     checkpoint_path: str | Path | None = None,
     confidence_threshold: float | None = None,
 ) -> dict[str, Any]:
+    _require_usable_alignment(alignment_result)
     segments = get_alignment_segments(alignment_result)
     segment_predictions = predict_segments(audio_path, segments, checkpoint_path)
     return _aggregate_segment_predictions(
@@ -685,6 +924,7 @@ def score_aligned_audio_context(
     checkpoint_path: str | Path | None = None,
     confidence_threshold: float | None = None,
 ) -> dict[str, Any]:
+    _require_usable_alignment(alignment_result)
     segments = get_alignment_segments(alignment_result)
     segment_predictions = predict_context_segments(audio_path, segments, checkpoint_path)
     context_config = _context_config()
@@ -714,10 +954,33 @@ def _job_prompt_text(job: dict[str, Any]) -> str | None:
 def _job_canonical_phones(job: dict[str, Any]) -> list[str]:
     raw_phones = job.get("canonical_phones") or job.get("phones")
     if isinstance(raw_phones, str):
-        return [phone for phone in raw_phones.split() if phone]
+        phones = [phone for phone in raw_phones.split() if phone]
+        return _normalize_expected_phones(phones, variant=str(job.get("pronunciation_variant") or ""))
     if isinstance(raw_phones, (list, tuple)):
-        return [str(phone).strip() for phone in raw_phones if str(phone).strip()]
+        phones = [str(phone).strip() for phone in raw_phones if str(phone).strip()]
+        return _normalize_expected_phones(phones, variant=str(job.get("pronunciation_variant") or ""))
     return []
+
+
+def _job_prepared_audio(job: dict[str, Any]) -> PreparedMfaAudio | None:
+    prepared = job.get("_prepared_audio")
+    return prepared if isinstance(prepared, PreparedMfaAudio) else None
+
+
+def _job_audio_quality_warnings(job: dict[str, Any]) -> list[str]:
+    warnings = job.get("_audio_quality_warnings")
+    if not isinstance(warnings, (list, tuple)):
+        return []
+    return [str(warning) for warning in warnings if str(warning).strip()]
+
+
+def _require_usable_alignment(alignment_result: dict[str, Any]) -> None:
+    status = str(alignment_result.get("alignment_status") or alignment_result.get("status") or "")
+    segments = get_alignment_segments(alignment_result)
+    if status == "failed" or not segments:
+        error = alignment_result.get("error") if isinstance(alignment_result.get("error"), dict) else {}
+        error_code = error.get("code") or (alignment_result.get("metadata") or {}).get("error_code") or "alignment_failed"
+        raise CNNAttentionScorerError(f"Alignment is unavailable for segment inference: {error_code}.")
 
 
 def score_pronunciation(job: dict[str, Any], confidence_threshold: float | None = None) -> dict[str, Any]:
@@ -729,24 +992,33 @@ def score_pronunciation(job: dict[str, Any], confidence_threshold: float | None 
         if prompt_text:
             from app.alignment.alignment_service import align_audio
 
-            alignment_result = align_audio(
-                audio_path,
-                prompt_text=prompt_text,
-                canonical_phones=_job_canonical_phones(job),
-            )
-            return score_aligned_audio(audio_path, alignment_result, confidence_threshold=confidence_threshold)
+            prepared_from_job = _job_prepared_audio(job)
+            with tempfile.TemporaryDirectory(prefix="cnn-prepared-") as prepared_directory:
+                prepared_audio = prepared_from_job or prepare_audio_for_mfa(audio_path, Path(prepared_directory) / "prepared.wav")
+                alignment_result = align_audio(
+                    audio_path,
+                    prompt_text=prompt_text,
+                    canonical_phones=_job_canonical_phones(job),
+                    job_id=str(job.get("job_id") or ""),
+                    prepared_audio=prepared_audio,
+                    upstream_quality_warnings=_job_audio_quality_warnings(job),
+                )
+                return score_aligned_audio(
+                    prepared_audio.path,
+                    alignment_result,
+                    confidence_threshold=confidence_threshold,
+                )
 
-        prediction = predict_audio(audio_path)
+        prepared_from_job = _job_prepared_audio(job)
+        with tempfile.TemporaryDirectory(prefix="cnn-prepared-") as prepared_directory:
+            prepared_audio = prepared_from_job or prepare_audio_for_mfa(audio_path, Path(prepared_directory) / "prepared.wav")
+            prediction = predict_audio(prepared_audio.path)
     finally:
         if temp_audio_path is not None:
             temp_audio_path.unlink(missing_ok=True)
 
-    demo_score = estimate_demo_score(
-        prediction["predicted_error_type"],
-        prediction["diagnosis_confidence"],
-    )
     result = build_ai_result(
-        score=demo_score["score"],
+        score=None,
         problem_phonemes=[],
         predicted_error_type=prediction["predicted_error_type"],
         class_probabilities=prediction["class_probabilities"],
@@ -754,9 +1026,11 @@ def score_pronunciation(job: dict[str, Any], confidence_threshold: float | None 
         scorer=SCORER_METADATA,
         metadata={
             **DEFAULT_METADATA,
-            "is_demo_score": demo_score["is_demo_score"],
-            "score_note": demo_score["score_note"],
-            "pronunciation_score_source": "demo_error_type_heuristic",
+            "is_demo_score": False,
+            "score_note": "Pronunciation score unavailable: the CNN classifies error type and has no correct class.",
+            "public_pronunciation_score_available": False,
+            "score_availability_reason": "error_type_classifier_only",
+            "model_capability": "error_type_classifier_only",
             "confidence_threshold": confidence_threshold,
             "device": prediction["device"],
             "checkpoint_path": prediction["checkpoint_path"],
@@ -766,6 +1040,8 @@ def score_pronunciation(job: dict[str, Any], confidence_threshold: float | None 
                 "inference over the first/whole submitted audio segment, not final phone-localized diagnosis."
             ),
         },
+        score_note="Pronunciation score unavailable: the CNN classifies error type and has no correct class.",
+        score_type="unavailable",
     )
     result["feedback"]["diagnosis"] = result["diagnosis"]
     result["feedback"]["scorer"] = result["scorer"]
@@ -787,16 +1063,22 @@ def score_pronunciation_context(job: dict[str, Any], confidence_threshold: float
 
         from app.alignment.alignment_service import align_audio
 
-        alignment_result = align_audio(
-            audio_path,
-            prompt_text=prompt_text,
-            canonical_phones=_job_canonical_phones(job),
-        )
-        return score_aligned_audio_context(
-            audio_path,
-            alignment_result,
-            confidence_threshold=confidence_threshold,
-        )
+        prepared_from_job = _job_prepared_audio(job)
+        with tempfile.TemporaryDirectory(prefix="cnn-prepared-") as prepared_directory:
+            prepared_audio = prepared_from_job or prepare_audio_for_mfa(audio_path, Path(prepared_directory) / "prepared.wav")
+            alignment_result = align_audio(
+                audio_path,
+                prompt_text=prompt_text,
+                canonical_phones=_job_canonical_phones(job),
+                job_id=str(job.get("job_id") or ""),
+                prepared_audio=prepared_audio,
+                upstream_quality_warnings=_job_audio_quality_warnings(job),
+            )
+            return score_aligned_audio_context(
+                prepared_audio.path,
+                alignment_result,
+                confidence_threshold=confidence_threshold,
+            )
     finally:
         if temp_audio_path is not None:
             temp_audio_path.unlink(missing_ok=True)

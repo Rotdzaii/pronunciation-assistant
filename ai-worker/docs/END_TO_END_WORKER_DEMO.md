@@ -71,9 +71,10 @@ Classifier confidence is not pronunciation score.
 
 Fallback alignment is approximate and not real forced alignment.
 
-`heuristic_gop` is not real GOP.
+`heuristic_gop` is internal diagnostic scaffolding, not a public score.
 
-Real GOP/CaGOP is not implemented.
+GOP/CaGOP is not the Phoenix v2 roadmap. Public score remains unavailable
+until a learned quality scorer is trained and validated.
 
 MFA execution is scaffolded only and requires local installation/configuration.
 

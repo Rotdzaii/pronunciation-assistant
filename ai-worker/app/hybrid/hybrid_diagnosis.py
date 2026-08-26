@@ -10,6 +10,33 @@ ERROR_LABELS = {
     "unknown": "chua ro",
 }
 
+_ARPABET_TO_IPA: dict[str, str] = {
+    "AA": "ɑ", "AA0": "ɑ", "AA1": "ɑ", "AA2": "ɑ",
+    "AE": "æ", "AE0": "æ", "AE1": "æ", "AE2": "æ",
+    "AH": "ʌ", "AH0": "ə", "AH1": "ʌ", "AH2": "ʌ",
+    "AO": "ɔ", "AO0": "ɔ", "AO1": "ɔ", "AO2": "ɔ",
+    "AW": "aʊ", "AW0": "aʊ", "AW1": "aʊ", "AW2": "aʊ",
+    "AY": "aɪ", "AY0": "aɪ", "AY1": "aɪ", "AY2": "aɪ",
+    "EH": "ɛ", "EH0": "ɛ", "EH1": "ɛ", "EH2": "ɛ",
+    "ER": "ɜr", "ER0": "ər", "ER1": "ɜr", "ER2": "ɜr",
+    "EY": "eɪ", "EY0": "eɪ", "EY1": "eɪ", "EY2": "eɪ",
+    "IH": "ɪ", "IH0": "ɪ", "IH1": "ɪ", "IH2": "ɪ",
+    "IY": "iː", "IY0": "iː", "IY1": "iː", "IY2": "iː",
+    "OW": "oʊ", "OW0": "oʊ", "OW1": "oʊ", "OW2": "oʊ",
+    "OY": "ɔɪ", "OY0": "ɔɪ", "OY1": "ɔɪ", "OY2": "ɔɪ",
+    "UH": "ʊ", "UH0": "ʊ", "UH1": "ʊ", "UH2": "ʊ",
+    "UW": "uː", "UW0": "uː", "UW1": "uː", "UW2": "uː",
+    "B": "b", "CH": "tʃ", "D": "d", "DH": "ð", "F": "f",
+    "G": "ɡ", "HH": "h", "JH": "dʒ", "K": "k", "L": "l",
+    "M": "m", "N": "n", "NG": "ŋ", "P": "p", "R": "r",
+    "S": "s", "SH": "ʃ", "T": "t", "TH": "θ", "V": "v",
+    "W": "w", "WH": "ʍ", "Y": "j", "Z": "z", "ZH": "ʒ",
+}
+
+
+def _arpabet_to_ipa(code: str) -> str:
+    return _ARPABET_TO_IPA.get(code.upper(), code)
+
 
 def _as_float(value: Any, default: float | None = None) -> float | None:
     try:
@@ -152,11 +179,11 @@ def build_hybrid_feedback(top_issues: list[dict[str, Any]]) -> dict[str, Any] | 
     phone = primary.get("phone") or primary.get("word") or "muc tieu"
     error_label = ERROR_LABELS.get(str(primary.get("predicted_error_type")), "loi phat am")
     return {
-        "summary": f"He thong phat hien kha nang co loi {error_label} tai {phone}.",
+        "summary": f"Phát hiện lỗi phát âm tại âm /{_arpabet_to_ipa(str(phone))}/.",
         "tips": [
-            "Luyen lai am hoac tu duoc danh dau voi toc do cham.",
-            "So sanh ban thu am voi phat am mau va thu lai trong moi truong yen tinh.",
-            "Luu y: muc do va vi tri loi hien tai phu thuoc vao alignment/scoring dang dung.",
+            "Hãy luyện tập lại từ này với tốc độ chậm hơn.",
+            "So sánh với phát âm mẫu và thử lại trong môi trường yên tĩnh.",
+            "Tập trung vào âm được đánh dấu và lặp lại nhiều lần.",
         ],
     }
 
@@ -182,11 +209,8 @@ def build_hybrid_diagnosis(
     severity = str(primary_issue.get("severity")) if primary_issue else "unknown"
     primary_error_type = primary_issue.get("predicted_error_type") if primary_issue else "unknown"
 
-    problem_phonemes = []
-    for issue in top_issues:
-        phone = issue.get("phone")
-        if phone and phone not in problem_phonemes:
-            problem_phonemes.append(phone)
+    primary_phone = primary_issue.get("phone") if primary_issue else None
+    problem_phonemes = [primary_phone] if primary_phone else []
 
     return {
         "hybrid_status": "success",
@@ -197,6 +221,8 @@ def build_hybrid_diagnosis(
         "severity": severity,
         "top_issues": top_issues,
         "problem_phonemes": problem_phonemes,
+        "problem_phonemes_order": "alignment_time",
+        "primary_error_selection": "severity_then_heuristic_phone_score_then_classifier_diagnosis_confidence",
         "feedback": feedback,
         "location_reliability": _location_reliability(alignment_result),
         "scoring_is_heuristic": bool(scoring_metadata.get("is_heuristic")),

@@ -101,5 +101,5 @@ Any score returned before GOP/CaGOP or hybrid scoring is marked as heuristic/dem
 Next integration steps:
 
 - forced alignment for phone boundaries and localized `problem_phonemes`
-- GOP/CaGOP scoring for pronunciation correctness
-- hybrid scoring that combines CNN Attention diagnosis with GOP/CaGOP evidence
+- audited correct samples and a learned correctness head
+- a learned quality/scoring head after suitable supervised labels exist

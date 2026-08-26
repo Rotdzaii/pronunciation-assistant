@@ -85,4 +85,9 @@ Compared with the speaker-disjoint baseline, it improves macro F1 and addition F
 
 Phase 2 selected `context_0_10` CNN Attention as the current candidate, and the candidate has since been integrated into the AI Worker demo flow.
 
-Phase 4 should focus on real forced alignment, real GOP/CaGOP, larger and better-normalized datasets, stronger acoustic models or fine-tuning, calibration, and runtime/audio preprocessing optimization.
+Phase 4 uses MFA for forced alignment, then continues the CNN + Attention +
+Context line with audited correct samples and a learned correctness head. A
+learned quality/scoring head requires suitable supervised labels. GOP/CaGOP,
+heuristics, and classifier confidence are not Phoenix v2 pronunciation scores;
+until a learned scorer is validated, public `score` is `null` with
+`score_type="unavailable"`.

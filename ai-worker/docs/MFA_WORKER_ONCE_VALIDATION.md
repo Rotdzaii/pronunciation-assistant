@@ -7,7 +7,7 @@ This document defines a production-like once-only validation flow for `ai-worker
 - `WORKER_MODE=once`
 - `SCORER_MODE=cnn_attention_context`
 - `ALIGNMENT_MODE=mfa`
-- `MFA_CONDA_ENV=mfa`
+- `MFA_CONDA_ENV=aligner`
 - `MFA_DICTIONARY_PATH=english_us_mfa`
 - `MFA_ACOUSTIC_MODEL_PATH=english_mfa`
 
@@ -20,7 +20,7 @@ Alignment timing is not pronunciation correctness. Classifier confidence is not 
 - backend is running locally and can accept `POST /practice/webhook/ai-result`
 - queue `practice_jobs` has a message available
 - Supabase environment is configured locally
-- MFA environment `mfa` is available locally
+- MFA environment `aligner` is available locally
 - `CNN_ATTENTION_CONTEXT_CHECKPOINT_PATH` points to a real local checkpoint
 
 Before running `worker.py` with `SCORER_MODE=cnn_attention_context`, run `ai-worker/scripts/inspect_context_checkpoints.py` and set `CNN_ATTENTION_CONTEXT_CHECKPOINT_PATH` to a compatible checkpoint.
@@ -34,7 +34,7 @@ $env:WORKER_MODE="once"
 $env:SCORER_MODE="cnn_attention_context"
 $env:ALIGNMENT_MODE="mfa"
 $env:ALLOW_ALIGNMENT_FALLBACK="true"
-$env:MFA_CONDA_ENV="mfa"
+$env:MFA_CONDA_ENV="aligner"
 $env:MFA_DICTIONARY_PATH="english_us_mfa"
 $env:MFA_ACOUSTIC_MODEL_PATH="english_mfa"
 $env:CNN_ATTENTION_CONTEXT_CHECKPOINT_PATH="C:\path\to\l2_arctic_cnn_attention_context_0_10.pt"
@@ -162,7 +162,7 @@ Checkpoint missing:
 
 MFA unavailable:
 
-- confirm `MFA_CONDA_ENV=mfa`
+- confirm `MFA_CONDA_ENV=aligner`
 - confirm MFA dictionary and acoustic model are available locally
 - confirm queued audio can be prepared into temporary WAV input
 

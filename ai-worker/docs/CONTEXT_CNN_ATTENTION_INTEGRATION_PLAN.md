@@ -178,8 +178,9 @@ Recommended implementation branch:
 
 - Fallback alignment is approximate.
 - Context inference quality depends on alignment boundary quality.
-- Real GOP/CaGOP is not implemented.
-- Heuristic scoring is not production pronunciation scoring.
+- GOP/CaGOP is not the Phoenix v2 roadmap.
+- Public score is unavailable until a learned quality scorer is trained and
+  validated; heuristic data remains internal diagnostics.
 - Classifier confidence is not pronunciation correctness.
 - The selected checkpoint is local only and must not be committed.
 - Vietnamese speaker coverage is limited to four L2-ARCTIC speakers.

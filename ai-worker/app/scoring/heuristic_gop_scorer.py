@@ -68,6 +68,9 @@ def _heuristic_phone_score(
     *,
     fallback_alignment: bool,
 ) -> tuple[float, float | None]:
+    # This score reflects CNN classifier confidence and detected error severity,
+    # NOT validated pronunciation accuracy. It is not a calibrated GOP/CaGOP
+    # score — true GOP scoring is future work (see thesis limitations section).
     error_type = (prediction or {}).get("predicted_error_type")
     confidence = _as_float((prediction or {}).get("diagnosis_confidence"), 0.0)
     duration_mismatch = _duration_mismatch(segment)

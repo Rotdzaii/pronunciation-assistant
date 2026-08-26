@@ -1,12 +1,15 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.api.admin import router as admin_feature_router
+from app.api.assignments import router as assignments_router
 from app.api.auth import router as auth_router
 from app.api.health import router as health_router
 from app.api.practice import router as practice_router
 from app.api.profile import router as profile_router
-from app.api.teacher import router as teacher_router
+from app.api.student import router as student_feature_router
 from app.api.student_review import router as student_review_router
+from app.api.teacher import router as teacher_router
 from app.api.vocabulary import router as vocabulary_router
 from app.api.class_management import (
     admin_router,
@@ -47,3 +50,10 @@ app.include_router(teacher_classes_router)
 app.include_router(admin_router)
 
 app.include_router(vocabulary_router)
+app.include_router(assignments_router)
+
+# Extended student feature endpoints
+app.include_router(student_feature_router)
+
+# Extended admin feature endpoints
+app.include_router(admin_feature_router)

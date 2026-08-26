@@ -14,7 +14,29 @@ SENSITIVE_KEYS = {
     "mfa_temp_dir",
     "local_path",
     "audio_path",
+    "debug_artifact_dir",
+    "mfa_debug_dir",
+    "audio_url",
+    "stderr",
+    "stdout",
+    "command",
+    "command_args",
+    "mfa_process_diagnostic",
+    "debug_metadata",
 }
+NON_PUBLIC_SCORING_KEYS = {
+    "pronunciation_score_source",
+    "scoring",
+    "phone_score",
+    "gop_score_raw",
+    "gop_score_calibrated",
+    "utterance_segmental_score",
+    "severity",
+    "scoring_method",
+    "scoring_status",
+    "scoring_is_heuristic",
+}
+MODEL_CAPABILITY = "error_type_classifier_only"
 SENSITIVE_VALUE_MARKERS = (
     "c:\\",
     "/tmp/",
@@ -27,6 +49,7 @@ SENSITIVE_VALUE_MARKERS = (
     "token=",
     "sig=",
     "signature=",
+    "authorization=",
 )
 
 
@@ -34,7 +57,7 @@ def _sanitize_for_webhook(value: Any) -> Any:
     if isinstance(value, dict):
         sanitized = {}
         for key, item in value.items():
-            if str(key).lower() in SENSITIVE_KEYS:
+            if str(key).lower() in SENSITIVE_KEYS | NON_PUBLIC_SCORING_KEYS:
                 continue
             sanitized[key] = _sanitize_for_webhook(item)
         return sanitized
@@ -66,11 +89,27 @@ def _find_sensitive_value_paths(value: Any, path: str = "") -> list[str]:
     return issues
 
 
+_CANONICAL_CONTRACT_FIELDS = (
+    "reliability",
+    "score_type",
+    "display_pronunciation",
+    "pronunciation_variant",
+    "expected_phones",
+    "pronunciation_source",
+    "phone_results",
+    "primary_feedback",
+    "model_capability",
+)
+
+
 def _feedback_with_ai_result(ai_result: dict[str, Any]) -> dict[str, Any]:
     feedback = deepcopy(ai_result.get("feedback") if isinstance(ai_result.get("feedback"), dict) else {})
     feedback.setdefault("summary", "")
     feedback.setdefault("tips", [])
     feedback["ai_result"] = _sanitize_for_webhook(ai_result)
+    for field in _CANONICAL_CONTRACT_FIELDS:
+        if field in ai_result:
+            feedback[field] = ai_result[field]
     return feedback
 
 
@@ -78,26 +117,50 @@ def _metadata(ai_result: dict[str, Any]) -> dict[str, Any]:
     metadata = ai_result.get("metadata")
     if not isinstance(metadata, dict):
         metadata = {}
+    safe_metadata = {
+        key: value
+        for key, value in metadata.items()
+        if key not in NON_PUBLIC_SCORING_KEYS
+    }
     return {
         "alignment_used": metadata.get("alignment_used", False),
         "alignment_status": metadata.get("alignment_status"),
         "alignment_method": metadata.get("alignment_method"),
-        "gop_used": metadata.get("gop_used", False),
-        "scoring_method": metadata.get("scoring_method"),
-        "scoring_is_heuristic": metadata.get("scoring_is_heuristic", False),
-        "hybrid_used": metadata.get("hybrid_used", False),
-        **metadata,
+        "gop_used": False,
+        "hybrid_used": False,
+        **safe_metadata,
+        "gop_used": False,
+        "hybrid_used": False,
     }
 
 
 def build_success_webhook_payload(job_id: str, ai_result: dict[str, Any]) -> dict[str, Any]:
     sanitized_ai_result = _sanitize_for_webhook(deepcopy(ai_result))
+    # Older callers can still provide an old result shape. Phoenix v2 must not
+    # publish a numerical score or a confirmed pronunciation diagnosis.
+    sanitized_ai_result["model_capability"] = MODEL_CAPABILITY
+    sanitized_ai_result["score"] = None
+    sanitized_ai_result["score_type"] = "unavailable"
+    diagnosis = sanitized_ai_result.get("diagnosis")
+    if not isinstance(diagnosis, dict):
+        diagnosis = {}
+        sanitized_ai_result["diagnosis"] = diagnosis
+    diagnosis["is_confirmed_error"] = False
+    reliability = sanitized_ai_result.get("reliability")
+    is_invalid = isinstance(reliability, dict) and reliability.get("status") == "invalid"
+    if is_invalid:
+        sanitized_ai_result["score"] = None
+        sanitized_ai_result["score_type"] = "unavailable"
+        sanitized_ai_result["problem_phonemes"] = []
+        sanitized_ai_result["primary_feedback"] = None
     metadata = _metadata(sanitized_ai_result)
     return {
         "job_id": str(job_id),
         "status": sanitized_ai_result.get("status", "completed"),
-        "score": sanitized_ai_result.get("score"),
-        "score_note": sanitized_ai_result.get("score_note") or metadata.get("score_note"),
+        "model_capability": sanitized_ai_result.get("model_capability", MODEL_CAPABILITY),
+        "score": None,
+        "score_type": "unavailable",
+        "score_note": sanitized_ai_result.get("score_note") or "Pronunciation score unavailable.",
         "problem_phonemes": list(sanitized_ai_result.get("problem_phonemes") or []),
         "feedback": _feedback_with_ai_result(sanitized_ai_result),
         "predicted_error_type": sanitized_ai_result.get("predicted_error_type"),
@@ -118,7 +181,9 @@ def build_failed_webhook_payload(
     failed_result = _sanitize_for_webhook(deepcopy(failed_result))
     failed_result["status"] = "failed"
     failed_result["score"] = None
+    failed_result["score_type"] = "unavailable"
     failed_result["problem_phonemes"] = []
+    failed_result["primary_feedback"] = None
     metadata = _metadata(failed_result)
     metadata["error"] = sanitized_error_message
 
@@ -129,7 +194,9 @@ def build_failed_webhook_payload(
     return {
         "job_id": str(job_id),
         "status": "failed",
+        "model_capability": failed_result.get("model_capability", MODEL_CAPABILITY),
         "score": None,
+        "score_type": "unavailable",
         "problem_phonemes": [],
         "feedback": feedback,
         "error_message": sanitized_error_message,
@@ -160,24 +227,22 @@ def validate_webhook_payload(payload: dict[str, Any]) -> tuple[bool, list[str]]:
     if not isinstance(payload.get("feedback"), dict):
         issues.append("Webhook payload feedback must be an object.")
 
-    if status == "completed" and payload.get("score") is None:
-        issues.append("Completed webhook payload score is required for current backend compatibility.")
+    if status == "completed" and payload.get("score") is None and payload.get("score_type") != "unavailable":
+        issues.append("Completed webhook payload score is required unless score_type is unavailable.")
     if status == "failed" and payload.get("score") is not None:
         issues.append("Failed webhook payload score must be null.")
+    if payload.get("model_capability") != MODEL_CAPABILITY:
+        issues.append("Webhook payload must declare error_type_classifier_only capability.")
+    if payload.get("score") is not None or payload.get("score_type") != "unavailable":
+        issues.append("Phoenix v2 classifier-only payload must not publish a pronunciation score.")
 
     diagnosis = payload.get("diagnosis") if isinstance(payload.get("diagnosis"), dict) else {}
     if diagnosis.get("confidence_note") is None and status == "completed":
         issues.append("Completed webhook payload should preserve diagnosis.confidence_note.")
+    if status == "completed" and diagnosis.get("is_confirmed_error") is not False:
+        issues.append("Completed classifier-only diagnosis must set is_confirmed_error to false.")
 
     metadata = payload.get("metadata") if isinstance(payload.get("metadata"), dict) else {}
-    if metadata.get("scoring_is_heuristic") is True:
-        score_note = str(payload.get("score_note") or metadata.get("score_note") or "").lower()
-        if "heuristic" not in score_note and "demo" not in score_note:
-            issues.append("Heuristic webhook payload score_note must mention heuristic or demo.")
-    if metadata.get("gop_used") is False and metadata.get("scoring_method") == "heuristic_gop":
-        claims = str(payload).lower()
-        if "real gop" in claims and "not real gop" not in claims:
-            issues.append("heuristic_gop webhook payload must not claim real GOP.")
     if metadata.get("alignment_method") == "fallback_even_split":
         fallback_warning_fields = [
             str(metadata.get("alignment_note") or ""),
@@ -187,8 +252,8 @@ def validate_webhook_payload(payload: dict[str, Any]) -> tuple[bool, list[str]]:
         fallback_warning_text = " ".join(fallback_warning_fields).lower()
         if not any(term in fallback_warning_text for term in ("approximate", "fallback", "limited")):
             issues.append("Fallback alignment webhook metadata must mention approximate, fallback, or limited reliability.")
-    if payload.get("pronunciation_score_source") == "classifier_confidence":
-        issues.append("Webhook payload must not use classifier_confidence as pronunciation_score_source.")
+    if any(key in str(payload) for key in ("pronunciation_score_source", "phone_score", "gop_score")):
+        issues.append("Webhook payload must not expose heuristic or pronunciation-score source fields.")
 
     sensitive_value_paths = _find_sensitive_value_paths(payload)
     if sensitive_value_paths:

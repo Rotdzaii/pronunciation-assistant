@@ -3,7 +3,9 @@ from __future__ import annotations
 import os
 import re
 import sys
+import tempfile
 import time
+from contextlib import contextmanager
 from pathlib import Path
 from typing import Any
 
@@ -12,6 +14,7 @@ from dotenv import load_dotenv
 from supabase import Client, create_client
 
 from app.contracts.ai_result_contract import build_failed_ai_result
+from app.audio.storage_resolver import AudioReferenceError, resolve_audio_reference
 from app.contracts.webhook_payload import (
     build_failed_webhook_payload,
     build_success_webhook_payload,
@@ -28,6 +31,7 @@ SUPPORTED_SCORER_MODES = ("mock", "wav2vec2", "cnn_attention", "cnn_attention_co
 STANDARD_ERROR_TYPES = {
     "audio_decode_failed",
     "audio_preprocess_failed",
+    "audio_quality_rejected",
     "alignment_failed",
     "checkpoint_missing",
     "checkpoint_incompatible",
@@ -36,6 +40,9 @@ STANDARD_ERROR_TYPES = {
     "webhook_failed",
     "unknown_error",
 }
+
+AUDIO_SNR_REJECT_THRESHOLD_DB = 15.0
+AUDIO_MIN_VOICED_DURATION_SECONDS = 0.3
 SENSITIVE_VALUE_MARKERS = (
     "c:\\",
     "/tmp/",
@@ -99,6 +106,16 @@ def _load_env() -> dict[str, Any]:
     except ValueError as exc:
         raise RuntimeError("WORKER_IDLE_BACKOFF_MAX_SECONDS must be a number") from exc
 
+    try:
+        visibility_timeout = int(
+            os.getenv("QUEUE_VISIBILITY_TIMEOUT_SECONDS", str(DEFAULT_VISIBILITY_TIMEOUT_SECONDS))
+        )
+    except ValueError as exc:
+        raise RuntimeError("QUEUE_VISIBILITY_TIMEOUT_SECONDS must be an integer") from exc
+
+    if visibility_timeout <= 0:
+        raise RuntimeError("QUEUE_VISIBILITY_TIMEOUT_SECONDS must be greater than 0")
+
     if poll_interval_seconds <= 0:
         raise RuntimeError("WORKER_POLL_INTERVAL_SECONDS must be greater than 0")
     if idle_backoff_max_seconds < poll_interval_seconds:
@@ -119,6 +136,7 @@ def _load_env() -> dict[str, Any]:
         "webhook_url": os.environ["NODE_WEBHOOK_URL"],
         "webhook_secret": os.environ["AI_WEBHOOK_SECRET"],
         "queue_name": os.getenv("QUEUE_NAME", "practice_jobs"),
+        "practice_audio_bucket": os.getenv("PRACTICE_AUDIO_BUCKET", "practice-audios").strip() or "practice-audios",
         "scorer_mode": scorer_mode,
         "alignment_mode": os.getenv("ALIGNMENT_MODE", "fallback").strip().lower() or "fallback",
         "model_version": os.getenv("MODEL_VERSION", DEFAULT_MODEL_VERSION).strip() or DEFAULT_MODEL_VERSION,
@@ -126,6 +144,7 @@ def _load_env() -> dict[str, Any]:
         "worker_mode": worker_mode,
         "poll_interval_seconds": poll_interval_seconds,
         "idle_backoff_max_seconds": idle_backoff_max_seconds,
+        "visibility_timeout": visibility_timeout,
     }
 
 
@@ -151,13 +170,13 @@ def _first_row(data: Any) -> dict[str, Any] | None:
     return None
 
 
-def _read_one_job(client: Client, queue_name: str) -> dict[str, Any] | None:
+def _read_one_job(client: Client, queue_name: str, visibility_timeout: int) -> dict[str, Any] | None:
     rpc_attempts = [
         (
             "read_practice_job",
             {
                 "p_queue_name": queue_name,
-                "p_vt": DEFAULT_VISIBILITY_TIMEOUT_SECONDS,
+                "p_vt": visibility_timeout,
                 "p_qty": 1,
             },
         ),
@@ -166,7 +185,7 @@ def _read_one_job(client: Client, queue_name: str) -> dict[str, Any] | None:
             "pgmq_read",
             {
                 "queue_name": queue_name,
-                "vt": DEFAULT_VISIBILITY_TIMEOUT_SECONDS,
+                "vt": visibility_timeout,
                 "qty": 1,
             },
         ),
@@ -174,7 +193,7 @@ def _read_one_job(client: Client, queue_name: str) -> dict[str, Any] | None:
             "pgmq_read",
             {
                 "p_queue_name": queue_name,
-                "p_vt": DEFAULT_VISIBILITY_TIMEOUT_SECONDS,
+                "p_vt": visibility_timeout,
                 "p_qty": 1,
             },
         ),
@@ -186,6 +205,7 @@ def _read_one_job(client: Client, queue_name: str) -> dict[str, Any] | None:
             row = _first_row(_rpc_data(_call_rpc(client, rpc_name, params)))
             if row:
                 return row
+            print(f"[WARN] {rpc_name} returned no messages from {queue_name!r} (queue empty or message within visibility window).")
             return None
         except Exception as exc:
             errors.append(f"{rpc_name}: {exc}")
@@ -426,6 +446,7 @@ def _normalize_result_for_webhook(
         if resolved_error_type not in STANDARD_ERROR_TYPES:
             resolved_error_type = "unknown_error"
         normalized["score"] = None
+        normalized["score_type"] = "unavailable"
         normalized["problem_phonemes"] = []
         feedback["error_type"] = resolved_error_type
         feedback.setdefault("summary", "Phoenix v2 could not produce a model score for this attempt.")
@@ -487,6 +508,19 @@ def _build_failed_result(
     return _normalize_result_for_webhook(result, config=config, error_type=error_type)
 
 
+def _build_validation_failure_webhook_payload(job_id: str) -> dict[str, Any]:
+    """Return a static terminal payload even when an internal result is invalid.
+
+    Do not reuse the invalid scorer result here: its metadata may be exactly
+    what made validation fail.  The minimal failed contract is safe for the
+    backend and keeps the queue from leaving the student's job in processing.
+    """
+    return build_failed_webhook_payload(
+        job_id,
+        "AI worker could not validate the scoring result. Please retry.",
+    )
+
+
 def _post_webhook(webhook_url: str, webhook_secret: str, payload: dict[str, Any]) -> requests.Response:
     return requests.post(
         webhook_url,
@@ -496,8 +530,139 @@ def _post_webhook(webhook_url: str, webhook_secret: str, payload: dict[str, Any]
     )
 
 
+@contextmanager
+def _prepared_audio_for_job(
+    job: dict[str, Any],
+    *,
+    storage_client: Client | None = None,
+    practice_audio_bucket: str = "practice-audios",
+):
+    """Prepare queued audio, supporting stable Storage keys and legacy URLs."""
+    from app.alignment.audio_preparation import prepare_audio_for_mfa
+
+    with tempfile.TemporaryDirectory(prefix="worker-prepared-") as directory:
+        root = Path(directory)
+        try:
+            resolved = resolve_audio_reference(
+                job,
+                storage_client=storage_client,
+                practice_audio_bucket=practice_audio_bucket,
+                temp_dir=root,
+            )
+        except AudioReferenceError as exc:
+            raise PhoenixWorkerError(str(exc), "audio_preprocess_failed") from exc
+
+        prepared = prepare_audio_for_mfa(resolved.path, root / "prepared.wav")
+        yield prepared
+
+
+def _audio_quality_gate(audio_path: Path, config: dict[str, Any]) -> tuple[dict[str, Any] | None, dict[str, Any]]:
+    """Check audio quality before running the scorer.
+
+    Returns a pre-built failed result plus safe diagnostics if quality is below
+    threshold, otherwise ``None`` plus diagnostics for downstream metadata.
+    Any exception raised here is caught by the caller, which logs a warning
+    and falls through to normal scoring rather than failing the job entirely.
+    """
+    if config.get("scorer_mode") == "mock":
+        return None, {"audio_quality_status": "not_checked"}
+
+    try:
+        snr_threshold = float(os.getenv("AUDIO_SNR_REJECT_THRESHOLD_DB", str(AUDIO_SNR_REJECT_THRESHOLD_DB)))
+    except ValueError:
+        snr_threshold = AUDIO_SNR_REJECT_THRESHOLD_DB
+    try:
+        min_voiced = float(os.getenv("AUDIO_MIN_VOICED_DURATION_SECONDS", str(AUDIO_MIN_VOICED_DURATION_SECONDS)))
+    except ValueError:
+        min_voiced = AUDIO_MIN_VOICED_DURATION_SECONDS
+
+    from app.audio.preprocessing import estimate_snr
+
+    gate_start = time.monotonic()
+    quality = estimate_snr(audio_path)
+    gate_elapsed = time.monotonic() - gate_start
+
+    snr_db = quality.get("snr_db")
+    voiced_duration = float(quality.get("voiced_duration_seconds") or 0.0)
+    voiced_frames_ratio = float(quality.get("voiced_frames_ratio") or 0.0)
+    unvoiced_frames_ratio = float(quality.get("unvoiced_frames_ratio") or 0.0)
+    mean_voiced_prob = float(quality.get("mean_voiced_prob") or 0.0)
+    speech_detection_mode = str(quality.get("speech_detection_mode") or "unknown")
+    audio_quality_status = str(quality.get("audio_quality_status") or "invalid")
+    largest_unvoiced_run = float(quality.get("largest_unvoiced_run_seconds") or 0.0)
+
+    # Primary gate: VAD-derived speech duration. SNR remains diagnostic only.
+    rejection_reason: str | None = None
+    if audio_quality_status == "invalid":
+        if speech_detection_mode == "no_voiced_anchor" and unvoiced_frames_ratio > 0:
+            rejection_reason = "insufficient_sustained_unvoiced_activity"
+        elif speech_detection_mode == "no_voiced_anchor":
+            rejection_reason = "no_voiced_anchor"
+        else:
+            rejection_reason = "insufficient_detected_speech"
+    elif speech_detection_mode != "pitch_degraded_unvoiced_only" and voiced_duration < min_voiced:
+        rejection_reason = "insufficient_detected_speech"
+
+    print(
+        f"audio_quality_check snr_db={snr_db} "
+        f"file_duration={float(quality.get('file_duration_seconds') or 0.0):.3f}s "
+        f"voiced_anchor_duration={float(quality.get('voiced_anchor_duration_seconds') or 0.0):.3f}s "
+        f"detected_speech_duration={voiced_duration:.3f}s "
+        f"voiced_frames_ratio={voiced_frames_ratio:.3f} "
+        f"unvoiced_frames_ratio={unvoiced_frames_ratio:.3f} "
+        f"mean_voiced_prob={mean_voiced_prob:.3f} "
+        f"finite_f0_frames={int(quality.get('finite_f0_frames') or 0)} "
+        f"finite_f0_ratio={float(quality.get('finite_f0_ratio') or 0.0):.3f} "
+        f"f0_min_hz={quality.get('f0_min_hz')} f0_max_hz={quality.get('f0_max_hz')} "
+        f"pyin_voiced_flag_ratio={float(quality.get('pyin_voiced_flag_ratio') or 0.0):.3f} "
+        f"voiced_candidate_count={int(quality.get('voiced_candidate_count') or 0)} "
+        f"unvoiced_candidate_count={int(quality.get('unvoiced_candidate_count') or 0)} "
+        f"largest_unvoiced_run_seconds={largest_unvoiced_run:.3f} "
+        f"speech_detection_mode={speech_detection_mode} audio_quality_status={audio_quality_status} "
+        f"gate_elapsed_s={gate_elapsed:.2f} "
+        f"min_voiced={min_voiced}s snr_threshold_diag={snr_threshold} "
+        f"rejected={rejection_reason is not None} reason={rejection_reason}"
+    )
+
+    if rejection_reason is None:
+        quality["gate_elapsed_seconds"] = round(gate_elapsed, 3)
+        return None, quality
+
+    scorer_mode = config.get("scorer_mode", "unknown")
+    from app.contracts.ai_result_contract import build_failed_ai_result as _build_failed
+    failed = _build_failed(
+        error=f"audio_quality_rejected:{rejection_reason}",
+        scorer={
+            "name": scorer_mode,
+            "type": "phone_error_classifier",
+            "version": "audio_quality_gate_v3",
+        },
+        metadata={
+            "error_type": "audio_quality_rejected",
+            "rejection_reason": rejection_reason,
+            "snr_db": snr_db,
+            **quality,
+            "snr_threshold_db": snr_threshold,
+            "min_voiced_duration_seconds": min_voiced,
+            "gate_elapsed_seconds": round(gate_elapsed, 3),
+            "model_version": config.get("model_version", "unknown"),
+            "scorer_mode": scorer_mode,
+            "alignment_method": config.get("alignment_mode", "unknown"),
+            "is_forced_alignment": False,
+        },
+    )
+    failed["feedback"]["error_type"] = "audio_quality_rejected"
+    failed["feedback"]["summary"] = "Âm thanh không rõ, vui lòng thu âm lại ở nơi yên tĩnh hơn."
+    failed["feedback"]["tips"] = [
+        "Di chuyển đến nơi yên tĩnh hơn và thử lại.",
+        "Giữ micro gần miệng và nói rõ ràng hơn.",
+        "Đảm bảo không có tiếng ồn lớn xung quanh khi ghi âm.",
+    ]
+    return failed, quality
+
+
 def _process_one_job(client: Client, config: dict[str, Any]) -> bool:
-    row = _read_one_job(client, config["queue_name"])
+    row = _read_one_job(client, config["queue_name"], config["visibility_timeout"])
     if not row:
         print(f"No job found in {config['queue_name']} queue.")
         return False
@@ -512,7 +677,44 @@ def _process_one_job(client: Client, config: dict[str, Any]) -> bool:
 
     try:
         _preflight_scorer_config(config)
-        result = _score(job, config["scorer_mode"], config["confidence_threshold"])
+        quality_rejection = None
+        scored_result: dict[str, Any] | None = None
+        if config["scorer_mode"] == "mock":
+            quality_rejection, _ = _audio_quality_gate(Path(), config)
+        else:
+            with _prepared_audio_for_job(
+                job,
+                storage_client=client,
+                practice_audio_bucket=config["practice_audio_bucket"],
+            ) as prepared_audio:
+                scoring_job = {
+                    **job,
+                    "audio_path": str(prepared_audio.path),
+                    "_prepared_audio": prepared_audio,
+                }
+                try:
+                    quality_rejection, audio_quality = _audio_quality_gate(prepared_audio.path, config)
+                except Exception as qe:
+                    print(f"[WARN] Audio quality gate failed, proceeding with scoring. error={_sanitize_error_text(str(qe))}")
+                    audio_quality = {"audio_quality_status": "not_checked"}
+                if quality_rejection is None:
+                    scoring_job["_audio_quality_warnings"] = [audio_quality["warning"]] if audio_quality.get("warning") else []
+                    scored_result = _score(
+                        scoring_job,
+                        config["scorer_mode"],
+                        config["confidence_threshold"],
+                    )
+        if quality_rejection is not None:
+            result = _normalize_result_for_webhook(
+                quality_rejection, config=config, error_type="audio_quality_rejected"
+            )
+        elif scored_result is not None:
+            result = _normalize_result_for_webhook(scored_result, config=config)
+        else:
+            result = _normalize_result_for_webhook(
+                _score(job, config["scorer_mode"], config["confidence_threshold"]),
+                config=config,
+            )
     except Exception as exc:
         sanitized_error = _sanitize_error_text(str(exc))
         error_type = _classify_exception(exc)
@@ -531,8 +733,6 @@ def _process_one_job(client: Client, config: dict[str, Any]) -> bool:
             config["confidence_threshold"],
             PhoenixWorkerError(sanitized_error, error_type),
         )
-    else:
-        result = _normalize_result_for_webhook(result, config=config)
 
     confidence = _extract_model_confidence(result)
     print(f"model_confidence={confidence if confidence is not None else 'unavailable'}")
@@ -543,21 +743,80 @@ def _process_one_job(client: Client, config: dict[str, Any]) -> bool:
     if result.get("status") == "failed":
         webhook_payload = build_failed_webhook_payload(
             job["job_id"],
-            _sanitize_error_text(str(result.get("metadata", {}).get("error") or "AI scoring failed.")),
+            _sanitize_error_text(
+                str(
+                    result.get("metadata", {}).get("error")
+                    or "AI scoring failed."
+                )
+            ),
             result,
         )
     else:
-        webhook_payload = build_success_webhook_payload(job["job_id"], result)
+        webhook_payload = build_success_webhook_payload(
+            job["job_id"],
+            result,
+        )
 
-    payload_is_valid, payload_issues = validate_webhook_payload(webhook_payload)
+    result_metadata = (
+        result.get("metadata")
+        if isinstance(result.get("metadata"), dict)
+        else {}
+    )
+    webhook_feedback = (
+        webhook_payload.get("feedback")
+        if isinstance(webhook_payload.get("feedback"), dict)
+        else {}
+    )
+    webhook_ai_result = (
+        webhook_feedback.get("ai_result")
+        if isinstance(webhook_feedback.get("ai_result"), dict)
+        else {}
+    )
+
+    print(
+        "score_trace "
+        f"job_id={job['job_id']} "
+        f"result_status={result.get('status')!r} "
+        f"result_score={result.get('score')!r} "
+        f"result_score_type={result.get('score_type')!r} "
+        f"webhook_status={webhook_payload.get('status')!r} "
+        f"webhook_score={webhook_payload.get('score')!r} "
+        f"feedback_ai_result_score={webhook_ai_result.get('score')!r} "
+        f"pronunciation_score_source="
+        f"{result.get('pronunciation_score_source') or result_metadata.get('pronunciation_score_source')!r} "
+        f"model_confidence={_extract_model_confidence(result)!r}"
+    )
+
+    payload_is_valid, payload_issues = validate_webhook_payload(
+        webhook_payload
+    )
     if not payload_is_valid:
-        print("Webhook payload validation failed: " + " | ".join(payload_issues))
+        print(
+            "Webhook payload validation failed: "
+            + " | ".join(payload_issues)
+        )
         print("webhook_payload_valid=false")
-        print("post_attempted=false")
-        print("archive_attempted=false")
-        print("reason=payload_validation_failed")
-        return False
-    print("webhook_payload_valid=true")
+        print(
+            "reason=payload_validation_failed; "
+            "sending terminal safety payload"
+        )
+        webhook_payload = _build_validation_failure_webhook_payload(
+            job["job_id"]
+        )
+        safety_payload_is_valid, safety_payload_issues = (
+            validate_webhook_payload(webhook_payload)
+        )
+        print(
+            "safety_webhook_payload_valid="
+            f"{'true' if safety_payload_is_valid else 'false'}"
+        )
+        if not safety_payload_is_valid:
+            print(
+                "Safety payload validation unexpectedly failed: "
+                + " | ".join(safety_payload_issues)
+            )
+    else:
+        print("webhook_payload_valid=true")
 
     try:
         response = _post_webhook(
@@ -574,10 +833,17 @@ def _process_one_job(client: Client, config: dict[str, Any]) -> bool:
         return False
 
     print(f"webhook_status_code={response.status_code}")
+    response_preview = _sanitize_error_text(
+        str(response.text or "")[:500]
+    )
+    print(f"webhook_response_body={response_preview}")
 
     if not 200 <= response.status_code < 300:
-        print(f"Webhook failed. Message {msg_id} was not archived. error_type=webhook_failed")
-        print(_sanitize_error_text(response.text))
+        print(
+            f"Webhook failed. Message {msg_id} was not archived. "
+            "error_type=webhook_failed"
+        )
+        print(response_preview)
         return False
 
     try:

@@ -4,10 +4,9 @@ import argparse
 import json
 import os
 import sys
-import tempfile
 from pathlib import Path
 from typing import Any
-from urllib.parse import urlparse, urlsplit, urlunsplit
+from urllib.parse import urlsplit, urlunsplit
 
 
 AI_WORKER_ROOT = Path(__file__).resolve().parents[1]
@@ -15,7 +14,10 @@ REPO_ROOT = AI_WORKER_ROOT.parent
 if str(AI_WORKER_ROOT) not in sys.path:
     sys.path.insert(0, str(AI_WORKER_ROOT))
 
+import worker  # noqa: E402
 from app.contracts.ai_result_validator import validate_ai_result  # noqa: E402
+from app.alignment.mfa_aligner import run_mfa_preflight  # noqa: E402
+from app.audio.storage_resolver import ResolvedAudioReference, resolve_audio_reference  # noqa: E402
 from app.contracts.webhook_payload import (  # noqa: E402
     build_failed_webhook_payload,
     build_success_webhook_payload,
@@ -49,11 +51,35 @@ def _parse_bool(value: str) -> bool:
     raise argparse.ArgumentTypeError(f"Invalid boolean value: {value!r}")
 
 
+def _positive_int(value: str) -> int:
+    try:
+        parsed = int(value)
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError("Value must be an integer.") from exc
+    if parsed <= 0:
+        raise argparse.ArgumentTypeError("Value must be greater than zero.")
+    return parsed
+
+
+def _default_visibility_timeout() -> int:
+    raw_value = os.getenv(
+        "QUEUE_VISIBILITY_TIMEOUT_SECONDS",
+        str(worker.DEFAULT_VISIBILITY_TIMEOUT_SECONDS),  # noqa: SLF001
+    )
+    return _positive_int(raw_value)
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Read one PGMQ job and validate MFA-aligned cnn_attention_context worker flow.",
     )
     parser.add_argument("--queue-name", default=DEFAULT_QUEUE_NAME, help="PGMQ queue name. Default: practice_jobs.")
+    parser.add_argument(
+        "--visibility-timeout",
+        type=_positive_int,
+        default=_default_visibility_timeout(),
+        help="PGMQ visibility timeout in seconds. Defaults to QUEUE_VISIBILITY_TIMEOUT_SECONDS or worker default.",
+    )
     parser.add_argument("--post", action="store_true", help="Explicitly POST the webhook payload.")
     parser.add_argument(
         "--archive",
@@ -63,7 +89,13 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--webhook-url", default=None, help="Optional webhook URL for --post.")
     parser.add_argument("--secret", default=None, help="Optional webhook secret for --post. Never printed.")
     parser.add_argument("--checkpoint-path", default=None, help="Optional local context checkpoint override.")
-    parser.add_argument("--conda-env", default="mfa", help='MFA conda environment name. Default: "mfa".')
+    parser.add_argument(
+        "--mfa-runtime",
+        choices=("conda", "wsl"),
+        default="conda",
+        help="MFA runtime. Default: conda. WSL must be selected explicitly.",
+    )
+    parser.add_argument("--conda-env", default="aligner", help='MFA conda environment name. Default: "aligner".')
     parser.add_argument(
         "--dictionary-path",
         default="english_us_mfa",
@@ -80,7 +112,24 @@ def parse_args() -> argparse.Namespace:
         default=True,
         help="Allow fallback alignment when MFA fails. Default: true.",
     )
-    return parser.parse_args()
+    parser.add_argument("--mfa-debug", action="store_true", help="Print local sanitized MFA preflight and subprocess diagnostics.")
+    parser.add_argument(
+        "--mfa-debug-dir",
+        default=None,
+        help="Optional local directory for sanitized MFA success/failure artifacts. Requires --mfa-debug.",
+    )
+    args = parser.parse_args()
+    if args.mfa_debug and (args.post or args.archive):
+        parser.error("--mfa-debug cannot be combined with --post or --archive.")
+    if args.mfa_debug_dir and not args.mfa_debug:
+        parser.error("--mfa-debug-dir requires --mfa-debug.")
+    return args
+
+
+def read_one_queue_job(worker_module: Any, client: Any, queue_name: str, visibility_timeout: int) -> dict[str, Any] | None:
+    """Call the worker's current PGMQ read API with its required timeout."""
+
+    return worker_module._read_one_job(client, queue_name, visibility_timeout)  # noqa: SLF001
 
 
 def load_local_env() -> None:
@@ -100,15 +149,21 @@ def configure_environment(args: argparse.Namespace) -> dict[str, Any]:
     config = {
         "SCORER_MODE": "cnn_attention_context",
         "ALIGNMENT_MODE": "mfa",
+        "MFA_RUNTIME": args.mfa_runtime,
         "ALLOW_ALIGNMENT_FALLBACK": "true" if args.allow_fallback else "false",
-        "MFA_CONDA_ENV": str(args.conda_env or "mfa"),
+        "MFA_CONDA_ENV": str(args.conda_env or "aligner"),
         "MFA_DICTIONARY_PATH": str(args.dictionary_path or "english_us_mfa"),
         "MFA_ACOUSTIC_MODEL_PATH": str(args.acoustic_model_path or "english_mfa"),
         "CNN_ATTENTION_CONTEXT_MODE": "context_0_10",
         "CNN_ATTENTION_CONTEXT_LEFT_SECONDS": "0.10",
         "CNN_ATTENTION_CONTEXT_RIGHT_SECONDS": "0.10",
         "CNN_ATTENTION_CONTEXT_CHECKPOINT_PATH": str(checkpoint_path),
+        "MFA_DEBUG": "true" if args.mfa_debug else "false",
     }
+    if args.mfa_debug_dir:
+        config["MFA_DEBUG_DIR"] = str(Path(args.mfa_debug_dir).expanduser())
+    else:
+        os.environ.pop("MFA_DEBUG_DIR", None)
     for key, value in config.items():
         os.environ[key] = str(value)
     return {
@@ -184,42 +239,24 @@ def top_segment(ai_result: dict[str, Any]) -> dict[str, Any]:
     return max(segments, key=lambda item: float(item.get("diagnosis_confidence") or 0.0))
 
 
-def _download_audio_to_temp(audio_url: str) -> Path:
-    try:
-        import requests
-    except ImportError as exc:
-        raise RuntimeError(f"Downloading queue audio_url requires requests: {exc}") from exc
-
-    response = requests.get(audio_url, timeout=60)
-    response.raise_for_status()
-    suffix = Path(urlparse(audio_url).path).suffix or ".audio"
-    temp_file = tempfile.NamedTemporaryFile(delete=False, suffix=suffix)
-    temp_path = Path(temp_file.name)
-    try:
-        temp_file.write(response.content)
-    finally:
-        temp_file.close()
-    return temp_path
-
-
-def prepare_scoring_job(job: dict[str, Any]) -> tuple[dict[str, Any], str, bool]:
-    audio_url = str(job.get("audio_url") or "").strip()
-    if not audio_url:
-        raise RuntimeError("Queue message audio_url is required.")
-
-    parsed = urlparse(audio_url)
-    if parsed.scheme in {"http", "https"}:
-        temp_audio_path = _download_audio_to_temp(audio_url)
-        prepared = dict(job)
-        prepared["audio_path"] = str(temp_audio_path)
-        prepared["audio_url"] = ""
-        return prepared, "downloaded_to_temp", True
-
-    local_path = Path(audio_url).expanduser()
+def prepare_scoring_job(
+    job: dict[str, Any],
+    *,
+    storage_client: Any,
+    practice_audio_bucket: str,
+) -> tuple[dict[str, Any], str, ResolvedAudioReference]:
+    """Resolve legacy URLs and stable Storage paths with the worker's resolver."""
+    resolved = resolve_audio_reference(
+        job,
+        storage_client=storage_client,
+        practice_audio_bucket=practice_audio_bucket,
+        request_timeout_seconds=60,
+    )
     prepared = dict(job)
-    prepared["audio_path"] = str(local_path)
+    prepared["audio_path"] = str(resolved.path)
     prepared["audio_url"] = ""
-    return prepared, "local_path", False
+    prepared["audio_reference_type"] = resolved.reference_type
+    return prepared, resolved.reference_type, resolved
 
 
 def post_payload(webhook_url: str, secret: str, payload: dict[str, Any]) -> tuple[bool, str]:
@@ -243,10 +280,12 @@ def post_payload(webhook_url: str, secret: str, payload: dict[str, Any]) -> tupl
 
 def print_section(title: str, payload: Any) -> None:
     print(title)
-    if isinstance(payload, str):
-        print(payload)
-    else:
-        print(json.dumps(payload, indent=2, ensure_ascii=False))
+    rendered = payload if isinstance(payload, str) else json.dumps(payload, indent=2, ensure_ascii=False)
+    try:
+        print(rendered)
+    except UnicodeEncodeError:
+        # Windows consoles configured with cp1252 cannot print IPA symbols.
+        print(payload if isinstance(payload, str) else json.dumps(payload, indent=2, ensure_ascii=True))
     print()
 
 
@@ -258,15 +297,19 @@ def main() -> int:
 
     config_summary = {
         "queue_name": args.queue_name,
+        "visibility_timeout_seconds": args.visibility_timeout,
         "scorer_mode": "cnn_attention_context",
         "alignment_mode": "mfa",
         "allow_fallback": args.allow_fallback,
+        "mfa_runtime": os.getenv("MFA_RUNTIME"),
         "mfa_conda_env": os.getenv("MFA_CONDA_ENV"),
         "mfa_dictionary_path": os.getenv("MFA_DICTIONARY_PATH"),
         "mfa_acoustic_model_path": os.getenv("MFA_ACOUSTIC_MODEL_PATH"),
         "context_mode": os.getenv("CNN_ATTENTION_CONTEXT_MODE"),
         "post_requested": bool(args.post),
         "archive_requested": bool(args.archive),
+        "mfa_debug": bool(args.mfa_debug),
+        "mfa_debug_artifacts_requested": bool(args.mfa_debug_dir),
         "checkpoint_path_configured": bool(str(checkpoint_path)),
         "webhook_url_safe": safe_webhook_url(args.webhook_url or os.getenv("NODE_WEBHOOK_URL") or os.getenv("AI_WEBHOOK_URL")),
         "secret_configured": bool(args.secret or os.getenv("AI_WEBHOOK_SECRET")),
@@ -290,7 +333,6 @@ def main() -> int:
 
     try:
         from supabase import create_client
-        import worker
     except Exception as exc:
         print_section("SETUP_ERROR", {"error": str(exc)})
         return 1
@@ -298,7 +340,7 @@ def main() -> int:
     client = create_client(os.environ["SUPABASE_URL"], os.environ["SUPABASE_SERVICE_ROLE_KEY"])
 
     try:
-        row = worker._read_one_job(client, args.queue_name)  # noqa: SLF001
+        row = read_one_queue_job(worker, client, args.queue_name, args.visibility_timeout)
     except Exception as exc:
         print_section("QUEUE_MESSAGE", {"queue_read_attempted": True, "queue_read_error": str(exc)})
         return 1
@@ -351,7 +393,7 @@ def main() -> int:
         )
         return 1
 
-    temp_audio_path: Path | None = None
+    audio_resolution: ResolvedAudioReference | None = None
     post_attempted = False
     archive_attempted = False
     post_success = False
@@ -359,12 +401,15 @@ def main() -> int:
     queue_message_found = True
     download_status = "not_attempted"
     inference_ran = False
+    mfa_preflight_status: str | None = None
 
     try:
         try:
-            scoring_job, download_status, uses_temp_audio = prepare_scoring_job(job)
-            temp_audio_value = str(scoring_job.get("audio_path") or "").strip()
-            temp_audio_path = Path(temp_audio_value) if temp_audio_value and uses_temp_audio else None
+            scoring_job, download_status, audio_resolution = prepare_scoring_job(
+                job,
+                storage_client=client,
+                practice_audio_bucket=os.getenv("PRACTICE_AUDIO_BUCKET", "practice-audios").strip() or "practice-audios",
+            )
         except Exception as exc:
             print_section(
                 "DOWNLOAD_RESULT",
@@ -394,9 +439,29 @@ def main() -> int:
                     "download_status": download_status,
                     "queue_audio_prepared_for_local_scoring": True,
                     "audio_url": "<audio-url-redacted>",
-                    "local_temp_path_redacted": temp_audio_path is not None,
+                    "local_temp_path_redacted": bool(audio_resolution and audio_resolution.cleanup_required),
                 },
         )
+
+        if args.mfa_debug:
+            try:
+                preflight = run_mfa_preflight(
+                    os.getenv("MFA_DICTIONARY_PATH"),
+                    os.getenv("MFA_ACOUSTIC_MODEL_PATH"),
+                )
+            except Exception as exc:
+                preflight = {
+                    "status": "failed",
+                    "mfa_runtime": os.getenv("MFA_RUNTIME"),
+                    "command_mode": None,
+                    "issues": ["preflight_configuration_failed"],
+                    "error_category": getattr(exc, "code", "mfa_preflight_failed"),
+                    "error": str(exc),
+                }
+            mfa_preflight_status = str(preflight["status"])
+            print_section("MFA_PREFLIGHT", preflight)
+            if preflight["status"] != "ok":
+                print("MFA preflight failed; continuing without POST/archive to capture the alignment subprocess diagnostic.")
 
         try:
             ai_result = worker._score(  # noqa: SLF001
@@ -464,6 +529,7 @@ def main() -> int:
                     "queue_message_found": queue_message_found,
                     "download_status": download_status,
                     "inference_ran": False,
+                    "mfa_preflight_status": mfa_preflight_status,
                     "post_attempted": False,
                     "archive_attempted": False,
                 },
@@ -487,12 +553,15 @@ def main() -> int:
                 "pronunciation_score_source": ai_result.get("metadata", {}).get("pronunciation_score_source"),
                 "predicted_error_type": ai_result.get("predicted_error_type"),
                 "problem_phonemes": ai_result.get("problem_phonemes"),
+                "global_diagnosis_selection": ai_result.get("metadata", {}).get("global_diagnosis_selection"),
+                "problem_phonemes_order": ai_result.get("metadata", {}).get("problem_phonemes_order"),
                 "diagnosis_confidence": ai_result.get("diagnosis", {}).get("diagnosis_confidence"),
                 "top_segment": {
                     "phone": top.get("phone"),
                     "word": top.get("word"),
                     "predicted_error_type": top.get("predicted_error_type"),
                     "diagnosis_confidence": top.get("diagnosis_confidence"),
+                    "selection": "highest_classifier_diagnosis_confidence",
                 },
             },
         )
@@ -593,6 +662,7 @@ def main() -> int:
                 "queue_message_found": queue_message_found,
                 "download_status": download_status,
                 "inference_ran": inference_ran,
+                "mfa_preflight_status": mfa_preflight_status,
                 "ai_result_valid": ai_result_valid,
                 "payload_valid": payload_valid,
                 "metadata_safety_check_passed": safety_passed,
@@ -605,8 +675,8 @@ def main() -> int:
         )
         return 0 if ai_result_valid and payload_valid and safety_passed and (not post_attempted or post_success) and (not archive_attempted or archive_success) else 1
     finally:
-        if temp_audio_path is not None:
-            temp_audio_path.unlink(missing_ok=True)
+        if audio_resolution is not None:
+            audio_resolution.cleanup()
 
 
 if __name__ == "__main__":

@@ -12,38 +12,51 @@ Phase 4 should move the project from a validated research candidate toward a mor
 - Parse TextGrid or equivalent alignment output into the project schema.
 - Compare fallback alignment against forced-alignment timing to quantify timing error.
 - Keep fallback alignment as a clearly labeled degraded/demo path, not as phone-level evidence.
-- Complete this step before implementing real GOP/CaGOP, because GOP/CaGOP needs reliable phone boundaries.
+- Complete this step before training learned phone-level heads, because the
+  CNN + Attention + Context pipeline needs reliable phone boundaries to select
+  the intended acoustic segment.
 
-## 2. Phase 4B: GOP/CaGOP
+## 2. Phase 4B: Correct Samples And A Learned Correctness Head
 
-- Start only after real forced-alignment validation is available.
-- Implement real GOP or CaGOP-style scoring based on acoustic likelihoods or posterior probabilities.
-- Calibrate phone-level scores so they are interpretable and not just classifier confidence.
-- Replace or clearly separate the current `heuristic_gop` value.
-- Validate whether GOP/CaGOP scores correlate with actual pronunciation quality labels.
+- Add audited `correct` phone examples to the current addition/deletion/
+  substitution dataset without leakage between speaker or prompt splits.
+- Train a correctness head in the CNN + Attention + Context model family.
+- Keep diagnosis confidence separate from correctness probability.
+- Do not publish any numerical pronunciation score until a learned quality
+  head has appropriate supervised labels.
 
-## 3. Phase 4C: Dataset Expansion
+## 3. Phase 4C: Learned Quality/Scoring Research
+
+- Define and collect phone- or word-level human quality labels with an
+  explicit scoring rubric.
+- Train a regression or ordinal quality head only after establishing a
+  leakage-safe evaluation protocol.
+- Before then, public output remains `score: null` and
+  `score_type: "unavailable"`.
+
+## 4. Phase 4D: Dataset Expansion
 
 - Search for additional public pronunciation or mispronunciation datasets suitable for English L2 learners.
 - Normalize speaker metadata, prompt text, phone labels, and error labels before combining datasets.
 - Avoid directly mixing incompatible label definitions without mapping rules.
 - Prioritize Vietnamese or similar L1 learner coverage if available.
 
-## 4. Phase 4D: Stronger Model Experiments
+## 5. Phase 4E: Stronger Model Experiments
 
 - Test Wav2Vec2, HuBERT, Whisper encoder features, or fine-tuning.
 - Compare stronger acoustic representations against the current CNN Attention context candidate.
 - Keep speaker-independent evaluation as the primary selection protocol.
 - Track macro F1, addition F1, deletion F1, substitution F1, calibration, and runtime.
 
-## 5. Evaluation Plan
+## 6. Evaluation Plan
 
 - Expand speaker-disjoint evaluation beyond the current four Vietnamese speakers when data permits.
-- Add confidence calibration metrics.
+- Evaluate correctness and quality heads against their own supervised labels;
+  do not convert classifier confidence into a pronunciation score.
 - Separate pronunciation correctness scoring from error-type classification.
 - Include real user or teacher-reviewed evaluation if feasible.
 
-## 6. Phase 4E: Runtime And Audio Preprocessing Optimization
+## 7. Phase 4F: Runtime And Audio Preprocessing Optimization
 
 - Benchmark local audio files separately from signed URL downloads.
 - Optimize WebM decoding and conversion from frontend recordings.

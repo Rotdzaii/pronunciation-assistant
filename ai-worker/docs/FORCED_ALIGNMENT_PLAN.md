@@ -43,5 +43,6 @@ It returns the normalized alignment contract with `alignment_method=mfa`, `align
 
 - configure local MFA installation and model paths outside Git
 - validate MFA TextGrid output on safe local audio
-- feed MFA phone boundaries into GOP/CaGOP scoring
+- feed MFA phone boundaries into learned CNN + Attention + Context heads for
+  segment selection and localization
 - keep CNN Attention confidence separate from pronunciation correctness scores

@@ -3,24 +3,18 @@ from __future__ import annotations
 from typing import Any
 
 
-SCORING_NOTE = "Heuristic score is not a production GOP score."
-SEVERITIES = {"low", "medium", "high", "unknown"}
+SCORING_NOTE = "Pronunciation score unavailable: Phoenix v2 has no learned correctness or quality head."
 
 
-def clamp_score(value: float | int | None) -> float | None:
-    if value is None:
-        return None
-    return round(max(0.0, min(100.0, float(value))), 1)
+def clamp_score(value: float | int | None) -> None:
+    """Legacy helper retained for callers; Phoenix v2 never emits a score."""
+    del value
+    return None
 
 
 def severity_from_score(score: float | int | None) -> str:
-    if score is None:
-        return "unknown"
-    if float(score) < 60:
-        return "high"
-    if float(score) < 75:
-        return "medium"
-    return "low"
+    del score
+    return "unavailable"
 
 
 def build_phone_score(
@@ -34,21 +28,17 @@ def build_phone_score(
     gop_score_calibrated: float | int | None = None,
     duration_mismatch: float | int | None = None,
     severity: str | None = None,
-    source: str = "heuristic",
+    source: str = "unavailable",
 ) -> dict[str, Any]:
-    normalized_score = clamp_score(phone_score)
-    normalized_severity = severity if severity in SEVERITIES else severity_from_score(normalized_score)
+    """Compatibility shape without exposing heuristic phone quality values."""
+    del phone_score, gop_score_raw, gop_score_calibrated, duration_mismatch, severity, source
     return {
         "phone": phone,
         "word": word,
         "start": round(float(start), 3) if start is not None else None,
         "end": round(float(end), 3) if end is not None else None,
-        "phone_score": normalized_score,
-        "gop_score_raw": float(gop_score_raw) if gop_score_raw is not None else None,
-        "gop_score_calibrated": clamp_score(gop_score_calibrated),
-        "duration_mismatch": round(float(duration_mismatch), 3) if duration_mismatch is not None else None,
-        "severity": normalized_severity,
-        "source": source,
+        "score": None,
+        "source": "unavailable",
     }
 
 
@@ -60,11 +50,12 @@ def build_word_score(
     score: float | int | None = None,
     phones: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
+    del score
     return {
         "word": word,
         "start": round(float(start), 3) if start is not None else None,
         "end": round(float(end), 3) if end is not None else None,
-        "score": clamp_score(score),
+        "score": None,
         "phones": list(phones or []),
     }
 
@@ -78,35 +69,31 @@ def build_scoring_result(
     phones: list[dict[str, Any]] | None = None,
     metadata: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    result_metadata = {
-        "is_real_gop": False,
-        "is_heuristic": scoring_method == "heuristic_gop",
-        "note": SCORING_NOTE if scoring_method == "heuristic_gop" else "",
-        **(metadata or {}),
-    }
+    del scoring_status, scoring_method, utterance_segmental_score, words, phones
     return {
-        "scoring_status": scoring_status,
-        "scoring_method": scoring_method,
-        "utterance_segmental_score": clamp_score(utterance_segmental_score),
-        "words": list(words or []),
-        "phones": list(phones or []),
-        "metadata": result_metadata,
+        "scoring_status": "unavailable",
+        "scoring_method": "unavailable",
+        "utterance_segmental_score": None,
+        "words": [],
+        "phones": [],
+        "metadata": {
+            "is_real_gop": False,
+            "is_heuristic": False,
+            "diagnostic_only": True,
+            "note": SCORING_NOTE,
+            **(metadata or {}),
+        },
     }
 
 
-def build_failed_scoring_result(scoring_method: str = "none", error: str | None = None) -> dict[str, Any]:
-    metadata = {
-        "is_real_gop": False,
-        "is_heuristic": False,
-        "note": "No pronunciation segmental score was produced.",
-    }
+def has_public_pronunciation_score(scoring_result: dict[str, Any]) -> bool:
+    del scoring_result
+    return False
+
+
+def build_failed_scoring_result(scoring_method: str = "unavailable", error: str | None = None) -> dict[str, Any]:
+    del scoring_method
+    metadata: dict[str, Any] = {"is_real_gop": False, "is_heuristic": False, "note": SCORING_NOTE}
     if error:
         metadata["error"] = error
-    return build_scoring_result(
-        scoring_status="failed",
-        scoring_method=scoring_method,
-        utterance_segmental_score=None,
-        words=[],
-        phones=[],
-        metadata=metadata,
-    )
+    return build_scoring_result(scoring_status="unavailable", scoring_method="unavailable", metadata=metadata)

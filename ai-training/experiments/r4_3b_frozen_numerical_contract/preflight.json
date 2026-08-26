@@ -1,0 +1,24 @@
+{
+  "experiment": "R4-3B0 Freeze Complete Numerical DP Contract",
+  "timestamp": "2026-08-14T14:38:23.6462305+07:00",
+  "git_branch": "research/phoenix-correctness",
+  "git_commit": "4758c0dcf5ab1681af1fcf74e068d609030d11a8",
+  "source_verification": {
+    "r3_checkpoint": "PASS",
+    "v4_dataset": "PASS",
+    "r4_3a_preregistration": "PASS",
+    "oracle_alignment": "PASS",
+    "word_reconstruction": "PASS",
+    "matched_control": "PASS"
+  },
+  "train_metadata_used_for_operation_counts": true,
+  "train_audio_read": false,
+  "validation_metadata_or_labels_used_for_numerical_design": false,
+  "validation_audio_inference": false,
+  "validation_sequence_scoring": false,
+  "r4_test_paths_resolved": false,
+  "r4_test_audio_accessed": false,
+  "r4_test_inference": false,
+  "training_performed": false,
+  "r3_checkpoint_modified": false
+}

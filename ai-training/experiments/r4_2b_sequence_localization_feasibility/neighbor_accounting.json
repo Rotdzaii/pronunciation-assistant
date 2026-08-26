@@ -1,0 +1,90 @@
+{
+  "train": {
+    "correct": {
+      "candidates": 51400,
+      "retained": 42307,
+      "excluded": 9093,
+      "exclusion_reasons_nonexclusive": {
+        "left_addition_neighbor": 274,
+        "left_non_speech_neighbor": 3807,
+        "left_unresolved_neighbor": 293,
+        "left_utterance_edge": 401,
+        "right_addition_neighbor": 297,
+        "right_non_speech_neighbor": 3826,
+        "right_unresolved_neighbor": 318
+      }
+    },
+    "substitution": {
+      "candidates": 6159,
+      "retained": 4490,
+      "excluded": 1669,
+      "exclusion_reasons_nonexclusive": {
+        "left_addition_neighbor": 49,
+        "left_non_speech_neighbor": 646,
+        "left_unresolved_neighbor": 48,
+        "left_utterance_edge": 61,
+        "right_addition_neighbor": 57,
+        "right_non_speech_neighbor": 782,
+        "right_unresolved_neighbor": 43
+      }
+    },
+    "deletion": {
+      "candidates": 1612,
+      "retained": 1266,
+      "excluded": 346,
+      "exclusion_reasons_nonexclusive": {
+        "left_addition_neighbor": 2,
+        "left_non_speech_neighbor": 26,
+        "left_unresolved_neighbor": 17,
+        "left_utterance_edge": 2,
+        "right_addition_neighbor": 11,
+        "right_non_speech_neighbor": 282,
+        "right_unresolved_neighbor": 10
+      }
+    }
+  },
+  "validation": {
+    "correct": {
+      "candidates": 25303,
+      "retained": 19877,
+      "excluded": 5426,
+      "exclusion_reasons_nonexclusive": {
+        "left_addition_neighbor": 177,
+        "left_non_speech_neighbor": 2053,
+        "left_unresolved_neighbor": 460,
+        "left_utterance_edge": 200,
+        "right_addition_neighbor": 198,
+        "right_non_speech_neighbor": 2000,
+        "right_unresolved_neighbor": 484
+      }
+    },
+    "substitution": {
+      "candidates": 2909,
+      "retained": 2111,
+      "excluded": 798,
+      "exclusion_reasons_nonexclusive": {
+        "left_addition_neighbor": 38,
+        "left_non_speech_neighbor": 298,
+        "left_unresolved_neighbor": 43,
+        "left_utterance_edge": 8,
+        "right_addition_neighbor": 52,
+        "right_non_speech_neighbor": 345,
+        "right_unresolved_neighbor": 36
+      }
+    },
+    "deletion": {
+      "candidates": 979,
+      "retained": 764,
+      "excluded": 215,
+      "exclusion_reasons_nonexclusive": {
+        "left_addition_neighbor": 2,
+        "left_non_speech_neighbor": 10,
+        "left_unresolved_neighbor": 14,
+        "left_utterance_edge": 3,
+        "right_addition_neighbor": 8,
+        "right_non_speech_neighbor": 172,
+        "right_unresolved_neighbor": 11
+      }
+    }
+  }
+}

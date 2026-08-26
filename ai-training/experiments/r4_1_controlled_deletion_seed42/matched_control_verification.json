@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "rows": 1564,
+  "deletion": 782,
+  "non_deletion": 782,
+  "pairs": 782,
+  "strata": 302,
+  "speakers": [
+    "ABA",
+    "HKK",
+    "HQTV",
+    "LXC",
+    "MBMPS",
+    "SVBI"
+  ],
+  "matching": "same speaker + canonical expected phone + half-open 10 ms annotation-duration bin",
+  "rebuilt_or_resampled": false
+}

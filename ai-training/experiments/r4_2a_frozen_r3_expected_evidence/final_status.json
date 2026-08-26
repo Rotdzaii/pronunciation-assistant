@@ -1,0 +1,56 @@
+{
+  "status": "R4_2A_EXPECTED_EVIDENCE_MODERATE",
+  "primary_signal_gate": "EXPECTED_EVIDENCE_SIGNAL_MODERATE",
+  "deletion_specific_interpretation": "EXPECTED_PHONE_MISMATCH_ONLY",
+  "strict_matched_margin_roc_auc": 0.6615488517212733,
+  "strict_matched_margin_pr_auc": 0.6428171449376126,
+  "deletion_vs_substitution_roc_auc": 0.5938212254526213,
+  "train_threshold": -2.4281023740768433,
+  "full_validation_metrics": {
+    "rows": 29191,
+    "non_deletion_support": 28212,
+    "deletion_support": 979,
+    "accuracy": 0.8822582302764551,
+    "balanced_accuracy": 0.6649769395212406,
+    "macro_f1": 0.5669967129079777,
+    "deletion_precision": 0.1280266343825666,
+    "deletion_recall": 0.432073544433095,
+    "deletion_f1": 0.19752509922951203,
+    "confusion_matrix": [
+      [
+        25331,
+        2881
+      ],
+      [
+        556,
+        423
+      ]
+    ]
+  },
+  "strict_matched_metrics": {
+    "rows": 1564,
+    "non_deletion_support": 782,
+    "deletion_support": 782,
+    "accuracy": 0.5914322250639387,
+    "balanced_accuracy": 0.5914322250639386,
+    "macro_f1": 0.5727556006048307,
+    "deletion_precision": 0.6571428571428571,
+    "deletion_recall": 0.38235294117647056,
+    "deletion_f1": 0.48342764753435735,
+    "confusion_matrix": [
+      [
+        626,
+        156
+      ],
+      [
+        483,
+        299
+      ]
+    ]
+  },
+  "inference_seconds_including_feature_materialization": 25.59226039999976,
+  "training_performed": false,
+  "r4_test_audio_paths_resolved": false,
+  "r4_test_audio_accessed": false,
+  "r4_test_inference": false
+}

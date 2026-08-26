@@ -1,0 +1,119 @@
+{
+  "manual_words_total": 25490,
+  "evaluated_words": 25474,
+  "exactly_one_predicted_expected_missing": 50,
+  "multiple_predicted_expected_missing": 11,
+  "ground_truth_words_with_one_deletion": 2112,
+  "ground_truth_words_with_multiple_deletions": 225,
+  "predicted_missing_with_insertion_and_or_substitution": 0,
+  "ambiguous_sequence_mapping": 19,
+  "position_quality": {
+    "single_phone": {
+      "manual_deletions": 11,
+      "exact_missing": 0,
+      "identification_rate": 0.0,
+      "anchors": 0,
+      "anchor_coverage": 0.0,
+      "timing_error": {
+        "count": null,
+        "mean": null,
+        "median": null,
+        "p50": null,
+        "p75": null,
+        "p90": null,
+        "p95": null,
+        "max": null
+      }
+    },
+    "initial": {
+      "manual_deletions": 149,
+      "exact_missing": 4,
+      "identification_rate": 0.026845637583892617,
+      "anchors": 0,
+      "anchor_coverage": 0.0,
+      "timing_error": {
+        "count": null,
+        "mean": null,
+        "median": null,
+        "p50": null,
+        "p75": null,
+        "p90": null,
+        "p95": null,
+        "max": null
+      }
+    },
+    "final": {
+      "manual_deletions": 1583,
+      "exact_missing": 6,
+      "identification_rate": 0.003790271636133923,
+      "anchors": 0,
+      "anchor_coverage": 0.0,
+      "timing_error": {
+        "count": null,
+        "mean": null,
+        "median": null,
+        "p50": null,
+        "p75": null,
+        "p90": null,
+        "p95": null,
+        "max": null
+      }
+    },
+    "medial": {
+      "manual_deletions": 848,
+      "exact_missing": 7,
+      "identification_rate": 0.008254716981132075,
+      "anchors": 7,
+      "anchor_coverage": 0.008254716981132075,
+      "timing_error": {
+        "count": 7,
+        "mean": 0.026635071428571414,
+        "median": 0.012026999999999788,
+        "p50": 0.012026999999999788,
+        "p75": 0.021656249999999932,
+        "p90": 0.05634510000000003,
+        "p95": 0.08007029999999996,
+        "max": 0.10379550000000001,
+        "within_ms": {
+          "25": {
+            "count": 6,
+            "rate": 0.8571428571428571
+          },
+          "50": {
+            "count": 6,
+            "rate": 0.8571428571428571
+          },
+          "75": {
+            "count": 6,
+            "rate": 0.8571428571428571
+          },
+          "100": {
+            "count": 6,
+            "rate": 0.8571428571428571
+          },
+          "150": {
+            "count": 7,
+            "rate": 1.0
+          }
+        }
+      }
+    },
+    "unmapped_position": {
+      "manual_deletions": 0,
+      "exact_missing": 0,
+      "identification_rate": null,
+      "anchors": 0,
+      "anchor_coverage": null,
+      "timing_error": {
+        "count": null,
+        "mean": null,
+        "median": null,
+        "p50": null,
+        "p75": null,
+        "p90": null,
+        "p95": null,
+        "max": null
+      }
+    }
+  }
+}

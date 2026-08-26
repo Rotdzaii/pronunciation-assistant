@@ -1,0 +1,28 @@
+{
+  "threshold": -2.4281023740768433,
+  "train_metrics": {
+    "rows": 59171,
+    "non_deletion_support": 57559,
+    "deletion_support": 1612,
+    "accuracy": 0.917155363269169,
+    "balanced_accuracy": 0.6918075958913579,
+    "macro_f1": 0.5929766368200704,
+    "deletion_precision": 0.15382996632996632,
+    "deletion_recall": 0.45347394540942926,
+    "deletion_f1": 0.22972972972972971,
+    "confusion_matrix": [
+      [
+        53538,
+        4021
+      ],
+      [
+        881,
+        731
+      ]
+    ]
+  },
+  "candidate_thresholds": 59159,
+  "feasible_thresholds": 54443,
+  "rule": "expected_margin <= threshold => deletion",
+  "selection": "TRAIN only: recall >=0.45; max Macro-F1; deletion F1; precision; lower threshold"
+}

@@ -1,0 +1,15 @@
+{
+  "seed": 42,
+  "sampling": "numpy default_rng(42), sorted strata and source indexes, without replacement",
+  "matching": "same speaker + expected canonical phone + floor(duration/0.010 + 1e-9)",
+  "pairs": 1253,
+  "rows": 2506,
+  "deletion_rows": 1253,
+  "non_deletion_rows": 1253,
+  "phones": 31,
+  "speakers": 12,
+  "deletion_coverage": 0.8115284974093264,
+  "duration_used_by_scorer": false,
+  "resampled_per_lambda": false,
+  "sha256": "EBE48A51EC4A5E6B93339536E673B85EB25665169635FBB6B3A49C0B3A1FC5CB"
+}

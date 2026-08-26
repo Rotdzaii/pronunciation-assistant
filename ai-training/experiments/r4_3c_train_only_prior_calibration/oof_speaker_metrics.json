@@ -1,0 +1,2662 @@
+{
+  "0.10": {
+    "BWC": {
+      "rows": 4711,
+      "non_deletion_support": 4512,
+      "deletion_support": 199,
+      "accuracy": 0.5773721078327319,
+      "balanced_accuracy": 0.49115646940375635,
+      "macro_f1": 0.3998851671726805,
+      "deletion_precision": 0.04051282051282051,
+      "deletion_recall": 0.3969849246231156,
+      "deletion_f1": 0.07352256863657515,
+      "confusion_matrix": [
+        [
+          2641,
+          1871
+        ],
+        [
+          120,
+          79
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.3862928348909657
+    },
+    "EBVS": {
+      "rows": 4491,
+      "non_deletion_support": 4307,
+      "deletion_support": 184,
+      "accuracy": 0.5791583166332666,
+      "balanced_accuracy": 0.5074531097000838,
+      "macro_f1": 0.40228924615121137,
+      "deletion_precision": 0.04238197424892704,
+      "deletion_recall": 0.42934782608695654,
+      "deletion_f1": 0.0771484375,
+      "confusion_matrix": [
+        [
+          2522,
+          1785
+        ],
+        [
+          105,
+          79
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.41926729986431477
+    },
+    "HJK": {
+      "rows": 4889,
+      "non_deletion_support": 4885,
+      "deletion_support": 4,
+      "accuracy": 0.6029862957660053,
+      "balanced_accuracy": 0.5515353121801433,
+      "macro_f1": 0.3771293883205225,
+      "deletion_precision": 0.0010303967027305513,
+      "deletion_recall": 0.5,
+      "deletion_f1": 0.0020565552699228795,
+      "confusion_matrix": [
+        [
+          2946,
+          1939
+        ],
+        [
+          2,
+          2
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.32919254658385094
+    },
+    "NCC": {
+      "rows": 4826,
+      "non_deletion_support": 4771,
+      "deletion_support": 55,
+      "accuracy": 0.6241193535018649,
+      "balanced_accuracy": 0.49537928012042454,
+      "macro_f1": 0.39447561167593936,
+      "deletion_precision": 0.011117287381878822,
+      "deletion_recall": 0.36363636363636365,
+      "deletion_f1": 0.02157497303128371,
+      "confusion_matrix": [
+        [
+          2992,
+          1779
+        ],
+        [
+          35,
+          20
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.34790874524714827
+    },
+    "NJS": {
+      "rows": 4793,
+      "non_deletion_support": 4716,
+      "deletion_support": 77,
+      "accuracy": 0.6459419987481744,
+      "balanced_accuracy": 0.462381448068471,
+      "macro_f1": 0.40394540996207445,
+      "deletion_precision": 0.01263537906137184,
+      "deletion_recall": 0.2727272727272727,
+      "deletion_f1": 0.024151811385853938,
+      "confusion_matrix": [
+        [
+          3075,
+          1641
+        ],
+        [
+          56,
+          21
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.3057692307692308
+    },
+    "PNV": {
+      "rows": 4830,
+      "non_deletion_support": 4594,
+      "deletion_support": 236,
+      "accuracy": 0.6178053830227743,
+      "balanced_accuracy": 0.4614382798491769,
+      "macro_f1": 0.4140951817201387,
+      "deletion_precision": 0.038946162657502864,
+      "deletion_recall": 0.288135593220339,
+      "deletion_f1": 0.0686175580221998,
+      "confusion_matrix": [
+        [
+          2916,
+          1678
+        ],
+        [
+          168,
+          68
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.37649063032367974
+    },
+    "RRBI": {
+      "rows": 4735,
+      "non_deletion_support": 4671,
+      "deletion_support": 64,
+      "accuracy": 0.5503695881731785,
+      "balanced_accuracy": 0.47159166934275315,
+      "macro_f1": 0.3654712326468367,
+      "deletion_precision": 0.01182033096926714,
+      "deletion_recall": 0.390625,
+      "deletion_f1": 0.022946305644791186,
+      "confusion_matrix": [
+        [
+          2581,
+          2090
+        ],
+        [
+          39,
+          25
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.4779582366589327
+    },
+    "TLV": {
+      "rows": 4748,
+      "non_deletion_support": 4332,
+      "deletion_support": 416,
+      "accuracy": 0.5935130581297389,
+      "balanced_accuracy": 0.5099594253853257,
+      "macro_f1": 0.4413443378109641,
+      "deletion_precision": 0.09169363538295577,
+      "deletion_recall": 0.40865384615384615,
+      "deletion_f1": 0.1497797356828194,
+      "confusion_matrix": [
+        [
+          2648,
+          1684
+        ],
+        [
+          246,
+          170
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.35269709543568467
+    },
+    "TNI": {
+      "rows": 4615,
+      "non_deletion_support": 4551,
+      "deletion_support": 64,
+      "accuracy": 0.5635969664138678,
+      "balanced_accuracy": 0.4860298560755878,
+      "macro_f1": 0.37202077397852984,
+      "deletion_precision": 0.012987012987012988,
+      "deletion_recall": 0.40625,
+      "deletion_f1": 0.025169409486931266,
+      "confusion_matrix": [
+        [
+          2575,
+          1976
+        ],
+        [
+          38,
+          26
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.473551637279597
+    },
+    "YBAA": {
+      "rows": 4318,
+      "non_deletion_support": 4291,
+      "deletion_support": 27,
+      "accuracy": 0.5734136174154701,
+      "balanced_accuracy": 0.5461387745237664,
+      "macro_f1": 0.3713648456184667,
+      "deletion_precision": 0.007596310363537711,
+      "deletion_recall": 0.5185185185185185,
+      "deletion_f1": 0.014973262032085563,
+      "confusion_matrix": [
+        [
+          2462,
+          1829
+        ],
+        [
+          13,
+          14
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.6020942408376964
+    },
+    "YKWK": {
+      "rows": 4721,
+      "non_deletion_support": 4596,
+      "deletion_support": 125,
+      "accuracy": 0.6081338699428087,
+      "balanced_accuracy": 0.47965883376849433,
+      "macro_f1": 0.3989759982647491,
+      "deletion_precision": 0.023743787962451683,
+      "deletion_recall": 0.344,
+      "deletion_f1": 0.04442148760330578,
+      "confusion_matrix": [
+        [
+          2828,
+          1768
+        ],
+        [
+          82,
+          43
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.4117647058823529
+    },
+    "ZHAA": {
+      "rows": 4627,
+      "non_deletion_support": 4534,
+      "deletion_support": 93,
+      "accuracy": 0.593473092716663,
+      "balanced_accuracy": 0.44500690126214837,
+      "macro_f1": 0.3854523270112513,
+      "deletion_precision": 0.014657980456026058,
+      "deletion_recall": 0.2903225806451613,
+      "deletion_f1": 0.027906976744186046,
+      "confusion_matrix": [
+        [
+          2719,
+          1815
+        ],
+        [
+          66,
+          27
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.36885245901639346
+    }
+  },
+  "0.20": {
+    "BWC": {
+      "rows": 4711,
+      "non_deletion_support": 4512,
+      "deletion_support": 199,
+      "accuracy": 0.6922097219274039,
+      "balanced_accuracy": 0.515081502370006,
+      "macro_f1": 0.4481303349407231,
+      "deletion_precision": 0.046410442349528645,
+      "deletion_recall": 0.32160804020100503,
+      "deletion_f1": 0.08111533586818759,
+      "confusion_matrix": [
+        [
+          3197,
+          1315
+        ],
+        [
+          135,
+          64
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.29906542056074764
+    },
+    "EBVS": {
+      "rows": 4491,
+      "non_deletion_support": 4307,
+      "deletion_support": 184,
+      "accuracy": 0.6867067468269873,
+      "balanced_accuracy": 0.5505181151007965,
+      "macro_f1": 0.45286646402259595,
+      "deletion_precision": 0.05397520058351568,
+      "deletion_recall": 0.40217391304347827,
+      "deletion_f1": 0.09517684887459807,
+      "confusion_matrix": [
+        [
+          3010,
+          1297
+        ],
+        [
+          110,
+          74
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.32700135685210313
+    },
+    "HJK": {
+      "rows": 4889,
+      "non_deletion_support": 4885,
+      "deletion_support": 4,
+      "accuracy": 0.7271425649417058,
+      "balanced_accuracy": 0.6136642784032753,
+      "macro_f1": 0.42246633229195446,
+      "deletion_precision": 0.0014992503748125937,
+      "deletion_recall": 0.5,
+      "deletion_f1": 0.0029895366218236174,
+      "confusion_matrix": [
+        [
+          3553,
+          1332
+        ],
+        [
+          2,
+          2
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.2236024844720497
+    },
+    "NCC": {
+      "rows": 4826,
+      "non_deletion_support": 4771,
+      "deletion_support": 55,
+      "accuracy": 0.7463738085370908,
+      "balanced_accuracy": 0.5032945256378498,
+      "macro_f1": 0.4383249657690553,
+      "deletion_precision": 0.011695906432748537,
+      "deletion_recall": 0.2545454545454545,
+      "deletion_f1": 0.022364217252396165,
+      "confusion_matrix": [
+        [
+          3588,
+          1183
+        ],
+        [
+          41,
+          14
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.23574144486692014
+    },
+    "NJS": {
+      "rows": 4793,
+      "non_deletion_support": 4716,
+      "deletion_support": 77,
+      "accuracy": 0.7600667640308784,
+      "balanced_accuracy": 0.46927563530616967,
+      "macro_f1": 0.4426834348483745,
+      "deletion_precision": 0.011828935395814377,
+      "deletion_recall": 0.16883116883116883,
+      "deletion_f1": 0.02210884353741497,
+      "confusion_matrix": [
+        [
+          3630,
+          1086
+        ],
+        [
+          64,
+          13
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.20961538461538462
+    },
+    "PNV": {
+      "rows": 4830,
+      "non_deletion_support": 4594,
+      "deletion_support": 236,
+      "accuracy": 0.7358178053830228,
+      "balanced_accuracy": 0.507397268360352,
+      "macro_f1": 0.4657776193633032,
+      "deletion_precision": 0.05172413793103448,
+      "deletion_recall": 0.2542372881355932,
+      "deletion_f1": 0.08595988538681948,
+      "confusion_matrix": [
+        [
+          3494,
+          1100
+        ],
+        [
+          176,
+          60
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.2453151618398637
+    },
+    "RRBI": {
+      "rows": 4735,
+      "non_deletion_support": 4671,
+      "deletion_support": 64,
+      "accuracy": 0.650052798310454,
+      "balanced_accuracy": 0.4989998126739456,
+      "macro_f1": 0.4062917870500713,
+      "deletion_precision": 0.013439218081857055,
+      "deletion_recall": 0.34375,
+      "deletion_f1": 0.025867136978248086,
+      "confusion_matrix": [
+        [
+          3056,
+          1615
+        ],
+        [
+          42,
+          22
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.4013921113689095
+    },
+    "TLV": {
+      "rows": 4748,
+      "non_deletion_support": 4332,
+      "deletion_support": 416,
+      "accuracy": 0.7112468407750632,
+      "balanced_accuracy": 0.5451436980609419,
+      "macro_f1": 0.49885316465811697,
+      "deletion_precision": 0.11522965350523771,
+      "deletion_recall": 0.34375,
+      "deletion_f1": 0.17260108630054313,
+      "confusion_matrix": [
+        [
+          3234,
+          1098
+        ],
+        [
+          273,
+          143
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.2475795297372061
+    },
+    "TNI": {
+      "rows": 4615,
+      "non_deletion_support": 4551,
+      "deletion_support": 64,
+      "accuracy": 0.6671722643553629,
+      "balanced_accuracy": 0.4769247143484948,
+      "macro_f1": 0.4111631004049051,
+      "deletion_precision": 0.011936339522546418,
+      "deletion_recall": 0.28125,
+      "deletion_f1": 0.022900763358778622,
+      "confusion_matrix": [
+        [
+          3061,
+          1490
+        ],
+        [
+          46,
+          18
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.3954659949622166
+    },
+    "YBAA": {
+      "rows": 4318,
+      "non_deletion_support": 4291,
+      "deletion_support": 27,
+      "accuracy": 0.6815655396016674,
+      "balanced_accuracy": 0.6005549945191054,
+      "macro_f1": 0.4149281540937686,
+      "deletion_precision": 0.010174418604651164,
+      "deletion_recall": 0.5185185185185185,
+      "deletion_f1": 0.019957234497505347,
+      "confusion_matrix": [
+        [
+          2929,
+          1362
+        ],
+        [
+          13,
+          14
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.46596858638743455
+    },
+    "YKWK": {
+      "rows": 4721,
+      "non_deletion_support": 4596,
+      "deletion_support": 125,
+      "accuracy": 0.7316246557932642,
+      "balanced_accuracy": 0.49249782419495214,
+      "macro_f1": 0.44454207392693856,
+      "deletion_precision": 0.024958402662229616,
+      "deletion_recall": 0.24,
+      "deletion_f1": 0.0452147701582517,
+      "confusion_matrix": [
+        [
+          3424,
+          1172
+        ],
+        [
+          95,
+          30
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.29411764705882354
+    },
+    "ZHAA": {
+      "rows": 4627,
+      "non_deletion_support": 4534,
+      "deletion_support": 93,
+      "accuracy": 0.701318348822131,
+      "balanced_accuracy": 0.47897130877337774,
+      "macro_f1": 0.42781101707230296,
+      "deletion_precision": 0.017228464419475654,
+      "deletion_recall": 0.24731182795698925,
+      "deletion_f1": 0.03221288515406162,
+      "confusion_matrix": [
+        [
+          3222,
+          1312
+        ],
+        [
+          70,
+          23
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.2923497267759563
+    }
+  },
+  "0.30": {
+    "BWC": {
+      "rows": 4711,
+      "non_deletion_support": 4512,
+      "deletion_support": 199,
+      "accuracy": 0.8076841434939503,
+      "balanced_accuracy": 0.5393389821447664,
+      "macro_f1": 0.4949915235707207,
+      "deletion_precision": 0.06086956521739131,
+      "deletion_recall": 0.24623115577889448,
+      "deletion_f1": 0.09760956175298806,
+      "confusion_matrix": [
+        [
+          3756,
+          756
+        ],
+        [
+          150,
+          49
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.19781931464174454
+    },
+    "EBVS": {
+      "rows": 4491,
+      "non_deletion_support": 4307,
+      "deletion_support": 184,
+      "accuracy": 0.802939211756847,
+      "balanced_accuracy": 0.5903067301965456,
+      "macro_f1": 0.5093411996066863,
+      "deletion_precision": 0.07923169267707082,
+      "deletion_recall": 0.358695652173913,
+      "deletion_f1": 0.12979351032448377,
+      "confusion_matrix": [
+        [
+          3540,
+          767
+        ],
+        [
+          118,
+          66
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.2130257801899593
+    },
+    "HJK": {
+      "rows": 4889,
+      "non_deletion_support": 4885,
+      "deletion_support": 4,
+      "accuracy": 0.8502761300879526,
+      "balanced_accuracy": 0.675281473899693,
+      "macro_f1": 0.4622396208995701,
+      "deletion_precision": 0.00273224043715847,
+      "deletion_recall": 0.5,
+      "deletion_f1": 0.005434782608695652,
+      "confusion_matrix": [
+        [
+          4155,
+          730
+        ],
+        [
+          2,
+          2
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.13664596273291926
+    },
+    "NCC": {
+      "rows": 4826,
+      "non_deletion_support": 4771,
+      "deletion_support": 55,
+      "accuracy": 0.8580605055946954,
+      "balanced_accuracy": 0.532823307482708,
+      "macro_f1": 0.4772691514939244,
+      "deletion_precision": 0.01687116564417178,
+      "deletion_recall": 0.2,
+      "deletion_f1": 0.031117397454031113,
+      "confusion_matrix": [
+        [
+          4130,
+          641
+        ],
+        [
+          44,
+          11
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.15019011406844107
+    },
+    "NJS": {
+      "rows": 4793,
+      "non_deletion_support": 4716,
+      "deletion_support": 77,
+      "accuracy": 0.8637596494888379,
+      "balanced_accuracy": 0.4964186576781997,
+      "macro_f1": 0.4767891487161827,
+      "deletion_precision": 0.015151515151515152,
+      "deletion_recall": 0.11688311688311688,
+      "deletion_f1": 0.026825633383010434,
+      "confusion_matrix": [
+        [
+          4131,
+          585
+        ],
+        [
+          68,
+          9
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.11153846153846154
+    },
+    "PNV": {
+      "rows": 4830,
+      "non_deletion_support": 4594,
+      "deletion_support": 236,
+      "accuracy": 0.8380952380952381,
+      "balanced_accuracy": 0.5410649852792515,
+      "macro_f1": 0.5121461662815047,
+      "deletion_precision": 0.07739938080495357,
+      "deletion_recall": 0.211864406779661,
+      "deletion_f1": 0.11337868480725624,
+      "confusion_matrix": [
+        [
+          3998,
+          596
+        ],
+        [
+          186,
+          50
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.15843270868824533
+    },
+    "RRBI": {
+      "rows": 4735,
+      "non_deletion_support": 4671,
+      "deletion_support": 64,
+      "accuracy": 0.7624076029567054,
+      "balanced_accuracy": 0.4943032808820381,
+      "macro_f1": 0.4445096778236949,
+      "deletion_precision": 0.012855831037649219,
+      "deletion_recall": 0.21875,
+      "deletion_f1": 0.02428447528187337,
+      "confusion_matrix": [
+        [
+          3596,
+          1075
+        ],
+        [
+          50,
+          14
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.2853828306264501
+    },
+    "TLV": {
+      "rows": 4748,
+      "non_deletion_support": 4332,
+      "deletion_support": 416,
+      "accuracy": 0.8108677337826453,
+      "balanced_accuracy": 0.5584503071951132,
+      "macro_f1": 0.5412364922211377,
+      "deletion_precision": 0.15173410404624277,
+      "deletion_recall": 0.25240384615384615,
+      "deletion_f1": 0.18953068592057762,
+      "confusion_matrix": [
+        [
+          3745,
+          587
+        ],
+        [
+          311,
+          105
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.1590594744121715
+    },
+    "TNI": {
+      "rows": 4615,
+      "non_deletion_support": 4551,
+      "deletion_support": 64,
+      "accuracy": 0.8023835319609968,
+      "balanced_accuracy": 0.5223731734783563,
+      "macro_f1": 0.4609042618596758,
+      "deletion_precision": 0.017084282460136675,
+      "deletion_recall": 0.234375,
+      "deletion_f1": 0.03184713375796179,
+      "confusion_matrix": [
+        [
+          3688,
+          863
+        ],
+        [
+          49,
+          15
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.2216624685138539
+    },
+    "YBAA": {
+      "rows": 4318,
+      "non_deletion_support": 4291,
+      "deletion_support": 27,
+      "accuracy": 0.8003705419175544,
+      "balanced_accuracy": 0.6419292748819665,
+      "macro_f1": 0.4590123809922467,
+      "deletion_precision": 0.015098722415795587,
+      "deletion_recall": 0.48148148148148145,
+      "deletion_f1": 0.029279279279279282,
+      "confusion_matrix": [
+        [
+          3443,
+          848
+        ],
+        [
+          14,
+          13
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.3089005235602094
+    },
+    "YKWK": {
+      "rows": 4721,
+      "non_deletion_support": 4596,
+      "deletion_support": 125,
+      "accuracy": 0.8468544799830544,
+      "balanced_accuracy": 0.5088764142732811,
+      "macro_f1": 0.4833244805934267,
+      "deletion_precision": 0.029874213836477988,
+      "deletion_recall": 0.152,
+      "deletion_f1": 0.049934296977660976,
+      "confusion_matrix": [
+        [
+          3979,
+          617
+        ],
+        [
+          106,
+          19
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.16
+    },
+    "ZHAA": {
+      "rows": 4627,
+      "non_deletion_support": 4534,
+      "deletion_support": 93,
+      "accuracy": 0.8113248325048628,
+      "balanced_accuracy": 0.5140384952876949,
+      "macro_f1": 0.46853689237498775,
+      "deletion_precision": 0.023227383863080684,
+      "deletion_recall": 0.20430107526881722,
+      "deletion_f1": 0.04171240395170143,
+      "confusion_matrix": [
+        [
+          3735,
+          799
+        ],
+        [
+          74,
+          19
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.19672131147540983
+    }
+  },
+  "0.40": {
+    "BWC": {
+      "rows": 4711,
+      "non_deletion_support": 4512,
+      "deletion_support": 199,
+      "accuracy": 0.8911059223094885,
+      "balanced_accuracy": 0.546863305891158,
+      "macro_f1": 0.5295072383187313,
+      "deletion_precision": 0.08900523560209424,
+      "deletion_recall": 0.1708542713567839,
+      "deletion_f1": 0.11703958691910497,
+      "confusion_matrix": [
+        [
+          4164,
+          348
+        ],
+        [
+          165,
+          34
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.09813084112149532
+    },
+    "EBVS": {
+      "rows": 4491,
+      "non_deletion_support": 4307,
+      "deletion_support": 184,
+      "accuracy": 0.8830995323981295,
+      "balanced_accuracy": 0.5852757391910035,
+      "macro_f1": 0.5458989199336464,
+      "deletion_precision": 0.10983981693363844,
+      "deletion_recall": 0.2608695652173913,
+      "deletion_f1": 0.15458937198067632,
+      "confusion_matrix": [
+        [
+          3918,
+          389
+        ],
+        [
+          136,
+          48
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.09633649932157395
+    },
+    "HJK": {
+      "rows": 4889,
+      "non_deletion_support": 4885,
+      "deletion_support": 4,
+      "accuracy": 0.9200245448967069,
+      "balanced_accuracy": 0.7101842374616172,
+      "macro_f1": 0.48422773747836445,
+      "deletion_precision": 0.005115089514066497,
+      "deletion_recall": 0.5,
+      "deletion_f1": 0.010126582278481015,
+      "confusion_matrix": [
+        [
+          4496,
+          389
+        ],
+        [
+          2,
+          2
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.07453416149068323
+    },
+    "NCC": {
+      "rows": 4826,
+      "non_deletion_support": 4771,
+      "deletion_support": 55,
+      "accuracy": 0.9222958972233734,
+      "balanced_accuracy": 0.5653112555019912,
+      "macro_f1": 0.5074484892773597,
+      "deletion_precision": 0.03216374269005848,
+      "deletion_recall": 0.2,
+      "deletion_f1": 0.055415617128463476,
+      "confusion_matrix": [
+        [
+          4440,
+          331
+        ],
+        [
+          44,
+          11
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.0779467680608365
+    },
+    "NJS": {
+      "rows": 4793,
+      "non_deletion_support": 4716,
+      "deletion_support": 77,
+      "accuracy": 0.9219695389109117,
+      "balanced_accuracy": 0.5132238414681163,
+      "macro_f1": 0.49771073048152553,
+      "deletion_precision": 0.022508038585209004,
+      "deletion_recall": 0.09090909090909091,
+      "deletion_f1": 0.03608247422680413,
+      "confusion_matrix": [
+        [
+          4412,
+          304
+        ],
+        [
+          70,
+          7
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.06346153846153846
+    },
+    "PNV": {
+      "rows": 4830,
+      "non_deletion_support": 4594,
+      "deletion_support": 236,
+      "accuracy": 0.90351966873706,
+      "balanced_accuracy": 0.5352615423212296,
+      "macro_f1": 0.5315251336043579,
+      "deletion_precision": 0.10344827586206896,
+      "deletion_recall": 0.1271186440677966,
+      "deletion_f1": 0.11406844106463879,
+      "confusion_matrix": [
+        [
+          4334,
+          260
+        ],
+        [
+          206,
+          30
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.08517887563884156
+    },
+    "RRBI": {
+      "rows": 4735,
+      "non_deletion_support": 4671,
+      "deletion_support": 64,
+      "accuracy": 0.8593453009503695,
+      "balanced_accuracy": 0.5126144026974953,
+      "macro_f1": 0.4766674234096449,
+      "deletion_precision": 0.01607717041800643,
+      "deletion_recall": 0.15625,
+      "deletion_f1": 0.029154518950437316,
+      "confusion_matrix": [
+        [
+          4059,
+          612
+        ],
+        [
+          54,
+          10
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.19489559164733178
+    },
+    "TLV": {
+      "rows": 4748,
+      "non_deletion_support": 4332,
+      "deletion_support": 416,
+      "accuracy": 0.8643639427127211,
+      "balanced_accuracy": 0.5464799080190355,
+      "macro_f1": 0.5491831750755315,
+      "deletion_precision": 0.1850828729281768,
+      "deletion_recall": 0.16105769230769232,
+      "deletion_f1": 0.17223650385604114,
+      "confusion_matrix": [
+        [
+          4037,
+          295
+        ],
+        [
+          349,
+          67
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.09266943291839558
+    },
+    "TNI": {
+      "rows": 4615,
+      "non_deletion_support": 4551,
+      "deletion_support": 64,
+      "accuracy": 0.8823401950162514,
+      "balanced_accuracy": 0.5398058119094704,
+      "macro_f1": 0.48982383877916613,
+      "deletion_precision": 0.02385685884691849,
+      "deletion_recall": 0.1875,
+      "deletion_f1": 0.042328042328042326,
+      "confusion_matrix": [
+        [
+          4060,
+          491
+        ],
+        [
+          52,
+          12
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.1561712846347607
+    },
+    "YBAA": {
+      "rows": 4318,
+      "non_deletion_support": 4291,
+      "deletion_support": 27,
+      "accuracy": 0.8932376100046318,
+      "balanced_accuracy": 0.5966450020283625,
+      "macro_f1": 0.48852047731627407,
+      "deletion_precision": 0.017777777777777778,
+      "deletion_recall": 0.2962962962962963,
+      "deletion_f1": 0.033542976939203356,
+      "confusion_matrix": [
+        [
+          3849,
+          442
+        ],
+        [
+          19,
+          8
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.18848167539267016
+    },
+    "YKWK": {
+      "rows": 4721,
+      "non_deletion_support": 4596,
+      "deletion_support": 125,
+      "accuracy": 0.9112476170302902,
+      "balanced_accuracy": 0.5224926022628372,
+      "macro_f1": 0.5080291934495053,
+      "deletion_precision": 0.043478260869565216,
+      "deletion_recall": 0.112,
+      "deletion_f1": 0.06263982102908276,
+      "confusion_matrix": [
+        [
+          4288,
+          308
+        ],
+        [
+          111,
+          14
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.07764705882352942
+    },
+    "ZHAA": {
+      "rows": 4627,
+      "non_deletion_support": 4534,
+      "deletion_support": 93,
+      "accuracy": 0.8928031121677112,
+      "balanced_accuracy": 0.5398150651469661,
+      "macro_f1": 0.5018822189347057,
+      "deletion_precision": 0.0367816091954023,
+      "deletion_recall": 0.17204301075268819,
+      "deletion_f1": 0.06060606060606061,
+      "confusion_matrix": [
+        [
+          4115,
+          419
+        ],
+        [
+          77,
+          16
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.1092896174863388
+    }
+  },
+  "0.50": {
+    "BWC": {
+      "rows": 4711,
+      "non_deletion_support": 4512,
+      "deletion_support": 199,
+      "accuracy": 0.9297389089365315,
+      "balanced_accuracy": 0.5358090318614348,
+      "macro_f1": 0.5380109543601903,
+      "deletion_precision": 0.1206896551724138,
+      "deletion_recall": 0.10552763819095477,
+      "deletion_f1": 0.1126005361930295,
+      "confusion_matrix": [
+        [
+          4359,
+          153
+        ],
+        [
+          178,
+          21
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.04672897196261682
+    },
+    "EBVS": {
+      "rows": 4491,
+      "non_deletion_support": 4307,
+      "deletion_support": 184,
+      "accuracy": 0.9236250278334447,
+      "balanced_accuracy": 0.5803911226416046,
+      "macro_f1": 0.5706640965445775,
+      "deletion_precision": 0.16170212765957448,
+      "deletion_recall": 0.20652173913043478,
+      "deletion_f1": 0.18138424821002386,
+      "confusion_matrix": [
+        [
+          4110,
+          197
+        ],
+        [
+          146,
+          38
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.048846675712347354
+    },
+    "HJK": {
+      "rows": 4889,
+      "non_deletion_support": 4885,
+      "deletion_support": 4,
+      "accuracy": 0.9552055635099203,
+      "balanced_accuracy": 0.7277891504605937,
+      "macro_f1": 0.49750864126264516,
+      "deletion_precision": 0.0091324200913242,
+      "deletion_recall": 0.5,
+      "deletion_f1": 0.017937219730941704,
+      "confusion_matrix": [
+        [
+          4668,
+          217
+        ],
+        [
+          2,
+          2
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.031055900621118012
+    },
+    "NCC": {
+      "rows": 4826,
+      "non_deletion_support": 4771,
+      "deletion_support": 55,
+      "accuracy": 0.9575217571487774,
+      "balanced_accuracy": 0.5471827899620815,
+      "macro_f1": 0.5210973619765837,
+      "deletion_precision": 0.042682926829268296,
+      "deletion_recall": 0.12727272727272726,
+      "deletion_f1": 0.0639269406392694,
+      "confusion_matrix": [
+        [
+          4614,
+          157
+        ],
+        [
+          48,
+          7
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.03612167300380228
+    },
+    "NJS": {
+      "rows": 4793,
+      "non_deletion_support": 4716,
+      "deletion_support": 77,
+      "accuracy": 0.9528479031921552,
+      "balanced_accuracy": 0.516140136369144,
+      "macro_f1": 0.50910087918064,
+      "deletion_precision": 0.031446540880503145,
+      "deletion_recall": 0.06493506493506493,
+      "deletion_f1": 0.0423728813559322,
+      "confusion_matrix": [
+        [
+          4562,
+          154
+        ],
+        [
+          72,
+          5
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.028846153846153848
+    },
+    "PNV": {
+      "rows": 4830,
+      "non_deletion_support": 4594,
+      "deletion_support": 236,
+      "accuracy": 0.9325051759834369,
+      "balanced_accuracy": 0.5283909373316706,
+      "macro_f1": 0.5346633787898849,
+      "deletion_precision": 0.1484375,
+      "deletion_recall": 0.08050847457627118,
+      "deletion_f1": 0.10439560439560439,
+      "confusion_matrix": [
+        [
+          4485,
+          109
+        ],
+        [
+          217,
+          19
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.039182282793867124
+    },
+    "RRBI": {
+      "rows": 4735,
+      "non_deletion_support": 4671,
+      "deletion_support": 64,
+      "accuracy": 0.9212249208025343,
+      "balanced_accuracy": 0.4977453971312353,
+      "macro_f1": 0.4899793786091404,
+      "deletion_precision": 0.012618296529968454,
+      "deletion_recall": 0.0625,
+      "deletion_f1": 0.02099737532808399,
+      "confusion_matrix": [
+        [
+          4358,
+          313
+        ],
+        [
+          60,
+          4
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.0951276102088167
+    },
+    "TLV": {
+      "rows": 4748,
+      "non_deletion_support": 4332,
+      "deletion_support": 416,
+      "accuracy": 0.8921651221566975,
+      "balanced_accuracy": 0.5367257972867391,
+      "macro_f1": 0.5445563549160671,
+      "deletion_precision": 0.2391304347826087,
+      "deletion_recall": 0.10576923076923077,
+      "deletion_f1": 0.14666666666666667,
+      "confusion_matrix": [
+        [
+          4192,
+          140
+        ],
+        [
+          372,
+          44
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.056708160442600276
+    },
+    "TNI": {
+      "rows": 4615,
+      "non_deletion_support": 4551,
+      "deletion_support": 64,
+      "accuracy": 0.9352112676056338,
+      "balanced_accuracy": 0.5512078389364975,
+      "macro_f1": 0.514570945212655,
+      "deletion_precision": 0.0392156862745098,
+      "deletion_recall": 0.15625,
+      "deletion_f1": 0.06269592476489028,
+      "confusion_matrix": [
+        [
+          4306,
+          245
+        ],
+        [
+          54,
+          10
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.07808564231738035
+    },
+    "YBAA": {
+      "rows": 4318,
+      "non_deletion_support": 4291,
+      "deletion_support": 27,
+      "accuracy": 0.9411764705882353,
+      "balanced_accuracy": 0.5655592670274563,
+      "macro_f1": 0.503769780943694,
+      "deletion_precision": 0.02109704641350211,
+      "deletion_recall": 0.18518518518518517,
+      "deletion_f1": 0.03787878787878788,
+      "confusion_matrix": [
+        [
+          4059,
+          232
+        ],
+        [
+          22,
+          5
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.1099476439790576
+    },
+    "YKWK": {
+      "rows": 4721,
+      "non_deletion_support": 4596,
+      "deletion_support": 125,
+      "accuracy": 0.9428087269646261,
+      "balanced_accuracy": 0.5231375108790253,
+      "macro_f1": 0.5197318844948156,
+      "deletion_precision": 0.06060606060606061,
+      "deletion_recall": 0.08,
+      "deletion_f1": 0.0689655172413793,
+      "confusion_matrix": [
+        [
+          4441,
+          155
+        ],
+        [
+          115,
+          10
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.03529411764705882
+    },
+    "ZHAA": {
+      "rows": 4627,
+      "non_deletion_support": 4534,
+      "deletion_support": 93,
+      "accuracy": 0.9353792954398098,
+      "balanced_accuracy": 0.5404755467649445,
+      "macro_f1": 0.5204122559159264,
+      "deletion_precision": 0.05217391304347826,
+      "deletion_recall": 0.12903225806451613,
+      "deletion_f1": 0.07430340557275542,
+      "confusion_matrix": [
+        [
+          4316,
+          218
+        ],
+        [
+          81,
+          12
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.06830601092896176
+    }
+  },
+  "0.60": {
+    "BWC": {
+      "rows": 4711,
+      "non_deletion_support": 4512,
+      "deletion_support": 199,
+      "accuracy": 0.9422627892167268,
+      "balanced_accuracy": 0.5279366691614099,
+      "macro_f1": 0.534756593470431,
+      "deletion_precision": 0.14563106796116504,
+      "deletion_recall": 0.07537688442211055,
+      "deletion_f1": 0.09933774834437085,
+      "confusion_matrix": [
+        [
+          4424,
+          88
+        ],
+        [
+          184,
+          15
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.03115264797507788
+    },
+    "EBVS": {
+      "rows": 4491,
+      "non_deletion_support": 4307,
+      "deletion_support": 184,
+      "accuracy": 0.9389890892896905,
+      "balanced_accuracy": 0.5623883263847529,
+      "macro_f1": 0.5690139957130249,
+      "deletion_precision": 0.1917808219178082,
+      "deletion_recall": 0.15217391304347827,
+      "deletion_f1": 0.16969696969696968,
+      "confusion_matrix": [
+        [
+          4189,
+          118
+        ],
+        [
+          156,
+          28
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.024423337856173677
+    },
+    "HJK": {
+      "rows": 4889,
+      "non_deletion_support": 4885,
+      "deletion_support": 4,
+      "accuracy": 0.9742278584577623,
+      "balanced_accuracy": 0.612410440122825,
+      "macro_f1": 0.5012840025906735,
+      "deletion_precision": 0.008064516129032258,
+      "deletion_recall": 0.25,
+      "deletion_f1": 0.015625,
+      "confusion_matrix": [
+        [
+          4762,
+          123
+        ],
+        [
+          3,
+          1
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.015527950310559006
+    },
+    "NCC": {
+      "rows": 4826,
+      "non_deletion_support": 4771,
+      "deletion_support": 55,
+      "accuracy": 0.9724409448818898,
+      "balanced_accuracy": 0.5367561593719632,
+      "macro_f1": 0.5279716602673801,
+      "deletion_precision": 0.056818181818181816,
+      "deletion_recall": 0.09090909090909091,
+      "deletion_f1": 0.06993006993006994,
+      "confusion_matrix": [
+        [
+          4688,
+          83
+        ],
+        [
+          50,
+          5
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.02091254752851711
+    },
+    "NJS": {
+      "rows": 4793,
+      "non_deletion_support": 4716,
+      "deletion_support": 77,
+      "accuracy": 0.9687043605257667,
+      "balanced_accuracy": 0.5178103279248317,
+      "macro_f1": 0.5173614281187736,
+      "deletion_precision": 0.04938271604938271,
+      "deletion_recall": 0.05194805194805195,
+      "deletion_f1": 0.05063291139240506,
+      "confusion_matrix": [
+        [
+          4639,
+          77
+        ],
+        [
+          73,
+          4
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.015384615384615385
+    },
+    "PNV": {
+      "rows": 4830,
+      "non_deletion_support": 4594,
+      "deletion_support": 236,
+      "accuracy": 0.9436853002070393,
+      "balanced_accuracy": 0.5201995233281436,
+      "macro_f1": 0.5260168327233684,
+      "deletion_precision": 0.2,
+      "deletion_recall": 0.05084745762711865,
+      "deletion_f1": 0.08108108108108107,
+      "confusion_matrix": [
+        [
+          4546,
+          48
+        ],
+        [
+          224,
+          12
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.017035775127768313
+    },
+    "RRBI": {
+      "rows": 4735,
+      "non_deletion_support": 4671,
+      "deletion_support": 64,
+      "accuracy": 0.9499472016895459,
+      "balanced_accuracy": 0.5045978511025476,
+      "macro_f1": 0.4995029348918298,
+      "deletion_precision": 0.01675977653631285,
+      "deletion_recall": 0.046875,
+      "deletion_f1": 0.02469135802469136,
+      "confusion_matrix": [
+        [
+          4495,
+          176
+        ],
+        [
+          61,
+          3
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.06728538283062645
+    },
+    "TLV": {
+      "rows": 4748,
+      "non_deletion_support": 4332,
+      "deletion_support": 416,
+      "accuracy": 0.9035383319292334,
+      "balanced_accuracy": 0.5244879341572555,
+      "macro_f1": 0.5272446154274266,
+      "deletion_precision": 0.28125,
+      "deletion_recall": 0.06490384615384616,
+      "deletion_f1": 0.10546875000000001,
+      "confusion_matrix": [
+        [
+          4263,
+          69
+        ],
+        [
+          389,
+          27
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.0318118948824343
+    },
+    "TNI": {
+      "rows": 4615,
+      "non_deletion_support": 4551,
+      "deletion_support": 64,
+      "accuracy": 0.9575297941495124,
+      "balanced_accuracy": 0.531713497033619,
+      "macro_f1": 0.5179838173354023,
+      "deletion_precision": 0.041666666666666664,
+      "deletion_recall": 0.09375,
+      "deletion_f1": 0.057692307692307696,
+      "confusion_matrix": [
+        [
+          4413,
+          138
+        ],
+        [
+          58,
+          6
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.05289672544080604
+    },
+    "YBAA": {
+      "rows": 4318,
+      "non_deletion_support": 4291,
+      "deletion_support": 27,
+      "accuracy": 0.9615562760537286,
+      "balanced_accuracy": 0.5390092959424118,
+      "macro_f1": 0.507635622279861,
+      "deletion_precision": 0.020689655172413793,
+      "deletion_recall": 0.1111111111111111,
+      "deletion_f1": 0.034883720930232565,
+      "confusion_matrix": [
+        [
+          4149,
+          142
+        ],
+        [
+          24,
+          3
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.08376963350785341
+    },
+    "YKWK": {
+      "rows": 4721,
+      "non_deletion_support": 4596,
+      "deletion_support": 125,
+      "accuracy": 0.9550942596907435,
+      "balanced_accuracy": 0.5294473455178416,
+      "macro_f1": 0.5315942191770564,
+      "deletion_precision": 0.09345794392523364,
+      "deletion_recall": 0.08,
+      "deletion_f1": 0.08620689655172413,
+      "confusion_matrix": [
+        [
+          4499,
+          97
+        ],
+        [
+          115,
+          10
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.02588235294117647
+    },
+    "ZHAA": {
+      "rows": 4627,
+      "non_deletion_support": 4534,
+      "deletion_support": 93,
+      "accuracy": 0.955478711908364,
+      "balanced_accuracy": 0.5401992591222353,
+      "macro_f1": 0.5328388376770794,
+      "deletion_precision": 0.07518796992481203,
+      "deletion_recall": 0.10752688172043011,
+      "deletion_f1": 0.08849557522123892,
+      "confusion_matrix": [
+        [
+          4411,
+          123
+        ],
+        [
+          83,
+          10
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.03278688524590164
+    }
+  },
+  "0.70": {
+    "BWC": {
+      "rows": 4711,
+      "non_deletion_support": 4512,
+      "deletion_support": 199,
+      "accuracy": 0.9484185947781787,
+      "balanced_accuracy": 0.5143380911650451,
+      "macro_f1": 0.5176281814937278,
+      "deletion_precision": 0.13333333333333333,
+      "deletion_recall": 0.04020100502512563,
+      "deletion_f1": 0.06177606177606178,
+      "confusion_matrix": [
+        [
+          4460,
+          52
+        ],
+        [
+          191,
+          8
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.018691588785046728
+    },
+    "EBVS": {
+      "rows": 4491,
+      "non_deletion_support": 4307,
+      "deletion_support": 184,
+      "accuracy": 0.9490091293698508,
+      "balanced_accuracy": 0.5442006692845822,
+      "macro_f1": 0.5580227813340037,
+      "deletion_precision": 0.2289156626506024,
+      "deletion_recall": 0.10326086956521739,
+      "deletion_f1": 0.14232209737827717,
+      "confusion_matrix": [
+        [
+          4243,
+          64
+        ],
+        [
+          165,
+          19
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.010854816824966078
+    },
+    "HJK": {
+      "rows": 4889,
+      "non_deletion_support": 4885,
+      "deletion_support": 4,
+      "accuracy": 0.9834321947228472,
+      "balanced_accuracy": 0.6170163766632548,
+      "macro_f1": 0.5078707817344675,
+      "deletion_precision": 0.012658227848101266,
+      "deletion_recall": 0.25,
+      "deletion_f1": 0.024096385542168672,
+      "confusion_matrix": [
+        [
+          4807,
+          78
+        ],
+        [
+          3,
+          1
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.006211180124223602
+    },
+    "NCC": {
+      "rows": 4826,
+      "non_deletion_support": 4771,
+      "deletion_support": 55,
+      "accuracy": 0.9782428512225445,
+      "balanced_accuracy": 0.5037461176425754,
+      "macro_f1": 0.5038455324752892,
+      "deletion_precision": 0.019230769230769232,
+      "deletion_recall": 0.01818181818181818,
+      "deletion_f1": 0.018691588785046728,
+      "confusion_matrix": [
+        [
+          4720,
+          51
+        ],
+        [
+          54,
+          1
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.011406844106463879
+    },
+    "NJS": {
+      "rows": 4793,
+      "non_deletion_support": 4716,
+      "deletion_support": 77,
+      "accuracy": 0.9745462132276236,
+      "balanced_accuracy": 0.5143914609563465,
+      "macro_f1": 0.5169879334954536,
+      "deletion_precision": 0.058823529411764705,
+      "deletion_recall": 0.03896103896103896,
+      "deletion_f1": 0.04687499999999999,
+      "confusion_matrix": [
+        [
+          4668,
+          48
+        ],
+        [
+          74,
+          3
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.009615384615384616
+    },
+    "PNV": {
+      "rows": 4830,
+      "non_deletion_support": 4594,
+      "deletion_support": 236,
+      "accuracy": 0.946376811594203,
+      "balanced_accuracy": 0.5075457671391572,
+      "macro_f1": 0.5047975618513177,
+      "deletion_precision": 0.15151515151515152,
+      "deletion_recall": 0.0211864406779661,
+      "deletion_f1": 0.03717472118959108,
+      "confusion_matrix": [
+        [
+          4566,
+          28
+        ],
+        [
+          231,
+          5
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.01192504258943782
+    },
+    "RRBI": {
+      "rows": 4735,
+      "non_deletion_support": 4671,
+      "deletion_support": 64,
+      "accuracy": 0.9674762407602957,
+      "balanced_accuracy": 0.5134824582530507,
+      "macro_f1": 0.5104793233082706,
+      "deletion_precision": 0.03125,
+      "deletion_recall": 0.046875,
+      "deletion_f1": 0.0375,
+      "confusion_matrix": [
+        [
+          4578,
+          93
+        ],
+        [
+          61,
+          3
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.03248259860788863
+    },
+    "TLV": {
+      "rows": 4748,
+      "non_deletion_support": 4332,
+      "deletion_support": 416,
+      "accuracy": 0.9090143218197135,
+      "balanced_accuracy": 0.5155373250941118,
+      "macro_f1": 0.5105677896215753,
+      "deletion_precision": 0.3333333333333333,
+      "deletion_recall": 0.038461538461538464,
+      "deletion_f1": 0.06896551724137931,
+      "confusion_matrix": [
+        [
+          4300,
+          32
+        ],
+        [
+          400,
+          16
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.013831258644536652
+    },
+    "TNI": {
+      "rows": 4615,
+      "non_deletion_support": 4551,
+      "deletion_support": 64,
+      "accuracy": 0.9711809317443121,
+      "balanced_accuracy": 0.5001218825532849,
+      "macro_f1": 0.5000956976767862,
+      "deletion_precision": 0.014084507042253521,
+      "deletion_recall": 0.015625,
+      "deletion_f1": 0.014814814814814814,
+      "confusion_matrix": [
+        [
+          4481,
+          70
+        ],
+        [
+          63,
+          1
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.03526448362720403
+    },
+    "YBAA": {
+      "rows": 4318,
+      "non_deletion_support": 4291,
+      "deletion_support": 27,
+      "accuracy": 0.9733672996757758,
+      "balanced_accuracy": 0.5265499710850445,
+      "macro_f1": 0.5100555192136735,
+      "deletion_precision": 0.021739130434782608,
+      "deletion_recall": 0.07407407407407407,
+      "deletion_f1": 0.03361344537815126,
+      "confusion_matrix": [
+        [
+          4201,
+          90
+        ],
+        [
+          25,
+          2
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.07329842931937172
+    },
+    "YKWK": {
+      "rows": 4721,
+      "non_deletion_support": 4596,
+      "deletion_support": 125,
+      "accuracy": 0.9639906799406905,
+      "balanced_accuracy": 0.5262341166231506,
+      "macro_f1": 0.5338275201903327,
+      "deletion_precision": 0.13114754098360656,
+      "deletion_recall": 0.064,
+      "deletion_f1": 0.08602150537634409,
+      "confusion_matrix": [
+        [
+          4543,
+          53
+        ],
+        [
+          117,
+          8
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.011764705882352941
+    },
+    "ZHAA": {
+      "rows": 4627,
+      "non_deletion_support": 4534,
+      "deletion_support": 93,
+      "accuracy": 0.9673654635833153,
+      "balanced_accuracy": 0.5199342127106545,
+      "macro_f1": 0.5227528103318845,
+      "deletion_precision": 0.07352941176470588,
+      "deletion_recall": 0.053763440860215055,
+      "deletion_f1": 0.062111801242236024,
+      "confusion_matrix": [
+        [
+          4471,
+          63
+        ],
+        [
+          88,
+          5
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.02459016393442623
+    }
+  },
+  "0.80": {
+    "BWC": {
+      "rows": 4711,
+      "non_deletion_support": 4512,
+      "deletion_support": 199,
+      "accuracy": 0.9543621311823393,
+      "balanced_accuracy": 0.5150391808332442,
+      "macro_f1": 0.5188740056156264,
+      "deletion_precision": 0.23333333333333334,
+      "deletion_recall": 0.035175879396984924,
+      "deletion_f1": 0.061135371179039305,
+      "confusion_matrix": [
+        [
+          4489,
+          23
+        ],
+        [
+          192,
+          7
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.010903426791277258
+    },
+    "EBVS": {
+      "rows": 4491,
+      "non_deletion_support": 4307,
+      "deletion_support": 184,
+      "accuracy": 0.9523491427299042,
+      "balanced_accuracy": 0.5251316108256529,
+      "macro_f1": 0.5343760053021818,
+      "deletion_precision": 0.21153846153846154,
+      "deletion_recall": 0.059782608695652176,
+      "deletion_f1": 0.09322033898305085,
+      "confusion_matrix": [
+        [
+          4266,
+          41
+        ],
+        [
+          173,
+          11
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.005427408412483039
+    },
+    "HJK": {
+      "rows": 4889,
+      "non_deletion_support": 4885,
+      "deletion_support": 4,
+      "accuracy": 0.9885457148701166,
+      "balanced_accuracy": 0.4946775844421699,
+      "macro_f1": 0.4971199341699239,
+      "deletion_precision": 0.0,
+      "deletion_recall": 0.0,
+      "deletion_f1": 0.0,
+      "confusion_matrix": [
+        [
+          4833,
+          52
+        ],
+        [
+          4,
+          0
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.006211180124223602
+    },
+    "NCC": {
+      "rows": 4826,
+      "non_deletion_support": 4771,
+      "deletion_support": 55,
+      "accuracy": 0.9825942809780357,
+      "balanced_accuracy": 0.505946914121301,
+      "macro_f1": 0.5072373571126422,
+      "deletion_precision": 0.03225806451612903,
+      "deletion_recall": 0.01818181818181818,
+      "deletion_f1": 0.023255813953488372,
+      "confusion_matrix": [
+        [
+          4741,
+          30
+        ],
+        [
+          54,
+          1
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.005703422053231939
+    },
+    "NJS": {
+      "rows": 4793,
+      "non_deletion_support": 4716,
+      "deletion_support": 77,
+      "accuracy": 0.9780930523680367,
+      "balanced_accuracy": 0.5034188669684853,
+      "macro_f1": 0.5038072354728061,
+      "deletion_precision": 0.03333333333333333,
+      "deletion_recall": 0.012987012987012988,
+      "deletion_f1": 0.01869158878504673,
+      "confusion_matrix": [
+        [
+          4687,
+          29
+        ],
+        [
+          76,
+          1
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.0038461538461538464
+    },
+    "PNV": {
+      "rows": 4830,
+      "non_deletion_support": 4594,
+      "deletion_support": 236,
+      "accuracy": 0.9478260869565217,
+      "balanced_accuracy": 0.5022782110785623,
+      "macro_f1": 0.49441394619310935,
+      "deletion_precision": 0.1,
+      "deletion_recall": 0.00847457627118644,
+      "deletion_f1": 0.015625,
+      "confusion_matrix": [
+        [
+          4576,
+          18
+        ],
+        [
+          234,
+          2
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.010221465076660987
+    },
+    "RRBI": {
+      "rows": 4735,
+      "non_deletion_support": 4671,
+      "deletion_support": 64,
+      "accuracy": 0.9736008447729673,
+      "balanced_accuracy": 0.5011758055020339,
+      "macro_f1": 0.5011845155874834,
+      "deletion_precision": 0.015873015873015872,
+      "deletion_recall": 0.015625,
+      "deletion_f1": 0.015748031496062992,
+      "confusion_matrix": [
+        [
+          4609,
+          62
+        ],
+        [
+          63,
+          1
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.025522041763341066
+    },
+    "TLV": {
+      "rows": 4748,
+      "non_deletion_support": 4332,
+      "deletion_support": 416,
+      "accuracy": 0.9090143218197135,
+      "balanced_accuracy": 0.505758798565239,
+      "macro_f1": 0.4918276639496569,
+      "deletion_precision": 0.23333333333333334,
+      "deletion_recall": 0.016826923076923076,
+      "deletion_f1": 0.03139013452914798,
+      "confusion_matrix": [
+        [
+          4309,
+          23
+        ],
+        [
+          409,
+          7
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.008298755186721992
+    },
+    "TNI": {
+      "rows": 4615,
+      "non_deletion_support": 4551,
+      "deletion_support": 64,
+      "accuracy": 0.9768147345612135,
+      "balanced_accuracy": 0.502978397604922,
+      "macro_f1": 0.5033087270126706,
+      "deletion_precision": 0.022222222222222223,
+      "deletion_recall": 0.015625,
+      "deletion_f1": 0.018348623853211007,
+      "confusion_matrix": [
+        [
+          4507,
+          44
+        ],
+        [
+          63,
+          1
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.017632241813602016
+    },
+    "YBAA": {
+      "rows": 4318,
+      "non_deletion_support": 4291,
+      "deletion_support": 27,
+      "accuracy": 0.9800833719314498,
+      "balanced_accuracy": 0.5115271412171901,
+      "macro_f1": 0.5063332198919471,
+      "deletion_precision": 0.01639344262295082,
+      "deletion_recall": 0.037037037037037035,
+      "deletion_f1": 0.022727272727272728,
+      "confusion_matrix": [
+        [
+          4231,
+          60
+        ],
+        [
+          26,
+          1
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.041884816753926704
+    },
+    "YKWK": {
+      "rows": 4721,
+      "non_deletion_support": 4596,
+      "deletion_support": 125,
+      "accuracy": 0.9684388900656641,
+      "balanced_accuracy": 0.5168450826805918,
+      "macro_f1": 0.5234211180646031,
+      "deletion_precision": 0.14705882352941177,
+      "deletion_recall": 0.04,
+      "deletion_f1": 0.06289308176100629,
+      "confusion_matrix": [
+        [
+          4567,
+          29
+        ],
+        [
+          120,
+          5
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.011764705882352941
+    },
+    "ZHAA": {
+      "rows": 4627,
+      "non_deletion_support": 4534,
+      "deletion_support": 93,
+      "accuracy": 0.9736330235573806,
+      "balanced_accuracy": 0.5126001394481836,
+      "macro_f1": 0.5167533010081087,
+      "deletion_precision": 0.08571428571428572,
+      "deletion_recall": 0.03225806451612903,
+      "deletion_f1": 0.046875,
+      "confusion_matrix": [
+        [
+          4502,
+          32
+        ],
+        [
+          90,
+          3
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.00819672131147541
+    }
+  },
+  "0.90": {
+    "BWC": {
+      "rows": 4711,
+      "non_deletion_support": 4512,
+      "deletion_support": 199,
+      "accuracy": 0.9558480152833794,
+      "balanced_accuracy": 0.5062079012081685,
+      "macro_f1": 0.5027241650900882,
+      "deletion_precision": 0.2,
+      "deletion_recall": 0.01507537688442211,
+      "deletion_f1": 0.02803738317757009,
+      "confusion_matrix": [
+        [
+          4500,
+          12
+        ],
+        [
+          196,
+          3
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.00778816199376947
+    },
+    "EBVS": {
+      "rows": 4491,
+      "non_deletion_support": 4307,
+      "deletion_support": 184,
+      "accuracy": 0.9541304831885994,
+      "balanced_accuracy": 0.5104525242022592,
+      "macro_f1": 0.5113982051867063,
+      "deletion_precision": 0.15625,
+      "deletion_recall": 0.02717391304347826,
+      "deletion_f1": 0.046296296296296294,
+      "confusion_matrix": [
+        [
+          4280,
+          27
+        ],
+        [
+          179,
+          5
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.005427408412483039
+    },
+    "HJK": {
+      "rows": 4889,
+      "non_deletion_support": 4885,
+      "deletion_support": 4,
+      "accuracy": 0.9924319901820413,
+      "balanced_accuracy": 0.4966223132036848,
+      "macro_f1": 0.49810081100503034,
+      "deletion_precision": 0.0,
+      "deletion_recall": 0.0,
+      "deletion_f1": 0.0,
+      "confusion_matrix": [
+        [
+          4852,
+          33
+        ],
+        [
+          4,
+          0
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.003105590062111801
+    },
+    "NCC": {
+      "rows": 4826,
+      "non_deletion_support": 4771,
+      "deletion_support": 55,
+      "accuracy": 0.9838375466224617,
+      "balanced_accuracy": 0.5065757131152226,
+      "macro_f1": 0.5084256163811116,
+      "deletion_precision": 0.04,
+      "deletion_recall": 0.01818181818181818,
+      "deletion_f1": 0.024999999999999998,
+      "confusion_matrix": [
+        [
+          4747,
+          24
+        ],
+        [
+          54,
+          1
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.005703422053231939
+    },
+    "NJS": {
+      "rows": 4793,
+      "non_deletion_support": 4716,
+      "deletion_support": 77,
+      "accuracy": 0.9799707907364907,
+      "balanced_accuracy": 0.5043730654417677,
+      "macro_f1": 0.5051450597102247,
+      "deletion_precision": 0.047619047619047616,
+      "deletion_recall": 0.012987012987012988,
+      "deletion_f1": 0.020408163265306124,
+      "confusion_matrix": [
+        [
+          4696,
+          20
+        ],
+        [
+          76,
+          1
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.0038461538461538464
+    },
+    "PNV": {
+      "rows": 4830,
+      "non_deletion_support": 4594,
+      "deletion_support": 236,
+      "accuracy": 0.9488612836438923,
+      "balanced_accuracy": 0.5008125926964427,
+      "macro_f1": 0.49089312301805244,
+      "deletion_precision": 0.07692307692307693,
+      "deletion_recall": 0.00423728813559322,
+      "deletion_f1": 0.008032128514056224,
+      "confusion_matrix": [
+        [
+          4582,
+          12
+        ],
+        [
+          235,
+          1
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.008517887563884156
+    },
+    "RRBI": {
+      "rows": 4735,
+      "non_deletion_support": 4671,
+      "deletion_support": 64,
+      "accuracy": 0.97740232312566,
+      "balanced_accuracy": 0.4953971312352815,
+      "macro_f1": 0.49428601943821426,
+      "deletion_precision": 0.0,
+      "deletion_recall": 0.0,
+      "deletion_f1": 0.0,
+      "confusion_matrix": [
+        [
+          4628,
+          43
+        ],
+        [
+          64,
+          0
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.02088167053364269
+    },
+    "TLV": {
+      "rows": 4748,
+      "non_deletion_support": 4332,
+      "deletion_support": 416,
+      "accuracy": 0.9109098567818029,
+      "balanced_accuracy": 0.5057110767810213,
+      "macro_f1": 0.49045130894435796,
+      "deletion_precision": 0.3157894736842105,
+      "deletion_recall": 0.014423076923076924,
+      "deletion_f1": 0.027586206896551724,
+      "confusion_matrix": [
+        [
+          4319,
+          13
+        ],
+        [
+          410,
+          6
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.008298755186721992
+    },
+    "TNI": {
+      "rows": 4615,
+      "non_deletion_support": 4551,
+      "deletion_support": 64,
+      "accuracy": 0.980931744312026,
+      "balanced_accuracy": 0.497363216875412,
+      "macro_f1": 0.49518704878582365,
+      "deletion_precision": 0.0,
+      "deletion_recall": 0.0,
+      "deletion_f1": 0.0,
+      "confusion_matrix": [
+        [
+          4527,
+          24
+        ],
+        [
+          64,
+          0
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.007556675062972292
+    },
+    "YBAA": {
+      "rows": 4318,
+      "non_deletion_support": 4291,
+      "deletion_support": 27,
+      "accuracy": 0.9870310328855951,
+      "balanced_accuracy": 0.5150228298678543,
+      "macro_f1": 0.5139772151695194,
+      "deletion_precision": 0.03225806451612903,
+      "deletion_recall": 0.037037037037037035,
+      "deletion_f1": 0.034482758620689655,
+      "confusion_matrix": [
+        [
+          4261,
+          30
+        ],
+        [
+          26,
+          1
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.015706806282722512
+    },
+    "YKWK": {
+      "rows": 4721,
+      "non_deletion_support": 4596,
+      "deletion_support": 125,
+      "accuracy": 0.9701334463037492,
+      "balanced_accuracy": 0.49825935596170584,
+      "macro_f1": 0.49242016987420706,
+      "deletion_precision": 0.0,
+      "deletion_recall": 0.0,
+      "deletion_f1": 0.0,
+      "confusion_matrix": [
+        [
+          4580,
+          16
+        ],
+        [
+          125,
+          0
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.004705882352941176
+    },
+    "ZHAA": {
+      "rows": 4627,
+      "non_deletion_support": 4534,
+      "deletion_support": 93,
+      "accuracy": 0.9764426194078236,
+      "balanced_accuracy": 0.5035016197807723,
+      "macro_f1": 0.5030481646472021,
+      "deletion_precision": 0.05555555555555555,
+      "deletion_recall": 0.010752688172043012,
+      "deletion_f1": 0.018018018018018018,
+      "confusion_matrix": [
+        [
+          4517,
+          17
+        ],
+        [
+          92,
+          1
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.00819672131147541
+    }
+  },
+  "1.00": {
+    "BWC": {
+      "rows": 4711,
+      "non_deletion_support": 4512,
+      "deletion_support": 199,
+      "accuracy": 0.9564848227552537,
+      "balanced_accuracy": 0.5041386008054457,
+      "macro_f1": 0.4984437945756906,
+      "deletion_precision": 0.2,
+      "deletion_recall": 0.010050251256281407,
+      "deletion_f1": 0.019138755980861247,
+      "confusion_matrix": [
+        [
+          4504,
+          8
+        ],
+        [
+          197,
+          2
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.003115264797507788
+    },
+    "EBVS": {
+      "rows": 4491,
+      "non_deletion_support": 4307,
+      "deletion_support": 184,
+      "accuracy": 0.957247828991316,
+      "balanced_accuracy": 0.5120777854049525,
+      "macro_f1": 0.5138185344730373,
+      "deletion_precision": 0.2777777777777778,
+      "deletion_recall": 0.02717391304347826,
+      "deletion_f1": 0.0495049504950495,
+      "confusion_matrix": [
+        [
+          4294,
+          13
+        ],
+        [
+          179,
+          5
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.0027137042062415195
+    },
+    "HJK": {
+      "rows": 4889,
+      "non_deletion_support": 4885,
+      "deletion_support": 4,
+      "accuracy": 0.9957046430762937,
+      "balanced_accuracy": 0.49825997952917095,
+      "macro_f1": 0.49892384954391716,
+      "deletion_precision": 0.0,
+      "deletion_recall": 0.0,
+      "deletion_f1": 0.0,
+      "confusion_matrix": [
+        [
+          4868,
+          17
+        ],
+        [
+          4,
+          0
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.003105590062111801
+    },
+    "NCC": {
+      "rows": 4826,
+      "non_deletion_support": 4771,
+      "deletion_support": 55,
+      "accuracy": 0.9857024450891007,
+      "balanced_accuracy": 0.49853280234751624,
+      "macro_f1": 0.4963998747782532,
+      "deletion_precision": 0.0,
+      "deletion_recall": 0.0,
+      "deletion_f1": 0.0,
+      "confusion_matrix": [
+        [
+          4757,
+          14
+        ],
+        [
+          55,
+          0
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.0019011406844106464
+    },
+    "NJS": {
+      "rows": 4793,
+      "non_deletion_support": 4716,
+      "deletion_support": 77,
+      "accuracy": 0.9816398915084498,
+      "balanced_accuracy": 0.5052212418624632,
+      "macro_f1": 0.5064775812037817,
+      "deletion_precision": 0.07692307692307693,
+      "deletion_recall": 0.012987012987012988,
+      "deletion_f1": 0.022222222222222227,
+      "confusion_matrix": [
+        [
+          4704,
+          12
+        ],
+        [
+          76,
+          1
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.0
+    },
+    "PNV": {
+      "rows": 4830,
+      "non_deletion_support": 4594,
+      "deletion_support": 236,
+      "accuracy": 0.9496894409937888,
+      "balanced_accuracy": 0.5012479431535607,
+      "macro_f1": 0.49117669372581746,
+      "deletion_precision": 0.1111111111111111,
+      "deletion_recall": 0.00423728813559322,
+      "deletion_f1": 0.00816326530612245,
+      "confusion_matrix": [
+        [
+          4586,
+          8
+        ],
+        [
+          235,
+          1
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.0068143100511073255
+    },
+    "RRBI": {
+      "rows": 4735,
+      "non_deletion_support": 4671,
+      "deletion_support": 64,
+      "accuracy": 0.9799366420274551,
+      "balanced_accuracy": 0.4966816527510169,
+      "macro_f1": 0.4949333333333333,
+      "deletion_precision": 0.0,
+      "deletion_recall": 0.0,
+      "deletion_f1": 0.0,
+      "confusion_matrix": [
+        [
+          4640,
+          31
+        ],
+        [
+          64,
+          0
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.018561484918793503
+    },
+    "TLV": {
+      "rows": 4748,
+      "non_deletion_support": 4332,
+      "deletion_support": 416,
+      "accuracy": 0.9121735467565291,
+      "balanced_accuracy": 0.5042305916613395,
+      "macro_f1": 0.48642642681590326,
+      "deletion_precision": 0.4444444444444444,
+      "deletion_recall": 0.009615384615384616,
+      "deletion_f1": 0.018823529411764708,
+      "confusion_matrix": [
+        [
+          4327,
+          5
+        ],
+        [
+          412,
+          4
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.0027662517289073307
+    },
+    "TNI": {
+      "rows": 4615,
+      "non_deletion_support": 4551,
+      "deletion_support": 64,
+      "accuracy": 0.9824485373781149,
+      "balanced_accuracy": 0.4981322786200835,
+      "macro_f1": 0.4955732866979997,
+      "deletion_precision": 0.0,
+      "deletion_recall": 0.0,
+      "deletion_f1": 0.0,
+      "confusion_matrix": [
+        [
+          4534,
+          17
+        ],
+        [
+          64,
+          0
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.005037783375314861
+    },
+    "YBAA": {
+      "rows": 4318,
+      "non_deletion_support": 4291,
+      "deletion_support": 27,
+      "accuracy": 0.9895785085687818,
+      "balanced_accuracy": 0.4979025868096015,
+      "macro_f1": 0.49738098009544873,
+      "deletion_precision": 0.0,
+      "deletion_recall": 0.0,
+      "deletion_f1": 0.0,
+      "confusion_matrix": [
+        [
+          4273,
+          18
+        ],
+        [
+          27,
+          0
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.015706806282722512
+    },
+    "YKWK": {
+      "rows": 4721,
+      "non_deletion_support": 4596,
+      "deletion_support": 125,
+      "accuracy": 0.9711925439525524,
+      "balanced_accuracy": 0.4988033072236728,
+      "macro_f1": 0.4926928863099076,
+      "deletion_precision": 0.0,
+      "deletion_recall": 0.0,
+      "deletion_f1": 0.0,
+      "confusion_matrix": [
+        [
+          4585,
+          11
+        ],
+        [
+          125,
+          0
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.002352941176470588
+    },
+    "ZHAA": {
+      "rows": 4627,
+      "non_deletion_support": 4534,
+      "deletion_support": 93,
+      "accuracy": 0.9775232331964556,
+      "balanced_accuracy": 0.5040530092823162,
+      "macro_f1": 0.5037496596843521,
+      "deletion_precision": 0.07692307692307693,
+      "deletion_recall": 0.010752688172043012,
+      "deletion_f1": 0.018867924528301886,
+      "confusion_matrix": [
+        [
+          4522,
+          12
+        ],
+        [
+          92,
+          1
+        ]
+      ],
+      "substitution_false_deletion_rate": 0.00273224043715847
+    }
+  }
+}

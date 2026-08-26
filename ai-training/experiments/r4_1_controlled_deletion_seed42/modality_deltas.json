@@ -1,0 +1,17 @@
+{
+  "strict_matched": {
+    "full_minus_no_audio": {
+      "macro_f1": 0.12106565973400263,
+      "balanced_accuracy": 0.12212276214833762,
+      "deletion_f1": -0.06144721673145337
+    },
+    "full_minus_no_phone": {
+      "macro_f1": 0.12873560909288478,
+      "balanced_accuracy": 0.06713554987212278,
+      "deletion_f1": 0.24785449748173993
+    }
+  },
+  "failures": [
+    "FULL-NO_AUDIO matched deletion F1 < 0.05"
+  ]
+}

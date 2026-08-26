@@ -1,0 +1,15 @@
+{
+  "recommended_stride_ms": 40,
+  "median_probes_per_word": 9.0,
+  "unbatched_forward_equivalents_per_word": 9.0,
+  "model_batches_per_median_word_at_batch8": 2,
+  "small_sample_gpu_throughput_probes_per_second": 266.7129759426246,
+  "small_sample_estimated_median_word_seconds": 0.03374413999990793,
+  "prior_r4_2b_bulk_reference": {
+    "probes": 56245,
+    "seconds": 16.1848403,
+    "probes_per_second": 3475.1655844265574,
+    "estimated_median_word_seconds_when_large_batches_are_amortized": 0.0025898046528580318
+  },
+  "cpu": "not benchmarked; expected materially slower than CUDA and must be measured before runtime integration"
+}

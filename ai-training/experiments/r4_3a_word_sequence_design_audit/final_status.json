@@ -1,0 +1,13 @@
+{
+  "status": "R4_3A_SEQUENCE_DESIGN_READY_WITH_WARNINGS",
+  "usable_train_words": 16259,
+  "usable_validation_words": 7728,
+  "oracle_deletion_deterministic_tiebreak_recovery": 0.8681855166802278,
+  "oracle_deletion_optimal_path_representable": 0.9991863303498779,
+  "recommended_evidence": "FROZEN_R3_SLIDING_LOGITS",
+  "recommended_stride_ms": 40,
+  "runtime": "WORD_SEQUENCE_RUNTIME_READY_WITH_SMALL_LAYER",
+  "main_unresolved_risk": "global skip/substitution transition costs and broad-context R3 posterior localization",
+  "training_performed": false,
+  "r4_test_accessed": false
+}

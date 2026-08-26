@@ -1,0 +1,88 @@
+{
+  "word_duration_seconds": {
+    "count": 23987,
+    "mean": 0.33892900321007213,
+    "median": 0.30000000000000004,
+    "p10": 0.13,
+    "p25": 0.19999999999999973,
+    "p75": 0.44999999999999996,
+    "p90": 0.5999999999999999
+  },
+  "manual_phone_duration_seconds": {
+    "count": 82641,
+    "mean": 0.09858277979453299,
+    "median": 0.08999999999999986,
+    "p10": 0.040000000000000036,
+    "p25": 0.06000000000000005,
+    "p75": 0.1200000000000001,
+    "p90": 0.16999999999999993
+  },
+  "candidates": {
+    "20": {
+      "stride_ms": 20,
+      "crop_ms": 500,
+      "adjacent_crop_overlap": 0.96,
+      "probes_per_word": {
+        "count": 23987,
+        "mean": 18.19581439946638,
+        "median": 16.0,
+        "p10": 8.0,
+        "p25": 11.0,
+        "p75": 24.0,
+        "p90": 31.0
+      },
+      "total_probes": 436463,
+      "train_probes": 293074,
+      "validation_probes": 143389,
+      "edge_padded_probes": 52597,
+      "edge_padding_rate": 0.12050735113858449,
+      "phone_duration_at_least_one_stride_rate": 0.9988504495347346,
+      "phone_duration_at_least_two_strides_rate": 0.935540470226643,
+      "temporal_redundancy": "HIGH"
+    },
+    "40": {
+      "stride_ms": 40,
+      "crop_ms": 500,
+      "adjacent_crop_overlap": 0.92,
+      "probes_per_word": {
+        "count": 23987,
+        "mean": 9.85062742318756,
+        "median": 9.0,
+        "p10": 5.0,
+        "p25": 6.0,
+        "p75": 13.0,
+        "p90": 16.0
+      },
+      "total_probes": 236287,
+      "train_probes": 158772,
+      "validation_probes": 77515,
+      "edge_padded_probes": 28756,
+      "edge_padding_rate": 0.12169945870911222,
+      "phone_duration_at_least_one_stride_rate": 0.935540470226643,
+      "phone_duration_at_least_two_strides_rate": 0.5838748321051294,
+      "temporal_redundancy": "MODERATE_HIGH"
+    },
+    "50": {
+      "stride_ms": 50,
+      "crop_ms": 500,
+      "adjacent_crop_overlap": 0.9,
+      "probes_per_word": {
+        "count": 23987,
+        "mean": 8.177471130195523,
+        "median": 7.0,
+        "p10": 4.0,
+        "p25": 5.0,
+        "p75": 10.0,
+        "p90": 13.0
+      },
+      "total_probes": 196153,
+      "train_probes": 131833,
+      "validation_probes": 64320,
+      "edge_padded_probes": 23885,
+      "edge_padding_rate": 0.1217671919369064,
+      "phone_duration_at_least_one_stride_rate": 0.846335354122046,
+      "phone_duration_at_least_two_strides_rate": 0.4068319599230406,
+      "temporal_redundancy": "MODERATE"
+    }
+  }
+}

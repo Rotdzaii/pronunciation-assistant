@@ -1,0 +1,68 @@
+{
+  "pure_deletion_words": {
+    "rows": 2318,
+    "non_deletion_support": 1702,
+    "deletion_support": 616,
+    "accuracy": 0.7368421052631579,
+    "balanced_accuracy": 0.5059059624277016,
+    "macro_f1": 0.4367197023415902,
+    "deletion_precision": 0.8,
+    "deletion_recall": 0.012987012987012988,
+    "deletion_f1": 0.025559105431309907,
+    "confusion_matrix": [
+      [
+        1700,
+        2
+      ],
+      [
+        608,
+        8
+      ]
+    ],
+    "words": 555
+  },
+  "substitution_plus_deletion_words": {
+    "rows": 1370,
+    "non_deletion_support": 1072,
+    "deletion_support": 298,
+    "accuracy": 0.7802919708029197,
+    "balanced_accuracy": 0.5046579184613843,
+    "macro_f1": 0.4541175162393321,
+    "deletion_precision": 0.38461538461538464,
+    "deletion_recall": 0.016778523489932886,
+    "deletion_f1": 0.03215434083601286,
+    "confusion_matrix": [
+      [
+        1064,
+        8
+      ],
+      [
+        293,
+        5
+      ]
+    ],
+    "words": 259
+  },
+  "multiple_deletion_words": {
+    "rows": 562,
+    "non_deletion_support": 372,
+    "deletion_support": 190,
+    "accuracy": 0.6761565836298933,
+    "balanced_accuracy": 0.5223401245048104,
+    "macro_f1": 0.4465151515151515,
+    "deletion_precision": 0.9,
+    "deletion_recall": 0.04736842105263158,
+    "deletion_f1": 0.09,
+    "confusion_matrix": [
+      [
+        371,
+        1
+      ],
+      [
+        181,
+        9
+      ]
+    ],
+    "words": 90
+  }
+}

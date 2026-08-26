@@ -1,0 +1,34 @@
+{
+  "v4_sha256": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D",
+  "raw_root_identity": "l2arctic_release_v5.0",
+  "parsed_utterances": 2699,
+  "mfa_textgrid_missing_for_audit_utterances": [],
+  "invalid_mfa_phone_labels": {
+    "spn": 18
+  },
+  "sequence_mapping_failures": {},
+  "algorithm_inputs": [
+    "expected_phone_identity",
+    "stable_v4_row_order",
+    "aligned_phone_identity",
+    "aligned_phone_timing"
+  ],
+  "algorithm_forbidden_inputs_verified": [
+    "manual_deletion_center",
+    "manual_deletion_duration",
+    "manual_relation_label"
+  ],
+  "manual_annotation_attached_after_prediction_for_evaluation_only": true,
+  "utterance_alignment_summary": {
+    "utterances": 2699,
+    "with_missing_expected": 106,
+    "with_insertions": 58,
+    "with_substitutions": 236,
+    "ambiguous_missing": 43,
+    "ambiguous_mapping": 60
+  },
+  "train_validation_only": true,
+  "test_alignment_paths_resolved": false,
+  "test_alignment_accessed": false,
+  "test_audio_accessed": false
+}

@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "runner": "direct Python function runner because pytest is not installed in the locked environment",
+  "tests_passed": 7,
+  "tests_failed": 0,
+  "tests": [
+    "probe grid matches R4-3A",
+    "all-correct sequence",
+    "medial deletion K IH T CH AH N -> K IH CH AH N",
+    "substitution K IH T -> K IH D",
+    "initial deletion",
+    "final deletion",
+    "two consecutive deletions"
+  ],
+  "validation_data_used": false,
+  "train_examples_used": false,
+  "synthetic_only": true
+}

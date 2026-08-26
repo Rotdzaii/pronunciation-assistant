@@ -1,0 +1,7 @@
+{
+  "selected_epoch": 13,
+  "last5_macro_f1_slope_per_epoch": 0.0015460250461566964,
+  "last5_validation_loss_slope_per_epoch": -0.0007518705658517294,
+  "flag": "NO_BUDGET_LIMIT_FLAG",
+  "no_automatic_extension": true
+}

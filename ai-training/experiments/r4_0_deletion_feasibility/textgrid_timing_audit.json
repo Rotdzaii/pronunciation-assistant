@@ -1,0 +1,31 @@
+{
+  "scope": "TRAIN+VALIDATION manual annotation TextGrid phones IntervalTier",
+  "deletion_rows": 2591,
+  "positive_duration_intervals": 2591,
+  "contiguous_previous_boundary": 2586,
+  "contiguous_next_boundary": 2591,
+  "previous_neighbor_relations": {
+    "correct": 1975,
+    "substitution": 336,
+    "deletion": 204,
+    "addition": 4,
+    "non_speech": 36,
+    "unresolved": 31
+  },
+  "next_neighbor_relations": {
+    "substitution": 243,
+    "correct": 1650,
+    "addition": 19,
+    "deletion": 204,
+    "non_speech": 454,
+    "unresolved": 21
+  },
+  "source_evidence": {
+    "builder_input": "<speaker>/annotation/*.TextGrid only",
+    "tier": "phones IntervalTier only",
+    "deletion_label_contract": "valid expected,sil,d -> expected canonical phone and observed <SIL>",
+    "MFA_or_textgrid_directory_used": false,
+    "interpretation": "A deletion is represented by a non-zero manual phones-tier interval occupying a contiguous temporal slot; it is not a PointTier marker. The code does not prove how annotators chose boundaries relative to an MFA alignment."
+  },
+  "runtime_warning": "Manual deletion boundaries and labels are supervision artifacts and are not inherently available from runtime audio; compatibility requires a separate alignment/sequence mechanism."
+}

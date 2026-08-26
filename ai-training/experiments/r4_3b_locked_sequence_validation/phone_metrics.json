@@ -1,0 +1,279 @@
+{
+  "phones": {
+    "AH": {
+      "rows": 2528,
+      "non_deletion_support": 2482,
+      "deletion_support": 46,
+      "accuracy": 0.9770569620253164,
+      "balanced_accuracy": 0.4975825946817083,
+      "macro_f1": 0.49419767907162865,
+      "deletion_precision": 0.0,
+      "deletion_recall": 0.0,
+      "deletion_f1": 0.0,
+      "confusion_matrix": [
+        [
+          2470,
+          12
+        ],
+        [
+          46,
+          0
+        ]
+      ]
+    },
+    "D": {
+      "rows": 1222,
+      "non_deletion_support": 1028,
+      "deletion_support": 194,
+      "accuracy": 0.8379705400981997,
+      "balanced_accuracy": 0.5043272895021862,
+      "macro_f1": 0.4705094537815126,
+      "deletion_precision": 0.3,
+      "deletion_recall": 0.015463917525773196,
+      "deletion_f1": 0.029411764705882353,
+      "confusion_matrix": [
+        [
+          1021,
+          7
+        ],
+        [
+          191,
+          3
+        ]
+      ]
+    },
+    "HH": {
+      "rows": 770,
+      "non_deletion_support": 748,
+      "deletion_support": 22,
+      "accuracy": 0.9662337662337662,
+      "balanced_accuracy": 0.49732620320855614,
+      "macro_f1": 0.4914134742404227,
+      "deletion_precision": 0.0,
+      "deletion_recall": 0.0,
+      "deletion_f1": 0.0,
+      "confusion_matrix": [
+        [
+          744,
+          4
+        ],
+        [
+          22,
+          0
+        ]
+      ]
+    },
+    "K": {
+      "rows": 662,
+      "non_deletion_support": 634,
+      "deletion_support": 28,
+      "accuracy": 0.9561933534743202,
+      "balanced_accuracy": 0.499211356466877,
+      "macro_f1": 0.4888030888030888,
+      "deletion_precision": 0.0,
+      "deletion_recall": 0.0,
+      "deletion_f1": 0.0,
+      "confusion_matrix": [
+        [
+          633,
+          1
+        ],
+        [
+          28,
+          0
+        ]
+      ]
+    },
+    "L": {
+      "rows": 1028,
+      "non_deletion_support": 956,
+      "deletion_support": 72,
+      "accuracy": 0.9250972762645915,
+      "balanced_accuracy": 0.4973849372384937,
+      "macro_f1": 0.48054573016675084,
+      "deletion_precision": 0.0,
+      "deletion_recall": 0.0,
+      "deletion_f1": 0.0,
+      "confusion_matrix": [
+        [
+          951,
+          5
+        ],
+        [
+          72,
+          0
+        ]
+      ]
+    },
+    "N": {
+      "rows": 1694,
+      "non_deletion_support": 1651,
+      "deletion_support": 43,
+      "accuracy": 0.9716646989374262,
+      "balanced_accuracy": 0.4984857662023016,
+      "macro_f1": 0.49281437125748506,
+      "deletion_precision": 0.0,
+      "deletion_recall": 0.0,
+      "deletion_f1": 0.0,
+      "confusion_matrix": [
+        [
+          1646,
+          5
+        ],
+        [
+          43,
+          0
+        ]
+      ]
+    },
+    "R": {
+      "rows": 992,
+      "non_deletion_support": 849,
+      "deletion_support": 143,
+      "accuracy": 0.8538306451612904,
+      "balanced_accuracy": 0.4988221436984688,
+      "macro_f1": 0.46057640021750945,
+      "deletion_precision": 0.0,
+      "deletion_recall": 0.0,
+      "deletion_f1": 0.0,
+      "confusion_matrix": [
+        [
+          847,
+          2
+        ],
+        [
+          143,
+          0
+        ]
+      ]
+    },
+    "S": {
+      "rows": 1065,
+      "non_deletion_support": 1044,
+      "deletion_support": 21,
+      "accuracy": 0.9784037558685446,
+      "balanced_accuracy": 0.4990421455938697,
+      "macro_f1": 0.49454200284765065,
+      "deletion_precision": 0.0,
+      "deletion_recall": 0.0,
+      "deletion_f1": 0.0,
+      "confusion_matrix": [
+        [
+          1042,
+          2
+        ],
+        [
+          21,
+          0
+        ]
+      ]
+    },
+    "T": {
+      "rows": 1541,
+      "non_deletion_support": 1383,
+      "deletion_support": 158,
+      "accuracy": 0.8961713173264114,
+      "balanced_accuracy": 0.5020799582635438,
+      "macro_f1": 0.47877557923220027,
+      "deletion_precision": 0.25,
+      "deletion_recall": 0.006329113924050633,
+      "deletion_f1": 0.01234567901234568,
+      "confusion_matrix": [
+        [
+          1380,
+          3
+        ],
+        [
+          157,
+          1
+        ]
+      ]
+    },
+    "V": {
+      "rows": 542,
+      "non_deletion_support": 524,
+      "deletion_support": 18,
+      "accuracy": 0.9612546125461254,
+      "balanced_accuracy": 0.49713740458015265,
+      "macro_f1": 0.49012229539040447,
+      "deletion_precision": 0.0,
+      "deletion_recall": 0.0,
+      "deletion_f1": 0.0,
+      "confusion_matrix": [
+        [
+          521,
+          3
+        ],
+        [
+          18,
+          0
+        ]
+      ]
+    },
+    "Z": {
+      "rows": 912,
+      "non_deletion_support": 862,
+      "deletion_support": 50,
+      "accuracy": 0.9484649122807017,
+      "balanced_accuracy": 0.53,
+      "macro_f1": 0.5433344342286098,
+      "deletion_precision": 1.0,
+      "deletion_recall": 0.06,
+      "deletion_f1": 0.11320754716981131,
+      "confusion_matrix": [
+        [
+          862,
+          0
+        ],
+        [
+          47,
+          3
+        ]
+      ]
+    }
+  },
+  "groups": {
+    "D_T_R_L": {
+      "rows": 4783,
+      "non_deletion_support": 4216,
+      "deletion_support": 567,
+      "accuracy": 0.8787371942295631,
+      "balanced_accuracy": 0.5015112078284121,
+      "macro_f1": 0.4745015404245905,
+      "deletion_precision": 0.19047619047619047,
+      "deletion_recall": 0.007054673721340388,
+      "deletion_f1": 0.013605442176870748,
+      "confusion_matrix": [
+        [
+          4199,
+          17
+        ],
+        [
+          563,
+          4
+        ]
+      ]
+    },
+    "all_other_phones": {
+      "rows": 21554,
+      "non_deletion_support": 21207,
+      "deletion_support": 347,
+      "accuracy": 0.9807460332188921,
+      "balanced_accuracy": 0.5111528614131405,
+      "macro_f1": 0.515922887823674,
+      "deletion_precision": 0.10465116279069768,
+      "deletion_recall": 0.025936599423631124,
+      "deletion_f1": 0.04157043879907621,
+      "confusion_matrix": [
+        [
+          21130,
+          77
+        ],
+        [
+          338,
+          9
+        ]
+      ]
+    }
+  }
+}

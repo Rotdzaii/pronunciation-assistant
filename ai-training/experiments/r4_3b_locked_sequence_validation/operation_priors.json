@@ -1,0 +1,33 @@
+{
+  "usable_train_words": 16259,
+  "count_scope": "clean expected-phone positions in usable TRAIN words; addition-containing, unresolved, malformed, or missing-boundary words excluded",
+  "counts": {
+    "C_MATCH": 48893,
+    "C_SUB": 5867,
+    "C_DEL": 1544,
+    "N": 56304
+  },
+  "laplace_alpha": 1.0,
+  "denominator": 56307,
+  "formula": "P_op = (C_op + 1) / (N + 3)",
+  "log_formula": "log_prior_op = natural_log(P_op)",
+  "scaling": "none",
+  "temperature": "none",
+  "values": {
+    "MATCH": {
+      "numerator": 48894,
+      "probability": 0.868346741968139,
+      "log_prior": -0.14116417177608467
+    },
+    "SUBSTITUTION": {
+      "numerator": 5868,
+      "probability": 0.10421439607864032,
+      "log_prior": -2.261305001061487
+    },
+    "DELETE_EXPECTED": {
+      "numerator": 1545,
+      "probability": 0.027438861953220737,
+      "log_prior": -3.595794950992514
+    }
+  }
+}

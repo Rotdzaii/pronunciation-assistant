@@ -1,0 +1,286 @@
+{
+  "duration_only": {
+    "name": "duration_only",
+    "feature_direction_for_deletion": "low",
+    "threshold_selected_on": "TRAIN only; highest Macro-F1, then deletion F1, precision, fewer deletion calls",
+    "threshold": 0.039766,
+    "train": {
+      "rows": 58222,
+      "deletion_support": 1612,
+      "non_deletion_support": 56610,
+      "accuracy": 0.9413967228882553,
+      "balanced_accuracy": 0.692027270300515,
+      "macro_f1": 0.6287103644899036,
+      "deletion_precision": 0.2169811320754717,
+      "deletion_recall": 0.4280397022332506,
+      "deletion_f1": 0.28797996661101843,
+      "confusion_matrix": [
+        [
+          54120,
+          2490
+        ],
+        [
+          922,
+          690
+        ]
+      ]
+    },
+    "validation": {
+      "rows": 28705,
+      "deletion_support": 979,
+      "non_deletion_support": 27726,
+      "accuracy": 0.9465946699181327,
+      "balanced_accuracy": 0.7063009965386512,
+      "macro_f1": 0.6681455065707653,
+      "deletion_precision": 0.30656424581005587,
+      "deletion_recall": 0.4484167517875383,
+      "deletion_f1": 0.3641642472003318,
+      "confusion_matrix": [
+        [
+          26733,
+          993
+        ],
+        [
+          540,
+          439
+        ]
+      ]
+    },
+    "validation_roc_auc": 0.8588509533353419,
+    "validation_pr_auc": 0.22064448241469528
+  },
+  "central_rms_only": {
+    "name": "central_rms_only",
+    "feature_direction_for_deletion": "low",
+    "threshold_selected_on": "TRAIN only; highest Macro-F1, then deletion F1, precision, fewer deletion calls",
+    "threshold": -37.99442586273108,
+    "train": {
+      "rows": 58222,
+      "deletion_support": 1612,
+      "non_deletion_support": 56610,
+      "accuracy": 0.9380818247397891,
+      "balanced_accuracy": 0.528803668651866,
+      "macro_f1": 0.5233381844182424,
+      "deletion_precision": 0.06692742285962625,
+      "deletion_recall": 0.09553349875930521,
+      "deletion_f1": 0.07871198568872988,
+      "confusion_matrix": [
+        [
+          54463,
+          2147
+        ],
+        [
+          1458,
+          154
+        ]
+      ]
+    },
+    "validation": {
+      "rows": 28705,
+      "deletion_support": 979,
+      "non_deletion_support": 27726,
+      "accuracy": 0.9482668524647274,
+      "balanced_accuracy": 0.5248707124298282,
+      "macro_f1": 0.5292043108115841,
+      "deletion_precision": 0.10714285714285714,
+      "deletion_recall": 0.07048008171603677,
+      "deletion_f1": 0.08502772643253234,
+      "confusion_matrix": [
+        [
+          27151,
+          575
+        ],
+        [
+          910,
+          69
+        ]
+      ]
+    },
+    "validation_roc_auc": 0.5213540470489086,
+    "validation_pr_auc": 0.05255164284354506
+  },
+  "central_silence_ratio_only": {
+    "name": "central_silence_ratio_only",
+    "feature_direction_for_deletion": "high",
+    "threshold_selected_on": "TRAIN only; highest Macro-F1, then deletion F1, precision, fewer deletion calls",
+    "threshold": 0.9473684210526315,
+    "train": {
+      "rows": 58222,
+      "deletion_support": 1612,
+      "non_deletion_support": 56610,
+      "accuracy": 0.9661811686304146,
+      "balanced_accuracy": 0.5131192789636813,
+      "macro_f1": 0.5173907846922066,
+      "deletion_precision": 0.11612903225806452,
+      "deletion_recall": 0.033498759305210915,
+      "deletion_f1": 0.051998074145402015,
+      "confusion_matrix": [
+        [
+          56199,
+          411
+        ],
+        [
+          1558,
+          54
+        ]
+      ]
+    },
+    "validation": {
+      "rows": 28705,
+      "deletion_support": 979,
+      "non_deletion_support": 27726,
+      "accuracy": 0.965162863612611,
+      "balanced_accuracy": 0.5119385844714036,
+      "macro_f1": 0.5149379837101626,
+      "deletion_precision": 0.352112676056338,
+      "deletion_recall": 0.02553626149131767,
+      "deletion_f1": 0.04761904761904762,
+      "confusion_matrix": [
+        [
+          27680,
+          46
+        ],
+        [
+          954,
+          25
+        ]
+      ]
+    },
+    "validation_roc_auc": 0.4692747915413616,
+    "validation_pr_auc": 0.04442191637352303
+  },
+  "context_0.50_rms_only": {
+    "name": "context_0.50_rms_only",
+    "feature_direction_for_deletion": "low",
+    "threshold_selected_on": "TRAIN only; highest Macro-F1, then deletion F1, precision, fewer deletion calls",
+    "threshold": -29.874575223365866,
+    "train": {
+      "rows": 58222,
+      "deletion_support": 1612,
+      "non_deletion_support": 56610,
+      "accuracy": 0.9445913915701968,
+      "balanced_accuracy": 0.5032223655563314,
+      "macro_f1": 0.50309341421487,
+      "deletion_precision": 0.03352601156069364,
+      "deletion_recall": 0.03598014888337469,
+      "deletion_f1": 0.034709754637941355,
+      "confusion_matrix": [
+        [
+          54938,
+          1672
+        ],
+        [
+          1554,
+          58
+        ]
+      ]
+    },
+    "validation": {
+      "rows": 28705,
+      "deletion_support": 979,
+      "non_deletion_support": 27726,
+      "accuracy": 0.9472565755094932,
+      "balanced_accuracy": 0.4997131568463227,
+      "macro_f1": 0.4986900463361994,
+      "deletion_precision": 0.03315881326352531,
+      "deletion_recall": 0.01940755873340143,
+      "deletion_f1": 0.02448453608247423,
+      "confusion_matrix": [
+        [
+          27172,
+          554
+        ],
+        [
+          960,
+          19
+        ]
+      ]
+    },
+    "validation_roc_auc": 0.4445428587364887,
+    "validation_pr_auc": 0.03109919836795101
+  },
+  "always_non_deletion": {
+    "validation": {
+      "rows": 28705,
+      "deletion_support": 979,
+      "non_deletion_support": 27726,
+      "accuracy": 0.9658944434767462,
+      "balanced_accuracy": 0.5,
+      "macro_f1": 0.49132568978043983,
+      "deletion_precision": 0.0,
+      "deletion_recall": 0.0,
+      "deletion_f1": 0.0,
+      "confusion_matrix": [
+        [
+          27726,
+          0
+        ],
+        [
+          979,
+          0
+        ]
+      ]
+    }
+  },
+  "expected_phone_prior": {
+    "rule": "predict deletion when TRAIN P(deletion|expected_phone) >= 0.5",
+    "train_probabilities": {
+      "AA": 0.0,
+      "AE": 0.0012040939193257074,
+      "AH": 0.01461495222034851,
+      "AO": 0.0,
+      "AY": 0.0009090909090909091,
+      "B": 0.0019880715705765406,
+      "CH": 0.016706443914081145,
+      "D": 0.11944045911047346,
+      "DH": 0.012121212121212121,
+      "EH": 0.0018963337547408343,
+      "ER": 0.009683666881859263,
+      "EY": 0.005154639175257732,
+      "F": 0.005409582689335394,
+      "G": 0.027923211169284468,
+      "HH": 0.010365853658536586,
+      "IH": 0.008968609865470852,
+      "IY": 0.0044194455604660505,
+      "JH": 0.019390581717451522,
+      "K": 0.025856496444731737,
+      "L": 0.05564924114671164,
+      "M": 0.0016987542468856172,
+      "N": 0.022138228941684664,
+      "NG": 0.015105740181268883,
+      "OW": 0.0,
+      "P": 0.020618556701030927,
+      "R": 0.10582444626743231,
+      "S": 0.021213406873143825,
+      "SH": 0.0029895366218236174,
+      "T": 0.07618238459359955,
+      "TH": 0.024390243902439025,
+      "UW": 0.0018957345971563982,
+      "V": 0.033925686591276254,
+      "W": 0.013605442176870748,
+      "Y": 0.024,
+      "Z": 0.04701073071027082
+    },
+    "validation": {
+      "rows": 28705,
+      "deletion_support": 979,
+      "non_deletion_support": 27726,
+      "accuracy": 0.9658944434767462,
+      "balanced_accuracy": 0.5,
+      "macro_f1": 0.49132568978043983,
+      "deletion_precision": 0.0,
+      "deletion_recall": 0.0,
+      "deletion_f1": 0.0,
+      "confusion_matrix": [
+        [
+          27726,
+          0
+        ],
+        [
+          979,
+          0
+        ]
+      ]
+    }
+  }
+}

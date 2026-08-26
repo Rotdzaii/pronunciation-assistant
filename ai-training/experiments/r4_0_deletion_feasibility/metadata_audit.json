@@ -1,0 +1,687 @@
+{
+  "source": {
+    "v4_sha256": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D",
+    "raw_rows": 135890,
+    "deletion_counts": {
+      "train": 1612,
+      "validation": 979,
+      "test": 827
+    },
+    "relation_counts": {
+      "train": {
+        "correct": 51400,
+        "deletion": 1612,
+        "substitution": 6159
+      },
+      "validation": {
+        "correct": 25303,
+        "substitution": 2909,
+        "deletion": 979
+      },
+      "test": {
+        "correct": 24923,
+        "substitution": 3293,
+        "deletion": 827
+      }
+    },
+    "deletion_phone_count_train_validation": 35,
+    "deletion_phones_train_validation": [
+      "AA",
+      "AE",
+      "AH",
+      "AO",
+      "AY",
+      "B",
+      "CH",
+      "D",
+      "DH",
+      "EH",
+      "ER",
+      "EY",
+      "F",
+      "G",
+      "HH",
+      "IH",
+      "IY",
+      "JH",
+      "K",
+      "L",
+      "M",
+      "N",
+      "NG",
+      "OW",
+      "P",
+      "R",
+      "S",
+      "SH",
+      "T",
+      "TH",
+      "UW",
+      "V",
+      "W",
+      "Y",
+      "Z"
+    ],
+    "analysis_scope": "TRAIN+VALIDATION clean correct/substitution/deletion restricted to expected phones with deletion support",
+    "analysis_rows": 86927,
+    "test_audio_paths_resolved": false,
+    "test_audio_accessed": false
+  },
+  "per_phone": {
+    "AA": {
+      "train_correct": 618,
+      "train_substitution": 132,
+      "train_deletion": 0,
+      "validation_correct": 295,
+      "validation_substitution": 61,
+      "validation_deletion": 1,
+      "flags": [
+        "NO_TRAIN_DELETION",
+        "TRAIN_DELETION_LT_10",
+        "VALIDATION_DELETION_LT_5"
+      ]
+    },
+    "AE": {
+      "train_correct": 1473,
+      "train_substitution": 186,
+      "train_deletion": 2,
+      "validation_correct": 702,
+      "validation_substitution": 70,
+      "validation_deletion": 3,
+      "flags": [
+        "TRAIN_DELETION_LT_10",
+        "VALIDATION_DELETION_LT_5"
+      ]
+    },
+    "AH": {
+      "train_correct": 4853,
+      "train_substitution": 406,
+      "train_deletion": 78,
+      "validation_correct": 2488,
+      "validation_substitution": 203,
+      "validation_deletion": 47,
+      "flags": []
+    },
+    "AO": {
+      "train_correct": 881,
+      "train_substitution": 46,
+      "train_deletion": 0,
+      "validation_correct": 420,
+      "validation_substitution": 43,
+      "validation_deletion": 1,
+      "flags": [
+        "NO_TRAIN_DELETION",
+        "TRAIN_DELETION_LT_10",
+        "VALIDATION_DELETION_LT_5"
+      ]
+    },
+    "AW": {
+      "train_correct": 371,
+      "train_substitution": 49,
+      "train_deletion": 0,
+      "validation_correct": 179,
+      "validation_substitution": 38,
+      "validation_deletion": 0,
+      "flags": [
+        "NO_TRAIN_DELETION",
+        "NO_VALIDATION_DELETION",
+        "TRAIN_DELETION_LT_10",
+        "VALIDATION_DELETION_LT_5"
+      ]
+    },
+    "AX": {
+      "train_correct": 0,
+      "train_substitution": 1,
+      "train_deletion": 0,
+      "validation_correct": 0,
+      "validation_substitution": 0,
+      "validation_deletion": 0,
+      "flags": [
+        "NO_TRAIN_DELETION",
+        "NO_VALIDATION_DELETION",
+        "TRAIN_DELETION_LT_10",
+        "VALIDATION_DELETION_LT_5"
+      ]
+    },
+    "AY": {
+      "train_correct": 1043,
+      "train_substitution": 56,
+      "train_deletion": 1,
+      "validation_correct": 533,
+      "validation_substitution": 17,
+      "validation_deletion": 2,
+      "flags": [
+        "TRAIN_DELETION_LT_10",
+        "VALIDATION_DELETION_LT_5"
+      ]
+    },
+    "B": {
+      "train_correct": 941,
+      "train_substitution": 63,
+      "train_deletion": 2,
+      "validation_correct": 459,
+      "validation_substitution": 38,
+      "validation_deletion": 4,
+      "flags": [
+        "TRAIN_DELETION_LT_10",
+        "VALIDATION_DELETION_LT_5"
+      ]
+    },
+    "CH": {
+      "train_correct": 390,
+      "train_substitution": 22,
+      "train_deletion": 7,
+      "validation_correct": 202,
+      "validation_substitution": 7,
+      "validation_deletion": 2,
+      "flags": [
+        "TRAIN_DELETION_LT_10",
+        "VALIDATION_DELETION_LT_5"
+      ]
+    },
+    "D": {
+      "train_correct": 2258,
+      "train_substitution": 197,
+      "train_deletion": 333,
+      "validation_correct": 1085,
+      "validation_substitution": 80,
+      "validation_deletion": 205,
+      "flags": []
+    },
+    "DH": {
+      "train_correct": 806,
+      "train_substitution": 987,
+      "train_deletion": 22,
+      "validation_correct": 505,
+      "validation_substitution": 390,
+      "validation_deletion": 16,
+      "flags": []
+    },
+    "EH": {
+      "train_correct": 1410,
+      "train_substitution": 169,
+      "train_deletion": 3,
+      "validation_correct": 727,
+      "validation_substitution": 54,
+      "validation_deletion": 5,
+      "flags": [
+        "TRAIN_DELETION_LT_10"
+      ]
+    },
+    "ER": {
+      "train_correct": 1207,
+      "train_substitution": 327,
+      "train_deletion": 15,
+      "validation_correct": 500,
+      "validation_substitution": 225,
+      "validation_deletion": 2,
+      "flags": [
+        "VALIDATION_DELETION_LT_5"
+      ]
+    },
+    "EY": {
+      "train_correct": 972,
+      "train_substitution": 186,
+      "train_deletion": 6,
+      "validation_correct": 509,
+      "validation_substitution": 75,
+      "validation_deletion": 1,
+      "flags": [
+        "TRAIN_DELETION_LT_10",
+        "VALIDATION_DELETION_LT_5"
+      ]
+    },
+    "F": {
+      "train_correct": 1270,
+      "train_substitution": 17,
+      "train_deletion": 7,
+      "validation_correct": 631,
+      "validation_substitution": 12,
+      "validation_deletion": 6,
+      "flags": [
+        "TRAIN_DELETION_LT_10"
+      ]
+    },
+    "G": {
+      "train_correct": 517,
+      "train_substitution": 40,
+      "train_deletion": 16,
+      "validation_correct": 258,
+      "validation_substitution": 18,
+      "validation_deletion": 12,
+      "flags": []
+    },
+    "HH": {
+      "train_correct": 1615,
+      "train_substitution": 8,
+      "train_deletion": 17,
+      "validation_correct": 798,
+      "validation_substitution": 3,
+      "validation_deletion": 25,
+      "flags": []
+    },
+    "IH": {
+      "train_correct": 3354,
+      "train_substitution": 403,
+      "train_deletion": 34,
+      "validation_correct": 1639,
+      "validation_substitution": 238,
+      "validation_deletion": 18,
+      "flags": []
+    },
+    "IY": {
+      "train_correct": 2401,
+      "train_substitution": 77,
+      "train_deletion": 11,
+      "validation_correct": 1188,
+      "validation_substitution": 38,
+      "validation_deletion": 6,
+      "flags": []
+    },
+    "JH": {
+      "train_correct": 227,
+      "train_substitution": 127,
+      "train_deletion": 7,
+      "validation_correct": 102,
+      "validation_substitution": 74,
+      "validation_deletion": 5,
+      "flags": [
+        "TRAIN_DELETION_LT_10"
+      ]
+    },
+    "K": {
+      "train_correct": 1439,
+      "train_substitution": 68,
+      "train_deletion": 40,
+      "validation_correct": 732,
+      "validation_substitution": 12,
+      "validation_deletion": 28,
+      "flags": []
+    },
+    "L": {
+      "train_correct": 2062,
+      "train_substitution": 178,
+      "train_deletion": 132,
+      "validation_correct": 973,
+      "validation_substitution": 88,
+      "validation_deletion": 83,
+      "flags": []
+    },
+    "M": {
+      "train_correct": 1738,
+      "train_substitution": 25,
+      "train_deletion": 3,
+      "validation_correct": 874,
+      "validation_substitution": 5,
+      "validation_deletion": 3,
+      "flags": [
+        "TRAIN_DELETION_LT_10",
+        "VALIDATION_DELETION_LT_5"
+      ]
+    },
+    "N": {
+      "train_correct": 3475,
+      "train_substitution": 147,
+      "train_deletion": 82,
+      "validation_correct": 1720,
+      "validation_substitution": 69,
+      "validation_deletion": 45,
+      "flags": []
+    },
+    "NG": {
+      "train_correct": 610,
+      "train_substitution": 42,
+      "train_deletion": 10,
+      "validation_correct": 306,
+      "validation_substitution": 22,
+      "validation_deletion": 3,
+      "flags": [
+        "VALIDATION_DELETION_LT_5"
+      ]
+    },
+    "OW": {
+      "train_correct": 723,
+      "train_substitution": 225,
+      "train_deletion": 0,
+      "validation_correct": 359,
+      "validation_substitution": 109,
+      "validation_deletion": 1,
+      "flags": [
+        "NO_TRAIN_DELETION",
+        "TRAIN_DELETION_LT_10",
+        "VALIDATION_DELETION_LT_5"
+      ]
+    },
+    "OY": {
+      "train_correct": 96,
+      "train_substitution": 6,
+      "train_deletion": 0,
+      "validation_correct": 50,
+      "validation_substitution": 1,
+      "validation_deletion": 0,
+      "flags": [
+        "NO_TRAIN_DELETION",
+        "NO_VALIDATION_DELETION",
+        "TRAIN_DELETION_LT_10",
+        "VALIDATION_DELETION_LT_5"
+      ]
+    },
+    "P": {
+      "train_correct": 996,
+      "train_substitution": 144,
+      "train_deletion": 24,
+      "validation_correct": 504,
+      "validation_substitution": 62,
+      "validation_deletion": 13,
+      "flags": []
+    },
+    "R": {
+      "train_correct": 2095,
+      "train_substitution": 85,
+      "train_deletion": 258,
+      "validation_correct": 863,
+      "validation_substitution": 49,
+      "validation_deletion": 157,
+      "flags": []
+    },
+    "S": {
+      "train_correct": 2230,
+      "train_substitution": 77,
+      "train_deletion": 50,
+      "validation_correct": 1132,
+      "validation_substitution": 28,
+      "validation_deletion": 22,
+      "flags": []
+    },
+    "SH": {
+      "train_correct": 630,
+      "train_substitution": 37,
+      "train_deletion": 2,
+      "validation_correct": 322,
+      "validation_substitution": 12,
+      "validation_deletion": 0,
+      "flags": [
+        "NO_VALIDATION_DELETION",
+        "TRAIN_DELETION_LT_10",
+        "VALIDATION_DELETION_LT_5"
+      ]
+    },
+    "T": {
+      "train_correct": 3125,
+      "train_substitution": 137,
+      "train_deletion": 269,
+      "validation_correct": 1451,
+      "validation_substitution": 87,
+      "validation_deletion": 164,
+      "flags": []
+    },
+    "TH": {
+      "train_correct": 287,
+      "train_substitution": 153,
+      "train_deletion": 11,
+      "validation_correct": 128,
+      "validation_substitution": 84,
+      "validation_deletion": 5,
+      "flags": []
+    },
+    "UH": {
+      "train_correct": 329,
+      "train_substitution": 31,
+      "train_deletion": 0,
+      "validation_correct": 159,
+      "validation_substitution": 26,
+      "validation_deletion": 0,
+      "flags": [
+        "NO_TRAIN_DELETION",
+        "NO_VALIDATION_DELETION",
+        "TRAIN_DELETION_LT_10",
+        "VALIDATION_DELETION_LT_5"
+      ]
+    },
+    "UW": {
+      "train_correct": 1009,
+      "train_substitution": 44,
+      "train_deletion": 2,
+      "validation_correct": 503,
+      "validation_substitution": 20,
+      "validation_deletion": 2,
+      "flags": [
+        "TRAIN_DELETION_LT_10",
+        "VALIDATION_DELETION_LT_5"
+      ]
+    },
+    "V": {
+      "train_correct": 932,
+      "train_substitution": 264,
+      "train_deletion": 42,
+      "validation_correct": 495,
+      "validation_substitution": 82,
+      "validation_deletion": 20,
+      "flags": []
+    },
+    "W": {
+      "train_correct": 1525,
+      "train_substitution": 70,
+      "train_deletion": 22,
+      "validation_correct": 768,
+      "validation_substitution": 13,
+      "validation_deletion": 9,
+      "flags": []
+    },
+    "Y": {
+      "train_correct": 477,
+      "train_substitution": 11,
+      "train_deletion": 12,
+      "validation_correct": 237,
+      "validation_substitution": 3,
+      "validation_deletion": 9,
+      "flags": []
+    },
+    "Z": {
+      "train_correct": 972,
+      "train_substitution": 893,
+      "train_deletion": 92,
+      "validation_correct": 493,
+      "validation_substitution": 434,
+      "validation_deletion": 54,
+      "flags": []
+    },
+    "ZH": {
+      "train_correct": 43,
+      "train_substitution": 23,
+      "train_deletion": 0,
+      "validation_correct": 14,
+      "validation_substitution": 19,
+      "validation_deletion": 0,
+      "flags": [
+        "NO_TRAIN_DELETION",
+        "NO_VALIDATION_DELETION",
+        "TRAIN_DELETION_LT_10",
+        "VALIDATION_DELETION_LT_5"
+      ]
+    }
+  },
+  "speaker_variability": {
+    "BWC": {
+      "split": "train",
+      "clean_rows_same_deletion_phone_inventory": 4836,
+      "clean_rows_all_expected_phones": 4921,
+      "deletion_count": 206,
+      "deletion_rate": 0.041861410282462916,
+      "median_deletion_duration": 0.04,
+      "median_deletion_rms_dbfs": -24.15050426099568,
+      "median_deletion_silence_ratio": 0.0
+    },
+    "EBVS": {
+      "split": "train",
+      "clean_rows_same_deletion_phone_inventory": 4883,
+      "clean_rows_all_expected_phones": 4957,
+      "deletion_count": 194,
+      "deletion_rate": 0.03913657454105306,
+      "median_deletion_duration": 0.03,
+      "median_deletion_rms_dbfs": -28.40286473946629,
+      "median_deletion_silence_ratio": 0.0
+    },
+    "HJK": {
+      "split": "train",
+      "clean_rows_same_deletion_phone_inventory": 4835,
+      "clean_rows_all_expected_phones": 4917,
+      "deletion_count": 4,
+      "deletion_rate": 0.0008135041692088672,
+      "median_deletion_duration": 0.03,
+      "median_deletion_rms_dbfs": -21.91336484313006,
+      "median_deletion_silence_ratio": 0.0
+    },
+    "NCC": {
+      "split": "train",
+      "clean_rows_same_deletion_phone_inventory": 4862,
+      "clean_rows_all_expected_phones": 4945,
+      "deletion_count": 55,
+      "deletion_rate": 0.011122345803842264,
+      "median_deletion_duration": 0.05,
+      "median_deletion_rms_dbfs": -22.664110755669785,
+      "median_deletion_silence_ratio": 0.0
+    },
+    "NJS": {
+      "split": "train",
+      "clean_rows_same_deletion_phone_inventory": 4922,
+      "clean_rows_all_expected_phones": 4994,
+      "deletion_count": 80,
+      "deletion_rate": 0.016019223067681217,
+      "median_deletion_duration": 0.035469,
+      "median_deletion_rms_dbfs": -23.317331518512763,
+      "median_deletion_silence_ratio": 0.0
+    },
+    "PNV": {
+      "split": "train",
+      "clean_rows_same_deletion_phone_inventory": 4917,
+      "clean_rows_all_expected_phones": 5002,
+      "deletion_count": 246,
+      "deletion_rate": 0.04918032786885246,
+      "median_deletion_duration": 0.05,
+      "median_deletion_rms_dbfs": -25.630551354458845,
+      "median_deletion_silence_ratio": 0.0
+    },
+    "RRBI": {
+      "split": "train",
+      "clean_rows_same_deletion_phone_inventory": 4861,
+      "clean_rows_all_expected_phones": 4939,
+      "deletion_count": 65,
+      "deletion_rate": 0.013160558817574408,
+      "median_deletion_duration": 0.04,
+      "median_deletion_rms_dbfs": -21.94908301909356,
+      "median_deletion_silence_ratio": 0.0
+    },
+    "TLV": {
+      "split": "train",
+      "clean_rows_same_deletion_phone_inventory": 4915,
+      "clean_rows_all_expected_phones": 4998,
+      "deletion_count": 435,
+      "deletion_rate": 0.08703481392557023,
+      "median_deletion_duration": 0.04,
+      "median_deletion_rms_dbfs": -24.595037807708124,
+      "median_deletion_silence_ratio": 0.0
+    },
+    "TNI": {
+      "split": "train",
+      "clean_rows_same_deletion_phone_inventory": 4792,
+      "clean_rows_all_expected_phones": 4868,
+      "deletion_count": 68,
+      "deletion_rate": 0.013968775677896467,
+      "median_deletion_duration": 0.05,
+      "median_deletion_rms_dbfs": -24.423209940339454,
+      "median_deletion_silence_ratio": 0.0
+    },
+    "YBAA": {
+      "split": "train",
+      "clean_rows_same_deletion_phone_inventory": 4749,
+      "clean_rows_all_expected_phones": 4823,
+      "deletion_count": 31,
+      "deletion_rate": 0.006427534729421522,
+      "median_deletion_duration": 0.03,
+      "median_deletion_rms_dbfs": -21.07751004946545,
+      "median_deletion_silence_ratio": 0.0
+    },
+    "YKWK": {
+      "split": "train",
+      "clean_rows_same_deletion_phone_inventory": 4812,
+      "clean_rows_all_expected_phones": 4895,
+      "deletion_count": 129,
+      "deletion_rate": 0.026353421859039838,
+      "median_deletion_duration": 0.04,
+      "median_deletion_rms_dbfs": -21.616250498237598,
+      "median_deletion_silence_ratio": 0.0
+    },
+    "ZHAA": {
+      "split": "train",
+      "clean_rows_same_deletion_phone_inventory": 4838,
+      "clean_rows_all_expected_phones": 4912,
+      "deletion_count": 99,
+      "deletion_rate": 0.02015472312703583,
+      "median_deletion_duration": 0.04,
+      "median_deletion_rms_dbfs": -28.72497689589512,
+      "median_deletion_silence_ratio": 0.0
+    },
+    "ABA": {
+      "split": "validation",
+      "clean_rows_same_deletion_phone_inventory": 4706,
+      "clean_rows_all_expected_phones": 4783,
+      "deletion_count": 31,
+      "deletion_rate": 0.006481287894626803,
+      "median_deletion_duration": 0.05,
+      "median_deletion_rms_dbfs": -21.780151080482067,
+      "median_deletion_silence_ratio": 0.0
+    },
+    "HKK": {
+      "split": "validation",
+      "clean_rows_same_deletion_phone_inventory": 4817,
+      "clean_rows_all_expected_phones": 4905,
+      "deletion_count": 103,
+      "deletion_rate": 0.020998980632008155,
+      "median_deletion_duration": 0.039781,
+      "median_deletion_rms_dbfs": -29.290528426127334,
+      "median_deletion_silence_ratio": 0.0
+    },
+    "HQTV": {
+      "split": "validation",
+      "clean_rows_same_deletion_phone_inventory": 4910,
+      "clean_rows_all_expected_phones": 4994,
+      "deletion_count": 477,
+      "deletion_rate": 0.09551461754104926,
+      "median_deletion_duration": 0.04,
+      "median_deletion_rms_dbfs": -18.13937280337577,
+      "median_deletion_silence_ratio": 0.0
+    },
+    "LXC": {
+      "split": "validation",
+      "clean_rows_same_deletion_phone_inventory": 4837,
+      "clean_rows_all_expected_phones": 4925,
+      "deletion_count": 216,
+      "deletion_rate": 0.04385786802030457,
+      "median_deletion_duration": 0.04,
+      "median_deletion_rms_dbfs": -26.94172680395222,
+      "median_deletion_silence_ratio": 0.0
+    },
+    "MBMPS": {
+      "split": "validation",
+      "clean_rows_same_deletion_phone_inventory": 4911,
+      "clean_rows_all_expected_phones": 4987,
+      "deletion_count": 63,
+      "deletion_rate": 0.01263284539803489,
+      "median_deletion_duration": 0.04,
+      "median_deletion_rms_dbfs": -25.25670173827396,
+      "median_deletion_silence_ratio": 0.0
+    },
+    "SVBI": {
+      "split": "validation",
+      "clean_rows_same_deletion_phone_inventory": 4524,
+      "clean_rows_all_expected_phones": 4597,
+      "deletion_count": 89,
+      "deletion_rate": 0.019360452469001522,
+      "median_deletion_duration": 0.041205,
+      "median_deletion_rms_dbfs": -21.204024601195158,
+      "median_deletion_silence_ratio": 0.0
+    }
+  },
+  "test_policy": "TEST metadata used only for aggregate deletion count; TEST audio paths not resolved/accessed"
+}

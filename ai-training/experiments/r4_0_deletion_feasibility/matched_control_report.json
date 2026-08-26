@@ -1,0 +1,235 @@
+{
+  "bin_seconds": 0.01,
+  "seed": 42,
+  "without_replacement": true,
+  "strict_same_speaker_phone_duration_bin": {
+    "rows": 1564,
+    "pairs": 782,
+    "deletion": 782,
+    "non_deletion": 782,
+    "phones": 33,
+    "speakers": 6,
+    "baseline_metrics_with_train_frozen_thresholds": {
+      "always_non_deletion": {
+        "rows": 1564,
+        "deletion_support": 782,
+        "non_deletion_support": 782,
+        "accuracy": 0.5,
+        "balanced_accuracy": 0.5,
+        "macro_f1": 0.3333333333333333,
+        "deletion_precision": 0.0,
+        "deletion_recall": 0.0,
+        "deletion_f1": 0.0,
+        "confusion_matrix": [
+          [
+            782,
+            0
+          ],
+          [
+            782,
+            0
+          ]
+        ]
+      },
+      "duration_only": {
+        "rows": 1564,
+        "deletion_support": 782,
+        "non_deletion_support": 782,
+        "accuracy": 0.4993606138107417,
+        "balanced_accuracy": 0.4993606138107417,
+        "macro_f1": 0.4850189762297753,
+        "deletion_precision": 0.4990403071017274,
+        "deletion_recall": 0.33248081841432225,
+        "deletion_f1": 0.3990790483499616,
+        "confusion_matrix": [
+          [
+            521,
+            261
+          ],
+          [
+            522,
+            260
+          ]
+        ]
+      },
+      "central_rms_only": {
+        "rows": 1564,
+        "deletion_support": 782,
+        "non_deletion_support": 782,
+        "accuracy": 0.5166240409207161,
+        "balanced_accuracy": 0.5166240409207161,
+        "macro_f1": 0.39553886925795056,
+        "deletion_precision": 0.6585365853658537,
+        "deletion_recall": 0.06905370843989769,
+        "deletion_f1": 0.125,
+        "confusion_matrix": [
+          [
+            754,
+            28
+          ],
+          [
+            728,
+            54
+          ]
+        ]
+      },
+      "central_silence_ratio_only": {
+        "rows": 1564,
+        "deletion_support": 782,
+        "non_deletion_support": 782,
+        "accuracy": 0.5070332480818415,
+        "balanced_accuracy": 0.5070332480818415,
+        "macro_f1": 0.35828197417149926,
+        "deletion_precision": 0.6896551724137931,
+        "deletion_recall": 0.02557544757033248,
+        "deletion_f1": 0.04932182490752158,
+        "confusion_matrix": [
+          [
+            773,
+            9
+          ],
+          [
+            762,
+            20
+          ]
+        ]
+      },
+      "context_0.50_rms_only": {
+        "rows": 1564,
+        "deletion_support": 782,
+        "non_deletion_support": 782,
+        "accuracy": 0.5057544757033248,
+        "balanced_accuracy": 0.5057544757033248,
+        "macro_f1": 0.35349609495111006,
+        "deletion_precision": 0.6956521739130435,
+        "deletion_recall": 0.020460358056265986,
+        "deletion_f1": 0.03975155279503106,
+        "confusion_matrix": [
+          [
+            775,
+            7
+          ],
+          [
+            766,
+            16
+          ]
+        ]
+      }
+    }
+  },
+  "relaxed_same_phone_duration_bin": {
+    "rows": 1724,
+    "pairs": 862,
+    "deletion": 862,
+    "non_deletion": 862,
+    "phones": 34,
+    "speakers": 6,
+    "baseline_metrics_with_train_frozen_thresholds": {
+      "always_non_deletion": {
+        "rows": 1724,
+        "deletion_support": 862,
+        "non_deletion_support": 862,
+        "accuracy": 0.5,
+        "balanced_accuracy": 0.5,
+        "macro_f1": 0.3333333333333333,
+        "deletion_precision": 0.0,
+        "deletion_recall": 0.0,
+        "deletion_f1": 0.0,
+        "confusion_matrix": [
+          [
+            862,
+            0
+          ],
+          [
+            862,
+            0
+          ]
+        ]
+      },
+      "duration_only": {
+        "rows": 1724,
+        "deletion_support": 862,
+        "non_deletion_support": 862,
+        "accuracy": 0.4994199535962877,
+        "balanced_accuracy": 0.49941995359628766,
+        "macro_f1": 0.49151164869131436,
+        "deletion_precision": 0.4992272024729521,
+        "deletion_recall": 0.37470997679814383,
+        "deletion_f1": 0.42809807819748175,
+        "confusion_matrix": [
+          [
+            538,
+            324
+          ],
+          [
+            539,
+            323
+          ]
+        ]
+      },
+      "central_rms_only": {
+        "rows": 1724,
+        "deletion_support": 862,
+        "non_deletion_support": 862,
+        "accuracy": 0.5139211136890951,
+        "balanced_accuracy": 0.5139211136890951,
+        "macro_f1": 0.3912131810711727,
+        "deletion_precision": 0.6363636363636364,
+        "deletion_recall": 0.06496519721577726,
+        "deletion_f1": 0.11789473684210525,
+        "confusion_matrix": [
+          [
+            830,
+            32
+          ],
+          [
+            806,
+            56
+          ]
+        ]
+      },
+      "central_silence_ratio_only": {
+        "rows": 1724,
+        "deletion_support": 862,
+        "non_deletion_support": 862,
+        "accuracy": 0.505800464037123,
+        "balanced_accuracy": 0.505800464037123,
+        "macro_f1": 0.35481195807820365,
+        "deletion_precision": 0.6785714285714286,
+        "deletion_recall": 0.022041763341067284,
+        "deletion_f1": 0.04269662921348314,
+        "confusion_matrix": [
+          [
+            853,
+            9
+          ],
+          [
+            843,
+            19
+          ]
+        ]
+      },
+      "context_0.50_rms_only": {
+        "rows": 1724,
+        "deletion_support": 862,
+        "non_deletion_support": 862,
+        "accuracy": 0.5023201856148491,
+        "balanced_accuracy": 0.5023201856148491,
+        "macro_f1": 0.35310190886699505,
+        "deletion_precision": 0.5588235294117647,
+        "deletion_recall": 0.022041763341067284,
+        "deletion_f1": 0.04241071428571428,
+        "confusion_matrix": [
+          [
+            847,
+            15
+          ],
+          [
+            843,
+            19
+          ]
+        ]
+      }
+    }
+  }
+}

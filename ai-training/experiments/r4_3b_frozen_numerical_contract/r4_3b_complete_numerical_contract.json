@@ -1,0 +1,248 @@
+{
+  "contract_id": "R4-3B0",
+  "status": "R4_3B0_NUMERICAL_CONTRACT_FROZEN",
+  "frozen_at": "2026-08-14T14:33:56.0682956+07:00",
+  "scope": "numerical contract freeze only; no validation scoring",
+  "source_artifacts": {
+    "r4_3a_preregistration": {
+      "path": "ai-training/experiments/r4_3a_word_sequence_design_audit/r4_3b_preregistered_design.json",
+      "sha256": "044DBDE804521D2AC0D149097CC9E95BB39EA11C98DA4827AD2FEA6F243E36F2"
+    },
+    "oracle_alignment": {
+      "path": "ai-training/experiments/r4_3a_word_sequence_design_audit/oracle_alignment.json",
+      "sha256": "FF6E73CB0EEA88EF5B6E258B614C0711C59CCF3FB65E46E2AA47594BF26CB528"
+    },
+    "word_reconstruction": {
+      "path": "ai-training/experiments/r4_3a_word_sequence_design_audit/word_reconstruction.json",
+      "sha256": "3440961B65A311ACF2ECC352E4F1DBF589E7628CA37B2BCE49972DDBEB8A1D93"
+    },
+    "matched_control": {
+      "path": "ai-training/experiments/r4_0_deletion_feasibility/matched_control_validation_rows.csv",
+      "sha256": "864591A259F0C7E6F16828C5F755049CFCF0F79A8B586ADA354D190F9C5C7823"
+    },
+    "r4_3a_probe_grid_implementation": {
+      "path": "ai-training/scripts/run_r4_3a_word_sequence_design_audit.py",
+      "sha256": "EE4BFA1911AD434C8E9B9FFEAAC159E7A64774CCFA1E16324AE8F6411DD9A5AC"
+    },
+    "r3_preprocessing_implementation": {
+      "path": "ai-training/scripts/run_l2_arctic_observed_phone_r3_1a.py",
+      "sha256": "1AB24C99A6F34156AF0E4A6C78AD6167A57993D2308920695687C8833A3AE2DC"
+    }
+  },
+  "model_and_data": {
+    "r3_checkpoint": {
+      "path": "ai-training/experiments/r3_1d_observed_phone_seed42_48epochs/R3_1D_observed_phone_40class_seed42_best_validation_macro_f1.pt",
+      "sha256": "5C66860BBC50BA803F5BFE25417DF19BDF34B1C7BE36D507B0DDCA88D767EA5E",
+      "mode": "eval",
+      "neural_inputs": ["audio_log_mel_only"]
+    },
+    "v4_dataset": {
+      "path": "ai-training/datasets/l2-arctic/metadata/all_speakers_expected_observed_v4.csv",
+      "sha256": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D"
+    },
+    "phone_vocabulary_index_order": [
+      "AA", "AE", "AH", "AO", "AW", "AX", "AY", "B", "CH", "D",
+      "DH", "EH", "ER", "EY", "F", "G", "HH", "IH", "IY", "JH",
+      "K", "L", "M", "N", "NG", "OW", "OY", "P", "R", "S",
+      "SH", "T", "TH", "UH", "UW", "V", "W", "Y", "Z", "ZH"
+    ],
+    "train_speakers": ["BWC", "EBVS", "HJK", "NCC", "NJS", "PNV", "RRBI", "TLV", "TNI", "YBAA", "YKWK", "ZHAA"],
+    "validation_speakers": ["ABA", "HKK", "HQTV", "LXC", "MBMPS", "SVBI"],
+    "r4_test_speakers_closed": ["ASI", "ERMS", "SKA", "THV", "TXHC", "YDCK"]
+  },
+  "probe_grid": {
+    "boundary_source": "MFA word start/end only",
+    "stride_seconds": 0.04,
+    "comparison_epsilon_seconds": 1e-09,
+    "first_probe_center": "word_start",
+    "recurrence": "append previous_center + 0.040 while that value < word_end - 1e-9",
+    "last_probe_center": "append word_end when word_end - last_center > 1e-9; therefore the last center is the word end, including a shorter final grid step when needed",
+    "non_positive_word_duration": "one probe at (word_start + word_end) / 2",
+    "positive_word_shorter_than_stride": "two probes: word_start and word_end",
+    "crop_seconds": 0.5,
+    "crop_samples": 8000,
+    "word_boundary_behavior": "crop is centered at each grid point and may include context outside the word",
+    "utterance_edge_behavior": "clip available waveform and zero-pad only the missing utterance-edge side",
+    "mfa_phone_labels_used": false
+  },
+  "preprocessing": {
+    "sample_rate": 16000,
+    "mono": true,
+    "n_mels": 64,
+    "n_fft": 2048,
+    "hop_length": 512,
+    "win_length": 2048,
+    "window": "Hann",
+    "center": true,
+    "pad_mode": "constant",
+    "power": 2.0,
+    "mel_scale": "slaney",
+    "norm": "slaney",
+    "power_to_db": "10*log10(clamp(power,min=1e-10)); subtract per-sample maximum; clamp minimum to -80 dB",
+    "feature_shape_per_probe": [1, 64, 16]
+  },
+  "acoustic_evidence": {
+    "model_output": "40 frozen logits per probe",
+    "formula": "L[t,p] = log_softmax(logits[t], dim=phone)[p]",
+    "phone_order": "model_and_data.phone_vocabulary_index_order",
+    "storage": "time x 40 log-probability matrix",
+    "dp_accumulation_dtype": "float64",
+    "expected_phone_is_neural_input": false
+  },
+  "train_only_operation_priors": {
+    "usable_train_words": 16259,
+    "count_scope": "clean expected-phone positions in usable TRAIN words; addition-containing, unresolved, malformed, or missing-boundary words excluded",
+    "counts": {
+      "C_MATCH": 48893,
+      "C_SUB": 5867,
+      "C_DEL": 1544,
+      "N": 56304
+    },
+    "laplace_alpha": 1.0,
+    "denominator": 56307,
+    "formula": "P_op = (C_op + 1) / (N + 3)",
+    "log_formula": "log_prior_op = natural_log(P_op)",
+    "scaling": "none",
+    "temperature": "none",
+    "values": {
+      "MATCH": {
+        "numerator": 48894,
+        "probability": 0.868346741968139,
+        "log_prior": -0.14116417177608467
+      },
+      "SUBSTITUTION": {
+        "numerator": 5868,
+        "probability": 0.10421439607864032,
+        "log_prior": -2.261305001061487
+      },
+      "DELETE_EXPECTED": {
+        "numerator": 1545,
+        "probability": 0.027438861953220737,
+        "log_prior": -3.595794950992514
+      }
+    }
+  },
+  "span_contract": {
+    "emission_operations": ["MATCH", "SUBSTITUTION"],
+    "domain": "every contiguous probe span [t,t+k) with integer k >= 1 and t+k <= T, subject only to existence of a complete monotonic path",
+    "minimum_probes": 1,
+    "maximum_probes": "remaining probe count",
+    "deletion_probes": 0,
+    "phone_relation_duration_bounds": "none",
+    "aggregation": "A(S,p) = (1/k) * sum_{u=t}^{t+k-1} L[u,p]",
+    "aggregation_type": "mean log probability",
+    "extra_normalization": "none"
+  },
+  "operation_scores": {
+    "MATCH": "log_prior_MATCH + A(S,e)",
+    "SUBSTITUTION": {
+      "alternative": "q_star = argmax over q != e of A(S,q)",
+      "alternative_tie": "lowest canonical phone index",
+      "score": "log_prior_SUB + A(S,q_star)",
+      "sustained_definition": "mean competing-phone log probability across the complete assigned span; no majority, posterior, margin, or minimum-winning-probe rule"
+    },
+    "DELETE_EXPECTED": "log_prior_DEL",
+    "ADVANCE_TIME": "structural only: increase k within the same contiguous emitted-phone span; no prior, continuation penalty, duration bonus, or duration penalty"
+  },
+  "dynamic_programming": {
+    "expected_sequence": "E[0..n-1]",
+    "probe_count": "T",
+    "state": "DP[i,t] is the best score after consuming exactly the first i expected phones and first t probes",
+    "domain": "0 <= i <= n and 0 <= t <= T",
+    "initialization": {
+      "DP[0,0]": 0.0,
+      "all_other_states": "negative infinity",
+      "free_leading_probes": false,
+      "free_leading_expected_phones": false
+    },
+    "recurrence": {
+      "MATCH": "for every k>=1 with t+k<=T: DP[i+1,t+k] candidate = DP[i,t] + log_prior_MATCH + mean(L[t:t+k,E[i]])",
+      "SUBSTITUTION": "for every k>=1 with t+k<=T: choose q_star != E[i] by maximum mean L (lowest index on exact tie); DP[i+1,t+k] candidate = DP[i,t] + log_prior_SUB + mean(L[t:t+k,q_star])",
+      "DELETE_EXPECTED": "DP[i+1,t] candidate = DP[i,t] + log_prior_DEL"
+    },
+    "termination": {
+      "required_state": "DP[n,T]",
+      "all_expected_phones_processed": true,
+      "all_probes_consumed": true,
+      "free_trailing_probes": false,
+      "free_unresolved_expected_phones": false,
+      "unreachable_result": "NO_VALID_PATH"
+    },
+    "insertion_transition": false,
+    "relation_output": "exactly one of correct, substitution, deletion per expected phone",
+    "substitution_output": "q_star from the selected assigned span"
+  },
+  "tie_policy": {
+    "accumulation_dtype": "float64",
+    "tie_epsilon": 1e-08,
+    "strict_better": "score_A > score_B + 1e-8",
+    "tie": "abs(score_A - score_B) <= 1e-8",
+    "ordered_resolution": [
+      "MATCH over SUBSTITUTION over DELETE_EXPECTED",
+      "for MATCH or SUBSTITUTION, shorter assigned span",
+      "for SUBSTITUTION, lower canonical q_star index",
+      "lower acoustic start index of the current predecessor transition",
+      "lexicographically smaller full operation-record sequence; each expected-position record is (operation_rank, probe_start, probe_end, q_star_or_-1), with MATCH=0, SUBSTITUTION=1, DELETE_EXPECTED=2"
+    ],
+    "manual_or_validation_dependent_ties": false
+  },
+  "ambiguity": {
+    "bookkeeping": "deterministic exact k=2 complete-path bookkeeping where practical",
+    "path_identity": "ordered expected-position records (operation_rank, probe_start, probe_end, q_star_or_-1)",
+    "path_score_gap": "best_complete_score - second_best_distinct_complete_path_score",
+    "numerically_ambiguous": "second-best distinct complete path exists and path_score_gap <= 1e-8",
+    "selected_path": "always the single path selected by tie_policy"
+  },
+  "interpretation": {
+    "match_vs_substitution": "generate both transitions; global DP chooses using frozen acoustic mean log evidence, TRAIN priors, and monotonic constraints; no threshold",
+    "deletion": "only a selected DELETE_EXPECTED transition in the globally optimal complete path; never inferred directly from duration, manual center, scalar margin, or MFA phone omission"
+  },
+  "hard_validation_gates_copied_unchanged": {
+    "binary_macro_f1_min": 0.70,
+    "deletion_f1_min": 0.40,
+    "deletion_recall_min": 0.45,
+    "binary_macro_f1_gain_over_duration_baseline_min": 0.03,
+    "strict_matched_macro_f1_min": 0.60,
+    "strict_matched_deletion_f1_min": 0.55,
+    "substitution_false_deletion_rate_max": 0.25,
+    "speaker_gate": "for each validation speaker with >=30 deletions, deletion recall >=0.25",
+    "additional_phone_or_generalization_hard_gates_in_r4_3a": "none"
+  },
+  "frozen_comparator_metrics": {
+    "duration_only": {
+      "macro_f1": 0.668146,
+      "balanced_accuracy": 0.706301,
+      "deletion_f1": 0.364164
+    },
+    "r4_1_full": {
+      "macro_f1": 0.657336,
+      "balanced_accuracy": 0.683828,
+      "deletion_f1": 0.341612
+    },
+    "r4_2a_expected_evidence": {
+      "macro_f1": 0.566997,
+      "balanced_accuracy": 0.664977,
+      "deletion_f1": 0.197525
+    }
+  },
+  "forbidden_inputs_and_tuning": [
+    "manual relation as scorer input",
+    "manual observed phone as scorer input",
+    "manual deletion interval or duration",
+    "MFA phone labels as observed truth",
+    "phone-, speaker-, duration-, or validation-specific costs",
+    "validation-derived numerical parameters",
+    "addition transitions",
+    "new neural training or R3 modification"
+  ],
+  "execution_policy": {
+    "train_metadata_used_only_for_relation_counts": true,
+    "validation_labels_used_for_contract_design": false,
+    "validation_acoustic_inference": false,
+    "r4_test_paths_resolved": false,
+    "r4_test_audio_accessed": false,
+    "r4_test_inference": false,
+    "training_performed": false,
+    "next_r4_3b_must_verify_contract_json_and_markdown_hashes": true
+  }
+}

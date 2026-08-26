@@ -1,0 +1,35 @@
+{
+  "experiment": "R4-2B Sequence/Localization Feasibility Audit",
+  "markers": [
+    "RESEARCH_ONLY",
+    "AUDIT_ONLY",
+    "NO_TRAINING",
+    "R4_TEST_CLOSED"
+  ],
+  "checkpoint_sha256": "5C66860BBC50BA803F5BFE25417DF19BDF34B1C7BE36D507B0DDCA88D767EA5E",
+  "offsets_ms": [
+    -100,
+    -50,
+    0,
+    50,
+    100
+  ],
+  "crop_seconds_each_probe": 0.5,
+  "feature_shape": [
+    1,
+    64,
+    16
+  ],
+  "matched_speaker_sufficient_pairs": 20,
+  "score_orientations": {
+    "neighbor_capture": "deletion_high",
+    "center_distinctness": "substitution_high",
+    "alternative_persistence": "substitution_high",
+    "left_right_transition": "deletion_high"
+  },
+  "combined": "+z_train(neighbor_capture)+z_train(transition)-z_train(center_distinctness); weights fixed 1",
+  "verdict_rule": "PROMISING if STRONG, or MODERATE with best and combined AUC>=.65 and both phone groups best-score AUC>=.60; runtime not blocker; WEAK=>NOT_SUPPORTED",
+  "test_audio_paths_resolved": false,
+  "test_audio_accessed": false,
+  "training_performed": false
+}

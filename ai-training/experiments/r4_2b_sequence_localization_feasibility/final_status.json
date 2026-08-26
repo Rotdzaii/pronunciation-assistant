@@ -1,0 +1,26 @@
+{
+  "signal_gate": "SEQUENCE_SIGNAL_MODERATE",
+  "best_predefined_score": "center_distinctness",
+  "best_matched_roc_auc": 0.6396183455855351,
+  "strong_scores": [],
+  "combined_roc_auc": 0.5852078868123577,
+  "combined_pr_auc": 0.5638989843773448,
+  "central_novel_rates": {
+    "substitution": {
+      "count": 301,
+      "support": 387,
+      "rate": 0.7777777777777778
+    },
+    "deletion": {
+      "count": 265,
+      "support": 387,
+      "rate": 0.6847545219638242
+    }
+  },
+  "runtime_anchor": "RUNTIME_ANCHOR_UNCERTAIN",
+  "formulation_verdict": "SEQUENCE_LOCALIZATION_NEEDS_MORE_EVIDENCE",
+  "training_performed": false,
+  "r4_test_audio_paths_resolved": false,
+  "r4_test_audio_accessed": false,
+  "r4_test_inference": false
+}

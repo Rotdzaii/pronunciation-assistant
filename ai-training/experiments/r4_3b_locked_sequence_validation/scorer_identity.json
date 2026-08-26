@@ -1,0 +1,19 @@
+{
+  "path": "ai-training/scripts/r4_3b_sequence_dp.py",
+  "sha256": "3DA0A8A238C5FDF05F368F010558263CC98E73FC49E4C4600BBEB68E221A86D1",
+  "synthetic_tests": {
+    "status": "PASS",
+    "passed": 7,
+    "expected": 7,
+    "tests": [
+      "test_all_correct",
+      "test_final_deletion",
+      "test_initial_deletion",
+      "test_medial_deletion_is_representable",
+      "test_probe_grid_matches_r4_3a",
+      "test_substitution_is_representable",
+      "test_two_consecutive_deletions"
+    ]
+  },
+  "modified_after_validation_started": false
+}

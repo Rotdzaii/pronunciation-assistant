@@ -1,0 +1,17 @@
+{
+  "train_operation_count_computation_seconds": 4.212267100000645,
+  "train_counts_reproduced_in_metadata_preflight": true,
+  "device": "cuda",
+  "gpu_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+  "checkpoint_epoch": 47,
+  "validation_probes": 77515,
+  "median_probes_per_word": 9.0,
+  "acoustic_inference_seconds": 29.50214760000017,
+  "probes_per_second": 2627.4358413148047,
+  "peak_vram_bytes": 94117376,
+  "audio_root_identity": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant\\ai-training\\datasets\\l2-arctic\\raw\\l2arctic_release_v5.0",
+  "dp_seconds": 45.98366720000013,
+  "no_valid_paths": 0,
+  "no_valid_path_rate": 0.0,
+  "total_experiment_seconds": 83.21533799999997
+}

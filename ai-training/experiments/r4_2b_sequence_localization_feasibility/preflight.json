@@ -1,0 +1,117 @@
+{
+  "checkpoint_sha256": "5C66860BBC50BA803F5BFE25417DF19BDF34B1C7BE36D507B0DDCA88D767EA5E",
+  "source": {
+    "dataset_sha256": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D",
+    "matched_control_sha256": "864591A259F0C7E6F16828C5F755049CFCF0F79A8B586ADA354D190F9C5C7823",
+    "splits": {
+      "train": {
+        "rows": 59171,
+        "correct": 51400,
+        "substitution": 6159,
+        "deletion": 1612,
+        "speakers": [
+          "BWC",
+          "EBVS",
+          "HJK",
+          "NCC",
+          "NJS",
+          "PNV",
+          "RRBI",
+          "TLV",
+          "TNI",
+          "YBAA",
+          "YKWK",
+          "ZHAA"
+        ]
+      },
+      "validation": {
+        "rows": 29191,
+        "correct": 25303,
+        "substitution": 2909,
+        "deletion": 979,
+        "speakers": [
+          "ABA",
+          "HKK",
+          "HQTV",
+          "LXC",
+          "MBMPS",
+          "SVBI"
+        ]
+      },
+      "test": {
+        "rows": 29043,
+        "correct": 24923,
+        "substitution": 3293,
+        "deletion": 827,
+        "speakers": [
+          "ASI",
+          "ERMS",
+          "SKA",
+          "THV",
+          "TXHC",
+          "YDCK"
+        ]
+      }
+    },
+    "matched_control": {
+      "status": "PASS",
+      "rows": 1564,
+      "deletion": 782,
+      "non_deletion": 782,
+      "pairs": 782,
+      "strata": 302,
+      "speakers": [
+        "ABA",
+        "HKK",
+        "HQTV",
+        "LXC",
+        "MBMPS",
+        "SVBI"
+      ],
+      "matching": "same speaker + canonical expected phone + half-open 10 ms annotation-duration bin",
+      "rebuilt_or_resampled": false
+    },
+    "test_audio_paths_resolved": false,
+    "test_audio_accessed": false
+  },
+  "audio": {
+    "scope": "TRAIN+VALIDATION only; TEST audio not resolved or accessed",
+    "rows": 11249,
+    "unique_wav_files": 2502,
+    "sample_rates": {
+      "44100": 2502
+    },
+    "total_unique_audio_hours": 2.5909441232048285,
+    "missing": 0,
+    "unreadable": 0,
+    "invalid_duration": 0,
+    "empty_crop": 0,
+    "edge_padding_by_origin": {
+      "correct": {
+        "rows": 2618,
+        "padded": 116,
+        "padded_rate": 0.04430863254392666
+      },
+      "substitution": {
+        "rows": 6601,
+        "padded": 294,
+        "padded_rate": 0.044538706256627786
+      }
+    }
+  },
+  "probe_shape": [
+    11249,
+    5,
+    40
+  ],
+  "feature_shape": [
+    1,
+    64,
+    16
+  ],
+  "center_reproduction_max_abs_delta": 6.246566772460938e-05,
+  "center_reproduction_status": "PASS",
+  "inference_seconds": 16.18484029999945,
+  "test_audio_paths_resolved": false,
+  "test_audio_accessed": false
+}

@@ -1,0 +1,11 @@
+{
+  "path": "ai-training/scripts/execute_r4_4d1_locked_hypothesis_validation.py",
+  "sha256": "5F12FB5E6B0A4765107DCAD3C822F32E6909940E9FAE265F5C3E3551ACB6AE22",
+  "modes": {
+    "self_test": "synthetic/static verification only",
+    "execute": "future locked TRAIN calibration followed by threshold freeze verification and one VALIDATION evaluation"
+  },
+  "future_output": "ai-training/experiments/r4_4d1_locked_hypothesis_validation/locked_execution_v1",
+  "overwrite_existing_stop_evidence": false,
+  "frozen_after_self_tests": true
+}

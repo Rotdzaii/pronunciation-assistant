@@ -1,0 +1,21 @@
+{
+  "locked_execution_count": 1,
+  "command": "$env:L2_ARCTIC_ROOT='C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant\\ai-training\\datasets\\l2-arctic\\raw\\l2arctic_release_v5.0'; & 'C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant\\ai-training\\.venv\\Scripts\\python.exe' ai-training\\scripts\\execute_r4_4d1_locked_hypothesis_validation.py --execute",
+  "start_time": "2026-08-14T21:56:03.8945742+07:00",
+  "end_time": "2026-08-14T22:52:39.9960778+07:00",
+  "wall_seconds_to_contractual_stop": 3396.1015036,
+  "exit_code": 1,
+  "train_words_scored": 16259,
+  "train_expected_phone_rows": 56304,
+  "train_hypotheses": 2268419,
+  "threshold_candidates": 56263,
+  "eligible_thresholds": 12493,
+  "validation_words_scored_once": 7728,
+  "validation_expected_phone_rows": 26337,
+  "validation_hypotheses": 1061208,
+  "validation_metrics_written": false,
+  "stop_reason": "frozen matched-control identity mapping failure",
+  "second_execution": false,
+  "training": false,
+  "test_accessed": false
+}

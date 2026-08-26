@@ -1,0 +1,222 @@
+{
+  "contract_id": "R4-4D2B_PREREGISTERED_FINAL_DEVELOPMENT_VALIDATION",
+  "status": "FROZEN_BEFORE_R4_4D2B",
+  "selected_score_family": "TARGET",
+  "robust_theta": 0.16184102947061696,
+  "threshold_source": "ordinary float64 median of 12 TRAIN-speaker LOSO thresholds",
+  "source_shas": {
+    "v4": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D",
+    "checkpoint": "F54C9C2361AE78E1C37353AEB338A2DE6722C0B1EC4F885F6B52688CE9E88085",
+    "r4_4d0_manifest": "A8443C85AA9C03879E3A907CC3AB05CC6154BB365BED70A59B4ED8E9FBA1A920",
+    "r4_4d1_numerical_contract": "5DC07A4B719FD6F38DBD1366CF802787FA3882CA972E5356A8F91DB435443425",
+    "train_position_scores": "E6361398B61B9CFC03AE695CA72377B5F5DBD8D71B254CB202CBE432B918996A",
+    "train_auc_metrics": "057DFF840A747CA955F9141A1CDCD9C31303312688C92FE6F2ADB10D83346A9D",
+    "train_deletion_vs_substitution": "627075FE379A8377DD34D6317D33BFE272FD582BFBD835D9F3907C2A20C8C612",
+    "r4_4d1_v2_manifest": "447D55708D20FC7506C0A49C9F8909B8E7AFDDEEF46F54FC63F99C322AC42577",
+    "matched_control": "D933F674743DA06CC8FAB425CEBF81D9C78505E1BDB4A90204DDB2E1A15B4798"
+  },
+  "train_only_selection": {
+    "speakers": [
+      "BWC",
+      "EBVS",
+      "HJK",
+      "NCC",
+      "NJS",
+      "PNV",
+      "RRBI",
+      "TLV",
+      "TNI",
+      "YBAA",
+      "YKWK",
+      "ZHAA"
+    ],
+    "protocol": "12-fold speaker LOSO",
+    "oof_metrics": {
+      "accuracy": 0.9482630008525149,
+      "balanced_accuracy": 0.7096806318291404,
+      "binary_macro_f1": 0.6497861293562859,
+      "deletion_precision": 0.2538655160014383,
+      "deletion_recall": 0.4572538860103627,
+      "deletion_f1": 0.3264739884393063,
+      "nondeletion_precision": 0.9843431795676625,
+      "nondeletion_recall": 0.9621073776479182,
+      "nondeletion_f1": 0.9730982702732653,
+      "binary_confusion_matrix": [
+        [
+          52685,
+          2075
+        ],
+        [
+          838,
+          706
+        ]
+      ],
+      "correct_false_deletion": 0.037490029247540545,
+      "substitution_false_deletion": 0.041247656383160046,
+      "three_relation_macro_f1": 0.49727422766157625,
+      "three_relation_per_class": {
+        "correct": {
+          "precision": 0.9627565897739412,
+          "recall": 0.6820403738776512,
+          "f1": 0.7984436729318808,
+          "support": 48893
+        },
+        "substitution": {
+          "precision": 0.24044265593561368,
+          "recall": 0.773990114198057,
+          "f1": 0.3669050216135418,
+          "support": 5867
+        },
+        "deletion": {
+          "precision": 0.2538655160014383,
+          "recall": 0.4572538860103627,
+          "f1": 0.3264739884393063,
+          "support": 1544
+        }
+      },
+      "three_relation_confusion_matrix": [
+        [
+          33347,
+          13713,
+          1833
+        ],
+        [
+          1084,
+          4541,
+          242
+        ],
+        [
+          206,
+          632,
+          706
+        ]
+      ],
+      "best_sub_phone": {
+        "true_substitution_support": 5867,
+        "predicted_substitution_rows": 4541,
+        "coverage": 0.773990114198057,
+        "correct": 3080,
+        "top1_accuracy": 0.6782646994054173
+      }
+    },
+    "fold_thresholds": {
+      "BWC": 0.1589079192190456,
+      "EBVS": 0.1665616830190022,
+      "HJK": 0.1589079192190456,
+      "NCC": 0.1647741397221883,
+      "NJS": 0.1647741397221883,
+      "PNV": 0.12906699521201,
+      "RRBI": 0.1647741397221883,
+      "TLV": 0.12906699521201,
+      "TNI": 0.1589079192190456,
+      "YBAA": 0.1589079192190456,
+      "YKWK": 0.1680642025811332,
+      "ZHAA": 0.1647741397221883
+    },
+    "validation_influence": false
+  },
+  "acoustic_checkpoint": [
+    "ai-training/experiments/r4_4c2_bigru_ctc_seed42/R4_4C2_bigru_ctc_phone_sequence_seed42_best_validation_per.pt",
+    "F54C9C2361AE78E1C37353AEB338A2DE6722C0B1EC4F885F6B52688CE9E88085"
+  ],
+  "hypothesis_and_relation_rule": {
+    "inherited": "R4-4D1A",
+    "decision_score": "D_i=DELETE_i-max(KEEP_i,BEST_SUB_i) within selected family",
+    "decision": "D_i>=ROBUST_THETA => deletion; else KEEP>=BEST_SUB => correct; else substitution",
+    "best_sub_tie": "lowest canonical phone index"
+  },
+  "validation_metrics_and_gates": {
+    "all_required": true,
+    "binary_macro_f1_min": 0.7,
+    "deletion_recall_min": 0.45,
+    "deletion_f1_min": 0.4,
+    "substitution_false_deletion_max": 0.25,
+    "matched_binary_macro_f1_min": 0.6,
+    "matched_deletion_f1_min": 0.55,
+    "speaker_deletion_recall": {
+      "apply_when_support_at_least": 30,
+      "minimum": 0.25,
+      "every_eligible_validation_speaker": true
+    },
+    "three_relation_macro_f1_min": 0.4
+  },
+  "matched_control": {
+    "path": "ai-training/experiments/r4_4a_ctc_sequence_feasibility/validation_word_eligible_matched_control.csv",
+    "sha256": "D933F674743DA06CC8FAB425CEBF81D9C78505E1BDB4A90204DDB2E1A15B4798",
+    "deletion_rows": 717,
+    "nondeletion_rows": 717,
+    "total_rows": 1434,
+    "phones": 32,
+    "validation_speakers": 6,
+    "identity_rule": "all 1434 frozen row identities must match exactly one future validation prediction row",
+    "prohibited": [
+      "rebuild",
+      "resample",
+      "intersection",
+      "silent shrink"
+    ],
+    "identity_failure_action": "stop matched evaluation and mark contract failure",
+    "metrics": [
+      "accuracy",
+      "balanced_accuracy",
+      "binary_macro_f1",
+      "deletion_precision",
+      "deletion_recall",
+      "deletion_f1",
+      "binary_confusion_matrix"
+    ]
+  },
+  "classification": {
+    "precedence": [
+      "R4_4D1_SOURCE_VERIFICATION_FAIL",
+      "R4_4D1_TRAIN_CALIBRATION_NO_ELIGIBLE_THRESHOLD",
+      "R4_4D1_HYPOTHESIS_DELETION_CONFIRMED",
+      "R4_4D1_HYPOTHESIS_DELETION_STRONG_PARTIAL",
+      "R4_4D1_HYPOTHESIS_THRESHOLD_TRANSFER_FAIL",
+      "R4_4D1_HYPOTHESIS_SIGNAL_NOT_CONFIRMED"
+    ],
+    "source_verification_fail": "any frozen source identity mismatch",
+    "no_eligible_threshold": "zero TRAIN threshold candidates pass all TRAIN eligibility constraints",
+    "confirmed": "all eight validation_hard_gates pass",
+    "strong_partial": {
+      "all_required": true,
+      "binary_macro_f1_min": 0.65,
+      "deletion_f1_min": 0.35,
+      "deletion_recall_min": 0.4,
+      "substitution_false_deletion_max": 0.25,
+      "matched_binary_macro_f1_min": 0.58,
+      "matched_deletion_f1_min": 0.5,
+      "three_relation_macro_f1_min": 0.38,
+      "speaker_deletion_recall": {
+        "apply_when_support_at_least": 30,
+        "minimum": 0.2,
+        "every_eligible_validation_speaker": true
+      }
+    },
+    "threshold_transfer_fail": {
+      "precondition": "confirmed and strong_partial both fail",
+      "all_required": true,
+      "validation_deletion_vs_nondeletion_roc_auc_min": 0.75,
+      "validation_deletion_vs_substitution_roc_auc_min": 0.7
+    },
+    "signal_not_confirmed": "confirmed fails, strong_partial fails, and both threshold_transfer_fail AUC criteria do not pass",
+    "subjective_override": false
+  },
+  "policy": {
+    "one_final_development_validation_run": true,
+    "r4_4d1_validation_already_consumed": true,
+    "r4_4d2b_not_pristine_first_validation": true,
+    "no_further_r4_calibration_if_r4_4d2b_fails": true,
+    "test_remains_final_independent_holdout": true,
+    "test_speakers": [
+      "ASI",
+      "ERMS",
+      "SKA",
+      "THV",
+      "TXHC",
+      "YDCK"
+    ],
+    "test_closed": true,
+    "training": false
+  }
+}

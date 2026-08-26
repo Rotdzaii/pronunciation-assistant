@@ -1,0 +1,15 @@
+{
+  "classification": "RESEARCH LIMITATION / NOT CONFIRMED",
+  "primary_limitation": "INSUFFICIENT ROBUST DELETION DECISION PERFORMANCE",
+  "failed_requirements": [
+    {"metric": "binary_macro_f1", "observed": 0.6521023094599894, "required": ">= 0.70"},
+    {"metric": "deletion_recall", "observed": 0.3730853391684901, "required": ">= 0.45"},
+    {"metric": "deletion_f1", "observed": 0.3313896987366375, "required": ">= 0.40"},
+    {"metric": "matched_macro_f1", "observed": 0.5934906451822113, "required": ">= 0.60"},
+    {"metric": "matched_deletion_f1", "observed": 0.4857685009487666, "required": ">= 0.55"}
+  ],
+  "important_qualification": "Continuous acoustic signal remained useful; this is not classified as complete acoustic-signal absence.",
+  "prohibited_claims": ["deletion solved", "production-ready deletion detection", "validated deletion classifier", "TEST-confirmed deletion performance"],
+  "runtime_policy": "Current R4 deletion output must not be presented as validated production behavior.",
+  "scope": "This limitation does not negate separate Phoenix research findings for correct and substitution."
+}

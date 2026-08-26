@@ -1,0 +1,8 @@
+{
+  "path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r4_4d1_locked_hypothesis_validation\\locked_execution_v1\\train_calibrated_threshold.json",
+  "sha256": "36F6FD5AB6B7E98A607D499445E455DCAB8C3DD4ACDD19F252DC472FCDD07E94",
+  "theta": 2.197946548461914,
+  "score_family": "RAW",
+  "content_verified": true,
+  "train_recalibrated": false
+}

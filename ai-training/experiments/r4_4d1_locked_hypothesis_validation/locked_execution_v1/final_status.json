@@ -1,0 +1,17 @@
+{
+  "status": "R4_4D1_SOURCE_VERIFICATION_FAIL",
+  "classification_basis": "The frozen matched-control source identities could not be verified against the frozen driver's validation row identity convention; 233 of 1434 required identities were unavailable. The contract required a fatal stop without intersection.",
+  "source_hash_verification": "PASS",
+  "matched_control_hash_verification": "PASS",
+  "matched_control_identity_mapping": "FAIL",
+  "train_threshold_calculated": true,
+  "threshold_frozen_before_validation": true,
+  "validation_hypothesis_scoring_executions": 1,
+  "validation_metrics_calculated": false,
+  "confirmation_gates_evaluated": false,
+  "locked_execution_count": 1,
+  "post_hoc_threshold_change": false,
+  "neural_training": false,
+  "r4_test_accessed": false,
+  "rerun_authorized": false
+}

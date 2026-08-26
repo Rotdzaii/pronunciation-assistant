@@ -1,0 +1,78 @@
+{
+  "r4_4d1_raw": {
+    "binary_macro_f1": 0.64375,
+    "balanced_accuracy": 0.696587,
+    "deletion_precision": 0.253149,
+    "deletion_recall": 0.439825,
+    "deletion_f1": 0.321343,
+    "matched_macro_f1": 0.613344,
+    "matched_deletion_f1": 0.533802,
+    "three_relation_macro_f1": 0.462263
+  },
+  "target_train_oof": {
+    "binary_macro_f1": 0.649786,
+    "deletion_precision": 0.253866,
+    "deletion_recall": 0.457254,
+    "deletion_f1": 0.326474,
+    "correct_false_deletion": 0.03749,
+    "substitution_false_deletion": 0.041248,
+    "three_relation_macro_f1": 0.497274
+  },
+  "r4_4d2b_target": {
+    "binary_macro_f1": 0.6521023094599894,
+    "balanced_accuracy": 0.670749883524378,
+    "deletion_precision": 0.2980769230769231,
+    "deletion_recall": 0.3730853391684901,
+    "deletion_f1": 0.3313896987366375,
+    "matched_macro_f1": 0.5934906451822113,
+    "matched_deletion_f1": 0.4857685009487666,
+    "three_relation_macro_f1": 0.4657420632332678
+  },
+  "delta_vs_r4_4d1_raw": {
+    "binary_macro_f1": 0.008352309459989327,
+    "balanced_accuracy": -0.025837116475621924,
+    "deletion_precision": 0.04492792307692306,
+    "deletion_recall": -0.0667396608315099,
+    "deletion_f1": 0.010046698736637494,
+    "matched_macro_f1": -0.019853354817788715,
+    "matched_deletion_f1": -0.048033499051233386,
+    "three_relation_macro_f1": 0.0034790632332677984
+  },
+  "target_oof_vs_validation": {
+    "binary_macro_f1": 0.0023163094599893963,
+    "deletion_precision": 0.04421092307692309,
+    "deletion_recall": -0.08416866083150987,
+    "deletion_f1": 0.004915698736637497,
+    "three_relation_macro_f1": -0.031531936766732216
+  },
+  "historical": {
+    "duration_only": {
+      "binary_macro_f1": 0.668146,
+      "deletion_f1": 0.364164
+    },
+    "r4_1": {
+      "binary_macro_f1": 0.657336,
+      "deletion_f1": 0.341612
+    },
+    "r4_2a": {
+      "binary_macro_f1": 0.566997,
+      "deletion_f1": 0.197525
+    },
+    "r4_3b": {
+      "binary_macro_f1": 0.503101,
+      "deletion_f1": 0.025465
+    },
+    "r4_4c2_greedy": {
+      "binary_macro_f1": 0.555712,
+      "deletion_f1": 0.185464
+    },
+    "r4_4d1_raw": {
+      "binary_macro_f1": 0.64375,
+      "deletion_f1": 0.321343
+    },
+    "r4_4d2b_target": {
+      "binary_macro_f1": 0.6521023094599894,
+      "deletion_f1": 0.3313896987366375
+    }
+  }
+}

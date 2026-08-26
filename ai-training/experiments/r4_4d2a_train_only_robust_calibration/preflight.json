@@ -1,0 +1,70 @@
+{
+  "source_verification": {
+    "status": "PASS",
+    "expected": {
+      "v4": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D",
+      "checkpoint": "F54C9C2361AE78E1C37353AEB338A2DE6722C0B1EC4F885F6B52688CE9E88085",
+      "r4_4d0_manifest": "A8443C85AA9C03879E3A907CC3AB05CC6154BB365BED70A59B4ED8E9FBA1A920",
+      "r4_4d1_numerical_contract": "5DC07A4B719FD6F38DBD1366CF802787FA3882CA972E5356A8F91DB435443425",
+      "train_position_scores": "E6361398B61B9CFC03AE695CA72377B5F5DBD8D71B254CB202CBE432B918996A",
+      "train_auc_metrics": "057DFF840A747CA955F9141A1CDCD9C31303312688C92FE6F2ADB10D83346A9D",
+      "train_deletion_vs_substitution": "627075FE379A8377DD34D6317D33BFE272FD582BFBD835D9F3907C2A20C8C612",
+      "r4_4d1_v2_manifest": "447D55708D20FC7506C0A49C9F8909B8E7AFDDEEF46F54FC63F99C322AC42577",
+      "matched_control": "D933F674743DA06CC8FAB425CEBF81D9C78505E1BDB4A90204DDB2E1A15B4798"
+    },
+    "actual": {
+      "v4": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D",
+      "checkpoint": "F54C9C2361AE78E1C37353AEB338A2DE6722C0B1EC4F885F6B52688CE9E88085",
+      "r4_4d0_manifest": "A8443C85AA9C03879E3A907CC3AB05CC6154BB365BED70A59B4ED8E9FBA1A920",
+      "r4_4d1_numerical_contract": "5DC07A4B719FD6F38DBD1366CF802787FA3882CA972E5356A8F91DB435443425",
+      "train_position_scores": "E6361398B61B9CFC03AE695CA72377B5F5DBD8D71B254CB202CBE432B918996A",
+      "train_auc_metrics": "057DFF840A747CA955F9141A1CDCD9C31303312688C92FE6F2ADB10D83346A9D",
+      "train_deletion_vs_substitution": "627075FE379A8377DD34D6317D33BFE272FD582BFBD835D9F3907C2A20C8C612",
+      "r4_4d1_v2_manifest": "447D55708D20FC7506C0A49C9F8909B8E7AFDDEEF46F54FC63F99C322AC42577",
+      "matched_control": "D933F674743DA06CC8FAB425CEBF81D9C78505E1BDB4A90204DDB2E1A15B4798"
+    },
+    "train_position_scores_complete": true,
+    "identity_duplicates": 0,
+    "validation_artifacts_used_for_selection": false,
+    "validation_scoring": false,
+    "test_accessed": false
+  },
+  "train_population": {
+    "words": 16259,
+    "expected_phone_rows": 56304,
+    "relations": {
+      "correct": 48893,
+      "substitution": 5867,
+      "deletion": 1544
+    },
+    "speakers": [
+      "BWC",
+      "EBVS",
+      "HJK",
+      "NCC",
+      "NJS",
+      "PNV",
+      "RRBI",
+      "TLV",
+      "TNI",
+      "YBAA",
+      "YKWK",
+      "ZHAA"
+    ]
+  },
+  "score_artifact_sha256": "E6361398B61B9CFC03AE695CA72377B5F5DBD8D71B254CB202CBE432B918996A",
+  "score_rows_complete": true,
+  "neural_inference": false,
+  "exact_sweep_selfcheck": {
+    "family": "RAW",
+    "expected_threshold": 2.197946548461914,
+    "reproduced_threshold": 2.197946548461914,
+    "candidate_count": 56263,
+    "eligible_count": 12493,
+    "pass": true
+  },
+  "validation_scoring": false,
+  "validation_threshold_evaluation": false,
+  "test_accessed": false,
+  "training": false
+}

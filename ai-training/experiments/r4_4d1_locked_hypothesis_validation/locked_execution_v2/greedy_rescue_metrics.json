@@ -1,0 +1,8 @@
+{
+  "greedy_true_deletions": 409,
+  "true_deletion_retention_rate": 0.5623471882640587,
+  "greedy_false_deletions": 3087,
+  "rescued_to_correct": 618,
+  "rescued_to_substitution": 1873,
+  "false_deletion_rescue_rate": 0.8069322967282151
+}

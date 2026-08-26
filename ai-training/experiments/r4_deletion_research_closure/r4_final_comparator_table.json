@@ -1,0 +1,15 @@
+{
+  "headline_metrics": ["binary_macro_f1", "deletion_f1"],
+  "comparators": [
+    {"method": "Duration-only", "binary_macro_f1": 0.668146, "deletion_f1": 0.364164},
+    {"method": "R4-1", "binary_macro_f1": 0.657336, "deletion_f1": 0.341612},
+    {"method": "R4-2A", "binary_macro_f1": 0.566997, "deletion_f1": 0.197525},
+    {"method": "R4-3B", "binary_macro_f1": 0.503101, "deletion_f1": 0.025465},
+    {"method": "R4-4C2 greedy", "binary_macro_f1": 0.555712, "deletion_f1": 0.185464},
+    {"method": "R4-4D1 RAW", "binary_macro_f1": 0.643750, "deletion_f1": 0.321343},
+    {"method": "R4-4D2B TARGET", "binary_macro_f1": 0.652102, "deletion_f1": 0.331390}
+  ],
+  "conclusion": "R4-4D2B did NOT surpass the duration-only baseline on either headline deletion metric.",
+  "delta_r4_4d2b_minus_duration": {"binary_macro_f1": -0.016044, "deletion_f1": -0.032774},
+  "refitting_performed": false
+}

@@ -1,0 +1,9 @@
+{
+  "score_family": "TARGET",
+  "theta": 0.16184102947061696,
+  "source": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r4_4d2a_train_only_robust_calibration\\r4_4d2b_preregistered_validation_design.json",
+  "source_sha256": "F0AC6874C1330DBFA2A8D99C88BE5167DCBED31122B40CE1F427FC0938DFA8AA",
+  "ordinary_float64_median_of_12_train_loso_thresholds": true,
+  "recalculated": false,
+  "modified": false
+}

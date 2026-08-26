@@ -1,0 +1,13 @@
+{
+  "family": "TARGET",
+  "raw": "-CTCLoss(log_softmax(logits),H,blank=40,reduction=none,zero_infinity=true)",
+  "target": "RAW_SCORE(H)/max(len(H),1)",
+  "decision_score": "DELETE_i-max(KEEP_i,BEST_SUB_i)",
+  "substitution_alternatives": 39,
+  "best_sub_tie": "lowest canonical phone index",
+  "dtype_for_decision": "float64",
+  "threshold": 0.16184102947061696,
+  "threshold_equality": "deletion",
+  "keep_sub_equality": "correct",
+  "alternative_families_evaluated": false
+}

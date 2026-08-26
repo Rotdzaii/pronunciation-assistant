@@ -1,0 +1,17 @@
+{
+  "locked_execution_v2_count": 1,
+  "command": "$env:L2_ARCTIC_ROOT='C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant\\ai-training\\datasets\\l2-arctic\\raw\\l2arctic_release_v5.0'; & 'C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant\\ai-training\\.venv\\Scripts\\python.exe' ai-training\\scripts\\execute_r4_4d1_locked_hypothesis_validation_v2.py --execute",
+  "artifact_execution_window": {
+    "preflight_created": "2026-08-14T23:25:47.3749386+07:00",
+    "final_status_created": "2026-08-14T23:26:15.9421011+07:00",
+    "manifest_created": "2026-08-14T23:26:16.3821726+07:00"
+  },
+  "driver_reported_validation_seconds": 27.88987790000101,
+  "exit_result": "completed with locked classification",
+  "train_scoring": false,
+  "train_recalibration": false,
+  "threshold_changed": false,
+  "neural_training": false,
+  "test_accessed": false,
+  "rerun": false
+}

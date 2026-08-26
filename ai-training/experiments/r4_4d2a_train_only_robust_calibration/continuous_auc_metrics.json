@@ -1,0 +1,71 @@
+{
+  "RAW": {
+    "deletion_vs_nondeletion": {
+      "count": 56304,
+      "positive": 1544,
+      "negative": 54760,
+      "roc_auc": 0.905406718246744,
+      "pr_auc": 0.20731604153767164,
+      "deletion_vs_correct": {
+        "count": 50437,
+        "positive": 1544,
+        "negative": 48893,
+        "roc_auc": 0.9055043693275862,
+        "pr_auc": 0.22889507941056317
+      }
+    },
+    "deletion_vs_substitution": {
+      "count": 7411,
+      "positive": 1544,
+      "negative": 5867,
+      "roc_auc": 0.9045929370475593,
+      "pr_auc": 0.6593420615473629
+    }
+  },
+  "TARGET": {
+    "deletion_vs_nondeletion": {
+      "count": 56304,
+      "positive": 1544,
+      "negative": 54760,
+      "roc_auc": 0.8754963368178428,
+      "pr_auc": 0.2287407761026902,
+      "deletion_vs_correct": {
+        "count": 50437,
+        "positive": 1544,
+        "negative": 48893,
+        "roc_auc": 0.8744089345360161,
+        "pr_auc": 0.2530898784265969
+      }
+    },
+    "deletion_vs_substitution": {
+      "count": 7411,
+      "positive": 1544,
+      "negative": 5867,
+      "roc_auc": 0.884558269622575,
+      "pr_auc": 0.6641025902779949
+    }
+  },
+  "TIME": {
+    "deletion_vs_nondeletion": {
+      "count": 56304,
+      "positive": 1544,
+      "negative": 54760,
+      "roc_auc": 0.8894803087992067,
+      "pr_auc": 0.19299010780504727,
+      "deletion_vs_correct": {
+        "count": 50437,
+        "positive": 1544,
+        "negative": 48893,
+        "roc_auc": 0.8894612074012948,
+        "pr_auc": 0.2173866031784452
+      }
+    },
+    "deletion_vs_substitution": {
+      "count": 7411,
+      "positive": 1544,
+      "negative": 5867,
+      "roc_auc": 0.8896394914561202,
+      "pr_auc": 0.6291334502588404
+    }
+  }
+}

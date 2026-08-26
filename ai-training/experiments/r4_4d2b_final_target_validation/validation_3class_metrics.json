@@ -1,0 +1,51 @@
+{
+  "class_order": [
+    "correct",
+    "substitution",
+    "deletion"
+  ],
+  "macro_f1": 0.4657420632332678,
+  "per_class": {
+    "correct": {
+      "precision": 0.9552329507089804,
+      "recall": 0.6216002460565051,
+      "f1": 0.7531209241662009,
+      "support": 22759
+    },
+    "substitution": {
+      "precision": 0.19647500722334585,
+      "recall": 0.7657657657657657,
+      "f1": 0.3127155667969648,
+      "support": 2664
+    },
+    "deletion": {
+      "precision": 0.2980769230769231,
+      "recall": 0.3730853391684901,
+      "f1": 0.3313896987366375,
+      "support": 914
+    }
+  },
+  "confusion_matrix": [
+    [
+      14147,
+      7894,
+      718
+    ],
+    [
+      539,
+      2040,
+      85
+    ],
+    [
+      124,
+      449,
+      341
+    ]
+  ],
+  "substitution_phone_diagnostic": {
+    "true_substitution_support": 2664,
+    "predicted_substitution_rows": 2040,
+    "coverage": 0.7657657657657657,
+    "best_sub_phone_top1_accuracy": 0.611764705882353
+  }
+}

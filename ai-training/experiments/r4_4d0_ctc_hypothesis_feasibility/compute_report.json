@@ -1,0 +1,140 @@
+{
+  "dataset": {
+    "usable_words": 16259,
+    "relation_counts": {
+      "correct": 48893,
+      "substitution": 5867,
+      "deletion": 1544
+    },
+    "expected_positions": 56304,
+    "empty_manual_targets": 28,
+    "speakers": [
+      "BWC",
+      "EBVS",
+      "HJK",
+      "NCC",
+      "NJS",
+      "PNV",
+      "RRBI",
+      "TLV",
+      "TNI",
+      "YBAA",
+      "YKWK",
+      "ZHAA"
+    ],
+    "reconstruction": {
+      "counts": {
+        "train_candidate": 16985,
+        "train_usable": 16259,
+        "multiple_deletion_words": 130,
+        "substitution_plus_deletion_words": 470,
+        "addition_words_excluded": 338,
+        "addition_plus_deletion_words": 28,
+        "malformed_or_unresolved_words": 402,
+        "unavailable_word_boundary": 1
+      },
+      "target_rows_without_manual_word": {
+        "total": 57,
+        "by_relation": {
+          "addition": 49,
+          "substitution": 2,
+          "correct": 6
+        }
+      },
+      "invalid_forced_alignment_phone_labels": {
+        "spn": 12
+      },
+      "mfa_vs_manual_boundary_start_error_seconds": {
+        "count": 16984,
+        "mean": 0.004179336374713614,
+        "median": 0.0,
+        "p10": 0.0,
+        "p25": 0.0,
+        "p75": 0.0,
+        "p90": 0.009999999999999787
+      },
+      "mfa_vs_manual_boundary_end_error_seconds": {
+        "count": 16984,
+        "mean": 0.0051764543768987505,
+        "median": 0.0,
+        "p10": 0.0,
+        "p25": 0.0,
+        "p75": 0.0,
+        "p90": 0.010000000000000009
+      }
+    }
+  },
+  "features": {
+    "words": 16259,
+    "seconds": 11.785968299998785,
+    "sample_length": {
+      "count": 16259,
+      "min": 480.0,
+      "median": 4800.0,
+      "mean": 5368.369518420567,
+      "p90": 9440.0,
+      "p95": 11040.0,
+      "max": 26080.0
+    },
+    "feature_frames": {
+      "count": 16259,
+      "min": 4.0,
+      "median": 31.0,
+      "mean": 34.55230949012854,
+      "p90": 60.0,
+      "p95": 70.0,
+      "max": 164.0
+    },
+    "encoder_output_steps": {
+      "count": 16259,
+      "min": 2.0,
+      "median": 15.0,
+      "mean": 17.02533981179654,
+      "p90": 30.0,
+      "p95": 35.0,
+      "max": 82.0
+    },
+    "edge_padded_words": 0,
+    "edge_padding_samples": 0,
+    "unalignable_words": 0,
+    "unalignable_word_ids": []
+  },
+  "empty_target_score": {
+    "word_id": "BWC/arctic_a0006/3",
+    "encoder_steps": 8,
+    "raw_nll": 6.206483840942383,
+    "raw_log_score": -6.206483840942383,
+    "finite": true,
+    "status": "PASS"
+  },
+  "total_hypotheses": 2268419,
+  "average_hypotheses_per_word": 139.51774401869733,
+  "keep_hypotheses": 16259,
+  "delete_hypotheses": 56304,
+  "substitution_hypotheses": 2195856,
+  "batch_size": 4096,
+  "seconds": 32.20857099999921,
+  "theoretically_unalignable": {},
+  "nonfinite_returned_scores": 0,
+  "feature_materialization_seconds": 12.598066100003052,
+  "acoustic_inference": {
+    "words": 16259,
+    "seconds": 2.9541044999969017,
+    "encoder_steps": {
+      "count": 16259,
+      "mean": 17.02533981179654,
+      "median": 15.0,
+      "p10": 7.0,
+      "p25": 10.0,
+      "p75": 22.0,
+      "p90": 30.0,
+      "min": 2.0,
+      "max": 82.0
+    }
+  },
+  "device": "cuda",
+  "gpu": "NVIDIA GeForce RTX 5060 Laptop GPU",
+  "peak_vram_bytes": 179952640,
+  "estimated_seconds_per_typical_word": 0.001980968755765989,
+  "total_seconds_before_artifact_hashing": 58.3042792999986
+}

@@ -1,0 +1,92 @@
+{
+  "RAW": {
+    "initial": {
+      "rows": 15551,
+      "deletion_support": 82,
+      "deletion_precision": 0.15637860082304528,
+      "deletion_recall": 0.4634146341463415,
+      "deletion_f1": 0.23384615384615387
+    },
+    "medial": {
+      "rows": 24494,
+      "deletion_support": 494,
+      "deletion_precision": 0.131981981981982,
+      "deletion_recall": 0.5931174089068826,
+      "deletion_f1": 0.21591746499631542
+    },
+    "final": {
+      "rows": 15551,
+      "deletion_support": 961,
+      "deletion_precision": 0.39282153539381853,
+      "deletion_recall": 0.4099895941727367,
+      "deletion_f1": 0.4012219959266803
+    },
+    "single": {
+      "rows": 708,
+      "deletion_support": 7,
+      "deletion_precision": 0.0,
+      "deletion_recall": 0.0,
+      "deletion_f1": 0.0
+    }
+  },
+  "TARGET": {
+    "initial": {
+      "rows": 15551,
+      "deletion_support": 82,
+      "deletion_precision": 0.1676300578034682,
+      "deletion_recall": 0.35365853658536583,
+      "deletion_f1": 0.2274509803921569
+    },
+    "medial": {
+      "rows": 24494,
+      "deletion_support": 494,
+      "deletion_precision": 0.15853658536585366,
+      "deletion_recall": 0.47368421052631576,
+      "deletion_f1": 0.23756345177664975
+    },
+    "final": {
+      "rows": 15551,
+      "deletion_support": 961,
+      "deletion_precision": 0.3976555455365194,
+      "deletion_recall": 0.4588969823100936,
+      "deletion_f1": 0.42608695652173906
+    },
+    "single": {
+      "rows": 708,
+      "deletion_support": 7,
+      "deletion_precision": 0.08695652173913043,
+      "deletion_recall": 0.2857142857142857,
+      "deletion_f1": 0.13333333333333333
+    }
+  },
+  "TIME": {
+    "initial": {
+      "rows": 15551,
+      "deletion_support": 82,
+      "deletion_precision": 0.16722408026755853,
+      "deletion_recall": 0.6097560975609756,
+      "deletion_f1": 0.26246719160104987
+    },
+    "medial": {
+      "rows": 24494,
+      "deletion_support": 494,
+      "deletion_precision": 0.12720403022670027,
+      "deletion_recall": 0.4089068825910931,
+      "deletion_f1": 0.19404418828049955
+    },
+    "final": {
+      "rows": 15551,
+      "deletion_support": 961,
+      "deletion_precision": 0.342769701606733,
+      "deletion_recall": 0.46618106139438087,
+      "deletion_f1": 0.3950617283950617
+    },
+    "single": {
+      "rows": 708,
+      "deletion_support": 7,
+      "deletion_precision": 0.09090909090909091,
+      "deletion_recall": 0.2857142857142857,
+      "deletion_f1": 0.13793103448275862
+    }
+  }
+}

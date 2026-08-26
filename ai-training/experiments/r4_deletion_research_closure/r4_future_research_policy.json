@@ -1,0 +1,9 @@
+{
+  "current_r4_branch": "CLOSED",
+  "resume_current_branch": false,
+  "prohibited_continuations": ["another threshold", "another normalization", "RAW/TARGET blending", "another GRU", "LSTM", "Transformer", "Conformer", "duration correction", "phone-specific threshold", "speaker-specific threshold", "R4-4D2C", "R4-4D3"],
+  "future_requirement": "Any future deletion work must be a NEW research generation with a new hypothesis and an appropriate independent evaluation protocol.",
+  "automatic_test_authorization": false,
+  "automatic_training_authorization": false,
+  "next_action": "Close documentation and retain deletion detection as a current Phoenix research limitation."
+}

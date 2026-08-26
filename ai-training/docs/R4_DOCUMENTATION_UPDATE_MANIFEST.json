@@ -1,0 +1,60 @@
+{
+  "manifest_id": "R4_COMPLETE_DOCUMENTATION_CONSOLIDATION",
+  "date": "2026-08-15",
+  "status": "R4_DOCUMENTATION_COMPLETE",
+  "algorithm": "SHA-256",
+  "authoritative_closure": {
+    "path": "ai-training/experiments/r4_deletion_research_closure/artifact_hashes.json",
+    "sha256": "3E21936C6175F9DEA5FAE3346E96EECD3AEF18732072C42B0B2FCAE4161D6174",
+    "final_status": "R4_DELETION_RESEARCH_CLOSED_NOT_CONFIRMED",
+    "verified_before_documentation": true
+  },
+  "new_or_modified_documents": {
+    "AI_WORKER_V2_DEVELOPMENT.md": {
+      "path": "docs/ai-worker-v2/AI_WORKER_V2_DEVELOPMENT.md",
+      "workspace": "pronunciation-assistant",
+      "change": "appended complete R4 closure section; existing R3/V2 history preserved",
+      "sha256": "7B5B5204B6EA2AE82D9B3DADF223C35C85401D4DDCD90A0BD07B38DCF04A8223"
+    },
+    "AI_CURRENT_STATUS_AND_ROADMAP.md": {
+      "path": "ai-training/docs/AI_CURRENT_STATUS_AND_ROADMAP.md",
+      "workspace": "pronunciation-assistant-research",
+      "change": "added R3-R7 research-generation roadmap",
+      "sha256": "983464D0EB9A72F0D1C803DA95795E918591A13BB2988F587106B1B3B188204A"
+    },
+    "R4_DELETION_RESEARCH_HISTORY.md": {
+      "path": "ai-training/docs/R4_DELETION_RESEARCH_HISTORY.md",
+      "workspace": "pronunciation-assistant-research",
+      "change": "created complete R4 main history and reproducibility appendix",
+      "sha256": "64C4354BAC017B745908F49A4DB0A41B9A718CB4038D3D9D0D5BB56D93310222"
+    },
+    "R4_DELETION_THESIS_SUMMARY.md": {
+      "path": "ai-training/docs/R4_DELETION_THESIS_SUMMARY.md",
+      "workspace": "pronunciation-assistant-research",
+      "change": "created academic English thesis summary with Vietnamese defense explanation",
+      "sha256": "8DA276C06A9FB6393ADFDADB86DFC7165499FD3948BCDC7C3A8E47A14F3707EB"
+    }
+  },
+  "coverage": {
+    "r4_stages": ["R4-0", "R4-1", "R4-2A", "R4-2B", "R4-2C", "R4-3A", "R4-3B", "R4-3C", "R4-4A", "R4-4B", "R4-4C0", "R4-4C2", "R4-4D0", "R4-4D1", "R4-4D2A", "R4-4D2B"],
+    "main_and_appendix_levels": true,
+    "hypothesis_evidence_decision_chain": true,
+    "failed_approaches_preserved": true,
+    "technical_stops_preserved": true,
+    "frozen_gates_recorded": true,
+    "checkpoints_and_shas_recorded": true,
+    "plain_english_failure_explanation": true,
+    "vietnamese_defense_explanation": true,
+    "test_closure_history": true,
+    "roadmap_updated": true
+  },
+  "execution_policy": {
+    "documentation_only": true,
+    "neural_training": false,
+    "inference": false,
+    "validation_rerun": false,
+    "test_accessed": false,
+    "r5_implementation_started": false
+  },
+  "manifest_excludes_itself": true
+}

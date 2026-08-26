@@ -1,0 +1,90 @@
+{
+  "contract_id": "R4-4D1C_MATCHED_CONTROL_ROW_IDENTITY_CORRECTION",
+  "contract_version": 1,
+  "status": "FROZEN_BEFORE_LOCKED_EXECUTION_V2",
+  "frozen_date": "2026-08-14",
+  "timezone": "Asia/Bangkok",
+  "policy": {
+    "additive_only": true,
+    "original_driver_unchanged": true,
+    "original_failed_execution_preserved": true,
+    "scientific_status": "technical validation-only re-execution, not a new hyperparameter experiment",
+    "permitted_semantic_changes": [
+      "canonicalize source_csv_row as int(source_index) + 2",
+      "remove and reject TRAIN calibration execution",
+      "load the immutable locked_execution_v1 TRAIN threshold artifact",
+      "write future outputs to locked_execution_v2"
+    ],
+    "all_other_semantic_changes_forbidden": true
+  },
+  "source_identities": {
+    "original_driver": {"path": "ai-training/scripts/execute_r4_4d1_locked_hypothesis_validation.py", "sha256": "5F12FB5E6B0A4765107DCAD3C822F32E6909940E9FAE265F5C3E3551ACB6AE22"},
+    "original_preregistration": {"path": "ai-training/experiments/r4_4d0_ctc_hypothesis_feasibility/r4_4d1_preregistered_score_design.json", "sha256": "7FD870DF2321465D716EAFB1B66E7D6116C153E3D8BCD494494F3FAE44ACC784"},
+    "numerical_contract_json": {"path": "ai-training/experiments/r4_4d1_numerical_contract/r4_4d1_complete_evaluation_contract.json", "sha256": "5DC07A4B719FD6F38DBD1366CF802787FA3882CA972E5356A8F91DB435443425"},
+    "numerical_contract_markdown": {"path": "ai-training/experiments/r4_4d1_numerical_contract/r4_4d1_complete_evaluation_contract.md", "sha256": "F00AE59A7EC1B44746BE39439C28C3EAFF5294C57C31D3088C4610062BF913C4"},
+    "r4_4c2_checkpoint": {"path": "ai-training/experiments/r4_4c2_bigru_ctc_seed42/R4_4C2_bigru_ctc_phone_sequence_seed42_best_validation_per.pt", "sha256": "F54C9C2361AE78E1C37353AEB338A2DE6722C0B1EC4F885F6B52688CE9E88085"},
+    "v4": {"path": "ai-training/datasets/l2-arctic/metadata/all_speakers_expected_observed_v4.csv", "sha256": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D"},
+    "matched_control": {"path": "ai-training/experiments/r4_4a_ctc_sequence_feasibility/validation_word_eligible_matched_control.csv", "sha256": "D933F674743DA06CC8FAB425CEBF81D9C78505E1BDB4A90204DDB2E1A15B4798"},
+    "failed_execution_manifest": {"path": "ai-training/experiments/r4_4d1_locked_hypothesis_validation/locked_execution_v1/artifact_hashes.json", "sha256": "E5E25A0DA103002234229BD9E36C55EFAEA6474B933A38365CD5332E360C253E"},
+    "frozen_threshold": {"path": "ai-training/experiments/r4_4d1_locked_hypothesis_validation/locked_execution_v1/train_calibrated_threshold.json", "sha256": "36F6FD5AB6B7E98A607D499445E455DCAB8C3DD4ACDD19F252DC472FCDD07E94"}
+  },
+  "threshold": {
+    "score_family": "RAW",
+    "theta": 2.197946548461914,
+    "authoritative_source": "source_identities.frozen_threshold",
+    "must_load_from_artifact": true,
+    "must_verify_sha_and_numeric_value": true,
+    "train_recalibration": "forbidden",
+    "threshold_candidate_reconstruction": "forbidden",
+    "threshold_eligibility_recalculation": "forbidden",
+    "threshold_reselection": "forbidden"
+  },
+  "identity_contract": {
+    "buggy_v1_expression": "source_csv_row = int(source_index)",
+    "canonical_expression": "canonical_source_csv_row = int(source_index) + 2",
+    "semantic_explanation": "csv.DictReader data records are enumerated from zero. source_index=0 is the first data record, located on physical CSV line 2 because physical line 1 is the header. The matched-control source_csv_row field stores that one-based physical CSV line number including the header; therefore the canonical conversion is source_index+2.",
+    "affected_field_only": "source_csv_row",
+    "matched_control_fields_unchanged": ["pair_id", "role", "source_csv_row", "speaker_id", "utterance_id", "start_time", "end_time", "duration_bin_10ms", "expected_phone", "relation"],
+    "prediction_and_ground_truth_fields_unchanged": ["speaker", "utterance", "word", "expected_phone", "expected_phone_index", "relation", "timing", "audio", "prediction", "score", "ground_truth"],
+    "required_mapping": {"total_rows": 1434, "mapped_rows": 1434, "missing_rows": 0, "duplicate_collisions": 0, "unexpected_ambiguities": 0, "deletion_rows": 717, "nondeletion_rows": 717, "phones": 32, "validation_speakers": 6},
+    "old_mapping_reproduction": {"mapped_rows": 1201, "missing_rows": 233},
+    "subset_or_intersection_evaluation": "forbidden"
+  },
+  "validation_score_contract": {
+    "inherited_without_change_from": ["source_identities.original_preregistration", "source_identities.numerical_contract_json"],
+    "raw_score": "-CTCLoss(log_softmax(logits), H, blank=40, reduction='none', zero_infinity=True)",
+    "hypotheses": {"keep": "full expected sequence", "delete": "expected sequence with local expected phone removed", "substitution": "exactly 39 local canonical replacements"},
+    "best_substitution_tie": "lowest canonical phone index",
+    "decision_score": "D_i = DELETE_i - max(KEEP_i, BEST_SUB_i)",
+    "decision": {"deletion": "D_i >= theta", "correct": "D_i < theta and KEEP_i >= BEST_SUB_i", "substitution": "D_i < theta and KEEP_i < BEST_SUB_i"},
+    "normalization": "none",
+    "score_model_metric_and_gate_changes": "forbidden"
+  },
+  "future_execution": {
+    "output_directory": "ai-training/experiments/r4_4d1_locked_hypothesis_validation/locked_execution_v2",
+    "preserve_locked_execution_v1": true,
+    "validation_only": true,
+    "sequence": ["verify contracts and hashes", "verify frozen threshold artifact SHA and theta", "verify canonical matched-control metadata mapping 1434/1434", "perform exactly one VALIDATION hypothesis-score pass", "calculate inherited frozen metrics, gates, diagnostics, and classification"],
+    "train_scoring": false,
+    "train_calibration": false,
+    "validation_execution_authorized_by_this_contract_freeze_task": false
+  },
+  "metrics_gates_and_classification": {
+    "inherit_exactly_from": "source_identities.numerical_contract_json",
+    "confirmation_gates": {"binary_macro_f1_min": 0.70, "deletion_recall_min": 0.45, "deletion_f1_min": 0.40, "substitution_false_deletion_max": 0.25, "matched_macro_f1_min": 0.60, "matched_deletion_f1_min": 0.55, "speaker_deletion_recall_min": 0.25, "speaker_gate_support_min": 30, "three_relation_macro_f1_min": 0.40},
+    "strong_partial_and_threshold_transfer_fail": "unchanged",
+    "classification_precedence": "unchanged",
+    "historical_comparators": "unchanged",
+    "speaker_phone_position_length_duration_rules": "unchanged"
+  },
+  "test_policy": {
+    "test_speakers": ["ASI", "ERMS", "SKA", "THV", "TXHC", "YDCK"],
+    "guard_before_path_resolution": true,
+    "paths_resolved": false,
+    "audio_read": false,
+    "posterior_computed": false,
+    "hypothesis_scored": false,
+    "metrics_calculated": false
+  },
+  "task_execution_policy": {"train_threshold_recalculated": false, "validation_acoustic_inference": false, "validation_hypothesis_scoring": false, "validation_metrics": false, "neural_training": false, "r4_test_access": false}
+}

@@ -1,0 +1,21 @@
+{
+  "accuracy": 0.6220362622036262,
+  "balanced_accuracy": 0.6220362622036262,
+  "binary_macro_f1": 0.5934906451822113,
+  "deletion_precision": 0.7596439169139466,
+  "deletion_recall": 0.35704323570432356,
+  "deletion_f1": 0.4857685009487666,
+  "nondeletion_precision": 0.5797629899726527,
+  "nondeletion_recall": 0.8870292887029289,
+  "nondeletion_f1": 0.701212789415656,
+  "confusion_matrix": [
+    [
+      636,
+      81
+    ],
+    [
+      461,
+      256
+    ]
+  ]
+}

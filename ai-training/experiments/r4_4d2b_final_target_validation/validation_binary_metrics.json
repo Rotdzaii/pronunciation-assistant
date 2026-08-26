@@ -1,0 +1,70 @@
+{
+  "accuracy": 0.9477541101871891,
+  "balanced_accuracy": 0.670749883524378,
+  "binary_macro_f1": 0.6521023094599894,
+  "deletion_precision": 0.2980769230769231,
+  "deletion_recall": 0.3730853391684901,
+  "deletion_f1": 0.3313896987366375,
+  "nondeletion_precision": 0.9772555868693684,
+  "nondeletion_recall": 0.9684144278802659,
+  "nondeletion_f1": 0.9728149201833413,
+  "confusion_matrix": [
+    [
+      24620,
+      803
+    ],
+    [
+      573,
+      341
+    ]
+  ],
+  "correct_false_deletion": 0.031547959049167365,
+  "substitution_false_deletion": 0.03190690690690691,
+  "confirmation_gates": {
+    "gates": {
+      "A_binary_macro_f1_ge_0_70": false,
+      "B_deletion_recall_ge_0_45": false,
+      "C_deletion_f1_ge_0_40": false,
+      "D_substitution_false_deletion_le_0_25": true,
+      "E_matched_macro_f1_ge_0_60": false,
+      "F_matched_deletion_f1_ge_0_55": false,
+      "G_all_supported_speakers_recall_ge_0_25": true,
+      "H_three_relation_macro_f1_ge_0_40": true
+    },
+    "speaker_gate_detail": {
+      "ABA": {
+        "support": 29,
+        "recall": 0.20689655172413793,
+        "passes": true
+      },
+      "HKK": {
+        "support": 99,
+        "recall": 0.3333333333333333,
+        "passes": true
+      },
+      "HQTV": {
+        "support": 444,
+        "recall": 0.40765765765765766,
+        "passes": true
+      },
+      "LXC": {
+        "support": 209,
+        "recall": 0.3444976076555024,
+        "passes": true
+      },
+      "MBMPS": {
+        "support": 59,
+        "recall": 0.4067796610169492,
+        "passes": true
+      },
+      "SVBI": {
+        "support": 74,
+        "recall": 0.33783783783783783,
+        "passes": true
+      }
+    },
+    "passed": 3,
+    "total": 8,
+    "all_passed": false
+  }
+}

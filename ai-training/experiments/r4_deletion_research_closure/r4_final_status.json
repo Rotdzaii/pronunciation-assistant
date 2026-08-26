@@ -1,0 +1,46 @@
+{
+  "closure_id": "PHOENIX_R4_DELETION_RESEARCH_CLOSURE",
+  "closure_date": "2026-08-15",
+  "status": "R4_DELETION_RESEARCH_CLOSED_NOT_CONFIRMED",
+  "final_development_status": "R4_4D2B_DELETION_VALIDATION_NOT_CONFIRMED",
+  "scientific_conclusion": "Phoenix deletion detection was NOT confirmed under the preregistered validation requirements.",
+  "primary_limitation": "INSUFFICIENT_ROBUST_DELETION_DECISION_PERFORMANCE",
+  "continuous_acoustic_signal_absent": false,
+  "production_ready": false,
+  "validated_deletion_classifier": false,
+  "test_confirmed": false,
+  "frozen_gates": {
+    "passed": 3,
+    "total": 8,
+    "all_passed": false,
+    "failed": ["binary_macro_f1", "deletion_recall", "deletion_f1", "matched_macro_f1", "matched_deletion_f1"],
+    "passed_names": ["substitution_false_deletion", "supported_speaker_recall", "three_relation_macro_f1"]
+  },
+  "policies": {
+    "branch_closed": true,
+    "new_training_performed_during_closure": false,
+    "validation_rerun_during_closure": false,
+    "r4_test_accessed": false,
+    "r4_4d2c_created": false,
+    "r4_4d3_created": false
+  },
+  "source_verification": {
+    "status": "PASS",
+    "r4_4d2b_manifest_entries_verified": 23,
+    "r4_4d2b_manifest_mismatches": 0,
+    "verified_identities": {
+      "v4": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D",
+      "r4_4c2_checkpoint": "F54C9C2361AE78E1C37353AEB338A2DE6722C0B1EC4F885F6B52688CE9E88085",
+      "r4_4d2a_preregistration_json": "F0AC6874C1330DBFA2A8D99C88BE5167DCBED31122B40CE1F427FC0938DFA8AA",
+      "r4_4d2a_preregistration_markdown": "71BEB2A97331455863CCE203FD886F6831697D69F857B2AC1D5C35EAA5DB2D6B",
+      "r4_4d2b_report": "646B7F7BDFB6EEFFACEF17C038847AFDF13248D58FBD7C1EE0C5F2147A553CAB",
+      "r4_4d2b_final_status": "DC5D7AC51DEE0079F6FE075C56E97A0321A71B7A6482C38583BD9DF063D30134",
+      "r4_4d2b_binary_metrics": "584385EC871BB871B7A70E9EF599F9D9CBE1882D82A947D0C66E09D1552EE177",
+      "r4_4d2b_three_class_metrics": "EE2FB68C4D545321F407C215208D64BDB9DD90A74B95335C3E94E937AFEE1CD6",
+      "r4_4d2b_matched_metrics": "4EB137702420529A6CC3B22F97C6185F2D8D44271B1E3CDC10C1502CF3B01E6F",
+      "r4_4d2b_phone_predictions": "D3B9DB11B37AE21E7F27274F66E870C9025590515F83451175E5B6BC070BCC87",
+      "r4_4d2b_word_predictions": "028D2F46C10A3CBD6A6788CAD6B8727A42110D980521C794B45215AC3500E2DA",
+      "r4_4d2b_artifact_manifest": "532308D7223B55E4BCFE5846FAE4F60A8497F34DD678A123ECB275E4755C463C"
+    }
+  }
+}

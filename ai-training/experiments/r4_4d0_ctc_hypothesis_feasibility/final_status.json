@@ -1,0 +1,14 @@
+{
+  "status": "R4_4D0_CTC_HYPOTHESIS_SIGNAL_STRONG",
+  "selected_family": "RAW",
+  "raw_length_bias": "RAW_SCORE_LENGTH_BIASED",
+  "training_occurred": false,
+  "validation_candidate_scores_calculated": false,
+  "validation_thresholds_selected": false,
+  "validation_used_to_choose_normalization": false,
+  "r4_test_accessed": false,
+  "test_paths_resolved": false,
+  "test_audio_read": false,
+  "test_posterior_computed": false,
+  "test_hypothesis_scored": false
+}

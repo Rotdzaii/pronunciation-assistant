@@ -1,0 +1,38 @@
+{
+  "acoustic": "frozen R4-4C2 T x 41 log_softmax",
+  "blank": 40,
+  "ctc": {
+    "implementation": "torch.nn.CTCLoss",
+    "reduction": "none",
+    "zero_infinity": true,
+    "raw_log_score": "-CTCLoss(log_probs,H,input_length,target_length)"
+  },
+  "hypotheses": {
+    "KEEP": "full expected sequence",
+    "DELETE": "remove local expected phone",
+    "SUB": "replace local expected phone with each other canonical phone"
+  },
+  "families": {
+    "RAW": "raw_log_score",
+    "TARGET": "raw_log_score/max(target_length,1)",
+    "TIME": "raw_log_score/input_length"
+  },
+  "primary_score": "DELETE - max(KEEP,BEST_SUB)",
+  "threshold_search": false,
+  "selection": [
+    "highest deletion-vs-substitution ROC-AUC",
+    "tie within .01: higher deletion-vs-nondeletion ROC-AUC",
+    "tie: higher deletion PR-AUC",
+    "tie: RAW then TIME then TARGET"
+  ],
+  "support": {
+    "speaker_min_deletions": 30,
+    "phone_min_deletions": 20,
+    "phone_min_nondeletions": 100
+  },
+  "raw_length_bias_rule": "RAW_SCORE_LENGTH_BIASED if maximum absolute TRAIN all-correct Spearman association with expected length, word duration, or encoder T >= 0.3",
+  "strong_broad_consistency": "at least 75% sufficient speakers AUC>0.5 and both D/T/R/L and other-phone ROC-AUC>=0.65",
+  "data": "TRAIN speakers only",
+  "validation_candidate_scoring": false,
+  "r4_test": "CLOSED"
+}

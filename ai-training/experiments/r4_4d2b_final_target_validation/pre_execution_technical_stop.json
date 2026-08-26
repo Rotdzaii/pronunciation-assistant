@@ -1,0 +1,13 @@
+{
+  "stage": "preflight_artifact_serialization",
+  "validation_acoustic_inference_started": false,
+  "validation_hypothesis_scoring_started": false,
+  "validation_metrics_calculated": false,
+  "cause": "strict JSON serialization rejected a numpy.bool_ design-check value",
+  "permitted_correction": "cast static design-check booleans to native Python bool",
+  "threshold_changed": false,
+  "score_family_changed": false,
+  "model_changed": false,
+  "test_accessed": false,
+  "preserved": true
+}

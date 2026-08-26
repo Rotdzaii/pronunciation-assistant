@@ -1,0 +1,45 @@
+{
+  "status": "R4_4D1_DESIGN_INCOMPLETE",
+  "source_verification": {
+    "status": "PASS",
+    "v4_sha256": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D",
+    "r4_4c2_checkpoint_sha256": "F54C9C2361AE78E1C37353AEB338A2DE6722C0B1EC4F885F6B52688CE9E88085",
+    "r4_4c2_manifest_sha256": "BE82690C366049E659F5A872256BF23616566E18D37A7AFB8A1E7169629F1DB9",
+    "r4_4d0_manifest_sha256": "A8443C85AA9C03879E3A907CC3AB05CC6154BB365BED70A59B4ED8E9FBA1A920",
+    "r4_4d1_preregistration_sha256": "7FD870DF2321465D716EAFB1B66E7D6116C153E3D8BCD494494F3FAE44ACC784",
+    "r4_4d0_implementation_sha256": "DC141D38091C9FC60BA2F0A8447FF918DC98B5D99499D336A524CABEB8F4948C",
+    "matched_control_sha256": "D933F674743DA06CC8FAB425CEBF81D9C78505E1BDB4A90204DDB2E1A15B4798"
+  },
+  "preregistration_completeness": {
+    "status": "FAIL",
+    "present": [
+      "selected score family RAW",
+      "high-level KEEP/DELETE/39-SUB hypothesis set",
+      "high-level deletion decision score",
+      "all-unique-TRAIN-score threshold candidate statement",
+      "TRAIN recall and substitution false-deletion constraints",
+      "threshold optimization and conservative tie order",
+      "non-deletion KEEP versus BEST_SUB relation rule",
+      "TEST closure"
+    ],
+    "missing_or_numerically_incomplete": [
+      "complete exact CTC score contract including blank index, reduction, zero_infinity, and raw_nll/raw_score equations",
+      "complete validation metric contract",
+      "all numeric hard validation gates",
+      "frozen matched-control path, support, and SHA identity",
+      "complete final result-classification precedence",
+      "numeric threshold-transfer classification criteria, if such a label is intended"
+    ],
+    "decision": "STOP before threshold calibration and before VALIDATION hypothesis scoring"
+  },
+  "train_threshold_calculated": false,
+  "threshold_artifact_created": false,
+  "validation_candidate_scores_calculated": false,
+  "validation_inference": false,
+  "training_occurred": false,
+  "test_paths_resolved": false,
+  "test_audio_read": false,
+  "test_ctc_posterior_produced": false,
+  "test_hypothesis_scored": false,
+  "test_threshold_metrics": false
+}

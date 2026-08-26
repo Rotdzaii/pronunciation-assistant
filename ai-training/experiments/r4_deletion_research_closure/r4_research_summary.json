@@ -1,0 +1,40 @@
+{
+  "title": "Phoenix R4 Deletion Research Summary",
+  "final_method": {
+    "name": "R4-4D2B TARGET-normalized CTC hypothesis scoring",
+    "acoustic_model": "self-trained CNN plus one-layer bidirectional GRU CTC phone-sequence model",
+    "score_family": "TARGET",
+    "threshold": 0.16184102947061696,
+    "threshold_source": "ordinary float64 median of 12 TRAIN-speaker LOSO fold thresholds",
+    "decision": "D_i >= theta predicts deletion; otherwise KEEP versus BEST_SUB predicts correct or substitution"
+  },
+  "final_validation": {
+    "status": "R4_4D2B_DELETION_VALIDATION_NOT_CONFIRMED",
+    "binary_macro_f1": 0.6521023094599894,
+    "balanced_accuracy": 0.670749883524378,
+    "deletion_precision": 0.2980769230769231,
+    "deletion_recall": 0.3730853391684901,
+    "deletion_f1": 0.3313896987366375,
+    "three_relation_macro_f1": 0.4657420632332678,
+    "matched_macro_f1": 0.5934906451822113,
+    "matched_deletion_f1": 0.4857685009487666,
+    "correct_false_deletion": 0.031547959049167365,
+    "substitution_false_deletion": 0.03190690690690691,
+    "continuous_target_signal": {
+      "deletion_vs_nondeletion_roc_auc": 0.8541244506193716,
+      "deletion_vs_substitution_roc_auc": 0.8622339516759647
+    },
+    "gates_passed": 3,
+    "gates_total": 8
+  },
+  "positive_findings": [
+    "CNN plus BiGRU CTC substantially improved phone-sequence acoustic modeling versus CNN-only CTC.",
+    "CTC hypothesis scoring strongly reduced greedy false deletions.",
+    "Deletion-versus-substitution continuous discrimination was meaningfully above chance.",
+    "Speaker-held-out TARGET normalization and calibration improved robustness relative to the original RAW threshold.",
+    "The final TARGET validation nevertheless failed the frozen confirmation requirements."
+  ],
+  "interpretation": "The frozen BiGRU CTC model produced useful continuous deletion-related acoustic evidence, but the resulting decision layer did not achieve the required validation precision/recall/F1 and matched-control gates.",
+  "capstone_ready_conclusion": "Phoenix demonstrated measurable acoustic evidence for pronunciation deletion through a self-trained CNN+BiGRU CTC sequence model and CTC hypothesis scoring. However, the final frozen validation protocol did not meet the predefined deletion confirmation criteria. Therefore deletion detection is retained as a current research limitation and was not evaluated on the untouched final R4 TEST split.",
+  "separation_from_other_findings": "Phoenix findings for correct and substitution remain separate from the unconfirmed deletion branch."
+}

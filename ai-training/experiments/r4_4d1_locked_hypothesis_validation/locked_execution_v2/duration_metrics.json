@@ -1,0 +1,42 @@
+{
+  "lt_150ms": {
+    "rows": 1890,
+    "deletion_support": 76,
+    "deletion_precision": 0.3,
+    "deletion_recall": 0.5921052631578947,
+    "deletion_f1": 0.3982300884955752,
+    "false_deletion_rate": 0.057883131201764054
+  },
+  "150_250ms": {
+    "rows": 4179,
+    "deletion_support": 155,
+    "deletion_precision": 0.3191489361702128,
+    "deletion_recall": 0.2903225806451613,
+    "deletion_f1": 0.304054054054054,
+    "false_deletion_rate": 0.02385685884691849
+  },
+  "250_400ms": {
+    "rows": 7111,
+    "deletion_support": 286,
+    "deletion_precision": 0.2946859903381642,
+    "deletion_recall": 0.42657342657342656,
+    "deletion_f1": 0.3485714285714286,
+    "false_deletion_rate": 0.04278388278388279
+  },
+  "400_600ms": {
+    "rows": 7641,
+    "deletion_support": 252,
+    "deletion_precision": 0.23180076628352492,
+    "deletion_recall": 0.4801587301587302,
+    "deletion_f1": 0.31266149870801035,
+    "false_deletion_rate": 0.054269860603599944
+  },
+  "ge_600ms": {
+    "rows": 5516,
+    "deletion_support": 145,
+    "deletion_precision": 0.19113573407202217,
+    "deletion_recall": 0.47586206896551725,
+    "deletion_f1": 0.2727272727272727,
+    "false_deletion_rate": 0.054366039843604545
+  }
+}

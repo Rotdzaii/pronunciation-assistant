@@ -1,0 +1,102 @@
+{
+  "initial": {
+    "positions": 15551,
+    "deletion_support": 82,
+    "RAW": {
+      "count": 15551,
+      "positive": 82,
+      "negative": 15469,
+      "roc_auc": 0.9330525724935315,
+      "pr_auc": 0.1851662559525908
+    },
+    "TARGET": {
+      "count": 15551,
+      "positive": 82,
+      "negative": 15469,
+      "roc_auc": 0.8287148648201201,
+      "pr_auc": 0.11378717308311055
+    },
+    "TIME": {
+      "count": 15551,
+      "positive": 82,
+      "negative": 15469,
+      "roc_auc": 0.8836942177037002,
+      "pr_auc": 0.17214976741750584
+    }
+  },
+  "medial": {
+    "positions": 24494,
+    "deletion_support": 494,
+    "RAW": {
+      "count": 24494,
+      "positive": 494,
+      "negative": 24000,
+      "roc_auc": 0.9056452007422402,
+      "pr_auc": 0.14363730200666255
+    },
+    "TARGET": {
+      "count": 24494,
+      "positive": 494,
+      "negative": 24000,
+      "roc_auc": 0.8948938090418351,
+      "pr_auc": 0.15132932921730333
+    },
+    "TIME": {
+      "count": 24494,
+      "positive": 494,
+      "negative": 24000,
+      "roc_auc": 0.8982119601889339,
+      "pr_auc": 0.1167358241521611
+    }
+  },
+  "final": {
+    "positions": 15551,
+    "deletion_support": 961,
+    "RAW": {
+      "count": 15551,
+      "positive": 961,
+      "negative": 14590,
+      "roc_auc": 0.89865145043253,
+      "pr_auc": 0.3533770511073519
+    },
+    "TARGET": {
+      "count": 15551,
+      "positive": 961,
+      "negative": 14590,
+      "roc_auc": 0.882209030888689,
+      "pr_auc": 0.3615754807100642
+    },
+    "TIME": {
+      "count": 15551,
+      "positive": 961,
+      "negative": 14590,
+      "roc_auc": 0.8816146363416563,
+      "pr_auc": 0.2943179563989041
+    }
+  },
+  "single": {
+    "positions": 708,
+    "deletion_support": 7,
+    "RAW": {
+      "count": 708,
+      "positive": 7,
+      "negative": 701,
+      "roc_auc": 0.943753821071938,
+      "pr_auc": 0.1054377565553632
+    },
+    "TARGET": {
+      "count": 708,
+      "positive": 7,
+      "negative": 701,
+      "roc_auc": 0.943753821071938,
+      "pr_auc": 0.1054377565553632
+    },
+    "TIME": {
+      "count": 708,
+      "positive": 7,
+      "negative": 701,
+      "roc_auc": 0.8227022620745874,
+      "pr_auc": 0.054532285002787374
+    }
+  }
+}

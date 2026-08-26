@@ -1,0 +1,59 @@
+{
+  "status": "R4_4D2B_DELETION_VALIDATION_NOT_CONFIRMED",
+  "confirmation_gates": {
+    "gates": {
+      "A_binary_macro_f1_ge_0_70": false,
+      "B_deletion_recall_ge_0_45": false,
+      "C_deletion_f1_ge_0_40": false,
+      "D_substitution_false_deletion_le_0_25": true,
+      "E_matched_macro_f1_ge_0_60": false,
+      "F_matched_deletion_f1_ge_0_55": false,
+      "G_all_supported_speakers_recall_ge_0_25": true,
+      "H_three_relation_macro_f1_ge_0_40": true
+    },
+    "speaker_gate_detail": {
+      "ABA": {
+        "support": 29,
+        "recall": 0.20689655172413793,
+        "passes": true
+      },
+      "HKK": {
+        "support": 99,
+        "recall": 0.3333333333333333,
+        "passes": true
+      },
+      "HQTV": {
+        "support": 444,
+        "recall": 0.40765765765765766,
+        "passes": true
+      },
+      "LXC": {
+        "support": 209,
+        "recall": 0.3444976076555024,
+        "passes": true
+      },
+      "MBMPS": {
+        "support": 59,
+        "recall": 0.4067796610169492,
+        "passes": true
+      },
+      "SVBI": {
+        "support": 74,
+        "recall": 0.33783783783783783,
+        "passes": true
+      }
+    },
+    "passed": 3,
+    "total": 8,
+    "all_passed": false
+  },
+  "score_family": "TARGET",
+  "theta": 0.16184102947061696,
+  "threshold_changed": false,
+  "threshold_recalculated": false,
+  "validation_execution_count": 1,
+  "neural_training": false,
+  "r4_test_accessed": false,
+  "scientific_status": "iterative development VALIDATION; not an untouched final holdout",
+  "stop_current_r4_deletion_research": true
+}

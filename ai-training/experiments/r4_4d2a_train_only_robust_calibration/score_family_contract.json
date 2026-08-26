@@ -1,0 +1,44 @@
+{
+  "families": {
+    "RAW": "raw_log_score(H)",
+    "TARGET": "raw_log_score(H)/max(target_length(H),1)",
+    "TIME": "raw_log_score(H)/input_length"
+  },
+  "decision_score": "D_i=DELETE_i-max(KEEP_i,BEST_SUB_i) within family",
+  "threshold_candidates": "nextafter(min,-inf) + every sorted unique float64 score + nextafter(max,+inf)",
+  "eligibility": {
+    "calibration_deletion_recall_min": 0.45,
+    "calibration_substitution_false_deletion_max": 0.25,
+    "each_calibration_speaker_support_min": 30,
+    "each_calibration_speaker_recall_min": 0.25
+  },
+  "selection_precedence": [
+    "binary_macro_f1",
+    "deletion_f1",
+    "deletion_precision",
+    "three_relation_macro_f1",
+    "higher_threshold"
+  ],
+  "robust_theta": "ordinary numeric median of all 12 fold thresholds",
+  "family_selection": [
+    "higher OOF deletion F1",
+    "higher OOF Binary Macro-F1",
+    "higher deletion precision",
+    "lower substitution false-deletion",
+    "threshold MAD not compared across different scales",
+    "RAW then TIME then TARGET"
+  ],
+  "development_gates": {
+    "binary_macro_f1_min": 0.6,
+    "deletion_f1_min": 0.3,
+    "three_relation_macro_f1_min": 0.4
+  },
+  "classification_rule_frozen_before_results": {
+    "READY": "at least one family passes eligibility and all development gates",
+    "UNSTABLE": "if no READY family and every family has at least two no-eligible folds, or every family fails at least three eligible held-out speaker recall gates",
+    "SIGNAL_WEAK": "otherwise, when continuous signal exists but no family passes all gates"
+  },
+  "validation_influence": false,
+  "duration_feature": false,
+  "test_closed": true
+}

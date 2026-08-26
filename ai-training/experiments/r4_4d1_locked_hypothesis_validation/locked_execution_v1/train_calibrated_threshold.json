@@ -1,0 +1,286 @@
+{
+  "status": "FROZEN_BEFORE_VALIDATION",
+  "score_family": "RAW",
+  "score_equation": "D_i=DELETE_i-max(KEEP_i,SUB_i)",
+  "train_population": {
+    "purpose": "threshold calibration only",
+    "usable_words": 16259,
+    "expected_phone_rows": 56304,
+    "relations": {
+      "correct": 48893,
+      "substitution": 5867,
+      "deletion": 1544
+    },
+    "speakers": [
+      "BWC",
+      "EBVS",
+      "HJK",
+      "NCC",
+      "NJS",
+      "PNV",
+      "RRBI",
+      "TLV",
+      "TNI",
+      "YBAA",
+      "YKWK",
+      "ZHAA"
+    ]
+  },
+  "selected_threshold": 2.197946548461914,
+  "selection_protocol": {
+    "data": "TRAIN only",
+    "finite_scores_only": true,
+    "unique_scores": "U=sorted(unique(finite TRAIN D_i), ascending)",
+    "candidate_generation": [
+      "np.nextafter(min(U), -np.inf)",
+      "every value in U",
+      "np.nextafter(max(U), +np.inf)"
+    ],
+    "candidate_order": "ascending numeric order",
+    "dtype": "float64",
+    "prediction_rule": "D_i >= threshold predicts deletion",
+    "edge_meaning": {
+      "below_minimum": "all deletion",
+      "above_maximum": "no deletion"
+    },
+    "eligibility": {
+      "all_required": true,
+      "deletion_recall_min": 0.45,
+      "substitution_false_deletion_max": 0.25,
+      "speaker_rule": {
+        "apply_when_true_deletion_support_at_least": 30,
+        "deletion_recall_min": 0.25,
+        "speakers": "each TRAIN speaker independently"
+      },
+      "correct_false_deletion_constraint": null
+    },
+    "selection_precedence": [
+      {
+        "priority": 1,
+        "metric": "binary_macro_f1",
+        "direction": "higher"
+      },
+      {
+        "priority": 2,
+        "metric": "deletion_f1",
+        "direction": "higher"
+      },
+      {
+        "priority": 3,
+        "metric": "deletion_precision",
+        "direction": "higher"
+      },
+      {
+        "priority": 4,
+        "metric": "three_relation_macro_f1",
+        "direction": "higher"
+      },
+      {
+        "priority": 5,
+        "metric": "threshold",
+        "direction": "higher",
+        "rationale": "more conservative against false deletion"
+      }
+    ],
+    "tie_comparison": "exact float64 equality; no tolerance",
+    "validation_influence": false,
+    "required_future_artifacts_before_validation": [
+      "all candidate thresholds and TRAIN metrics",
+      "selected threshold and selection trace",
+      "immutable threshold artifact SHA-256"
+    ],
+    "no_eligible_threshold": {
+      "status": "R4_4D1_TRAIN_CALIBRATION_NO_ELIGIBLE_THRESHOLD",
+      "action": "stop before validation without weakening constraints"
+    }
+  },
+  "selection_result": {
+    "threshold": 2.197946548461914,
+    "eligible": true,
+    "binary": {
+      "accuracy": 0.9373934356351236,
+      "balanced_accuracy": 0.7081837561549786,
+      "binary_macro_f1": 0.6284987892241034,
+      "deletion_precision": 0.2102954080140392,
+      "deletion_recall": 0.46567357512953367,
+      "deletion_f1": 0.2897441063872658,
+      "nondeletion_precision": 0.9844001134537204,
+      "nondeletion_recall": 0.9506939371804237,
+      "nondeletion_f1": 0.967253472060941,
+      "confusion_matrix": [
+        [
+          52060,
+          2700
+        ],
+        [
+          825,
+          719
+        ]
+      ]
+    },
+    "false_deletion": {
+      "correct_false_deletion": 0.04865727200212709,
+      "substitution_false_deletion": 0.05471280040906767
+    },
+    "speaker": {
+      "BWC": {
+        "deletion_support": 199,
+        "deletion_recall": 0.47738693467336685,
+        "eligible": true,
+        "pass": true
+      },
+      "EBVS": {
+        "deletion_support": 184,
+        "deletion_recall": 0.4945652173913043,
+        "eligible": true,
+        "pass": true
+      },
+      "HJK": {
+        "deletion_support": 4,
+        "deletion_recall": 0.75,
+        "eligible": false,
+        "pass": true
+      },
+      "NCC": {
+        "deletion_support": 55,
+        "deletion_recall": 0.4,
+        "eligible": true,
+        "pass": true
+      },
+      "NJS": {
+        "deletion_support": 77,
+        "deletion_recall": 0.2857142857142857,
+        "eligible": true,
+        "pass": true
+      },
+      "PNV": {
+        "deletion_support": 236,
+        "deletion_recall": 0.5042372881355932,
+        "eligible": true,
+        "pass": true
+      },
+      "RRBI": {
+        "deletion_support": 64,
+        "deletion_recall": 0.34375,
+        "eligible": true,
+        "pass": true
+      },
+      "TLV": {
+        "deletion_support": 416,
+        "deletion_recall": 0.5192307692307693,
+        "eligible": true,
+        "pass": true
+      },
+      "TNI": {
+        "deletion_support": 64,
+        "deletion_recall": 0.46875,
+        "eligible": true,
+        "pass": true
+      },
+      "YBAA": {
+        "deletion_support": 27,
+        "deletion_recall": 0.48148148148148145,
+        "eligible": false,
+        "pass": true
+      },
+      "YKWK": {
+        "deletion_support": 125,
+        "deletion_recall": 0.36,
+        "eligible": true,
+        "pass": true
+      },
+      "ZHAA": {
+        "deletion_support": 93,
+        "deletion_recall": 0.44086021505376344,
+        "eligible": true,
+        "pass": true
+      }
+    },
+    "speaker_gate": true,
+    "three_relation_macro_f1": 0.48467653339199873
+  },
+  "train_metrics": {
+    "binary": {
+      "accuracy": 0.9373934356351236,
+      "balanced_accuracy": 0.7081837561549786,
+      "binary_macro_f1": 0.6284987892241034,
+      "deletion_precision": 0.2102954080140392,
+      "deletion_recall": 0.46567357512953367,
+      "deletion_f1": 0.2897441063872658,
+      "nondeletion_precision": 0.9844001134537204,
+      "nondeletion_recall": 0.9506939371804237,
+      "nondeletion_f1": 0.967253472060941,
+      "confusion_matrix": [
+        [
+          52060,
+          2700
+        ],
+        [
+          825,
+          719
+        ]
+      ]
+    },
+    "false_deletion": {
+      "correct_false_deletion": 0.04865727200212709,
+      "substitution_false_deletion": 0.05471280040906767
+    },
+    "three": {
+      "class_order": [
+        "correct",
+        "substitution",
+        "deletion"
+      ],
+      "macro_f1": 0.48467653339199873,
+      "per_class": {
+        "correct": {
+          "precision": 0.9620410883486424,
+          "recall": 0.679054261346205,
+          "f1": 0.796148865761834,
+          "support": 48893
+        },
+        "substitution": {
+          "precision": 0.24284314792641776,
+          "recall": 0.7605249701721493,
+          "f1": 0.3681366280268966,
+          "support": 5867
+        },
+        "deletion": {
+          "precision": 0.2102954080140392,
+          "recall": 0.46567357512953367,
+          "f1": 0.2897441063872658,
+          "support": 1544
+        }
+      },
+      "confusion_matrix": [
+        [
+          33201,
+          13313,
+          2379
+        ],
+        [
+          1084,
+          4462,
+          321
+        ],
+        [
+          226,
+          599,
+          719
+        ]
+      ]
+    }
+  },
+  "source_shas": {
+    "original_preregistration": "7FD870DF2321465D716EAFB1B66E7D6116C153E3D8BCD494494F3FAE44ACC784",
+    "numerical_json": "5DC07A4B719FD6F38DBD1366CF802787FA3882CA972E5356A8F91DB435443425",
+    "numerical_markdown": "F00AE59A7EC1B44746BE39439C28C3EAFF5294C57C31D3088C4610062BF913C4",
+    "v4": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D",
+    "r4_4c2_checkpoint": "F54C9C2361AE78E1C37353AEB338A2DE6722C0B1EC4F885F6B52688CE9E88085",
+    "r4_4c2_manifest": "BE82690C366049E659F5A872256BF23616566E18D37A7AFB8A1E7169629F1DB9",
+    "r4_4d0_manifest": "A8443C85AA9C03879E3A907CC3AB05CC6154BB365BED70A59B4ED8E9FBA1A920",
+    "r4_4d0_scoring_implementation": "DC141D38091C9FC60BA2F0A8447FF918DC98B5D99499D336A524CABEB8F4948C",
+    "matched_control": "D933F674743DA06CC8FAB425CEBF81D9C78505E1BDB4A90204DDB2E1A15B4798"
+  },
+  "test_policy": "CLOSED"
+}

@@ -1,0 +1,314 @@
+{
+  "BWC": {
+    "positions": 4711,
+    "deletion_support": 199,
+    "sufficient": true,
+    "RAW": {
+      "count": 4711,
+      "positive": 199,
+      "negative": 4512,
+      "roc_auc": 0.9000025615666987,
+      "pr_auc": 0.3014038256992345
+    },
+    "TARGET": {
+      "count": 4711,
+      "positive": 199,
+      "negative": 4512,
+      "roc_auc": 0.8716510299725578,
+      "pr_auc": 0.35317096778759877
+    },
+    "TIME": {
+      "count": 4711,
+      "positive": 199,
+      "negative": 4512,
+      "roc_auc": 0.8867464539007093,
+      "pr_auc": 0.3011265517541497
+    }
+  },
+  "EBVS": {
+    "positions": 4491,
+    "deletion_support": 184,
+    "sufficient": true,
+    "RAW": {
+      "count": 4491,
+      "positive": 184,
+      "negative": 4307,
+      "roc_auc": 0.887308072803626,
+      "pr_auc": 0.24878639994018686
+    },
+    "TARGET": {
+      "count": 4491,
+      "positive": 184,
+      "negative": 4307,
+      "roc_auc": 0.8507977407859802,
+      "pr_auc": 0.23083395163615839
+    },
+    "TIME": {
+      "count": 4491,
+      "positive": 184,
+      "negative": 4307,
+      "roc_auc": 0.8722655737373942,
+      "pr_auc": 0.2223601678511445
+    }
+  },
+  "HJK": {
+    "positions": 4889,
+    "deletion_support": 4,
+    "sufficient": false,
+    "RAW": {
+      "count": 4889,
+      "positive": 4,
+      "negative": 4885,
+      "roc_auc": 0.9505117707267143,
+      "pr_auc": 0.010796628935810055
+    },
+    "TARGET": {
+      "count": 4889,
+      "positive": 4,
+      "negative": 4885,
+      "roc_auc": 0.9357727737973387,
+      "pr_auc": 0.009523235990131626
+    },
+    "TIME": {
+      "count": 4889,
+      "positive": 4,
+      "negative": 4885,
+      "roc_auc": 0.9516376663254862,
+      "pr_auc": 0.010188194756624826
+    }
+  },
+  "NCC": {
+    "positions": 4826,
+    "deletion_support": 55,
+    "sufficient": true,
+    "RAW": {
+      "count": 4826,
+      "positive": 55,
+      "negative": 4771,
+      "roc_auc": 0.9070444541834188,
+      "pr_auc": 0.08695851811042435
+    },
+    "TARGET": {
+      "count": 4826,
+      "positive": 55,
+      "negative": 4771,
+      "roc_auc": 0.8900821249595091,
+      "pr_auc": 0.10709966744983272
+    },
+    "TIME": {
+      "count": 4826,
+      "positive": 55,
+      "negative": 4771,
+      "roc_auc": 0.9059088050913664,
+      "pr_auc": 0.0980193494107453
+    }
+  },
+  "NJS": {
+    "positions": 4793,
+    "deletion_support": 77,
+    "sufficient": true,
+    "RAW": {
+      "count": 4793,
+      "positive": 77,
+      "negative": 4716,
+      "roc_auc": 0.9012370157408326,
+      "pr_auc": 0.10861609992512133
+    },
+    "TARGET": {
+      "count": 4793,
+      "positive": 77,
+      "negative": 4716,
+      "roc_auc": 0.8670428384168841,
+      "pr_auc": 0.10750113305484782
+    },
+    "TIME": {
+      "count": 4793,
+      "positive": 77,
+      "negative": 4716,
+      "roc_auc": 0.8792064593591311,
+      "pr_auc": 0.09357824591643325
+    }
+  },
+  "PNV": {
+    "positions": 4830,
+    "deletion_support": 236,
+    "sufficient": true,
+    "RAW": {
+      "count": 4830,
+      "positive": 236,
+      "negative": 4594,
+      "roc_auc": 0.928585000332047,
+      "pr_auc": 0.425095899076714
+    },
+    "TARGET": {
+      "count": 4830,
+      "positive": 236,
+      "negative": 4594,
+      "roc_auc": 0.9086206769330666,
+      "pr_auc": 0.46387585635453527
+    },
+    "TIME": {
+      "count": 4830,
+      "positive": 236,
+      "negative": 4594,
+      "roc_auc": 0.9127454380437269,
+      "pr_auc": 0.41918768201204315
+    }
+  },
+  "RRBI": {
+    "positions": 4735,
+    "deletion_support": 64,
+    "sufficient": true,
+    "RAW": {
+      "count": 4735,
+      "positive": 64,
+      "negative": 4671,
+      "roc_auc": 0.8731200492399915,
+      "pr_auc": 0.06936589313256926
+    },
+    "TARGET": {
+      "count": 4735,
+      "positive": 64,
+      "negative": 4671,
+      "roc_auc": 0.8525476343395418,
+      "pr_auc": 0.0986196499363488
+    },
+    "TIME": {
+      "count": 4735,
+      "positive": 64,
+      "negative": 4671,
+      "roc_auc": 0.8605859291372298,
+      "pr_auc": 0.06908303615570636
+    }
+  },
+  "TLV": {
+    "positions": 4748,
+    "deletion_support": 416,
+    "sufficient": true,
+    "RAW": {
+      "count": 4748,
+      "positive": 416,
+      "negative": 4332,
+      "roc_auc": 0.8992520997585056,
+      "pr_auc": 0.41881985202532085
+    },
+    "TARGET": {
+      "count": 4748,
+      "positive": 416,
+      "negative": 4332,
+      "roc_auc": 0.8773056280630728,
+      "pr_auc": 0.4728447530037344
+    },
+    "TIME": {
+      "count": 4748,
+      "positive": 416,
+      "negative": 4332,
+      "roc_auc": 0.8853400898501314,
+      "pr_auc": 0.42196751926084825
+    }
+  },
+  "TNI": {
+    "positions": 4615,
+    "deletion_support": 64,
+    "sufficient": true,
+    "RAW": {
+      "count": 4615,
+      "positive": 64,
+      "negative": 4551,
+      "roc_auc": 0.9226028620083497,
+      "pr_auc": 0.13216836674253168
+    },
+    "TARGET": {
+      "count": 4615,
+      "positive": 64,
+      "negative": 4551,
+      "roc_auc": 0.8816812239068337,
+      "pr_auc": 0.14380386493753358
+    },
+    "TIME": {
+      "count": 4615,
+      "positive": 64,
+      "negative": 4551,
+      "roc_auc": 0.9105897055592178,
+      "pr_auc": 0.13657335439513216
+    }
+  },
+  "YBAA": {
+    "positions": 4318,
+    "deletion_support": 27,
+    "sufficient": false,
+    "RAW": {
+      "count": 4318,
+      "positive": 27,
+      "negative": 4291,
+      "roc_auc": 0.9049863193419474,
+      "pr_auc": 0.0851899139011727
+    },
+    "TARGET": {
+      "count": 4318,
+      "positive": 27,
+      "negative": 4291,
+      "roc_auc": 0.8906669428692268,
+      "pr_auc": 0.07322715766677206
+    },
+    "TIME": {
+      "count": 4318,
+      "positive": 27,
+      "negative": 4291,
+      "roc_auc": 0.8840726067479738,
+      "pr_auc": 0.13122062137809898
+    }
+  },
+  "YKWK": {
+    "positions": 4721,
+    "deletion_support": 125,
+    "sufficient": true,
+    "RAW": {
+      "count": 4721,
+      "positive": 125,
+      "negative": 4596,
+      "roc_auc": 0.896290687554395,
+      "pr_auc": 0.19051317322809846
+    },
+    "TARGET": {
+      "count": 4721,
+      "positive": 125,
+      "negative": 4596,
+      "roc_auc": 0.8630513489991298,
+      "pr_auc": 0.2270963210575041
+    },
+    "TIME": {
+      "count": 4721,
+      "positive": 125,
+      "negative": 4596,
+      "roc_auc": 0.8701322889469103,
+      "pr_auc": 0.18040115451622665
+    }
+  },
+  "ZHAA": {
+    "positions": 4627,
+    "deletion_support": 93,
+    "sufficient": true,
+    "RAW": {
+      "count": 4627,
+      "positive": 93,
+      "negative": 4534,
+      "roc_auc": 0.8869023056381651,
+      "pr_auc": 0.14005109777121008
+    },
+    "TARGET": {
+      "count": 4627,
+      "positive": 93,
+      "negative": 4534,
+      "roc_auc": 0.8579905232152767,
+      "pr_auc": 0.1441757311764197
+    },
+    "TIME": {
+      "count": 4627,
+      "positive": 93,
+      "negative": 4534,
+      "roc_auc": 0.8684325360122562,
+      "pr_auc": 0.1331049873510675
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "status": "R4_4D1C_IDENTITY_CORRECTION_FROZEN",
+  "all_frozen_sources_verified": true,
+  "threshold_artifact_unchanged": true,
+  "old_mapping_reproduced": true,
+  "canonical_mapping_rows": 1434,
+  "canonical_mapping_missing": 0,
+  "duplicate_collisions": 0,
+  "unexpected_ambiguities": 0,
+  "v2_allowed_semantic_changes_only": true,
+  "synthetic_tests": "10/10 PASS",
+  "v2_driver_frozen": true,
+  "train_threshold_recalculated": false,
+  "validation_acoustic_inference": false,
+  "validation_hypothesis_scoring": false,
+  "validation_metrics": false,
+  "neural_training": false,
+  "r4_test_accessed": false,
+  "locked_execution_v2_run": false
+}

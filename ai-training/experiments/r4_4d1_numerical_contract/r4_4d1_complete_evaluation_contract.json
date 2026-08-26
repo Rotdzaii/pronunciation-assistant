@@ -1,0 +1,449 @@
+{
+  "contract_id": "R4-4D1A_COMPLETE_NUMERICAL_EVALUATION_CONTRACT",
+  "contract_version": 1,
+  "status": "FROZEN_BEFORE_TRAIN_THRESHOLD_AND_VALIDATION",
+  "frozen_date": "2026-08-14",
+  "timezone": "Asia/Bangkok",
+  "git_commit": "4758c0dcf5ab1681af1fcf74e068d609030d11a8",
+  "additive_contract_policy": {
+    "original_preregistration_path": "ai-training/experiments/r4_4d0_ctc_hypothesis_feasibility/r4_4d1_preregistered_score_design.json",
+    "original_preregistration_sha256": "7FD870DF2321465D716EAFB1B66E7D6116C153E3D8BCD494494F3FAE44ACC784",
+    "original_must_not_be_modified": true,
+    "effective_future_contract": "original preregistration plus this additive numerical contract",
+    "conflict_rule": "This additive contract supplies previously missing numerical details and may not alter the original frozen RAW family or TRAIN-only calibration policy. Any contradiction is a contract verification failure."
+  },
+  "source_identities": {
+    "v4": {
+      "path": "ai-training/datasets/l2-arctic/metadata/all_speakers_expected_observed_v4.csv",
+      "sha256": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D"
+    },
+    "r4_4c2_checkpoint": {
+      "path": "ai-training/experiments/r4_4c2_bigru_ctc_seed42/R4_4C2_bigru_ctc_phone_sequence_seed42_best_validation_per.pt",
+      "sha256": "F54C9C2361AE78E1C37353AEB338A2DE6722C0B1EC4F885F6B52688CE9E88085"
+    },
+    "r4_4c2_manifest": {
+      "path": "ai-training/experiments/r4_4c2_bigru_ctc_seed42/artifact_hashes.json",
+      "sha256": "BE82690C366049E659F5A872256BF23616566E18D37A7AFB8A1E7169629F1DB9"
+    },
+    "r4_4d0_manifest": {
+      "path": "ai-training/experiments/r4_4d0_ctc_hypothesis_feasibility/artifact_hashes.json",
+      "sha256": "A8443C85AA9C03879E3A907CC3AB05CC6154BB365BED70A59B4ED8E9FBA1A920"
+    },
+    "r4_4d0_scoring_implementation": {
+      "path": "ai-training/scripts/run_r4_4d0_ctc_hypothesis_feasibility.py",
+      "sha256": "DC141D38091C9FC60BA2F0A8447FF918DC98B5D99499D336A524CABEB8F4948C"
+    }
+  },
+  "populations": {
+    "train": {
+      "purpose": "threshold calibration only",
+      "usable_words": 16259,
+      "expected_phone_rows": 56304,
+      "relations": {
+        "correct": 48893,
+        "substitution": 5867,
+        "deletion": 1544
+      },
+      "speakers": ["BWC", "EBVS", "HJK", "NCC", "NJS", "PNV", "RRBI", "TLV", "TNI", "YBAA", "YKWK", "ZHAA"]
+    },
+    "validation": {
+      "purpose": "one locked evaluation after threshold freeze",
+      "usable_words": 7728,
+      "expected_phone_rows": 26337,
+      "relations": {
+        "correct": 22759,
+        "substitution": 2664,
+        "deletion": 914
+      },
+      "speakers": ["ABA", "HKK", "HQTV", "LXC", "MBMPS", "SVBI"]
+    },
+    "test": {
+      "status": "CLOSED",
+      "speakers": ["ASI", "ERMS", "SKA", "THV", "TXHC", "YDCK"]
+    }
+  },
+  "acoustic_model": {
+    "frozen": true,
+    "training_allowed": false,
+    "checkpoint_sha256": "F54C9C2361AE78E1C37353AEB338A2DE6722C0B1EC4F885F6B52688CE9E88085",
+    "audio": {
+      "span": "full_MFA_word_span",
+      "channels": "mono",
+      "sample_rate_hz": 16000,
+      "side_context_seconds": 0.0,
+      "manual_phone_intervals_used": false,
+      "duration_feature_used": false
+    },
+    "features": {
+      "type": "log_mel",
+      "mel_bins": 64,
+      "fft_samples": 512,
+      "window_samples": 400,
+      "window": "Hann",
+      "hop_samples": 160,
+      "mel_scale": "slaney",
+      "mel_normalization": "slaney",
+      "amplitude": "per_word_max_relative_dB"
+    },
+    "architecture": {
+      "cnn_channels": [16, 32, 64, 96],
+      "bigru_layers": 1,
+      "bigru_hidden_size": 96,
+      "bigru_bidirectional": true,
+      "bigru_packed_lengths": true,
+      "head": "Linear(192,41)",
+      "phone_classes": 40,
+      "blank_index": 40,
+      "total_classes": 41
+    }
+  },
+  "ctc_score": {
+    "selected_family": "RAW",
+    "logits_shape_per_word": "[T,41]",
+    "log_probs_equation": "log_probs = torch.log_softmax(logits, dim=-1)",
+    "implementation": "torch.nn.CTCLoss",
+    "parameters": {
+      "blank": 40,
+      "reduction": "none",
+      "zero_infinity": true,
+      "input_lengths": "[T]",
+      "target_lengths": "[len(H)]"
+    },
+    "nll_equation": "NLL(H) = CTCLoss(log_probs, H, input_lengths=[T], target_lengths=[len(H)], blank=40, reduction='none', zero_infinity=True)",
+    "raw_score_equation": "RAW_SCORE(H) = -NLL(H)",
+    "empty_target": {
+      "allowed": true,
+      "implementation": "exact torch CTCLoss target_length=0 behavior",
+      "finite_score_required": true,
+      "failure_action": "stop future run; do not drop target or substitute a custom formula"
+    },
+    "forbidden": [
+      "target_length_normalization",
+      "encoder_time_normalization",
+      "length_correction",
+      "duration_correction",
+      "phone_prior",
+      "speaker_prior",
+      "greedy_decode_omission_in_decision_score"
+    ]
+  },
+  "local_hypotheses": {
+    "expected_sequence": "E=[E0,...,E(n-1)]",
+    "for_each_expected_position": true,
+    "keep": "H_KEEP=E",
+    "delete": "H_DELETE(i)=E with Ei removed",
+    "substitution": "H_SUB(i,q)=E with Ei replaced by q for every canonical q != Ei",
+    "substitution_hypotheses_per_position": 39,
+    "manual_observed_phone_enters_scoring": false,
+    "confusion_prior": false,
+    "best_substitution": {
+      "score_equation": "BEST_SUB_SCORE_i=max_{q != Ei} RAW_SCORE(H_SUB(i,q))",
+      "phone_equation": "BEST_SUB_PHONE_i=argmax_{q != Ei} RAW_SCORE(H_SUB(i,q))",
+      "exact_score_tie": "lowest canonical phone index",
+      "canonical_phone_indices": "frozen R3/R4 ordering 0 through 39"
+    }
+  },
+  "decision_score": {
+    "keep": "KEEP_i=RAW_SCORE(H_KEEP)",
+    "delete": "DELETE_i=RAW_SCORE(H_DELETE(i))",
+    "substitution": "SUB_i=BEST_SUB_SCORE_i",
+    "equation": "D_i=DELETE_i-max(KEEP_i,SUB_i)",
+    "dtype": "float64",
+    "only_scalar_for_deletion_calibration": true
+  },
+  "train_threshold_calibration": {
+    "data": "TRAIN only",
+    "finite_scores_only": true,
+    "unique_scores": "U=sorted(unique(finite TRAIN D_i), ascending)",
+    "candidate_generation": [
+      "np.nextafter(min(U), -np.inf)",
+      "every value in U",
+      "np.nextafter(max(U), +np.inf)"
+    ],
+    "candidate_order": "ascending numeric order",
+    "dtype": "float64",
+    "prediction_rule": "D_i >= threshold predicts deletion",
+    "edge_meaning": {
+      "below_minimum": "all deletion",
+      "above_maximum": "no deletion"
+    },
+    "eligibility": {
+      "all_required": true,
+      "deletion_recall_min": 0.45,
+      "substitution_false_deletion_max": 0.25,
+      "speaker_rule": {
+        "apply_when_true_deletion_support_at_least": 30,
+        "deletion_recall_min": 0.25,
+        "speakers": "each TRAIN speaker independently"
+      },
+      "correct_false_deletion_constraint": null
+    },
+    "selection_precedence": [
+      {"priority": 1, "metric": "binary_macro_f1", "direction": "higher"},
+      {"priority": 2, "metric": "deletion_f1", "direction": "higher"},
+      {"priority": 3, "metric": "deletion_precision", "direction": "higher"},
+      {"priority": 4, "metric": "three_relation_macro_f1", "direction": "higher"},
+      {"priority": 5, "metric": "threshold", "direction": "higher", "rationale": "more conservative against false deletion"}
+    ],
+    "tie_comparison": "exact float64 equality; no tolerance",
+    "validation_influence": false,
+    "required_future_artifacts_before_validation": [
+      "all candidate thresholds and TRAIN metrics",
+      "selected threshold and selection trace",
+      "immutable threshold artifact SHA-256"
+    ],
+    "no_eligible_threshold": {
+      "status": "R4_4D1_TRAIN_CALIBRATION_NO_ELIGIBLE_THRESHOLD",
+      "action": "stop before validation without weakening constraints"
+    }
+  },
+  "final_relation_decision": {
+    "precedence": [
+      "if D_i >= theta predict deletion",
+      "otherwise if KEEP_i >= SUB_i predict correct",
+      "otherwise predict substitution with BEST_SUB_PHONE_i"
+    ],
+    "equal_score_rules": {
+      "D_i_equals_theta": "deletion",
+      "KEEP_i_equals_SUB_i": "correct"
+    },
+    "second_threshold": false
+  },
+  "metrics": {
+    "zero_denominator_value": 0.0,
+    "binary": {
+      "truth_mapping": {"correct": 0, "substitution": 0, "deletion": 1},
+      "prediction_mapping": {"correct": 0, "substitution": 0, "deletion": 1},
+      "confusion_matrix_order": "[[TN,FP],[FN,TP]]",
+      "accuracy": "(TP+TN)/(TP+TN+FP+FN)",
+      "true_negative_rate": "TN/(TN+FP)",
+      "deletion_recall": "TP/(TP+FN)",
+      "balanced_accuracy": "(true_negative_rate+deletion_recall)/2",
+      "deletion_precision": "TP/(TP+FP)",
+      "deletion_f1": "2*deletion_precision*deletion_recall/(deletion_precision+deletion_recall)",
+      "nondeletion_precision": "TN/(TN+FN)",
+      "nondeletion_recall": "TN/(TN+FP)",
+      "nondeletion_f1": "2*nondeletion_precision*nondeletion_recall/(nondeletion_precision+nondeletion_recall)",
+      "binary_macro_f1": "(nondeletion_f1+deletion_f1)/2"
+    },
+    "false_deletion": {
+      "correct": "count(true=correct and predicted=deletion)/count(true=correct)",
+      "substitution": "count(true=substitution and predicted=deletion)/count(true=substitution)",
+      "exclusions": "none"
+    },
+    "three_relation": {
+      "class_order": ["correct", "substitution", "deletion"],
+      "confusion_matrix": "rows truth, columns prediction, fixed class order",
+      "per_class": ["precision", "recall", "f1", "support"],
+      "macro_f1": "unweighted mean of correct_f1, substitution_f1, deletion_f1"
+    },
+    "substitution_phone": {
+      "population": "true substitution rows predicted substitution",
+      "coverage": "population count/all true substitution rows",
+      "top1_accuracy": "BEST_SUB_PHONE equals manual observed canonical phone/population count",
+      "zero_coverage_accuracy": 0.0
+    }
+  },
+  "matched_control": {
+    "path": "ai-training/experiments/r4_4a_ctc_sequence_feasibility/validation_word_eligible_matched_control.csv",
+    "sha256": "D933F674743DA06CC8FAB425CEBF81D9C78505E1BDB4A90204DDB2E1A15B4798",
+    "deletion_rows": 717,
+    "nondeletion_rows": 717,
+    "total_rows": 1434,
+    "phones": 32,
+    "validation_speakers": 6,
+    "identity_rule": "all 1434 frozen row identities must match exactly one future validation prediction row",
+    "prohibited": ["rebuild", "resample", "intersection", "silent shrink"],
+    "identity_failure_action": "stop matched evaluation and mark contract failure",
+    "metrics": ["accuracy", "balanced_accuracy", "binary_macro_f1", "deletion_precision", "deletion_recall", "deletion_f1", "binary_confusion_matrix"]
+  },
+  "validation_hard_gates": {
+    "all_required": true,
+    "binary_macro_f1_min": 0.70,
+    "deletion_recall_min": 0.45,
+    "deletion_f1_min": 0.40,
+    "substitution_false_deletion_max": 0.25,
+    "matched_binary_macro_f1_min": 0.60,
+    "matched_deletion_f1_min": 0.55,
+    "speaker_deletion_recall": {
+      "apply_when_support_at_least": 30,
+      "minimum": 0.25,
+      "every_eligible_validation_speaker": true
+    },
+    "three_relation_macro_f1_min": 0.40
+  },
+  "validation_reports": {
+    "speaker": {
+      "speakers": ["ABA", "HKK", "HQTV", "LXC", "MBMPS", "SVBI"],
+      "fields": ["expected_phone_rows", "deletion_support", "binary_macro_f1", "balanced_accuracy", "deletion_precision", "deletion_recall", "deletion_f1", "correct_false_deletion", "substitution_false_deletion"]
+    },
+    "phone": {
+      "each_expected_phone_fields": ["support", "deletion_support", "deletion_precision", "deletion_recall", "deletion_f1", "low_support_flag"],
+      "groups": {
+        "D_T_R_L": ["D", "T", "R", "L"],
+        "OTHER": "all expected phones not in D/T/R/L"
+      },
+      "group_minimum_support_filter": false
+    },
+    "position": {
+      "categories": {
+        "single_phone": "expected sequence length equals 1",
+        "initial": "expected sequence length greater than 1 and index equals 0",
+        "final": "expected sequence length greater than 1 and index equals n-1",
+        "medial": "expected sequence length greater than 1 and 0 < index < n-1"
+      },
+      "fields": ["deletion_support", "deletion_precision", "deletion_recall", "deletion_f1"]
+    },
+    "multi_error": {
+      "pure_deletion_words": "word deletion count > 0 and substitution count == 0",
+      "substitution_plus_deletion_words": "word deletion count > 0 and substitution count > 0",
+      "multiple_deletion_words": "word deletion count > 1",
+      "overlap": "multiple-deletion words may also be pure-deletion or substitution-plus-deletion words",
+      "fields": ["deletion_support", "deletion_precision", "deletion_recall", "deletion_f1"]
+    },
+    "continuous_diagnostics": {
+      "timing": "after threshold and predictions are frozen",
+      "deletion_vs_nondeletion": ["roc_auc", "pr_auc"],
+      "deletion_vs_substitution": ["roc_auc", "pr_auc"],
+      "selection_influence": false
+    },
+    "length_bias": {
+      "buckets": ["1", "2", "3", "4", "5", "6+"],
+      "fields": ["rows", "deletion_support", "deletion_precision", "deletion_recall", "deletion_f1", "overall_false_deletion_rate"],
+      "overall_false_deletion_rate": "predicted deletion among true nondeletion rows in bucket / true nondeletion rows in bucket",
+      "length_specific_threshold": false
+    },
+    "duration": {
+      "duration_source": "MFA word end minus MFA word start; diagnostic only",
+      "buckets_seconds": ["d<0.150", "0.150<=d<0.250", "0.250<=d<0.400", "0.400<=d<0.600", "d>=0.600"],
+      "fields": ["rows", "deletion_support", "deletion_precision", "deletion_recall", "deletion_f1", "false_deletion_rate"],
+      "false_deletion_rate": "predicted deletion among true nondeletion rows in bucket / true nondeletion rows in bucket",
+      "duration_enters_prediction": false
+    },
+    "score_distributions": {
+      "score": "D_i",
+      "relations": ["correct", "substitution", "deletion"],
+      "statistics": ["mean", "median", "p10", "p25", "p75", "p90"]
+    }
+  },
+  "greedy_rescue": {
+    "comparator": "frozen R4-4C2 greedy relation predictions",
+    "population": "rows predicted deletion by R4-4C2 greedy relation alignment",
+    "true_deletion_retention_rate": "R4-4D1 predicted deletion among greedy-predicted deletions that are true deletions / all such true deletions",
+    "false_deletion_rescue_rate": "R4-4D1 predicted correct or substitution among greedy-predicted deletions that are not true deletion / all such false deletions",
+    "diagnostic_only": true
+  },
+  "historical_comparators": {
+    "duration_only": {"binary_macro_f1": 0.668146, "deletion_f1": 0.364164},
+    "r4_1": {"binary_macro_f1": 0.657336, "deletion_f1": 0.341612},
+    "r4_2a": {"binary_macro_f1": 0.566997, "deletion_f1": 0.197525},
+    "r4_3b": {"binary_macro_f1": 0.503101, "deletion_f1": 0.025465},
+    "r4_4c2_greedy": {"binary_macro_f1": 0.555712, "deletion_f1": 0.185464},
+    "refitting_allowed": false
+  },
+  "train_calibration_report": {
+    "fields": ["binary_macro_f1", "balanced_accuracy", "deletion_precision", "deletion_recall", "deletion_f1", "correct_false_deletion", "substitution_false_deletion", "three_relation_macro_f1", "per_speaker_deletion_recall"],
+    "external_validation_evidence": false
+  },
+  "threshold_transfer": {
+    "report": [
+      "TRAIN selected threshold theta",
+      "TRAIN D_i medians for correct, substitution, deletion",
+      "VALIDATION D_i medians for correct, substitution, deletion",
+      "absolute median shift for each relation",
+      "VALIDATION continuous deletion-vs-nondeletion ROC-AUC and PR-AUC",
+      "VALIDATION continuous deletion-vs-substitution ROC-AUC and PR-AUC"
+    ],
+    "threshold_adjustment_allowed": false,
+    "qualitative_stability_label": "descriptive only; no unstated numerical category boundary"
+  },
+  "result_classification": {
+    "precedence": [
+      "R4_4D1_SOURCE_VERIFICATION_FAIL",
+      "R4_4D1_TRAIN_CALIBRATION_NO_ELIGIBLE_THRESHOLD",
+      "R4_4D1_HYPOTHESIS_DELETION_CONFIRMED",
+      "R4_4D1_HYPOTHESIS_DELETION_STRONG_PARTIAL",
+      "R4_4D1_HYPOTHESIS_THRESHOLD_TRANSFER_FAIL",
+      "R4_4D1_HYPOTHESIS_SIGNAL_NOT_CONFIRMED"
+    ],
+    "source_verification_fail": "any frozen source identity mismatch",
+    "no_eligible_threshold": "zero TRAIN threshold candidates pass all TRAIN eligibility constraints",
+    "confirmed": "all eight validation_hard_gates pass",
+    "strong_partial": {
+      "all_required": true,
+      "binary_macro_f1_min": 0.65,
+      "deletion_f1_min": 0.35,
+      "deletion_recall_min": 0.40,
+      "substitution_false_deletion_max": 0.25,
+      "matched_binary_macro_f1_min": 0.58,
+      "matched_deletion_f1_min": 0.50,
+      "three_relation_macro_f1_min": 0.38,
+      "speaker_deletion_recall": {
+        "apply_when_support_at_least": 30,
+        "minimum": 0.20,
+        "every_eligible_validation_speaker": true
+      }
+    },
+    "threshold_transfer_fail": {
+      "precondition": "confirmed and strong_partial both fail",
+      "all_required": true,
+      "validation_deletion_vs_nondeletion_roc_auc_min": 0.75,
+      "validation_deletion_vs_substitution_roc_auc_min": 0.70
+    },
+    "signal_not_confirmed": "confirmed fails, strong_partial fails, and both threshold_transfer_fail AUC criteria do not pass",
+    "subjective_override": false
+  },
+  "future_artifacts": {
+    "experiment_directory": "ai-training/experiments/r4_4d1_locked_hypothesis_validation",
+    "threshold_artifact_before_validation": "train_calibrated_threshold.json",
+    "required": [
+      "preflight.json",
+      "train_calibrated_threshold.json",
+      "threshold_calibration_metrics.json",
+      "validation_binary_metrics.json",
+      "validation_3class_metrics.json",
+      "matched_control_metrics.json",
+      "length_metrics.json",
+      "duration_metrics.json",
+      "speaker_metrics.json",
+      "phone_metrics.json",
+      "position_metrics.json",
+      "multi_error_metrics.json",
+      "greedy_rescue_metrics.json",
+      "score_distributions.json",
+      "threshold_transfer.json",
+      "compute_report.json",
+      "validation_phone_predictions.csv",
+      "validation_word_predictions.jsonl",
+      "final_status.json",
+      "r4_4d1_report.md",
+      "artifact_hashes.json"
+    ]
+  },
+  "no_post_hoc_policy": [
+    "do not modify threshold after validation",
+    "do not change >= to >",
+    "do not choose another threshold",
+    "do not switch RAW to TARGET or TIME",
+    "do not normalize by length",
+    "do not correct for duration",
+    "do not use phone-specific or speaker-specific thresholds",
+    "do not combine greedy and RAW predictions",
+    "do not retrain model",
+    "do not select another checkpoint"
+  ],
+  "test_policy": {
+    "status": "CLOSED",
+    "paths_resolved": false,
+    "audio_read": false,
+    "posterior_computed": false,
+    "hypothesis_scored": false,
+    "metrics_computed": false
+  },
+  "freeze_task_execution": {
+    "train_threshold_calculated": false,
+    "validation_hypothesis_scoring": false,
+    "r4_test_accessed": false,
+    "neural_training": false
+  }
+}

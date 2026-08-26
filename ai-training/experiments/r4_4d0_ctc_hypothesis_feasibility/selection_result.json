@@ -1,0 +1,35 @@
+{
+  "selected_family": "RAW",
+  "selection_trace": [
+    {
+      "rule": "highest deletion-vs-substitution ROC-AUC; within 0.01 advances",
+      "maximum": 0.9045929370475593,
+      "contenders": [
+        "RAW"
+      ]
+    },
+    {
+      "rule": "simplicity RAW > TIME > TARGET",
+      "selected": "RAW"
+    }
+  ],
+  "gates": {
+    "deletion_vs_nondeletion_roc_at_least_0_65": true,
+    "deletion_vs_substitution_roc_at_least_0_60": true,
+    "speaker_direction_consistent_at_least_75_percent": true,
+    "clean_zero_threshold_deletion_preference_at_most_25_percent": true
+  },
+  "feasible": true,
+  "sufficient_speakers": 10,
+  "consistent_speakers": 10,
+  "speaker_consistency_fraction": 1.0,
+  "group_roc_auc": {
+    "D_T_R_L": 0.825971343353103,
+    "OTHER": 0.9166688909609425
+  },
+  "broad_consistency": true,
+  "strong_thresholds": {
+    "deletion_vs_nondeletion_roc": 0.75,
+    "deletion_vs_substitution_roc": 0.7
+  }
+}

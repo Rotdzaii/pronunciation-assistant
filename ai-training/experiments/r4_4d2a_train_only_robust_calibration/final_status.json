@@ -1,0 +1,11 @@
+{
+  "status": "R4_4D2A_ROBUST_CALIBRATION_READY",
+  "selected_family": "TARGET",
+  "robust_theta": 0.16184102947061696,
+  "validation_scoring": false,
+  "validation_candidate_metrics": false,
+  "validation_used_for_selection": false,
+  "test_accessed": false,
+  "training": false,
+  "stop_r4_deletion_calibration_if_not_ready": false
+}

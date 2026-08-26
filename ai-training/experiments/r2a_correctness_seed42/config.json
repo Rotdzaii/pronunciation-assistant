@@ -1,0 +1,190 @@
+{
+  "experiment": "R2-A binary correctness baseline",
+  "research_only": true,
+  "used_by_runtime": false,
+  "production_model": false,
+  "dataset": "ai-training/datasets/l2-arctic/metadata/all_speakers_phone_correctness_v3.csv",
+  "dataset_sha256": "433F006AB0ABCE47955C2305FCD131F2FFD9741417891BE125798163ADD28F7E",
+  "eligible_labels": {
+    "correct": 0,
+    "substitution": 1,
+    "deletion": 1
+  },
+  "excluded_labels": [
+    "addition"
+  ],
+  "speaker_split": {
+    "train": [
+      "BWC",
+      "EBVS",
+      "HJK",
+      "NCC",
+      "NJS",
+      "PNV",
+      "RRBI",
+      "TLV",
+      "TNI",
+      "YBAA",
+      "YKWK",
+      "ZHAA"
+    ],
+    "validation": [
+      "ABA",
+      "HKK",
+      "HQTV",
+      "LXC",
+      "MBMPS",
+      "SVBI"
+    ],
+    "test": [
+      "ASI",
+      "ERMS",
+      "SKA",
+      "THV",
+      "TXHC",
+      "YDCK"
+    ]
+  },
+  "split_counts": {
+    "train": {
+      "speakers": [
+        "BWC",
+        "EBVS",
+        "HJK",
+        "NCC",
+        "NJS",
+        "PNV",
+        "RRBI",
+        "TLV",
+        "TNI",
+        "YBAA",
+        "YKWK",
+        "ZHAA"
+      ],
+      "rows": 59572,
+      "correct": 51400,
+      "incorrect": 8172,
+      "substitution": 6558,
+      "deletion": 1614
+    },
+    "validation": {
+      "speakers": [
+        "ABA",
+        "HKK",
+        "HQTV",
+        "LXC",
+        "MBMPS",
+        "SVBI"
+      ],
+      "rows": 29767,
+      "correct": 25303,
+      "incorrect": 4464,
+      "substitution": 3485,
+      "deletion": 979
+    },
+    "test": {
+      "speakers": [
+        "ASI",
+        "ERMS",
+        "SKA",
+        "THV",
+        "TXHC",
+        "YDCK"
+      ],
+      "rows": 29805,
+      "correct": 24923,
+      "incorrect": 4882,
+      "substitution": 4055,
+      "deletion": 827
+    }
+  },
+  "feature_allowlist": [
+    "audio waveform"
+  ],
+  "forbidden_model_features": [
+    "error_type",
+    "raw_label",
+    "label",
+    "expected_phone",
+    "observed_phone",
+    "speaker_id",
+    "l1",
+    "gender",
+    "split",
+    "utterance_id",
+    "filename",
+    "path",
+    "duration",
+    "start_time",
+    "end_time"
+  ],
+  "audio": {
+    "sample_rate": 16000,
+    "mono": true,
+    "crop": "one second centered at (start_time + end_time) / 2 for every class",
+    "samples": 16000,
+    "boundary_policy": "clip available utterance audio and zero-pad only the missing side"
+  },
+  "log_mel": {
+    "n_mels": 64,
+    "n_fft": 2048,
+    "hop_length": 512,
+    "win_length": 2048,
+    "window": "hann",
+    "center": true,
+    "pad_mode": "constant",
+    "power": 2.0,
+    "power_to_db_ref": "max",
+    "top_db": 80.0,
+    "mel_norm": "slaney (legacy librosa default)",
+    "feature_shape": [
+      1,
+      64,
+      32
+    ]
+  },
+  "model": "SmallPronunciationCNNAttention",
+  "backbone_channels": [
+    16,
+    32,
+    64,
+    96
+  ],
+  "head": {
+    "dropout": 0.2,
+    "linear": [
+      96,
+      2
+    ]
+  },
+  "random_initialization": true,
+  "loss": "class-weighted CrossEntropy",
+  "class_weight_formula": "N / (2 * train_class_count[c])",
+  "class_weights": {
+    "correct": 0.5794941634241245,
+    "incorrect": 3.6448849730788058
+  },
+  "sampler": "standard shuffled DataLoader",
+  "augmentation": "none",
+  "seed": 42,
+  "batch_size": 8,
+  "optimizer": "Adam",
+  "learning_rate": 0.0001,
+  "epochs": 12,
+  "threshold": "argmax",
+  "checkpoint_selection": "highest validation Macro-F1; tie higher incorrect F1; tie earlier epoch",
+  "validation_thresholds": {
+    "macro_f1": 0.6,
+    "balanced_accuracy": 0.6,
+    "incorrect_f1": 0.4,
+    "incorrect_recall": 0.4,
+    "substitution_recall": 0.4,
+    "deletion_recall": 0.3
+  },
+  "duration_matched_test_thresholds": {
+    "macro_f1": 0.55,
+    "incorrect_f1": 0.35,
+    "max_macro_f1_drop": 0.1,
+    "max_incorrect_f1_drop": 0.1
+  }
+}

@@ -1,0 +1,238 @@
+{
+  "experiment": "R2-B audio + canonical expected-phone binary correctness",
+  "research_only": true,
+  "used_by_runtime": false,
+  "production_model": false,
+  "test_policy": "TEST remains closed; no TEST audio decoding, feature materialization, or inference",
+  "dataset": "ai-training/datasets/l2-arctic/metadata/all_speakers_phone_correctness_v3.csv",
+  "dataset_sha256": "433F006AB0ABCE47955C2305FCD131F2FFD9741417891BE125798163ADD28F7E",
+  "eligible_labels": {
+    "correct": 0,
+    "substitution": 1,
+    "deletion": 1
+  },
+  "excluded_labels": [
+    "addition"
+  ],
+  "speaker_split": {
+    "train": [
+      "BWC",
+      "EBVS",
+      "HJK",
+      "NCC",
+      "NJS",
+      "PNV",
+      "RRBI",
+      "TLV",
+      "TNI",
+      "YBAA",
+      "YKWK",
+      "ZHAA"
+    ],
+    "validation": [
+      "ABA",
+      "HKK",
+      "HQTV",
+      "LXC",
+      "MBMPS",
+      "SVBI"
+    ],
+    "test_locked_closed": [
+      "ASI",
+      "ERMS",
+      "SKA",
+      "THV",
+      "TXHC",
+      "YDCK"
+    ]
+  },
+  "split_counts": {
+    "train": {
+      "rows": 59572,
+      "correct": 51400,
+      "incorrect": 8172,
+      "substitution": 6558,
+      "deletion": 1614,
+      "speakers": [
+        "BWC",
+        "EBVS",
+        "HJK",
+        "NCC",
+        "NJS",
+        "PNV",
+        "RRBI",
+        "TLV",
+        "TNI",
+        "YBAA",
+        "YKWK",
+        "ZHAA"
+      ]
+    },
+    "validation": {
+      "rows": 29767,
+      "correct": 25303,
+      "incorrect": 4464,
+      "substitution": 3485,
+      "deletion": 979,
+      "speakers": [
+        "ABA",
+        "HKK",
+        "HQTV",
+        "LXC",
+        "MBMPS",
+        "SVBI"
+      ]
+    }
+  },
+  "phone_vocabulary": {
+    "<UNK>": 0,
+    "AA": 1,
+    "AE": 2,
+    "AH": 3,
+    "AO": 4,
+    "AW": 5,
+    "AY": 6,
+    "B": 7,
+    "CH": 8,
+    "D": 9,
+    "DH": 10,
+    "EH": 11,
+    "ER": 12,
+    "EY": 13,
+    "F": 14,
+    "G": 15,
+    "HH": 16,
+    "IH": 17,
+    "IY": 18,
+    "JH": 19,
+    "K": 20,
+    "L": 21,
+    "M": 22,
+    "N": 23,
+    "NG": 24,
+    "OW": 25,
+    "OY": 26,
+    "P": 27,
+    "R": 28,
+    "S": 29,
+    "SH": 30,
+    "T": 31,
+    "TH": 32,
+    "UH": 33,
+    "UW": 34,
+    "V": 35,
+    "W": 36,
+    "Y": 37,
+    "Z": 38,
+    "ZH": 39
+  },
+  "phone_canonicalization": "remove ARPAbet vowel stress 0/1/2; preserve consonants/case; AX,d,l/unseen -> <UNK>",
+  "phone_embedding": {
+    "vocab_size": 40,
+    "dimension": 16,
+    "padding_idx": 0,
+    "unk_fixed_zero": true
+  },
+  "model_inputs": [
+    "audio-derived log-mel",
+    "canonical_phone_id"
+  ],
+  "forbidden_model_features": [
+    "raw_label",
+    "error_type",
+    "binary_label",
+    "raw_stressed_expected_phone",
+    "observed_phone",
+    "speaker_id",
+    "l1",
+    "gender",
+    "duration",
+    "filename",
+    "path",
+    "utterance_text",
+    "utterance_id",
+    "start_time",
+    "end_time"
+  ],
+  "audio": {
+    "sample_rate": 16000,
+    "mono": true,
+    "crop": "one second centered at (start_time + end_time) / 2 for every class",
+    "samples": 16000,
+    "boundary_policy": "clip available utterance audio and zero-pad only the missing side"
+  },
+  "log_mel": {
+    "n_mels": 64,
+    "n_fft": 2048,
+    "hop_length": 512,
+    "win_length": 2048,
+    "window": "hann",
+    "center": true,
+    "pad_mode": "constant",
+    "power": 2.0,
+    "power_to_db_ref": "max",
+    "top_db": 80.0,
+    "feature_shape": [
+      1,
+      64,
+      32
+    ]
+  },
+  "architecture": {
+    "audio_backbone": "legacy SmallPronunciationCNNAttention CNN + temporal attention",
+    "audio_vector": 96,
+    "phone_vector": 16,
+    "fusion_vector": 112,
+    "head": "Dropout(0.2) + Linear(112,2)",
+    "hidden_mlp": false,
+    "random_initialization": true,
+    "legacy_checkpoint_loaded": false
+  },
+  "seed": 42,
+  "batch_size": 8,
+  "optimizer": "Adam",
+  "learning_rate": 0.0001,
+  "weight_decay": 0.0,
+  "epochs": 12,
+  "loss": "class-weighted CrossEntropy",
+  "class_weights": {
+    "correct": 0.5794941634241245,
+    "incorrect": 3.6448849730788058
+  },
+  "sampler": "none; standard shuffled DataLoader",
+  "augmentation": "none",
+  "threshold": "argmax",
+  "checkpoint_selection": "highest FULL validation Macro-F1; tie higher incorrect F1; tie earlier epoch",
+  "external_baselines": {
+    "audio_only_r2a": {
+      "macro_f1": 0.542294
+    },
+    "phone_only_r2b0": {
+      "macro_f1": 0.598279,
+      "balanced_accuracy": 0.580861,
+      "incorrect_f1": 0.28239,
+      "incorrect_recall": 0.201165
+    }
+  },
+  "primary_thresholds": {
+    "macro_f1": 0.65,
+    "balanced_accuracy": 0.65,
+    "incorrect_f1": 0.4,
+    "incorrect_recall": 0.4,
+    "substitution_recall": 0.4,
+    "deletion_recall": 0.3
+  },
+  "phone_only_improvement_thresholds": {
+    "macro_f1": 0.05,
+    "balanced_accuracy": 0.05,
+    "incorrect_f1": 0.1
+  },
+  "modality_thresholds": {
+    "macro_f1_delta": 0.03,
+    "incorrect_f1_delta": 0.05
+  },
+  "duration_drop_thresholds": {
+    "macro_f1": 0.1,
+    "incorrect_f1": 0.1
+  }
+}

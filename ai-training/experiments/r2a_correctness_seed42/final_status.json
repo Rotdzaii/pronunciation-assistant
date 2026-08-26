@@ -1,0 +1,13 @@
+{
+  "status": "R2A_VALIDATION_FAIL",
+  "test_opened": false,
+  "failures": [
+    "macro_f1: 0.542294 < 0.600000",
+    "balanced_accuracy: 0.542661 < 0.600000",
+    "incorrect_f1: 0.223282 < 0.400000",
+    "incorrect_recall: 0.225582 < 0.400000",
+    "substitution_recall: 0.224964 < 0.400000",
+    "deletion_recall: 0.227783 < 0.300000"
+  ],
+  "elapsed_seconds": 463.26017590000015
+}

@@ -1,0 +1,286 @@
+{
+  "metadata_csv": "ai-training\\datasets\\l2-arctic\\metadata\\all_speakers_phone_error_classification_v2.csv",
+  "total_rows": 18610,
+  "total_addition_rows": 1092,
+  "vietnamese_addition_rows": 198,
+  "addition_by_split": {
+    "train": 953,
+    "val": 81,
+    "test": 58
+  },
+  "addition_by_l1_total": {
+    "Arabic": 274,
+    "Chinese": 206,
+    "Spanish": 200,
+    "Vietnamese": 198,
+    "Hindi": 109,
+    "Korean": 105
+  },
+  "addition_by_vietnamese_speaker_total": {
+    "HQTV": 72,
+    "THV": 67,
+    "TLV": 43,
+    "PNV": 16
+  },
+  "top_addition_phone_pairs": [
+    {
+      "target_phone": "sil",
+      "observed_phone": "AH0",
+      "rows": 178
+    },
+    {
+      "target_phone": "sil",
+      "observed_phone": "R",
+      "rows": 102
+    },
+    {
+      "target_phone": "sil",
+      "observed_phone": "G",
+      "rows": 87
+    },
+    {
+      "target_phone": "sil",
+      "observed_phone": "AX",
+      "rows": 84
+    },
+    {
+      "target_phone": "sil",
+      "observed_phone": "S",
+      "rows": 66
+    },
+    {
+      "target_phone": "sil",
+      "observed_phone": "K",
+      "rows": 49
+    },
+    {
+      "target_phone": "sil",
+      "observed_phone": "IH",
+      "rows": 40
+    },
+    {
+      "target_phone": "sil",
+      "observed_phone": "D",
+      "rows": 39
+    },
+    {
+      "target_phone": "sil",
+      "observed_phone": "Y",
+      "rows": 36
+    },
+    {
+      "target_phone": "sil",
+      "observed_phone": "EH",
+      "rows": 36
+    },
+    {
+      "target_phone": "sil",
+      "observed_phone": "IH0",
+      "rows": 36
+    },
+    {
+      "target_phone": "sil",
+      "observed_phone": "AH",
+      "rows": 33
+    },
+    {
+      "target_phone": "sil",
+      "observed_phone": "EH0",
+      "rows": 30
+    },
+    {
+      "target_phone": "sil",
+      "observed_phone": "N",
+      "rows": 27
+    },
+    {
+      "target_phone": "sil",
+      "observed_phone": "T",
+      "rows": 26
+    },
+    {
+      "target_phone": "sil",
+      "observed_phone": "W",
+      "rows": 22
+    },
+    {
+      "target_phone": "sil",
+      "observed_phone": "L",
+      "rows": 18
+    },
+    {
+      "target_phone": "sil",
+      "observed_phone": "HH",
+      "rows": 16
+    },
+    {
+      "target_phone": "sil",
+      "observed_phone": "EH*",
+      "rows": 16
+    },
+    {
+      "target_phone": "sil",
+      "observed_phone": "IY",
+      "rows": 14
+    },
+    {
+      "target_phone": "sil",
+      "observed_phone": "Z",
+      "rows": 10
+    },
+    {
+      "target_phone": "sil",
+      "observed_phone": "err",
+      "rows": 10
+    },
+    {
+      "target_phone": "sil",
+      "observed_phone": "IY0",
+      "rows": 8
+    },
+    {
+      "target_phone": "sil",
+      "observed_phone": "UH",
+      "rows": 8
+    },
+    {
+      "target_phone": "sil",
+      "observed_phone": "M",
+      "rows": 8
+    }
+  ],
+  "speaker_disjoint_addition_confusion": [
+    {
+      "held_out_speaker": "HQTV",
+      "actual_error_type": "addition",
+      "predicted_error_type": "addition",
+      "rows": 9
+    },
+    {
+      "held_out_speaker": "HQTV",
+      "actual_error_type": "addition",
+      "predicted_error_type": "deletion",
+      "rows": 18
+    },
+    {
+      "held_out_speaker": "HQTV",
+      "actual_error_type": "addition",
+      "predicted_error_type": "substitution",
+      "rows": 45
+    },
+    {
+      "held_out_speaker": "HQTV",
+      "actual_error_type": "deletion",
+      "predicted_error_type": "addition",
+      "rows": 51
+    },
+    {
+      "held_out_speaker": "HQTV",
+      "actual_error_type": "substitution",
+      "predicted_error_type": "addition",
+      "rows": 93
+    },
+    {
+      "held_out_speaker": "PNV",
+      "actual_error_type": "addition",
+      "predicted_error_type": "addition",
+      "rows": 3
+    },
+    {
+      "held_out_speaker": "PNV",
+      "actual_error_type": "addition",
+      "predicted_error_type": "deletion",
+      "rows": 7
+    },
+    {
+      "held_out_speaker": "PNV",
+      "actual_error_type": "addition",
+      "predicted_error_type": "substitution",
+      "rows": 6
+    },
+    {
+      "held_out_speaker": "PNV",
+      "actual_error_type": "deletion",
+      "predicted_error_type": "addition",
+      "rows": 20
+    },
+    {
+      "held_out_speaker": "PNV",
+      "actual_error_type": "substitution",
+      "predicted_error_type": "addition",
+      "rows": 102
+    },
+    {
+      "held_out_speaker": "THV",
+      "actual_error_type": "addition",
+      "predicted_error_type": "addition",
+      "rows": 25
+    },
+    {
+      "held_out_speaker": "THV",
+      "actual_error_type": "addition",
+      "predicted_error_type": "deletion",
+      "rows": 17
+    },
+    {
+      "held_out_speaker": "THV",
+      "actual_error_type": "addition",
+      "predicted_error_type": "substitution",
+      "rows": 25
+    },
+    {
+      "held_out_speaker": "THV",
+      "actual_error_type": "deletion",
+      "predicted_error_type": "addition",
+      "rows": 44
+    },
+    {
+      "held_out_speaker": "THV",
+      "actual_error_type": "substitution",
+      "predicted_error_type": "addition",
+      "rows": 196
+    },
+    {
+      "held_out_speaker": "TLV",
+      "actual_error_type": "addition",
+      "predicted_error_type": "addition",
+      "rows": 9
+    },
+    {
+      "held_out_speaker": "TLV",
+      "actual_error_type": "addition",
+      "predicted_error_type": "deletion",
+      "rows": 8
+    },
+    {
+      "held_out_speaker": "TLV",
+      "actual_error_type": "addition",
+      "predicted_error_type": "substitution",
+      "rows": 26
+    },
+    {
+      "held_out_speaker": "TLV",
+      "actual_error_type": "deletion",
+      "predicted_error_type": "addition",
+      "rows": 45
+    },
+    {
+      "held_out_speaker": "TLV",
+      "actual_error_type": "substitution",
+      "predicted_error_type": "addition",
+      "rows": 130
+    }
+  ],
+  "speaker_disjoint_misclassified_addition_summary": {
+    "total_misclassified_examples_saved": 1684,
+    "misclassified_involving_addition": 833,
+    "actual_addition_misclassified_as": {
+      "substitution": 102,
+      "deletion": 50
+    },
+    "non_addition_misclassified_as_addition": {
+      "substitution": 521,
+      "deletion": 160
+    }
+  }
+}

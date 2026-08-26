@@ -1,0 +1,13 @@
+held_out_speaker,actual_error_type,addition,deletion,substitution
+HQTV,addition,35,12,25
+HQTV,deletion,185,263,29
+HQTV,substitution,292,85,432
+PNV,addition,7,5,4
+PNV,deletion,67,151,28
+PNV,substitution,216,94,321
+THV,addition,26,15,26
+THV,deletion,87,277,42
+THV,substitution,204,128,594
+TLV,addition,17,6,20
+TLV,deletion,125,265,47
+TLV,substitution,228,132,429

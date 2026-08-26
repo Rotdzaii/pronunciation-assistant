@@ -1,0 +1,7 @@
+error_type,count,mean,std,min,25%,50%,75%,max,duration_column
+addition,1092.0,0.074503,0.062627,0.006805,0.041258,0.060202,0.089958,1.034461,original_duration
+deletion,3420.0,0.049531,0.031474,0.004562,0.03,0.04,0.06,0.332727,original_duration
+substitution,14098.0,0.098324,0.053044,0.010159,0.06,0.09,0.127824,0.42,original_duration
+addition,1092.0,0.570972,0.055679,0.301146,0.540137,0.55971,0.588949,1.0,context_duration
+deletion,3420.0,0.544957,0.040792,0.26282,0.53,0.54,0.56,0.832727,context_duration
+substitution,14098.0,0.582955,0.078753,0.265,0.55,0.58,0.62,0.92,context_duration

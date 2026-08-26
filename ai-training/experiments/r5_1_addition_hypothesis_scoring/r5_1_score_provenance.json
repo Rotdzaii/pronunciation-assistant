@@ -1,0 +1,59 @@
+{
+  "status": "PASS",
+  "score_definition_reconstructed_exactly": true,
+  "application_to_insert_well_defined": true,
+  "formula": {
+    "log_probs": "log_softmax(logits,dim=-1)",
+    "raw_nll": "CTCLoss(log_probs,H,input_lengths=[T],target_lengths=[len(H)],blank=40,reduction='none',zero_infinity=True)",
+    "raw_score": "-raw_nll(H)",
+    "target_score": "raw_score(H)/max(len(H),1)",
+    "r5_keep": "raw_score(E)/max(N,1)",
+    "r5_insert": "raw_score(E[:b]+[p]+E[b:])/(N+1)",
+    "r5_decision_score": "max_(b,p) r5_insert(b,p) - r5_keep"
+  },
+  "mathematical_audit": {
+    "eligible_expected_length": "N>=1",
+    "keep_denominator": "N",
+    "insert_denominator": "N+1",
+    "zero_denominator_possible": false,
+    "additional_normalization_choice_required": false,
+    "conclusion": "TARGET normalization transfers exactly to the longer INSERT hypotheses."
+  },
+  "primary_code_provenance": [
+    {
+      "path": "ai-training/scripts/run_r4_4d0_ctc_hypothesis_feasibility.py",
+      "sha256": "DC141D38091C9FC60BA2F0A8447FF918DC98B5D99499D336A524CABEB8F4948C",
+      "functions": ["score_hypotheses", "family_scores"],
+      "evidence": "CTCLoss(blank=40,reduction='none',zero_infinity=True), raw score=-NLL, TARGET divides KEEP/SUB by N and DELETE by max(N-1,1)."
+    },
+    {
+      "path": "ai-training/scripts/run_r4_4d2a_train_only_robust_calibration.py",
+      "sha256": "BD6E39C3D79AE5FF9975E8C4759A9C14D316EA6C92A6909F37410688AB96379B",
+      "evidence": "Frozen score-family contract writes TARGET=raw_log_score(H)/max(target_length(H),1)."
+    },
+    {
+      "path": "ai-training/scripts/execute_r4_4d2b_final_target_validation.py",
+      "sha256": "C89A3E18366BB452B6943AC830DEC4E98091D39120AF93DD9BC1EA5B6B592632",
+      "evidence": "Locked execution records raw and TARGET score identities and uses float64 decision scores."
+    }
+  ],
+  "artifact_provenance": [
+    {
+      "path": "ai-training/experiments/r4_4d2a_train_only_robust_calibration/score_family_contract.json",
+      "sha256": "7E9DD1C1B86F4F26DE9B3D23F099F139056E79D69CF0F56E98C0E08A5A0402F6"
+    },
+    {
+      "path": "ai-training/experiments/r4_4d2b_final_target_validation/score_contract_identity.json",
+      "sha256": "0761F19F3D6CF9D8472CC1AD3428ADE6BA3F1C425FE3CAE96BB3AD9BFA6916B4"
+    },
+    {
+      "path": "ai-training/experiments/r4_4d2a_train_only_robust_calibration/artifact_hashes.json",
+      "sha256": "F27A47A0E00398FF3C00CB4EB4F6997210D13D3B2B6BE0A72AB0F264A5D76B50"
+    },
+    {
+      "path": "ai-training/experiments/r4_4d2b_final_target_validation/artifact_hashes.json",
+      "sha256": "532308D7223B55E4BCFE5846FAE4F60A8497F34DD678A123ECB275E4755C463C"
+    }
+  ],
+  "blocked_status_if_missing": "R5_1_CONTRACT_BLOCKED_SCORE_DEFINITION"
+}

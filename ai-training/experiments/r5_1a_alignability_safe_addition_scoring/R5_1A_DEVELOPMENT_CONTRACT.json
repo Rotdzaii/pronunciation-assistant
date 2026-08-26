@@ -1,0 +1,240 @@
+{
+  "schema_version": "1.0",
+  "contract_id": "R5-1A_ALIGNABILITY_SAFE_EXACT_CTC_ADDITION_SCORING",
+  "status": "R5_1A_CONTRACT_FROZEN",
+  "frozen_at": "2026-08-15T03:00:00+07:00",
+  "research_branch": "research/phoenix-correctness",
+  "stage_type": "TRAIN-only development preregistration; contract only",
+  "relationship_to_r5_1": {
+    "new_named_generation": true,
+    "r5_1_preserved": true,
+    "r5_1_scientific_result_exists": false,
+    "r5_1_gates_evaluated": 0,
+    "reason": "R5-1 froze zero_infinity=True output semantics and then encountered impossible INSERT targets. Treating impossible targets as probability zero changes the explicitly frozen behavior and therefore requires a separately named pre-metric contract."
+  },
+  "source_identities": {
+    "r5_1_contract": {
+      "path": "ai-training/experiments/r5_1_addition_hypothesis_scoring/R5_1_DEVELOPMENT_CONTRACT.json",
+      "sha256": "18697A0C7DED130E122F49A9440AFA2D79B02E8630F2F7583C775F67797DCE77"
+    },
+    "r5_1_preregistration": {
+      "path": "ai-training/experiments/r5_1_addition_hypothesis_scoring/R5_1_PREREGISTRATION.md",
+      "sha256": "3F69286BC25DA1AFF0A8C91028DC8C7C54D222F65825773F334EE737ABE2A633"
+    },
+    "r5_1_technical_correction": {
+      "path": "ai-training/experiments/r5_1_addition_hypothesis_scoring/r5_1_pre_metric_technical_correction.json",
+      "sha256": "EFF87E86464FAE206F19F47FE209BE3EA6B975556C22329E7DEF3D4AAF400359"
+    },
+    "r5_1_technical_status": {
+      "path": "ai-training/experiments/r5_1_addition_hypothesis_scoring/r5_1_execution_technical_stop_status.json",
+      "sha256": "5FDEF1E35DF6C0C89A1B3ABE11E98942AD0AB9F1B61A69D1F540776E385DE4E3"
+    },
+    "r5_1_technical_report": {
+      "path": "ai-training/experiments/r5_1_addition_hypothesis_scoring/R5_1_EXECUTION_TECHNICAL_STOP_REPORT.md",
+      "sha256": "B5C7F9189FA63D734A4F3AD19E725096900FBB4A846C1177FB4F498B7CB055FE"
+    },
+    "r5_1_technical_manifest": {
+      "path": "ai-training/experiments/r5_1_addition_hypothesis_scoring/R5_1_EXECUTION_TECHNICAL_STOP_MANIFEST.json",
+      "sha256": "A1B3F1F8358BAEC7C72F66743C04AD95B19E52FB7FB55345438840EF4B4F30C8"
+    },
+    "v4": {
+      "path": "ai-training/datasets/l2-arctic/metadata/all_speakers_expected_observed_v4.csv",
+      "sha256": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D"
+    },
+    "r4_4c2_checkpoint": {
+      "path": "ai-training/experiments/r4_4c2_bigru_ctc_seed42/R4_4C2_bigru_ctc_phone_sequence_seed42_best_validation_per.pt",
+      "sha256": "F54C9C2361AE78E1C37353AEB338A2DE6722C0B1EC4F885F6B52688CE9E88085"
+    },
+    "r5_0_preregistration": {
+      "path": "ai-training/experiments/r5_0_addition_feasibility_audit/R5_0_PREREGISTRATION.json",
+      "sha256": "14CBFADAC0BE35D53C01DC966A030A71F24EC4D86EA88384BC449544CE12AEF7"
+    },
+    "r5_0_report": {
+      "path": "ai-training/experiments/r5_0_addition_feasibility_audit/R5_0_ADDITION_FEASIBILITY_REPORT.md",
+      "sha256": "DF484A09333A2F53A05E98E1C66B3C330CBA35F029B04B0BBB1623A3A9BAA3BA"
+    },
+    "r5_0_final_status": {
+      "path": "ai-training/experiments/r5_0_addition_feasibility_audit/r5_0_final_status.json",
+      "sha256": "29F06679FD24F8A2BBBED25B9B57A693D15046444A97BF5D951D575E5850D0B6"
+    }
+  },
+  "scientific_hypothesis": "Exact CTC sequence likelihood can provide better addition evidence than greedy INSERT_IN_DECODED when impossible CTC targets receive their exact probability-zero semantics.",
+  "speaker_splits": {
+    "TRAIN": ["BWC", "EBVS", "HJK", "NCC", "NJS", "PNV", "RRBI", "TLV", "TNI", "YBAA", "YKWK", "ZHAA"],
+    "VALIDATION": ["ABA", "HKK", "HQTV", "LXC", "MBMPS", "SVBI"],
+    "TEST": ["ASI", "ERMS", "SKA", "THV", "TXHC", "YDCK"]
+  },
+  "model_contract": {
+    "model": "frozen R4-4C2 CNN plus one packed bidirectional GRU plus CTC",
+    "phone_classes": 40,
+    "phone_indices": "0..39 in frozen order",
+    "blank_index": 40,
+    "checkpoint_frozen": true,
+    "preprocessing_frozen": true,
+    "architecture_frozen": true,
+    "training": false,
+    "fine_tuning": false,
+    "checkpoint_selection": false
+  },
+  "population": {
+    "runtime_evaluable_train_words": 16582,
+    "positive_words": 323,
+    "negative_words": 16259,
+    "source_addition_events": 423,
+    "runtime_addition_events": 342,
+    "multiple_addition_words": 19,
+    "mixed_substitution_addition_words": 117,
+    "mixed_deletion_addition_words": 26,
+    "population_membership_changed_from_r5_1": false,
+    "impossible_insert_candidate_excludes_word": false,
+    "keep_impossible_action": "stop R5_1A_EXECUTION_BLOCKED_KEEP_ALIGNABILITY; do not exclude or redefine the word"
+  },
+  "hypotheses": {
+    "expected": "E=[e_1,...,e_N], N>=1",
+    "keep": "H_KEEP=E",
+    "insert_boundaries": "b in {0,...,N}",
+    "insert_phones": "p in {0,...,39}",
+    "insert": "H_INSERT(E,b,p)=E[:b]+[p]+E[b:]",
+    "enumeration": "all 40*(N+1) INSERT identities remain in accounting",
+    "manual_phone_or_boundary_given_to_scorer": false
+  },
+  "alignability": {
+    "adjacent_repeat_count": "count of i in {2,...,U} where h_i==h_(i-1)",
+    "minimum_ctc_steps": "MIN_CTC_STEPS(H)=len(H)+ADJACENT_REPEAT_COUNT(H)",
+    "alignable": "T>=MIN_CTC_STEPS(H)",
+    "impossible": "T<MIN_CTC_STEPS(H)",
+    "rationale": "CTC requires at least one intervening blank between adjacent identical target labels.",
+    "decision_timing": "before CTCLoss output is interpreted",
+    "keep_audit_required": true,
+    "keep_impossible_status": "R5_1A_EXECUTION_BLOCKED_KEEP_ALIGNABILITY"
+  },
+  "score": {
+    "log_probs": "torch.log_softmax(logits,dim=-1)",
+    "alignable_raw_nll": "torch.nn.CTCLoss(blank=40,reduction='none',zero_infinity=True)(log_probs,H,input_lengths=[T],target_lengths=[len(H)])",
+    "alignable_raw_score": "RAW_SCORE(H)=-raw_nll(H)",
+    "alignable_target_score": "TARGET_SCORE(H)=RAW_SCORE(H)/max(len(H),1)",
+    "alignable_nonfinite_action": "stop future execution; do not convert or continue",
+    "impossible_probability": 0,
+    "impossible_log_probability_serialized": "-Infinity",
+    "impossible_raw_score_serialized": "-Infinity",
+    "impossible_target_score_serialized": "-Infinity",
+    "forbidden_replacements": [0, "large finite negative constant", "epsilon", "clipping", "penalty", "heuristic"],
+    "score_family": "TARGET only",
+    "normalization_variants": false
+  },
+  "best_insert": {
+    "candidate_population": "alignable INSERT candidates only for argmax; impossible identities remain counted",
+    "argmax": "maximum TARGET_SCORE",
+    "tie_order": ["lower insertion boundary", "lower canonical phone index"],
+    "preserve": ["total candidate count", "alignable count", "impossible count", "phone", "boundary", "TARGET score"],
+    "all_insert_impossible": {
+      "best_insert_exists": false,
+      "best_insert_score_serialized": "-Infinity",
+      "addition_score_A_serialized": "-Infinity",
+      "phone": null,
+      "boundary": null,
+      "predicted_event": null,
+      "binary_population_membership_preserved": true
+    }
+  },
+  "addition_score": {
+    "finite_best_insert": "A=TARGET_SCORE(BEST_INSERT)-TARGET_SCORE(KEEP)",
+    "no_alignable_insert_serialized": "-Infinity",
+    "decision_dtype": "float64 for finite scores and extended-real negative infinity",
+    "no_penalty_clipping_or_alternative_family": true
+  },
+  "speaker_loso": {
+    "folds": 12,
+    "held_out_unit": "one TRAIN speaker",
+    "calibration": "other 11 TRAIN speakers",
+    "threshold_candidates": "np.nextafter(min(U),-np.inf), every sorted unique finite float64 calibration A value U, np.nextafter(max(U),+np.inf)",
+    "negative_infinity_is_candidate": false,
+    "negative_infinity_prediction_for_finite_threshold": "non-addition",
+    "selection_precedence": [
+      "higher Binary Macro-F1",
+      "higher addition F1",
+      "lower correct-only false-addition rate",
+      "higher threshold"
+    ],
+    "prediction": "A>=theta predicts addition; otherwise non-addition",
+    "validation_influence": false,
+    "no_finite_calibration_score_action": "technical stop before held-out prediction; do not approximate a threshold"
+  },
+  "continuous_metric_nonfinite_policy": {
+    "negative_infinity": "valid lowest ordered score and tied with every other negative-infinity score",
+    "roc_auc_algorithm": "Mann-Whitney rank AUC over extended-real scores using ascending exact comparisons and average ranks for exact ties",
+    "roc_auc_formula": "(sum_positive_ranks - n_positive*(n_positive+1)/2)/(n_positive*n_negative)",
+    "finite_replacement": false,
+    "ordering_or_ties_may_change": false,
+    "serialization": "JSON string '-Infinity'; restore IEEE-754 negative infinity before ranking",
+    "unsupported_action": "R5_1A_EXECUTION_BLOCKED_NONFINITE_METRIC_SUPPORT before metrics"
+  },
+  "word_metrics": {
+    "unchanged_from_r5_1": true,
+    "positive_class": "addition",
+    "binary_macro_f1": "unweighted mean of addition and non-addition F1",
+    "false_addition_cohorts": ["correct-only", "substitution-containing non-addition", "deletion-containing non-addition"]
+  },
+  "event_metrics": {
+    "exact_match": ["same word", "same canonical added phone", "same expected-sequence insertion boundary"],
+    "maximum_predicted_events_per_word": 1,
+    "multiple_addition_limitation_unchanged": true,
+    "no_best_insert_means_no_predicted_event": true,
+    "timestamp_used": false,
+    "position_strata": ["BEFORE_FIRST", "BETWEEN", "AFTER_FINAL"]
+  },
+  "development_gates": {
+    "all_required": true,
+    "G1": {"metric": "addition_vs_all_nonaddition_roc_auc", "operator": ">=", "value": 0.70},
+    "G2": {"metric": "addition_vs_correct_only_roc_auc", "operator": ">=", "value": 0.70},
+    "G3": {"metric": "oof_binary_macro_f1", "operator": ">", "value": 0.548179},
+    "G4": {"metric": "oof_addition_f1", "operator": ">", "value": 0.129246},
+    "G5": {"metric": "correct_only_false_addition_rate", "operator": "<=", "value": 0.054352},
+    "G6": {"metric": "exact_event_f1", "operator": ">", "value": 0.026688}
+  },
+  "robust_threshold": {
+    "authorized_only_if_all_six_gates_pass": true,
+    "formula": "ordinary float64 median of the 12 LOSO fold thresholds",
+    "validation_tuning": false
+  },
+  "required_future_alignability_audit": {
+    "report": [
+      "total words", "KEEP impossible words", "total INSERT hypotheses",
+      "alignable INSERT hypotheses", "impossible INSERT hypotheses",
+      "words with at least one impossible INSERT", "words with all INSERT hypotheses impossible",
+      "counts by speaker", "counts by positive/negative class", "counts by expected sequence length",
+      "counts caused by adjacent-repeat requirements"
+    ],
+    "changes_scoring": false
+  },
+  "validation_policy": {
+    "speakers": ["ABA", "HKK", "HQTV", "LXC", "MBMPS", "SVBI"],
+    "paths_may_be_resolved": false,
+    "audio_may_be_read": false,
+    "inference_may_run": false,
+    "scores_or_metrics_may_be_calculated": false,
+    "performance_consumed": false
+  },
+  "test_policy": {
+    "speakers": ["ASI", "ERMS", "SKA", "THV", "TXHC", "YDCK"],
+    "paths_may_be_resolved": false,
+    "audio_may_be_read": false,
+    "inference_may_run": false,
+    "scores_predictions_or_metrics_may_be_calculated": false,
+    "performance_consumed": false
+  },
+  "forbidden": [
+    "modify or delete R5-1", "describe R5-1 as a performance failure", "train or fine-tune",
+    "change checkpoint, preprocessing, architecture, vocabulary, or blank", "change TARGET normalization",
+    "evaluate RAW or TIME", "insertion penalty", "clip or finitely replace impossible scores",
+    "exclude affected words", "alter LOSO, threshold rules, or six gates", "access VALIDATION or TEST",
+    "start R5-2"
+  ],
+  "current_task_protocol": {
+    "contract_only": true,
+    "model_inference": false,
+    "performance_metrics": false,
+    "thresholds": false,
+    "training": false
+  }
+}

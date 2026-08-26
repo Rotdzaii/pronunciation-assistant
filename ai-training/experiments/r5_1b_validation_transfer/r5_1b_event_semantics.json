@@ -1,0 +1,96 @@
+{
+  "status": "UNAMBIGUOUS_AND_FROZEN_FROM_R5_0_R5_1_R5_1A",
+  "provenance": [
+    {
+      "path": "ai-training/experiments/r5_0_addition_feasibility_audit/r5_0_annotation_semantics.json",
+      "sha256": "F4AD6B887D73F0D0E24232ED36AB4F589952D09FBD6A20FE019D348AF3497640"
+    },
+    {
+      "path": "ai-training/experiments/r5_1_addition_hypothesis_scoring/R5_1_DEVELOPMENT_CONTRACT.json",
+      "sha256": "18697A0C7DED130E122F49A9440AFA2D79B02E8630F2F7583C775F67797DCE77"
+    },
+    {
+      "path": "ai-training/experiments/r5_1a_alignability_safe_addition_scoring/r5_1a_train_execution_driver.py",
+      "sha256": "80D0E1263BE1744BCC252736BAF9C28F3E5D19C204596D836F3D9C296AB52D5D"
+    }
+  ],
+  "annotation_representation": {
+    "source": "L2-ARCTIC phones-tier interval",
+    "raw_triplet": "sil,<observed_phone>,a",
+    "resolved_relation": "addition",
+    "expected_phone": "<SIL> placeholder; not a canonical expected phone",
+    "observed_phone": "canonical added phone",
+    "own_interval": true,
+    "timestamps_present": true
+  },
+  "clean_addition_rule": {
+    "tagged_relation": "addition",
+    "relation": "addition",
+    "expected_phone_canonical": "<SIL>",
+    "observed_phone_canonical": "one of the frozen 40 canonical phones",
+    "research_subset": "ADDITION_AUDIT",
+    "is_addition_audit": 1,
+    "interval": "finite end_time greater than start_time"
+  },
+  "source_level_exclusions": [
+    "tagged addition whose resolved relation is unresolved",
+    "expected raw token other than sil",
+    "unknown, malformed, noncanonical, or non-speech observed phone",
+    "non-finite or non-positive interval for detailed event analysis"
+  ],
+  "runtime_word_eligibility": {
+    "manual_word": "unique containing manual word exists",
+    "expected_sequence": "nonempty canonical sequence",
+    "word_rows": "no unresolved or malformed row in the word",
+    "runtime_span": "reliable frozen MFA word boundary available",
+    "validation_specific_rule": false,
+    "every_exclusion_reported": true
+  },
+  "expected_sequence": {
+    "included_relations": ["correct", "substitution", "deletion"],
+    "requirements": "clean row with canonical expected phone",
+    "order": "frozen source_index order",
+    "addition_rows_included": false
+  },
+  "boundary": {
+    "formula": "count expected-sequence rows with source_index less than the addition source_index",
+    "valid_values": "0 through N",
+    "BEFORE_FIRST": "boundary==0",
+    "BETWEEN": "0<boundary<N",
+    "AFTER_FINAL": "boundary==N"
+  },
+  "ambiguous_position_policy": {
+    "source_support_retained": true,
+    "runtime_position_and_exact_event_eligible": false,
+    "conditions": ["no unique manual-word containment", "empty expected sequence"],
+    "no_fabricated_boundary": true
+  },
+  "binary_word_labels": {
+    "positive": "eligible runtime word contains at least one clean mapped addition event",
+    "negative": "eligible runtime word contains zero clean mapped addition events",
+    "correct_only_negative": "negative with zero substitutions and zero deletions",
+    "substitution_negative": "negative with at least one substitution; may overlap deletion-negative",
+    "deletion_negative": "negative with at least one deletion; may overlap substitution-negative"
+  },
+  "mixed_and_multiple": {
+    "addition_plus_substitution": "retain positive word and flag cohort",
+    "addition_plus_deletion": "retain positive word and flag cohort",
+    "multiple_additions": "retain word and every true event",
+    "collapse_true_events": false,
+    "maximum_predicted_events_per_word": 1,
+    "unmatched_true_events": "false negatives"
+  },
+  "prediction_and_matching": {
+    "event_exists": "A>=0.7485884030659993 and best_insert_exists=true",
+    "identity": ["word_id", "boundary", "phone_index"],
+    "exact_match": "all identity fields equal",
+    "one_to_one_method": "multiset Counter intersection",
+    "timestamp_used": false
+  },
+  "validation_support_reference": {
+    "source_clean_additions": 296,
+    "speakers_with_at_least_five": 6,
+    "runtime_count_is_not_forced_to_source_count": true
+  },
+  "event_semantics_changed_for_r5_1b": false
+}

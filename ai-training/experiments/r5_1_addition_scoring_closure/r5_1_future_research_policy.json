@@ -1,0 +1,43 @@
+{
+  "status": "CURRENT_R5_1_GENERATION_CLOSED",
+  "r5_2_designed_in_this_stage": false,
+  "closed_continuations": [
+    "change ROBUST_THETA",
+    "calculate a validation-optimal threshold",
+    "use per-speaker thresholds",
+    "use phone-specific thresholds",
+    "use boundary-specific thresholds",
+    "change >= semantics",
+    "retune TARGET scoring",
+    "fall back to RAW",
+    "fall back to TIME normalization",
+    "subtract speaker medians",
+    "apply speaker z-normalization",
+    "add an insertion penalty",
+    "add beam search",
+    "emit multiple insertions",
+    "select an alternate checkpoint",
+    "run another seed",
+    "retrain",
+    "remove difficult speakers",
+    "remove difficult phones",
+    "remove mixed-error words"
+  ],
+  "future_r5_research_remains_possible": true,
+  "new_generation_requirements": [
+    "state a new scientific hypothesis",
+    "explain which frozen R5-1 failure evidence motivates it",
+    "state whether it targets calibration robustness, class separability, or both",
+    "freeze a new preregistration before evaluation",
+    "acknowledge that existing VALIDATION addition performance is consumed",
+    "preserve TEST until the new protocol legitimately reaches it",
+    "freeze numeric gates before observing new evaluation metrics"
+  ],
+  "not_yet_justified": [
+    "speaker normalization",
+    "new calibration method",
+    "new model",
+    "new decoder"
+  ],
+  "meaningful_change_requires": "a new named R5 research generation with explicit development and evaluation policy"
+}

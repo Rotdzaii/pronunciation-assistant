@@ -1,0 +1,33 @@
+{
+  "definition": "VALIDATION minus frozen TRAIN OOF",
+  "train": {
+    "addition_vs_all_nonaddition_roc_auc": 0.7734833025081417,
+    "addition_vs_correct_only_roc_auc": 0.802352821409537,
+    "binary_macro_f1": 0.5551978767901391,
+    "addition_precision": 0.1005665722379603,
+    "addition_recall": 0.2198142414860681,
+    "addition_f1": 0.1379980563654033,
+    "correct_only_false_addition_rate": 0.03491295938104449,
+    "exact_event_f1": 0.04389312977099236
+  },
+  "validation": {
+    "addition_vs_all_nonaddition_roc_auc": 0.7512808848879525,
+    "addition_vs_correct_only_roc_auc": 0.7717072309229656,
+    "binary_macro_f1": 0.543887636349494,
+    "addition_precision": 0.09335219236209336,
+    "addition_recall": 0.2907488986784141,
+    "addition_f1": 0.14132762312633834,
+    "correct_only_false_addition_rate": 0.0832481079975455,
+    "exact_event_f1": 0.03781512605042017
+  },
+  "deltas": {
+    "addition_vs_all_nonaddition_roc_auc": -0.022202417620189152,
+    "addition_vs_correct_only_roc_auc": -0.03064559048657145,
+    "binary_macro_f1": -0.011310240440645103,
+    "addition_precision": -0.007214379875866941,
+    "addition_recall": 0.07093465719234598,
+    "addition_f1": 0.0033295667609350432,
+    "correct_only_false_addition_rate": 0.04833514861650102,
+    "exact_event_f1": -0.006078003720572191
+  }
+}

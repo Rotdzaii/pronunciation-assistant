@@ -1,0 +1,86 @@
+{
+  "manifest_type": "additive R5-1B fixed-threshold VALIDATION execution manifest",
+  "self_excluded": true,
+  "hash_algorithm": "SHA-256",
+  "artifact_count": 14,
+  "hash_audit": "HASH_AUDIT_PASS",
+  "failures": [],
+  "artifacts": [
+    {
+      "relative_path": "r5_1b_validation_execution_driver.py",
+      "byte_size": 40776,
+      "sha256": "39B8F559DE380F591B358BA31E6E0AC5B3E351BDFFCEADEE9868DD526F92DC76"
+    },
+    {
+      "relative_path": "r5_1b_population_accounting.json",
+      "byte_size": 2627,
+      "sha256": "DC975592ABBCEF000D0EB440192B68ACA43E1E59EC085F9CDB7D5286A37808C1"
+    },
+    {
+      "relative_path": "r5_1b_alignability_audit.json",
+      "byte_size": 4794,
+      "sha256": "CA61081C4321D1CACE068F85E2447731D65BC1F9E07F358EB0455C8B005D6750"
+    },
+    {
+      "relative_path": "r5_1b_validation_scores.jsonl",
+      "byte_size": 8141185,
+      "sha256": "5BD5924B690299AB8D25F9D080F894C70CC5B9DD73FC20066F4CDDC876EAA5EF"
+    },
+    {
+      "relative_path": "r5_1b_continuous_metrics.json",
+      "byte_size": 4933,
+      "sha256": "699027D27605F0DC44983EFC2FBB83C71FBF849564B68AEBD9AC86980005D851"
+    },
+    {
+      "relative_path": "r5_1b_binary_metrics.json",
+      "byte_size": 1007,
+      "sha256": "3A03D249749B69EC63F1271A32E4EBF7CDF97E256DF09E32EACE36A78CB936E4"
+    },
+    {
+      "relative_path": "r5_1b_per_speaker_metrics.json",
+      "byte_size": 4994,
+      "sha256": "2E9C604AA189444560B3734CD37C2579C34D970CE16495E076299D8A5194D1FE"
+    },
+    {
+      "relative_path": "r5_1b_event_metrics.json",
+      "byte_size": 1193,
+      "sha256": "316410E6C043ED5C3A382BD49575E547E8720151EF17B92A7D90177AD88986CE"
+    },
+    {
+      "relative_path": "r5_1b_train_validation_deltas.json",
+      "byte_size": 1356,
+      "sha256": "553DD0CA1749739D29569CB089E120216B68518D85910D46601D8B63ACC38BEA"
+    },
+    {
+      "relative_path": "r5_1b_gate_results.json",
+      "byte_size": 1402,
+      "sha256": "1BD81E83584B263AA06BE7556BEDFE05E43DD97AD2727D73AFF88931AC8FBE80"
+    },
+    {
+      "relative_path": "r5_1b_execution_protocol_audit.json",
+      "byte_size": 620,
+      "sha256": "79FECDD04C999CC2ACB25D095A1B3F6E7E1333B363C29854ED4B67A43F1F979B"
+    },
+    {
+      "relative_path": "r5_1b_final_status.json",
+      "byte_size": 1035,
+      "sha256": "0C19F49CFB5AC35DA236694A77BB98C9E28582E5CF56FC013ED503A9DA11C85E"
+    },
+    {
+      "relative_path": "r5_1b_compute_report.json",
+      "byte_size": 1618,
+      "sha256": "2ED2811F3BA19B4CE8AF9EF7F991A200D1EC2657ED3D3F821B487C79E2E468AC"
+    },
+    {
+      "relative_path": "R5_1B_VALIDATION_TRANSFER_RESULT.md",
+      "byte_size": 1624,
+      "sha256": "2A558CCD44974B28257F884DBDF281152F90A7932BD496C058C28B235C6C6898"
+    }
+  ],
+  "preserved_r5_1b_contract_sha256": "BD169175C0777B1C37506E95350CB6AD90A992045527396DDE5DA4419779AC4A",
+  "preserved_r5_1b_contract_manifest_sha256": "1C91E2FD10D9EBFC97C9F1C10068209E50071EE7E642382E962436263E313939",
+  "preserved_r5_1a_scorer_sha256": "4DE49C9070C973EE44EFBD09DFC063C436779E723D12EC7A7A2BC4A06AF35F90",
+  "robust_theta": 0.7485884030659993,
+  "validation_threshold_search": false,
+  "test_accessed": false
+}

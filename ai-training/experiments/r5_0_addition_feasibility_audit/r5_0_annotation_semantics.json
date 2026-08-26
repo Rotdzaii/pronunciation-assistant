@@ -1,0 +1,74 @@
+{
+  "status": "UNAMBIGUOUS",
+  "source_fields": [
+    "raw_label",
+    "tagged_relation",
+    "relation",
+    "expected_phone_raw",
+    "observed_phone_raw",
+    "expected_phone_canonical",
+    "observed_phone_canonical",
+    "start_time",
+    "end_time",
+    "label_quality",
+    "exclusion_reason",
+    "research_subset"
+  ],
+  "representation": "phones-tier interval raw triplet sil,<observed_phone>,a; resolved relation addition; expected canonical placeholder <SIL>; observed canonical is the added phone",
+  "has_own_interval": true,
+  "timestamps_present": true,
+  "expected_phone_identity_present": "placeholder sil/<SIL>, not a canonical expected phone",
+  "observed_phone_identity_present": true,
+  "multiple_additions_supported": true,
+  "mixed_with_substitution_or_deletion_supported": true,
+  "clean_rule": {
+    "support_count_rule": "A clean addition event is one frozen V4 row whose resolved relation field equals addition. The V4 parser has already enforced expected raw placeholder sil and a canonical observed phone.",
+    "required_fields_for_train_validation_detailed_audit": {
+      "tagged_relation": "addition",
+      "relation": "addition",
+      "expected_phone_canonical": "<SIL>",
+      "observed_phone_canonical": "one of the frozen 40 canonical phones",
+      "research_subset": "ADDITION_AUDIT",
+      "is_addition_audit": 1,
+      "timestamps": "finite end_time greater than start_time"
+    },
+    "test_rule": "For TEST, inspect only speaker_id and frozen relation to count aggregate clean additions and per-speaker support; no detailed fields, identities, sequences, phones, positions, paths, or examples are inspected or exported.",
+    "mixed_error_policy": "A clean addition event remains eligible when another clean relation occurs in the same word; mixed status is reported and never used for exclusion.",
+    "multiple_addition_policy": "Each clean addition interval is one event; all events are retained. Words are separately classified as single-addition or multiple-addition.",
+    "exclusions": [
+      "tagged addition whose resolved relation is unresolved",
+      "addition with expected raw token other than sil",
+      "unknown, malformed, noncanonical, or non-speech observed phone",
+      "non-finite or non-positive interval for detailed TRAIN/VALIDATION event analysis",
+      "ambiguous or missing manual-word containment for word/position/CTC analyses only"
+    ],
+    "exclusion_reporting": "All excluded or ambiguous tagged additions are counted by reason; support gates use resolved clean addition relation events and are never redefined after counts are seen."
+  },
+  "malformed_unknown": {
+    "global_tagged_addition_annotations": 1092,
+    "global_clean_additions": 1044,
+    "addition_invalid_observed_phone": 48
+  },
+  "position_contract": {
+    "boundary_definition": "For an addition row in a word with expected sequence length N, boundary equals the number of expected-sequence rows preceding that addition in source interval order.",
+    "valid_boundaries": "integers 0 through N",
+    "classes": {
+      "BEFORE_FIRST": "boundary == 0",
+      "BETWEEN": "0 < boundary < N",
+      "AFTER_FINAL": "boundary == N"
+    },
+    "ambiguous_position_policy": "If unique word containment or a nonempty expected sequence cannot be established, retain the clean event in source-level support but report position as ambiguous and exclude it only from position/exact-event metrics."
+  },
+  "position_mapping": {
+    "train": {
+      "clean_addition_without_expected_sequence": 14,
+      "position_mapped": 360,
+      "clean_addition_without_manual_word": 49
+    },
+    "validation": {
+      "position_mapped": 263,
+      "clean_addition_without_manual_word": 30,
+      "clean_addition_without_expected_sequence": 3
+    }
+  }
+}

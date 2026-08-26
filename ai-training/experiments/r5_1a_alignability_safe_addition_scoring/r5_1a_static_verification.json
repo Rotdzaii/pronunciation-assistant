@@ -1,0 +1,75 @@
+{
+  "status": "R5_1A_STATIC_VERIFICATION_PASS",
+  "identity_verification": {
+    "contract_sha256": "A6BE2C1C6A09AC0007E9330E44C1C7F45A91CCB76E47EE63ACEB99D0781A1BEB",
+    "preregistration_sha256": "2CE9F25B91139B9EA38E2AB552B11C29AA1397B252CE957833D1E3A80D689141",
+    "frozen_manifest_sha256": "93EB772243E066AB0D2A406F9FD4FEABDB6D9B99F55A794DDC58BD29E18A80FC",
+    "v4_sha256": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D",
+    "checkpoint_sha256": "F54C9C2361AE78E1C37353AEB338A2DE6722C0B1EC4F885F6B52688CE9E88085",
+    "all_match": true
+  },
+  "implementation": {
+    "scorer": "r5_1a_scorer.py",
+    "scorer_sha256": "4DE49C9070C973EE44EFBD09DFC063C436779E723D12EC7A7A2BC4A06AF35F90",
+    "tests": "test_r5_1a_scorer.py",
+    "tests_sha256": "2380212FC5ACCB5DAA2A96836EABA9C2AC2046980ABC501DD0DDC06743A47F1F",
+    "production_code_changed": false,
+    "r4_code_changed": false
+  },
+  "synthetic_suite": {
+    "test_count": 17,
+    "passed": 17,
+    "failed": 0,
+    "A": "PASS",
+    "B": "PASS",
+    "C": "PASS",
+    "D": "PASS",
+    "E": "PASS",
+    "F": "PASS",
+    "G": "PASS",
+    "H": "PASS",
+    "I": "PASS",
+    "J": "PASS",
+    "K": "PASS",
+    "L": "PASS",
+    "ZERO_INFINITY_REGRESSION": "PASS",
+    "EXTENDED_REAL_ROC_AUC": "PASS",
+    "THRESHOLD_CANDIDATES": "PASS",
+    "SERIALIZATION_ROUNDTRIP": "PASS",
+    "CANDIDATE_ENUMERATION": "PASS"
+  },
+  "notable_fixture_results": {
+    "zero_infinity_underlying_impossible_loss": 0.0,
+    "guard_called_ctc_for_impossible_target": false,
+    "guarded_impossible_score": "-Infinity",
+    "all_insert_impossible_candidate_count": 80,
+    "all_insert_impossible_best_insert_exists": false,
+    "keep_impossible_status": "R5_1A_EXECUTION_BLOCKED_KEEP_ALIGNABILITY",
+    "finite_auc_custom": 0.8888888888888888,
+    "finite_auc_trusted": 0.888888888888889,
+    "tied_negative_infinity_auc": 0.625,
+    "mixed_class_tie_auc": 0.5,
+    "threshold_negative_infinity_excluded": true,
+    "finite_serialization_roundtrip_exact": true
+  },
+  "determinism": {
+    "runs": 2,
+    "run_1_sha256": "571A8E637BC697EFEFFF8F17DA3313835F11DF9A0F0C71F7F54F355F40CDD622",
+    "run_2_sha256": "571A8E637BC697EFEFFF8F17DA3313835F11DF9A0F0C71F7F54F355F40CDD622",
+    "byte_identical": true,
+    "candidate_selections_identical": true,
+    "serialized_content_identical": true,
+    "status": "PASS"
+  },
+  "pre_freeze_test_iteration": {
+    "initial_failed_fixture": "finite-only ROC-AUC cross-check used exact binary-float equality",
+    "difference": "1.1102230246251565e-16 (one ULP)",
+    "correction": "fixed absolute cross-check tolerance of 1e-15",
+    "scoring_or_ranking_semantics_changed": false,
+    "phoenix_information_consumed": false
+  },
+  "synthetic_only": true,
+  "real_checkpoint_loaded": false,
+  "audio_accessed": false,
+  "phoenix_performance_metrics_calculated": false
+}

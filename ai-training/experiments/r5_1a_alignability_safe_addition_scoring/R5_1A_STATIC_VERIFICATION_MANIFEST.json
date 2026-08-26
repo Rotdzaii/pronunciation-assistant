@@ -1,0 +1,46 @@
+{
+  "manifest_type": "additive R5-1A static-verification manifest",
+  "hash_algorithm": "SHA-256",
+  "self_excluded": true,
+  "artifact_count": 6,
+  "hash_audit": "HASH_AUDIT_PASS",
+  "artifacts": [
+    {
+      "relative_path": "r5_1a_scorer.py",
+      "byte_size": 10711,
+      "sha256": "4DE49C9070C973EE44EFBD09DFC063C436779E723D12EC7A7A2BC4A06AF35F90"
+    },
+    {
+      "relative_path": "test_r5_1a_scorer.py",
+      "byte_size": 11772,
+      "sha256": "2380212FC5ACCB5DAA2A96836EABA9C2AC2046980ABC501DD0DDC06743A47F1F"
+    },
+    {
+      "relative_path": "r5_1a_static_verification.json",
+      "byte_size": 2855,
+      "sha256": "82A7E9450C826C99E153B8FD41D795E288B2E8F676C5FD4A79DECA4E9BC23CD8"
+    },
+    {
+      "relative_path": "r5_1a_serialization_contract.json",
+      "byte_size": 973,
+      "sha256": "9C22A00FDFABB9E437C062A0A510452AED06418161EA1178C765701B7CC397D1"
+    },
+    {
+      "relative_path": "r5_1a_static_protocol_audit.json",
+      "byte_size": 937,
+      "sha256": "04465E4BC1ECE115B3DC6C472C66C618F632628089B0F539EDE8516C2C6CF5A1"
+    },
+    {
+      "relative_path": "R5_1A_STATIC_VERIFICATION_REPORT.md",
+      "byte_size": 2648,
+      "sha256": "FFF295DDCC9E5BD2BFF69B0DAD7C1022770450004883063E5925C2CBA8B0FBD2"
+    }
+  ],
+  "deterministic_test_output_sha256": "571A8E637BC697EFEFFF8F17DA3313835F11DF9A0F0C71F7F54F355F40CDD622",
+  "deterministic_runs": 2,
+  "preserved_frozen_identities": {
+    "R5_1A_DEVELOPMENT_CONTRACT.json": "A6BE2C1C6A09AC0007E9330E44C1C7F45A91CCB76E47EE63ACEB99D0781A1BEB",
+    "R5_1A_PREREGISTRATION.md": "2CE9F25B91139B9EA38E2AB552B11C29AA1397B252CE957833D1E3A80D689141",
+    "artifact_hashes.json": "93EB772243E066AB0D2A406F9FD4FEABDB6D9B99F55A794DDC58BD29E18A80FC"
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "started_at": "2026-08-15T15:15:01+0700",
+  "ended_at": "2026-08-15T15:17:37+0700",
+  "python": "3.12.10",
+  "pytorch": "2.12.0.dev20260408+cu128",
+  "cuda": "12.8",
+  "device": "cuda",
+  "gpu": "NVIDIA GeForce RTX 5060 Laptop GPU",
+  "peak_vram_bytes": 125096448,
+  "batch_adapter_equivalence": {
+    "status": "PASS",
+    "raw_score": -9.767560005187988,
+    "target_score": -4.883780002593994
+  },
+  "inference": {
+    "feature_report": {
+      "words": 16582,
+      "seconds": 35.53837300000032,
+      "sample_length": {
+        "count": 16582,
+        "min": 480.0,
+        "median": 4800.0,
+        "mean": 5415.385357616693,
+        "p90": 9600.0,
+        "p95": 11040.0,
+        "max": 30560.0
+      },
+      "feature_frames": {
+        "count": 16582,
+        "min": 4.0,
+        "median": 31.0,
+        "mean": 34.84615848510433,
+        "p90": 61.0,
+        "p95": 70.0,
+        "max": 192.0
+      },
+      "encoder_output_steps": {
+        "count": 16582,
+        "min": 2.0,
+        "median": 15.0,
+        "mean": 17.172295259920396,
+        "p90": 30.0,
+        "p95": 35.0,
+        "max": 96.0
+      },
+      "edge_padded_words": 0,
+      "edge_padding_samples": 0,
+      "unalignable_words": 0,
+      "unalignable_word_ids": []
+    },
+    "inference_seconds": 8.431748699999844
+  },
+  "scoring": {
+    "alignable_hypotheses_scored": 2993426,
+    "batch_size": 4096,
+    "seconds": 60.37121759999991
+  },
+  "total_seconds_before_hashing": 155.3276923000003
+}

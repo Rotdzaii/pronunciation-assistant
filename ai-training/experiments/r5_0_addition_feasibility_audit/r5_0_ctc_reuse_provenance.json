@@ -1,0 +1,50 @@
+{
+  "classification": "R5_CTC_REUSE_DEVELOPMENT_ALLOWED_CONFIRMATION_REQUIRES_NEW_PROTOCOL",
+  "checkpoint_train_speakers": [
+    "BWC",
+    "EBVS",
+    "HJK",
+    "NCC",
+    "NJS",
+    "PNV",
+    "RRBI",
+    "TLV",
+    "TNI",
+    "YBAA",
+    "YKWK",
+    "ZHAA"
+  ],
+  "addition_containing_words_excluded_from_r4": true,
+  "r4_addition_word_counts": {
+    "train": {
+      "addition_containing_words": 338,
+      "addition_plus_deletion_words": 28
+    },
+    "validation": {
+      "addition_containing_words": 244,
+      "addition_plus_deletion_words": 28
+    }
+  },
+  "r5_addition_labels_directly_used_in_r4_training": false,
+  "r4_validation_speakers_influenced_checkpoint_selection": true,
+  "checkpoint_selection": {
+    "primary": "lowest validation PER",
+    "tie_1": "higher validation deletion F1",
+    "tie_2": "earlier epoch",
+    "manual_selection": false,
+    "test_influence": false
+  },
+  "selected_epoch": 35,
+  "selected_validation_metric": "lowest validation PER, then deletion F1, then earlier epoch",
+  "test_used": false,
+  "train_only_r5_diagnostic_reuse": "scientifically acceptable because the checkpoint is frozen, TRAIN speakers are its development population, and addition-containing words/labels were excluded from R4 training",
+  "future_current_validation_use": "acceptable only as iterative development, not clean confirmatory evidence, because the same validation speakers selected epoch 35",
+  "clean_confirmation_requirement": "a new preregistered protocol with an independent untouched evaluation population and leakage controls; the untouched R4/R5 TEST must remain closed until a development candidate is frozen",
+  "reason": "No addition labels entered training, so diagnostic reuse is informative; however validation-based checkpoint selection prevents treating future results on the same validation speakers as independent confirmation.",
+  "provenance_paths": [
+    "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r4_4c2_bigru_ctc_seed42\\dataset_summary.json",
+    "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r4_4c2_bigru_ctc_seed42\\selected_checkpoint.json",
+    "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r4_4c2_bigru_ctc_seed42\\training_config.json",
+    "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r4_4a_ctc_sequence_feasibility\\addition_audit.json"
+  ]
+}

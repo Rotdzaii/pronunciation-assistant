@@ -1,0 +1,18 @@
+{
+  "status": "R5_1_ADDITION_SCORING_GENERATION_CLOSED_NOT_CONFIRMED",
+  "limitations": [
+    "severe class imbalance",
+    "absolute addition precision remained low",
+    "one BEST_INSERT predicts at most one event per word",
+    "multiple-addition event recall is structurally limited",
+    "MFA cannot explicitly localize arbitrary added-phone slots",
+    "the R4-4C2 checkpoint used current VALIDATION speakers for PER-based epoch selection",
+    "R5-1B is iterative transfer evidence rather than fully independent confirmation",
+    "R5-1C interpretation is post-hoc and exploratory",
+    "speaker-dependent calibration variation remains",
+    "intrinsic addition/non-addition class overlap remains",
+    "the current global threshold did not provide adequate false-addition control on VALIDATION"
+  ],
+  "production_ready": false,
+  "independent_confirmation": false
+}

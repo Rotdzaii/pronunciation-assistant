@@ -1,0 +1,192 @@
+{
+  "speakers": {
+    "ABA": {
+      "words": 1265,
+      "TP": 18,
+      "FP": 126,
+      "FN": 39,
+      "TN": 1082,
+      "accuracy": 0.8695652173913043,
+      "balanced_accuracy": 0.6057424189613105,
+      "binary_macro_f1": 0.5541293105105644,
+      "addition_precision": 0.125,
+      "addition_recall": 0.3157894736842105,
+      "addition_f1": 0.1791044776119403,
+      "nonaddition_f1": 0.9291541434091884,
+      "confusion_matrix": [
+        [
+          1082,
+          126
+        ],
+        [
+          39,
+          18
+        ]
+      ],
+      "positive_support": 57,
+      "predicted_positive_rate": 0.11383399209486166,
+      "correct_only_false_addition": {
+        "support": 1017,
+        "predicted_addition": 106,
+        "false_addition_rate": 0.10422812192723697
+      }
+    },
+    "HKK": {
+      "words": 1388,
+      "TP": 13,
+      "FP": 124,
+      "FN": 24,
+      "TN": 1227,
+      "accuracy": 0.8933717579250721,
+      "balanced_accuracy": 0.6297837437733811,
+      "binary_macro_f1": 0.5462729818795444,
+      "addition_precision": 0.0948905109489051,
+      "addition_recall": 0.35135135135135137,
+      "addition_f1": 0.14942528735632185,
+      "nonaddition_f1": 0.9431206764027671,
+      "confusion_matrix": [
+        [
+          1227,
+          124
+        ],
+        [
+          24,
+          13
+        ]
+      ],
+      "positive_support": 37,
+      "predicted_positive_rate": 0.09870317002881844,
+      "correct_only_false_addition": {
+        "support": 1017,
+        "predicted_addition": 87,
+        "false_addition_rate": 0.0855457227138643
+      }
+    },
+    "HQTV": {
+      "words": 1379,
+      "TP": 16,
+      "FP": 107,
+      "FN": 28,
+      "TN": 1228,
+      "accuracy": 0.902102973168963,
+      "balanced_accuracy": 0.6417432754511406,
+      "binary_macro_f1": 0.5697566657499359,
+      "addition_precision": 0.13008130081300814,
+      "addition_recall": 0.36363636363636365,
+      "addition_f1": 0.19161676646706588,
+      "nonaddition_f1": 0.9478965650328058,
+      "confusion_matrix": [
+        [
+          1228,
+          107
+        ],
+        [
+          28,
+          16
+        ]
+      ],
+      "positive_support": 44,
+      "predicted_positive_rate": 0.08919506889050036,
+      "correct_only_false_addition": {
+        "support": 514,
+        "predicted_addition": 47,
+        "false_addition_rate": 0.0914396887159533
+      }
+    },
+    "LXC": {
+      "words": 1396,
+      "TP": 10,
+      "FP": 121,
+      "FN": 35,
+      "TN": 1230,
+      "accuracy": 0.8882521489971347,
+      "balanced_accuracy": 0.566329467883872,
+      "binary_macro_f1": 0.5270016680567139,
+      "addition_precision": 0.07633587786259542,
+      "addition_recall": 0.2222222222222222,
+      "addition_f1": 0.11363636363636363,
+      "nonaddition_f1": 0.9403669724770642,
+      "confusion_matrix": [
+        [
+          1230,
+          121
+        ],
+        [
+          35,
+          10
+        ]
+      ],
+      "positive_support": 45,
+      "predicted_positive_rate": 0.09383954154727794,
+      "correct_only_false_addition": {
+        "support": 675,
+        "predicted_addition": 52,
+        "false_addition_rate": 0.07703703703703704
+      }
+    },
+    "MBMPS": {
+      "words": 1393,
+      "TP": 5,
+      "FP": 127,
+      "FN": 16,
+      "TN": 1245,
+      "accuracy": 0.8973438621679828,
+      "balanced_accuracy": 0.5727648202137998,
+      "binary_macro_f1": 0.5055244024435955,
+      "addition_precision": 0.03787878787878788,
+      "addition_recall": 0.23809523809523808,
+      "addition_f1": 0.065359477124183,
+      "nonaddition_f1": 0.9456893277630081,
+      "confusion_matrix": [
+        [
+          1245,
+          127
+        ],
+        [
+          16,
+          5
+        ]
+      ],
+      "positive_support": 21,
+      "predicted_positive_rate": 0.09475951184493898,
+      "correct_only_false_addition": {
+        "support": 909,
+        "predicted_addition": 90,
+        "false_addition_rate": 0.09900990099009901
+      }
+    },
+    "SVBI": {
+      "words": 1134,
+      "TP": 4,
+      "FP": 36,
+      "FN": 19,
+      "TN": 1075,
+      "accuracy": 0.9514991181657848,
+      "balanced_accuracy": 0.5707549015771143,
+      "binary_macro_f1": 0.5510204081632653,
+      "addition_precision": 0.1,
+      "addition_recall": 0.17391304347826086,
+      "addition_f1": 0.126984126984127,
+      "nonaddition_f1": 0.9750566893424035,
+      "confusion_matrix": [
+        [
+          1075,
+          36
+        ],
+        [
+          19,
+          4
+        ]
+      ],
+      "positive_support": 23,
+      "predicted_positive_rate": 0.03527336860670194,
+      "correct_only_false_addition": {
+        "support": 757,
+        "predicted_addition": 25,
+        "false_addition_rate": 0.03302509907529723
+      }
+    }
+  },
+  "diagnostic_only": true,
+  "threshold_tuning": false
+}

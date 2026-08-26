@@ -1,0 +1,42 @@
+{
+  "status": "PASS",
+  "r5_1_preservation": {
+    "contract_modified": false,
+    "execution_evidence_modified": false,
+    "scientific_performance_result_exists": false,
+    "gates_evaluated": 0,
+    "classification": "technical stop generation"
+  },
+  "identities": {
+    "contract": {
+      "sha256": "18697A0C7DED130E122F49A9440AFA2D79B02E8630F2F7583C775F67797DCE77",
+      "match": true
+    },
+    "preregistration": {
+      "sha256": "3F69286BC25DA1AFF0A8C91028DC8C7C54D222F65825773F334EE737ABE2A633",
+      "match": true
+    },
+    "technical_correction": {
+      "sha256": "EFF87E86464FAE206F19F47FE209BE3EA6B975556C22329E7DEF3D4AAF400359",
+      "match": true
+    },
+    "technical_stop_status": {
+      "sha256": "5FDEF1E35DF6C0C89A1B3ABE11E98942AD0AB9F1B61A69D1F540776E385DE4E3",
+      "match": true
+    },
+    "technical_stop_report": {
+      "sha256": "B5C7F9189FA63D734A4F3AD19E725096900FBB4A846C1177FB4F498B7CB055FE",
+      "match": true
+    },
+    "technical_stop_manifest": {
+      "sha256": "A1B3F1F8358BAEC7C72F66743C04AD95B19E52FB7FB55345438840EF4B4F30C8",
+      "match": true
+    }
+  },
+  "observed_pre_metric_condition": {
+    "impossible_insert_hypotheses": 196,
+    "affected_words": 65,
+    "train_inference_metrics_produced": false,
+    "reason_r5_1a_is_new": "Probability-zero semantics for impossible targets differ from R5-1's frozen direct zero_infinity output behavior."
+  }
+}

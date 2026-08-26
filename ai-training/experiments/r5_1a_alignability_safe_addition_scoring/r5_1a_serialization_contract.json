@@ -1,0 +1,29 @@
+{
+  "status": "FROZEN_IMPLEMENTATION_MATCH",
+  "internal_representation": {
+    "finite": "Python float / IEEE-754 float64-compatible scalar",
+    "negative_infinity": "float('-inf')"
+  },
+  "json_representation": {
+    "finite": {
+      "score_value": "<finite numeric value>",
+      "score_is_neg_inf": false
+    },
+    "negative_infinity": {
+      "score_value": null,
+      "score_is_neg_inf": true
+    }
+  },
+  "deserialization": {
+    "score_is_neg_inf_true": "require score_value=null and reconstruct float('-inf')",
+    "score_is_neg_inf_false": "require finite numeric score_value and reconstruct float"
+  },
+  "applies_to": ["RAW_SCORE", "TARGET_SCORE", "BEST_INSERT_SCORE", "A"],
+  "forbidden": ["bare -Infinity JSON token", "finite sentinel", "epsilon", "clipping", "penalty"],
+  "round_trip_tests": {
+    "negative_infinity": "PASS",
+    "finite_float64": "PASS",
+    "standards_compatible_allow_nan_false": "PASS"
+  },
+  "mathematical_order_changed": false
+}

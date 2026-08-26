@@ -1,0 +1,59 @@
+{
+  "status": "R5_1_ADDITION_SCORING_GENERATION_CLOSED_NOT_CONFIRMED",
+  "scientific_conclusion": {
+    "data_feasibility": {
+      "status": "SUPPORTED_FOR_RESEARCH",
+      "meaning": "Addition annotations and speaker-disjoint support are sufficient for R5 research; this is not detector confirmation."
+    },
+    "continuous_addition_evidence": {
+      "status": "SUPPORTED",
+      "allowed_claim": "Addition-related continuous ranking evidence transferred to the iterative VALIDATION split."
+    },
+    "fixed_threshold_decision_transfer": {
+      "status": "NOT_CONFIRMED",
+      "reason": "The TRAIN-derived global threshold produced excessive false-addition predictions on VALIDATION, especially correct-only words."
+    }
+  },
+  "established": [
+    "addition annotations are sufficiently supported across speakers",
+    "the frozen CTC model can represent insertion hypotheses",
+    "alignability-safe exact CTC scoring is technically valid",
+    "continuous addition ranking was above chance on TRAIN and iterative VALIDATION",
+    "exact hypothesis scoring passed every frozen TRAIN development gate",
+    "exact-event evidence exceeded the frozen greedy comparator",
+    "R5-1A controlled correct-word false additions on TRAIN"
+  ],
+  "not_established": [
+    "confirmed addition detection",
+    "adequate fixed-threshold transfer to new speakers",
+    "production-quality precision or event localization",
+    "independent final confirmation",
+    "TEST performance"
+  ],
+  "positive_findings_retained": [
+    "1,044 clean global additions and all split speaker-support gates passed",
+    "greedy CTC showed directional addition signal",
+    "exact CTC insertion scoring improved over frozen greedy development comparators",
+    "continuous ranking survived from TRAIN to VALIDATION",
+    "failure emerged primarily at fixed-threshold decision transfer"
+  ],
+  "preferred_interpretation": "The frozen CTC scorer retained meaningful addition-ranking evidence, but its score distributions shifted across speakers and addition/non-addition overlap remained substantial. Consequently, the TRAIN-derived global threshold did not transfer with adequate false-addition control.",
+  "allowed_thesis_claim": "Exact CTC insertion-hypothesis scoring produced meaningful addition-ranking evidence and passed all preregistered TRAIN development gates. However, fixed-threshold transfer to the iterative VALIDATION split was not confirmed because false-addition rates increased substantially across unseen speakers.",
+  "allowed_vietnamese_defense": "Mô hình có học được tín hiệu của âm thêm và vẫn xếp hạng khá tốt khi đổi người nói. Tuy nhiên cùng một ngưỡng từ tập TRAIN lại báo nhầm addition quá nhiều trên VALIDATION. Kiểm tra sau đó cho thấy vừa có lệch điểm giữa người nói, vừa có sự chồng lấn giữa addition và các trường hợp không phải addition.",
+  "forbidden_claims": [
+    "Phoenix accurately detects additions.",
+    "R5 addition detection was confirmed.",
+    "Only threshold calibration caused the failure.",
+    "The model cannot hear addition."
+  ],
+  "source_identities": {
+    "r5_1a_contract": "A6BE2C1C6A09AC0007E9330E44C1C7F45A91CCB76E47EE63ACEB99D0781A1BEB",
+    "r5_1a_execution_manifest": "C9343A75CE26C2BEECA388EBA855E91AE0992D22C0C5D785308D0A98B89A3CD6",
+    "r5_1b_contract": "BD169175C0777B1C37506E95350CB6AD90A992045527396DDE5DA4419779AC4A",
+    "r5_1b_execution_manifest": "B1E053F8B80F6EDCBB4195BA632B1215E9FA42A7AA0AF5C2950D92AFF6E0771E",
+    "r5_1c_audit_manifest": "67BCB0D2655F68100E7BB657FD193E63300802B398D395DBA5EF6D120E4C7241",
+    "frozen_scorer": "4DE49C9070C973EE44EFBD09DFC063C436779E723D12EC7A7A2BC4A06AF35F90",
+    "v4": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D",
+    "r4_4c2_checkpoint": "F54C9C2361AE78E1C37353AEB338A2DE6722C0B1EC4F885F6B52688CE9E88085"
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "manifest_type": "R5-1 addition scoring generation closure artifacts",
+  "created_at": "2026-08-18T08:59:55+07:00",
+  "self_excluded": true,
+  "hash_algorithm": "SHA-256",
+  "artifact_count": 10,
+  "hash_audit": "HASH_AUDIT_PASS",
+  "failures": [],
+  "artifacts": [
+    {
+      "relative_path": "r5_1_final_status.json",
+      "byte_size": 1118,
+      "sha256": "AEF81158C8F5890305D69DC72412F02ABF1D59712C78E6F2650F156E9A4EF9C6"
+    },
+    {
+      "relative_path": "r5_1_research_summary.json",
+      "byte_size": 3983,
+      "sha256": "08FC39F05C3BFF146B9B7F45F01E701393D150E1928BD87984FC82ED7A241E08"
+    },
+    {
+      "relative_path": "r5_1_experiment_timeline.json",
+      "byte_size": 2832,
+      "sha256": "A9234870F26789BE928297D6D284930B3FD7CBC7073760152E56B5A37A6772BB"
+    },
+    {
+      "relative_path": "r5_1_final_metrics.json",
+      "byte_size": 2725,
+      "sha256": "378A0429B56E4BBD32E286AA8FE8A6563FF018198B2C628B5BC53FE2A532621B"
+    },
+    {
+      "relative_path": "r5_1_failure_interpretation.json",
+      "byte_size": 1506,
+      "sha256": "77256DEA554F063EF4D27C169768BD332C9E3CB9F7BF639B138A2B0BC47D1433"
+    },
+    {
+      "relative_path": "r5_1_limitations.json",
+      "byte_size": 893,
+      "sha256": "E91463E15EB3FBEBCB140BF69D440E2EE0CA6DF38589EEBC446EC4146CD31D81"
+    },
+    {
+      "relative_path": "r5_1_validation_consumption.json",
+      "byte_size": 604,
+      "sha256": "57CE48D86A42D0BADAA92C32AD7B3EC3C7EBC1F64E0EBED4D33210B135CC813E"
+    },
+    {
+      "relative_path": "r5_1_test_policy.json",
+      "byte_size": 572,
+      "sha256": "64C6211B11659936C814DBF89E8BE6892F9E0D6E4A599D09EDEC53777B969327"
+    },
+    {
+      "relative_path": "r5_1_future_research_policy.json",
+      "byte_size": 1581,
+      "sha256": "A4C36375A35F7880FE477B9F28ED4EFCD0511EB759237DA5410706E1985BA1E9"
+    },
+    {
+      "relative_path": "R5_1_ADDITION_SCORING_CONCLUSION.md",
+      "byte_size": 4563,
+      "sha256": "5DD35196D07A1479DF6B6E26864AEF62DE0A7F11A73206646800232F09D8D7DF"
+    }
+  ],
+  "final_status": "R5_1_ADDITION_SCORING_GENERATION_CLOSED_NOT_CONFIRMED",
+  "upstream_identities": {
+    "r5_1a_contract": "A6BE2C1C6A09AC0007E9330E44C1C7F45A91CCB76E47EE63ACEB99D0781A1BEB",
+    "r5_1a_execution_manifest": "C9343A75CE26C2BEECA388EBA855E91AE0992D22C0C5D785308D0A98B89A3CD6",
+    "r5_1b_contract": "BD169175C0777B1C37506E95350CB6AD90A992045527396DDE5DA4419779AC4A",
+    "r5_1b_execution_manifest": "B1E053F8B80F6EDCBB4195BA632B1215E9FA42A7AA0AF5C2950D92AFF6E0771E",
+    "r5_1c_audit_manifest": "67BCB0D2655F68100E7BB657FD193E63300802B398D395DBA5EF6D120E4C7241",
+    "frozen_scorer": "4DE49C9070C973EE44EFBD09DFC063C436779E723D12EC7A7A2BC4A06AF35F90",
+    "v4": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D",
+    "r4_4c2_checkpoint": "F54C9C2361AE78E1C37353AEB338A2DE6722C0B1EC4F885F6B52688CE9E88085"
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "frozen_false_positive_words": 641,
+  "mutually_exclusive_cohorts": {
+    "correct_only": {
+      "count": 407,
+      "percentage": 63.494539781591264
+    },
+    "substitution_only": {
+      "count": 167,
+      "percentage": 26.053042121684868
+    },
+    "deletion_only": {
+      "count": 44,
+      "percentage": 6.86427457098284
+    },
+    "substitution_and_deletion_mixed": {
+      "count": 23,
+      "percentage": 3.5881435257410295
+    },
+    "other_negative": {
+      "count": 0,
+      "percentage": 0.0
+    }
+  },
+  "nonexclusive_membership": {
+    "correct_only": {
+      "count": 407,
+      "percentage": 63.494539781591264
+    },
+    "substitution_containing": {
+      "count": 190,
+      "percentage": 29.641185647425896
+    },
+    "deletion_containing": {
+      "count": 67,
+      "percentage": 10.45241809672387
+    }
+  },
+  "by_validation_speaker": {
+    "ABA": {
+      "count": 126,
+      "percentage": 19.65678627145086
+    },
+    "HKK": {
+      "count": 124,
+      "percentage": 19.34477379095164
+    },
+    "HQTV": {
+      "count": 107,
+      "percentage": 16.692667706708267
+    },
+    "LXC": {
+      "count": 121,
+      "percentage": 18.876755070202808
+    },
+    "MBMPS": {
+      "count": 127,
+      "percentage": 19.81279251170047
+    },
+    "SVBI": {
+      "count": 36,
+      "percentage": 5.616224648985959
+    }
+  },
+  "all_false_positives_accounted_once": true
+}

@@ -1,0 +1,25 @@
+{
+  "support_gates": {
+    "TRAIN": {
+      "clean_additions_ge_100": true,
+      "speakers_ge_5_at_least_6": true,
+      "position_classes_at_least_2": true,
+      "PASS": true
+    },
+    "VALIDATION": {
+      "clean_additions_ge_43": true,
+      "speakers_ge_5_at_least_3": true,
+      "PASS": true
+    },
+    "TEST": {
+      "clean_additions_ge_43": true,
+      "speakers_ge_5_at_least_3": true,
+      "PASS": true
+    }
+  },
+  "all_data_support_gates_pass": true,
+  "ctc_sequence_representation_viable": true,
+  "directional_ctc_insertion_signal": true,
+  "reuse_justified_for_next_development_stage": true,
+  "final_status": "R5_0_PASS_EXISTING_CTC_FEASIBLE"
+}

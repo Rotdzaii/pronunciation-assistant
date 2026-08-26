@@ -1,0 +1,18 @@
+{
+  "status": "UNTOUCHED_AND_CLOSED_FOR_CURRENT_R5_1_GENERATION",
+  "speakers": [
+    "ASI",
+    "ERMS",
+    "SKA",
+    "THV",
+    "TXHC",
+    "YDCK"
+  ],
+  "test_audio_accessed": false,
+  "test_inference_run": false,
+  "test_performance_consumed": false,
+  "current_generation_eligible_to_open_test": false,
+  "reason": "R5-1B did not pass its frozen validation-transfer contract.",
+  "preservation_is_intentional": true,
+  "future_access_requires": "a genuinely new R5 generation that reaches a separately frozen and authorized locked TEST protocol"
+}

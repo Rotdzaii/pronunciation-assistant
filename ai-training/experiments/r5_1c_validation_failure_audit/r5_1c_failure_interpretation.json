@@ -1,0 +1,34 @@
+{
+  "classification": "MIXED_CALIBRATION_AND_CLASS_OVERLAP",
+  "status_role": "POST-HOC / EXPLORATORY; does not change the frozen R5-1B scientific result",
+  "authoritative_scientific_status": "R5_1B_VALIDATION_TRANSFER_NOT_CONFIRMED",
+  "ranking_vs_decision": {
+    "TRAIN": {
+      "addition_vs_all_nonaddition_roc_auc": 0.7734833025081417,
+      "addition_vs_correct_only_roc_auc": 0.802352821409537,
+      "correct_only_false_addition_rate": 0.03491295938104449
+    },
+    "VALIDATION": {
+      "addition_vs_all_nonaddition_roc_auc": 0.7512808848879525,
+      "addition_vs_correct_only_roc_auc": 0.7717072309229656,
+      "correct_only_false_addition_rate": 0.0832481079975455
+    },
+    "VALIDATION_minus_TRAIN": {
+      "addition_vs_all_nonaddition_roc_auc": -0.022202417620189152,
+      "addition_vs_correct_only_roc_auc": -0.03064559048657145,
+      "correct_only_false_addition_rate": 0.04833514861650102
+    }
+  },
+  "calibration_location_shift_evidence": [
+    "Both VALIDATION AUCs remained above 0.70 while correct-only FAR rose from 0.03491295938104449 to 0.0832481079975455 at the unchanged threshold.",
+    "Five of six VALIDATION speakers exceeded the historical correct-only FAR reference, so inflation was broad rather than attributable to one speaker.",
+    "Speaker score medians and correct-only FARs varied materially, including the lower-location/lower-FAR SVBI pattern."
+  ],
+  "class_overlap_evidence": [
+    "AUCs near 0.75-0.77 indicate useful but incomplete separation, not near-perfect ranking.",
+    "False positives occurred across correct-only, substitution-containing, and deletion-containing negative cohorts.",
+    "Frozen margin bins show both true additions below the threshold and negatives above it."
+  ],
+  "caution": "The evidence supports a mixed descriptive explanation but cannot identify a causal mechanism or authorize a new parameter.",
+  "threshold_search_or_recalibration": false
+}

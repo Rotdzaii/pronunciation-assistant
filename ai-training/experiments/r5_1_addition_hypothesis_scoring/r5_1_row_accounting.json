@@ -1,0 +1,263 @@
+{
+  "status": "R5_1_EXECUTION_BLOCKED_ROW_ACCOUNTING",
+  "clean_train_addition_events_source": 423,
+  "clean_addition_containing_words_frozen_source_reconstruction": 338,
+  "runtime_evaluable_words": 16582,
+  "runtime_evaluable_addition_words": 0,
+  "runtime_evaluable_negative_words": 16582,
+  "excluded_non_runtime_evaluable_positive_words": 338,
+  "runtime_addition_events": 0,
+  "source_events_not_in_runtime_population": 423,
+  "multiple_addition_positive_words": 0,
+  "events_in_multiple_addition_words": 0,
+  "mixed_substitution_addition_words": 0,
+  "mixed_deletion_addition_words": 0,
+  "mixed_substitution_and_deletion_addition_words": 0,
+  "other_mixed_error_positive_words": 0,
+  "runtime_positive_event_multiplicity": {},
+  "reconstruction": {
+    "counts": {
+      "train_candidate": 16985,
+      "train_usable": 16259,
+      "multiple_deletion_words": 130,
+      "substitution_plus_deletion_words": 470,
+      "addition_words_excluded": 338,
+      "addition_plus_deletion_words": 28,
+      "malformed_or_unresolved_words": 402,
+      "unavailable_word_boundary": 1
+    },
+    "target_rows_without_manual_word": {
+      "total": 57,
+      "by_relation": {
+        "addition": 49,
+        "substitution": 2,
+        "correct": 6
+      }
+    },
+    "invalid_forced_alignment_phone_labels": {
+      "spn": 12
+    },
+    "mfa_vs_manual_boundary_start_error_seconds": {
+      "count": 16984,
+      "mean": 0.004179336374713614,
+      "median": 0.0,
+      "p10": 0.0,
+      "p25": 0.0,
+      "p75": 0.0,
+      "p90": 0.009999999999999787
+    },
+    "mfa_vs_manual_boundary_end_error_seconds": {
+      "count": 16984,
+      "mean": 0.0051764543768987505,
+      "median": 0.0,
+      "p10": 0.0,
+      "p25": 0.0,
+      "p75": 0.0,
+      "p90": 0.010000000000000009
+    }
+  },
+  "expected_tuple": [
+    16582,
+    323,
+    16259,
+    342
+  ],
+  "actual_tuple": [
+    16582,
+    0,
+    16582,
+    0
+  ],
+  "source_scan": {
+    "train_relation_counts": {
+      "correct": 51400,
+      "deletion": 1612,
+      "substitution": 6159,
+      "non_speech": 7777,
+      "addition": 423,
+      "unresolved": 418
+    },
+    "clean_train_addition_events": 423,
+    "heldout_fields_inspected": [
+      "speaker_id"
+    ],
+    "validation_paths_resolved": false,
+    "test_paths_resolved": false
+  },
+  "addition_mapping": {
+    "mapping": {
+      "clean_addition_without_manual_word": 49
+    },
+    "mapped_word_multiplicity": {},
+    "mapped_words": 0,
+    "mapped_events": 0
+  },
+  "candidate_alignability": {
+    "hypotheses": 2993622,
+    "insert_hypotheses": 2977040,
+    "unalignable": 196,
+    "examples": [
+      {
+        "word_id": "BWC/arctic_a0081/6",
+        "kind": "INSERT",
+        "boundary": 0,
+        "phone_index": 10,
+        "minimum_steps": 4,
+        "encoder_steps": 3
+      },
+      {
+        "word_id": "BWC/arctic_a0081/6",
+        "kind": "INSERT",
+        "boundary": 1,
+        "phone_index": 2,
+        "minimum_steps": 4,
+        "encoder_steps": 3
+      },
+      {
+        "word_id": "BWC/arctic_a0081/6",
+        "kind": "INSERT",
+        "boundary": 1,
+        "phone_index": 10,
+        "minimum_steps": 4,
+        "encoder_steps": 3
+      },
+      {
+        "word_id": "BWC/arctic_a0081/6",
+        "kind": "INSERT",
+        "boundary": 2,
+        "phone_index": 2,
+        "minimum_steps": 4,
+        "encoder_steps": 3
+      },
+      {
+        "word_id": "EBVS/arctic_a0036/2",
+        "kind": "INSERT",
+        "boundary": 0,
+        "phone_index": 17,
+        "minimum_steps": 4,
+        "encoder_steps": 3
+      },
+      {
+        "word_id": "EBVS/arctic_a0036/2",
+        "kind": "INSERT",
+        "boundary": 1,
+        "phone_index": 17,
+        "minimum_steps": 4,
+        "encoder_steps": 3
+      },
+      {
+        "word_id": "EBVS/arctic_a0036/2",
+        "kind": "INSERT",
+        "boundary": 1,
+        "phone_index": 23,
+        "minimum_steps": 4,
+        "encoder_steps": 3
+      },
+      {
+        "word_id": "EBVS/arctic_a0036/2",
+        "kind": "INSERT",
+        "boundary": 2,
+        "phone_index": 23,
+        "minimum_steps": 4,
+        "encoder_steps": 3
+      },
+      {
+        "word_id": "EBVS/arctic_a0063/3",
+        "kind": "INSERT",
+        "boundary": 0,
+        "phone_index": 2,
+        "minimum_steps": 3,
+        "encoder_steps": 2
+      },
+      {
+        "word_id": "EBVS/arctic_a0063/3",
+        "kind": "INSERT",
+        "boundary": 1,
+        "phone_index": 2,
+        "minimum_steps": 3,
+        "encoder_steps": 2
+      },
+      {
+        "word_id": "EBVS/arctic_a0102/3",
+        "kind": "INSERT",
+        "boundary": 0,
+        "phone_index": 2,
+        "minimum_steps": 4,
+        "encoder_steps": 3
+      },
+      {
+        "word_id": "EBVS/arctic_a0102/3",
+        "kind": "INSERT",
+        "boundary": 1,
+        "phone_index": 2,
+        "minimum_steps": 4,
+        "encoder_steps": 3
+      },
+      {
+        "word_id": "EBVS/arctic_a0102/3",
+        "kind": "INSERT",
+        "boundary": 1,
+        "phone_index": 29,
+        "minimum_steps": 4,
+        "encoder_steps": 3
+      },
+      {
+        "word_id": "EBVS/arctic_a0102/3",
+        "kind": "INSERT",
+        "boundary": 2,
+        "phone_index": 29,
+        "minimum_steps": 4,
+        "encoder_steps": 3
+      },
+      {
+        "word_id": "EBVS/arctic_a0106/10",
+        "kind": "INSERT",
+        "boundary": 0,
+        "phone_index": 2,
+        "minimum_steps": 3,
+        "encoder_steps": 2
+      },
+      {
+        "word_id": "EBVS/arctic_a0106/10",
+        "kind": "INSERT",
+        "boundary": 1,
+        "phone_index": 2,
+        "minimum_steps": 3,
+        "encoder_steps": 2
+      },
+      {
+        "word_id": "EBVS/arctic_a0265/0",
+        "kind": "INSERT",
+        "boundary": 0,
+        "phone_index": 10,
+        "minimum_steps": 4,
+        "encoder_steps": 3
+      },
+      {
+        "word_id": "EBVS/arctic_a0265/0",
+        "kind": "INSERT",
+        "boundary": 1,
+        "phone_index": 2,
+        "minimum_steps": 4,
+        "encoder_steps": 3
+      },
+      {
+        "word_id": "EBVS/arctic_a0265/0",
+        "kind": "INSERT",
+        "boundary": 1,
+        "phone_index": 10,
+        "minimum_steps": 4,
+        "encoder_steps": 3
+      },
+      {
+        "word_id": "EBVS/arctic_a0265/0",
+        "kind": "INSERT",
+        "boundary": 2,
+        "phone_index": 2,
+        "minimum_steps": 4,
+        "encoder_steps": 3
+      }
+    ],
+    "status": "FAIL"
+  }
+}

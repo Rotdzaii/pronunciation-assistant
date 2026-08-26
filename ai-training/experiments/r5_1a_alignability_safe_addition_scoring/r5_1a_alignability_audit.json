@@ -1,0 +1,237 @@
+{
+  "status": "PASS",
+  "total_words": 16582,
+  "keep_impossible_words": 0,
+  "keep_impossible_details": [],
+  "total_insert_hypotheses": 2977040,
+  "alignable_insert_hypotheses": 2976844,
+  "impossible_insert_hypotheses": 196,
+  "words_with_impossible_insert": 65,
+  "words_with_all_inserts_impossible": 0,
+  "adjacent_repeat_related_impossible": 196,
+  "by_speaker": {
+    "BWC": {
+      "words": 1390,
+      "insert_total": 250360,
+      "insert_alignable": 250356,
+      "insert_impossible": 4,
+      "words_with_impossible": 1,
+      "words_all_impossible": 0
+    },
+    "EBVS": {
+      "words": 1372,
+      "insert_total": 247000,
+      "insert_alignable": 246984,
+      "insert_impossible": 16,
+      "words_with_impossible": 5,
+      "words_all_impossible": 0
+    },
+    "HJK": {
+      "words": 1401,
+      "insert_total": 252480,
+      "insert_alignable": 252472,
+      "insert_impossible": 8,
+      "words_with_impossible": 2,
+      "words_all_impossible": 0
+    },
+    "NCC": {
+      "words": 1408,
+      "insert_total": 253600,
+      "insert_alignable": 253584,
+      "insert_impossible": 16,
+      "words_with_impossible": 5,
+      "words_all_impossible": 0
+    },
+    "NJS": {
+      "words": 1406,
+      "insert_total": 254120,
+      "insert_alignable": 254098,
+      "insert_impossible": 22,
+      "words_with_impossible": 10,
+      "words_all_impossible": 0
+    },
+    "PNV": {
+      "words": 1395,
+      "insert_total": 251880,
+      "insert_alignable": 251874,
+      "insert_impossible": 6,
+      "words_with_impossible": 2,
+      "words_all_impossible": 0
+    },
+    "RRBI": {
+      "words": 1408,
+      "insert_total": 252600,
+      "insert_alignable": 252598,
+      "insert_impossible": 2,
+      "words_with_impossible": 1,
+      "words_all_impossible": 0
+    },
+    "TLV": {
+      "words": 1383,
+      "insert_total": 248720,
+      "insert_alignable": 248670,
+      "insert_impossible": 50,
+      "words_with_impossible": 15,
+      "words_all_impossible": 0
+    },
+    "TNI": {
+      "words": 1345,
+      "insert_total": 239360,
+      "insert_alignable": 239340,
+      "insert_impossible": 20,
+      "words_with_impossible": 6,
+      "words_all_impossible": 0
+    },
+    "YBAA": {
+      "words": 1298,
+      "insert_total": 229720,
+      "insert_alignable": 229700,
+      "insert_impossible": 20,
+      "words_with_impossible": 6,
+      "words_all_impossible": 0
+    },
+    "YKWK": {
+      "words": 1382,
+      "insert_total": 248240,
+      "insert_alignable": 248226,
+      "insert_impossible": 14,
+      "words_with_impossible": 5,
+      "words_all_impossible": 0
+    },
+    "ZHAA": {
+      "words": 1394,
+      "insert_total": 248960,
+      "insert_alignable": 248942,
+      "insert_impossible": 18,
+      "words_with_impossible": 7,
+      "words_all_impossible": 0
+    }
+  },
+  "by_class": {
+    "positive": {
+      "words": 323,
+      "insert_total": 74520,
+      "insert_alignable": 74520,
+      "insert_impossible": 0,
+      "words_with_impossible": 0,
+      "words_all_impossible": 0
+    },
+    "negative": {
+      "words": 16259,
+      "insert_total": 2902520,
+      "insert_alignable": 2902324,
+      "insert_impossible": 196,
+      "words_with_impossible": 65,
+      "words_all_impossible": 0
+    }
+  },
+  "by_expected_length": {
+    "1": {
+      "words": 710,
+      "insert_total": 56800,
+      "insert_alignable": 56736,
+      "insert_impossible": 64,
+      "words_with_impossible": 32,
+      "words_all_impossible": 0
+    },
+    "2": {
+      "words": 5228,
+      "insert_total": 627360,
+      "insert_alignable": 627228,
+      "insert_impossible": 132,
+      "words_with_impossible": 33,
+      "words_all_impossible": 0
+    },
+    "3": {
+      "words": 4872,
+      "insert_total": 779520,
+      "insert_alignable": 779520,
+      "insert_impossible": 0,
+      "words_with_impossible": 0,
+      "words_all_impossible": 0
+    },
+    "4": {
+      "words": 2022,
+      "insert_total": 404400,
+      "insert_alignable": 404400,
+      "insert_impossible": 0,
+      "words_with_impossible": 0,
+      "words_all_impossible": 0
+    },
+    "5": {
+      "words": 1398,
+      "insert_total": 335520,
+      "insert_alignable": 335520,
+      "insert_impossible": 0,
+      "words_with_impossible": 0,
+      "words_all_impossible": 0
+    },
+    "6": {
+      "words": 918,
+      "insert_total": 257040,
+      "insert_alignable": 257040,
+      "insert_impossible": 0,
+      "words_with_impossible": 0,
+      "words_all_impossible": 0
+    },
+    "7": {
+      "words": 665,
+      "insert_total": 212800,
+      "insert_alignable": 212800,
+      "insert_impossible": 0,
+      "words_with_impossible": 0,
+      "words_all_impossible": 0
+    },
+    "8": {
+      "words": 362,
+      "insert_total": 130320,
+      "insert_alignable": 130320,
+      "insert_impossible": 0,
+      "words_with_impossible": 0,
+      "words_all_impossible": 0
+    },
+    "9": {
+      "words": 223,
+      "insert_total": 89200,
+      "insert_alignable": 89200,
+      "insert_impossible": 0,
+      "words_with_impossible": 0,
+      "words_all_impossible": 0
+    },
+    "10": {
+      "words": 137,
+      "insert_total": 60280,
+      "insert_alignable": 60280,
+      "insert_impossible": 0,
+      "words_with_impossible": 0,
+      "words_all_impossible": 0
+    },
+    "11": {
+      "words": 20,
+      "insert_total": 9600,
+      "insert_alignable": 9600,
+      "insert_impossible": 0,
+      "words_with_impossible": 0,
+      "words_all_impossible": 0
+    },
+    "12": {
+      "words": 23,
+      "insert_total": 11960,
+      "insert_alignable": 11960,
+      "insert_impossible": 0,
+      "words_with_impossible": 0,
+      "words_all_impossible": 0
+    },
+    "13": {
+      "words": 4,
+      "insert_total": 2240,
+      "insert_alignable": 2240,
+      "insert_impossible": 0,
+      "words_with_impossible": 0,
+      "words_all_impossible": 0
+    }
+  },
+  "r5_1_prior_impossible_count": 196,
+  "difference_from_r5_1": 0,
+  "comparison_explanation": "same frozen population, output-length contract, and minimum-step definition"
+}

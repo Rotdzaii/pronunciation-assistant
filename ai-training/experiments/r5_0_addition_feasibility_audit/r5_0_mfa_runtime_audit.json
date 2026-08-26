@@ -1,0 +1,23 @@
+{
+  "explicit_extra_phone_localization_supported": false,
+  "empirical_rerun_required": false,
+  "empirical_rerun_performed": false,
+  "evidence": [
+    "Phoenix runtime writes the canonical prompt transcript to MFA as a .lab file and invokes transcript-constrained forced alignment.",
+    "The runtime API supplies prompt text and does not supply observed/addition phone labels; no code path requests arbitrary extra-phone hypotheses.",
+    "The TextGrid parser only returns intervals emitted by MFA and cannot create an additional phone label.",
+    "Frozen R4-2C evidence classified MFA behavior as C_FORCED_ALIGNMENT_RETAINS_EXPECTED_LABEL; 2454 deletion slots retained the expected label and only 10 were missing without a clean anchor."
+  ],
+  "normal_runtime_output": "canonical-transcript alignment intervals; extra acoustic material can be absorbed into expected/silence spans or boundary placement, but is not exposed as a labeled extra-phone slot",
+  "limitation": "MFA can supply a word span and expected-phone timing context, but not a reliable explicit addition interval or added-phone identity under the current runtime contract.",
+  "ctc_alternative": "The frozen CTC decoded sequence independently represents insertions by canonical phone identity and expected-sequence boundary.",
+  "sources": {
+    "runtime_aligner": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-worker\\app\\alignment\\mfa_aligner.py",
+    "runtime_parser": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-worker\\app\\alignment\\textgrid_parser.py",
+    "r4_runtime_path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r4_2c_mfa_missing_phone_anchor\\runtime_alignment_path.json",
+    "r4_semantics": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r4_2c_mfa_missing_phone_anchor\\manual_vs_mfa_semantics.json",
+    "r4_status": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r4_2c_mfa_missing_phone_anchor\\final_status.json"
+  },
+  "test_mfa_run": false,
+  "validation_mfa_run_for_model_evaluation": false
+}

@@ -1,0 +1,56 @@
+{
+  "gates": {
+    "G1": {
+      "metric": "addition_vs_all_nonaddition_roc_auc",
+      "value": 0.7512808848879525,
+      "operator": ">=",
+      "threshold": 0.7,
+      "result": "PASS",
+      "full_precision": true
+    },
+    "G2": {
+      "metric": "addition_vs_correct_only_roc_auc",
+      "value": 0.7717072309229656,
+      "operator": ">=",
+      "threshold": 0.7,
+      "result": "PASS",
+      "full_precision": true
+    },
+    "G3": {
+      "metric": "fixed_threshold_binary_macro_f1",
+      "value": 0.543887636349494,
+      "operator": ">",
+      "threshold": 0.548179,
+      "result": "FAIL",
+      "full_precision": true
+    },
+    "G4": {
+      "metric": "fixed_threshold_addition_f1",
+      "value": 0.14132762312633834,
+      "operator": ">",
+      "threshold": 0.129246,
+      "result": "PASS",
+      "full_precision": true
+    },
+    "G5": {
+      "metric": "correct_only_false_addition_rate",
+      "value": 0.0832481079975455,
+      "operator": "<=",
+      "threshold": 0.054352,
+      "result": "FAIL",
+      "full_precision": true
+    },
+    "G6": {
+      "metric": "exact_event_f1",
+      "value": 0.03781512605042017,
+      "operator": ">",
+      "threshold": 0.026688,
+      "result": "PASS",
+      "full_precision": true
+    }
+  },
+  "passed_count": 4,
+  "total": 6,
+  "all_pass": false,
+  "threshold_modified": false
+}

@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "artifact_count": 5,
+  "artifacts": [
+    {
+      "relative_path": "R5_1_DEVELOPMENT_CONTRACT.json",
+      "byte_size": 14482,
+      "sha256": "18697A0C7DED130E122F49A9440AFA2D79B02E8630F2F7583C775F67797DCE77"
+    },
+    {
+      "relative_path": "R5_1_PREREGISTRATION.md",
+      "byte_size": 6582,
+      "sha256": "3F69286BC25DA1AFF0A8C91028DC8C7C54D222F65825773F334EE737ABE2A633"
+    },
+    {
+      "relative_path": "r5_1_protocol_audit.json",
+      "byte_size": 2502,
+      "sha256": "2E12C3AEB74B64F4A1621D410DDF60DDACE1FCE9A2946FCBEBB334C5605E5759"
+    },
+    {
+      "relative_path": "r5_1_score_provenance.json",
+      "byte_size": 2745,
+      "sha256": "C07E6880BED376DAB1ED7745ABB5A583BB2EC27230BB4E590CD5DC21451916A2"
+    },
+    {
+      "relative_path": "r5_1_source_identity.json",
+      "byte_size": 2352,
+      "sha256": "5768B4C535756A37EC96BBB78DC72AFA142FCFE22AD6C4ED43A8713ED7FC7635"
+    }
+  ],
+  "self_excluded": "artifact_hashes.json cannot contain a stable hash of itself",
+  "verification": "HASH_AUDIT_PASS",
+  "failures": []
+}

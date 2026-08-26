@@ -1,0 +1,75 @@
+{
+  "global": {
+    "eligible_relation_observations": 118449,
+    "total_tagged_addition_annotations": 1092,
+    "clean_additions": 1044,
+    "excluded_or_ambiguous_additions": 48,
+    "excluded_reasons": {
+      "addition_invalid_observed_phone": 48
+    },
+    "addition_prevalence": 0.008813919914900084,
+    "speakers_with_at_least_1_clean_addition": 24
+  },
+  "splits": {
+    "train": {
+      "clean_additions": 423,
+      "speakers_with_at_least_1": 12,
+      "speakers_with_at_least_5": 12,
+      "per_speaker": {
+        "BWC": 43,
+        "EBVS": 90,
+        "HJK": 7,
+        "NCC": 30,
+        "NJS": 37,
+        "PNV": 16,
+        "RRBI": 44,
+        "TLV": 39,
+        "TNI": 8,
+        "YBAA": 30,
+        "YKWK": 29,
+        "ZHAA": 50
+      },
+      "position_counts": {
+        "BETWEEN": 183,
+        "AFTER_FINAL": 127,
+        "BEFORE_FIRST": 50
+      }
+    },
+    "validation": {
+      "clean_additions": 296,
+      "speakers_with_at_least_1": 6,
+      "speakers_with_at_least_5": 6,
+      "per_speaker": {
+        "ABA": 74,
+        "HKK": 43,
+        "HQTV": 72,
+        "LXC": 57,
+        "MBMPS": 23,
+        "SVBI": 27
+      },
+      "position_counts": {
+        "AFTER_FINAL": 123,
+        "BEFORE_FIRST": 26,
+        "BETWEEN": 114
+      }
+    },
+    "test": {
+      "clean_additions": 325,
+      "speakers_with_at_least_1": 6,
+      "speakers_with_at_least_5": 6
+    }
+  },
+  "class_imbalance": {
+    "classification": "severe",
+    "correct_to_addition": 97.34291187739464,
+    "substitution_to_addition": 11.840038314176246,
+    "deletion_to_addition": 3.2739463601532566,
+    "exact_relation_counts": {
+      "correct": 101626,
+      "substitution": 12361,
+      "deletion": 3418,
+      "addition": 1044
+    }
+  },
+  "test_detail_policy": "Only aggregate clean support and aggregate speaker-support counts are exported."
+}

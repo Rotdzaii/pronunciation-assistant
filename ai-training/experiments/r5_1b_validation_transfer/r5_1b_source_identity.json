@@ -1,0 +1,66 @@
+{
+  "status": "PASS",
+  "verified_at": "2026-08-15T18:09:15+07:00",
+  "identities": [
+    {
+      "name": "R5-1A contract",
+      "path": "ai-training/experiments/r5_1a_alignability_safe_addition_scoring/R5_1A_DEVELOPMENT_CONTRACT.json",
+      "expected_sha256": "A6BE2C1C6A09AC0007E9330E44C1C7F45A91CCB76E47EE63ACEB99D0781A1BEB",
+      "actual_sha256": "A6BE2C1C6A09AC0007E9330E44C1C7F45A91CCB76E47EE63ACEB99D0781A1BEB",
+      "byte_size": 11840,
+      "pass": true
+    },
+    {
+      "name": "R5-1A preregistration",
+      "path": "ai-training/experiments/r5_1a_alignability_safe_addition_scoring/R5_1A_PREREGISTRATION.md",
+      "expected_sha256": "2CE9F25B91139B9EA38E2AB552B11C29AA1397B252CE957833D1E3A80D689141",
+      "actual_sha256": "2CE9F25B91139B9EA38E2AB552B11C29AA1397B252CE957833D1E3A80D689141",
+      "byte_size": 5658,
+      "pass": true
+    },
+    {
+      "name": "R5-1A static manifest",
+      "path": "ai-training/experiments/r5_1a_alignability_safe_addition_scoring/R5_1A_STATIC_VERIFICATION_MANIFEST.json",
+      "expected_sha256": "EED04655AD957A66BF9A13149F812BD0CD74B2D362BDFD4CECD12579DAAA3B5E",
+      "actual_sha256": "EED04655AD957A66BF9A13149F812BD0CD74B2D362BDFD4CECD12579DAAA3B5E",
+      "byte_size": 1732,
+      "pass": true
+    },
+    {
+      "name": "R5-1A execution manifest",
+      "path": "ai-training/experiments/r5_1a_alignability_safe_addition_scoring/R5_1A_EXECUTION_MANIFEST.json",
+      "expected_sha256": "C9343A75CE26C2BEECA388EBA855E91AE0992D22C0C5D785308D0A98B89A3CD6",
+      "actual_sha256": "C9343A75CE26C2BEECA388EBA855E91AE0992D22C0C5D785308D0A98B89A3CD6",
+      "byte_size": 2971,
+      "pass": true
+    },
+    {
+      "name": "V4 dataset",
+      "path": "ai-training/datasets/l2-arctic/metadata/all_speakers_expected_observed_v4.csv",
+      "expected_sha256": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D",
+      "actual_sha256": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D",
+      "byte_size": 48727961,
+      "pass": true
+    },
+    {
+      "name": "R4-4C2 checkpoint",
+      "path": "ai-training/experiments/r4_4c2_bigru_ctc_seed42/R4_4C2_bigru_ctc_phone_sequence_seed42_best_validation_per.pt",
+      "expected_sha256": "F54C9C2361AE78E1C37353AEB338A2DE6722C0B1EC4F885F6B52688CE9E88085",
+      "actual_sha256": "F54C9C2361AE78E1C37353AEB338A2DE6722C0B1EC4F885F6B52688CE9E88085",
+      "byte_size": 813093,
+      "pass": true
+    }
+  ],
+  "manifest_content_verification": {
+    "static_and_execution_entries_checked": 20,
+    "all_hashes_pass": true,
+    "all_byte_sizes_pass": true,
+    "failures": []
+  },
+  "audio_or_model_access": {
+    "checkpoint_loaded": false,
+    "audio_paths_resolved": false,
+    "audio_read": false,
+    "model_inference": false
+  }
+}

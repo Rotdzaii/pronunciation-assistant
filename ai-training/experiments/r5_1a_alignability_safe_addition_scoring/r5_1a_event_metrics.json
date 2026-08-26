@@ -1,0 +1,46 @@
+{
+  "exact_event": {
+    "tp": 23,
+    "fp": 683,
+    "fn": 319,
+    "precision": 0.032577903682719546,
+    "recall": 0.06725146198830409,
+    "f1": 0.04389312977099236,
+    "true_events": 342,
+    "predicted_events": 706
+  },
+  "by_position": {
+    "BEFORE_FIRST": {
+      "tp": 3,
+      "fp": 136,
+      "fn": 44,
+      "precision": 0.02158273381294964,
+      "recall": 0.06382978723404255,
+      "f1": 0.03225806451612903,
+      "true_events": 47,
+      "predicted_events": 139
+    },
+    "BETWEEN": {
+      "tp": 13,
+      "fp": 207,
+      "fn": 162,
+      "precision": 0.05909090909090909,
+      "recall": 0.07428571428571429,
+      "f1": 0.06582278481012659,
+      "true_events": 175,
+      "predicted_events": 220
+    },
+    "AFTER_FINAL": {
+      "tp": 7,
+      "fp": 340,
+      "fn": 113,
+      "precision": 0.020172910662824207,
+      "recall": 0.058333333333333334,
+      "f1": 0.029978586723768734,
+      "true_events": 120,
+      "predicted_events": 347
+    }
+  },
+  "matching": "Counter intersection on (word_id,boundary,phone_index)",
+  "multiple_addition_limitation": "one BEST_INSERT maximum per word; additional true events remain false negatives"
+}

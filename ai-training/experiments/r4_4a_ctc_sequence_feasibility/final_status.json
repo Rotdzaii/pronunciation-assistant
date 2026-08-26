@@ -1,0 +1,13 @@
+{
+  "final_status": "R4_4A_CTC_SEQUENCE_READY_WITH_WARNINGS",
+  "preregistered_hashes": {
+    "json": "2AB7129149C0A67ED718F5CA087A57E363CA8B034CD8618E60645E207E7A842D",
+    "markdown": "14ADB9C11F9D055A1C6311841A085CF2BBEC3519112B416DFB695C2473479560"
+  },
+  "empty_target_policy": "EMPTY_TARGET_SUPPORTED",
+  "recommended_architecture": "fresh R3-like convolutional encoder with one time pool, no attention, temporal Linear 41",
+  "training_performed": false,
+  "validation_model_inference": false,
+  "r4_test_accessed": false,
+  "test_paths_resolved": false
+}

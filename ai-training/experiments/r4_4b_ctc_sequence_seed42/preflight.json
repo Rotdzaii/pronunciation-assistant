@@ -1,0 +1,100 @@
+{
+  "status": "PASS",
+  "verification": {
+    "expected": {
+      "preregistered_json": "2AB7129149C0A67ED718F5CA087A57E363CA8B034CD8618E60645E207E7A842D",
+      "preregistered_markdown": "14ADB9C11F9D055A1C6311841A085CF2BBEC3519112B416DFB695C2473479560",
+      "matched_control": "D933F674743DA06CC8FAB425CEBF81D9C78505E1BDB4A90204DDB2E1A15B4798",
+      "v4": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D"
+    },
+    "actual": {
+      "preregistered_json": "2AB7129149C0A67ED718F5CA087A57E363CA8B034CD8618E60645E207E7A842D",
+      "preregistered_markdown": "14ADB9C11F9D055A1C6311841A085CF2BBEC3519112B416DFB695C2473479560",
+      "matched_control": "D933F674743DA06CC8FAB425CEBF81D9C78505E1BDB4A90204DDB2E1A15B4798",
+      "v4": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D"
+    },
+    "status": "PASS"
+  },
+  "git_commit": "4758c0dcf5ab1681af1fcf74e068d609030d11a8",
+  "python": "3.12.10",
+  "pytorch": "2.12.0.dev20260408+cu128",
+  "cuda": "12.8",
+  "device": "cuda",
+  "gpu": "NVIDIA GeForce RTX 5060 Laptop GPU",
+  "seed": 42,
+  "training_started": true,
+  "test_paths_resolved": false,
+  "test_audio_read": false,
+  "test_target_reconstruction": false,
+  "test_inference": false,
+  "train_features": {
+    "words": 16259,
+    "seconds": 5.8914523999992525,
+    "sample_length": {
+      "count": 16259,
+      "min": 480.0,
+      "median": 4800.0,
+      "mean": 5368.369518420567,
+      "p90": 9440.0,
+      "p95": 11040.0,
+      "max": 26080.0
+    },
+    "feature_frames": {
+      "count": 16259,
+      "min": 4.0,
+      "median": 31.0,
+      "mean": 34.55230949012854,
+      "p90": 60.0,
+      "p95": 70.0,
+      "max": 164.0
+    },
+    "encoder_output_steps": {
+      "count": 16259,
+      "min": 2.0,
+      "median": 15.0,
+      "mean": 17.02533981179654,
+      "p90": 30.0,
+      "p95": 35.0,
+      "max": 82.0
+    },
+    "edge_padded_words": 0,
+    "edge_padding_samples": 0,
+    "unalignable_words": 0,
+    "unalignable_word_ids": []
+  },
+  "validation_features": {
+    "words": 7728,
+    "seconds": 3.000377700000172,
+    "sample_length": {
+      "count": 7728,
+      "min": 480.0,
+      "median": 4960.0,
+      "mean": 5537.515527950311,
+      "p90": 9760.0,
+      "p95": 11520.0,
+      "max": 25440.0
+    },
+    "feature_frames": {
+      "count": 7728,
+      "min": 4.0,
+      "median": 32.0,
+      "mean": 35.609472049689444,
+      "p90": 62.0,
+      "p95": 73.0,
+      "max": 160.0
+    },
+    "encoder_output_steps": {
+      "count": 7728,
+      "min": 2.0,
+      "median": 16.0,
+      "mean": 17.554477225672876,
+      "p90": 31.0,
+      "p95": 36.0,
+      "max": 80.0
+    },
+    "edge_padded_words": 0,
+    "edge_padding_samples": 0,
+    "unalignable_words": 0,
+    "unalignable_word_ids": []
+  }
+}

@@ -1,0 +1,373 @@
+{
+  "selected_epoch": 35,
+  "correlation_with_per": {
+    "deletion_recall": {
+      "pearson": -0.8153280149215781,
+      "spearman": -0.7806385428666708
+    },
+    "deletion_precision": {
+      "pearson": -0.9794412063933348,
+      "spearman": -0.9567567567567569
+    },
+    "substitution_false_deletion": {
+      "pearson": 0.9169153859114915,
+      "spearman": 0.7733299072944052
+    },
+    "binary_macro_f1": {
+      "pearson": -0.9738240623117586,
+      "spearman": -0.9410553410553412
+    }
+  },
+  "epoch_1": {
+    "loss": 3.332475565481877,
+    "phone_error_rate": 0.8803052354167487,
+    "target_phone_denominator": 25423,
+    "edit_counts": {
+      "substitution": 8592,
+      "deletion": 13732,
+      "insertion": 56,
+      "errors": 22380
+    },
+    "exact_decoded_sequence_accuracy": 0.04218426501035197,
+    "exact_decoded_words": 326,
+    "binary": {
+      "rows": 26337,
+      "accuracy": 0.43824277632228426,
+      "balanced_accuracy": 0.42265667961547937,
+      "macro_f1": 0.3246836105820751,
+      "non_deletion": {
+        "precision": 0.9536452108588014,
+        "recall": 0.43940526295087123,
+        "f1": 0.6016102539246574,
+        "support": 25423
+      },
+      "deletion": {
+        "precision": 0.02537099090473911,
+        "recall": 0.4059080962800875,
+        "f1": 0.047756967239492826,
+        "support": 914
+      },
+      "confusion_matrix_labels": [
+        "non_deletion",
+        "deletion"
+      ],
+      "confusion_matrix": [
+        [
+          11171,
+          14252
+        ],
+        [
+          543,
+          371
+        ]
+      ]
+    },
+    "three_relation": {
+      "rows": 26337,
+      "macro_f1": 0.15475961465812085,
+      "per_class": {
+        "correct": {
+          "precision": 0.9457693564194708,
+          "recall": 0.12720242541412188,
+          "f1": 0.22424477149496513,
+          "support": 22759
+        },
+        "substitution": {
+          "precision": 0.12573673870333987,
+          "recall": 0.4084084084084084,
+          "f1": 0.19227710523990457,
+          "support": 2664
+        },
+        "deletion": {
+          "precision": 0.02537099090473911,
+          "recall": 0.4059080962800875,
+          "f1": 0.047756967239492826,
+          "support": 914
+        }
+      },
+      "confusion_matrix_labels": [
+        "correct",
+        "substitution",
+        "deletion"
+      ],
+      "confusion_matrix": [
+        [
+          2895,
+          7048,
+          12816
+        ],
+        [
+          140,
+          1088,
+          1436
+        ],
+        [
+          26,
+          517,
+          371
+        ]
+      ]
+    },
+    "correct_false_deletion_rate": 0.5631178874291489,
+    "substitution_false_deletion_rate": 0.539039039039039,
+    "predicted_insertions": 33,
+    "predicted_insertion_phone_counts": {
+      "HH": 29,
+      "D": 3,
+      "W": 1
+    },
+    "empty_target_per_rule": "empty target contributes decoded phones as insertions to aggregate PER numerator; denominator remains total nonempty target phones; per-word PER is 0 only for empty->empty and otherwise undefined"
+  },
+  "epoch_35": {
+    "loss": 1.9728625983801935,
+    "phone_error_rate": 0.6028399480785116,
+    "target_phone_denominator": 25423,
+    "edit_counts": {
+      "substitution": 8631,
+      "deletion": 6199,
+      "insertion": 496,
+      "errors": 15326
+    },
+    "exact_decoded_sequence_accuracy": 0.12487060041407867,
+    "exact_decoded_words": 965,
+    "binary": {
+      "rows": 26337,
+      "accuracy": 0.7323537228993431,
+      "balanced_accuracy": 0.6124429359826915,
+      "macro_f1": 0.47694100707132253,
+      "non_deletion": {
+        "precision": 0.9755668288642717,
+        "recall": 0.7412972505211816,
+        "f1": 0.842448760644599,
+        "support": 25423
+      },
+      "deletion": {
+        "precision": 0.0629719333238353,
+        "recall": 0.48358862144420134,
+        "f1": 0.11143325349804614,
+        "support": 914
+      },
+      "confusion_matrix_labels": [
+        "non_deletion",
+        "deletion"
+      ],
+      "confusion_matrix": [
+        [
+          18846,
+          6577
+        ],
+        [
+          472,
+          442
+        ]
+      ]
+    },
+    "three_relation": {
+      "rows": 26337,
+      "macro_f1": 0.3193130914357745,
+      "per_class": {
+        "correct": {
+          "precision": 0.9586661341853036,
+          "recall": 0.421899028955578,
+          "f1": 0.5859344012204424,
+          "support": 22759
+        },
+        "substitution": {
+          "precision": 0.167598365942808,
+          "recall": 0.5852102102102102,
+          "f1": 0.260571619588835,
+          "support": 2664
+        },
+        "deletion": {
+          "precision": 0.0629719333238353,
+          "recall": 0.48358862144420134,
+          "f1": 0.11143325349804614,
+          "support": 914
+        }
+      },
+      "confusion_matrix_labels": [
+        "correct",
+        "substitution",
+        "deletion"
+      ],
+      "confusion_matrix": [
+        [
+          9602,
+          7328,
+          5829
+        ],
+        [
+          357,
+          1559,
+          748
+        ],
+        [
+          57,
+          415,
+          442
+        ]
+      ]
+    },
+    "correct_false_deletion_rate": 0.2561184586317501,
+    "substitution_false_deletion_rate": 0.2807807807807808,
+    "predicted_insertions": 402,
+    "predicted_insertion_phone_counts": {
+      "D": 56,
+      "IY": 55,
+      "HH": 35,
+      "IH": 31,
+      "S": 29,
+      "AH": 26,
+      "M": 22,
+      "T": 21,
+      "N": 18,
+      "W": 15,
+      "Y": 10,
+      "K": 9,
+      "AO": 9,
+      "AE": 8,
+      "UW": 8,
+      "F": 7,
+      "B": 6,
+      "AY": 6,
+      "Z": 5,
+      "SH": 5,
+      "ER": 5,
+      "L": 4,
+      "P": 3,
+      "V": 3,
+      "EH": 2,
+      "G": 1,
+      "CH": 1,
+      "OW": 1,
+      "R": 1
+    },
+    "empty_target_per_rule": "empty target contributes decoded phones as insertions to aggregate PER numerator; denominator remains total nonempty target phones; per-word PER is 0 only for empty->empty and otherwise undefined"
+  },
+  "epoch_36": {
+    "loss": 1.955641302015964,
+    "phone_error_rate": 0.6197931007355544,
+    "target_phone_denominator": 25423,
+    "edit_counts": {
+      "substitution": 8016,
+      "deletion": 7414,
+      "insertion": 327,
+      "errors": 15757
+    },
+    "exact_decoded_sequence_accuracy": 0.1286231884057971,
+    "exact_decoded_words": 994,
+    "binary": {
+      "rows": 26337,
+      "accuracy": 0.6864487223298021,
+      "balanced_accuracy": 0.5965759351768084,
+      "macro_f1": 0.4549103797263894,
+      "non_deletion": {
+        "precision": 0.9747220532109077,
+        "recall": 0.6931518703536168,
+        "f1": 0.8101696473725346,
+        "support": 25423
+      },
+      "deletion": {
+        "precision": 0.055340276095907,
+        "recall": 0.5,
+        "f1": 0.09965111208024423,
+        "support": 914
+      },
+      "confusion_matrix_labels": [
+        "non_deletion",
+        "deletion"
+      ],
+      "confusion_matrix": [
+        [
+          17622,
+          7801
+        ],
+        [
+          457,
+          457
+        ]
+      ]
+    },
+    "three_relation": {
+      "rows": 26337,
+      "macro_f1": 0.30785894429317956,
+      "per_class": {
+        "correct": {
+          "precision": 0.9629392288796326,
+          "recall": 0.39615097324135506,
+          "f1": 0.5613598157026337,
+          "support": 22759
+        },
+        "substitution": {
+          "precision": 0.1714089031665902,
+          "recall": 0.5608108108108109,
+          "f1": 0.26256590509666083,
+          "support": 2664
+        },
+        "deletion": {
+          "precision": 0.055340276095907,
+          "recall": 0.5,
+          "f1": 0.09965111208024423,
+          "support": 914
+        }
+      },
+      "confusion_matrix_labels": [
+        "correct",
+        "substitution",
+        "deletion"
+      ],
+      "confusion_matrix": [
+        [
+          9016,
+          6806,
+          6937
+        ],
+        [
+          306,
+          1494,
+          864
+        ],
+        [
+          41,
+          416,
+          457
+        ]
+      ]
+    },
+    "correct_false_deletion_rate": 0.3048024957159805,
+    "substitution_false_deletion_rate": 0.32432432432432434,
+    "predicted_insertions": 257,
+    "predicted_insertion_phone_counts": {
+      "HH": 36,
+      "IY": 31,
+      "S": 24,
+      "D": 24,
+      "M": 18,
+      "T": 16,
+      "AH": 15,
+      "Y": 13,
+      "IH": 10,
+      "F": 9,
+      "W": 9,
+      "N": 7,
+      "UW": 7,
+      "AY": 5,
+      "B": 5,
+      "ER": 5,
+      "AE": 5,
+      "V": 3,
+      "K": 3,
+      "AO": 2,
+      "Z": 2,
+      "SH": 2,
+      "G": 1,
+      "P": 1,
+      "EH": 1,
+      "DH": 1,
+      "L": 1,
+      "R": 1
+    },
+    "empty_target_per_rule": "empty target contributes decoded phones as insertions to aggregate PER numerator; denominator remains total nonempty target phones; per-word PER is 0 only for empty->empty and otherwise undefined"
+  },
+  "interpretation": "Lower PER accompanies improved deletion precision and recall, lower substitution false-deletion, and higher binary Macro-F1."
+}

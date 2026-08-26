@@ -1,0 +1,124 @@
+{
+  "validation": {
+    "feature_materialization": {
+      "words": 7728,
+      "seconds": 5.455668500002503,
+      "sample_length": {
+        "count": 7728,
+        "min": 480.0,
+        "median": 4960.0,
+        "mean": 5537.515527950311,
+        "p90": 9760.0,
+        "p95": 11520.0,
+        "max": 25440.0
+      },
+      "feature_frames": {
+        "count": 7728,
+        "min": 4.0,
+        "median": 32.0,
+        "mean": 35.609472049689444,
+        "p90": 62.0,
+        "p95": 73.0,
+        "max": 160.0
+      },
+      "encoder_output_steps": {
+        "count": 7728,
+        "min": 2.0,
+        "median": 16.0,
+        "mean": 17.554477225672876,
+        "p90": 31.0,
+        "p95": 36.0,
+        "max": 80.0
+      },
+      "edge_padded_words": 0,
+      "edge_padding_samples": 0,
+      "unalignable_words": 0,
+      "unalignable_word_ids": []
+    },
+    "inference_seconds": 4.005027500003052,
+    "all_blank_posterior": {
+      "count": 135661,
+      "mean": 0.8019315266100062,
+      "median": 0.9851160645484924,
+      "min": 5.458190571516752e-06,
+      "max": 1.0,
+      "p75": 0.9978639483451843,
+      "p90": 0.9996047616004944,
+      "p95": 0.9998642206192017
+    },
+    "all_nonblank_run_length": {
+      "count": 19720,
+      "mean": 1.0550202839756593,
+      "median": 1.0,
+      "min": 1.0,
+      "max": 3.0,
+      "p10": 1.0,
+      "p25": 1.0,
+      "p75": 1.0,
+      "p90": 1.0,
+      "p95": 2.0
+    }
+  },
+  "train": {
+    "feature_materialization": {
+      "words": 16259,
+      "seconds": 7.018588499999169,
+      "sample_length": {
+        "count": 16259,
+        "min": 480.0,
+        "median": 4800.0,
+        "mean": 5368.369518420567,
+        "p90": 9440.0,
+        "p95": 11040.0,
+        "max": 26080.0
+      },
+      "feature_frames": {
+        "count": 16259,
+        "min": 4.0,
+        "median": 31.0,
+        "mean": 34.55230949012854,
+        "p90": 60.0,
+        "p95": 70.0,
+        "max": 164.0
+      },
+      "encoder_output_steps": {
+        "count": 16259,
+        "min": 2.0,
+        "median": 15.0,
+        "mean": 17.02533981179654,
+        "p90": 30.0,
+        "p95": 35.0,
+        "max": 82.0
+      },
+      "edge_padded_words": 0,
+      "edge_padding_samples": 0,
+      "unalignable_words": 0,
+      "unalignable_word_ids": []
+    },
+    "inference_seconds": 6.971941900003003,
+    "all_blank_posterior": {
+      "count": 276815,
+      "mean": 0.7983292940854895,
+      "median": 0.985612690448761,
+      "min": 3.962227765441639e-06,
+      "max": 1.0,
+      "p75": 0.9979976415634155,
+      "p90": 0.9996387958526611,
+      "p95": 0.9998743534088135
+    },
+    "all_nonblank_run_length": {
+      "count": 41881,
+      "mean": 1.0569231871254268,
+      "median": 1.0,
+      "min": 1.0,
+      "max": 3.0,
+      "p10": 1.0,
+      "p25": 1.0,
+      "p75": 1.0,
+      "p90": 1.0,
+      "p95": 2.0
+    }
+  },
+  "total_seconds": 31.342696700001397,
+  "device": "cuda"
+}

@@ -1,0 +1,162 @@
+{
+  "selected_epoch": 35,
+  "minimum_validation_per": 0.45332966211698067,
+  "peak_deletion_f1_epoch": 36,
+  "peak_binary_macro_f1_epoch": 35,
+  "epoch_36": {
+    "loss": 1.4589221112538076,
+    "target_phone_denominator": 25423,
+    "edit_counts": {
+      "substitution": 7626,
+      "deletion": 3445,
+      "insertion": 579,
+      "errors": 11650
+    },
+    "phone_error_rate": 0.45824646973213234,
+    "exact_decoded_words": 1940,
+    "exact_decoded_sequence_accuracy": 0.2510351966873706,
+    "predicted_insertion_phone_counts": {
+      "UW": 58,
+      "D": 51,
+      "HH": 43,
+      "IY": 35,
+      "AH": 30,
+      "IH": 24,
+      "R": 24,
+      "T": 20,
+      "EH": 15,
+      "L": 13,
+      "AE": 12,
+      "N": 11,
+      "F": 10,
+      "W": 9,
+      "ER": 9,
+      "DH": 9,
+      "S": 8,
+      "K": 7,
+      "Y": 7,
+      "B": 7,
+      "AO": 5,
+      "V": 5,
+      "OW": 5,
+      "AY": 5,
+      "P": 4,
+      "M": 4,
+      "Z": 3,
+      "G": 2,
+      "UH": 2,
+      "CH": 2,
+      "EY": 2,
+      "AA": 2,
+      "SH": 1,
+      "NG": 1
+    },
+    "binary": {
+      "rows": 26337,
+      "accuracy": 0.8413258913315868,
+      "balanced_accuracy": 0.6889282788178075,
+      "macro_f1": 0.5494463016190301,
+      "non_deletion": {
+        "precision": 0.9803726483357453,
+        "recall": 0.852692443850057,
+        "f1": 0.9120858314925844,
+        "support": 25423
+      },
+      "deletion": {
+        "precision": 0.1136094674556213,
+        "recall": 0.5251641137855579,
+        "f1": 0.18680677174547577,
+        "support": 914
+      },
+      "confusion_matrix_labels": [
+        "non_deletion",
+        "deletion"
+      ],
+      "confusion_matrix": [
+        [
+          21678,
+          3745
+        ],
+        [
+          434,
+          480
+        ]
+      ]
+    },
+    "three_relation": {
+      "rows": 26337,
+      "macro_f1": 0.40551614233714534,
+      "per_class": {
+        "correct": {
+          "precision": 0.9576215744711783,
+          "recall": 0.5788479282921042,
+          "f1": 0.7215467192463577,
+          "support": 22759
+        },
+        "substitution": {
+          "precision": 0.20323159784560144,
+          "recall": 0.6373873873873874,
+          "f1": 0.3081949360196025,
+          "support": 2664
+        },
+        "deletion": {
+          "precision": 0.1136094674556213,
+          "recall": 0.5251641137855579,
+          "f1": 0.18680677174547577,
+          "support": 914
+        }
+      },
+      "confusion_matrix_labels": [
+        "correct",
+        "substitution",
+        "deletion"
+      ],
+      "confusion_matrix": [
+        [
+          13174,
+          6292,
+          3293
+        ],
+        [
+          514,
+          1698,
+          452
+        ],
+        [
+          69,
+          365,
+          480
+        ]
+      ]
+    },
+    "correct_false_deletion_rate": 0.14469001274221188,
+    "substitution_false_deletion_rate": 0.16966966966966968,
+    "decoded_phone_total": 22557,
+    "aggregate_decoded_target_ratio": 0.8872674349998033,
+    "words_decoded_shorter": 2416,
+    "words_decoded_shorter_fraction": 0.31262939958592134,
+    "blank_argmax_occupancy_mean": 0.8045547338314432,
+    "blank_posterior_mean": 0.8078759200205111,
+    "blank_posterior_median": 0.9976722598075867
+  },
+  "selected_is_epoch_36": false,
+  "last_six_per": [
+    0.47704834205247215,
+    0.4586791488022657,
+    0.46017385831727176,
+    0.45812846634936866,
+    0.45332966211698067,
+    0.45824646973213234
+  ],
+  "last_six_loss": [
+    1.5157622772405854,
+    1.4660269762418285,
+    1.473098782834059,
+    1.4556132766339103,
+    1.4757750360121638,
+    1.4589221112538076
+  ],
+  "still_improving_at_36": false,
+  "overfitting_detected": false,
+  "extension_authorized": false
+}

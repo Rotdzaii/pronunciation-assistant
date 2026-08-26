@@ -1,0 +1,13 @@
+{
+  "train": {
+    "per": 0.3837289992695398,
+    "decoded_target_ratio": 0.9084915997078159,
+    "blank_argmax_occupancy": 0.7918089906575019
+  },
+  "validation": {
+    "per": 0.45332966211698067,
+    "decoded_target_ratio": 0.9249105141014042,
+    "blank_argmax_occupancy": 0.7974599758953658
+  },
+  "validation_minus_train_per": 0.06960066284744088
+}

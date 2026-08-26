@@ -1,0 +1,13 @@
+{
+  "path": "ai-training/experiments/r4_4c2_bigru_ctc_seed42/R4_4C2_bigru_ctc_phone_sequence_seed42_best_validation_per.pt",
+  "sha256": "F54C9C2361AE78E1C37353AEB338A2DE6722C0B1EC4F885F6B52688CE9E88085",
+  "selected_epoch": 35,
+  "validation_per": 0.45332966211698067,
+  "selection": {
+    "primary": "lowest validation PER",
+    "tie_1": "higher validation deletion F1",
+    "tie_2": "earlier epoch",
+    "manual_selection": false,
+    "test_influence": false
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "status": "R4_4C1_BIGRU_CONTRACT_FROZEN",
+  "source_verification": "PASS",
+  "synthetic_static_checks": "PASS",
+  "parameter_count": 198761,
+  "train_unalignable_words": 0,
+  "validation_unalignable_words": 0,
+  "training_occurred": false,
+  "validation_model_inference_occurred": false,
+  "r4_test_accessed": false,
+  "next_smallest_action": "Run exactly one separately authorized R4-4C2 TRAIN plus VALIDATION experiment after verifying the frozen contract and implementation hashes."
+}

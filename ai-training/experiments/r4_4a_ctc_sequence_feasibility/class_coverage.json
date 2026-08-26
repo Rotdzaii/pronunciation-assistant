@@ -1,0 +1,176 @@
+{
+  "classes": {
+    "AA": {
+      "train": 801,
+      "validation": 368
+    },
+    "AE": {
+      "train": 1556,
+      "validation": 674
+    },
+    "AH": {
+      "train": 4954,
+      "validation": 2465
+    },
+    "AO": {
+      "train": 1267,
+      "validation": 549
+    },
+    "AW": {
+      "train": 384,
+      "validation": 175
+    },
+    "AX": {
+      "train": 83,
+      "validation": 59
+    },
+    "AY": {
+      "train": 1037,
+      "validation": 507
+    },
+    "B": {
+      "train": 1052,
+      "validation": 467
+    },
+    "CH": {
+      "train": 451,
+      "validation": 216
+    },
+    "D": {
+      "train": 3076,
+      "validation": 1309
+    },
+    "DH": {
+      "train": 814,
+      "validation": 493
+    },
+    "EH": {
+      "train": 1621,
+      "validation": 730
+    },
+    "ER": {
+      "train": 1173,
+      "validation": 466
+    },
+    "EY": {
+      "train": 983,
+      "validation": 477
+    },
+    "F": {
+      "train": 1391,
+      "validation": 624
+    },
+    "G": {
+      "train": 541,
+      "validation": 228
+    },
+    "HH": {
+      "train": 1575,
+      "validation": 746
+    },
+    "IH": {
+      "train": 3305,
+      "validation": 1502
+    },
+    "IY": {
+      "train": 2654,
+      "validation": 1256
+    },
+    "JH": {
+      "train": 242,
+      "validation": 88
+    },
+    "K": {
+      "train": 1395,
+      "validation": 646
+    },
+    "L": {
+      "train": 2011,
+      "validation": 934
+    },
+    "M": {
+      "train": 1663,
+      "validation": 806
+    },
+    "N": {
+      "train": 3406,
+      "validation": 1618
+    },
+    "NG": {
+      "train": 650,
+      "validation": 294
+    },
+    "OW": {
+      "train": 759,
+      "validation": 393
+    },
+    "OY": {
+      "train": 93,
+      "validation": 48
+    },
+    "P": {
+      "train": 983,
+      "validation": 487
+    },
+    "R": {
+      "train": 2026,
+      "validation": 838
+    },
+    "S": {
+      "train": 3011,
+      "validation": 1490
+    },
+    "SH": {
+      "train": 667,
+      "validation": 324
+    },
+    "T": {
+      "train": 3262,
+      "validation": 1368
+    },
+    "TH": {
+      "train": 306,
+      "validation": 113
+    },
+    "UH": {
+      "train": 373,
+      "validation": 177
+    },
+    "UW": {
+      "train": 1004,
+      "validation": 486
+    },
+    "V": {
+      "train": 988,
+      "validation": 465
+    },
+    "W": {
+      "train": 1657,
+      "validation": 769
+    },
+    "Y": {
+      "train": 469,
+      "validation": 218
+    },
+    "Z": {
+      "train": 993,
+      "validation": 508
+    },
+    "ZH": {
+      "train": 84,
+      "validation": 42
+    }
+  },
+  "train_below_100": [
+    "AX",
+    "OY",
+    "ZH"
+  ],
+  "validation_below_50": [
+    "OY",
+    "ZH"
+  ],
+  "validation_absent_from_train": [],
+  "train_inventory_size": 40,
+  "validation_inventory_size": 40
+}

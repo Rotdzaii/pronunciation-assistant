@@ -1,0 +1,103 @@
+{
+  "pure_deletion_words": {
+    "rows": 2318,
+    "accuracy": 0.5970664365832614,
+    "balanced_accuracy": 0.5614374608939826,
+    "macro_f1": 0.5447186818658987,
+    "non_deletion": {
+      "precision": 0.7738944365192582,
+      "recall": 0.6374853113983548,
+      "f1": 0.6990979381443299,
+      "support": 1702
+    },
+    "deletion": {
+      "precision": 0.32641921397379914,
+      "recall": 0.48538961038961037,
+      "f1": 0.39033942558746737,
+      "support": 616
+    },
+    "confusion_matrix_labels": [
+      "non_deletion",
+      "deletion"
+    ],
+    "confusion_matrix": [
+      [
+        1085,
+        617
+      ],
+      [
+        317,
+        299
+      ]
+    ]
+  },
+  "substitution_plus_deletion_words": {
+    "rows": 1370,
+    "accuracy": 0.5751824817518248,
+    "balanced_accuracy": 0.5407724381448462,
+    "macro_f1": 0.5092978258300839,
+    "non_deletion": {
+      "precision": 0.80625,
+      "recall": 0.601679104477612,
+      "f1": 0.6891025641025641,
+      "support": 1072
+    },
+    "deletion": {
+      "precision": 0.25087719298245614,
+      "recall": 0.4798657718120805,
+      "f1": 0.3294930875576037,
+      "support": 298
+    },
+    "confusion_matrix_labels": [
+      "non_deletion",
+      "deletion"
+    ],
+    "confusion_matrix": [
+      [
+        645,
+        427
+      ],
+      [
+        155,
+        143
+      ]
+    ]
+  },
+  "multiple_deletion_words": {
+    "rows": 562,
+    "accuracy": 0.5373665480427047,
+    "balanced_accuracy": 0.5436757215619694,
+    "macro_f1": 0.5257383966244725,
+    "non_deletion": {
+      "precision": 0.7014388489208633,
+      "recall": 0.5241935483870968,
+      "f1": 0.6,
+      "support": 372
+    },
+    "deletion": {
+      "precision": 0.3767605633802817,
+      "recall": 0.5631578947368421,
+      "f1": 0.45147679324894513,
+      "support": 190
+    },
+    "confusion_matrix_labels": [
+      "non_deletion",
+      "deletion"
+    ],
+    "confusion_matrix": [
+      [
+        195,
+        177
+      ],
+      [
+        83,
+        107
+      ]
+    ]
+  },
+  "word_counts": {
+    "pure_deletion": 555,
+    "substitution_plus_deletion": 259,
+    "multiple_deletion": 90
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "status": "R4_4B_CTC_SEQUENCE_LEARNED_DELETION_WEAK",
+  "selected_epoch": 35,
+  "gates": {
+    "gates": {
+      "A_per_le_0_55": false,
+      "B_binary_macro_f1_ge_0_70": false,
+      "C_deletion_recall_ge_0_45": true,
+      "D_deletion_f1_ge_0_40": false,
+      "E_substitution_false_deletion_le_0_25": false,
+      "F_matched_macro_f1_ge_0_60": false,
+      "G_matched_deletion_f1_ge_0_55": false,
+      "H_speaker_recall": true,
+      "I_three_relation_macro_f1_ge_0_40": false
+    },
+    "speaker_details": {
+      "ABA": {
+        "eligible": false,
+        "deletion_support": 29,
+        "deletion_recall": 0.4482758620689655,
+        "pass": true
+      },
+      "HKK": {
+        "eligible": true,
+        "deletion_support": 99,
+        "deletion_recall": 0.42424242424242425,
+        "pass": true
+      },
+      "HQTV": {
+        "eligible": true,
+        "deletion_support": 444,
+        "deletion_recall": 0.4752252252252252,
+        "pass": true
+      },
+      "LXC": {
+        "eligible": true,
+        "deletion_support": 209,
+        "deletion_recall": 0.49760765550239233,
+        "pass": true
+      },
+      "MBMPS": {
+        "eligible": true,
+        "deletion_support": 59,
+        "deletion_recall": 0.6101694915254238,
+        "pass": true
+      },
+      "SVBI": {
+        "eligible": true,
+        "deletion_support": 74,
+        "deletion_recall": 0.4864864864864865,
+        "pass": true
+      }
+    },
+    "all_pass": false
+  },
+  "training_seconds": 727.3773753999994,
+  "training_occurred": true,
+  "new_neural_runs": 1,
+  "r4_test_accessed": false,
+  "test_paths_resolved": false,
+  "test_audio_read": false,
+  "test_target_reconstruction": false,
+  "test_inference": false,
+  "test_metrics": false,
+  "checkpoint": "ai-training/experiments/r4_4b_ctc_sequence_seed42/R4_4B_ctc_phone_sequence_seed42_best_validation_per.pt",
+  "checkpoint_sha256": "A154DFAC573D69B8ED1A71CBCDC23227EA3E80929890AD87E97ED85667142106",
+  "trend": {
+    "selected_epoch": 35,
+    "minimum_validation_per": 0.6028399480785116,
+    "peak_deletion_f1_epoch": 35,
+    "same_epoch": true,
+    "epoch_36_selected": false,
+    "last_four_validation_per": [
+      0.6166463438618573,
+      0.6230185265310939,
+      0.6028399480785116,
+      0.6197931007355544
+    ],
+    "last_four_validation_loss": [
+      1.969410520903072,
+      2.003662908854692,
+      1.9728625983801935,
+      1.955641302015964
+    ],
+    "training_budget_possibly_limiting": false,
+    "flag": "NO_BUDGET_EXTENSION_AUTHORIZED"
+  }
+}

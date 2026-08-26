@@ -1,0 +1,37 @@
+{
+  "manual_target_total_phones": 25423,
+  "decoded_total_phones": 23514,
+  "aggregate_decoded_target_ratio": 0.9249105141014042,
+  "words_decoded_shorter": 2049,
+  "words_decoded_shorter_fraction": 0.265139751552795,
+  "blank_argmax_occupancy_mean": 0.7974599758953658,
+  "blank_posterior_mean": 0.7967935041016196,
+  "blank_posterior_median": 0.9965808987617493,
+  "ctc_target_phone_deletion_edit_count": 2769,
+  "clean_all_correct_words": 4889,
+  "clean_word_rows": 15111,
+  "clean_word_false_expected_phone_deletion_rate": 0.10396399973529218,
+  "r4_4b_reference": {
+    "per": 0.60284,
+    "binary_macro_f1": 0.476941,
+    "deletion_precision": 0.062972,
+    "deletion_recall": 0.483589,
+    "deletion_f1": 0.111433,
+    "correct_false_deletion": 0.256118,
+    "substitution_false_deletion": 0.280781,
+    "decoded_target_ratio": 0.7757,
+    "shorter_fraction": 0.4885,
+    "blank_occupancy": 0.8277,
+    "blank_posterior_mean": 0.8019,
+    "ctc_deletion_edits": 6199,
+    "clean_word_false_deletion": 0.2416
+  },
+  "deltas_current_minus_r4_4b": {
+    "aggregate_decoded_target_ratio": 0.1492105141014043,
+    "words_decoded_shorter_fraction": -0.22336024844720498,
+    "blank_argmax_occupancy_mean": -0.030240024104634222,
+    "blank_posterior_mean": -0.005106495898380303,
+    "ctc_target_phone_deletion_edit_count": -3430,
+    "clean_word_false_expected_phone_deletion_rate": -0.13763600026470785
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "seed": 42,
+  "epochs": 36,
+  "batch_size": 8,
+  "batching": "length-bucketed, variable-length, right-padded word batches",
+  "optimizer": "Adam",
+  "learning_rate": 0.0001,
+  "weight_decay": 0.0,
+  "gradient_clip_norm": 5.0,
+  "scheduler": "none",
+  "early_stopping": false,
+  "augmentation": "none",
+  "sampler": "none",
+  "oversampling": false,
+  "additional_seed": false,
+  "train_all_epochs": true,
+  "loss": {
+    "name": "torch.nn.CTCLoss",
+    "blank": 40,
+    "reduction": "mean",
+    "zero_infinity": true,
+    "auxiliary_losses": "none",
+    "blank_weighting": false
+  },
+  "checkpoint_selection": {
+    "primary": "lowest validation PER",
+    "tie_1": "higher validation deletion F1",
+    "tie_2": "earlier epoch",
+    "manual_selection": false,
+    "test_influence": false
+  },
+  "classification": [
+    {
+      "status": "R4_4C2_BIGRU_CTC_CONFIRMED",
+      "rule": "all nine hard gates pass"
+    },
+    {
+      "status": "R4_4C2_BIGRU_CTC_IMPROVED",
+      "rule": "PER improves >=0.02, binary Macro-F1 improves >=0.02, deletion F1 improves >=0.03, and at least 2/5 under-generation components improve, but confirmation is not reached"
+    },
+    {
+      "status": "R4_4C2_BIGRU_CTC_MIXED",
+      "rule": "at least one registered development-improvement dimension passes but the complete IMPROVED rule does not"
+    },
+    {
+      "status": "R4_4C2_BIGRU_CTC_NOT_IMPROVED",
+      "rule": "no registered development-improvement dimension passes"
+    }
+  ]
+}

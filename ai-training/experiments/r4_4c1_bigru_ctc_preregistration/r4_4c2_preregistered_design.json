@@ -1,0 +1,179 @@
+{
+  "experiment": "R4-4C2 locked self-trained CNN plus one-layer BiGRU CTC phone-sequence experiment",
+  "frozen_by": "R4-4C1",
+  "frozen_date": "2026-08-14",
+  "git_commit": "4758c0dcf5ab1681af1fcf74e068d609030d11a8",
+  "markers": ["RESEARCH_ONLY", "NOT_PRODUCTION", "R4_TEST_CLOSED", "ONE_TRAINING_RUN_ONLY"],
+  "research_question": "Does exactly one small bidirectional GRU after the unchanged time-preserving R4-4B CNN improve phone-sequence modeling enough to reduce broad phone confusion and CTC under-generation?",
+  "single_architecture_change": "insert one packed bidirectional GRU layer between frequency pooling and the CTC head",
+  "source_identities": {
+    "v4_csv_sha256": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D",
+    "r4_4a_preregistered_design_sha256": "2AB7129149C0A67ED718F5CA087A57E363CA8B034CD8618E60645E207E7A842D",
+    "r4_4b_selected_checkpoint_sha256": "A154DFAC573D69B8ED1A71CBCDC23227EA3E80929890AD87E97ED85667142106",
+    "r4_4b_artifact_manifest_sha256": "56A109E7D62A72CC27BB29B4C1DDF98E7DE8B095E232603534C0ABBA008EDC1B",
+    "r4_4c0_audit_manifest_sha256": "11BF1244477BDA50E6F749FDB841AA4FC53952A3F672415321FD1F70B26A232D",
+    "matched_control_sha256": "D933F674743DA06CC8FAB425CEBF81D9C78505E1BDB4A90204DDB2E1A15B4798"
+  },
+  "data": {
+    "eligibility": "exact R4-4A/R4-4B usable-word policy: reliable MFA word boundary, relations limited to correct/substitution/deletion, no addition-containing/unresolved/malformed word",
+    "train_speakers": ["BWC", "EBVS", "HJK", "NCC", "NJS", "PNV", "RRBI", "TLV", "TNI", "YBAA", "YKWK", "ZHAA"],
+    "validation_speakers": ["ABA", "HKK", "HQTV", "LXC", "MBMPS", "SVBI"],
+    "test_speakers_closed": ["ASI", "ERMS", "SKA", "THV", "TXHC", "YDCK"],
+    "usable_words": {"train": 16259, "validation": 7728},
+    "empty_target_words": {"train": 28, "validation": 15},
+    "addition_words": "excluded",
+    "new_filtering": false,
+    "mfa_usage": "word boundaries only; MFA phone labels are not observed-phone truth"
+  },
+  "ctc_target": {
+    "correct": "append expected_phone_canonical",
+    "substitution": "append observed_phone_canonical",
+    "deletion": "append nothing",
+    "expected_phone_is_neural_input": false,
+    "relation_is_neural_input": false,
+    "deletion_specific_label": false
+  },
+  "vocabulary": {
+    "phones": ["AA", "AE", "AH", "AO", "AW", "AX", "AY", "B", "CH", "D", "DH", "EH", "ER", "EY", "F", "G", "HH", "IH", "IY", "JH", "K", "L", "M", "N", "NG", "OW", "OY", "P", "R", "S", "SH", "T", "TH", "UH", "UW", "V", "W", "Y", "Z", "ZH"],
+    "phone_indexes": {"AA": 0, "AE": 1, "AH": 2, "AO": 3, "AW": 4, "AX": 5, "AY": 6, "B": 7, "CH": 8, "D": 9, "DH": 10, "EH": 11, "ER": 12, "EY": 13, "F": 14, "G": 15, "HH": 16, "IH": 17, "IY": 18, "JH": 19, "K": 20, "L": 21, "M": 22, "N": 23, "NG": 24, "OW": 25, "OY": 26, "P": 27, "R": 28, "S": 29, "SH": 30, "T": 31, "TH": 32, "UH": 33, "UW": 34, "V": 35, "W": 36, "Y": 37, "Z": 38, "ZH": 39},
+    "ctc_blank": "<CTC_BLANK>", "blank_index": 40, "class_count": 41,
+    "forbidden_classes": ["<SIL>", "<UNK>", "stress-specific phones", "boundary token"]
+  },
+  "audio_and_features": {
+    "span": "full MFA word span", "side_context_seconds": 0.0, "mono": true, "sample_rate": 16000,
+    "feature": "64-bin log-mel", "n_mels": 64, "n_fft": 512, "win_length_samples": 400,
+    "window_ms": 25, "window": "Hann", "hop_length_samples": 160, "hop_ms": 10,
+    "center": true, "pad_mode": "constant", "power": 2.0, "mel_scale": "slaney", "mel_norm": "slaney",
+    "amplitude": "per-word maximum-relative dB with -80 dB floor", "phone_interval_input": false,
+    "duration_feature": false, "relation_specific_preprocessing": false
+  },
+  "cnn_encoder": {
+    "inheritance": "exact R4-4B implementation", "input_shape": "[B,1,64,T_feature]",
+    "layers": [
+      "Conv2d(1,16,kernel_size=3,padding=1), BatchNorm2d(16), ReLU, MaxPool2d((2,2)), Dropout2d(0.05)",
+      "Conv2d(16,32,kernel_size=3,padding=1), BatchNorm2d(32), ReLU, MaxPool2d((2,1)), Dropout2d(0.10)",
+      "Conv2d(32,64,kernel_size=3,padding=1), BatchNorm2d(64), ReLU",
+      "Conv2d(64,96,kernel_size=3,padding=1), BatchNorm2d(96), ReLU"
+    ],
+    "channels": [16, 32, 64, 96], "first_pool": [2, 2], "second_pool": [2, 1],
+    "temporal_downsampling": 2, "frequency_reduction": "mean over frequency only",
+    "sequence_shape": "[B,T_out,96]", "approx_output_spacing_ms": 20,
+    "kernel_or_pooling_change_from_r4_4b": false
+  },
+  "bigru": {
+    "layer_count": 1, "input_size": 96, "hidden_size": 96, "num_layers": 1,
+    "bidirectional": true, "batch_first": true, "bias": true, "recurrent_dropout": 0.0,
+    "output_shape": "[B,T_out,192]",
+    "forbidden": ["second recurrent layer", "LSTM", "projection", "attention", "LayerNorm", "Transformer", "residual recurrence"]
+  },
+  "variable_length_handling": {
+    "length_source": "true CNN encoder output lengths floor(feature_frames/2)",
+    "before_bigru": "pack_padded_sequence(sequence, output_lengths.cpu(), batch_first=True, enforce_sorted=False)",
+    "after_bigru": "pad_packed_sequence(packed_output, batch_first=True, total_length=padded_CNN_time)",
+    "ctc_input_lengths": "same true encoder output lengths", "padding_enters_recurrent_context": false
+  },
+  "head": {"dropout": 0.2, "linear": "Linear(192,41)", "intermediate_mlp": false, "post_linear_activation": false, "ctc_input": "raw logits"},
+  "parameter_count": {"cnn_encoder": 79104, "bigru": 111744, "ctc_head": 7913, "total": 198761, "trainable": 198761},
+  "initialization": {
+    "policy": "fresh random initialization", "seed": 42, "r3_weights_loaded": false,
+    "r4_4b_weights_loaded": false, "external_pretraining": false,
+    "rationale": "isolate architecture capacity rather than continuation from a validation-selected checkpoint"
+  },
+  "loss": {"name": "torch.nn.CTCLoss", "blank": 40, "reduction": "mean", "zero_infinity": true, "auxiliary_losses": "none", "blank_weighting": false},
+  "training": {
+    "seed": 42, "epochs": 36, "batch_size": 8,
+    "batching": "length-bucketed, variable-length, right-padded word batches",
+    "optimizer": "Adam", "learning_rate": 0.0001, "weight_decay": 0.0, "gradient_clip_norm": 5.0,
+    "scheduler": "none", "early_stopping": false, "augmentation": "none", "sampler": "none",
+    "oversampling": false, "additional_seed": false, "train_all_epochs": true
+  },
+  "greedy_decoding": {
+    "steps": ["argmax each timestep over 41 classes", "collapse consecutive identical labels", "remove class 40 CTC blank"],
+    "beam_search": false, "blank_penalty": false, "insertion_bonus": false, "language_model": false,
+    "lexicon": false, "expected_phone_constraint": false, "temperature_scaling": false
+  },
+  "relation_recovery": {
+    "algorithm": "unit-cost deterministic Levenshtein alignment of expected canonical sequence against greedy decoded sequence",
+    "tie_order": ["MATCH", "SUBSTITUTION", "DELETE_FROM_EXPECTED", "INSERT_IN_DECODED"],
+    "mapping": {"MATCH": "correct", "SUBSTITUTION": "substitution", "DELETE_FROM_EXPECTED": "deletion", "INSERT_IN_DECODED": "diagnostic insertion"}
+  },
+  "checkpoint_selection": {
+    "primary": "lowest validation PER", "tie_1": "higher validation deletion F1", "tie_2": "earlier epoch",
+    "manual_selection": false, "test_influence": false
+  },
+  "epoch_metrics": ["train CTC loss", "validation CTC loss", "validation PER", "validation exact decoded sequence accuracy", "validation binary Macro-F1", "validation deletion precision/recall/F1", "validation substitution false-deletion rate", "validation 3-relation Macro-F1"],
+  "selected_checkpoint_metrics": {
+    "acoustic": ["PER", "absolute PER delta vs R4-4B", "exact sequence accuracy", "S/D/I edit counts"],
+    "binary": ["accuracy", "balanced accuracy", "Macro-F1", "deletion precision/recall/F1", "confusion matrix"],
+    "three_relation": ["Macro-F1", "per-class precision/recall/F1/support", "3x3 confusion matrix"],
+    "speaker": ["PER", "deletion support", "deletion precision/recall/F1", "binary Macro-F1", "substitution false-deletion rate"],
+    "phone": "observed-target precision/recall/F1/support for all 40 phones",
+    "required_phone_focus": ["AW", "UH", "G", "NG", "TH", "OW", "AA", "DH", "R", "L", "AX", "OY", "ZH"]
+  },
+  "hard_gates": {
+    "validation_per_max": 0.55, "binary_macro_f1_min": 0.70, "deletion_recall_min": 0.45,
+    "deletion_f1_min": 0.40, "substitution_false_deletion_rate_max": 0.25,
+    "matched_macro_f1_min": 0.60, "matched_deletion_f1_min": 0.55,
+    "speaker_gate": "every validation speaker with >=30 deletion rows must have deletion recall >=0.25",
+    "three_relation_macro_f1_min": 0.40
+  },
+  "matched_control": {
+    "pairs": 717, "rows": 1434, "sha256": "D933F674743DA06CC8FAB425CEBF81D9C78505E1BDB4A90204DDB2E1A15B4798",
+    "rebuild": false, "resample": false, "duration_is_model_input": false
+  },
+  "r4_4b_references": {
+    "per": 0.602840, "binary_macro_f1": 0.476941, "deletion_precision": 0.062972,
+    "deletion_recall": 0.483589, "deletion_f1": 0.111433,
+    "correct_false_deletion_rate": 0.256118, "substitution_false_deletion_rate": 0.280781
+  },
+  "under_generation_diagnostics": {
+    "required": ["manual target total phones", "decoded total phones", "aggregate decoded/target length ratio", "fraction of words decoded shorter", "blank argmax occupancy mean", "blank posterior mean and median", "PER deletion-edit count", "clean all-correct word false expected-phone deletion rate"],
+    "r4_4b_references": {
+      "aggregate_decoded_target_ratio": 0.7757, "words_decoded_shorter_fraction": 0.4885,
+      "blank_argmax_occupancy_mean": 0.8277, "blank_posterior_mean": 0.8019,
+      "per_deletion_edit_count": 6199, "clean_word_false_expected_phone_deletion_rate": 0.2416
+    },
+    "tunable": false
+  },
+  "rare_phone_policy": {
+    "train_support": {"AX": 83, "OY": 93, "ZH": 84}, "report_separately": true,
+    "oversampling": false, "loss_weighting": false
+  },
+  "development_improvement_contract": {
+    "meaningful_per_improvement_min_absolute": 0.02,
+    "binary_macro_f1_improvement_min_absolute": 0.02,
+    "deletion_f1_improvement_min_absolute": 0.03,
+    "under_generation_components": {
+      "aggregate_decoded_target_ratio_increase_min": 0.05,
+      "words_decoded_shorter_fraction_decrease_min": 0.05,
+      "blank_argmax_occupancy_mean_decrease_min": 0.05,
+      "per_deletion_edit_count_relative_decrease_min": 0.10,
+      "clean_word_false_deletion_rate_decrease_min": 0.05
+    },
+    "under_generation_improved": "at least 2 of 5 components meet their registered minimum",
+    "purpose": "numerically disambiguate IMPROVED/MIXED/NOT_IMPROVED; diagnostics do not replace confirmation gates"
+  },
+  "result_classification_precedence": [
+    {"status": "R4_4C2_BIGRU_CTC_CONFIRMED", "rule": "all nine hard gates pass"},
+    {"status": "R4_4C2_BIGRU_CTC_IMPROVED", "rule": "PER improves >=0.02, binary Macro-F1 improves >=0.02, deletion F1 improves >=0.03, and at least 2/5 under-generation components improve, but confirmation is not reached"},
+    {"status": "R4_4C2_BIGRU_CTC_MIXED", "rule": "at least one registered development-improvement dimension passes but the complete IMPROVED rule does not"},
+    {"status": "R4_4C2_BIGRU_CTC_NOT_IMPROVED", "rule": "no registered development-improvement dimension passes"}
+  ],
+  "stop_rules": {
+    "R4_4C2_BIGRU_CTC_NOT_IMPROVED": "stop CTC architecture expansion; do not automatically try deeper/larger recurrent or Transformer-family models",
+    "R4_4C2_BIGRU_CTC_MIXED": "perform a new failure audit before any training",
+    "R4_4C2_BIGRU_CTC_IMPROVED": "decide separately whether exactly one further cycle is justified by the specific remaining gate",
+    "R4_4C2_BIGRU_CTC_CONFIRMED": "do not open R4 TEST without a separate protocol-freeze and authorization task"
+  },
+  "static_verification": {
+    "synthetic_shape": "[B,T,96] -> packed BiGRU -> [B,T,192] -> Linear -> [B,T,41]",
+    "packed_lengths_required": true, "expected_parameter_count": 198761,
+    "ctc_alignability_source": "unchanged R4-4A/R4-4B div2 CNN temporal geometry",
+    "train_unalignable_words": 0, "validation_unalignable_words": 0,
+    "validation_acoustic_inference_permitted_during_freeze": false
+  },
+  "test_policy": {
+    "status": "CLOSED", "resolve_test_paths": false, "read_test_audio": false,
+    "construct_test_targets": false, "run_test_inference": false, "inspect_test_metrics": false
+  }
+}

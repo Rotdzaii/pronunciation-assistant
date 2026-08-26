@@ -1,0 +1,54 @@
+{
+  "train": {
+    "words": 16259,
+    "target_phones": 54760,
+    "decoded_phones": 41881,
+    "per": 0.5614682249817385,
+    "decoded_target_ratio": 0.7648100803506209,
+    "blank_argmax_occupancy": {
+      "count": 16259,
+      "mean": 0.8220292625362803,
+      "median": 0.8333333333333334,
+      "min": 0.5,
+      "max": 1.0,
+      "p10": 0.7142857142857143,
+      "p25": 0.7777777777777778,
+      "p75": 0.8787878787878788,
+      "p90": 0.9130434782608695,
+      "p95": 0.9333333333333333
+    },
+    "edit_counts": {
+      "substitution": 16461,
+      "deletion": 13582,
+      "insertion": 703,
+      "errors": 30746
+    }
+  },
+  "validation": {
+    "words": 7728,
+    "target_phones": 25423,
+    "decoded_phones": 19720,
+    "per": 0.6028399480785116,
+    "decoded_target_ratio": 0.7756755693663219,
+    "blank_argmax_occupancy": {
+      "count": 7728,
+      "mean": 0.8276955889141012,
+      "median": 0.8378378378378378,
+      "min": 0.4,
+      "max": 1.0,
+      "p10": 0.7142857142857143,
+      "p25": 0.7777777777777778,
+      "p75": 0.8846153846153846,
+      "p90": 0.92,
+      "p95": 0.9411764705882353
+    }
+  },
+  "validation_minus_train_per": 0.04137172309677306,
+  "train_minus_validation_length_ratio": -0.010865489015700946,
+  "classification_rule": {
+    "severe": "PER gap >=0.15 or length-ratio gap >=0.15",
+    "moderate": "PER gap >=0.05 or length-ratio gap >=0.05",
+    "otherwise": "no major gap"
+  },
+  "classification": "NO_MAJOR_GENERALIZATION_GAP"
+}

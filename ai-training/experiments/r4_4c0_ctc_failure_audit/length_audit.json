@@ -1,0 +1,64 @@
+{
+  "words": 7728,
+  "expected_length": {
+    "count": 7728,
+    "mean": 3.407996894409938,
+    "median": 3.0,
+    "min": 1.0,
+    "max": 13.0,
+    "p10": 2.0,
+    "p25": 2.0,
+    "p75": 4.0,
+    "p90": 6.0,
+    "p95": 7.0
+  },
+  "manual_observed_target_length": {
+    "count": 7728,
+    "mean": 3.289725672877847,
+    "median": 3.0,
+    "min": 0.0,
+    "max": 13.0,
+    "p10": 2.0,
+    "p25": 2.0,
+    "p75": 4.0,
+    "p90": 6.0,
+    "p95": 7.0
+  },
+  "greedy_decoded_length": {
+    "count": 7728,
+    "mean": 2.55175983436853,
+    "median": 2.0,
+    "min": 0.0,
+    "max": 12.0,
+    "p10": 1.0,
+    "p25": 2.0,
+    "p75": 3.0,
+    "p90": 4.0,
+    "p95": 5.0
+  },
+  "decoded_target_ratio_nonempty": {
+    "count": 7713,
+    "mean": 0.8222779824005029,
+    "median": 1.0,
+    "min": 0.0,
+    "max": 4.0,
+    "p10": 0.5,
+    "p25": 0.6,
+    "p75": 1.0,
+    "p90": 1.0
+  },
+  "length_comparison": {
+    "shorter": {
+      "words": 3775,
+      "fraction": 0.48848343685300205
+    },
+    "equal": {
+      "words": 3523,
+      "fraction": 0.45587474120082816
+    },
+    "longer": {
+      "words": 430,
+      "fraction": 0.055641821946169776
+    }
+  }
+}

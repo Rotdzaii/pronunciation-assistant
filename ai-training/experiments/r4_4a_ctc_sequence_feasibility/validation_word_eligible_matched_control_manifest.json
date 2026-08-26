@@ -1,0 +1,21 @@
+{
+  "seed": 42,
+  "sampling": "numpy default_rng(42), sorted strata/source identities, without replacement",
+  "pairs": 717,
+  "rows": 1434,
+  "deletion": 717,
+  "non_deletion": 717,
+  "phones": 32,
+  "speakers": [
+    "ABA",
+    "HKK",
+    "HQTV",
+    "LXC",
+    "MBMPS",
+    "SVBI"
+  ],
+  "deletion_coverage": 0.7844638949671773,
+  "duration_is_model_input": false,
+  "rebuild_or_resample_in_r4_4b": false,
+  "sha256": "D933F674743DA06CC8FAB425CEBF81D9C78505E1BDB4A90204DDB2E1A15B4798"
+}

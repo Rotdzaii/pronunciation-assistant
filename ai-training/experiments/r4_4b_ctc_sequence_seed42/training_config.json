@@ -1,0 +1,28 @@
+{
+  "seed": 42,
+  "epochs": 36,
+  "batch_size": 8,
+  "batching": "length-bucketed variable word batches with right padding and exact input lengths",
+  "optimizer": "Adam",
+  "learning_rate": 0.0001,
+  "weight_decay": 0.0,
+  "gradient_clip_norm": 5.0,
+  "augmentation": "none",
+  "sampler": "none",
+  "early_stopping": false,
+  "checkpoint_metric": "lowest validation PER; tie higher deletion F1; tie earlier epoch",
+  "loss": {
+    "name": "torch.nn.CTCLoss",
+    "blank": 40,
+    "reduction": "mean",
+    "zero_infinity": true,
+    "auxiliary_losses": "none"
+  },
+  "selection": "lowest validation PER; tie higher deletion F1; tie earlier epoch",
+  "final_result_classification_frozen_before_training": {
+    "confirmed": "all nine frozen gates pass",
+    "partial": "PER<=.55 AND binary Macro-F1>=.60 AND deletion F1>=.25",
+    "sequence_learned_deletion_weak": "not above, but PER<=.65",
+    "not_learned": "PER>.65"
+  }
+}

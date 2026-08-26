@@ -1,0 +1,14 @@
+{
+  "loss": 1.4757750360121638,
+  "phone_error_rate": 0.45332966211698067,
+  "per_delta_current_minus_r4_4b": -0.14951033788301937,
+  "exact_decoded_sequence_accuracy": 0.24547101449275363,
+  "target_phone_denominator": 25423,
+  "decoded_phone_total": 23514,
+  "edit_counts": {
+    "substitution": 7896,
+    "deletion": 2769,
+    "insertion": 860,
+    "errors": 11525
+  }
+}

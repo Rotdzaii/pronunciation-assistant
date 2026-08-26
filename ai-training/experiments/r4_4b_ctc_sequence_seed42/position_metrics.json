@@ -1,0 +1,130 @@
+{
+  "initial": {
+    "rows": 7377,
+    "accuracy": 0.7660295513081198,
+    "balanced_accuracy": 0.675430504305043,
+    "macro_f1": 0.4528879666395217,
+    "non_deletion": {
+      "precision": 0.9955681616734622,
+      "recall": 0.7675276752767528,
+      "f1": 0.8668004321654577,
+      "support": 7317
+    },
+    "deletion": {
+      "precision": 0.020161290322580645,
+      "recall": 0.5833333333333334,
+      "f1": 0.03897550111358575,
+      "support": 60
+    },
+    "confusion_matrix_labels": [
+      "non_deletion",
+      "deletion"
+    ],
+    "confusion_matrix": [
+      [
+        5616,
+        1701
+      ],
+      [
+        25,
+        35
+      ]
+    ]
+  },
+  "medial": {
+    "rows": 11232,
+    "accuracy": 0.6558048433048433,
+    "balanced_accuracy": 0.6245967228105879,
+    "macro_f1": 0.43475388475855015,
+    "non_deletion": {
+      "precision": 0.9838643511554765,
+      "recall": 0.657497943891072,
+      "f1": 0.7882340052585451,
+      "support": 10943
+    },
+    "deletion": {
+      "precision": 0.04363357999489666,
+      "recall": 0.5916955017301038,
+      "f1": 0.08127376425855513,
+      "support": 289
+    },
+    "confusion_matrix_labels": [
+      "non_deletion",
+      "deletion"
+    ],
+    "confusion_matrix": [
+      [
+        7195,
+        3748
+      ],
+      [
+        118,
+        171
+      ]
+    ]
+  },
+  "final": {
+    "rows": 7377,
+    "accuracy": 0.8096787311915413,
+    "balanced_accuracy": 0.6295508680424795,
+    "macro_f1": 0.5705053563111318,
+    "non_deletion": {
+      "precision": 0.9460929772502473,
+      "recall": 0.8419894366197183,
+      "f1": 0.8910107126222636,
+      "support": 6816
+    },
+    "deletion": {
+      "precision": 0.17848970251716248,
+      "recall": 0.41711229946524064,
+      "f1": 0.25,
+      "support": 561
+    },
+    "confusion_matrix_labels": [
+      "non_deletion",
+      "deletion"
+    ],
+    "confusion_matrix": [
+      [
+        5739,
+        1077
+      ],
+      [
+        327,
+        234
+      ]
+    ]
+  },
+  "single": {
+    "rows": 351,
+    "accuracy": 0.8490028490028491,
+    "balanced_accuracy": 0.6765129682997117,
+    "macro_f1": 0.49400244798041615,
+    "non_deletion": {
+      "precision": 0.9932885906040269,
+      "recall": 0.8530259365994236,
+      "f1": 0.9178294573643411,
+      "support": 347
+    },
+    "deletion": {
+      "precision": 0.03773584905660377,
+      "recall": 0.5,
+      "f1": 0.07017543859649122,
+      "support": 4
+    },
+    "confusion_matrix_labels": [
+      "non_deletion",
+      "deletion"
+    ],
+    "confusion_matrix": [
+      [
+        296,
+        51
+      ],
+      [
+        2,
+        2
+      ]
+    ]
+  }
+}

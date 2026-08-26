@@ -1,0 +1,46 @@
+{
+  "rows": 26337,
+  "macro_f1": 0.3193130914357745,
+  "per_class": {
+    "correct": {
+      "precision": 0.9586661341853036,
+      "recall": 0.421899028955578,
+      "f1": 0.5859344012204424,
+      "support": 22759
+    },
+    "substitution": {
+      "precision": 0.167598365942808,
+      "recall": 0.5852102102102102,
+      "f1": 0.260571619588835,
+      "support": 2664
+    },
+    "deletion": {
+      "precision": 0.0629719333238353,
+      "recall": 0.48358862144420134,
+      "f1": 0.11143325349804614,
+      "support": 914
+    }
+  },
+  "confusion_matrix_labels": [
+    "correct",
+    "substitution",
+    "deletion"
+  ],
+  "confusion_matrix": [
+    [
+      9602,
+      7328,
+      5829
+    ],
+    [
+      357,
+      1559,
+      748
+    ],
+    [
+      57,
+      415,
+      442
+    ]
+  ]
+}

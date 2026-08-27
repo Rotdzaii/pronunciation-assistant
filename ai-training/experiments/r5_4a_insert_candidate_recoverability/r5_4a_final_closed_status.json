@@ -1,0 +1,10 @@
+{
+  "status": "R5_4A_INSERT_CANDIDATE_RECOVERABILITY_CLOSED_NOT_CONFIRMED",
+  "development_result": "R5_4A_INSERT_CANDIDATE_RECOVERABILITY_NOT_CONFIRMED",
+  "feasibility_gates_passed": 1,
+  "feasibility_gates_total": 4,
+  "validation_accessed": false,
+  "test_accessed": false,
+  "new_generation_authorized": false,
+  "closure_reason": "Top-5, Top-10, and median truth-rank feasibility gates failed."
+}

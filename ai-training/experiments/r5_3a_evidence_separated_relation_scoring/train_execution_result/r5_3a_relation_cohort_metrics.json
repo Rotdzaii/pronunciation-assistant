@@ -1,0 +1,23 @@
+{
+  "correct_only": {
+    "support": 10340,
+    "predicted_addition": 253,
+    "false_addition_rate": 0.02446808510638298,
+    "delta_vs_R5_1A": -0.010444874274661509,
+    "descriptive_delta_vs_R5_2B": -0.01876208897485493
+  },
+  "substitution_negative": {
+    "support": 4964,
+    "predicted_addition": 261,
+    "false_addition_rate": 0.05257856567284448,
+    "delta_vs_R5_1A": 0.002417405318291703,
+    "descriptive_delta_vs_R5_2B": 0.035455278001611606
+  },
+  "deletion_negative": {
+    "support": 1403,
+    "predicted_addition": 139,
+    "false_addition_rate": 0.09907341411261582,
+    "delta_vs_R5_1A": 0.06557377049180327,
+    "descriptive_delta_vs_R5_2B": 0.09265858873841767
+  }
+}

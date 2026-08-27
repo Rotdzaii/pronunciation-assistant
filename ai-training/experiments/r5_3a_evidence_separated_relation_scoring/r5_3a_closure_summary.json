@@ -1,0 +1,59 @@
+{
+  "stage": "R5-3A development closure and documentation",
+  "execution_manifest_sha256": "1EC6DED9ECA6617AE683C9EF316B4435A11F6898B380E4592D779061BF73CE51",
+  "execution_identity_verified": true,
+  "development_status": "R5_3A_EVIDENCE_SEPARATION_DEVELOPMENT_NOT_CONFIRMED",
+  "closure_status": "R5_3A_EVIDENCE_SEPARATION_GENERATION_CLOSED_NOT_CONFIRMED",
+  "population": {
+    "words": 16582,
+    "positive": 323,
+    "negative": 16259,
+    "speaker_loso_folds": 12,
+    "all_folds_converged": true,
+    "n_iter_each_fold": 7
+  },
+  "metrics": {
+    "addition_all_negative_roc_auc": 0.7825848108511275,
+    "addition_correct_only_roc_auc": 0.8269990598295717,
+    "addition_substitution_containing_roc_auc": 0.7143987795720519,
+    "addition_deletion_containing_roc_auc": 0.6112200966968173,
+    "tp": 70,
+    "fp": 587,
+    "fn": 253,
+    "tn": 15672,
+    "binary_macro_f1": 0.5583786087141792,
+    "addition_precision": 0.106544901065449,
+    "addition_recall": 0.21671826625386997,
+    "addition_f1": 0.14285714285714285,
+    "correct_only_far": 0.02446808510638298,
+    "substitution_negative_far": 0.05257856567284448,
+    "deletion_negative_far": 0.09907341411261582,
+    "exact_event_f1": 0.044044044044044044
+  },
+  "gates": {
+    "G1": "PASS",
+    "G2": "PASS",
+    "G3": "PASS",
+    "G4": "PASS",
+    "G5": "PASS",
+    "G6": "FAIL",
+    "G7": "FAIL",
+    "G8": "PASS",
+    "passed": 6,
+    "total": 8
+  },
+  "coefficient_medians": {
+    "A": 0.9953044129046558,
+    "S": 0.1523077166275505,
+    "D": 0.5849599738415144
+  },
+  "coefficient_positive_folds": {
+    "A": 12,
+    "S": 12,
+    "D": 12
+  },
+  "robust_threshold": "R5_3A_ROBUST_THETA_NOT_AUTHORIZED",
+  "validation_accessed": false,
+  "test_accessed": false,
+  "future_addition_research_policy": "separately named mechanistic hypothesis and preregistration required"
+}

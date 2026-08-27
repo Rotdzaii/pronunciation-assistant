@@ -1,0 +1,43 @@
+{
+  "stage": "R5-3A synthetic threshold verification",
+  "status": "PASS",
+  "candidate_fixture": {
+    "input_scores": [
+      0.2,
+      0.8,
+      0.2
+    ],
+    "candidate_hex": [
+      "0x1.9999999999999p-3",
+      "0x1.999999999999ap-3",
+      "0x1.999999999999ap-1",
+      "0x1.999999999999bp-1"
+    ],
+    "contains_all_unique_scores": true,
+    "contains_nextafter_lower_edge": true,
+    "contains_nextafter_upper_edge": true,
+    "duplicates_after_canonicalization": 0,
+    "arbitrary_0_5_added": false
+  },
+  "decision_fixture": {
+    "scores": [
+      0.49,
+      0.5,
+      0.51
+    ],
+    "theta": 0.5,
+    "predictions": [
+      false,
+      true,
+      true
+    ],
+    "equality_is_Addition": true
+  },
+  "tie_priority": {
+    "higher_Binary_Macro_F1": "PASS",
+    "higher_Addition_F1": "PASS",
+    "lower_correct_only_FAR": "PASS",
+    "higher_threshold": "PASS"
+  },
+  "heldout_data_used": false
+}

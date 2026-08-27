@@ -1,0 +1,112 @@
+{
+  "status": "PASS",
+  "addition_positive_words": 323,
+  "total_truth_events": 342,
+  "single_addition_words": 304,
+  "single_addition_exactly_mappable": 304,
+  "single_addition_unmappable": 0,
+  "single_addition_mapping_coverage": 1.0,
+  "multiple_addition_words": 19,
+  "multiple_addition_events": 38,
+  "multiple_addition_mapped_events": 38,
+  "multiple_addition_event_mapping_coverage": 1.0,
+  "unmappable_event_details": [],
+  "mapping_identity": "exact (canonical phone index, expected-sequence boundary)",
+  "manual_fixes": false,
+  "truth_provenance": {
+    "source": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r5_2b_relation_competition\\r5_2b_tc1_pa1_env_train_scores.jsonl",
+    "source_sha256": "EAC81ABDDF56C77E4A71AD96AE5985D7C00DD60559A27C3A3BAAB16859EEFF3C",
+    "runtime_rows": 16582,
+    "addition_positive_words": 323,
+    "truth_events": 342,
+    "event_count_distribution": {
+      "1": 304,
+      "2": 19
+    },
+    "manual_relabeling": false,
+    "fuzzy_phone_matching": false,
+    "audio_or_textgrid_read": false
+  },
+  "candidate_provenance": {
+    "status": "PASS",
+    "shards": 12,
+    "candidate_rows": 2977040,
+    "positive_candidate_families_loaded": 323,
+    "missing_positive_families": 0,
+    "shard_records": {
+      "BWC": {
+        "path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r5_4b_insert_candidate_materialization\\materialization_result\\r5_4b_insert_candidates_BWC.jsonl",
+        "candidate_rows": 250360,
+        "byte_size": 94429876,
+        "sha256": "BF99F85E5311F3837695D581BB0B00149EDEF2EF4AE88C22C26818D9591CBA4E"
+      },
+      "EBVS": {
+        "path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r5_4b_insert_candidate_materialization\\materialization_result\\r5_4b_insert_candidates_EBVS.jsonl",
+        "candidate_rows": 247000,
+        "byte_size": 93647034,
+        "sha256": "050C4123D2178D7CD8B7F6D2BCF994966135659FE0FA41D767114076CE371FFC"
+      },
+      "HJK": {
+        "path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r5_4b_insert_candidate_materialization\\materialization_result\\r5_4b_insert_candidates_HJK.jsonl",
+        "candidate_rows": 252480,
+        "byte_size": 95232467,
+        "sha256": "B2B9787F0086660FA9D29B9BB053A26C2E507D7CF7179747E9841C37EC4D6961"
+      },
+      "NCC": {
+        "path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r5_4b_insert_candidate_materialization\\materialization_result\\r5_4b_insert_candidates_NCC.jsonl",
+        "candidate_rows": 253600,
+        "byte_size": 95659617,
+        "sha256": "ACD5661A5256C9376F6D3E902A1214963DA1117B014B916DDF40E11A7242C034"
+      },
+      "NJS": {
+        "path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r5_4b_insert_candidate_materialization\\materialization_result\\r5_4b_insert_candidates_NJS.jsonl",
+        "candidate_rows": 254120,
+        "byte_size": 95849435,
+        "sha256": "F9C4592DC16D1440F0138638AAE24196C00624A1E76B99D50AAC376FF75EB64E"
+      },
+      "PNV": {
+        "path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r5_4b_insert_candidate_materialization\\materialization_result\\r5_4b_insert_candidates_PNV.jsonl",
+        "candidate_rows": 251880,
+        "byte_size": 95007963,
+        "sha256": "0032C785E5D6E59878AB4AC25314D2061676B37E7869B60424FE940A12C78CF2"
+      },
+      "RRBI": {
+        "path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r5_4b_insert_candidate_materialization\\materialization_result\\r5_4b_insert_candidates_RRBI.jsonl",
+        "candidate_rows": 252600,
+        "byte_size": 95777896,
+        "sha256": "A4A76CCC349386F333303A14621AB16B80DEBE403FEA0F6DE2A4159460197226"
+      },
+      "TLV": {
+        "path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r5_4b_insert_candidate_materialization\\materialization_result\\r5_4b_insert_candidates_TLV.jsonl",
+        "candidate_rows": 248720,
+        "byte_size": 93802303,
+        "sha256": "40BD10443AC02E482247873726D06B48A2757D140A74B5713BA4CDE7650ED4BF"
+      },
+      "TNI": {
+        "path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r5_4b_insert_candidate_materialization\\materialization_result\\r5_4b_insert_candidates_TNI.jsonl",
+        "candidate_rows": 239360,
+        "byte_size": 90278530,
+        "sha256": "EEE041C8EC65CC370AEA0D91531285723A29B5160ACC24CEF37F1A052D7E609E"
+      },
+      "YBAA": {
+        "path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r5_4b_insert_candidate_materialization\\materialization_result\\r5_4b_insert_candidates_YBAA.jsonl",
+        "candidate_rows": 229720,
+        "byte_size": 87098950,
+        "sha256": "3BBEB0FD7D1C4945CB202B6875D76EEEB6B79576E1F49831484AB54E74BDB222"
+      },
+      "YKWK": {
+        "path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r5_4b_insert_candidate_materialization\\materialization_result\\r5_4b_insert_candidates_YKWK.jsonl",
+        "candidate_rows": 248240,
+        "byte_size": 94130305,
+        "sha256": "410ADDDD149C6DF31EDFE85BF5B44BD3FECE7481E38D56EB40BF0F98F6AC17F4"
+      },
+      "ZHAA": {
+        "path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r5_4b_insert_candidate_materialization\\materialization_result\\r5_4b_insert_candidates_ZHAA.jsonl",
+        "candidate_rows": 248960,
+        "byte_size": 94394546,
+        "sha256": "0D418E66AFE556EBC475B81B5D3EEE4C39BD4D14444EA0BACA3E1E971166D637"
+      }
+    },
+    "new_candidate_scores_created": false
+  }
+}

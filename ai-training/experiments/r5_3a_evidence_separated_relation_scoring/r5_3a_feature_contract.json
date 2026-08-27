@@ -1,0 +1,81 @@
+{
+  "stage": "R5-3A frozen feature contract",
+  "status": "FROZEN",
+  "stable_join_key": "source_identity",
+  "population": {
+    "runtime_words": 16582,
+    "positive_words": 323,
+    "negative_words": 16259,
+    "missing_rows_allowed": 0,
+    "duplicate_rows_allowed": 0,
+    "fuzzy_matching_allowed": false,
+    "exclusions_allowed": false
+  },
+  "feature_order": [
+    "A",
+    "S",
+    "D"
+  ],
+  "features": {
+    "A": {
+      "formula": "BEST_INSERT_SCORE - KEEP_SCORE",
+      "authoritative_source": "frozen R5-1A r5_1a_train_scores.jsonl addition_score_A_value",
+      "source_fields": [
+        "best_insert_target_score_value",
+        "keep_target_score_value",
+        "addition_score_A_value"
+      ],
+      "purpose": "original Addition evidence"
+    },
+    "S": {
+      "formula": "BEST_SUB_SCORE - KEEP_SCORE",
+      "authoritative_source": "frozen R5-2B r5_2b_tc1_pa1_env_train_scores.jsonl",
+      "source_fields": [
+        "best_sub_score_value",
+        "keep_target_score_value"
+      ],
+      "purpose": "single-substitution evidence relative to KEEP"
+    },
+    "D": {
+      "formula": "BEST_DELETE_SCORE - KEEP_SCORE",
+      "authoritative_source": "frozen R5-2B r5_2b_tc1_pa1_env_train_scores.jsonl",
+      "source_fields": [
+        "best_delete_score_value",
+        "keep_target_score_value"
+      ],
+      "purpose": "single-deletion evidence relative to KEEP"
+    }
+  },
+  "numeric_policy": {
+    "input_values": "raw finite serialized score floats",
+    "feature_matrix_dtype": "float64",
+    "subtraction": "float64 subtraction after parsing each frozen source value",
+    "clipping": false,
+    "imputation": false,
+    "rounding": false,
+    "row_with_nonfinite_feature": "technical stop before fitting"
+  },
+  "forbidden_features": [
+    "R5-2B C",
+    "max(S,D)",
+    "A-S",
+    "A-D",
+    "speaker identity",
+    "phone identity",
+    "word identity",
+    "utterance identity",
+    "boundary position",
+    "duration",
+    "manual error relation",
+    "true annotation counts",
+    "VALIDATION information",
+    "TEST information"
+  ],
+  "labels": {
+    "positive": "frozen Addition-positive word",
+    "negative": "all frozen non-Addition words",
+    "label_used_as_feature": false
+  },
+  "no_hard_max_feature": true,
+  "no_manual_feature_engineering": true
+}

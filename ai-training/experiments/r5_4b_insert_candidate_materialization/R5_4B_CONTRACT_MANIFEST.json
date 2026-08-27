@@ -1,0 +1,54 @@
+{
+  "stage": "R5-4B full INSERT candidate score materialization contract",
+  "status": "R5_4B_MATERIALIZATION_CONTRACT_FROZEN",
+  "manifest_self_excluded": true,
+  "artifact_count": 9,
+  "artifacts": [
+    {
+      "relative_path": "R5_4B_MATERIALIZATION_CONTRACT.md",
+      "byte_size": 5835,
+      "sha256": "DF9C6F4507556E8EEB9F45216F0FC63AA268AFC03DED16C4CDEB99347C7BEC41"
+    },
+    {
+      "relative_path": "R5_4B_PREREGISTRATION.md",
+      "byte_size": 1001,
+      "sha256": "F0906954E0591712409E27533B0D23719A5BAD8B371F5E10EBC2755803C080DD"
+    },
+    {
+      "relative_path": "r5_4b_source_identity.json",
+      "byte_size": 1524,
+      "sha256": "CDF541BB4DB613AD63F32F75E5BB7F821070EC9825A6D076FDC750FC5839063D"
+    },
+    {
+      "relative_path": "r5_4b_candidate_enumeration_contract.json",
+      "byte_size": 998,
+      "sha256": "39383F4B663A26CD5710545F6C0D30C7A4CC5A429A3FEB4A4139A917C1E8484A"
+    },
+    {
+      "relative_path": "r5_4b_score_semantics.json",
+      "byte_size": 1657,
+      "sha256": "CA1ACD068210BC75C3ADEB8C2FBAA153AE2A9565894471C1BFDE730A1A6A3F8C"
+    },
+    {
+      "relative_path": "r5_4b_storage_contract.json",
+      "byte_size": 1648,
+      "sha256": "1340BDABC67B7ECA0ADD93DD1C02A29C1AE65186A001C37FFFFEF1B8E31E8499"
+    },
+    {
+      "relative_path": "r5_4b_reproduction_guard.json",
+      "byte_size": 1495,
+      "sha256": "6199D5516D11249540C90F1E173219FF846EE9DFA7CAAC2F5DF43F430A772A4D"
+    },
+    {
+      "relative_path": "r5_4b_materialization_gates.json",
+      "byte_size": 875,
+      "sha256": "542D4D382ACADEEE939D575D8AE6646EC14F2DA21EAE90E158845745A6604FE7"
+    },
+    {
+      "relative_path": "r5_4b_protocol_audit.json",
+      "byte_size": 715,
+      "sha256": "582DEFDBD5F3F3BEE163320C91ADCF04D8C6DEF9A0408E3BF928F6856C765478"
+    }
+  ],
+  "hash_audit": "HASH_AUDIT_PASS"
+}

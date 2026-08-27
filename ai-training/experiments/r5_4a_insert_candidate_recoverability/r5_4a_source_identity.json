@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "verification_mode": "manifest and hash verification only; no candidate-ranking values inspected before contract freeze",
+  "identities": {
+    "r5_3a_closure_manifest": "9F57A293E0F4CA6E35E06761CFF54ABF70D967FE6ECF4F42ABFFF7C35397768C",
+    "r5_3a_execution_manifest": "1EC6DED9ECA6617AE683C9EF316B4435A11F6898B380E4592D779061BF73CE51",
+    "r5_2b_execution_manifest": "37F3C86FF11526B8AB54D173937A0F488125A1D0B610032CC8A5D47B11602387",
+    "r5_1a_execution_manifest": "C9343A75CE26C2BEECA388EBA855E91AE0992D22C0C5D785308D0A98B89A3CD6",
+    "v4": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D",
+    "checkpoint": "F54C9C2361AE78E1C37353AEB338A2DE6722C0B1EC4F885F6B52688CE9E88085"
+  },
+  "manifest_entry_failures": 0,
+  "checkpoint_loaded": false,
+  "validation_accessed": false,
+  "test_accessed": false
+}

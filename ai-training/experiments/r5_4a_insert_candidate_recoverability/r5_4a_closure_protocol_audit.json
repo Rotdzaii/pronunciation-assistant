@@ -1,0 +1,18 @@
+{
+  "neural_training": false,
+  "checkpoint_inference": false,
+  "train_audio_accessed": false,
+  "candidate_scores_recomputed": false,
+  "recoverability_recomputed": false,
+  "new_performance_metrics": false,
+  "classifier_fitting": false,
+  "threshold_search": false,
+  "validation_accessed": false,
+  "test_accessed": false,
+  "r5_4a_modified": false,
+  "r5_4b_modified": false,
+  "r5_4b_candidate_shards_preserved": true,
+  "td_ai_env_01_preserved": true,
+  "virtual_environments_modified": false,
+  "closure_documentation_only": true
+}

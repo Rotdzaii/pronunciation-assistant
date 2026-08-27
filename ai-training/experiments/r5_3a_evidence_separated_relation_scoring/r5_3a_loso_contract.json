@@ -1,0 +1,54 @@
+{
+  "stage": "R5-3A frozen TRAIN speaker-LOSO contract",
+  "status": "FROZEN",
+  "speaker_order": [
+    "BWC",
+    "EBVS",
+    "HJK",
+    "NCC",
+    "NJS",
+    "PNV",
+    "RRBI",
+    "TLV",
+    "TNI",
+    "YBAA",
+    "YKWK",
+    "ZHAA"
+  ],
+  "fold_count": 12,
+  "per_fold": [
+    "hold out exactly one TRAIN speaker",
+    "use the other 11 TRAIN speakers as calibration rows",
+    "fit StandardScaler only on calibration A/S/D",
+    "transform calibration rows with that scaler",
+    "fit the frozen LogisticRegression only on calibration rows and labels",
+    "produce calibration predict_proba[:,1]",
+    "choose a threshold using calibration rows only",
+    "transform the held-out speaker with the calibration scaler",
+    "produce held-out predict_proba[:,1]",
+    "apply the selected threshold once to the held-out speaker"
+  ],
+  "heldout_labels_used_for_scaler": false,
+  "heldout_labels_used_for_model": false,
+  "heldout_labels_used_for_threshold": false,
+  "oof_policy": "each runtime word occurs in exactly one held-out prediction set",
+  "threshold_candidates": {
+    "finite_unique_calibration_scores": true,
+    "lower_edge": "np.nextafter(min_finite_score, -np.inf)",
+    "upper_edge": "np.nextafter(max_finite_score, np.inf)",
+    "negative_infinity_candidate": false,
+    "candidate_dtype": "float64"
+  },
+  "decision": "score >= theta -> ADDITION; score < theta -> NON_ADDITION",
+  "threshold_tie_priority": [
+    "higher Binary Macro-F1",
+    "higher Addition F1",
+    "lower correct-only false-addition rate",
+    "higher threshold"
+  ],
+  "robust_threshold": {
+    "authorized_only_if": "8 / 8 development gates PASS",
+    "definition": "ordinary float64 median of the 12 fold calibration thresholds",
+    "failure_value": "R5_3A_ROBUST_THETA_NOT_AUTHORIZED"
+  }
+}

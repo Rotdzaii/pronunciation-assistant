@@ -1,0 +1,85 @@
+{
+  "stage": "R5-4A resumed frozen INSERT candidate recoverability audit",
+  "status": "R5_4A_INSERT_CANDIDATE_RECOVERABILITY_NOT_CONFIRMED",
+  "manifest_self_excluded": true,
+  "artifact_count": 14,
+  "artifacts": [
+    {
+      "relative_path": "r5_4a_resume_audit.py",
+      "byte_size": 34971,
+      "sha256": "9FD727D0A65523903265264FFC88299ED87AE723AC74CC34ADA03EF56A86014D"
+    },
+    {
+      "relative_path": "r5_4a_resume_source_identity.json",
+      "byte_size": 4772,
+      "sha256": "F2206011ACB135A0EF5099D0FD0D7C397769B53E05626455C8B8AEF30BCEC715"
+    },
+    {
+      "relative_path": "r5_4a_truth_mapping_audit.json",
+      "byte_size": 5997,
+      "sha256": "2E5A5873C030A6EA6F9FBD4DEB8685E7CF3D029934C476DF83DD15E45449BC46"
+    },
+    {
+      "relative_path": "r5_4a_single_addition_recoverability.json",
+      "byte_size": 160947,
+      "sha256": "1C9BC235BF66E907B9F707F717572B430BD6BFE488EDBFC2716E3C091A9707A4"
+    },
+    {
+      "relative_path": "r5_4a_rank_distribution.json",
+      "byte_size": 1995,
+      "sha256": "46606330984844CAD8E4712D239CE5AE02E73E5B65794C4088F7FC4ADB703191"
+    },
+    {
+      "relative_path": "r5_4a_incremental_topk.json",
+      "byte_size": 212,
+      "sha256": "557D475B5CF6988DB404A310DD0DD77AD307BBC3FD0ECCBB7EFE868351650F05"
+    },
+    {
+      "relative_path": "r5_4a_score_gap_diagnostics.json",
+      "byte_size": 454,
+      "sha256": "70B4B85DC156EA566ADCC8503D2800F928C5E461473C09C84A806925C4A515DB"
+    },
+    {
+      "relative_path": "r5_4a_speaker_diagnostics.json",
+      "byte_size": 7740,
+      "sha256": "C57082842E8950568E9F5D41DCD5ABF220DD6F539280B7ADD852D2D4A0E59663"
+    },
+    {
+      "relative_path": "r5_4a_phone_diagnostics.json",
+      "byte_size": 14895,
+      "sha256": "A2584D31EB2DDA47DC1345CA448E1FF06BA962C088235C7EB6FBA5E2F4BF6B1F"
+    },
+    {
+      "relative_path": "r5_4a_position_diagnostics.json",
+      "byte_size": 1776,
+      "sha256": "C7C83419D3692C3E6E70AC152B1165AFCB531B139465B1A334059189BDE4E7B2"
+    },
+    {
+      "relative_path": "r5_4a_multiple_addition_diagnostics.json",
+      "byte_size": 13176,
+      "sha256": "491A8B648F574A95E151D6229E8791EA383510E6B071B9D72B4FE84DC795E782"
+    },
+    {
+      "relative_path": "r5_4a_interpretation.json",
+      "byte_size": 1793,
+      "sha256": "E55B951195FEF7A17EF5AD5F5B5EDF7ADC2B71AE85B6EC735E292C85FC868424"
+    },
+    {
+      "relative_path": "r5_4a_resume_protocol_audit.json",
+      "byte_size": 664,
+      "sha256": "F49922B3EB3F180B0039AB3CA102F1362A5237018E9A0A2E863D0C9CE5132259"
+    },
+    {
+      "relative_path": "R5_4A_RESUMED_RECOVERABILITY_REPORT.md",
+      "byte_size": 1730,
+      "sha256": "30C08B8288D0CA05779CF9D1C538D70437AAEB0DDBF5CC625051A8E3FEA10000"
+    }
+  ],
+  "hash_audit": "HASH_AUDIT_PASS",
+  "failures": [],
+  "preserved_r5_4a_contract_sha256": "111DDB77EC09B177505AEEF7B260476D8C718F745AD6170E6969926841338A27",
+  "r5_4b_execution_manifest_sha256": "FD1E4E66168654EC54778A489E0B443BD9C691DD1392233C4284CDF6CDF07B11",
+  "new_checkpoint_inference": false,
+  "validation_accessed": false,
+  "test_accessed": false
+}

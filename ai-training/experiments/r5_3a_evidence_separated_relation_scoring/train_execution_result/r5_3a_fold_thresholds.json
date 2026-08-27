@@ -1,0 +1,116 @@
+{
+  "speaker_order": [
+    "BWC",
+    "EBVS",
+    "HJK",
+    "NCC",
+    "NJS",
+    "PNV",
+    "RRBI",
+    "TLV",
+    "TNI",
+    "YBAA",
+    "YKWK",
+    "ZHAA"
+  ],
+  "folds": [
+    {
+      "heldout_speaker": "BWC",
+      "calibration_rows": 15192,
+      "heldout_rows": 1390,
+      "candidate_count": 15194,
+      "selected_theta": 0.7756310375133694
+    },
+    {
+      "heldout_speaker": "EBVS",
+      "calibration_rows": 15210,
+      "heldout_rows": 1372,
+      "candidate_count": 15212,
+      "selected_theta": 0.7696336587481865
+    },
+    {
+      "heldout_speaker": "HJK",
+      "calibration_rows": 15181,
+      "heldout_rows": 1401,
+      "candidate_count": 15183,
+      "selected_theta": 0.7703152412526275
+    },
+    {
+      "heldout_speaker": "NCC",
+      "calibration_rows": 15174,
+      "heldout_rows": 1408,
+      "candidate_count": 15176,
+      "selected_theta": 0.7773010378920989
+    },
+    {
+      "heldout_speaker": "NJS",
+      "calibration_rows": 15176,
+      "heldout_rows": 1406,
+      "candidate_count": 15178,
+      "selected_theta": 0.7775582775136194
+    },
+    {
+      "heldout_speaker": "PNV",
+      "calibration_rows": 15187,
+      "heldout_rows": 1395,
+      "candidate_count": 15189,
+      "selected_theta": 0.7741998069800518
+    },
+    {
+      "heldout_speaker": "RRBI",
+      "calibration_rows": 15174,
+      "heldout_rows": 1408,
+      "candidate_count": 15176,
+      "selected_theta": 0.7971574912329571
+    },
+    {
+      "heldout_speaker": "TLV",
+      "calibration_rows": 15199,
+      "heldout_rows": 1383,
+      "candidate_count": 15201,
+      "selected_theta": 0.74088012374138
+    },
+    {
+      "heldout_speaker": "TNI",
+      "calibration_rows": 15237,
+      "heldout_rows": 1345,
+      "candidate_count": 15239,
+      "selected_theta": 0.7790431438700388
+    },
+    {
+      "heldout_speaker": "YBAA",
+      "calibration_rows": 15284,
+      "heldout_rows": 1298,
+      "candidate_count": 15286,
+      "selected_theta": 0.7749607954933213
+    },
+    {
+      "heldout_speaker": "YKWK",
+      "calibration_rows": 15200,
+      "heldout_rows": 1382,
+      "candidate_count": 15202,
+      "selected_theta": 0.7875162126605274
+    },
+    {
+      "heldout_speaker": "ZHAA",
+      "calibration_rows": 15188,
+      "heldout_rows": 1394,
+      "candidate_count": 15190,
+      "selected_theta": 0.7712658907697739
+    }
+  ],
+  "thresholds_in_speaker_order": [
+    0.7756310375133694,
+    0.7696336587481865,
+    0.7703152412526275,
+    0.7773010378920989,
+    0.7775582775136194,
+    0.7741998069800518,
+    0.7971574912329571,
+    0.74088012374138,
+    0.7790431438700388,
+    0.7749607954933213,
+    0.7875162126605274,
+    0.7712658907697739
+  ]
+}

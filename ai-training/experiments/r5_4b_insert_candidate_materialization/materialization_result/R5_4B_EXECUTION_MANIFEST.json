@@ -1,0 +1,131 @@
+{
+  "stage": "R5-4B full INSERT candidate materialization execution",
+  "status": "R5_4B_INSERT_CANDIDATE_MATERIALIZATION_PASS",
+  "manifest_self_excluded": true,
+  "artifact_count": 23,
+  "artifacts": [
+    {
+      "relative_path": "r5_4b_materialization_driver.py",
+      "byte_size": 36543,
+      "sha256": "5D2BF0540AFDCD1EB4A03FA9399C7C3F8CB5EF202F1163A669DEAF9EDB9E2F36"
+    },
+    {
+      "relative_path": "r5_4b_environment_identity.json",
+      "byte_size": 533,
+      "sha256": "426923C1176CA3854AA806591D67CDF607D1A69A8C9AD058FF3AFEAB4678D338"
+    },
+    {
+      "relative_path": "r5_4b_source_identity.json",
+      "byte_size": 5743,
+      "sha256": "DC5BF89EFD97CB6BC2A13735FC4A77FB698037FDB4907DCAC63B5D2F01987092"
+    },
+    {
+      "relative_path": "r5_4b_path_guard.json",
+      "byte_size": 2868,
+      "sha256": "CEC80AEEA14520AA9F93DE0C8AE09ABE81BC526402DB631C32FB9DC91D3192CC"
+    },
+    {
+      "relative_path": "r5_4b_population_audit.json",
+      "byte_size": 652,
+      "sha256": "F9E860DE5284338346FBF3B130A6E2999300B06B85740E3AD33D7C171E974A45"
+    },
+    {
+      "relative_path": "r5_4b_insert_candidates_BWC.jsonl",
+      "byte_size": 94429876,
+      "sha256": "BF99F85E5311F3837695D581BB0B00149EDEF2EF4AE88C22C26818D9591CBA4E"
+    },
+    {
+      "relative_path": "r5_4b_insert_candidates_EBVS.jsonl",
+      "byte_size": 93647034,
+      "sha256": "050C4123D2178D7CD8B7F6D2BCF994966135659FE0FA41D767114076CE371FFC"
+    },
+    {
+      "relative_path": "r5_4b_insert_candidates_HJK.jsonl",
+      "byte_size": 95232467,
+      "sha256": "B2B9787F0086660FA9D29B9BB053A26C2E507D7CF7179747E9841C37EC4D6961"
+    },
+    {
+      "relative_path": "r5_4b_insert_candidates_NCC.jsonl",
+      "byte_size": 95659617,
+      "sha256": "ACD5661A5256C9376F6D3E902A1214963DA1117B014B916DDF40E11A7242C034"
+    },
+    {
+      "relative_path": "r5_4b_insert_candidates_NJS.jsonl",
+      "byte_size": 95849435,
+      "sha256": "F9C4592DC16D1440F0138638AAE24196C00624A1E76B99D50AAC376FF75EB64E"
+    },
+    {
+      "relative_path": "r5_4b_insert_candidates_PNV.jsonl",
+      "byte_size": 95007963,
+      "sha256": "0032C785E5D6E59878AB4AC25314D2061676B37E7869B60424FE940A12C78CF2"
+    },
+    {
+      "relative_path": "r5_4b_insert_candidates_RRBI.jsonl",
+      "byte_size": 95777896,
+      "sha256": "A4A76CCC349386F333303A14621AB16B80DEBE403FEA0F6DE2A4159460197226"
+    },
+    {
+      "relative_path": "r5_4b_insert_candidates_TLV.jsonl",
+      "byte_size": 93802303,
+      "sha256": "40BD10443AC02E482247873726D06B48A2757D140A74B5713BA4CDE7650ED4BF"
+    },
+    {
+      "relative_path": "r5_4b_insert_candidates_TNI.jsonl",
+      "byte_size": 90278530,
+      "sha256": "EEE041C8EC65CC370AEA0D91531285723A29B5160ACC24CEF37F1A052D7E609E"
+    },
+    {
+      "relative_path": "r5_4b_insert_candidates_YBAA.jsonl",
+      "byte_size": 87098950,
+      "sha256": "3BBEB0FD7D1C4945CB202B6875D76EEEB6B79576E1F49831484AB54E74BDB222"
+    },
+    {
+      "relative_path": "r5_4b_insert_candidates_YKWK.jsonl",
+      "byte_size": 94130305,
+      "sha256": "410ADDDD149C6DF31EDFE85BF5B44BD3FECE7481E38D56EB40BF0F98F6AC17F4"
+    },
+    {
+      "relative_path": "r5_4b_insert_candidates_ZHAA.jsonl",
+      "byte_size": 94394546,
+      "sha256": "0D418E66AFE556EBC475B81B5D3EEE4C39BD4D14444EA0BACA3E1E971166D637"
+    },
+    {
+      "relative_path": "r5_4b_candidate_accounting.json",
+      "byte_size": 4044,
+      "sha256": "4A097D69B109A0743D586BB2C98037A90A21B65F508EB948D16099C0D60AAA7F"
+    },
+    {
+      "relative_path": "r5_4b_best_insert_reproduction.json",
+      "byte_size": 700,
+      "sha256": "95E23823D13CC4BF4F821286A5861543245A62A7572DC35F48D427340A4E3AD0"
+    },
+    {
+      "relative_path": "r5_4b_materialization_gates.json",
+      "byte_size": 336,
+      "sha256": "0AD40D913543048E8F62139B400F97A96F9D26A5E2A6979C3B48F102D34DBF37"
+    },
+    {
+      "relative_path": "r5_4b_protocol_audit.json",
+      "byte_size": 656,
+      "sha256": "3CED8EA151305EB01A7A2CD8AE4A3FC64797667678E24BADE5610E1721004545"
+    },
+    {
+      "relative_path": "r5_4b_materialization_index.json",
+      "byte_size": 3303,
+      "sha256": "59DC998DE409FE2E94F37B35907CFF8DBDABF933108D26F8686CC243596669ED"
+    },
+    {
+      "relative_path": "R5_4B_MATERIALIZATION_RESULT.md",
+      "byte_size": 909,
+      "sha256": "654F41070DCE5EBB03725129A97C887B7409374BA95333CA25AF36E24EBA1B79"
+    }
+  ],
+  "hash_audit": "HASH_AUDIT_PASS",
+  "failures": [],
+  "contract_manifest_sha256": "5087DB63E37C52A407720A9A7A11D542A4DD651510469CE5960CE8B3B2421297",
+  "frozen_scorer_sha256": "2E44B79828DBB37B312CDC03C897A80803947A48F13864B26C454F3B8ED161A3",
+  "checkpoint_sha256": "F54C9C2361AE78E1C37353AEB338A2DE6722C0B1EC4F885F6B52688CE9E88085",
+  "truth_blind_materialization": true,
+  "performance_metrics_calculated": false,
+  "recoverability_metrics_calculated": false
+}

@@ -1,0 +1,10 @@
+{
+  "status": "R5_4B_INSERT_CANDIDATE_MATERIALIZATION_CLOSED_PASS",
+  "execution_result": "R5_4B_INSERT_CANDIDATE_MATERIALIZATION_PASS",
+  "materialization_gates_passed": 10,
+  "materialization_gates_total": 10,
+  "scientific_performance_claim": false,
+  "candidate_shards_preserved": true,
+  "validation_accessed": false,
+  "test_accessed": false
+}

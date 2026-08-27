@@ -1,0 +1,17 @@
+{
+  "definition": "BEST_INSERT_SCORE - TRUTH_INSERT_SCORE",
+  "distribution": {
+    "count": 304,
+    "mean": 1.029737302997228,
+    "median": 0.7877457908221654,
+    "q25": 0.32179776646874175,
+    "q75": 1.5121724233031273,
+    "q90": 2.2835456232229867,
+    "maximum": 8.42849357922872,
+    "quantile_method": "numpy default linear"
+  },
+  "rank_1_words": 41,
+  "rank_1_zero_gap": 41,
+  "rank_1_nonzero_gap_violations": 0,
+  "finite_gap_count": 304
+}

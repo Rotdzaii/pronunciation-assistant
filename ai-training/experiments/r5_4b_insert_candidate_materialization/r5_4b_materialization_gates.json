@@ -1,0 +1,19 @@
+{
+  "gates": {
+    "M1": "16582 / 16582 frozen TRAIN words present",
+    "M2": "2977040 / 2977040 INSERT candidate identities persisted",
+    "M3": "2976844 alignable INSERT candidates reproduced",
+    "M4": "196 impossible INSERT candidates reproduced",
+    "M5": "65 words affected by impossible INSERT candidates reproduced",
+    "M6": "0 words lack a finite INSERT candidate",
+    "M7": "per-word 40*(N+1) accounting exact with no duplicate or missing candidate identity",
+    "M8": "BEST_INSERT identity reproduced 16582 / 16582",
+    "M9": "winning-score exact-equality policy passes for 16582 / 16582",
+    "M10": "artifact and hash audit passes"
+  },
+  "all_required": true,
+  "pass_status": "R5_4B_INSERT_CANDIDATE_MATERIALIZATION_PASS",
+  "gate_type": "materialization/provenance only",
+  "scientific_recoverability_gate": false,
+  "r5_4a_gates_evaluated": false
+}

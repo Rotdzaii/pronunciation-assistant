@@ -1,0 +1,13 @@
+{
+  "TP": 70,
+  "FP": 587,
+  "FN": 253,
+  "TN": 15672,
+  "accuracy": 0.9493426607164395,
+  "balanced_accuracy": 0.590307592441776,
+  "binary_macro_f1": 0.5583786087141792,
+  "addition_precision": 0.106544901065449,
+  "addition_recall": 0.21671826625386997,
+  "addition_f1": 0.14285714285714285,
+  "nonaddition_f1": 0.9739000745712155
+}

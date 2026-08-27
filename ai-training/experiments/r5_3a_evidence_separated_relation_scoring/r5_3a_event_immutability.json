@@ -1,0 +1,18 @@
+{
+  "stage": "R5-3A synthetic event immutability verification",
+  "status": "PASS",
+  "input_fixture": {
+    "BEST_INSERT_phone": "ZH",
+    "BEST_INSERT_boundary": 7
+  },
+  "predicted_positive_output": {
+    "phone": "ZH",
+    "boundary": 7
+  },
+  "predicted_negative_output": null,
+  "phone_changed": false,
+  "boundary_changed": false,
+  "alternate_localization_created": false,
+  "synthetic_oof_positive_events": 5,
+  "synthetic_oof_negative_without_events": 19
+}

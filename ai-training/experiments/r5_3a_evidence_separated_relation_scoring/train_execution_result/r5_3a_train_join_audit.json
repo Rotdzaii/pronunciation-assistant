@@ -1,0 +1,27 @@
+{
+  "status": "PASS",
+  "matched_rows": 16582,
+  "positive": 323,
+  "negative": 16259,
+  "r5_1a_duplicates": 0,
+  "r5_2b_duplicates": 0,
+  "missing_r5_1a": 0,
+  "missing_r5_2b": 0,
+  "metadata_mismatches": 0,
+  "fuzzy_matching": false,
+  "excluded_rows": 0,
+  "speakers": [
+    "BWC",
+    "EBVS",
+    "HJK",
+    "NCC",
+    "NJS",
+    "PNV",
+    "RRBI",
+    "TLV",
+    "TNI",
+    "YBAA",
+    "YKWK",
+    "ZHAA"
+  ]
+}

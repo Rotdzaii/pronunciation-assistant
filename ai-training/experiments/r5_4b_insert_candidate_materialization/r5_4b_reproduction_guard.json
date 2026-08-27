@@ -1,0 +1,41 @@
+{
+  "population_identity": {
+    "required_words": 16582,
+    "stable_identity_source": "frozen R5-2B TRAIN score artifact",
+    "required_matches": 16582,
+    "duplicates_allowed": 0,
+    "missing_allowed": 0,
+    "exclusions_allowed": 0
+  },
+  "per_word_candidate_guard": {
+    "count": "40*(N+1)",
+    "candidate_identity": [
+      "inserted_phone_index",
+      "boundary_index"
+    ],
+    "duplicates_allowed": 0,
+    "missing_allowed": 0,
+    "classification_required": [
+      "alignable",
+      "impossible"
+    ]
+  },
+  "best_insert_identity": {
+    "derived_from_materialized_candidates": true,
+    "winner_rule": "highest score, then lower boundary, then lower phone index",
+    "required_matches": 16582,
+    "allowed_mismatches": 0
+  },
+  "winning_score_comparison": {
+    "materialized_value_source": "float.fromhex(authoritative_insert_target_score_float64_hex)",
+    "historical_value_source": "frozen R5-2B best_insert_score_value",
+    "operator": "exact Python float ==",
+    "atol": null,
+    "rtol": null,
+    "tolerance_relaxation_authorized": false,
+    "justification": "future materialization must reuse the exact R5-2B runtime, inference, log-softmax, batch adapter, ordering, device, dtype, and batch size",
+    "tc1_policy_used": false,
+    "tc1_exclusion_reason": "the TC1 bound was specific to an independent empty-target CPU/CUDA reduction; INSERT targets are nonempty"
+  },
+  "mismatch_action": "stop before materialization PASS and preserve technical evidence"
+}

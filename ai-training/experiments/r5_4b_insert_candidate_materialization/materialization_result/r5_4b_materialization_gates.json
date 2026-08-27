@@ -1,0 +1,18 @@
+{
+  "gates": {
+    "M1": "PASS",
+    "M2": "PASS",
+    "M3": "PASS",
+    "M4": "PASS",
+    "M5": "PASS",
+    "M6": "PASS",
+    "M7": "PASS",
+    "M8": "PASS",
+    "M9": "PASS",
+    "M10": "PASS"
+  },
+  "passed_count": 10,
+  "total": 10,
+  "all_pass": true,
+  "gate_type": "materialization/provenance only; not scientific performance"
+}

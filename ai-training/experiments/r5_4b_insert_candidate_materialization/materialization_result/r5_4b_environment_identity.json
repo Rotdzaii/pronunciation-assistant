@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "observed": {
+    "sys_executable": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant\\ai-training\\.venv\\Scripts\\python.exe",
+    "python_version": "3.12.10",
+    "torch_version": "2.12.0.dev20260408+cu128",
+    "torch_cuda_version": "12.8",
+    "cuda_available": true,
+    "cuda_device_count": 1,
+    "gpu_device_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+    "numpy_version": "2.4.6"
+  },
+  "packages_installed_or_modified": false,
+  "dataset_accessed": false,
+  "checkpoint_loaded": false
+}

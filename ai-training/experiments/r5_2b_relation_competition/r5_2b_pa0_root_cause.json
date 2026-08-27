@@ -1,0 +1,32 @@
+{
+  "classification": "PATH_ROOT_MISCONFIGURATION",
+  "evidence": [
+    "The successful R5-0 source identity records the main-repository raw L2-ARCTIC root.",
+    "R5-1A and R4 require L2_ARCTIC_ROOT and use the same <speaker>/annotation/<utterance>.TextGrid schema.",
+    "The V4 builder documents and enumerates the same annotation schema.",
+    "The TC1 driver newly derived AUDIO_ROOT from the research worktree and passed it directly to inherited population functions.",
+    "The research-derived raw root is absent, while the provenance-established main-repository root exists.",
+    "All 1,799 required TRAIN mappings exist under the authoritative root with no missing or ambiguous mappings."
+  ],
+  "minimal_future_correction": {
+    "category": "PATH_RESOLUTION_ONLY",
+    "permitted_change": "Create an additive corrected execution driver/configuration that obtains MANUAL_TEXTGRID_ROOT from the established external dataset configuration (or explicitly supplies the frozen authoritative root) and passes that root to the unchanged R5-1A population helpers.",
+    "must_preserve": [
+      "frozen population semantics",
+      "frozen R5-2B scorer",
+      "C formula",
+      "model and checkpoint",
+      "eight gates",
+      "LOSO and threshold procedure",
+      "annotation contents",
+      "all prior execution evidence"
+    ],
+    "implemented_in_pa0": false
+  },
+  "scientific_impact": {
+    "r5_2_performance": "UNKNOWN",
+    "gates_evaluated": 0,
+    "gates_total": 8,
+    "scientific_status_assigned": false
+  }
+}

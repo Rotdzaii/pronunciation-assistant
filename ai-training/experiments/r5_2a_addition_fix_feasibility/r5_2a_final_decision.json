@@ -1,0 +1,25 @@
+{
+  "final_status": "R5_2A_RELATION_COMPETITION_FEASIBLE",
+  "decision_basis": [
+    "All authoritative source identities passed.",
+    "KEEP, INSERT, SUBSTITUTION, and DELETE targets are deterministic and exact-likelihood constructible from expected text and one CTC posterior.",
+    "The full candidate space is finite and linear in expected length: 80*N+41.",
+    "R4 supplies inspected KEEP/SUB/DELETE construction mechanics in the same frozen CTC likelihood family.",
+    "R5-1A supplies alignability-safe impossible-target, TARGET normalization, tie, serialization, and batching mechanisms.",
+    "Explicit SUB/DELETE competitors have a direct mechanistic relationship to frozen substitution/deletion false-positive cohorts.",
+    "A TRAIN-only speaker-LOSO experiment can be preregistered without consuming TEST or treating current VALIDATION as independent confirmation."
+  ],
+  "preferred_next_hypothesis": "A single preregistered relation-competitive exact CTC score should compare BEST_INSERT with the strongest permitted KEEP/SUBSTITUTION/DELETE explanation in one TARGET-normalized, alignability-safe likelihood space.",
+  "speaker_shift_assessment": "PARTIALLY_TARGETS",
+  "class_overlap_assessment": "MECHANISTICALLY_JUSTIFIED_BUT_NOT_GUARANTEED",
+  "important_nonclaims": [
+    "No improvement has been demonstrated.",
+    "No final mathematical margin, threshold, or gate has been selected.",
+    "Relation competition is not claimed to cancel speaker shift.",
+    "The R5-1 result remains closed and unchanged.",
+    "R4 deletion is not reopened.",
+    "TEST is not authorized."
+  ],
+  "smallest_next_action": "Create a separate R5-2B TRAIN-only development contract that freezes one relation-competition formula, empty-target handling, tie rules, metrics, gates, and stop policy before any inference.",
+  "next_action_implemented": false
+}

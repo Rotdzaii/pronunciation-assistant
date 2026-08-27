@@ -1,0 +1,106 @@
+{
+  "status": "PASS",
+  "scope": "TRAIN_ONLY_EXISTENCE_AND_PROVENANCE_GUARD",
+  "roots": {
+    "MANUAL_TEXTGRID_ROOT": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant\\ai-training\\datasets\\l2-arctic\\raw\\l2arctic_release_v5.0",
+    "AUDIO_ROOT": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant\\ai-training\\datasets\\l2-arctic\\raw\\l2arctic_release_v5.0",
+    "V4_METADATA_ROOT": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\datasets\\l2-arctic\\metadata",
+    "logical_roles_independently_configured": true,
+    "root_cross_derivation_used": false
+  },
+  "path_formula": "MANUAL_TEXTGRID_ROOT/<speaker>/annotation/<utterance_id>.TextGrid",
+  "expected": 1799,
+  "derived_from_v4": 1799,
+  "existing": 1799,
+  "missing": 0,
+  "ambiguous": 0,
+  "missing_paths": [],
+  "ambiguous_mappings": [],
+  "by_speaker": {
+    "BWC": {
+      "expected": 150,
+      "derived_from_v4": 150,
+      "existing": 150,
+      "missing": 0
+    },
+    "EBVS": {
+      "expected": 150,
+      "derived_from_v4": 150,
+      "existing": 150,
+      "missing": 0
+    },
+    "HJK": {
+      "expected": 150,
+      "derived_from_v4": 150,
+      "existing": 150,
+      "missing": 0
+    },
+    "NCC": {
+      "expected": 150,
+      "derived_from_v4": 150,
+      "existing": 150,
+      "missing": 0
+    },
+    "NJS": {
+      "expected": 150,
+      "derived_from_v4": 150,
+      "existing": 150,
+      "missing": 0
+    },
+    "PNV": {
+      "expected": 150,
+      "derived_from_v4": 150,
+      "existing": 150,
+      "missing": 0
+    },
+    "RRBI": {
+      "expected": 150,
+      "derived_from_v4": 150,
+      "existing": 150,
+      "missing": 0
+    },
+    "TLV": {
+      "expected": 150,
+      "derived_from_v4": 150,
+      "existing": 150,
+      "missing": 0
+    },
+    "TNI": {
+      "expected": 150,
+      "derived_from_v4": 150,
+      "existing": 150,
+      "missing": 0
+    },
+    "YBAA": {
+      "expected": 149,
+      "derived_from_v4": 149,
+      "existing": 149,
+      "missing": 0
+    },
+    "YKWK": {
+      "expected": 150,
+      "derived_from_v4": 150,
+      "existing": 150,
+      "missing": 0
+    },
+    "ZHAA": {
+      "expected": 150,
+      "derived_from_v4": 150,
+      "existing": 150,
+      "missing": 0
+    }
+  },
+  "first_file": {
+    "path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant\\ai-training\\datasets\\l2-arctic\\raw\\l2arctic_release_v5.0\\BWC\\annotation\\arctic_a0006.TextGrid",
+    "exists": true,
+    "byte_size": 8123,
+    "sha256": "EF3056511B71013C399F5F69F40B6A8865756FE26091DF72CC5EDB8E7D14A337",
+    "expected_byte_size": 8123,
+    "expected_sha256": "EF3056511B71013C399F5F69F40B6A8865756FE26091DF72CC5EDB8E7D14A337",
+    "match": true
+  },
+  "annotation_content_parsed": false,
+  "audio_accessed": false,
+  "validation_paths_resolved": false,
+  "test_paths_resolved": false
+}

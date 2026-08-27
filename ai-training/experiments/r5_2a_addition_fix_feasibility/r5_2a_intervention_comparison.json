@@ -1,0 +1,58 @@
+{
+  "comparison_basis": "Frozen R5-1B/R5-1C evidence and inspected deterministic code only; no intervention was executed.",
+  "families": {
+    "A_calibration_only": {
+      "frozen_evidence_supporting": [
+        "Broad speaker-dependent score-location movement.",
+        "Five of six VALIDATION speakers exceeded the historical correct-only FAR reference.",
+        "The same fixed threshold had materially different false-addition behavior across splits."
+      ],
+      "frozen_evidence_against_or_limiting": [
+        "R5-1C also found substantial positive/negative overlap.",
+        "Validation-informed calibration would be contaminated.",
+        "Runtime speaker adaptation may require support audio or assumptions not present in a single-word request."
+      ],
+      "runtime_assumptions": "Would require a globally frozen TRAIN-only transform or an explicitly designed calibration context; per-speaker oracle information is unavailable.",
+      "contamination_risk": "high if current VALIDATION informs the transform; manageable only under TRAIN-only preregistration",
+      "scientific_complexity": "moderate",
+      "directly_addresses": "calibration shift",
+      "smallest_valid_experiment": "A separately preregistered TRAIN-speaker LOSO audit of one fixed calibration mechanism, with no VALIDATION formula selection."
+    },
+    "B_relation_competition": {
+      "frozen_evidence_supporting": [
+        "Substitution-only, deletion-only, and substitution-plus-deletion negatives all contributed frozen false positives.",
+        "R4 already provides deterministic KEEP/SUB/DELETE hypothesis construction in the same CTC model space.",
+        "R5-1 compared INSERT only with KEEP, leaving explicit alternative relations unmodeled."
+      ],
+      "frozen_evidence_against_or_limiting": [
+        "Correct-only words were the largest frozen false-positive cohort.",
+        "One-edit competition cannot fully explain mixed or multiple errors.",
+        "It only partially targets speaker-dependent relative-score shift."
+      ],
+      "runtime_assumptions": "Expected text, word audio, one frozen CTC posterior, and deterministic sequence constructors are sufficient.",
+      "contamination_risk": "low for a TRAIN-only preregistered experiment; high only if formulas are ranked on consumed VALIDATION",
+      "scientific_complexity": "low-to-moderate and causally interpretable",
+      "directly_addresses": "class-overlap/explanation confounding; partially calibration shift",
+      "smallest_valid_experiment": "Freeze one coherent BEST_INSERT-versus-BEST_NON_ADDITION definition and run one TRAIN-only 12-fold speaker-LOSO comparison with unchanged acoustic logits."
+    },
+    "C_combined_relation_and_calibration": {
+      "frozen_evidence_supporting": [
+        "The frozen audit found both calibration shift and class overlap."
+      ],
+      "frozen_evidence_against_or_limiting": [
+        "A combined first experiment would confound which mechanism caused any change.",
+        "It adds more design choices and overfitting risk after VALIDATION consumption.",
+        "Runtime calibration assumptions are not yet frozen."
+      ],
+      "runtime_assumptions": "Requires every relation-competition input plus an independently justified calibration context.",
+      "contamination_risk": "highest of the three because multiple design degrees of freedom could be informed by consumed evidence",
+      "scientific_complexity": "high",
+      "directly_addresses": "both, in principle",
+      "smallest_valid_experiment": "Only after isolated mechanisms are preregistered; a factorial TRAIN-only design would be needed to separate their effects."
+    }
+  },
+  "preferred_family": "B_relation_competition",
+  "preference_reason": "It is the smallest runtime-compatible change with a direct mechanistic link to frozen substitution/deletion false-positive cohorts, reuses one coherent likelihood space, and permits a clean TRAIN-only causal comparison. It does not claim to solve speaker shift or correct-only overlap.",
+  "combined_intervention_currently_justified": false,
+  "calibration_only_currently_preferred": false
+}

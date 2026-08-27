@@ -1,0 +1,58 @@
+{
+  "validation_status": {
+    "speakers": ["ABA", "HKK", "HQTV", "LXC", "MBMPS", "SVBI"],
+    "addition_performance_consumed_in": "R5-1B",
+    "r5_1c_posthoc_analysis_consumed": true,
+    "may_be_called_untouched_confirmation_for_r5_2": false,
+    "required_disclosure": "R5-2 is motivated by R5-1B and R5-1C, so any later use of current VALIDATION is iterative development/transfer evidence only."
+  },
+  "test_status": {
+    "speakers": ["ASI", "ERMS", "SKA", "THV", "TXHC", "YDCK"],
+    "audio_accessed": false,
+    "inference_run": false,
+    "performance_consumed": false,
+    "may_be_used_for_development": false,
+    "current_action": "PRESERVE_CLOSED"
+  },
+  "future_policy_options": [
+    {
+      "option": "TRAIN_ONLY_LOSO_DEVELOPMENT",
+      "role": "Preferred smallest feasibility experiment.",
+      "design": "Freeze one relation-competition formula, ties, metrics, gates, and threshold protocol before scoring; use 12-fold TRAIN-speaker LOSO and compare causally with the frozen-formula baseline on TRAIN only.",
+      "confirmation_level": "development only",
+      "uses_current_validation": false,
+      "uses_test": false
+    },
+    {
+      "option": "TRANSPARENT_ITERATIVE_VALIDATION_TRANSFER",
+      "role": "Possible later transfer check only after TRAIN development and a separate frozen contract.",
+      "design": "Use current VALIDATION once with full disclosure that R5-1B/R5-1C informed the new hypothesis; never call it independent confirmation and never tune on it.",
+      "confirmation_level": "iterative transfer evidence",
+      "uses_current_validation": true,
+      "uses_test": false
+    },
+    {
+      "option": "NEW_EXTERNAL_OR_NEWLY_HELD_OUT_SPEAKERS",
+      "role": "Strongest route to a fresh development-transfer evaluation if scientifically and operationally available.",
+      "design": "Freeze eligibility and gates before observing addition performance on genuinely new speakers; retain current TEST if possible.",
+      "confirmation_level": "depends on collection and isolation protocol",
+      "uses_current_validation": false,
+      "uses_test": false
+    },
+    {
+      "option": "LOCKED_TEST_AFTER_DEVELOPMENT",
+      "role": "Candidate final independent confirmation only after all development requirements pass.",
+      "design": "Create a dedicated locked TEST preregistration and obtain separate authorization. TEST must not be used as development validation.",
+      "confirmation_level": "potential final independent confirmation",
+      "uses_current_validation": "optional iterative evidence only",
+      "uses_test": "future separately authorized single locked evaluation"
+    }
+  ],
+  "forbidden_counterfactual_work": [
+    "ranking R5-2 formulas on consumed VALIDATION",
+    "calculating validation-optimal thresholds",
+    "selecting normalizations, penalties, or weights from R5-1B scores",
+    "using TEST as development validation"
+  ],
+  "protocol_blocked": false
+}

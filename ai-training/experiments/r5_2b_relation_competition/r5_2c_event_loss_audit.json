@@ -1,0 +1,35 @@
+{
+  "BEST_INSERT_metadata": {
+    "identical_count": 16582,
+    "identical_share": 1.0,
+    "mismatch_count": 0,
+    "mismatch_examples": []
+  },
+  "frozen_event_F1": {
+    "R5_1A": 0.04389312977099236,
+    "R5_2B": 0.03253796095444685,
+    "delta": -0.01135516881654551
+  },
+  "R5_1A_predicted_event_words": 706,
+  "R5_2B_predicted_event_words": 580,
+  "R5_1A_exact_event_TP_words": 23,
+  "R5_2B_exact_event_TP_words": 15,
+  "event_TP_lost_due_decision_change": 10,
+  "event_TP_lost_position_counts": {
+    "BETWEEN": 8,
+    "AFTER_FINAL": 2
+  },
+  "event_FP_removed": 403,
+  "event_FP_removed_position_counts": {
+    "BETWEEN": 160,
+    "BEFORE_FIRST": 68,
+    "AFTER_FINAL": 175
+  },
+  "event_FP_newly_introduced": 285,
+  "event_FP_new_position_counts": {
+    "BETWEEN": 131,
+    "BEFORE_FIRST": 24,
+    "AFTER_FINAL": 130
+  },
+  "primary_cause": "decision changes from relation suppression/LOSO thresholds; BEST_INSERT phone/boundary construction remained identical"
+}

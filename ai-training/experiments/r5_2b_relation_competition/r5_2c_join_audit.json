@@ -1,0 +1,28 @@
+{
+  "status": "PASS",
+  "stable_identity_field": "source_identity",
+  "matched_rows": 16582,
+  "union_rows": 16582,
+  "row_counts": {
+    "r5_1a_scores": 16582,
+    "r5_1a_oof": 16582,
+    "r5_2b_scores": 16582,
+    "r5_2b_oof": 16582
+  },
+  "duplicates": {
+    "r5_1a_scores": 0,
+    "r5_1a_oof": 0,
+    "r5_2b_scores": 0,
+    "r5_2b_oof": 0
+  },
+  "missing": {
+    "r5_1a_scores": 0,
+    "r5_1a_oof": 0,
+    "r5_2b_scores": 0,
+    "r5_2b_oof": 0
+  },
+  "metadata_mismatch_count": 0,
+  "metadata_mismatch_examples": [],
+  "fuzzy_matching_used": false,
+  "rows_excluded": 0
+}

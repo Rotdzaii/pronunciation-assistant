@@ -1,0 +1,39 @@
+{
+  "provenance_result": "UNIQUE_AND_CONSISTENT",
+  "r5_1a": {
+    "driver": "ai-training/experiments/r5_1a_alignability_safe_addition_scoring/r5_1a_train_execution_driver.py",
+    "root_resolution": "Path(os.environ['L2_ARCTIC_ROOT']).resolve()",
+    "root_source": "required environment configuration",
+    "manual_textgrid_formula": "audio_root / speaker / 'annotation' / f'{utterance}.TextGrid'",
+    "relevant_lines": [243, 283, 285, 761, 766, 767]
+  },
+  "r5_0": {
+    "source_identity": "ai-training/experiments/r5_0_addition_feasibility_audit/r5_0_source_identity.json",
+    "recorded_root": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant\\ai-training\\datasets\\l2-arctic\\raw\\l2arctic_release_v5.0",
+    "manual_textgrid_formula": "audio_root / speaker / 'annotation' / f'{utterance}.TextGrid'",
+    "source_line": 223
+  },
+  "r4": {
+    "mfa_anchor_driver": "ai-training/scripts/run_r4_2c_mfa_missing_phone_anchor_audit.py",
+    "root_resolution": "Path(os.environ['L2_ARCTIC_ROOT']).expanduser().resolve()",
+    "manual_textgrid_formula": "RAW_ROOT / speaker / 'annotation' / f'{utterance}.TextGrid'",
+    "word_reconstruction_driver": "ai-training/scripts/run_r4_3a_word_sequence_design_audit.py",
+    "word_reconstruction_formula": "audio_root / speaker / 'annotation' / f'{utterance}.TextGrid'"
+  },
+  "v4_generation": {
+    "builder": "ai-training/scripts/build_l2_arctic_expected_observed_v4.py",
+    "default_dataset_root": "ai-training/datasets/l2-arctic/raw/l2arctic_release_v5.0",
+    "source_schema": "l2arctic_release_v5.0/<speaker>/annotation/*.TextGrid",
+    "delegated_enumerator": "build_l2_arctic_all_speakers_correctness_v3.iter_annotation_intervals",
+    "enumerator_formula": "dataset_root / speaker_id / 'annotation'; glob('*.TextGrid')"
+  },
+  "path_schema": {
+    "speaker_directory": "<speaker>",
+    "annotation_subdirectory": "annotation",
+    "filename": "<utterance_id>.TextGrid",
+    "extension_case": ".TextGrid",
+    "utterance_normalization": "none",
+    "speaker_normalization": "none"
+  },
+  "annotation_content_read_during_pa0": false
+}

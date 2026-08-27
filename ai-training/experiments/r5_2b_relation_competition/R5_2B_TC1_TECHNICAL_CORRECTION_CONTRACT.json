@@ -1,0 +1,64 @@
+{
+  "stage": "R5-2B-TC1",
+  "title": "Empty-target execution-guard technical correction contract",
+  "status": "R5_2B_TC1_TECHNICAL_CORRECTION_CONTRACT_FROZEN",
+  "contract_type": "technical_correction_only",
+  "scientific_hypothesis_changed": false,
+  "authoritative_upstream_status": {
+    "r5_2b_contract": "R5_2B_DEVELOPMENT_CONTRACT_FROZEN",
+    "r5_2b_static_verification": "R5_2B_STATIC_VERIFICATION_PASS",
+    "failed_execution": "R5_2B_EXECUTION_TECHNICAL_FAILURE_EMPTY_TARGET",
+    "tc0": "R5_2B_TC0_NUMERICAL_EQUIVALENCE_CONFIRMED",
+    "tc0_root_cause": "FLOATING_POINT_EQUIVALENCE_ONLY",
+    "scientific_metrics_exist": false,
+    "gates_evaluated": 0,
+    "gates_total": 8
+  },
+  "correction_scope": {
+    "may_change": [
+      "additive execution-orchestration driver identity",
+      "empty-target diagnostic equivalence guard",
+      "diagnostic provenance and bound reporting"
+    ],
+    "must_not_change": [
+      "r5_2b_scorer.py",
+      "R5_2B_DEVELOPMENT_CONTRACT.json",
+      "model or checkpoint",
+      "logits or preprocessing",
+      "blank index",
+      "hypothesis constructors or tie rules",
+      "TARGET_SCORE or empty-target formula",
+      "relation-competition score C",
+      "population or cohorts",
+      "LOSO or threshold selection",
+      "eight gates",
+      "event semantics or scientific statuses"
+    ],
+    "original_failed_driver_preserved": true,
+    "future_driver_name": "r5_2b_train_execution_driver_tc1.py"
+  },
+  "authoritative_score_policy": {
+    "implementation": "imported frozen R5-2B scorer",
+    "frozen_scorer_sha256": "2E44B79828DBB37B312CDC03C897A80803947A48F13864B26C454F3B8ED161A3",
+    "empty_raw_score": "sum_t log_softmax(logits[t],dim=-1)[blank=40]",
+    "empty_target_score": "RAW_SCORE([])",
+    "scientific_value": "the unchanged value returned by frozen scorer.score_target(logits,[],T)",
+    "diagnostic_value_may_replace_scientific_value": false,
+    "cpu_reduction_substitution": false,
+    "float64_scientific_promotion": false,
+    "averaging": false
+  },
+  "numeric_policy_reference": "r5_2b_tc1_numeric_policy.json",
+  "future_failure_statuses": {
+    "nonfinite": "R5_2B_TC_EXECUTION_TECHNICAL_FAILURE_NONFINITE_EMPTY_TARGET",
+    "beyond_bound": "R5_2B_TC_EXECUTION_TECHNICAL_FAILURE_EMPTY_TARGET_MISMATCH"
+  },
+  "historical_regressions": {
+    "tc0_float32_cross_backend": "PASS_UNDER_GENERAL_TWO_REDUCTION_BOUND",
+    "original_static_float64": "PASS"
+  },
+  "static_regression_required_before_train": true,
+  "train_execution_authorized_by_this_contract": false,
+  "validation_authorized": false,
+  "test_authorized": false
+}

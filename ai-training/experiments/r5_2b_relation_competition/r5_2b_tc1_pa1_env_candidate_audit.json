@@ -1,0 +1,300 @@
+{
+  "status": "PASS",
+  "words": 16582,
+  "keep_impossible": 0,
+  "keep_impossible_details": [],
+  "candidate_totals_by_family": {
+    "KEEP": 16582,
+    "INSERT": 2977040,
+    "SUB": 2255916,
+    "DELETE": 57844
+  },
+  "alignable_by_family": {
+    "KEEP": 16582,
+    "INSERT": 2976844,
+    "SUB": 2255916,
+    "DELETE": 57844
+  },
+  "impossible_by_family": {
+    "KEEP": 0,
+    "INSERT": 196,
+    "SUB": 0,
+    "DELETE": 0
+  },
+  "total_candidates": 5307382,
+  "total_alignable": 5307186,
+  "total_impossible": 196,
+  "empty_delete_count": 710,
+  "one_phone_words": 710,
+  "words_with_no_finite_insert": 0,
+  "words_with_no_finite_sub": 0,
+  "words_affected_by_impossible_candidates": 65,
+  "by_speaker": {
+    "BWC": {
+      "KEEP": {
+        "total": 1390,
+        "alignable": 1390,
+        "impossible": 0
+      },
+      "INSERT": {
+        "total": 250360,
+        "alignable": 250356,
+        "impossible": 4
+      },
+      "SUB": {
+        "total": 189891,
+        "alignable": 189891,
+        "impossible": 0
+      },
+      "DELETE": {
+        "total": 4869,
+        "alignable": 4869,
+        "impossible": 0
+      }
+    },
+    "EBVS": {
+      "KEEP": {
+        "total": 1372,
+        "alignable": 1372,
+        "impossible": 0
+      },
+      "INSERT": {
+        "total": 247000,
+        "alignable": 246984,
+        "impossible": 16
+      },
+      "SUB": {
+        "total": 187317,
+        "alignable": 187317,
+        "impossible": 0
+      },
+      "DELETE": {
+        "total": 4803,
+        "alignable": 4803,
+        "impossible": 0
+      }
+    },
+    "HJK": {
+      "KEEP": {
+        "total": 1401,
+        "alignable": 1401,
+        "impossible": 0
+      },
+      "INSERT": {
+        "total": 252480,
+        "alignable": 252472,
+        "impossible": 8
+      },
+      "SUB": {
+        "total": 191529,
+        "alignable": 191529,
+        "impossible": 0
+      },
+      "DELETE": {
+        "total": 4911,
+        "alignable": 4911,
+        "impossible": 0
+      }
+    },
+    "NCC": {
+      "KEEP": {
+        "total": 1408,
+        "alignable": 1408,
+        "impossible": 0
+      },
+      "INSERT": {
+        "total": 253600,
+        "alignable": 253584,
+        "impossible": 16
+      },
+      "SUB": {
+        "total": 192348,
+        "alignable": 192348,
+        "impossible": 0
+      },
+      "DELETE": {
+        "total": 4932,
+        "alignable": 4932,
+        "impossible": 0
+      }
+    },
+    "NJS": {
+      "KEEP": {
+        "total": 1406,
+        "alignable": 1406,
+        "impossible": 0
+      },
+      "INSERT": {
+        "total": 254120,
+        "alignable": 254098,
+        "impossible": 22
+      },
+      "SUB": {
+        "total": 192933,
+        "alignable": 192933,
+        "impossible": 0
+      },
+      "DELETE": {
+        "total": 4947,
+        "alignable": 4947,
+        "impossible": 0
+      }
+    },
+    "PNV": {
+      "KEEP": {
+        "total": 1395,
+        "alignable": 1395,
+        "impossible": 0
+      },
+      "INSERT": {
+        "total": 251880,
+        "alignable": 251874,
+        "impossible": 6
+      },
+      "SUB": {
+        "total": 191178,
+        "alignable": 191178,
+        "impossible": 0
+      },
+      "DELETE": {
+        "total": 4902,
+        "alignable": 4902,
+        "impossible": 0
+      }
+    },
+    "RRBI": {
+      "KEEP": {
+        "total": 1408,
+        "alignable": 1408,
+        "impossible": 0
+      },
+      "INSERT": {
+        "total": 252600,
+        "alignable": 252598,
+        "impossible": 2
+      },
+      "SUB": {
+        "total": 191373,
+        "alignable": 191373,
+        "impossible": 0
+      },
+      "DELETE": {
+        "total": 4907,
+        "alignable": 4907,
+        "impossible": 0
+      }
+    },
+    "TLV": {
+      "KEEP": {
+        "total": 1383,
+        "alignable": 1383,
+        "impossible": 0
+      },
+      "INSERT": {
+        "total": 248720,
+        "alignable": 248670,
+        "impossible": 50
+      },
+      "SUB": {
+        "total": 188565,
+        "alignable": 188565,
+        "impossible": 0
+      },
+      "DELETE": {
+        "total": 4835,
+        "alignable": 4835,
+        "impossible": 0
+      }
+    },
+    "TNI": {
+      "KEEP": {
+        "total": 1345,
+        "alignable": 1345,
+        "impossible": 0
+      },
+      "INSERT": {
+        "total": 239360,
+        "alignable": 239340,
+        "impossible": 20
+      },
+      "SUB": {
+        "total": 180921,
+        "alignable": 180921,
+        "impossible": 0
+      },
+      "DELETE": {
+        "total": 4639,
+        "alignable": 4639,
+        "impossible": 0
+      }
+    },
+    "YBAA": {
+      "KEEP": {
+        "total": 1298,
+        "alignable": 1298,
+        "impossible": 0
+      },
+      "INSERT": {
+        "total": 229720,
+        "alignable": 229700,
+        "impossible": 20
+      },
+      "SUB": {
+        "total": 173355,
+        "alignable": 173355,
+        "impossible": 0
+      },
+      "DELETE": {
+        "total": 4445,
+        "alignable": 4445,
+        "impossible": 0
+      }
+    },
+    "YKWK": {
+      "KEEP": {
+        "total": 1382,
+        "alignable": 1382,
+        "impossible": 0
+      },
+      "INSERT": {
+        "total": 248240,
+        "alignable": 248226,
+        "impossible": 14
+      },
+      "SUB": {
+        "total": 188136,
+        "alignable": 188136,
+        "impossible": 0
+      },
+      "DELETE": {
+        "total": 4824,
+        "alignable": 4824,
+        "impossible": 0
+      }
+    },
+    "ZHAA": {
+      "KEEP": {
+        "total": 1394,
+        "alignable": 1394,
+        "impossible": 0
+      },
+      "INSERT": {
+        "total": 248960,
+        "alignable": 248942,
+        "impossible": 18
+      },
+      "SUB": {
+        "total": 188370,
+        "alignable": 188370,
+        "impossible": 0
+      },
+      "DELETE": {
+        "total": 4830,
+        "alignable": 4830,
+        "impossible": 0
+      }
+    }
+  },
+  "candidate_count_identity": "80N+41",
+  "expected_total_from_identity": 5307382
+}

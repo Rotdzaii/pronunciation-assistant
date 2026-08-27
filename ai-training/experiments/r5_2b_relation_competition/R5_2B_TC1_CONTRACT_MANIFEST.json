@@ -1,0 +1,55 @@
+{
+  "manifest_name": "R5_2B_TC1_CONTRACT_MANIFEST",
+  "manifest_version": 1,
+  "created_stage": "R5-2B-TC1 technical-correction contract freeze",
+  "self_excluded": true,
+  "artifact_count": 7,
+  "artifacts": [
+    {
+      "relative_path": "R5_2B_TC1_TECHNICAL_CORRECTION_CONTRACT.json",
+      "byte_size": 2612,
+      "sha256": "632F32CEF2F8EE05A47ACA7FFCE97FB5DA35236C48B53E25EC06CEFCDACE954F"
+    },
+    {
+      "relative_path": "R5_2B_TC1_PREREGISTRATION.md",
+      "byte_size": 3867,
+      "sha256": "4FE47BA0FC11B475AE18CAF04EEFD122992983B0AA7F9D3BA3C98E213572B929"
+    },
+    {
+      "relative_path": "r5_2b_tc1_source_identity.json",
+      "byte_size": 1245,
+      "sha256": "F56B09650CE693EBB9222D0C5A682B16FDAB261627101302A92461F9D2914C97"
+    },
+    {
+      "relative_path": "r5_2b_tc1_numeric_policy.json",
+      "byte_size": 2842,
+      "sha256": "EB7A4989AC03ED89080F302523398797D41944C99FA32879383BFA61AFFA2772"
+    },
+    {
+      "relative_path": "r5_2b_tc1_correction_scope.json",
+      "byte_size": 1672,
+      "sha256": "6CFBFE999974480F494601D8276E0F2D8318A4188A572DC3A3A9477D985CC42D"
+    },
+    {
+      "relative_path": "r5_2b_tc1_protocol_audit.json",
+      "byte_size": 674,
+      "sha256": "DEEC49B95447261C25351CC1686A8D7F279BC78AEDE8D98FAD2165D89F0B1742"
+    },
+    {
+      "relative_path": "R5_2B_TC1_TECHNICAL_CORRECTION_CONTRACT.md",
+      "byte_size": 3061,
+      "sha256": "4C766115526794B112BA49FA776FBF91CA7362B2E99D7A020E01E705DC38DD87"
+    }
+  ],
+  "preserved_frozen_identities": {
+    "r5_2b_contract_sha256": "55572805C1878D41D4B6C41E1C7A31B2C3725A81050942494F0E1292092FEF38",
+    "r5_2b_preregistration_sha256": "6D2DD9672222D174B32F0E25448419F42FE179522D2D8AA37C7766C8A1BBFBBA",
+    "r5_2b_static_manifest_sha256": "0D380ACA5C0CF101E60DFF043221BBE6AE267BA9FFDAD1C677C4E7FFCA23F80F",
+    "r5_2b_scorer_sha256": "2E44B79828DBB37B312CDC03C897A80803947A48F13864B26C454F3B8ED161A3",
+    "failed_execution_manifest_sha256": "92163F8DE3ECEAFEE2950AF57302AA565C0F3612A2D6F0D36462552FA66BA09E",
+    "tc0_manifest_sha256": "91F5DBCB9719FEF7C7E3E1CEF5773E92A18B813FFD54384359DF026F300C278E"
+  },
+  "hash_algorithm": "SHA-256",
+  "hash_audit": "HASH_AUDIT_PASS",
+  "final_status": "R5_2B_TC1_TECHNICAL_CORRECTION_CONTRACT_FROZEN"
+}

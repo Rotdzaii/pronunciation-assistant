@@ -1,0 +1,21 @@
+{
+  "contract_status": "FROZEN",
+  "source_population": "Exact R5-1A TRAIN runtime population",
+  "runtime_evaluable_words": 16582,
+  "positive_words": 323,
+  "negative_words": 16259,
+  "clean_source_addition_events": 423,
+  "runtime_addition_events": 342,
+  "multiple_addition_words": 19,
+  "mixed_substitution_addition_words": 117,
+  "mixed_deletion_addition_words": 26,
+  "train_speakers": [
+    "BWC", "EBVS", "HJK", "NCC", "NJS", "PNV",
+    "RRBI", "TLV", "TNI", "YBAA", "YKWK", "ZHAA"
+  ],
+  "membership_changes_allowed": false,
+  "one_phone_words_retained": true,
+  "mixed_error_words_retained": true,
+  "future_accounting_failure_status": "STOP_BEFORE_METRIC_INTERPRETATION",
+  "no_r5_2_specific_exclusions": true
+}

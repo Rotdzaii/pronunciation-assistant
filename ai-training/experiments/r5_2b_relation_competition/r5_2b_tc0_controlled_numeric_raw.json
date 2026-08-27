@@ -1,0 +1,366 @@
+{
+  "scope": "deterministic synthetic tensors only",
+  "torch_version": "2.12.0.dev20260408+cu128",
+  "cuda_version": "12.8",
+  "cuda_available": true,
+  "gpu": "NVIDIA GeForce RTX 5060 Laptop GPU",
+  "cases": [
+    {
+      "device": "cpu",
+      "dtype": "float32",
+      "shape": [
+        4,
+        41
+      ],
+      "T": 4,
+      "blank_index": 40,
+      "logits_dtype": "float32",
+      "log_softmax_dtype": "float32",
+      "logits_device": "cpu",
+      "log_probs_device": "cpu",
+      "blank_log_prob_values": [
+        -4.125710964202881,
+        -3.2495081424713135,
+        -4.680192470550537,
+        -3.61171817779541
+      ],
+      "paths": {
+        "frozen_scorer": -15.667130470275879,
+        "shared_log_probs_same_device_tensor_sum": -15.667130470275879,
+        "historical_adapter_cpu_tensor_sum": -15.667130470275879,
+        "separate_recomputed_same_device_tensor_sum": -15.667130470275879,
+        "separate_recomputed_cpu_tensor_sum": -15.667130470275879,
+        "shared_log_probs_promoted_float64_same_device_sum": -15.667129755020142,
+        "shared_log_probs_promoted_float64_cpu_sum": -15.667129755020142,
+        "python_math_fsum": -15.667129755020142,
+        "numpy_source_dtype_sum": -15.667130470275879,
+        "numpy_float64_sum": -15.667129755020142,
+        "framework_target_length_zero_ctc": -15.667130470275879
+      },
+      "differences_from_frozen_scorer": {
+        "frozen_scorer": {
+          "absolute": 0.0,
+          "relative_to_scorer": 0.0
+        },
+        "shared_log_probs_same_device_tensor_sum": {
+          "absolute": 0.0,
+          "relative_to_scorer": 0.0
+        },
+        "historical_adapter_cpu_tensor_sum": {
+          "absolute": 0.0,
+          "relative_to_scorer": 0.0
+        },
+        "separate_recomputed_same_device_tensor_sum": {
+          "absolute": 0.0,
+          "relative_to_scorer": 0.0
+        },
+        "separate_recomputed_cpu_tensor_sum": {
+          "absolute": 0.0,
+          "relative_to_scorer": 0.0
+        },
+        "shared_log_probs_promoted_float64_same_device_sum": {
+          "absolute": 7.152557373046875e-07,
+          "relative_to_scorer": 4.565326998850816e-08
+        },
+        "shared_log_probs_promoted_float64_cpu_sum": {
+          "absolute": 7.152557373046875e-07,
+          "relative_to_scorer": 4.565326998850816e-08
+        },
+        "python_math_fsum": {
+          "absolute": 7.152557373046875e-07,
+          "relative_to_scorer": 4.565326998850816e-08
+        },
+        "numpy_source_dtype_sum": {
+          "absolute": 0.0,
+          "relative_to_scorer": 0.0
+        },
+        "numpy_float64_sum": {
+          "absolute": 7.152557373046875e-07,
+          "relative_to_scorer": 4.565326998850816e-08
+        },
+        "framework_target_length_zero_ctc": {
+          "absolute": 0.0,
+          "relative_to_scorer": 0.0
+        }
+      },
+      "framework": {
+        "supported": true,
+        "value": -15.667130470275879,
+        "error": null
+      },
+      "recomputation_contributes": false,
+      "device_transfer_before_sum_contributes": false,
+      "source_dtype_machine_epsilon": 1.1920928955078125e-07,
+      "source_dtype_sum_abs_terms": 15.667129755020142
+    },
+    {
+      "device": "cpu",
+      "dtype": "float64",
+      "shape": [
+        4,
+        41
+      ],
+      "T": 4,
+      "blank_index": 40,
+      "logits_dtype": "float64",
+      "log_softmax_dtype": "float64",
+      "logits_device": "cpu",
+      "log_probs_device": "cpu",
+      "blank_log_prob_values": [
+        -4.1257108640595925,
+        -3.2495081589531662,
+        -4.680192476302401,
+        -3.61171819042553
+      ],
+      "paths": {
+        "frozen_scorer": -15.66712968974069,
+        "shared_log_probs_same_device_tensor_sum": -15.66712968974069,
+        "historical_adapter_cpu_tensor_sum": -15.66712968974069,
+        "separate_recomputed_same_device_tensor_sum": -15.66712968974069,
+        "separate_recomputed_cpu_tensor_sum": -15.66712968974069,
+        "shared_log_probs_promoted_float64_same_device_sum": -15.66712968974069,
+        "shared_log_probs_promoted_float64_cpu_sum": -15.66712968974069,
+        "python_math_fsum": -15.66712968974069,
+        "numpy_source_dtype_sum": -15.66712968974069,
+        "numpy_float64_sum": -15.66712968974069,
+        "framework_target_length_zero_ctc": -15.66712968974069
+      },
+      "differences_from_frozen_scorer": {
+        "frozen_scorer": {
+          "absolute": 0.0,
+          "relative_to_scorer": 0.0
+        },
+        "shared_log_probs_same_device_tensor_sum": {
+          "absolute": 0.0,
+          "relative_to_scorer": 0.0
+        },
+        "historical_adapter_cpu_tensor_sum": {
+          "absolute": 0.0,
+          "relative_to_scorer": 0.0
+        },
+        "separate_recomputed_same_device_tensor_sum": {
+          "absolute": 0.0,
+          "relative_to_scorer": 0.0
+        },
+        "separate_recomputed_cpu_tensor_sum": {
+          "absolute": 0.0,
+          "relative_to_scorer": 0.0
+        },
+        "shared_log_probs_promoted_float64_same_device_sum": {
+          "absolute": 0.0,
+          "relative_to_scorer": 0.0
+        },
+        "shared_log_probs_promoted_float64_cpu_sum": {
+          "absolute": 0.0,
+          "relative_to_scorer": 0.0
+        },
+        "python_math_fsum": {
+          "absolute": 0.0,
+          "relative_to_scorer": 0.0
+        },
+        "numpy_source_dtype_sum": {
+          "absolute": 0.0,
+          "relative_to_scorer": 0.0
+        },
+        "numpy_float64_sum": {
+          "absolute": 0.0,
+          "relative_to_scorer": 0.0
+        },
+        "framework_target_length_zero_ctc": {
+          "absolute": 0.0,
+          "relative_to_scorer": 0.0
+        }
+      },
+      "framework": {
+        "supported": true,
+        "value": -15.66712968974069,
+        "error": null
+      },
+      "recomputation_contributes": false,
+      "device_transfer_before_sum_contributes": false,
+      "source_dtype_machine_epsilon": 2.220446049250313e-16,
+      "source_dtype_sum_abs_terms": 15.66712968974069
+    },
+    {
+      "device": "cuda",
+      "dtype": "float32",
+      "shape": [
+        4,
+        41
+      ],
+      "T": 4,
+      "blank_index": 40,
+      "logits_dtype": "float32",
+      "log_softmax_dtype": "float32",
+      "logits_device": "cuda:0",
+      "log_probs_device": "cuda:0",
+      "blank_log_prob_values": [
+        -4.125710964202881,
+        -3.2495081424713135,
+        -4.680192470550537,
+        -3.61171817779541
+      ],
+      "paths": {
+        "frozen_scorer": -15.667129516601562,
+        "shared_log_probs_same_device_tensor_sum": -15.667129516601562,
+        "historical_adapter_cpu_tensor_sum": -15.667130470275879,
+        "separate_recomputed_same_device_tensor_sum": -15.667129516601562,
+        "separate_recomputed_cpu_tensor_sum": -15.667130470275879,
+        "shared_log_probs_promoted_float64_same_device_sum": -15.667129755020142,
+        "shared_log_probs_promoted_float64_cpu_sum": -15.667129755020142,
+        "python_math_fsum": -15.667129755020142,
+        "numpy_source_dtype_sum": -15.667130470275879,
+        "numpy_float64_sum": -15.667129755020142,
+        "framework_target_length_zero_ctc": -15.667130470275879
+      },
+      "differences_from_frozen_scorer": {
+        "frozen_scorer": {
+          "absolute": 0.0,
+          "relative_to_scorer": 0.0
+        },
+        "shared_log_probs_same_device_tensor_sum": {
+          "absolute": 0.0,
+          "relative_to_scorer": 0.0
+        },
+        "historical_adapter_cpu_tensor_sum": {
+          "absolute": 9.5367431640625e-07,
+          "relative_to_scorer": 6.087103035662633e-08
+        },
+        "separate_recomputed_same_device_tensor_sum": {
+          "absolute": 0.0,
+          "relative_to_scorer": 0.0
+        },
+        "separate_recomputed_cpu_tensor_sum": {
+          "absolute": 9.5367431640625e-07,
+          "relative_to_scorer": 6.087103035662633e-08
+        },
+        "shared_log_probs_promoted_float64_same_device_sum": {
+          "absolute": 2.384185791015625e-07,
+          "relative_to_scorer": 1.5217757589156582e-08
+        },
+        "shared_log_probs_promoted_float64_cpu_sum": {
+          "absolute": 2.384185791015625e-07,
+          "relative_to_scorer": 1.5217757589156582e-08
+        },
+        "python_math_fsum": {
+          "absolute": 2.384185791015625e-07,
+          "relative_to_scorer": 1.5217757589156582e-08
+        },
+        "numpy_source_dtype_sum": {
+          "absolute": 9.5367431640625e-07,
+          "relative_to_scorer": 6.087103035662633e-08
+        },
+        "numpy_float64_sum": {
+          "absolute": 2.384185791015625e-07,
+          "relative_to_scorer": 1.5217757589156582e-08
+        },
+        "framework_target_length_zero_ctc": {
+          "absolute": 9.5367431640625e-07,
+          "relative_to_scorer": 6.087103035662633e-08
+        }
+      },
+      "framework": {
+        "supported": true,
+        "value": -15.667130470275879,
+        "error": null
+      },
+      "recomputation_contributes": false,
+      "device_transfer_before_sum_contributes": true,
+      "source_dtype_machine_epsilon": 1.1920928955078125e-07,
+      "source_dtype_sum_abs_terms": 15.667129755020142
+    },
+    {
+      "device": "cuda",
+      "dtype": "float64",
+      "shape": [
+        4,
+        41
+      ],
+      "T": 4,
+      "blank_index": 40,
+      "logits_dtype": "float64",
+      "log_softmax_dtype": "float64",
+      "logits_device": "cuda:0",
+      "log_probs_device": "cuda:0",
+      "blank_log_prob_values": [
+        -4.1257108640595925,
+        -3.249508158953166,
+        -4.680192476302402,
+        -3.61171819042553
+      ],
+      "paths": {
+        "frozen_scorer": -15.66712968974069,
+        "shared_log_probs_same_device_tensor_sum": -15.66712968974069,
+        "historical_adapter_cpu_tensor_sum": -15.66712968974069,
+        "separate_recomputed_same_device_tensor_sum": -15.66712968974069,
+        "separate_recomputed_cpu_tensor_sum": -15.66712968974069,
+        "shared_log_probs_promoted_float64_same_device_sum": -15.66712968974069,
+        "shared_log_probs_promoted_float64_cpu_sum": -15.66712968974069,
+        "python_math_fsum": -15.66712968974069,
+        "numpy_source_dtype_sum": -15.66712968974069,
+        "numpy_float64_sum": -15.66712968974069,
+        "framework_target_length_zero_ctc": -15.66712968974069
+      },
+      "differences_from_frozen_scorer": {
+        "frozen_scorer": {
+          "absolute": 0.0,
+          "relative_to_scorer": 0.0
+        },
+        "shared_log_probs_same_device_tensor_sum": {
+          "absolute": 0.0,
+          "relative_to_scorer": 0.0
+        },
+        "historical_adapter_cpu_tensor_sum": {
+          "absolute": 0.0,
+          "relative_to_scorer": 0.0
+        },
+        "separate_recomputed_same_device_tensor_sum": {
+          "absolute": 0.0,
+          "relative_to_scorer": 0.0
+        },
+        "separate_recomputed_cpu_tensor_sum": {
+          "absolute": 0.0,
+          "relative_to_scorer": 0.0
+        },
+        "shared_log_probs_promoted_float64_same_device_sum": {
+          "absolute": 0.0,
+          "relative_to_scorer": 0.0
+        },
+        "shared_log_probs_promoted_float64_cpu_sum": {
+          "absolute": 0.0,
+          "relative_to_scorer": 0.0
+        },
+        "python_math_fsum": {
+          "absolute": 0.0,
+          "relative_to_scorer": 0.0
+        },
+        "numpy_source_dtype_sum": {
+          "absolute": 0.0,
+          "relative_to_scorer": 0.0
+        },
+        "numpy_float64_sum": {
+          "absolute": 0.0,
+          "relative_to_scorer": 0.0
+        },
+        "framework_target_length_zero_ctc": {
+          "absolute": 0.0,
+          "relative_to_scorer": 0.0
+        }
+      },
+      "framework": {
+        "supported": true,
+        "value": -15.66712968974069,
+        "error": null
+      },
+      "recomputation_contributes": false,
+      "device_transfer_before_sum_contributes": false,
+      "source_dtype_machine_epsilon": 2.220446049250313e-16,
+      "source_dtype_sum_abs_terms": 15.66712968974069
+    }
+  ],
+  "historical_discrepancy_reproduced": true,
+  "historical_absolute_difference": 9.5367431640625e-07,
+  "audio_accessed": false,
+  "checkpoint_loaded": false,
+  "model_inference": false
+}

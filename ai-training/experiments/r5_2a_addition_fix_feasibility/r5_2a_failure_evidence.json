@@ -1,0 +1,32 @@
+{
+  "evidence_policy": "Frozen R5-1B and R5-1C evidence only; no metric was recomputed.",
+  "authoritative_status": "R5_1B_VALIDATION_TRANSFER_NOT_CONFIRMED",
+  "frozen_validation_metrics": {
+    "addition_vs_nonaddition_roc_auc": 0.7512808848879525,
+    "addition_vs_correct_only_roc_auc": 0.7717072309229656,
+    "binary_macro_f1": 0.543887636349494,
+    "addition_f1": 0.1413276231263383,
+    "correct_only_false_addition_rate": 0.0832481079975455
+  },
+  "frozen_false_positive_composition": {
+    "total": 641,
+    "correct_only": {"count": 407, "percent": 63.49},
+    "substitution_only": {"count": 167, "percent": 26.05},
+    "deletion_only": {"count": 44, "percent": 6.86},
+    "substitution_and_deletion": {"count": 23, "percent": 3.59}
+  },
+  "calibration_evidence": {
+    "five_of_six_validation_speakers_exceeded_historical_correct_far_reference": true,
+    "broad_speaker_score_location_movement": true,
+    "same_frozen_threshold_had_materially_higher_correct_only_far_on_validation": true,
+    "interpretation": "Speaker-dependent score location/calibration contributed to the transfer failure."
+  },
+  "class_overlap_evidence": {
+    "positive_and_negative_distributions_overlapped": true,
+    "false_positives_occurred_in_correct_substitution_deletion_and_mixed_negative_cohorts": true,
+    "mechanistic_relevance": "A KEEP-only non-addition reference may be weak for words acoustically better explained by a substitution or deletion; explicit competitors could suppress some such insertion explanations.",
+    "caution": "Correct-only words were the largest false-positive cohort, so relation competition cannot be assumed to solve the dominant error source."
+  },
+  "frozen_posthoc_interpretation": "MIXED_CALIBRATION_AND_CLASS_OVERLAP",
+  "r5_1_result_modified": false
+}

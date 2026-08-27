@@ -1,0 +1,64 @@
+{
+  "stage": "R5-2B-TC1 synthetic static regression",
+  "synthetic_only": true,
+  "identity_verification": {
+    "status": "PASS",
+    "required_top_level_identities_verified": 10,
+    "manifest_entries_verified": 42,
+    "all_recorded_byte_sizes_verified": true,
+    "all_recorded_hashes_verified": true
+  },
+  "suite": {
+    "run_count": 2,
+    "tests_per_run": 22,
+    "run_1_passed": 22,
+    "run_1_failed": 0,
+    "run_2_passed": 22,
+    "run_2_failed": 0,
+    "run_1_sha256": "349237D74A8DD2FA9883F1B2E32FD4B0C2968C9B5A904F696C224C19A0056975",
+    "run_2_sha256": "349237D74A8DD2FA9883F1B2E32FD4B0C2968C9B5A904F696C224C19A0056975",
+    "byte_identical": true
+  },
+  "bound_verification": {
+    "float32_n_1": "PASS",
+    "float32_n_2": "PASS",
+    "float32_n_4": "PASS",
+    "float32_n_128": "PASS",
+    "float64_n_1": "PASS",
+    "float64_n_4": "PASS",
+    "mixed_backend_same_dtype": "PASS",
+    "unit_roundoff_convention": "eps/2",
+    "two_reduction_bound": "BOUND_A + BOUND_B",
+    "n_1_gamma_and_bound_are_exactly_zero": true,
+    "invalid_gamma_domain_rejected": true
+  },
+  "regressions": {
+    "historical_tc0_float32": "PASS",
+    "original_static_fixture": "PASS",
+    "float64_control": "PASS",
+    "exact_equality": "PASS",
+    "within_bound": "PASS",
+    "beyond_bound_rejected": "PASS",
+    "equality_at_bound": "PASS",
+    "nan_rejected": "PASS",
+    "positive_infinity_rejected": "PASS",
+    "negative_infinity_rejected": "PASS",
+    "authoritative_score_immutable": "PASS",
+    "relation_score_immutable": "PASS"
+  },
+  "immutability": {
+    "frozen_scorer_sha256_before": "2E44B79828DBB37B312CDC03C897A80803947A48F13864B26C454F3B8ED161A3",
+    "frozen_scorer_sha256_after": "2E44B79828DBB37B312CDC03C897A80803947A48F13864B26C454F3B8ED161A3",
+    "failed_execution_manifest_sha256": "92163F8DE3ECEAFEE2950AF57302AA565C0F3612A2D6F0D36462552FA66BA09E",
+    "scientific_score_changed": false,
+    "relation_score_changed": false,
+    "frozen_scorer_modified": false,
+    "failed_execution_modified": false
+  },
+  "pass_criteria": {
+    "criteria_total": 25,
+    "criteria_passed": 25,
+    "criteria_failed": 0
+  },
+  "final_status": "R5_2B_TC1_STATIC_REGRESSION_PASS"
+}

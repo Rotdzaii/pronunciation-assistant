@@ -1,0 +1,62 @@
+{
+  "contract_status": "FROZEN",
+  "expected_sequence": "E = [e1,...,eN], N >= 1",
+  "vocabulary": {"canonical_phone_indices": "0..39", "blank_index": 40},
+  "hypothesis_families": {
+    "KEEP": {
+      "construction": "H_KEEP = E",
+      "count": "1"
+    },
+    "INSERT": {
+      "construction": "H_INSERT(E,b,p) = E[:b] + [p] + E[b:] for b=0..N, p=0..39",
+      "count": "40(N+1)",
+      "best_tie": ["lower insertion boundary", "lower canonical phone index"]
+    },
+    "SUB": {
+      "construction": "replace E[i] with p for i=0..N-1 and p != E[i]",
+      "count": "39N",
+      "best_tie": ["lower expected-phone position", "lower replacement canonical phone index"]
+    },
+    "DELETE": {
+      "construction": "H_DELETE(E,i) = E with E[i] removed for i=0..N-1",
+      "count": "N",
+      "best_tie": ["lower deleted expected-phone position"],
+      "identical_target_tie": "lower deleted expected-phone position wins metadata"
+    }
+  },
+  "candidate_count_identity": "1 + 40(N+1) + 39N + N = 80N + 41",
+  "nonempty_alignability": {
+    "adjacent_repeat_count": "count of adjacent identical canonical labels",
+    "minimum_ctc_steps": "len(H) + ADJACENT_REPEAT_COUNT(H)",
+    "alignable": "T >= MIN_CTC_STEPS(H)",
+    "impossible_raw_score": "negative infinity",
+    "impossible_target_score": "negative infinity",
+    "zero_infinity_output_interpreted_for_impossible_target": false
+  },
+  "alignable_nonempty_scoring": {
+    "raw_score": "-CTCLoss(log_softmax(logits,dim=-1),H,input_lengths=[T],target_lengths=[len(H)],blank=40,reduction='none',zero_infinity=True)",
+    "target_score": "RAW_SCORE(H) / max(len(H),1)",
+    "unexpected_nonfinite_action": "fatal technical stop"
+  },
+  "empty_target_scoring": "Use r5_2b_empty_target_contract.json exactly.",
+  "best_nonaddition": {
+    "numeric_score": "max(TARGET_SCORE(H_KEEP), TARGET_SCORE(BEST_SUB), TARGET_SCORE(BEST_DELETE))",
+    "diagnostic_family_tie_priority": ["KEEP", "SUB", "DELETE"],
+    "tie_priority_changes_numeric_maximum": false
+  },
+  "relation_competition_score": "C = TARGET_SCORE(BEST_INSERT) - BEST_NON_ADDITION_SCORE",
+  "binary_decision": {"addition": "C >= theta", "nonaddition": "C < theta"},
+  "event_output": "For a threshold-positive word, use BEST_INSERT phone and expected-sequence boundary.",
+  "nonaddition_output": "Binary NON_ADDITION; winning non-addition family is diagnostic only and is not a confirmed multiclass relation prediction.",
+  "only_score_family": "TARGET-normalized relation-competition margin C",
+  "forbidden_alternatives": [
+    "BEST_INSERT minus KEEP branch",
+    "ratios",
+    "relation softmax",
+    "RAW or TIME margins",
+    "relation weights",
+    "insertion penalties",
+    "learned normalization",
+    "R3 classifier outputs"
+  ]
+}

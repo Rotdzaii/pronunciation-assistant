@@ -1,0 +1,22 @@
+{
+  "stage": "R5-2A feasibility/design audit",
+  "documentation_and_static_code_inspection_only": true,
+  "training_run": false,
+  "model_inference_run": false,
+  "new_train_predictions": false,
+  "train_rerun": false,
+  "validation_rerun": false,
+  "validation_optimization": false,
+  "threshold_search": false,
+  "new_performance_metrics_calculated": false,
+  "synthetic_benchmark_run": false,
+  "checkpoint_loaded": false,
+  "audio_paths_resolved": false,
+  "test_audio_accessed": false,
+  "test_inference_run": false,
+  "test_performance_consumed": false,
+  "r5_1_modified": false,
+  "r4_modified_or_reopened": false,
+  "r5_2_scorer_implemented": false,
+  "r5_2_performance_artifacts_created": false
+}

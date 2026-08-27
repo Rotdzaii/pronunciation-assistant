@@ -1,0 +1,75 @@
+{
+  "contract_id": "R5-2B-PA1",
+  "contract_type": "TRAIN_PATH_RESOLUTION_ONLY_TECHNICAL_CORRECTION",
+  "contract_status": "R5_2B_PA1_PATH_CORRECTION_CONTRACT_FROZEN",
+  "scientific_generation": "R5-2B",
+  "scientific_performance_status": "UNKNOWN",
+  "scientific_gates_evaluated": 0,
+  "scientific_gates_total": 8,
+  "upstream_finding": {
+    "audit": "R5-2B-PA0",
+    "status": "R5_2B_PA0_ANNOTATION_PROVENANCE_CONFIRMED",
+    "root_cause": "PATH_ROOT_MISCONFIGURATION"
+  },
+  "frozen_roots": {
+    "MANUAL_TEXTGRID_ROOT": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant\\ai-training\\datasets\\l2-arctic\\raw\\l2arctic_release_v5.0",
+    "AUDIO_ROOT": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant\\ai-training\\datasets\\l2-arctic\\raw\\l2arctic_release_v5.0",
+    "V4_METADATA_ROOT": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\datasets\\l2-arctic\\metadata"
+  },
+  "root_role_policy": {
+    "logical_roles_are_independent": true,
+    "current_audio_and_manual_roots_physically_equal": true,
+    "manual_root_may_be_derived_from_driver_location": false,
+    "manual_root_may_be_derived_from_research_worktree": false,
+    "manual_root_may_be_derived_from_v4_metadata_root": false,
+    "audio_root_may_be_implicitly_derived_from_manual_root": false,
+    "manual_root_may_be_implicitly_derived_from_audio_root": false
+  },
+  "manual_textgrid_path_formula": "MANUAL_TEXTGRID_ROOT / <speaker> / annotation / <utterance_id>.TextGrid",
+  "allowed_correction": "PATH_RESOLUTION_ONLY",
+  "future_driver_identity_policy": "A new additive path-corrected driver must explicitly configure and pass independently named AUDIO_ROOT and MANUAL_TEXTGRID_ROOT inputs to unchanged inherited helpers.",
+  "future_pre_inference_guard": {
+    "must_run_before_annotation_content_or_audio_access": true,
+    "scope": "AUTHORIZED_TRAIN_SPEAKERS_ONLY",
+    "expected": 1799,
+    "existing_required": 1799,
+    "missing_required": 0,
+    "ambiguous_required": 0,
+    "failure_status": "R5_2B_PA1_EXECUTION_BLOCKED_ANNOTATION_EXISTENCE",
+    "skip_missing_files": false,
+    "first_file_regression": {
+      "relative_path": "BWC/annotation/arctic_a0006.TextGrid",
+      "byte_size": 8123,
+      "sha256": "EF3056511B71013C399F5F69F40B6A8865756FE26091DF72CC5EDB8E7D14A337",
+      "scientific_sample_selection_rule": false
+    },
+    "by_speaker": {
+      "BWC": 150,
+      "EBVS": 150,
+      "HJK": 150,
+      "NCC": 150,
+      "NJS": 150,
+      "PNV": 150,
+      "RRBI": 150,
+      "TLV": 150,
+      "TNI": 150,
+      "YBAA": 149,
+      "YKWK": 150,
+      "ZHAA": 150
+    }
+  },
+  "dataset_restoration_authorized": false,
+  "separate_static_path_suite_required": false,
+  "next_execution_authorization_after_freeze": "ONE_PATH_CORRECTED_CONTINUATION_USING_EXISTING_TC1_GUARD",
+  "scientific_immutability": {
+    "scientific_contract_modified": false,
+    "frozen_scorer_modified": false,
+    "population_semantics_modified": false,
+    "model_modified": false,
+    "threshold_policy_modified": false,
+    "gates_modified": false,
+    "TC1_numeric_policy_modified": false
+  },
+  "validation_access_authorized": false,
+  "test_access_authorized": false
+}

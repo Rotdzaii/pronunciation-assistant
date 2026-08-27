@@ -1,0 +1,52 @@
+{
+  "manifest_id": "R5_2B_PA0_MANIFEST",
+  "audit_id": "R5-2B-PA0",
+  "final_status": "R5_2B_PA0_ANNOTATION_PROVENANCE_CONFIRMED",
+  "root_cause": "PATH_ROOT_MISCONFIGURATION",
+  "hash_algorithm": "SHA-256",
+  "manifest_self_excluded": true,
+  "artifact_count": 8,
+  "artifacts": [
+    {
+      "relative_path": "r5_2b_pa0_annotation_root_provenance.json",
+      "byte_size": 2302,
+      "sha256": "9CFE7E9A87F7C5AF13F50F728FC6234CA3764CF32153D346CEE2994CE8946B22"
+    },
+    {
+      "relative_path": "r5_2b_pa0_driver_path_trace.json",
+      "byte_size": 1645,
+      "sha256": "68811CBFC36AE339796A98BEE6E2F6BE713AF2D91CA138A8342100D910837B61"
+    },
+    {
+      "relative_path": "r5_2b_pa0_prior_pipeline_path_trace.json",
+      "byte_size": 2097,
+      "sha256": "B53EEBCA429A4A3482F4F4437A663AE3014B0F1B510E1F166147A758A08C98C0"
+    },
+    {
+      "relative_path": "r5_2b_pa0_protocol_audit.json",
+      "byte_size": 575,
+      "sha256": "862882A97D8A46B0C43F4C9CD0174F7B949FE4DCA386F32894C90498FFE6D936"
+    },
+    {
+      "relative_path": "r5_2b_pa0_root_cause.json",
+      "byte_size": 1531,
+      "sha256": "08375A4FA5876E6F201C008F8D3554CBEE8FD9B4DD654EBC5414784363BB107D"
+    },
+    {
+      "relative_path": "r5_2b_pa0_source_identity.json",
+      "byte_size": 1715,
+      "sha256": "41905CB0D6EACA6C4896033A87A3A3341C7A466264FFDD2EF104B6BC64188DAD"
+    },
+    {
+      "relative_path": "R5_2B_PA0_TRAIN_ANNOTATION_PROVENANCE_AUDIT.md",
+      "byte_size": 4143,
+      "sha256": "CA6AE324748236249BD89219B8C6D22827D923F287AF40AD45A5BF418E1D1508"
+    },
+    {
+      "relative_path": "r5_2b_pa0_train_existence_audit.json",
+      "byte_size": 1580,
+      "sha256": "718538CFDDAE8A82F5AEC7E12C7FD29D086D4652FC983AA023DEBCBAA0F91F22"
+    }
+  ],
+  "hash_audit": "HASH_AUDIT_PASS"
+}

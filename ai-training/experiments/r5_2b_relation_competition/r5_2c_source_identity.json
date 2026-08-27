@@ -1,0 +1,44 @@
+{
+  "status": "PASS",
+  "r5_1a_execution_manifest": {
+    "path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r5_1a_alignability_safe_addition_scoring\\R5_1A_EXECUTION_MANIFEST.json",
+    "sha256": "C9343A75CE26C2BEECA388EBA855E91AE0992D22C0C5D785308D0A98B89A3CD6",
+    "entry_count": 14,
+    "failures": [],
+    "pass": true
+  },
+  "r5_2b_execution_manifest": {
+    "path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r5_2b_relation_competition\\R5_2B_TC1_PA1_ENV_EXECUTION_MANIFEST.json",
+    "sha256": "37F3C86FF11526B8AB54D173937A0F488125A1D0B610032CC8A5D47B11602387",
+    "entry_count": 21,
+    "failures": [],
+    "pass": true
+  },
+  "direct_frozen_identities": {
+    "r5_2b_contract": {
+      "path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r5_2b_relation_competition\\R5_2B_DEVELOPMENT_CONTRACT.json",
+      "expected_sha256": "55572805C1878D41D4B6C41E1C7A31B2C3725A81050942494F0E1292092FEF38",
+      "actual_sha256": "55572805C1878D41D4B6C41E1C7A31B2C3725A81050942494F0E1292092FEF38",
+      "match": true
+    },
+    "r5_2b_scorer": {
+      "path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r5_2b_relation_competition\\r5_2b_scorer.py",
+      "expected_sha256": "2E44B79828DBB37B312CDC03C897A80803947A48F13864B26C454F3B8ED161A3",
+      "actual_sha256": "2E44B79828DBB37B312CDC03C897A80803947A48F13864B26C454F3B8ED161A3",
+      "match": true
+    },
+    "v4": {
+      "path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\datasets\\l2-arctic\\metadata\\all_speakers_expected_observed_v4.csv",
+      "expected_sha256": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D",
+      "actual_sha256": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D",
+      "match": true
+    },
+    "checkpoint": {
+      "path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r4_4c2_bigru_ctc_seed42\\R4_4C2_bigru_ctc_phone_sequence_seed42_best_validation_per.pt",
+      "expected_sha256": "F54C9C2361AE78E1C37353AEB338A2DE6722C0B1EC4F885F6B52688CE9E88085",
+      "actual_sha256": "F54C9C2361AE78E1C37353AEB338A2DE6722C0B1EC4F885F6B52688CE9E88085",
+      "match": true
+    }
+  },
+  "audio_or_model_loaded": false
+}

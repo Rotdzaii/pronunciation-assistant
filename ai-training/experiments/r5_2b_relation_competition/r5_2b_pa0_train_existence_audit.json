@@ -1,0 +1,27 @@
+{
+  "scope": "TRAIN_ONLY_EXISTENCE_CHECK",
+  "derivation": "Distinct (speaker_id, utterance_id) pairs from frozen V4 metadata, filtered to the 12 authorized TRAIN speakers, mapped with the frozen manual TextGrid formula. No TextGrid content was read.",
+  "manual_textgrid_root": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant\\ai-training\\datasets\\l2-arctic\\raw\\l2arctic_release_v5.0",
+  "expected_required_annotation_files": 1799,
+  "existing_annotation_files": 1799,
+  "missing_annotation_files": 0,
+  "duplicate_or_ambiguous_mappings": 0,
+  "missing_paths": [],
+  "by_speaker": [
+    {"speaker": "BWC", "expected": 150, "existing": 150, "missing": 0},
+    {"speaker": "EBVS", "expected": 150, "existing": 150, "missing": 0},
+    {"speaker": "HJK", "expected": 150, "existing": 150, "missing": 0},
+    {"speaker": "NCC", "expected": 150, "existing": 150, "missing": 0},
+    {"speaker": "NJS", "expected": 150, "existing": 150, "missing": 0},
+    {"speaker": "PNV", "expected": 150, "existing": 150, "missing": 0},
+    {"speaker": "RRBI", "expected": 150, "existing": 150, "missing": 0},
+    {"speaker": "TLV", "expected": 150, "existing": 150, "missing": 0},
+    {"speaker": "TNI", "expected": 150, "existing": 150, "missing": 0},
+    {"speaker": "YBAA", "expected": 149, "existing": 149, "missing": 0},
+    {"speaker": "YKWK", "expected": 150, "existing": 150, "missing": 0},
+    {"speaker": "ZHAA", "expected": 150, "existing": 150, "missing": 0}
+  ],
+  "validation_paths_resolved": false,
+  "test_paths_resolved": false,
+  "annotation_content_read": false
+}

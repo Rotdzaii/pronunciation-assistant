@@ -1,0 +1,79 @@
+{
+  "manifest_id": "R5_2A_COMPETITIVE_RELATION_SCORING_FEASIBILITY_ARTIFACTS",
+  "date": "2026-08-18",
+  "status": "R5_2A_RELATION_COMPETITION_FEASIBLE",
+  "hash_algorithm": "SHA-256",
+  "manifest_excludes_itself": true,
+  "artifact_count": 11,
+  "artifacts": [
+    {
+      "relative_path": "r5_2a_source_identity.json",
+      "byte_size": 2988,
+      "sha256": "5CBDC96B4CA3E052AA21D5F2F77CEC171AF5538CF4318EDFCE1DD7C50F893B61"
+    },
+    {
+      "relative_path": "r5_2a_failure_evidence.json",
+      "byte_size": 1790,
+      "sha256": "E5942866667AAFDDCCAC1459BE45C9DD00E1A27120924C55F76642175983D4E5"
+    },
+    {
+      "relative_path": "r5_2a_relation_hypothesis_audit.json",
+      "byte_size": 3080,
+      "sha256": "B2209A449369DED298F56D859863C77FE22BDE8088F0B5887A8DA2C7E3BD539D"
+    },
+    {
+      "relative_path": "r5_2a_r3_r4_reuse_audit.json",
+      "byte_size": 2520,
+      "sha256": "FF5C8D2194E98A6DDB7ACAA7198D17D302839C43EE51971EBC85F9BE28F6B0C6"
+    },
+    {
+      "relative_path": "r5_2a_hypothesis_space.json",
+      "byte_size": 2860,
+      "sha256": "9AF280BC0AB28C27F00A28BEE3BFD0AD991A7987863ACE26524E9C6D630989E1"
+    },
+    {
+      "relative_path": "r5_2a_runtime_feasibility.json",
+      "byte_size": 2315,
+      "sha256": "405791CF97B2DEC4EEDC9FD2CF3DD90D779AF7CCAD9974ED89AABFC1976CF50E"
+    },
+    {
+      "relative_path": "r5_2a_evaluation_contamination.json",
+      "byte_size": 2936,
+      "sha256": "3709EA5508CBDC1FAB8A6359185BF97FA9A1572E3EFA45B749DC07C2713FA48A"
+    },
+    {
+      "relative_path": "r5_2a_intervention_comparison.json",
+      "byte_size": 4147,
+      "sha256": "1508EA9C9B6D4E23EDBE8B4923AB615BB7088038F8B45C6D20D7A78E52750C15"
+    },
+    {
+      "relative_path": "r5_2a_final_decision.json",
+      "byte_size": 1859,
+      "sha256": "A8C70FBAC06C5CF17FF24E294952CD6D12E362CD59A9360D6C2C1AC1DF54DD54"
+    },
+    {
+      "relative_path": "r5_2a_protocol_audit.json",
+      "byte_size": 706,
+      "sha256": "B9628C168DA49372ACD4B215A23AAC84BDD4800610F31580A8B1FFE049278C27"
+    },
+    {
+      "relative_path": "R5_2A_ADDITION_FIX_FEASIBILITY_REPORT.md",
+      "byte_size": 12734,
+      "sha256": "EBA3457D0FFDE82B8FB1CC350AE0678D8C1E637B22ACAEFF51600EBC19F4931F"
+    }
+  ],
+  "hash_audit": "HASH_AUDIT_PASS",
+  "hash_failures": [],
+  "protocol": {
+    "training_run": false,
+    "model_inference_run": false,
+    "new_train_predictions": false,
+    "validation_rerun": false,
+    "validation_optimization": false,
+    "threshold_search": false,
+    "test_audio_accessed": false,
+    "test_inference_run": false,
+    "test_performance_consumed": false,
+    "r5_1_modified": false
+  }
+}

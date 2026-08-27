@@ -1,0 +1,23 @@
+{
+  "stage": "R5-2B-TC1-PA1",
+  "verification_timing": "before_authorized_launch",
+  "status": "PASS",
+  "top_level_identities": [
+    {"name": "scientific_contract", "sha256": "55572805C1878D41D4B6C41E1C7A31B2C3725A81050942494F0E1292092FEF38", "byte_size": 6145, "match": true},
+    {"name": "frozen_scorer", "sha256": "2E44B79828DBB37B312CDC03C897A80803947A48F13864B26C454F3B8ED161A3", "byte_size": 18291, "match": true},
+    {"name": "TC1_static_manifest", "sha256": "462C7966B01B5858EB9D4A20F23ECF1A17EACD6430BB233A37A4E7EDA7A9DF63", "byte_size": 3473, "match": true},
+    {"name": "previous_corrected_execution_manifest", "sha256": "605941841092EA2D52D2773981FBB8D39E91738114F415AAFEF059EC536B521C", "byte_size": 2558, "match": true},
+    {"name": "PA0_manifest", "sha256": "8D17C47786AC8A4167C19A5A5C37291EDAA31DBD54505E8638CE591DD581182C", "byte_size": 1784, "match": true},
+    {"name": "PA1_contract", "sha256": "F02A497648D9D707521C3289C85755D75A5E5C3440BA97499F51C4EF677820B6", "byte_size": 3197, "match": true},
+    {"name": "PA1_preregistration", "sha256": "546373878FC019C6EA0F5722F82C32C9FC363C0B506447F30866BD6FC59AB915", "byte_size": 3370, "match": true},
+    {"name": "PA1_manifest", "sha256": "DF209C8376F18C82F6212508208D3856046BABBEB1351CE11E62BC33F24B2451", "byte_size": 1585, "match": true},
+    {"name": "V4", "sha256": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D", "byte_size": 48727961, "match": true},
+    {"name": "checkpoint", "sha256": "F54C9C2361AE78E1C37353AEB338A2DE6722C0B1EC4F885F6B52688CE9E88085", "byte_size": 813093, "match": true}
+  ],
+  "referenced_manifests_verified": 4,
+  "referenced_manifest_entries_verified": 32,
+  "manifest_entry_size_failures": 0,
+  "manifest_entry_sha256_failures": 0,
+  "all_required_identities_match": true,
+  "data_access_started_after_verification": false
+}

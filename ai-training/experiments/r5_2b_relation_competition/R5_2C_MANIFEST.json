@@ -1,0 +1,84 @@
+{
+  "stage": "R5-2C frozen relation-competition post-hoc failure audit",
+  "status": "R5_2C_POSTHOC_FAILURE_AUDIT_COMPLETE",
+  "manifest_self_excluded": true,
+  "artifact_count": 15,
+  "artifacts": [
+    {
+      "relative_path": "r5_2c_failure_audit_driver.py",
+      "byte_size": 39731,
+      "sha256": "04653DFBC4426589F1C5874DC3E9707326D3218AC32B0CC050711543B23F2CE1"
+    },
+    {
+      "relative_path": "r5_2c_source_identity.json",
+      "byte_size": 2474,
+      "sha256": "685B4FDFADBE50D365715F78214FFF3276D9A8A90152AAA853F18FA74EF43780"
+    },
+    {
+      "relative_path": "r5_2c_join_audit.json",
+      "byte_size": 604,
+      "sha256": "836D9A3613A83F8C6F9AE10B524E1AA3D68DE1D92A5493739BEEE7489E26DBB7"
+    },
+    {
+      "relative_path": "r5_2c_suppression_metrics.json",
+      "byte_size": 8908,
+      "sha256": "ED9CECD80564973DF61A9788335018B5A33A2AB5FE7BEBCEF74A2611325AA8EC"
+    },
+    {
+      "relative_path": "r5_2c_positive_suppression.json",
+      "byte_size": 5747,
+      "sha256": "5388295D74187DF7E665B41E9892D345FC75440F203CBEAC18AD2BF2BF1B0845"
+    },
+    {
+      "relative_path": "r5_2c_ranking_comparison.json",
+      "byte_size": 1267,
+      "sha256": "F7657C8BCA67508FFDB9B990B8629C1DB1D986F55DAC9BF022F0159B47765836"
+    },
+    {
+      "relative_path": "r5_2c_tp_fn_transition_audit.json",
+      "byte_size": 3432,
+      "sha256": "067034FC24935B638778E9E937D3142B629E72DDFABDFE7730621E52FB5ADCB9"
+    },
+    {
+      "relative_path": "r5_2c_threshold_compensation.json",
+      "byte_size": 141924,
+      "sha256": "C57E4EE6102E5DB657F4188AA7B6E6630A856B8536CEC8912EC902939BA7EE7B"
+    },
+    {
+      "relative_path": "r5_2c_relation_cohort_audit.json",
+      "byte_size": 2435,
+      "sha256": "980757BB256CB6B97611E4C6BE58C105F30D39618C50E466751D14F147E14B32"
+    },
+    {
+      "relative_path": "r5_2c_event_loss_audit.json",
+      "byte_size": 1008,
+      "sha256": "A089D713FC2E99ADCBE259CE5499EE17EDDCEF1F7C95AB55158570388DDA94A2"
+    },
+    {
+      "relative_path": "r5_2c_speaker_audit.json",
+      "byte_size": 5857,
+      "sha256": "4ACF49B7709E802804F5024D67684A2C44C61C040A85BB424D7AC70E7ADAFBDA"
+    },
+    {
+      "relative_path": "r5_2c_phone_position_diagnostics.json",
+      "byte_size": 4391,
+      "sha256": "88015495C934AB45B68F97368BBFF79C04771A287404A227F1C2308292116779"
+    },
+    {
+      "relative_path": "r5_2c_interpretation.json",
+      "byte_size": 1570,
+      "sha256": "B097A6B26FD29AD46409CD456A734F73673CD090B1044E3C6356AE67E213B18E"
+    },
+    {
+      "relative_path": "r5_2c_protocol_audit.json",
+      "byte_size": 480,
+      "sha256": "C2CEF4ADD964E2DE77154CC2DE78FE5DD6F2DDDDCA1B15CFCD8B1B77869A4A70"
+    },
+    {
+      "relative_path": "R5_2C_RELATION_COMPETITION_FAILURE_AUDIT.md",
+      "byte_size": 1779,
+      "sha256": "28C8D1BD79C880BEABFF722061CA8477044DE648CFA787B008A2E2CD346FEE2B"
+    }
+  ],
+  "hash_audit": "HASH_AUDIT_PASS"
+}

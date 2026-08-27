@@ -1,0 +1,135 @@
+{
+  "contract_id": "R5-2B_RELATION_COMPETITIVE_EXACT_CTC_TRAIN_DEVELOPMENT",
+  "date": "2026-08-18",
+  "contract_status": "R5_2B_DEVELOPMENT_CONTRACT_FROZEN",
+  "purpose": "Freeze one TRAIN-only relation-competitive exact CTC development experiment before implementation, static verification, or inference.",
+  "scientific_hypothesis": "An INSERT counts as addition evidence only to the extent that it outperforms the strongest KEEP, single-SUBSTITUTION, or single-DELETE non-addition explanation in the same alignability-safe TARGET-normalized exact CTC likelihood space.",
+  "causal_mechanism": "Explicit SUB/DELETE alternatives may prevent a weak KEEP score in substitution/deletion words from creating spurious INSERT preference.",
+  "nonclaim": "The hypothesis has not been evaluated and is not claimed to improve performance.",
+  "authoritative_sources": {
+    "r5_2a_manifest_sha256": "F8E476F8FFA6AB2CD0F833B17D667D0D9B6CE3FC6B9FA1A7F5C1A3D71BA753E1",
+    "v4_sha256": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D",
+    "checkpoint_sha256": "F54C9C2361AE78E1C37353AEB338A2DE6722C0B1EC4F885F6B52688CE9E88085",
+    "r5_1a_scorer_sha256": "4DE49C9070C973EE44EFBD09DFC063C436779E723D12EC7A7A2BC4A06AF35F90",
+    "r5_1_closure_manifest_sha256": "C8E71EDE56902D594A60F1194ABF8A72AB0A7EFBE4F212F57BC71FCEF21B1D69",
+    "r5_documentation_manifest_sha256": "1E9AE8829F7C3DAAB25FD8E1FBFB30EE6BFE3746E9A16DFF2379CD39C074D813"
+  },
+  "score_contract": {
+    "expected_sequence": "E=[e1,...,eN], N>=1",
+    "vocabulary": "canonical indices 0..39; blank 40",
+    "KEEP": "one target E",
+    "INSERT": "40(N+1) targets E[:b]+[p]+E[b:]",
+    "SUB": "39N targets replacing one expected phone with p != E[i]",
+    "DELETE": "N targets removing one expected phone",
+    "total_candidates": "80N+41",
+    "nonempty_alignability": "T >= len(H) + ADJACENT_REPEAT_COUNT(H)",
+    "nonempty_impossible_score": "negative infinity",
+    "alignable_nonempty_raw": "-CTCLoss(log_softmax(logits),H,blank=40,reduction=none,zero_infinity=True)",
+    "target_normalization": "RAW_SCORE(H)/max(len(H),1)",
+    "empty_delete_raw": "sum over t of log_softmax(logits[t])[40]",
+    "empty_delete_target": "RAW_SCORE([])",
+    "best_nonaddition": "max(KEEP, BEST_SUB, BEST_DELETE) TARGET scores",
+    "C": "TARGET_SCORE(BEST_INSERT)-BEST_NON_ADDITION_SCORE",
+    "decision": "C >= theta means ADDITION; otherwise NON_ADDITION"
+  },
+  "tie_rules": {
+    "BEST_INSERT": ["lower insertion boundary", "lower canonical phone index"],
+    "BEST_SUB": ["lower expected-phone position", "lower replacement canonical phone index"],
+    "BEST_DELETE": ["lower deleted expected-phone position"],
+    "BEST_NON_ADDITION_family_diagnostic": ["KEEP", "SUB", "DELETE"],
+    "family_priority_changes_numeric_maximum": false
+  },
+  "population": {
+    "runtime_evaluable_words": 16582,
+    "positive_words": 323,
+    "negative_words": 16259,
+    "source_addition_events": 423,
+    "runtime_addition_events": 342,
+    "multiple_addition_words": 19,
+    "mixed_substitution_addition_words": 117,
+    "mixed_deletion_addition_words": 26,
+    "membership_changes": false
+  },
+  "development": {
+    "split": "TRAIN only",
+    "speakers": ["BWC", "EBVS", "HJK", "NCC", "NJS", "PNV", "RRBI", "TLV", "TNI", "YBAA", "YKWK", "ZHAA"],
+    "folds": 12,
+    "protocol": "speaker LOSO",
+    "threshold_candidates": "np.nextafter edges plus all unique finite float64 calibration C scores",
+    "negative_infinity_threshold_candidate": false,
+    "threshold_tie": ["higher Binary Macro-F1", "higher addition F1", "lower correct-only FAR", "higher threshold"],
+    "oof_predictions": "each TRAIN speaker predicted once using threshold from other 11 speakers"
+  },
+  "development_gates": [
+    "G1 addition-vs-all-nonaddition ROC-AUC >= 0.70",
+    "G2 addition-vs-correct-only ROC-AUC >= 0.70",
+    "G3 OOF Binary Macro-F1 > 0.5551978767901391",
+    "G4 OOF Addition F1 > 0.1379980563654033",
+    "G5 correct-only FAR <= 0.03491295938104449",
+    "G6 substitution-negative FAR < 0.05016116035455278",
+    "G7 deletion-negative FAR < 0.03349964362081254",
+    "G8 exact-event F1 >= 0.04389312977099236"
+  ],
+  "robust_threshold": {
+    "authorized_only_if_all_eight_pass": true,
+    "definition": "ordinary float64 median of 12 LOSO thresholds",
+    "otherwise": "R5_2_ROBUST_THETA_NOT_AUTHORIZED"
+  },
+  "future_result_statuses": {
+    "all_eight_pass": "R5_2_RELATION_COMPETITION_DEVELOPMENT_PASS",
+    "any_valid_gate_fails": "R5_2_RELATION_COMPETITION_DEVELOPMENT_NOT_CONFIRMED"
+  },
+  "evaluation_policy": {
+    "validation_consumed": true,
+    "validation_access_authorized": false,
+    "test_untouched": true,
+    "test_access_authorized": false
+  },
+  "static_verification": {
+    "required_before_train_inference": true,
+    "synthetic_only": true,
+    "required_cases": [
+      "KEEP scoring",
+      "INSERT construction and count",
+      "SUB construction and count",
+      "DELETE construction and count",
+      "80N+41 identity",
+      "alignable and impossible targets",
+      "empty DELETE exact all-blank likelihood",
+      "one-phone word",
+      "all BEST_* tie rules",
+      "BEST_NON_ADDITION family tie",
+      "C arithmetic",
+      "impossible candidate exclusion",
+      "extended-real serialization",
+      "unchanged threshold helper",
+      "deterministic repeat"
+    ],
+    "completed": false
+  },
+  "forbidden": [
+    "training or fine-tuning",
+    "checkpoint change",
+    "R3 classifier outputs",
+    "RAW/TIME or alternate margin",
+    "relation weights or insertion penalty",
+    "validation formula selection",
+    "speaker normalization or speaker threshold",
+    "arbitrary multi-edit hypotheses",
+    "beam search or language model",
+    "population filtering",
+    "gate changes after metrics",
+    "TEST access"
+  ],
+  "current_task_protocol": {
+    "scorer_implemented": false,
+    "static_tests_executed": false,
+    "training_run": false,
+    "model_inference_run": false,
+    "audio_accessed": false,
+    "performance_metrics_calculated": false,
+    "threshold_search_run": false,
+    "validation_accessed": false,
+    "test_accessed": false
+  }
+}

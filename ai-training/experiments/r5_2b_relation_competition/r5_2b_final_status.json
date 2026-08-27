@@ -1,0 +1,16 @@
+{
+  "status": "R5_2B_EXECUTION_TECHNICAL_FAILURE_EMPTY_TARGET",
+  "scientific_result_exists": false,
+  "gates_evaluated": 0,
+  "gates_total": 8,
+  "gates_passed": null,
+  "robust_threshold": {
+    "status": "R5_2_ROBUST_THETA_NOT_AUTHORIZED",
+    "value": null,
+    "reason": "No valid TRAIN scores, LOSO thresholds, or scientific gate results were produced."
+  },
+  "single_authorized_execution_consumed": true,
+  "rerun_performed": false,
+  "validation_untouched_by_r5_2b": true,
+  "test_untouched": true
+}

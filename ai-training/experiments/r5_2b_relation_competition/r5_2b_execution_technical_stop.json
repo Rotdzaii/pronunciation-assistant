@@ -1,0 +1,33 @@
+{
+  "stage": "R5-2B frozen TRAIN development execution",
+  "status": "R5_2B_EXECUTION_TECHNICAL_FAILURE_EMPTY_TARGET",
+  "classification": "pre_metric_technical_stop",
+  "execution_attempts": 1,
+  "failure_location": "synthetic batch-adapter empty-target equivalence guard",
+  "failure_occurred_before": [
+    "frozen population loading",
+    "TRAIN audio access",
+    "checkpoint model instantiation",
+    "TRAIN model inference",
+    "real-data relation-competition scoring",
+    "LOSO threshold calculation",
+    "scientific performance metrics",
+    "gate evaluation"
+  ],
+  "empty_target_observation": {
+    "batch_explicit_all_blank_score": -15.667130470275879,
+    "frozen_scorer_empty_target_score": -15.667129516601562,
+    "absolute_difference": 9.5367431640625e-7,
+    "exact_equality_required_by_execution_adapter": true,
+    "exact_equality_passed": false,
+    "synthetic_dtype": "float32",
+    "device": "cuda:0",
+    "interpretation": "GPU versus CPU accumulation paths were not exactly identical for the synthetic empty-target all-blank sum. The frozen execution guard rejected the mismatch before real-data access."
+  },
+  "scientific_metrics_produced": false,
+  "scientific_gates_evaluated": 0,
+  "scientific_gates_total": 8,
+  "scientific_status_assigned": false,
+  "rerun_performed": false,
+  "score_or_contract_modified": false
+}

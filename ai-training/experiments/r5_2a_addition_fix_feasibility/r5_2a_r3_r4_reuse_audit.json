@@ -1,0 +1,44 @@
+{
+  "r3_reuse": {
+    "classification": "REUSE_CANONICAL_SUBSTITUTION_CONCEPT_ONLY",
+    "r3_model_decisions_reused": false,
+    "reason": "R3 uses a separately trained local 40-class CNN-attention phone classifier and separately calibrated margins. Combining its decisions with R5 CTC scores would mix models, units, windows, and calibration histories.",
+    "acceptable_concept": "A substitution is an expected position replaced by another canonical phone.",
+    "preferred_mechanism": "Construct exact CTC substitution sequences directly under the frozen R4/R5 acoustic logits so every competitor shares one likelihood and normalization space."
+  },
+  "r4_reuse": {
+    "scientific_deletion_result_reused_as_confirmation": false,
+    "r4_reopened": false,
+    "deterministic_mechanism_reuse_feasible": true,
+    "exact_construction": {
+      "KEEP": "full expected sequence",
+      "DELETE": "for each expected position i, E[:i] + E[i+1:]",
+      "SUBSTITUTION": "for each expected position i, replace E[i] with each canonical phone q != E[i]",
+      "BEST_SUB_tie": "lowest canonical phone index within the frozen R4 per-position comparison",
+      "TARGET_normalization": "RAW_SCORE(H) / max(len(H), 1)",
+      "RAW_SCORE": "-CTCLoss(log_softmax(logits), H, blank=40, reduction=none, zero_infinity=True)"
+    },
+    "code_reuse_boundary": "Hypothesis constructors, phone vocabulary, batching pattern, and TARGET formula can inform new R5-2 code without changing frozen R4 artifacts or conclusions.",
+    "required_safety_change_for_new_generation": "R4 code counted minimum CTC steps but relied on zero_infinity=True. Any new implementation must apply R5-1A alignability-safe impossible-target semantics before interpreting loss. This is new R5-2 code, not a modification of R4."
+  },
+  "r5_1a_reuse": {
+    "frozen_scorer_modified": false,
+    "reusable_mechanisms": [
+      "minimum CTC steps and adjacent-repeat count",
+      "impossible target score = negative infinity",
+      "alignable non-finite stop guard",
+      "TARGET normalization",
+      "BEST_INSERT construction and tie rule",
+      "extended-real serialization and ROC-AUC support",
+      "finite threshold-candidate handling",
+      "batched exact CTC adapter pattern"
+    ],
+    "not_reusable_as_r5_2_evidence": [
+      "R5-1A threshold as an R5-2 threshold",
+      "R5-1A predictions",
+      "R5-1B predictions or metrics for formula selection",
+      "R5-1C findings as a tuning set"
+    ]
+  },
+  "coherent_likelihood_space_available": true
+}

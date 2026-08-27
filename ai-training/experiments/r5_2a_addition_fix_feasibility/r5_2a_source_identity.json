@@ -1,0 +1,68 @@
+{
+  "audit_id": "R5-2A_COMPETITIVE_RELATION_SCORING_FEASIBILITY",
+  "date": "2026-08-18",
+  "status": "PASS",
+  "authoritative_identities": [
+    {
+      "name": "V4 metadata",
+      "path": "ai-training/datasets/l2-arctic/metadata/all_speakers_expected_observed_v4.csv",
+      "sha256_expected": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D",
+      "sha256_actual": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D",
+      "match": true
+    },
+    {
+      "name": "R4-4C2 frozen checkpoint",
+      "path": "ai-training/experiments/r4_4c2_bigru_ctc_seed42/R4_4C2_bigru_ctc_phone_sequence_seed42_best_validation_per.pt",
+      "sha256_expected": "F54C9C2361AE78E1C37353AEB338A2DE6722C0B1EC4F885F6B52688CE9E88085",
+      "sha256_actual": "F54C9C2361AE78E1C37353AEB338A2DE6722C0B1EC4F885F6B52688CE9E88085",
+      "match": true,
+      "checkpoint_loaded": false
+    },
+    {
+      "name": "R5-1A frozen scorer",
+      "path": "ai-training/experiments/r5_1a_alignability_safe_addition_scoring/r5_1a_scorer.py",
+      "sha256_expected": "4DE49C9070C973EE44EFBD09DFC063C436779E723D12EC7A7A2BC4A06AF35F90",
+      "sha256_actual": "4DE49C9070C973EE44EFBD09DFC063C436779E723D12EC7A7A2BC4A06AF35F90",
+      "match": true
+    },
+    {
+      "name": "R5-1 closure manifest",
+      "path": "ai-training/experiments/r5_1_addition_scoring_closure/artifact_hashes.json",
+      "sha256_expected": "C8E71EDE56902D594A60F1194ABF8A72AB0A7EFBE4F212F57BC71FCEF21B1D69",
+      "sha256_actual": "C8E71EDE56902D594A60F1194ABF8A72AB0A7EFBE4F212F57BC71FCEF21B1D69",
+      "match": true,
+      "manifested_artifacts_verified": 10
+    },
+    {
+      "name": "R5 documentation update manifest",
+      "path": "ai-training/docs/R5_DOCUMENTATION_UPDATE_MANIFEST.json",
+      "sha256_expected": "1E9AE8829F7C3DAAB25FD8E1FBFB30EE6BFE3746E9A16DFF2379CD39C074D813",
+      "sha256_actual": "1E9AE8829F7C3DAAB25FD8E1FBFB30EE6BFE3746E9A16DFF2379CD39C074D813",
+      "match": true
+    }
+  ],
+  "inspected_provenance": [
+    {
+      "path": "ai-training/scripts/run_r4_4d0_ctc_hypothesis_feasibility.py",
+      "sha256": "DC141D38091C9FC60BA2F0A8447FF918DC98B5D99499D336A524CABEB8F4948C"
+    },
+    {
+      "path": "ai-training/scripts/execute_r4_4d2b_final_target_validation.py",
+      "sha256": "C89A3E18366BB452B6943AC830DEC4E98091D39120AF93DD9BC1EA5B6B592632"
+    },
+    {
+      "path": "ai-training/experiments/r5_1a_alignability_safe_addition_scoring/r5_1a_train_execution_driver.py",
+      "sha256": "80D0E1263BE1744BCC252736BAF9C28F3E5D19C204596D836F3D9C296AB52D5D"
+    },
+    {
+      "path": "ai-training/docs/l2_arctic_observed_phone_r3_1d.md",
+      "sha256": "53CC6231C20417AE0B8A13FA1405024650B68409BFD0305806F9718DAB553DD1"
+    },
+    {
+      "path": "ai-training/docs/l2_arctic_r3_2a_expected_vs_alternative_scoring.md",
+      "sha256": "2331285F91042B30A976503FD7FFB45E8FC7A2A497453A42B62AAECC4EE04B0D"
+    }
+  ],
+  "identity_failures": [],
+  "model_or_audio_access": false
+}

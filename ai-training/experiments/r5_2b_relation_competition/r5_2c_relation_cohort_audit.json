@@ -1,0 +1,96 @@
+{
+  "substitution_containing_negative": {
+    "n": 4964,
+    "suppression": {
+      "n": 4964,
+      "minimum": 0.0,
+      "maximum": 7.662540137767792,
+      "mean": 0.7556239276651006,
+      "median": 0.6353517214457194,
+      "q25": 0.3457552075386047,
+      "q75": 0.9988610347112019,
+      "q90": 1.4705993284781775,
+      "equal_zero_count": 349,
+      "greater_zero_count": 4615,
+      "less_zero_count": 0
+    },
+    "decision_transitions": {
+      "TN_in_both": 4686,
+      "FP_in_both": 56,
+      "TN_R5_1A_to_FP_R5_2B": 29,
+      "FP_R5_1A_to_TN_R5_2B": 193
+    },
+    "winner_family": {
+      "DELETE": {
+        "count": 679,
+        "share": 0.13678485092667203
+      },
+      "KEEP": {
+        "count": 349,
+        "share": 0.07030620467365029
+      },
+      "SUB": {
+        "count": 3936,
+        "share": 0.7929089443996776
+      }
+    },
+    "R5_1A_FAR": {
+      "support": 4964,
+      "false_positives": 249,
+      "false_addition_rate": 0.05016116035455278
+    },
+    "R5_2B_FAR": {
+      "support": 4964,
+      "false_positives": 85,
+      "false_addition_rate": 0.017123287671232876
+    },
+    "FAR_delta_R5_2B_minus_R5_1A": -0.033037872683319904
+  },
+  "deletion_containing_negative": {
+    "n": 1403,
+    "suppression": {
+      "n": 1403,
+      "minimum": 0.0,
+      "maximum": 6.476931810379028,
+      "mean": 1.0255435041006915,
+      "median": 0.8071908950805665,
+      "q25": 0.4940999922298249,
+      "q75": 1.3133817513783772,
+      "q90": 2.1009264097327276,
+      "equal_zero_count": 59,
+      "greater_zero_count": 1344,
+      "less_zero_count": 0
+    },
+    "decision_transitions": {
+      "TN_in_both": 1355,
+      "FP_in_both": 8,
+      "TN_R5_1A_to_FP_R5_2B": 1,
+      "FP_R5_1A_to_TN_R5_2B": 39
+    },
+    "winner_family": {
+      "DELETE": {
+        "count": 790,
+        "share": 0.5630791161796151
+      },
+      "KEEP": {
+        "count": 59,
+        "share": 0.042052744119743406
+      },
+      "SUB": {
+        "count": 554,
+        "share": 0.3948681397006415
+      }
+    },
+    "R5_1A_FAR": {
+      "support": 1403,
+      "false_positives": 47,
+      "false_addition_rate": 0.03349964362081254
+    },
+    "R5_2B_FAR": {
+      "support": 1403,
+      "false_positives": 9,
+      "false_addition_rate": 0.006414825374198147
+    },
+    "FAR_delta_R5_2B_minus_R5_1A": -0.027084818246614396
+  }
+}

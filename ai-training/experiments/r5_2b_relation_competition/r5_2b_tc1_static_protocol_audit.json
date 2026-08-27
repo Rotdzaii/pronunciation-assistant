@@ -1,0 +1,22 @@
+{
+  "stage": "R5-2B-TC1 synthetic static regression",
+  "neural_training_run": false,
+  "train_audio_accessed": false,
+  "real_train_logits_loaded": false,
+  "checkpoint_loaded": false,
+  "checkpoint_inference_run": false,
+  "train_relation_scores_calculated": false,
+  "loso_run": false,
+  "performance_metrics_calculated": false,
+  "validation_accessed": false,
+  "validation_rerun": false,
+  "test_accessed": false,
+  "test_inference_run": false,
+  "threshold_search_run": false,
+  "scientific_contract_modified": false,
+  "frozen_scorer_modified": false,
+  "failed_execution_modified": false,
+  "synthetic_tensors_only": true,
+  "current_runtime_cuda_available": false,
+  "status": "PASS"
+}

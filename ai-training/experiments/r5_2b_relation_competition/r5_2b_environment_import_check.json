@@ -1,0 +1,19 @@
+{
+  "status": "PASS",
+  "interpreter": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant\\ai-training\\.venv\\Scripts\\python.exe",
+  "imports": {
+    "torch": "PASS",
+    "numpy": "PASS",
+    "pandas": "PASS",
+    "sklearn": "PASS",
+    "r5_2b_scorer": "PASS",
+    "r5_2b_tc1_numeric_guard": "PASS",
+    "r5_2b_train_execution_driver_tc1_pa1_transitive_dependencies": "PASS"
+  },
+  "probe_method": "Imported the frozen scorer, TC1 guard, and additive PA1 driver module from their frozen research locations without calling execute().",
+  "checkpoint_loaded": false,
+  "model_created": false,
+  "dataset_accessed": false,
+  "inference_run": false,
+  "fallback_interpreter_used": false
+}

@@ -1,0 +1,56 @@
+{
+  "policy_name": "two-independent-reduction forward-error equivalence",
+  "policy_frozen_before_historical_regression_check": true,
+  "scope": "technical diagnostic for finite empty-target reductions only",
+  "preconditions": {
+    "same_mathematical_quantity": true,
+    "same_T": true,
+    "same_blank_index": true,
+    "same_number_of_terms": true,
+    "same_finite_operand_values": true,
+    "device_transfer_must_preserve_operand_values_exactly": true,
+    "separate_log_softmax_recomputation_must_be_same_backend_dtype_and_elementwise_identical": true,
+    "if_any_precondition_fails": "R5_2B_TC_EXECUTION_TECHNICAL_FAILURE_EMPTY_TARGET_MISMATCH"
+  },
+  "definitions": {
+    "machine_epsilon": "torch.finfo(dtype).eps: spacing from 1.0 to the next larger representable value",
+    "unit_roundoff": "u = machine_epsilon / 2",
+    "gamma_for_n_terms": "0 when n<=1; otherwise ((n-1)*u)/(1-(n-1)*u)",
+    "gamma_domain": "require (n-1)*u < 1",
+    "abs_sum": "deterministic compensated/high-precision host sum of absolute actual represented operands, conservatively rounded upward",
+    "bound_A": "gamma_A * ABS_SUM_A, rounded upward",
+    "bound_B": "gamma_B * ABS_SUM_B, rounded upward",
+    "correction_bound": "BOUND_A + BOUND_B, rounded upward"
+  },
+  "why_two_bounds": "A and B are independent floating-point reductions. Each can differ from the exact real sum, potentially in opposite directions, so |A-B| is bounded conservatively by BOUND_A + BOUND_B rather than one reduction bound.",
+  "acceptance": {
+    "finite_required": true,
+    "inequality": "abs(A-B) <= CORRECTION_BOUND",
+    "bitwise_cross_backend_equality_required": false,
+    "fixed_absolute_tolerance": null,
+    "fixed_relative_tolerance": null,
+    "observed_historical_difference_used_to_choose_bound": false
+  },
+  "nonfinite_status": "R5_2B_TC_EXECUTION_TECHNICAL_FAILURE_NONFINITE_EMPTY_TARGET",
+  "beyond_bound_status": "R5_2B_TC_EXECUTION_TECHNICAL_FAILURE_EMPTY_TARGET_MISMATCH",
+  "same_backend_control": "Record exact equality descriptively when it occurs; apply the same finite/bound policy without depending on cross-device bitwise identity.",
+  "historical_regression": {
+    "dtype": "float32",
+    "n": 4,
+    "machine_epsilon": 1.1920928955078125e-7,
+    "unit_roundoff": 5.960464477539063e-8,
+    "gamma_3": 1.788139663006007e-7,
+    "abs_sum": 15.667129755020142,
+    "single_reduction_bound": 2.8015016120413103e-6,
+    "two_reduction_correction_bound": 5.603003224082621e-6,
+    "observed_difference": 9.5367431640625e-7,
+    "result": "PASS"
+  },
+  "original_static_regression": {
+    "explicit": -19.43882697170362,
+    "framework": -19.43882697170362,
+    "difference": 0.0,
+    "result": "PASS"
+  },
+  "scientific_score_policy": "Always retain the unchanged frozen scorer return value; diagnostic B and all bounds are metadata only."
+}

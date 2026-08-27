@@ -1,0 +1,66 @@
+{
+  "manifest_type": "additive R5-2B-TC0 empty-target numerical equivalence audit",
+  "self_excluded": true,
+  "hash_algorithm": "SHA-256",
+  "artifact_count": 10,
+  "hash_audit": "HASH_AUDIT_PASS",
+  "failures": [],
+  "artifacts": [
+    {
+      "relative_path": "r5_2b_tc0_numeric_probe.py",
+      "byte_size": 6136,
+      "sha256": "DC2ECF1C08B11155DB3684E2AD1E9A82FDB8BBABAB803F67F93B51261B3DAA1B"
+    },
+    {
+      "relative_path": "r5_2b_tc0_controlled_numeric_raw.json",
+      "byte_size": 12580,
+      "sha256": "4AA9BA6E103425091438E00AD11F25724CE0E34F7E29EBD44B6156458D768F72"
+    },
+    {
+      "relative_path": "r5_2b_tc0_original_static_rerun.json",
+      "byte_size": 5391,
+      "sha256": "F0E54A0A4DBC1378F424E6C8FE8B0A9861CDD72DCBE72C045B96660324723197"
+    },
+    {
+      "relative_path": "r5_2b_tc0_numeric_provenance.json",
+      "byte_size": 2748,
+      "sha256": "AD344A23DF91F3B18862B4D44D057FC84824465C00A49744B53A3554457FD066"
+    },
+    {
+      "relative_path": "r5_2b_tc0_dtype_audit.json",
+      "byte_size": 1843,
+      "sha256": "C6CA05C753ACF4B45846BABEFC0D207488D0156B0FAAF494327A7F2C8FADBDE8"
+    },
+    {
+      "relative_path": "r5_2b_tc0_accumulation_audit.json",
+      "byte_size": 1690,
+      "sha256": "8FEBAA37D3DDAC84FF80F8485F2C943B6C4ACFCD8D4596BB48BCDC67F3BDE247"
+    },
+    {
+      "relative_path": "r5_2b_tc0_same_tensor_comparison.json",
+      "byte_size": 1665,
+      "sha256": "7329EC0F33C4DF1C3F7E158315A668426766EA7FE7C49A78327605015C55B4AA"
+    },
+    {
+      "relative_path": "r5_2b_tc0_interpretation.json",
+      "byte_size": 2180,
+      "sha256": "D7473FAD5752B8FD8E95BCBB55C1831AE6F808467F8242CA2FD7D221339EC1B5"
+    },
+    {
+      "relative_path": "r5_2b_tc0_protocol_audit.json",
+      "byte_size": 634,
+      "sha256": "A3E15DB91A8B280435B7E92A22D1938C6AB0453DD917215FA742A4D8AB39D934"
+    },
+    {
+      "relative_path": "R5_2B_TC0_NUMERICAL_EQUIVALENCE_AUDIT.md",
+      "byte_size": 3675,
+      "sha256": "6BF13E7209C5250481B7169BE5FF62CBEBDFA3C09E046359ACC995AD917B4A9D"
+    }
+  ],
+  "preserved_contract_sha256": "55572805C1878D41D4B6C41E1C7A31B2C3725A81050942494F0E1292092FEF38",
+  "preserved_static_manifest_sha256": "0D380ACA5C0CF101E60DFF043221BBE6AE267BA9FFDAD1C677C4E7FFCA23F80F",
+  "preserved_scorer_sha256": "2E44B79828DBB37B312CDC03C897A80803947A48F13864B26C454F3B8ED161A3",
+  "preserved_failed_execution_manifest_sha256": "92163F8DE3ECEAFEE2950AF57302AA565C0F3612A2D6F0D36462552FA66BA09E",
+  "technical_interpretation": "FLOATING_POINT_EQUIVALENCE_ONLY",
+  "final_status": "R5_2B_TC0_NUMERICAL_EQUIVALENCE_CONFIRMED"
+}

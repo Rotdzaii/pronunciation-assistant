@@ -1,0 +1,39 @@
+{
+  "stage": "R5-2B-SV",
+  "synthetic_only": true,
+  "best_insert": {
+    "tie_order": ["lower_boundary", "lower_phone_index"],
+    "status": "PASS"
+  },
+  "best_sub": {
+    "tie_order": ["lower_expected_position", "lower_replacement_phone_index"],
+    "status": "PASS"
+  },
+  "best_delete": {
+    "tie_order": ["lower_deleted_position"],
+    "identical_targets_retained": true,
+    "status": "PASS"
+  },
+  "best_nonaddition": {
+    "family_tie_priority": ["KEEP", "SUB", "DELETE"],
+    "unique_keep_winner": "PASS",
+    "unique_sub_winner": "PASS",
+    "unique_delete_winner": "PASS",
+    "keep_sub_tie": "PASS",
+    "keep_delete_tie": "PASS",
+    "sub_delete_tie": "PASS",
+    "numeric_maximum_unmodified": true,
+    "status": "PASS"
+  },
+  "relation_competition": {
+    "formula": "C = TARGET_SCORE(BEST_INSERT) - BEST_NON_ADDITION_SCORE",
+    "positive_case": "PASS",
+    "zero_case": "PASS",
+    "negative_case": "PASS",
+    "sub_beats_insert_mechanism": "PASS",
+    "delete_beats_insert_mechanism": "PASS",
+    "insert_beats_all_mechanism": "PASS",
+    "status": "PASS"
+  },
+  "status": "PASS"
+}

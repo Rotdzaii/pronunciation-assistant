@@ -1,0 +1,61 @@
+{
+  "manifest_type": "R5-2B additive synthetic static-verification artifacts",
+  "manifest_self_excluded": true,
+  "artifact_count": 10,
+  "frozen_contract_manifest_sha256": "5A1E82FD9E0209DB371F7E313125FAC64434BA6DA6E677CFF20E0AE3336F583E",
+  "artifacts": [
+    {
+      "relative_path": "r5_2b_scorer.py",
+      "byte_size": 18291,
+      "sha256": "2E44B79828DBB37B312CDC03C897A80803947A48F13864B26C454F3B8ED161A3"
+    },
+    {
+      "relative_path": "test_r5_2b_scorer.py",
+      "byte_size": 19784,
+      "sha256": "45F5CD8452193E9FC608B54367356FD3B1CC2C5864770C849237D1560107332C"
+    },
+    {
+      "relative_path": "r5_2b_static_run_1.json",
+      "byte_size": 5391,
+      "sha256": "F0E54A0A4DBC1378F424E6C8FE8B0A9861CDD72DCBE72C045B96660324723197"
+    },
+    {
+      "relative_path": "r5_2b_static_run_2.json",
+      "byte_size": 5391,
+      "sha256": "F0E54A0A4DBC1378F424E6C8FE8B0A9861CDD72DCBE72C045B96660324723197"
+    },
+    {
+      "relative_path": "r5_2b_static_verification.json",
+      "byte_size": 2376,
+      "sha256": "FBC81E5163805D94356D221C8DC00D0163BFB2D3515C3F2FC1B900221C4386EB"
+    },
+    {
+      "relative_path": "r5_2b_empty_target_verification.json",
+      "byte_size": 798,
+      "sha256": "E05A89E5D5775DE25189337460DFC6450086407CD87CE1FE42F286037E71E43E"
+    },
+    {
+      "relative_path": "r5_2b_relation_tie_verification.json",
+      "byte_size": 1102,
+      "sha256": "38C8B034E9AF3C0F3A463E3AC65AF6EFD5E4F5C7BB058096C66AA574AD6D7E55"
+    },
+    {
+      "relative_path": "r5_2b_serialization_verification.json",
+      "byte_size": 1212,
+      "sha256": "1A88D4BD241D919AB9C368E7F8EC007825B515C1881B79826ED29582EBF01831"
+    },
+    {
+      "relative_path": "r5_2b_static_protocol_audit.json",
+      "byte_size": 664,
+      "sha256": "3EC5C170872C6DC2568CBA0D784F3E83CD34489A27C5698C19337D2AB06EDAAA"
+    },
+    {
+      "relative_path": "R5_2B_STATIC_VERIFICATION_REPORT.md",
+      "byte_size": 3404,
+      "sha256": "B02F75D4CEC140DF40827A31CF389B89F25DC9C8318FFF91238537C48BD3A838"
+    }
+  ],
+  "hash_algorithm": "SHA-256",
+  "hash_audit": "HASH_AUDIT_PASS",
+  "final_status": "R5_2B_STATIC_VERIFICATION_PASS"
+}

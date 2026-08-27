@@ -1,0 +1,36 @@
+{
+  "posthoc_exploratory": true,
+  "authoritative_R5_2B_status_unchanged": "R5_2_RELATION_COMPETITION_DEVELOPMENT_NOT_CONFIRMED",
+  "classification": "MIXED_OVER_SUPPRESSION_AND_THRESHOLD_COMPENSATION",
+  "questions": {
+    "Q1": {
+      "answer": "YES",
+      "evidence": "Substitution- and deletion-negative FAR fell, with many frozen R5-1A FP to R5-2B TN conversions and corresponding SUB/DELETE winners."
+    },
+    "Q2": {
+      "answer": "YES",
+      "evidence": "SUB or DELETE won BEST_NON_ADDITION for 90.092879% of the 323 positive words, and positive scores shifted downward."
+    },
+    "Q3": {
+      "answer": "YES",
+      "evidence": "AUC fell for addition vs all negatives and correct-only negatives, consistent with unequal cohort suppression changing ranks."
+    },
+    "Q4": {
+      "answer": "YES",
+      "evidence": "249/249 newly introduced correct FPs had C below the old frozen threshold and became positive only under the lower R5-2B fold threshold."
+    },
+    "Q5": {
+      "answer": "YES",
+      "evidence": "BEST_INSERT phone/boundary matched for 16582/16582 words; event changes therefore came from frozen decision changes rather than relocalization."
+    },
+    "Q6": {
+      "answer": "YES",
+      "evidence": "G6/G7 support the narrow SUB/DELETE-confounding mechanism, while the other six frozen gates failed."
+    }
+  },
+  "classification_evidence": {
+    "over_suppression_supported": true,
+    "threshold_compensation_supported": true,
+    "speaker_failure_assessment": "broad_across_speakers"
+  }
+}

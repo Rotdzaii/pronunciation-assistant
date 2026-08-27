@@ -1,0 +1,45 @@
+{
+  "root_contract_status": "FROZEN",
+  "MANUAL_TEXTGRID_ROOT": {
+    "value": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant\\ai-training\\datasets\\l2-arctic\\raw\\l2arctic_release_v5.0",
+    "logical_role": "authoritative manual L2-ARCTIC TextGrid source",
+    "configuration_required": true
+  },
+  "AUDIO_ROOT": {
+    "value": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant\\ai-training\\datasets\\l2-arctic\\raw\\l2arctic_release_v5.0",
+    "logical_role": "authoritative frozen L2-ARCTIC audio source",
+    "configuration_required": true
+  },
+  "V4_METADATA_ROOT": {
+    "value": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\datasets\\l2-arctic\\metadata",
+    "logical_role": "frozen research V4 metadata source",
+    "raw_dataset_root": false
+  },
+  "role_separation": {
+    "independent_names_required": true,
+    "independent_configuration_inputs_required": true,
+    "current_manual_and_audio_values_equal": true,
+    "implicit_cross_derivation_forbidden": true,
+    "driver_location_derivation_forbidden": true,
+    "research_worktree_derivation_forbidden": true,
+    "metadata_root_derivation_forbidden": true
+  },
+  "manual_annotation_formula": "MANUAL_TEXTGRID_ROOT / <speaker> / annotation / <utterance_id>.TextGrid",
+  "example": {
+    "speaker": "BWC",
+    "utterance_id": "arctic_a0006",
+    "absolute_path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant\\ai-training\\datasets\\l2-arctic\\raw\\l2arctic_release_v5.0\\BWC\\annotation\\arctic_a0006.TextGrid",
+    "pa0_exists": true,
+    "pa0_byte_size": 8123,
+    "pa0_sha256": "EF3056511B71013C399F5F69F40B6A8865756FE26091DF72CC5EDB8E7D14A337"
+  },
+  "future_train_existence_guard": {
+    "expected": 1799,
+    "existing_required": 1799,
+    "missing_required": 0,
+    "ambiguous_required": 0,
+    "stop_status_on_mismatch": "R5_2B_PA1_EXECUTION_BLOCKED_ANNOTATION_EXISTENCE"
+  },
+  "dataset_files_missing": false,
+  "dataset_restoration_authorized": false
+}

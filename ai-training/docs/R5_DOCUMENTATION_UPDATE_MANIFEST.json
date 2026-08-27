@@ -1,0 +1,94 @@
+{
+  "manifest_id": "R5_1_COMPLETE_DOCUMENTATION_CONSOLIDATION",
+  "date": "2026-08-18",
+  "status": "R5_1_DOCUMENTATION_COMPLETE",
+  "algorithm": "SHA-256",
+  "authoritative_closure": {
+    "workspace": "pronunciation-assistant-research",
+    "relative_path": "ai-training/experiments/r5_1_addition_scoring_closure/artifact_hashes.json",
+    "absolute_path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r5_1_addition_scoring_closure\\artifact_hashes.json",
+    "sha256": "C8E71EDE56902D594A60F1194ABF8A72AB0A7EFBE4F212F57BC71FCEF21B1D69",
+    "final_status": "R5_1_ADDITION_SCORING_GENERATION_CLOSED_NOT_CONFIRMED",
+    "verified_before_documentation": true,
+    "manifested_closure_artifacts_verified": 10
+  },
+  "new_or_modified_documents": [
+    {
+      "name": "AI_WORKER_V2_DEVELOPMENT.md",
+      "workspace": "pronunciation-assistant",
+      "relative_path": "docs/ai-worker-v2/AI_WORKER_V2_DEVELOPMENT.md",
+      "absolute_path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant\\docs\\ai-worker-v2\\AI_WORKER_V2_DEVELOPMENT.md",
+      "change": "appended complete R5-0 through R5-1D generation-closure section; existing V2/R3/R4 history preserved",
+      "byte_size": 60872,
+      "sha256": "21CDCF6F90CFE9E1B174207EBE1B0E8627B9DBD02A36BD1E8276E04805358C32"
+    },
+    {
+      "name": "R5_ADDITION_RESEARCH_HISTORY.md",
+      "workspace": "pronunciation-assistant-research",
+      "relative_path": "ai-training/docs/R5_ADDITION_RESEARCH_HISTORY.md",
+      "absolute_path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\docs\\R5_ADDITION_RESEARCH_HISTORY.md",
+      "change": "created complete causal R5 history, exact metrics, reproducibility identities, technical stops, claim limits, and evaluation policy",
+      "byte_size": 20593,
+      "sha256": "91955A29E46A7B147376F684E91C0ECAB3445695BEE958F400EFC1B3DADA9F93"
+    },
+    {
+      "name": "R5_ADDITION_THESIS_SUMMARY.md",
+      "workspace": "pronunciation-assistant-research",
+      "relative_path": "ai-training/docs/R5_ADDITION_THESIS_SUMMARY.md",
+      "absolute_path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\docs\\R5_ADDITION_THESIS_SUMMARY.md",
+      "change": "created thesis-ready academic summary with plain-English and Vietnamese defense explanations plus frozen appendix",
+      "byte_size": 9765,
+      "sha256": "535748B39F02C4F57FE56F30178FB3DD46D34224E9ADFC65E457F463A079DE07"
+    },
+    {
+      "name": "AI_CURRENT_STATUS_AND_ROADMAP.md",
+      "workspace": "pronunciation-assistant-research",
+      "relative_path": "ai-training/docs/AI_CURRENT_STATUS_AND_ROADMAP.md",
+      "absolute_path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\docs\\AI_CURRENT_STATUS_AND_ROADMAP.md",
+      "change": "updated R5 from NEXT to R5-0 feasibility pass and R5-1 current-generation closure; future R5 remains undefined",
+      "byte_size": 9869,
+      "sha256": "E30FEE212EB9F5E8F0526CF084D6EDA37E5869D2089BC40EF5BEEF2E73BB8371"
+    }
+  ],
+  "coverage": {
+    "stages": [
+      "R5-0",
+      "R5-1 contract",
+      "R5-1 pre-metric technical stop",
+      "R5-1A alignability-safe contract",
+      "R5-1A static verification",
+      "R5-1A TRAIN development",
+      "R5-1B validation-transfer contract",
+      "R5-1B fixed-threshold VALIDATION execution",
+      "R5-1C post-hoc failure audit",
+      "R5-1D generation closure"
+    ],
+    "causal_history_preserved": true,
+    "technical_stop_not_misclassified": true,
+    "exact_train_and_validation_metrics_preserved": true,
+    "failed_gates_preserved": true,
+    "mixed_failure_interpretation_labeled_posthoc": true,
+    "claim_policy_preserved": true,
+    "vietnamese_defense_explanation_included": true,
+    "validation_consumption_recorded": true,
+    "test_closure_recorded": true,
+    "roadmap_updated_without_r5_2_design": true,
+    "frozen_shas_recorded": true
+  },
+  "protocol_audit": {
+    "documentation_only": true,
+    "training_run": false,
+    "model_inference_run": false,
+    "train_rerun": false,
+    "validation_rerun": false,
+    "threshold_search_run": false,
+    "recalibration_run": false,
+    "test_accessed": false,
+    "new_metrics_derived": false,
+    "r5_2_designed_or_started": false,
+    "frozen_scientific_results_modified": false
+  },
+  "manifest_excludes_itself": true,
+  "hash_audit": "HASH_AUDIT_PASS",
+  "hash_failures": []
+}

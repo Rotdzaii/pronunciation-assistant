@@ -1,0 +1,158 @@
+{
+  "manifest_id": "PHOENIX_R5_RESEARCH_CLOSURE_DOCUMENTATION_RECONCILIATION",
+  "created_at": "2026-08-27T18:13:27+07:00",
+  "status": "R5_DOCUMENTATION_RECONCILED_TO_R5_4A_R5_4B_CLOSURE",
+  "algorithm": "SHA-256",
+  "purpose": "Supersede the historical R5-1-only documentation snapshot with a complete provenance register covering R5-0 through R5-4A/R5-4B closure without rewriting the historical manifest.",
+  "reconciliation_boundary": {
+    "workspace": "pronunciation-assistant-research",
+    "branch": "research/phoenix-correctness",
+    "compact_research_preservation_head_before_documentation_reconciliation": "180655ec94293b165f9ed0d3b22abd46909a9d7c",
+    "documentation_commit_sha": null,
+    "documentation_commit_sha_policy": "Not guessed or self-referenced before commit creation."
+  },
+  "historical_manifest": {
+    "role": "historical_r5_1_documentation_snapshot",
+    "path": "ai-training/docs/R5_DOCUMENTATION_UPDATE_MANIFEST.json",
+    "byte_size": 4463,
+    "sha256": "1E9AE8829F7C3DAAB25FD8E1FBFB30EE6BFE3746E9A16DFF2379CD39C074D813",
+    "remains_byte_identical_historical_evidence": true,
+    "superseded_for_current_closure_documentation": true,
+    "historical_scope": "R5-0 through R5-1D only"
+  },
+  "current_closure_documentation": [
+    {
+      "role": "r5_research_history",
+      "path": "ai-training/docs/R5_ADDITION_RESEARCH_HISTORY.md",
+      "byte_size": 28954,
+      "sha256": "C902C9E8458997ABE6E9AA822241C5D0DA16A5051660724F641B10DD694C80B0"
+    },
+    {
+      "role": "r5_thesis_summary",
+      "path": "ai-training/docs/R5_ADDITION_THESIS_SUMMARY.md",
+      "byte_size": 14052,
+      "sha256": "F42B99A550436B14C3DEBFB2DD2CF7387316A545874BFDC2BAFB6BF8CFCE54BF"
+    },
+    {
+      "role": "current_roadmap",
+      "path": "ai-training/docs/AI_CURRENT_STATUS_AND_ROADMAP.md",
+      "byte_size": 14201,
+      "sha256": "633108B1700E21C773DCB653A05A4BEA10EC47185063B071F1B9CA27821C0AF7"
+    },
+    {
+      "role": "master_state",
+      "path": "ai-training/docs/PHOENIX_RESEARCH_MASTER_STATE.md",
+      "byte_size": 39733,
+      "sha256": "FBD9F56F9CB505D96655ADA38BE5864EEAC0BA2CD3C61412FDA5D26C4DEA1C02"
+    }
+  ],
+  "canonical_research_records": [
+    {
+      "role": "r5_1_final_status",
+      "path": "ai-training/experiments/r5_1_addition_scoring_closure/r5_1_final_status.json",
+      "byte_size": 1118,
+      "sha256": "AEF81158C8F5890305D69DC72412F02ABF1D59712C78E6F2650F156E9A4EF9C6"
+    },
+    {
+      "role": "r5_1_artifact_hashes",
+      "path": "ai-training/experiments/r5_1_addition_scoring_closure/artifact_hashes.json",
+      "byte_size": 2939,
+      "sha256": "C8E71EDE56902D594A60F1194ABF8A72AB0A7EFBE4F212F57BC71FCEF21B1D69"
+    },
+    {
+      "role": "r5_2b_final_status",
+      "path": "ai-training/experiments/r5_2b_relation_competition/r5_2b_tc1_pa1_env_final_status.json",
+      "byte_size": 2995,
+      "sha256": "A09BB313AD8F78F399128FFC15A93D7D76E929AD53A79707F681AFD7E8CAD00F"
+    },
+    {
+      "role": "r5_2c_manifest",
+      "path": "ai-training/experiments/r5_2b_relation_competition/R5_2C_MANIFEST.json",
+      "byte_size": 2990,
+      "sha256": "C18621208A35074B7681EFC95261B73147B4A6E3716F17AF0AB0471F8B328F90"
+    },
+    {
+      "role": "r5_3a_final_closed_status",
+      "path": "ai-training/experiments/r5_3a_evidence_separated_relation_scoring/r5_3a_final_closed_status.json",
+      "byte_size": 483,
+      "sha256": "F50D178155B509E054A3F7C791807E99A3595808A284ECC60917340A5DB024ED"
+    },
+    {
+      "role": "r5_3a_closure_manifest",
+      "path": "ai-training/experiments/r5_3a_evidence_separated_relation_scoring/R5_3A_CLOSURE_MANIFEST.json",
+      "byte_size": 2433,
+      "sha256": "9F57A293E0F4CA6E35E06761CFF54ABF70D967FE6ECF4F42ABFFF7C35397768C"
+    },
+    {
+      "role": "r5_4a_final_closed_status",
+      "path": "ai-training/experiments/r5_4a_insert_candidate_recoverability/r5_4a_final_closed_status.json",
+      "byte_size": 403,
+      "sha256": "35A4194E555402AFA0F56FD35A9BDA485E52AB4AF47A361C732B69A6977571B6"
+    },
+    {
+      "role": "r5_4a_closure_manifest",
+      "path": "ai-training/experiments/r5_4a_insert_candidate_recoverability/R5_4A_CLOSURE_MANIFEST.json",
+      "byte_size": 3177,
+      "sha256": "2E717A5ADEB6EEC35D645B7DF67FE24486960B9B87AAA6FFBEC4CDA3E8C3D94B"
+    },
+    {
+      "role": "r5_4b_final_closed_status",
+      "path": "ai-training/experiments/r5_4a_insert_candidate_recoverability/r5_4b_final_closed_status.json",
+      "byte_size": 350,
+      "sha256": "B8E970FAF30CE9F9275C1126FE40A1319571D1D3033FF54DF9B78A256E1F17F1"
+    },
+    {
+      "role": "r5_4b_execution_manifest",
+      "path": "ai-training/experiments/r5_4b_insert_candidate_materialization/materialization_result/R5_4B_EXECUTION_MANIFEST.json",
+      "byte_size": 4843,
+      "sha256": "FD1E4E66168654EC54778A489E0B443BD9C691DD1392233C4284CDF6CDF07B11"
+    }
+  ],
+  "scientific_status_register": {
+    "R5-0": {
+      "status": "R5_0_PASS_EXISTING_CTC_FEASIBLE",
+      "meaning": "Research feasibility only; not addition-detector confirmation."
+    },
+    "R5-1": {
+      "status": "R5_1_ADDITION_SCORING_GENERATION_CLOSED_NOT_CONFIRMED",
+      "meaning": "Scientific scoring generation closed not confirmed."
+    },
+    "R5-2": {
+      "status": "R5_2_RELATION_COMPETITION_DEVELOPMENT_NOT_CONFIRMED",
+      "posthoc_status": "R5_2C_POSTHOC_FAILURE_AUDIT_COMPLETE",
+      "meaning": "Development not confirmed; do not normalize this status to a closure pass."
+    },
+    "R5-3A": {
+      "status": "R5_3A_EVIDENCE_SEPARATION_GENERATION_CLOSED_NOT_CONFIRMED",
+      "meaning": "Evidence-separation generation closed not confirmed."
+    },
+    "R5-4B": {
+      "status": "R5_4B_INSERT_CANDIDATE_MATERIALIZATION_CLOSED_PASS",
+      "meaning": "Technical materialization and provenance pass only; NOT scientific confirmation of addition detection."
+    },
+    "R5-4A": {
+      "status": "R5_4A_INSERT_CANDIDATE_RECOVERABILITY_CLOSED_NOT_CONFIRMED",
+      "meaning": "Candidate recoverability closed not confirmed."
+    },
+    "umbrella_r5_scientific_pass": false
+  },
+  "evaluation_policy": {
+    "r5_validation": "Consumed as iterative development evidence in R5-1B; not an untouched independent confirmation split.",
+    "r5_test": "UNTOUCHED_AND_UNAUTHORIZED",
+    "test_paths_resolved": false,
+    "test_audio_accessed": false,
+    "test_inference_run": false,
+    "test_performance_consumed": false
+  },
+  "protocol_audit": {
+    "documentation_only": true,
+    "historical_manifest_modified": false,
+    "training_run": false,
+    "model_inference_run": false,
+    "scientific_metrics_recomputed": false,
+    "validation_accessed": false,
+    "test_accessed": false,
+    "frozen_scientific_results_modified": false
+  },
+  "manifest_excludes_itself": true
+}

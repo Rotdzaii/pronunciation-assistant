@@ -1,0 +1,83 @@
+{
+  "stage": "R6-0_LOCAL_BOUNDARY_ADDITION_FEASIBILITY",
+  "status": "PASS",
+  "recommended_research_boundary_source": "GOLD_MANUAL_V4_ORACLE_BOUNDARY",
+  "manual_textgrid_root": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant\\ai-training\\datasets\\l2-arctic\\raw\\l2arctic_release_v5.0",
+  "audio_root": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant\\ai-training\\datasets\\l2-arctic\\raw\\l2arctic_release_v5.0",
+  "gold_manual": {
+    "path_formula": "<root>/<speaker>/annotation/<utterance_id>.TextGrid",
+    "tier": "phones IntervalTier",
+    "time_units": "seconds",
+    "v4_path": "ai-training/datasets/l2-arctic/metadata/all_speakers_expected_observed_v4.csv",
+    "v4_sha256": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D",
+    "train_expected_files": 1799,
+    "train_existing_files": 1799,
+    "train_missing_files": 0,
+    "runtime_addition_events_mapped": 342,
+    "runtime_addition_events_expected": 342,
+    "positive_words": 323,
+    "mapping": "stable V4 row order plus manual word containment; expected rows are clean correct/substitution/deletion rows with canonical expected phones; Addition boundary is the count of preceding expected rows",
+    "full_future_boundary_anchor_coverage": "not evaluated in R6-0; preregistered as R6-1 F1"
+  },
+  "mfa": {
+    "path_formula": "<root>/<speaker>/textgrid/<utterance_id>.TextGrid",
+    "tiers": ["words", "phones"],
+    "time_units": "seconds",
+    "train_speaker_directory_textgrids": 13448,
+    "manually_annotated_train_utterances": 1799,
+    "matching_mfa_files_for_annotated_train_utterances": 1799,
+    "missing_matching_files": 0,
+    "historical_role": "frozen checkpoint word-audio crop and production/runtime forced-alignment reference",
+    "expected_phone_mapping": "canonical expected sequence aligned deterministically to MFA phone labels",
+    "known_limitations": [
+      "MFA is forced alignment, not manual ground truth",
+      "prior audit observed 18 invalid canonical MFA labels named spn",
+      "edit alignment can have ambiguous mappings",
+      "forced alignment can retain an expected label where manual annotation indicates deletion"
+    ]
+  },
+  "train_file_counts_by_speaker": {
+    "BWC": {"manual": 150, "mfa_match": 150},
+    "EBVS": {"manual": 150, "mfa_match": 150},
+    "HJK": {"manual": 150, "mfa_match": 150},
+    "NCC": {"manual": 150, "mfa_match": 150},
+    "NJS": {"manual": 150, "mfa_match": 150},
+    "PNV": {"manual": 150, "mfa_match": 150},
+    "RRBI": {"manual": 150, "mfa_match": 150},
+    "TLV": {"manual": 150, "mfa_match": 150},
+    "TNI": {"manual": 150, "mfa_match": 150},
+    "YBAA": {"manual": 149, "mfa_match": 149},
+    "YKWK": {"manual": 150, "mfa_match": 150},
+    "ZHAA": {"manual": 150, "mfa_match": 150}
+  },
+  "oracle_boundary_time": {
+    "b_equals_0": "start_time(q[0])",
+    "zero_lt_b_lt_N": "(end_time(q[b-1]) + start_time(q[b])) / 2",
+    "b_equals_N": "end_time(q[N-1])",
+    "unavailable_or_nonunique": "invalid; no imputation"
+  },
+  "scientific_scope": "GOLD is an oracle feasibility reference. It is not silently interchangeable with MFA and does not establish deployable runtime boundary availability.",
+  "source_files": [
+    {
+      "path": "ai-training/scripts/run_r4_2c_mfa_missing_phone_anchor_audit.py",
+      "byte_size": 35023,
+      "sha256": "5C91CB853A883DD64042CCF32F516CA13BF46A7B308A2DE623A28CD2AC25EB58"
+    },
+    {
+      "path": "ai-training/scripts/build_l2_arctic_expected_observed_v4.py",
+      "byte_size": 24934,
+      "sha256": "B41724AD234B09763F98027B2B4AEDC98264AFFFB34FB3E592113D5E22F0E49F"
+    },
+    {
+      "path": "ai-worker/app/alignment/mfa_aligner.py",
+      "byte_size": 30563,
+      "sha256": "430405A9CA88F26C3EDE862132C0682D86FB9D5A2E2D546290959ABB4827D969"
+    },
+    {
+      "path": "ai-worker/app/alignment/textgrid_parser.py",
+      "byte_size": 4943,
+      "sha256": "1B214A8C700C3532CE944EC26282FB9D85BBCBE62DC8E298B992DAC353EC6D0B"
+    }
+  ]
+}
+

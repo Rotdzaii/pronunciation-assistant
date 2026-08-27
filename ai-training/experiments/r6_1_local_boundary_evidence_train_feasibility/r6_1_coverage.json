@@ -1,0 +1,12 @@
+{
+  "total_addition_events": 342,
+  "covered_addition_events": 308,
+  "uncovered_addition_events": 34,
+  "addition_event_anchor_window_coverage": 0.9005847953216374,
+  "total_positive_boundary_identities": 324,
+  "covered_positive_boundary_identities": 293,
+  "uncovered_positive_boundary_identities": 31,
+  "positive_boundary_anchor_window_coverage": 0.904320987654321,
+  "valid_all_boundaries": 72336,
+  "invalid_all_boundaries": 2090
+}

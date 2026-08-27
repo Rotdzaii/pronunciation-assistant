@@ -1,0 +1,42 @@
+{
+  "stage": "R6-0_LOCAL_BOUNDARY_ADDITION_FEASIBILITY",
+  "status": "FROZEN_POPULATION_CONTRACT",
+  "source": "frozen R5 TRAIN population and truth/event metadata",
+  "source_score_artifact": {
+    "path": "ai-training/experiments/r5_2b_relation_competition/r5_2b_tc1_pa1_env_train_scores.jsonl",
+    "byte_size": 25848478,
+    "sha256": "EAC81ABDDF56C77E4A71AD96AE5985D7C00DD60559A27C3A3BAAB16859EEFF3C"
+  },
+  "train_speakers": ["BWC", "EBVS", "HJK", "NCC", "NJS", "PNV", "RRBI", "TLV", "TNI", "YBAA", "YKWK", "ZHAA"],
+  "words": 16582,
+  "addition_positive_words": 323,
+  "nonaddition_words": 16259,
+  "expected_boundary_instances": 74426,
+  "positive_boundary_identities": 324,
+  "negative_boundary_identities": 74102,
+  "runtime_addition_events": 342,
+  "single_addition_words": 304,
+  "multiple_addition_words": 19,
+  "multiple_addition_events": 38,
+  "mixed_substitution_addition_words": 117,
+  "mixed_deletion_addition_words": 26,
+  "boundary_identity": "(source_identity, boundary_index)",
+  "positive_label": "one or more frozen Addition truth events map to the boundary identity",
+  "negative_label": "no frozen Addition truth event maps to the boundary identity",
+  "non_event_boundaries_inside_addition_words": "retained as negative boundary instances",
+  "event_multiplicity": "preserved as addition_event_count; binary boundary label remains one",
+  "cohort_policy": [
+    "single Addition retained",
+    "multiple Addition retained",
+    "substitution/addition retained and tagged",
+    "deletion/addition retained and tagged",
+    "correct/substitution/deletion/mixed negative boundaries retained",
+    "no speaker exclusion",
+    "no difficult-row exclusion",
+    "no manual relabeling",
+    "no negative downsampling for registered metrics"
+  ],
+  "structural_accounting_only": true,
+  "performance_metrics_calculated": false
+}
+

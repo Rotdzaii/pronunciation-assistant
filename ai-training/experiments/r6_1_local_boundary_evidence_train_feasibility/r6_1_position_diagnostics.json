@@ -1,0 +1,30 @@
+{
+  "unit": "valid boundary identity",
+  "positions": [
+    {
+      "position": "BEFORE_FIRST",
+      "positive_count": 40,
+      "negative_count": 15896,
+      "roc_auc": 0.18940928535480628,
+      "positive_score_median": 0.0410033242436402,
+      "negative_score_median": 0.34407813471233073
+    },
+    {
+      "position": "BETWEEN",
+      "positive_count": 161,
+      "negative_count": 40961,
+      "roc_auc": 0.5843141809941618,
+      "positive_score_median": 0.08072141082380418,
+      "negative_score_median": 0.028077658322735056
+    },
+    {
+      "position": "AFTER_FINAL",
+      "positive_count": 92,
+      "negative_count": 15186,
+      "roc_auc": 0.653246840625519,
+      "positive_score_median": 0.23474521823896274,
+      "negative_score_median": 0.11313893702170041
+    }
+  ],
+  "gating": false
+}

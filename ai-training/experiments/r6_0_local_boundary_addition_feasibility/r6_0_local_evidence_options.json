@@ -1,0 +1,54 @@
+{
+  "stage": "R6-0_LOCAL_BOUNDARY_ADDITION_FEASIBILITY",
+  "status": "FROZEN_RECOMMENDATION",
+  "posterior_definition": "P = exp(log_softmax(frozen_float32_logits, dim=-1))",
+  "adjacent_expected_phone_set": "left expected phone if b>0 plus right expected phone if b<N; duplicate symbols represented once",
+  "selected_feature_set": {
+    "primary": {
+      "name": "MEAN_UNEXPECTED_PHONE_MASS",
+      "formula": "mean over available window frames of sum P[t,p] over canonical phone classes p not in the adjacent expected-phone set",
+      "role": "only primary continuous score for R6-1 gates"
+    },
+    "descriptive_controls": [
+      {
+        "name": "PEAK_UNEXPECTED_PHONE_POSTERIOR",
+        "formula": "max P[t,p] over available window frames and canonical phones not in the adjacent expected-phone set"
+      },
+      {
+        "name": "MEAN_NONBLANK_MASS",
+        "formula": "mean over available window frames of 1 - P[t,40]"
+      }
+    ]
+  },
+  "numeric_policy": {
+    "logits_and_log_softmax_dtype": "float32 historical checkpoint path",
+    "summary_reduction_dtype": "float64",
+    "clipping": false,
+    "rounding": false,
+    "normalization_across_words_or_speakers": false
+  },
+  "option_a_non_expected_phone_mass": "selected as primary",
+  "option_b_blank_vs_nonblank": "selected only as descriptive MEAN_NONBLANK_MASS",
+  "option_c_strongest_unexpected_phone": "selected only as descriptive PEAK_UNEXPECTED_PHONE_POSTERIOR",
+  "option_d_duration_or_consecutive_support": "deferred because it requires an additional support/threshold convention",
+  "option_e_entropy_or_competition": "deferred to keep the first feasibility test minimal",
+  "forbidden": [
+    "BEST_INSERT_SCORE",
+    "whole-word INSERT candidate enumeration",
+    "whole-word CTC target likelihood",
+    "top-k INSERT ranking",
+    "learned feature fusion",
+    "feature selection after metrics",
+    "phone-specific thresholds",
+    "speaker normalization",
+    "window-size search"
+  ],
+  "mechanism_distinctness": {
+    "local_time_index_aggregation": true,
+    "insert_hypothesis_sequence_scoring": false,
+    "ctc_path_sum_for_inserted_target": false,
+    "keep_sub_delete_competition": false,
+    "status_if_reduced_to_r5": "R6_0_MECHANISM_NOT_DISTINCT_FROM_R5"
+  }
+}
+

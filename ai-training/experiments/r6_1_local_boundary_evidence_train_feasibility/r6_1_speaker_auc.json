@@ -1,0 +1,115 @@
+{
+  "speakers": [
+    {
+      "speaker": "BWC",
+      "valid_boundaries": 6143,
+      "positive_boundaries": 25,
+      "negative_boundaries": 6118,
+      "roc_auc": 0.42906832298136643,
+      "positive_median": 0.056566380928789003,
+      "negative_median": 0.05842749602462716
+    },
+    {
+      "speaker": "EBVS",
+      "valid_boundaries": 6039,
+      "positive_boundaries": 57,
+      "negative_boundaries": 5982,
+      "roc_auc": 0.5284156563257023,
+      "positive_median": 0.11329194104403477,
+      "negative_median": 0.08835196225939537
+    },
+    {
+      "speaker": "HJK",
+      "valid_boundaries": 6125,
+      "positive_boundaries": 5,
+      "negative_boundaries": 6120,
+      "roc_auc": 0.722483660130719,
+      "positive_median": 0.23167159614888497,
+      "negative_median": 0.09549775554971962
+    },
+    {
+      "speaker": "NCC",
+      "valid_boundaries": 6200,
+      "positive_boundaries": 24,
+      "negative_boundaries": 6176,
+      "roc_auc": 0.626666396804836,
+      "positive_median": 0.20203096816299693,
+      "negative_median": 0.08424133862083899
+    },
+    {
+      "speaker": "NJS",
+      "valid_boundaries": 6299,
+      "positive_boundaries": 27,
+      "negative_boundaries": 6272,
+      "roc_auc": 0.46962396069538925,
+      "positive_median": 0.028549103792608155,
+      "negative_median": 0.08223327862975868
+    },
+    {
+      "speaker": "PNV",
+      "valid_boundaries": 6187,
+      "positive_boundaries": 14,
+      "negative_boundaries": 6173,
+      "roc_auc": 0.4946772812478304,
+      "positive_median": 0.06363262852680501,
+      "negative_median": 0.07641478575219382
+    },
+    {
+      "speaker": "RRBI",
+      "valid_boundaries": 6214,
+      "positive_boundaries": 37,
+      "negative_boundaries": 6177,
+      "roc_auc": 0.2955908798550858,
+      "positive_median": 0.005817779292604302,
+      "negative_median": 0.09418447698360467
+    },
+    {
+      "speaker": "TLV",
+      "valid_boundaries": 6006,
+      "positive_boundaries": 17,
+      "negative_boundaries": 5989,
+      "roc_auc": 0.5926649838429278,
+      "positive_median": 0.14341384150574732,
+      "negative_median": 0.06465393231254445
+    },
+    {
+      "speaker": "TNI",
+      "valid_boundaries": 5967,
+      "positive_boundaries": 5,
+      "negative_boundaries": 5962,
+      "roc_auc": 0.22901710835290173,
+      "positive_median": 0.0020351163545559493,
+      "negative_median": 0.10307453310685381
+    },
+    {
+      "speaker": "YBAA",
+      "valid_boundaries": 5267,
+      "positive_boundaries": 23,
+      "negative_boundaries": 5244,
+      "roc_auc": 0.678290717341558,
+      "positive_median": 0.26380109454017103,
+      "negative_median": 0.06904967026116662
+    },
+    {
+      "speaker": "YKWK",
+      "valid_boundaries": 5753,
+      "positive_boundaries": 26,
+      "negative_boundaries": 5727,
+      "roc_auc": 0.5654390135794012,
+      "positive_median": 0.11238331956111261,
+      "negative_median": 0.06608679355242267
+    },
+    {
+      "speaker": "ZHAA",
+      "valid_boundaries": 6136,
+      "positive_boundaries": 33,
+      "negative_boundaries": 6103,
+      "roc_auc": 0.709814845158119,
+      "positive_median": 0.30193565959301755,
+      "negative_median": 0.08603727504551717
+    }
+  ],
+  "ordinary_median_roc_auc": 0.5469273349525517,
+  "count_roc_auc_gt_0_55": 6,
+  "speaker_count": 12
+}

@@ -1,0 +1,136 @@
+{
+  "status": "PASS",
+  "expected": {
+    "words": 16582,
+    "boundaries": 74426,
+    "positive_boundaries": 324,
+    "negative_boundaries": 74102,
+    "events": 342,
+    "single_addition_words": 304,
+    "multiple_addition_words": 19,
+    "mixed_substitution_addition_words": 117,
+    "mixed_deletion_addition_words": 26
+  },
+  "actual": {
+    "words": 16582,
+    "boundaries": 74426,
+    "positive_boundaries": 324,
+    "negative_boundaries": 74102,
+    "events": 342,
+    "single_addition_words": 304,
+    "multiple_addition_words": 19,
+    "mixed_substitution_addition_words": 117,
+    "mixed_deletion_addition_words": 26
+  },
+  "by_speaker": {
+    "BWC": {
+      "boundaries": 6259,
+      "positive_boundaries": 30,
+      "events": 39
+    },
+    "EBVS": {
+      "boundaries": 6175,
+      "positive_boundaries": 62,
+      "events": 65
+    },
+    "HJK": {
+      "boundaries": 6312,
+      "positive_boundaries": 7,
+      "events": 7
+    },
+    "NCC": {
+      "boundaries": 6340,
+      "positive_boundaries": 25,
+      "events": 26
+    },
+    "NJS": {
+      "boundaries": 6353,
+      "positive_boundaries": 31,
+      "events": 32
+    },
+    "PNV": {
+      "boundaries": 6297,
+      "positive_boundaries": 14,
+      "events": 14
+    },
+    "RRBI": {
+      "boundaries": 6315,
+      "positive_boundaries": 39,
+      "events": 40
+    },
+    "TLV": {
+      "boundaries": 6218,
+      "positive_boundaries": 19,
+      "events": 21
+    },
+    "TNI": {
+      "boundaries": 5984,
+      "positive_boundaries": 5,
+      "events": 5
+    },
+    "YBAA": {
+      "boundaries": 5743,
+      "positive_boundaries": 26,
+      "events": 26
+    },
+    "YKWK": {
+      "boundaries": 6206,
+      "positive_boundaries": 28,
+      "events": 29
+    },
+    "ZHAA": {
+      "boundaries": 6224,
+      "positive_boundaries": 38,
+      "events": 38
+    }
+  },
+  "join": {
+    "eligible_reconstructed_words": 16582,
+    "frozen_rows": 16582,
+    "missing": 0,
+    "unexpected": 0,
+    "duplicates": 0,
+    "metadata_mismatches": 0,
+    "reconstruction": {
+      "counts": {
+        "train_candidate": 16985,
+        "train_usable": 16259,
+        "multiple_deletion_words": 130,
+        "substitution_plus_deletion_words": 470,
+        "addition_words_excluded": 338,
+        "addition_plus_deletion_words": 28,
+        "malformed_or_unresolved_words": 402,
+        "unavailable_word_boundary": 1
+      },
+      "target_rows_without_manual_word": {
+        "total": 57,
+        "by_relation": {
+          "addition": 49,
+          "substitution": 2,
+          "correct": 6
+        }
+      },
+      "invalid_forced_alignment_phone_labels": {
+        "spn": 12
+      },
+      "mfa_vs_manual_boundary_start_error_seconds": {
+        "count": 16984,
+        "mean": 0.004179336374713614,
+        "median": 0.0,
+        "p10": 0.0,
+        "p25": 0.0,
+        "p75": 0.0,
+        "p90": 0.009999999999999787
+      },
+      "mfa_vs_manual_boundary_end_error_seconds": {
+        "count": 16984,
+        "mean": 0.0051764543768987505,
+        "median": 0.0,
+        "p10": 0.0,
+        "p25": 0.0,
+        "p75": 0.0,
+        "p90": 0.010000000000000009
+      }
+    }
+  }
+}

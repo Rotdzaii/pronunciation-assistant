@@ -1,0 +1,67 @@
+{
+  "neural_training": false,
+  "fine_tuning": false,
+  "checkpoint_loaded": true,
+  "checkpoint_inference": true,
+  "train_audio_accessed": true,
+  "train_gold_boundaries_accessed": true,
+  "classifier_fitting": false,
+  "threshold_search": false,
+  "word_level_performance": false,
+  "recoverability_topk": false,
+  "descriptive_control_auc_calculated": false,
+  "validation_accessed": false,
+  "validation_paths_resolved": false,
+  "test_accessed": false,
+  "test_paths_resolved": false,
+  "execution_count": 1,
+  "window_modified": false,
+  "feature_modified": false,
+  "boundary_mapping_modified": false,
+  "elapsed_seconds": 132.33536989999993,
+  "inference": {
+    "checkpoint_loaded": true,
+    "checkpoint_inference": true,
+    "inference_seconds": 46.20344809999369,
+    "feature_materialization": {
+      "words": 16582,
+      "seconds": 21.030148899997585,
+      "sample_length": {
+        "count": 16582,
+        "min": 480.0,
+        "median": 4800.0,
+        "mean": 5415.385357616693,
+        "p90": 9600.0,
+        "p95": 11040.0,
+        "max": 30560.0
+      },
+      "feature_frames": {
+        "count": 16582,
+        "min": 4.0,
+        "median": 31.0,
+        "mean": 34.84615848510433,
+        "p90": 61.0,
+        "p95": 70.0,
+        "max": 192.0
+      },
+      "encoder_output_steps": {
+        "count": 16582,
+        "min": 2.0,
+        "median": 15.0,
+        "mean": 17.172295259920396,
+        "p90": 30.0,
+        "p95": 35.0,
+        "max": 96.0
+      },
+      "edge_padded_words": 0,
+      "edge_padding_samples": 0,
+      "unalignable_words": 0,
+      "unalignable_word_ids": []
+    },
+    "invalid_boundary_mappings": 2090,
+    "invalid_mapping_reasons": {
+      "GOLD boundary lies outside historical MFA word crop": 2090
+    },
+    "maximum_nonblank_equivalence_absolute_difference": 2.396819180350285e-07
+  }
+}

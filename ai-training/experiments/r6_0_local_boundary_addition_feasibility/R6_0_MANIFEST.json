@@ -1,0 +1,59 @@
+{
+  "stage": "R6-0_LOCAL_BOUNDARY_ADDITION_FEASIBILITY",
+  "status": "R6_0_LOCAL_BOUNDARY_ADDITION_FEASIBILITY_CONTRACT_FROZEN",
+  "manifest_self_excluded": true,
+  "hash_algorithm": "SHA-256",
+  "artifact_count": 8,
+  "artifacts": [
+    {
+      "relative_path": "R6_0_FEASIBILITY_CONTRACT.md",
+      "byte_size": 10785,
+      "sha256": "F07FB5C5BFB984B7D09F51675779262B479412F4A828D1C3531FF1718F9E80B7"
+    },
+    {
+      "relative_path": "r6_0_checkpoint_output_provenance.json",
+      "byte_size": 3930,
+      "sha256": "F97F4747580F8F420E037682A0305B4B1179592BC249F198B19E820DC01D8B18"
+    },
+    {
+      "relative_path": "r6_0_boundary_provenance.json",
+      "byte_size": 3977,
+      "sha256": "F29B565F5E164CCE932FF3F225036203DA90FCFA1E4DE9ED92C16389B065B19E"
+    },
+    {
+      "relative_path": "r6_0_frame_time_mapping.json",
+      "byte_size": 1946,
+      "sha256": "29E35F17EACEABF67F05F5BC7C120546CCE5306AC811D1A9F047A8E5C39B46E0"
+    },
+    {
+      "relative_path": "r6_0_local_evidence_options.json",
+      "byte_size": 2263,
+      "sha256": "F54C21407B8D0BDFA80489B86F255DA7539FF4E64777C7CB7EDF66AD3407FE66"
+    },
+    {
+      "relative_path": "r6_0_population_contract.json",
+      "byte_size": 1849,
+      "sha256": "F887DC9485206679180732F2662052DF4309B48860D45B965A81E4387CA393D1"
+    },
+    {
+      "relative_path": "r6_0_next_experiment_contract.json",
+      "byte_size": 2870,
+      "sha256": "8FB578805ABF3A43D33B6987113C0B072DA80219E41A4BDB745CF303DBCE5B7C"
+    },
+    {
+      "relative_path": "r6_0_protocol_audit.json",
+      "byte_size": 977,
+      "sha256": "89F61D0D1D048456B554D515BF0E57DC7415250AED2685EB55E886B4E502A628"
+    }
+  ],
+  "upstream_identity_verification": "PASS",
+  "referenced_manifest_entries_checked": 46,
+  "referenced_manifest_entry_failures": 0,
+  "json_parse_audit": "PASS",
+  "independent_hash_audit": "HASH_AUDIT_PASS",
+  "checkpoint_loaded": false,
+  "checkpoint_inference": false,
+  "performance_metrics": false,
+  "validation_accessed": false,
+  "test_accessed": false
+}

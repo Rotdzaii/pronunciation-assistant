@@ -1,0 +1,91 @@
+{
+  "stage": "R6-1 frozen TRAIN local boundary evidence feasibility",
+  "final_status": "R6_1_LOCAL_BOUNDARY_EVIDENCE_NOT_CONFIRMED",
+  "manifest_self_excluded": true,
+  "hash_algorithm": "SHA-256",
+  "artifact_count": 16,
+  "artifacts": [
+    {
+      "relative_path": "r6_1_train_execution.py",
+      "byte_size": 41957,
+      "sha256": "28550C3C6B6ABE1DFAF5D630B43FD72DDF2A98D6373D6E0FD309FCE265A904FC"
+    },
+    {
+      "relative_path": "r6_1_environment_identity.json",
+      "byte_size": 884,
+      "sha256": "E69B9ED1725B43441DDE6598C730686C9A90E8554248119A95B040D6C0BD2983"
+    },
+    {
+      "relative_path": "r6_1_source_identity.json",
+      "byte_size": 2773,
+      "sha256": "EBB176188E28CDA0D9D070DB9CF406392D7CA21EF8BDAC9B0A64B338FF934A7F"
+    },
+    {
+      "relative_path": "r6_1_execution_state.json",
+      "byte_size": 127,
+      "sha256": "B72BC80EAA24CE2EEC1FB4546E065B70D5A3D5EF64B597F7002F8768C4748476"
+    },
+    {
+      "relative_path": "r6_1_boundary_accounting.json",
+      "byte_size": 3136,
+      "sha256": "B65EDFAD9643E32A5DA792F2CFCEC8576CD21A5DFA147F30D0F07A52DADE3D84"
+    },
+    {
+      "relative_path": "r6_1_boundary_scores.jsonl",
+      "byte_size": 82465617,
+      "sha256": "A45B9560DDA67C3E0CD90E88E1100EB73058E281AC0FD2E5E001B592DBDA0DB4"
+    },
+    {
+      "relative_path": "r6_1_coverage.json",
+      "byte_size": 439,
+      "sha256": "051F24563B68DCF71D305F8A20953A8B0C3F09534C5AB1AC95AEC62182EF70DC"
+    },
+    {
+      "relative_path": "r6_1_primary_auc.json",
+      "byte_size": 864,
+      "sha256": "BA717B896FDACF5414C266AAB0C8C2576A20D2293EADBE8A9C0D657CA4E8AF16"
+    },
+    {
+      "relative_path": "r6_1_speaker_auc.json",
+      "byte_size": 3312,
+      "sha256": "49079F68759F1D18293FEC081857DE6A4BD13B928A453238BAF174196E88E7A5"
+    },
+    {
+      "relative_path": "r6_1_position_diagnostics.json",
+      "byte_size": 813,
+      "sha256": "D2A88011D57BFB53054776D589F52DA0D29250DF2F457C6E7A83E244C9600748"
+    },
+    {
+      "relative_path": "r6_1_mixed_multiple_diagnostics.json",
+      "byte_size": 1791,
+      "sha256": "32A8D840C685F4A49C6F4837F9D110D2685AD730789517138F9423BBBB7560EF"
+    },
+    {
+      "relative_path": "r6_1_descriptive_controls.json",
+      "byte_size": 1230,
+      "sha256": "AA328A34695768F84B9F57D4DDF1C807405E1DB1A9857221A7B91C8CF8CBB96C"
+    },
+    {
+      "relative_path": "r6_1_gate_results.json",
+      "byte_size": 794,
+      "sha256": "F456CD1CB5917F140C8DA88D7E5C9F534182F4C6274C6220DDA827D24F9DDDD1"
+    },
+    {
+      "relative_path": "r6_1_protocol_audit.json",
+      "byte_size": 1850,
+      "sha256": "9A65DFE4DFF3D749F8FE21C205627C496D3D9371BB7C0769072A20D341711D94"
+    },
+    {
+      "relative_path": "r6_1_final_status.json",
+      "byte_size": 427,
+      "sha256": "AF8EBDBB61D7CE17ECECBFF480FCB2CCDF6A507702CF60390A29A5B20A75E314"
+    },
+    {
+      "relative_path": "R6_1_TRAIN_FEASIBILITY_RESULT.md",
+      "byte_size": 2393,
+      "sha256": "62E08A2A2049D83ECF99C5EE4CC6A02750A113795EB9AED22C502F77181F98B5"
+    }
+  ],
+  "independent_hash_audit": "HASH_AUDIT_PASS",
+  "execution_count": 1
+}

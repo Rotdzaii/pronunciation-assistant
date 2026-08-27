@@ -1,0 +1,90 @@
+{
+  "stage": "R6-0_LOCAL_BOUNDARY_ADDITION_FEASIBILITY",
+  "status": "PASS",
+  "audit_date": "2026-08-19",
+  "upstream_identity": {
+    "r5_4a_contract_sha256": "111DDB77EC09B177505AEEF7B260476D8C718F745AD6170E6969926841338A27",
+    "r5_4a_resume_manifest_sha256": "328E2732A3705593EA29D6C2682956E3B5D19F2175B4F7E2C55F888175A15046",
+    "r5_4a_closure_manifest_sha256": "2E717A5ADEB6EEC35D645B7DF67FE24486960B9B87AAA6FFBEC4CDA3E8C3D94B",
+    "r5_4b_execution_manifest_sha256": "FD1E4E66168654EC54778A489E0B443BD9C691DD1392233C4284CDF6CDF07B11",
+    "r5_3a_closure_manifest_sha256": "9F57A293E0F4CA6E35E06761CFF54ABF70D967FE6ECF4F42ABFFF7C35397768C",
+    "r5_2b_execution_manifest_sha256": "37F3C86FF11526B8AB54D173937A0F488125A1D0B610032CC8A5D47B11602387",
+    "r5_1a_execution_manifest_sha256": "C9343A75CE26C2BEECA388EBA855E91AE0992D22C0C5D785308D0A98B89A3CD6",
+    "v4_sha256": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D",
+    "checkpoint_sha256": "F54C9C2361AE78E1C37353AEB338A2DE6722C0B1EC4F885F6B52688CE9E88085",
+    "frozen_scorer_sha256": "2E44B79828DBB37B312CDC03C897A80803947A48F13864B26C454F3B8ED161A3",
+    "direct_hash_checks": "PASS",
+    "referenced_manifest_entries_checked": 46,
+    "referenced_manifest_entry_failures": 0
+  },
+  "source_evidence": [
+    {
+      "path": "ai-training/scripts/run_r4_4b_ctc_sequence.py",
+      "byte_size": 52719,
+      "sha256": "C940E8E13E5750E3EBED84CEC917C3E362AAA5B29CAACCA0F23C216DB07B5469"
+    },
+    {
+      "path": "ai-training/scripts/run_r4_4c2_bigru_ctc_sequence.py",
+      "byte_size": 6166,
+      "sha256": "E6639A8BBBB65C41105C151A881736125280E7F66298801DC21D8BD3205695ED"
+    },
+    {
+      "path": "ai-training/experiments/r4_4c2_bigru_ctc_seed42/feature_config.json",
+      "byte_size": 585,
+      "sha256": "BB7E638F61628A117B081D7B30BE3346C4774DE808B9595D10F5020554A11809"
+    },
+    {
+      "path": "ai-training/experiments/r4_4c2_bigru_ctc_seed42/model_config.json",
+      "byte_size": 2378,
+      "sha256": "AC05095522AB0276C00BA98CCEC603163DE536EB92C58CFA5B37753C411330AB"
+    }
+  ],
+  "checkpoint": {
+    "path": "ai-training/experiments/r4_4c2_bigru_ctc_seed42/R4_4C2_bigru_ctc_phone_sequence_seed42_best_validation_per.pt",
+    "loaded_during_r6_0": false,
+    "inference_during_r6_0": false
+  },
+  "input": {
+    "span": "full historical MFA word span",
+    "side_context_seconds": 0.0,
+    "sample_rate_hz": 16000,
+    "feature": "64-bin log-mel",
+    "n_fft": 512,
+    "win_length_samples": 400,
+    "window_ms": 25.0,
+    "hop_length_samples": 160,
+    "hop_ms": 10.0,
+    "center": true,
+    "pad_mode": "constant"
+  },
+  "output": {
+    "tensor_semantics": "raw pre-softmax logits",
+    "shape": "[B,T_out,41]",
+    "historical_dtype": "float32",
+    "phone_class_count": 40,
+    "blank_index": 40,
+    "canonical_phone_vocabulary": [
+      "AA", "AE", "AH", "AO", "AW", "AX", "AY", "B", "CH", "D",
+      "DH", "EH", "ER", "EY", "F", "G", "HH", "IH", "IY", "JH",
+      "K", "L", "M", "N", "NG", "OW", "OY", "P", "R", "S",
+      "SH", "T", "TH", "UH", "UW", "V", "W", "Y", "Z", "ZH"
+    ],
+    "pre_softmax_logits_available": true,
+    "log_softmax_available": true,
+    "posterior_available": true,
+    "feature_frame_formula": "floor(sample_count / 160) + 1",
+    "output_length_formula": "floor(feature_frames / 2)",
+    "nominal_output_spacing_ms": 20.0,
+    "cnn_time_receptive_field_mel_frames": 16,
+    "cnn_time_receptive_field_nominal_ms": 160.0,
+    "bigru_context": "bidirectional over the full unpadded word sequence"
+  },
+  "historical_exposure": {
+    "model_forward_returns_logits_and_output_lengths": true,
+    "r5_driver_computes_log_softmax_from_logits": true,
+    "frozen_r5_scorer_accepts_logits": true,
+    "complete_frame_tensors_persisted_in_r5_result_artifacts": false
+  },
+  "limitation": "R6 aggregates a local time-index window, but each indexed logit is whole-word-contextualized by the BiGRU."
+}
+

@@ -1,0 +1,87 @@
+{
+  "stage": "R6-0 synthetic static verification",
+  "status": "R6_0_LOCAL_BOUNDARY_STATIC_VERIFICATION_PASS",
+  "manifest_self_excluded": true,
+  "hash_algorithm": "SHA-256",
+  "artifact_count": 13,
+  "artifacts": [
+    {
+      "relative_path": "r6_0_boundary_mapping.py",
+      "byte_size": 3595,
+      "sha256": "F7DE67453C8A4EE8E267F54FE7C6587157DDC95E259617A2E0A26B2B7D28DDB4"
+    },
+    {
+      "relative_path": "r6_0_local_features.py",
+      "byte_size": 3862,
+      "sha256": "0103FA719F13BA140D77A86B8DEDA6DD541846925E4358B4EB6431304EC36714"
+    },
+    {
+      "relative_path": "r6_0_boundary_labels.py",
+      "byte_size": 1832,
+      "sha256": "7D836B3DA494BB73AB311C2B0C7F712024D727DCB6D7D38C751AD913977FDAE5"
+    },
+    {
+      "relative_path": "test_r6_0_static.py",
+      "byte_size": 15052,
+      "sha256": "BE280B0B788B287F3220D94693003385F980540C2ECC63E4ED0A867037944AEE"
+    },
+    {
+      "relative_path": "r6_0_static_run_1.json",
+      "byte_size": 3674,
+      "sha256": "6815B9B47BCF7C1F849DD2127DA1D1A075DEAAEC99BA8630519EA9E65EEF3E44"
+    },
+    {
+      "relative_path": "r6_0_static_run_2.json",
+      "byte_size": 3674,
+      "sha256": "6815B9B47BCF7C1F849DD2127DA1D1A075DEAAEC99BA8630519EA9E65EEF3E44"
+    },
+    {
+      "relative_path": "r6_0_static_results.json",
+      "byte_size": 1799,
+      "sha256": "1D899CD855A063C7B8AD753473EEE34164B0FF496DC643C77826D3DA0A9E8FC9"
+    },
+    {
+      "relative_path": "r6_0_time_mapping_verification.json",
+      "byte_size": 1332,
+      "sha256": "398557CD6730EE2842CBF9F475C2BA71F6D3C63DF6649DE172948840F77F9D29"
+    },
+    {
+      "relative_path": "r6_0_feature_verification.json",
+      "byte_size": 1478,
+      "sha256": "6BA278E57D1476E69BB283F32DC158DD986C758BC51E8264BEDB042EB36A7F56"
+    },
+    {
+      "relative_path": "r6_0_label_verification.json",
+      "byte_size": 1202,
+      "sha256": "64990A3372E057867E1DA30EA721B44001111E17234281D79567238ABA8341CA"
+    },
+    {
+      "relative_path": "r6_0_distinctness_audit.json",
+      "byte_size": 693,
+      "sha256": "D9FFAB5A91B60B11EBACA18BC129EB3BBEA580D19970A807440359A0FF2F42FA"
+    },
+    {
+      "relative_path": "r6_0_static_protocol_audit.json",
+      "byte_size": 823,
+      "sha256": "7E199F38F463D3FF8CA28B93148E119F792237E03A2592B9B68C91C12283D044"
+    },
+    {
+      "relative_path": "R6_0_STATIC_VERIFICATION_REPORT.md",
+      "byte_size": 2975,
+      "sha256": "F7903ED43E91E8F5C237DFCAAB058A56F08AD80C1FEA2D076907B99F24547713"
+    }
+  ],
+  "frozen_r6_0_manifest_sha256": "EDB1A62CD6350AFC955C7A49B51C668BD0ED4217F7BBC9AD916525769DF8718A",
+  "frozen_identity_verification": "PASS",
+  "runs": 2,
+  "tests_per_run": 36,
+  "run_summary_sha256": "6815B9B47BCF7C1F849DD2127DA1D1A075DEAAEC99BA8630519EA9E65EEF3E44",
+  "run_summaries_byte_identical": true,
+  "json_parse_audit": "PASS",
+  "independent_hash_audit": "HASH_AUDIT_PASS",
+  "checkpoint_loaded": false,
+  "checkpoint_inference": false,
+  "real_train_performance": false,
+  "validation_accessed": false,
+  "test_accessed": false
+}

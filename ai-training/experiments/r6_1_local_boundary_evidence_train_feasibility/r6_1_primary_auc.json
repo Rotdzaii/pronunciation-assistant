@@ -1,0 +1,26 @@
+{
+  "primary_score": "MEAN_UNEXPECTED_PHONE_MASS",
+  "formula": "mean over available window frames of posterior mass over canonical phone classes 0..39 excluding adjacent expected phones; blank excluded",
+  "valid_boundary_instances": 72336,
+  "positive_instances": 293,
+  "negative_instances": 72043,
+  "pooled_boundary_roc_auc": 0.5265224849834894,
+  "positive_score_distribution": {
+    "count": 293,
+    "mean": 0.16057572933420977,
+    "median": 0.10794248542777041,
+    "p25": 0.016068245690354217,
+    "p75": 0.26380109454017103,
+    "min": 0.0001918199869873606,
+    "max": 0.9138506439299258
+  },
+  "negative_score_distribution": {
+    "count": 72043,
+    "mean": 0.15009757078654518,
+    "median": 0.08116954843769238,
+    "p25": 0.011331144988891338,
+    "p75": 0.24486485540079742,
+    "min": 8.564231895058462e-07,
+    "max": 0.9610954149829322
+  }
+}

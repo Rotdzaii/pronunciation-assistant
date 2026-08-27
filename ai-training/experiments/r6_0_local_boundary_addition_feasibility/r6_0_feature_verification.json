@@ -1,0 +1,41 @@
+{
+  "stage": "R6-0 synthetic local feature verification",
+  "status": "PASS",
+  "synthetic_logits_shape": [3, 41],
+  "synthetic_logits_dtype": "float32",
+  "posterior_transform": "exp(log_softmax(logits, dim=-1))",
+  "posterior_row_sum_check": "PASS",
+  "adjacent_expected_phone_ids": [1, 2],
+  "window_indices": [0, 1, 2],
+  "verified_values": {
+    "mean_unexpected_phone_mass": 0.9275149651839456,
+    "peak_unexpected_phone_posterior": 0.06716762483119965,
+    "peak_unexpected_frame_index": 1,
+    "peak_unexpected_phone_index": 39,
+    "mean_nonblank_mass": 0.9602171731724715,
+    "mean_nonblank_mass_from_phone_sum": 0.960217201498987
+  },
+  "numeric_policy": {
+    "posterior_dtype": "float32",
+    "summary_reduction_dtype": "float64",
+    "nonblank_equivalence_tolerance_used_only_for_static_float_check": "1e-6 absolute",
+    "clipping": false,
+    "duration_weighting": false,
+    "class_count_normalization": false
+  },
+  "semantic_checks": {
+    "blank_excluded_from_primary": "PASS",
+    "adjacent_expected_phones_excluded": "PASS",
+    "ordinary_frame_mean": "PASS",
+    "peak_blank_excluded": "PASS",
+    "peak_tie_first_frame_then_lower_phone": "PASS",
+    "nonblank_sum_equals_one_minus_blank": "PASS",
+    "frames_outside_window_have_no_effect": "PASS"
+  },
+  "scientific_feature_set": {
+    "primary": ["MEAN_UNEXPECTED_PHONE_MASS"],
+    "descriptive": ["PEAK_UNEXPECTED_PHONE_POSTERIOR", "MEAN_NONBLANK_MASS"]
+  },
+  "extra_features_calculated": false
+}
+

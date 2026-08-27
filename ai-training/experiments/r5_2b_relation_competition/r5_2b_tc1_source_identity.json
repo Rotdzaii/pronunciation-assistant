@@ -1,0 +1,36 @@
+{
+  "stage": "R5-2B-TC1",
+  "status": "PASS",
+  "verified_artifacts": [
+    {
+      "relative_path": "R5_2B_DEVELOPMENT_CONTRACT.json",
+      "sha256": "55572805C1878D41D4B6C41E1C7A31B2C3725A81050942494F0E1292092FEF38"
+    },
+    {
+      "relative_path": "R5_2B_PREREGISTRATION.md",
+      "sha256": "6D2DD9672222D174B32F0E25448419F42FE179522D2D8AA37C7766C8A1BBFBBA"
+    },
+    {
+      "relative_path": "R5_2B_STATIC_VERIFICATION_MANIFEST.json",
+      "sha256": "0D380ACA5C0CF101E60DFF043221BBE6AE267BA9FFDAD1C677C4E7FFCA23F80F"
+    },
+    {
+      "relative_path": "r5_2b_scorer.py",
+      "sha256": "2E44B79828DBB37B312CDC03C897A80803947A48F13864B26C454F3B8ED161A3"
+    },
+    {
+      "relative_path": "R5_2B_EXECUTION_MANIFEST.json",
+      "sha256": "92163F8DE3ECEAFEE2950AF57302AA565C0F3612A2D6F0D36462552FA66BA09E"
+    },
+    {
+      "relative_path": "R5_2B_TC0_MANIFEST.json",
+      "sha256": "91F5DBCB9719FEF7C7E3E1CEF5773E92A18B813FFD54384359DF026F300C278E"
+    }
+  ],
+  "contract_manifest_entries_verified": true,
+  "static_manifest_entries_verified": true,
+  "failed_execution_manifest_entries_verified": true,
+  "tc0_manifest_entries_verified": true,
+  "all_recorded_byte_sizes_verified": true,
+  "upstream_artifacts_modified": false
+}

@@ -1,0 +1,55 @@
+{
+  "status": "R5_1A_INSERTION_HYPOTHESIS_SCORING_DEVELOPMENT_PASS",
+  "gates_passed": 6,
+  "gates_total": 6,
+  "robust_theta": {
+    "status": "AUTHORIZED",
+    "thresholds_speaker_order": [
+      0.7137756109237671,
+      0.9448950631277899,
+      0.7485884030659993,
+      0.7137756109237671,
+      0.7485884030659993,
+      0.7485884030659993,
+      0.7485884030659993,
+      0.7569018363952638,
+      0.7485884030659993,
+      0.7485884030659993,
+      0.7485884030659993,
+      0.7137756109237671
+    ],
+    "sorted_thresholds": [
+      0.7137756109237671,
+      0.7137756109237671,
+      0.7137756109237671,
+      0.7485884030659993,
+      0.7485884030659993,
+      0.7485884030659993,
+      0.7485884030659993,
+      0.7485884030659993,
+      0.7485884030659993,
+      0.7485884030659993,
+      0.7569018363952638,
+      0.9448950631277899
+    ],
+    "value": 0.7485884030659993
+  },
+  "protocol": {
+    "execution_count": 1,
+    "neural_training": false,
+    "optimizer_created": false,
+    "train_inference": true,
+    "validation_audio_accessed": false,
+    "validation_inference_run": false,
+    "validation_performance_consumed": false,
+    "test_audio_accessed": false,
+    "test_inference_run": false,
+    "test_performance_consumed": false,
+    "r5_1_modified": false,
+    "r5_1a_contract_modified": false,
+    "r5_1a_scorer_modified": false,
+    "checkpoint_selection": false,
+    "alternative_score_family": false
+  },
+  "multiple_addition_limitation": "one BEST_INSERT maximum per word; additional true events remain false negatives"
+}

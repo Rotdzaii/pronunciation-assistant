@@ -1,0 +1,16 @@
+{
+  "verdict": "WORD_SEQUENCE_RUNTIME_READY_WITH_SMALL_LAYER",
+  "available": [
+    "target word",
+    "expected canonical phones",
+    "MFA word boundary",
+    "word audio",
+    "frozen acoustic checkpoint"
+  ],
+  "missing": [
+    "batched sliding-window evidence service",
+    "posterior-aware monotonic DP layer",
+    "sequence reliability contract"
+  ],
+  "mfa_phone_labels_used_as_observed_truth": false
+}

@@ -1,0 +1,12 @@
+{
+  "path": "ai-training/experiments/r4_4b_ctc_sequence_seed42/R4_4B_ctc_phone_sequence_seed42_best_validation_per.pt",
+  "sha256": "A154DFAC573D69B8ED1A71CBCDC23227EA3E80929890AD87E97ED85667142106",
+  "selected_epoch": 35,
+  "selection_order": [
+    "lowest validation PER",
+    "higher deletion F1",
+    "earlier epoch"
+  ],
+  "validation_per": 0.6028399480785116,
+  "validation_deletion_f1": 0.11143325349804614
+}

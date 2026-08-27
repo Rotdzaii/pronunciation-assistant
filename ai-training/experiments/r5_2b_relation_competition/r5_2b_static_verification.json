@@ -1,0 +1,62 @@
+{
+  "stage": "R5-2B-SV",
+  "scope": "synthetic_static_verification_only",
+  "status": "R5_2B_STATIC_VERIFICATION_PASS",
+  "identity_verification": {
+    "status": "PASS",
+    "contract_sha256": "55572805C1878D41D4B6C41E1C7A31B2C3725A81050942494F0E1292092FEF38",
+    "preregistration_sha256": "6D2DD9672222D174B32F0E25448419F42FE179522D2D8AA37C7766C8A1BBFBBA",
+    "contract_manifest_sha256": "5A1E82FD9E0209DB371F7E313125FAC64434BA6DA6E677CFF20E0AE3336F583E",
+    "r5_2a_manifest_sha256": "F8E476F8FFA6AB2CD0F833B17D667D0D9B6CE3FC6B9FA1A7F5C1A3D71BA753E1",
+    "v4_sha256": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D",
+    "checkpoint_sha256": "F54C9C2361AE78E1C37353AEB338A2DE6722C0B1EC4F885F6B52688CE9E88085",
+    "r5_1a_scorer_sha256": "4DE49C9070C973EE44EFBD09DFC063C436779E723D12EC7A7A2BC4A06AF35F90"
+  },
+  "synthetic_runs": [
+    {
+      "run": 1,
+      "tests": 50,
+      "passed": 50,
+      "failed": 0,
+      "summary_sha256": "F0E54A0A4DBC1378F424E6C8FE8B0A9861CDD72DCBE72C045B96660324723197"
+    },
+    {
+      "run": 2,
+      "tests": 50,
+      "passed": 50,
+      "failed": 0,
+      "summary_sha256": "F0E54A0A4DBC1378F424E6C8FE8B0A9861CDD72DCBE72C045B96660324723197"
+    }
+  ],
+  "determinism": {
+    "byte_identical_summaries": true,
+    "deterministic_fixture_sha256": "CBAD78A3ED01758740866D991A736FD044DCB219AA109E85C84F951403435A1F",
+    "candidate_order_sha256": "CCCD4E7F672628E48DF5DF45A0D879B6A4D96178B64FF1B55728662921A83A1F",
+    "status": "PASS"
+  },
+  "pass_criteria": {
+    "contract_identities": "PASS",
+    "candidate_constructors": "PASS",
+    "candidate_counts": "PASS",
+    "alignability_semantics": "PASS",
+    "impossible_target_semantics": "PASS",
+    "empty_delete_all_blank_likelihood": "PASS",
+    "one_phone_word": "PASS",
+    "best_insert_ties": "PASS",
+    "best_sub_ties": "PASS",
+    "best_delete_ties": "PASS",
+    "best_nonaddition_family_priority": "PASS",
+    "relation_competition_arithmetic": "PASS",
+    "all_insert_impossible": "PASS",
+    "impossible_nonaddition_cannot_win": "PASS",
+    "extended_real_serialization": "PASS",
+    "threshold_helper": "PASS",
+    "cohort_far_helpers": "PASS",
+    "event_helpers": "PASS",
+    "determinism": "PASS",
+    "no_real_data_inference_or_performance": "PASS",
+    "validation_untouched": "PASS",
+    "test_untouched": "PASS",
+    "hash_audit": "PASS"
+  }
+}

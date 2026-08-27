@@ -1,0 +1,31 @@
+{
+  "stage": "R5-2B-TC1",
+  "correction_class": "execution_orchestration_numerical_guard_only",
+  "justification": "The failed attempt stopped before TRAIN access or performance, and TC0 proved identical empty-target semantics with cross-backend float32 reduction rounding only.",
+  "permitted_future_changes": [
+    "create additive r5_2b_train_execution_driver_tc1.py",
+    "call the unchanged imported frozen scorer for the authoritative empty-target scientific score",
+    "retain an independent calculation as diagnostic metadata only",
+    "replace cross-backend exact-equality assertion with the frozen forward-error equivalence policy",
+    "emit dtype/device/term-count/ABS_SUM/bound/difference audit fields"
+  ],
+  "prohibited_changes": [
+    "modify or copy-edit r5_2b_scorer.py",
+    "overwrite r5_2b_train_execution_driver.py or its failed evidence",
+    "modify R5_2B_DEVELOPMENT_CONTRACT.json or R5_2B_PREREGISTRATION.md",
+    "replace scorer output with diagnostic CPU sum",
+    "promote or average the scientific score",
+    "change model, checkpoint, preprocessing, logits, blank, hypotheses, normalization, C, population, cohorts, LOSO, thresholds, gates, events, or statuses",
+    "run TRAIN before TC1 synthetic static regression passes",
+    "access VALIDATION or TEST"
+  ],
+  "scientific_contract_modified": false,
+  "frozen_scorer_modified": false,
+  "eight_gates_modified": false,
+  "population_modified": false,
+  "hypothesis_modified": false,
+  "failed_execution_modified": false,
+  "new_scientific_hypothesis": false,
+  "second_performance_attempt_after_metrics": false,
+  "reason": "The original attempt exposed no performance information."
+}

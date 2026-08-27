@@ -1,0 +1,1526 @@
+{
+  "seed": 42,
+  "without_replacement": true,
+  "matching": "validation speaker + expected phone; no duration",
+  "pairs": 387,
+  "rows": 774,
+  "substitutions": 387,
+  "deletions": 387,
+  "phones": [
+    "AA",
+    "AE",
+    "AH",
+    "AO",
+    "AY",
+    "B",
+    "CH",
+    "D",
+    "DH",
+    "EH",
+    "ER",
+    "EY",
+    "F",
+    "G",
+    "IH",
+    "IY",
+    "JH",
+    "K",
+    "L",
+    "M",
+    "N",
+    "NG",
+    "P",
+    "R",
+    "S",
+    "T",
+    "TH",
+    "UW",
+    "V",
+    "W",
+    "Y",
+    "Z"
+  ],
+  "speakers": [
+    "ABA",
+    "HKK",
+    "HQTV",
+    "LXC",
+    "MBMPS",
+    "SVBI"
+  ],
+  "excluded_strata": [
+    {
+      "speaker_id": "ABA",
+      "expected_phone": "AA",
+      "substitutions": 13,
+      "deletions": 1,
+      "matched_each": 1,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "ABA",
+      "expected_phone": "AE",
+      "substitutions": 5,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "ABA",
+      "expected_phone": "AH",
+      "substitutions": 8,
+      "deletions": 6,
+      "matched_each": 6,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "ABA",
+      "expected_phone": "AO",
+      "substitutions": 5,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "ABA",
+      "expected_phone": "AW",
+      "substitutions": 2,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "ABA",
+      "expected_phone": "B",
+      "substitutions": 11,
+      "deletions": 1,
+      "matched_each": 1,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "ABA",
+      "expected_phone": "CH",
+      "substitutions": 3,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "ABA",
+      "expected_phone": "D",
+      "substitutions": 2,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "ABA",
+      "expected_phone": "DH",
+      "substitutions": 9,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "ABA",
+      "expected_phone": "EH",
+      "substitutions": 3,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "ABA",
+      "expected_phone": "ER",
+      "substitutions": 2,
+      "deletions": 1,
+      "matched_each": 1,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "ABA",
+      "expected_phone": "EY",
+      "substitutions": 2,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "ABA",
+      "expected_phone": "HH",
+      "substitutions": 0,
+      "deletions": 1,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "ABA",
+      "expected_phone": "IH",
+      "substitutions": 20,
+      "deletions": 1,
+      "matched_each": 1,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "ABA",
+      "expected_phone": "IY",
+      "substitutions": 3,
+      "deletions": 1,
+      "matched_each": 1,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "ABA",
+      "expected_phone": "JH",
+      "substitutions": 16,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "ABA",
+      "expected_phone": "L",
+      "substitutions": 0,
+      "deletions": 2,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "ABA",
+      "expected_phone": "N",
+      "substitutions": 0,
+      "deletions": 1,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "ABA",
+      "expected_phone": "NG",
+      "substitutions": 2,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "ABA",
+      "expected_phone": "OW",
+      "substitutions": 1,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "ABA",
+      "expected_phone": "P",
+      "substitutions": 18,
+      "deletions": 1,
+      "matched_each": 1,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "ABA",
+      "expected_phone": "R",
+      "substitutions": 0,
+      "deletions": 6,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "ABA",
+      "expected_phone": "S",
+      "substitutions": 2,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "ABA",
+      "expected_phone": "SH",
+      "substitutions": 1,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "ABA",
+      "expected_phone": "T",
+      "substitutions": 2,
+      "deletions": 1,
+      "matched_each": 1,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "ABA",
+      "expected_phone": "TH",
+      "substitutions": 4,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "ABA",
+      "expected_phone": "UH",
+      "substitutions": 2,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "ABA",
+      "expected_phone": "UW",
+      "substitutions": 4,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "ABA",
+      "expected_phone": "V",
+      "substitutions": 2,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "ABA",
+      "expected_phone": "W",
+      "substitutions": 0,
+      "deletions": 1,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "ABA",
+      "expected_phone": "Y",
+      "substitutions": 0,
+      "deletions": 1,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "ABA",
+      "expected_phone": "Z",
+      "substitutions": 6,
+      "deletions": 1,
+      "matched_each": 1,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "ABA",
+      "expected_phone": "ZH",
+      "substitutions": 1,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "HKK",
+      "expected_phone": "AA",
+      "substitutions": 1,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "HKK",
+      "expected_phone": "AE",
+      "substitutions": 5,
+      "deletions": 1,
+      "matched_each": 1,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "HKK",
+      "expected_phone": "AH",
+      "substitutions": 15,
+      "deletions": 1,
+      "matched_each": 1,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "HKK",
+      "expected_phone": "AO",
+      "substitutions": 10,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "HKK",
+      "expected_phone": "AW",
+      "substitutions": 2,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "HKK",
+      "expected_phone": "AY",
+      "substitutions": 1,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "HKK",
+      "expected_phone": "B",
+      "substitutions": 2,
+      "deletions": 1,
+      "matched_each": 1,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "HKK",
+      "expected_phone": "CH",
+      "substitutions": 1,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "HKK",
+      "expected_phone": "D",
+      "substitutions": 4,
+      "deletions": 20,
+      "matched_each": 4,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "HKK",
+      "expected_phone": "DH",
+      "substitutions": 27,
+      "deletions": 1,
+      "matched_each": 1,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "HKK",
+      "expected_phone": "EH",
+      "substitutions": 9,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "HKK",
+      "expected_phone": "ER",
+      "substitutions": 2,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "HKK",
+      "expected_phone": "EY",
+      "substitutions": 4,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "HKK",
+      "expected_phone": "F",
+      "substitutions": 2,
+      "deletions": 1,
+      "matched_each": 1,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "HKK",
+      "expected_phone": "HH",
+      "substitutions": 0,
+      "deletions": 16,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "HKK",
+      "expected_phone": "IH",
+      "substitutions": 30,
+      "deletions": 1,
+      "matched_each": 1,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "HKK",
+      "expected_phone": "IY",
+      "substitutions": 5,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "HKK",
+      "expected_phone": "JH",
+      "substitutions": 4,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "HKK",
+      "expected_phone": "K",
+      "substitutions": 0,
+      "deletions": 5,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "HKK",
+      "expected_phone": "L",
+      "substitutions": 18,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "HKK",
+      "expected_phone": "N",
+      "substitutions": 2,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "HKK",
+      "expected_phone": "OW",
+      "substitutions": 31,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "HKK",
+      "expected_phone": "P",
+      "substitutions": 6,
+      "deletions": 4,
+      "matched_each": 4,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "HKK",
+      "expected_phone": "R",
+      "substitutions": 4,
+      "deletions": 14,
+      "matched_each": 4,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "HKK",
+      "expected_phone": "T",
+      "substitutions": 5,
+      "deletions": 23,
+      "matched_each": 5,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "HKK",
+      "expected_phone": "TH",
+      "substitutions": 9,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "HKK",
+      "expected_phone": "V",
+      "substitutions": 1,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "HKK",
+      "expected_phone": "W",
+      "substitutions": 1,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "HKK",
+      "expected_phone": "Z",
+      "substitutions": 48,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "HKK",
+      "expected_phone": "ZH",
+      "substitutions": 4,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "HQTV",
+      "expected_phone": "AA",
+      "substitutions": 20,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "HQTV",
+      "expected_phone": "AE",
+      "substitutions": 21,
+      "deletions": 1,
+      "matched_each": 1,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "HQTV",
+      "expected_phone": "AH",
+      "substitutions": 50,
+      "deletions": 21,
+      "matched_each": 21,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "HQTV",
+      "expected_phone": "AO",
+      "substitutions": 14,
+      "deletions": 1,
+      "matched_each": 1,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "HQTV",
+      "expected_phone": "AW",
+      "substitutions": 4,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "HQTV",
+      "expected_phone": "AY",
+      "substitutions": 2,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "HQTV",
+      "expected_phone": "B",
+      "substitutions": 5,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "HQTV",
+      "expected_phone": "D",
+      "substitutions": 11,
+      "deletions": 63,
+      "matched_each": 11,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "HQTV",
+      "expected_phone": "DH",
+      "substitutions": 62,
+      "deletions": 6,
+      "matched_each": 6,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "HQTV",
+      "expected_phone": "EH",
+      "substitutions": 10,
+      "deletions": 1,
+      "matched_each": 1,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "HQTV",
+      "expected_phone": "ER",
+      "substitutions": 61,
+      "deletions": 1,
+      "matched_each": 1,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "HQTV",
+      "expected_phone": "EY",
+      "substitutions": 14,
+      "deletions": 1,
+      "matched_each": 1,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "HQTV",
+      "expected_phone": "G",
+      "substitutions": 5,
+      "deletions": 6,
+      "matched_each": 5,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "HQTV",
+      "expected_phone": "HH",
+      "substitutions": 0,
+      "deletions": 1,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "HQTV",
+      "expected_phone": "IH",
+      "substitutions": 51,
+      "deletions": 11,
+      "matched_each": 11,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "HQTV",
+      "expected_phone": "IY",
+      "substitutions": 11,
+      "deletions": 2,
+      "matched_each": 2,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "HQTV",
+      "expected_phone": "JH",
+      "substitutions": 13,
+      "deletions": 5,
+      "matched_each": 5,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "HQTV",
+      "expected_phone": "K",
+      "substitutions": 2,
+      "deletions": 12,
+      "matched_each": 2,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "HQTV",
+      "expected_phone": "L",
+      "substitutions": 31,
+      "deletions": 38,
+      "matched_each": 31,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "HQTV",
+      "expected_phone": "N",
+      "substitutions": 8,
+      "deletions": 24,
+      "matched_each": 8,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "HQTV",
+      "expected_phone": "NG",
+      "substitutions": 1,
+      "deletions": 2,
+      "matched_each": 1,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "HQTV",
+      "expected_phone": "OW",
+      "substitutions": 13,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "HQTV",
+      "expected_phone": "P",
+      "substitutions": 15,
+      "deletions": 3,
+      "matched_each": 3,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "HQTV",
+      "expected_phone": "R",
+      "substitutions": 10,
+      "deletions": 57,
+      "matched_each": 10,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "HQTV",
+      "expected_phone": "S",
+      "substitutions": 8,
+      "deletions": 11,
+      "matched_each": 8,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "HQTV",
+      "expected_phone": "SH",
+      "substitutions": 7,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "HQTV",
+      "expected_phone": "T",
+      "substitutions": 18,
+      "deletions": 51,
+      "matched_each": 18,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "HQTV",
+      "expected_phone": "TH",
+      "substitutions": 7,
+      "deletions": 1,
+      "matched_each": 1,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "HQTV",
+      "expected_phone": "UH",
+      "substitutions": 11,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "HQTV",
+      "expected_phone": "UW",
+      "substitutions": 5,
+      "deletions": 1,
+      "matched_each": 1,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "HQTV",
+      "expected_phone": "V",
+      "substitutions": 16,
+      "deletions": 4,
+      "matched_each": 4,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "HQTV",
+      "expected_phone": "W",
+      "substitutions": 0,
+      "deletions": 1,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "HQTV",
+      "expected_phone": "Y",
+      "substitutions": 2,
+      "deletions": 3,
+      "matched_each": 2,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "HQTV",
+      "expected_phone": "Z",
+      "substitutions": 27,
+      "deletions": 35,
+      "matched_each": 27,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "HQTV",
+      "expected_phone": "ZH",
+      "substitutions": 5,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "LXC",
+      "expected_phone": "AA",
+      "substitutions": 9,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "LXC",
+      "expected_phone": "AE",
+      "substitutions": 8,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "LXC",
+      "expected_phone": "AH",
+      "substitutions": 40,
+      "deletions": 9,
+      "matched_each": 9,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "LXC",
+      "expected_phone": "AO",
+      "substitutions": 2,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "LXC",
+      "expected_phone": "AW",
+      "substitutions": 17,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "LXC",
+      "expected_phone": "AY",
+      "substitutions": 4,
+      "deletions": 1,
+      "matched_each": 1,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "LXC",
+      "expected_phone": "B",
+      "substitutions": 1,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "LXC",
+      "expected_phone": "CH",
+      "substitutions": 1,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "LXC",
+      "expected_phone": "D",
+      "substitutions": 14,
+      "deletions": 15,
+      "matched_each": 14,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "LXC",
+      "expected_phone": "DH",
+      "substitutions": 47,
+      "deletions": 5,
+      "matched_each": 5,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "LXC",
+      "expected_phone": "EH",
+      "substitutions": 17,
+      "deletions": 1,
+      "matched_each": 1,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "LXC",
+      "expected_phone": "ER",
+      "substitutions": 67,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "LXC",
+      "expected_phone": "EY",
+      "substitutions": 11,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "LXC",
+      "expected_phone": "F",
+      "substitutions": 1,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "LXC",
+      "expected_phone": "G",
+      "substitutions": 1,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "LXC",
+      "expected_phone": "HH",
+      "substitutions": 0,
+      "deletions": 1,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "LXC",
+      "expected_phone": "IH",
+      "substitutions": 45,
+      "deletions": 1,
+      "matched_each": 1,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "LXC",
+      "expected_phone": "IY",
+      "substitutions": 5,
+      "deletions": 2,
+      "matched_each": 2,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "LXC",
+      "expected_phone": "JH",
+      "substitutions": 3,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "LXC",
+      "expected_phone": "K",
+      "substitutions": 1,
+      "deletions": 5,
+      "matched_each": 1,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "LXC",
+      "expected_phone": "L",
+      "substitutions": 22,
+      "deletions": 28,
+      "matched_each": 22,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "LXC",
+      "expected_phone": "N",
+      "substitutions": 40,
+      "deletions": 9,
+      "matched_each": 9,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "LXC",
+      "expected_phone": "NG",
+      "substitutions": 3,
+      "deletions": 1,
+      "matched_each": 1,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "LXC",
+      "expected_phone": "OW",
+      "substitutions": 22,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "LXC",
+      "expected_phone": "P",
+      "substitutions": 1,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "LXC",
+      "expected_phone": "R",
+      "substitutions": 17,
+      "deletions": 49,
+      "matched_each": 17,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "LXC",
+      "expected_phone": "T",
+      "substitutions": 4,
+      "deletions": 27,
+      "matched_each": 4,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "LXC",
+      "expected_phone": "TH",
+      "substitutions": 22,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "LXC",
+      "expected_phone": "UH",
+      "substitutions": 3,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "LXC",
+      "expected_phone": "UW",
+      "substitutions": 4,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "LXC",
+      "expected_phone": "V",
+      "substitutions": 19,
+      "deletions": 4,
+      "matched_each": 4,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "LXC",
+      "expected_phone": "W",
+      "substitutions": 2,
+      "deletions": 3,
+      "matched_each": 2,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "LXC",
+      "expected_phone": "Z",
+      "substitutions": 85,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "LXC",
+      "expected_phone": "ZH",
+      "substitutions": 3,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "MBMPS",
+      "expected_phone": "AA",
+      "substitutions": 7,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "MBMPS",
+      "expected_phone": "AE",
+      "substitutions": 17,
+      "deletions": 1,
+      "matched_each": 1,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "MBMPS",
+      "expected_phone": "AH",
+      "substitutions": 42,
+      "deletions": 6,
+      "matched_each": 6,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "MBMPS",
+      "expected_phone": "AO",
+      "substitutions": 6,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "MBMPS",
+      "expected_phone": "AW",
+      "substitutions": 1,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "MBMPS",
+      "expected_phone": "AY",
+      "substitutions": 2,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "MBMPS",
+      "expected_phone": "B",
+      "substitutions": 1,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "MBMPS",
+      "expected_phone": "CH",
+      "substitutions": 0,
+      "deletions": 1,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "MBMPS",
+      "expected_phone": "D",
+      "substitutions": 5,
+      "deletions": 15,
+      "matched_each": 5,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "MBMPS",
+      "expected_phone": "DH",
+      "substitutions": 32,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "MBMPS",
+      "expected_phone": "EH",
+      "substitutions": 6,
+      "deletions": 2,
+      "matched_each": 2,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "MBMPS",
+      "expected_phone": "ER",
+      "substitutions": 1,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "MBMPS",
+      "expected_phone": "EY",
+      "substitutions": 4,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "MBMPS",
+      "expected_phone": "F",
+      "substitutions": 1,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "MBMPS",
+      "expected_phone": "G",
+      "substitutions": 2,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "MBMPS",
+      "expected_phone": "HH",
+      "substitutions": 0,
+      "deletions": 1,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "MBMPS",
+      "expected_phone": "IH",
+      "substitutions": 57,
+      "deletions": 3,
+      "matched_each": 3,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "MBMPS",
+      "expected_phone": "IY",
+      "substitutions": 4,
+      "deletions": 1,
+      "matched_each": 1,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "MBMPS",
+      "expected_phone": "JH",
+      "substitutions": 8,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "MBMPS",
+      "expected_phone": "K",
+      "substitutions": 1,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "MBMPS",
+      "expected_phone": "L",
+      "substitutions": 1,
+      "deletions": 2,
+      "matched_each": 1,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "MBMPS",
+      "expected_phone": "M",
+      "substitutions": 1,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "MBMPS",
+      "expected_phone": "NG",
+      "substitutions": 11,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "MBMPS",
+      "expected_phone": "P",
+      "substitutions": 2,
+      "deletions": 1,
+      "matched_each": 1,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "MBMPS",
+      "expected_phone": "R",
+      "substitutions": 2,
+      "deletions": 1,
+      "matched_each": 1,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "MBMPS",
+      "expected_phone": "S",
+      "substitutions": 5,
+      "deletions": 1,
+      "matched_each": 1,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "MBMPS",
+      "expected_phone": "T",
+      "substitutions": 20,
+      "deletions": 10,
+      "matched_each": 10,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "MBMPS",
+      "expected_phone": "TH",
+      "substitutions": 11,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "MBMPS",
+      "expected_phone": "UH",
+      "substitutions": 6,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "MBMPS",
+      "expected_phone": "UW",
+      "substitutions": 1,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "MBMPS",
+      "expected_phone": "V",
+      "substitutions": 3,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "MBMPS",
+      "expected_phone": "W",
+      "substitutions": 0,
+      "deletions": 1,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "MBMPS",
+      "expected_phone": "Y",
+      "substitutions": 0,
+      "deletions": 1,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "MBMPS",
+      "expected_phone": "Z",
+      "substitutions": 68,
+      "deletions": 1,
+      "matched_each": 1,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "MBMPS",
+      "expected_phone": "ZH",
+      "substitutions": 5,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "SVBI",
+      "expected_phone": "AA",
+      "substitutions": 2,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "SVBI",
+      "expected_phone": "AE",
+      "substitutions": 3,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "SVBI",
+      "expected_phone": "AH",
+      "substitutions": 8,
+      "deletions": 1,
+      "matched_each": 1,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "SVBI",
+      "expected_phone": "AO",
+      "substitutions": 1,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "SVBI",
+      "expected_phone": "AW",
+      "substitutions": 9,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "SVBI",
+      "expected_phone": "AY",
+      "substitutions": 1,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "SVBI",
+      "expected_phone": "B",
+      "substitutions": 2,
+      "deletions": 1,
+      "matched_each": 1,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "SVBI",
+      "expected_phone": "D",
+      "substitutions": 8,
+      "deletions": 22,
+      "matched_each": 8,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "SVBI",
+      "expected_phone": "DH",
+      "substitutions": 24,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "SVBI",
+      "expected_phone": "EH",
+      "substitutions": 1,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "SVBI",
+      "expected_phone": "ER",
+      "substitutions": 26,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "SVBI",
+      "expected_phone": "EY",
+      "substitutions": 30,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "SVBI",
+      "expected_phone": "G",
+      "substitutions": 1,
+      "deletions": 2,
+      "matched_each": 1,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "SVBI",
+      "expected_phone": "HH",
+      "substitutions": 0,
+      "deletions": 1,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "SVBI",
+      "expected_phone": "IH",
+      "substitutions": 2,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "SVBI",
+      "expected_phone": "IY",
+      "substitutions": 2,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "SVBI",
+      "expected_phone": "JH",
+      "substitutions": 8,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "SVBI",
+      "expected_phone": "K",
+      "substitutions": 3,
+      "deletions": 2,
+      "matched_each": 2,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "SVBI",
+      "expected_phone": "L",
+      "substitutions": 0,
+      "deletions": 1,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "SVBI",
+      "expected_phone": "OW",
+      "substitutions": 29,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "SVBI",
+      "expected_phone": "OY",
+      "substitutions": 1,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "SVBI",
+      "expected_phone": "P",
+      "substitutions": 5,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "SVBI",
+      "expected_phone": "R",
+      "substitutions": 0,
+      "deletions": 10,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "SVBI",
+      "expected_phone": "S",
+      "substitutions": 3,
+      "deletions": 1,
+      "matched_each": 1,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "SVBI",
+      "expected_phone": "SH",
+      "substitutions": 1,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "SVBI",
+      "expected_phone": "T",
+      "substitutions": 9,
+      "deletions": 15,
+      "matched_each": 9,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "SVBI",
+      "expected_phone": "TH",
+      "substitutions": 8,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "SVBI",
+      "expected_phone": "UH",
+      "substitutions": 2,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "SVBI",
+      "expected_phone": "V",
+      "substitutions": 20,
+      "deletions": 4,
+      "matched_each": 4,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "SVBI",
+      "expected_phone": "W",
+      "substitutions": 6,
+      "deletions": 3,
+      "matched_each": 3,
+      "reason": "unmatched_excess_rows"
+    },
+    {
+      "speaker_id": "SVBI",
+      "expected_phone": "Y",
+      "substitutions": 0,
+      "deletions": 3,
+      "reason": "one_class_absent"
+    },
+    {
+      "speaker_id": "SVBI",
+      "expected_phone": "Z",
+      "substitutions": 68,
+      "deletions": 0,
+      "reason": "one_class_absent"
+    }
+  ]
+}

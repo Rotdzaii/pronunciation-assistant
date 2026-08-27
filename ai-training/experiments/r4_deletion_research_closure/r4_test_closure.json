@@ -1,0 +1,12 @@
+{
+  "status": "CLOSED_AND_UNTOUCHED",
+  "test_speakers": ["ASI", "ERMS", "SKA", "THV", "TXHC", "YDCK"],
+  "paths_resolved": false,
+  "audio_read": false,
+  "posterior_computed": false,
+  "hypothesis_scores_computed": false,
+  "metrics_calculated": false,
+  "ever_accessed_during_r4": false,
+  "reason_not_evaluated": "No R4 development candidate passed the final validation confirmation contract.",
+  "preservation_reason": "The untouched R4 TEST split remains available only for a genuinely new future research generation with an appropriate independent evaluation protocol."
+}

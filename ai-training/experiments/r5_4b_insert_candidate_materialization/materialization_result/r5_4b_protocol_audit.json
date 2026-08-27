@@ -1,0 +1,21 @@
+{
+  "neural_training": false,
+  "checkpoint_loaded": true,
+  "checkpoint_inference": true,
+  "train_audio_accessed": true,
+  "new_acoustic_candidate_artifact": true,
+  "scientific_scorer_modified": false,
+  "candidate_family_modified": false,
+  "truth_used_during_materialization": false,
+  "truth_fields_written_to_candidate_shards": false,
+  "performance_metrics": false,
+  "recoverability_metrics": false,
+  "truth_ranks_inspected": false,
+  "threshold_search": false,
+  "classifier_fitting": false,
+  "validation_paths_resolved": false,
+  "validation_accessed": false,
+  "test_paths_resolved": false,
+  "test_accessed": false,
+  "execution_count": 1
+}

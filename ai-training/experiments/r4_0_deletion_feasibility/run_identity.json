@@ -1,0 +1,44 @@
+{
+  "experiment": "R4-0 deletion feasibility audit",
+  "markers": [
+    "RESEARCH_ONLY",
+    "NO_TRAINING",
+    "R4_TEST_CLOSED"
+  ],
+  "timestamp_utc": "2026-08-13T17:30:26.602293+00:00",
+  "v4_sha256": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D",
+  "audio_root_identity": "l2arctic_release_v5.0",
+  "sample_rate": 16000,
+  "seed": 42,
+  "train_speakers": [
+    "BWC",
+    "EBVS",
+    "HJK",
+    "NCC",
+    "NJS",
+    "PNV",
+    "RRBI",
+    "TLV",
+    "TNI",
+    "YBAA",
+    "YKWK",
+    "ZHAA"
+  ],
+  "validation_speakers": [
+    "ABA",
+    "HKK",
+    "HQTV",
+    "LXC",
+    "MBMPS",
+    "SVBI"
+  ],
+  "test_speakers_metadata_only": [
+    "ASI",
+    "ERMS",
+    "SKA",
+    "THV",
+    "TXHC",
+    "YDCK"
+  ],
+  "test_audio_accessed": false
+}

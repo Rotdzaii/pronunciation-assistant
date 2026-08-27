@@ -1,0 +1,18 @@
+{
+  "stage": "R5-3A development contract freeze",
+  "neural_training": false,
+  "checkpoint_inference": false,
+  "classifier_fitting": false,
+  "performance_metrics_calculated": false,
+  "threshold_search": false,
+  "train_score_artifacts_read_for_identity_only": true,
+  "feature_values_persisted": false,
+  "validation_paths_resolved": false,
+  "validation_accessed": false,
+  "test_paths_resolved": false,
+  "test_accessed": false,
+  "r5_1a_modified": false,
+  "r5_2b_modified": false,
+  "r5_2c_modified": false,
+  "scientific_performance_exposed": false
+}

@@ -1,0 +1,80 @@
+{
+  "status": "PASS",
+  "paths": {
+    "v4": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\datasets\\l2-arctic\\metadata\\all_speakers_expected_observed_v4.csv",
+    "checkpoint": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r4_4c2_bigru_ctc_seed42\\R4_4C2_bigru_ctc_phone_sequence_seed42_best_validation_per.pt",
+    "r4_closure_manifest": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r4_deletion_research_closure\\artifact_hashes.json",
+    "preregistration": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r5_0_addition_feasibility_audit\\R5_0_PREREGISTRATION.json"
+  },
+  "expected_sha256": {
+    "v4": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D",
+    "checkpoint": "F54C9C2361AE78E1C37353AEB338A2DE6722C0B1EC4F885F6B52688CE9E88085",
+    "r4_closure_manifest": "3E21936C6175F9DEA5FAE3346E96EECD3AEF18732072C42B0B2FCAE4161D6174",
+    "preregistration": "14CBFADAC0BE35D53C01DC966A030A71F24EC4D86EA88384BC449544CE12AEF7"
+  },
+  "actual_sha256": {
+    "v4": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D",
+    "checkpoint": "F54C9C2361AE78E1C37353AEB338A2DE6722C0B1EC4F885F6B52688CE9E88085",
+    "r4_closure_manifest": "3E21936C6175F9DEA5FAE3346E96EECD3AEF18732072C42B0B2FCAE4161D6174",
+    "preregistration": "14CBFADAC0BE35D53C01DC966A030A71F24EC4D86EA88384BC449544CE12AEF7"
+  },
+  "bytes": {
+    "v4": 48727961,
+    "checkpoint": 813093,
+    "r4_closure_manifest": 951,
+    "preregistration": 14816
+  },
+  "checkpoint_contract": {
+    "epoch": 35,
+    "validation_per": 0.45332966211698067,
+    "blank_index": 40,
+    "vocabulary": [
+      "AA",
+      "AE",
+      "AH",
+      "AO",
+      "AW",
+      "AX",
+      "AY",
+      "B",
+      "CH",
+      "D",
+      "DH",
+      "EH",
+      "ER",
+      "EY",
+      "F",
+      "G",
+      "HH",
+      "IH",
+      "IY",
+      "JH",
+      "K",
+      "L",
+      "M",
+      "N",
+      "NG",
+      "OW",
+      "OY",
+      "P",
+      "R",
+      "S",
+      "SH",
+      "T",
+      "TH",
+      "UH",
+      "UW",
+      "V",
+      "W",
+      "Y",
+      "Z",
+      "ZH"
+    ]
+  },
+  "r4_modified": false,
+  "v4_audit_path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\datasets\\l2-arctic\\metadata\\all_speakers_expected_observed_v4_audit.json",
+  "v4_audit_sha256": "D188A6CF11A15556BD94E9F399D4D9D3506437C02FAB03E26C184C3EF8065B45",
+  "branch": "research/phoenix-correctness",
+  "audio_root_used_for_train_validation_data_and_train_inference": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant\\ai-training\\datasets\\l2-arctic\\raw\\l2arctic_release_v5.0",
+  "test_audio_root_paths_constructed": false
+}

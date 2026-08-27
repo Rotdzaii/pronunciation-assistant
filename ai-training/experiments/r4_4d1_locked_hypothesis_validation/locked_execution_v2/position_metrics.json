@@ -1,0 +1,34 @@
+{
+  "initial": {
+    "rows": 7377,
+    "deletion_support": 60,
+    "deletion_precision": 0.16153846153846155,
+    "deletion_recall": 0.35,
+    "deletion_f1": 0.2210526315789474,
+    "false_deletion_rate": 0.014896815634823014
+  },
+  "medial": {
+    "rows": 11232,
+    "deletion_support": 289,
+    "deletion_precision": 0.16213389121338911,
+    "deletion_recall": 0.5363321799307958,
+    "deletion_f1": 0.24899598393574296,
+    "false_deletion_rate": 0.07319747783971489
+  },
+  "final": {
+    "rows": 7377,
+    "deletion_support": 561,
+    "deletion_precision": 0.450199203187251,
+    "deletion_recall": 0.4028520499108734,
+    "deletion_f1": 0.425211665098777,
+    "false_deletion_rate": 0.040492957746478875
+  },
+  "single": {
+    "rows": 351,
+    "deletion_support": 4,
+    "deletion_precision": 0.0,
+    "deletion_recall": 0.0,
+    "deletion_f1": 0.0,
+    "false_deletion_rate": 0.0
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "manifest_type": "additive R5-1 pre-metric technical-stop manifest",
+  "hash_algorithm": "SHA-256",
+  "self_excluded": true,
+  "artifact_count": 7,
+  "hash_audit": "HASH_AUDIT_PASS",
+  "preserved_frozen_contract_identities": {
+    "R5_1_DEVELOPMENT_CONTRACT.json": "18697A0C7DED130E122F49A9440AFA2D79B02E8630F2F7583C775F67797DCE77",
+    "R5_1_PREREGISTRATION.md": "3F69286BC25DA1AFF0A8C91028DC8C7C54D222F65825773F334EE737ABE2A633",
+    "artifact_hashes.json": "EE6026D7A863A0354B51D79E1BBD9CE82099EA26B2A38A6A4047F646FC864F21"
+  },
+  "artifacts": [
+    {
+      "relative_path": "execute_r5_1_frozen_addition_hypothesis_scoring.py",
+      "byte_size": 49290,
+      "sha256": "318A34A70F53502D38CCDF5D63C9D0D7C355F0130EFA89A759C380468E078247"
+    },
+    {
+      "relative_path": "r5_1_implementation_identity.json",
+      "byte_size": 341,
+      "sha256": "310A71AC425BDD61B2940D14732300EA3C692084DA9F8E0056E447C372CF972B"
+    },
+    {
+      "relative_path": "r5_1_row_accounting.json",
+      "byte_size": 6691,
+      "sha256": "FC65335E296F26F9633F7D27945FE4F204C2A189DD3A29A41B8A83080B6CE90F"
+    },
+    {
+      "relative_path": "r5_1_pre_metric_technical_correction.json",
+      "byte_size": 2107,
+      "sha256": "EFF87E86464FAE206F19F47FE209BE3EA6B975556C22329E7DEF3D4AAF400359"
+    },
+    {
+      "relative_path": "r5_1_technical_stop_protocol_audit.json",
+      "byte_size": 889,
+      "sha256": "56B2EC7DE4408C7A0371EC2ECF4A0322EAF01BC2EC6AB48460B5616D1E4985E9"
+    },
+    {
+      "relative_path": "r5_1_execution_technical_stop_status.json",
+      "byte_size": 816,
+      "sha256": "5FDEF1E35DF6C0C89A1B3ABE11E98942AD0AB9F1B61A69D1F540776E385DE4E3"
+    },
+    {
+      "relative_path": "R5_1_EXECUTION_TECHNICAL_STOP_REPORT.md",
+      "byte_size": 2476,
+      "sha256": "B5C7F9189FA63D734A4F3AD19E725096900FBB4A846C1177FB4F498B7CB055FE"
+    }
+  ]
+}

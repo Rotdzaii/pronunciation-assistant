@@ -1,0 +1,13 @@
+{
+  "name": "ControlledDeletionModel",
+  "selected_epoch": 13,
+  "checkpoint": "R4_1_controlled_deletion_audio_phone_seed42_best_validation_macro_f1.pt",
+  "checkpoint_sha256": "4773F1ACFF2A20BAC81B68743FE052394DF4F7F844C924964D1CF2C5FC75B6EF",
+  "random_initialization": true,
+  "pretrained_checkpoint_loaded": false,
+  "feature_shape": [
+    1,
+    64,
+    10
+  ]
+}

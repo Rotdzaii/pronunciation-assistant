@@ -1,0 +1,38 @@
+{
+  "source_verification": "PASS",
+  "source_hashes": {
+    "checkpoint": "5C66860BBC50BA803F5BFE25417DF19BDF34B1C7BE36D507B0DDCA88D767EA5E",
+    "v4": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D",
+    "contract": "2E65880C3E4AFD0EFBBB8014AAD8E1B04B051267470C17A3E733244176D18FB5",
+    "scorer": "3DA0A8A238C5FDF05F368F010558263CC98E73FC49E4C4600BBEB68E221A86D1"
+  },
+  "runner_sha256": "47C02B954E9DEB29C272F0B639983C04544C22BCD831DBF4FA28FBF8B79A067E",
+  "synthetic_tests": {
+    "status": "PASS",
+    "passed": 7,
+    "tests": [
+      "test_all_correct",
+      "test_final_deletion",
+      "test_initial_deletion",
+      "test_medial_deletion_is_representable",
+      "test_probe_grid_matches_r4_3a",
+      "test_substitution_is_representable",
+      "test_two_consecutive_deletions"
+    ]
+  },
+  "train_only": true,
+  "train_usable_words": 16259,
+  "train_relation_counts": {
+    "correct": 48893,
+    "deletion": 1544,
+    "substitution": 5867
+  },
+  "validation_paths_resolved": false,
+  "validation_acoustic_inference": false,
+  "validation_candidate_metrics": false,
+  "previous_validation_used_for_selection": false,
+  "r4_test_paths_resolved": false,
+  "r4_test_audio_accessed": false,
+  "r4_test_inference": false,
+  "training_performed": false
+}

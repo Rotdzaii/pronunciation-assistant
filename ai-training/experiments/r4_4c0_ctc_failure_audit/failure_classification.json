@@ -1,0 +1,15 @@
+{
+  "primary_failure": "CTC_MIXED_ACOUSTIC_FAILURE",
+  "architecture_implication": "BIGRU_NEXT_EXPERIMENT_JUSTIFIED",
+  "frozen_classification_inputs": {
+    "median_per_word_decoded_target_ratio": 1.0,
+    "aggregate_decoded_target_ratio": 0.7756755693663219,
+    "median_blank_argmax_occupancy": 0.8378378378378378,
+    "per_deletion_error_fraction": 0.4044760537648441,
+    "per_substitution_error_fraction": 0.563160642046196,
+    "supported_phones_below_0_50_recall": 28,
+    "clean_word_per": 0.5954602607372113
+  },
+  "reason": "The decoder both omits many target phones and confuses phone identities broadly; neither a blank-only nor rare-phone-only account explains the locked result.",
+  "next_smallest_action": "Pre-register one fresh CNN + one small BiGRU CTC experiment, preserving greedy decoding and all data policies; do not train it in this audit."
+}

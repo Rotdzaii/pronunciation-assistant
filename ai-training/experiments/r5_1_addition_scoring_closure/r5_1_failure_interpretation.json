@@ -1,0 +1,29 @@
+{
+  "status": "R5_1_ADDITION_SCORING_GENERATION_CLOSED_NOT_CONFIRMED",
+  "preferred_interpretation": "The frozen CTC scorer retained meaningful addition-ranking evidence, but its score distributions shifted across speakers and addition/non-addition overlap remained substantial. Consequently, the TRAIN-derived global threshold did not transfer with adequate false-addition control.",
+  "components": {
+    "speaker_dependent_score_location_or_calibration_shift": {
+      "supported": true,
+      "evidence": [
+        "continuous AUC remained useful while correct-only FAR increased from 0.03491295938104449 to 0.0832481079975455",
+        "5 of 6 VALIDATION speakers exceeded the historical correct-FAR reference",
+        "aggregate medians shifted upward by about 0.13 to 0.15 across major cohorts"
+      ]
+    },
+    "material_intrinsic_class_overlap": {
+      "supported": true,
+      "evidence": [
+        "VALIDATION AUCs of 0.7513 and 0.7717 show useful but incomplete separation",
+        "false positives occurred in correct-only, substitution, deletion, and mixed negative cohorts",
+        "positive and negative frozen-threshold margins overlapped broadly"
+      ]
+    }
+  },
+  "posthoc_classification": "MIXED_CALIBRATION_AND_CLASS_OVERLAP",
+  "posthoc_only": true,
+  "does_not_replace": "R5_1B_VALIDATION_TRANSFER_NOT_CONFIRMED",
+  "forbidden_simplifications": [
+    "threshold calibration failed was the only issue",
+    "the model cannot hear addition"
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "status": "DESIGN_INCOMPLETE_NOT_EXECUTED",
+  "frozen_defined_fields": {
+    "stride_ms": 40,
+    "crop_seconds": 0.5,
+    "acoustic_values": "frozen R3 log_softmax over 40 phones",
+    "state": "DP(i,t)",
+    "operations": [
+      "MATCH_OR_EMIT",
+      "SUBSTITUTION",
+      "DELETE_EXPECTED",
+      "ADVANCE_TIME"
+    ],
+    "insertion_enabled": false,
+    "prior_scope": "global TRAIN-only Laplace-smoothed operation priors",
+    "hard_gates": {
+      "full_validation_macro_f1_min": 0.70,
+      "deletion_f1_min": 0.40,
+      "deletion_recall_min": 0.45,
+      "macro_f1_gain_over_duration_baseline_min": 0.03,
+      "matched_macro_f1_min": 0.60,
+      "matched_deletion_f1_min": 0.55,
+      "substitution_false_deletion_rate_max": 0.25,
+      "speaker_rule": "for speakers with >=30 deletions, deletion recall >=0.25"
+    }
+  },
+  "missing_required_deterministic_rules": [
+    "Laplace smoothing coefficient alpha",
+    "exact TRAIN operation-count denominator and prior formula",
+    "exact conversion from priors to additive path score or cost",
+    "exact acoustic span aggregation: sum, mean, length-normalized sum, or another formula",
+    "minimum and maximum probes allowed per emitted expected phone",
+    "exact MATCH versus SUBSTITUTION decision from competing-phone evidence",
+    "definition of sustained competing evidence",
+    "ADVANCE_TIME recurrence and its transition cost",
+    "boundary initialization and terminal-state rules",
+    "global deterministic tie policy",
+    "near-equal path tolerance",
+    "second-best or equal-path ambiguity definition"
+  ],
+  "reason_not_executed": "Multiple compliant implementations would produce different paths and deletion predictions. Choosing one after preregistration would invent methodology rather than execute the frozen design."
+}

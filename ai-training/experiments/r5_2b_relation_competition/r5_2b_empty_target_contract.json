@@ -1,0 +1,43 @@
+{
+  "contract_status": "FROZEN",
+  "scope": "DELETE of a one-phone expected sequence",
+  "condition": "N = 1 and H_DELETE = []",
+  "ctc_semantics": {
+    "blank_index": 40,
+    "reasoning": "After CTC collapse, the only alignment producing an empty output sequence contains blank at every encoder step.",
+    "raw_score_formula": "RAW_SCORE([]) = sum_{t=1..T} log_softmax(logits[t], dim=-1)[40]",
+    "probability_formula": "P([] | X) = product_{t=1..T} P(blank_t | X)",
+    "target_score_formula": "TARGET_SCORE([]) = RAW_SCORE([]) / max(0,1) = RAW_SCORE([])",
+    "alignability": "alignable for every nonnegative T under the mathematical contract",
+    "T_zero_convention": "the empty sum is 0, corresponding to probability 1"
+  },
+  "provenance": {
+    "r4_numerical_contract_path": "ai-training/experiments/r4_4d1_numerical_contract/r4_4d1_complete_evaluation_contract.json",
+    "r4_numerical_contract_sha256": "5DC07A4B719FD6F38DBD1366CF802787FA3882CA972E5356A8F91DB435443425",
+    "r4_contract_behavior": "Empty target allowed through exact torch CTCLoss target_length=0 behavior; finite score required.",
+    "r4_d0_script_path": "ai-training/scripts/run_r4_4d0_ctc_hypothesis_feasibility.py",
+    "r4_d0_script_sha256": "DC141D38091C9FC60BA2F0A8447FF918DC98B5D99499D336A524CABEB8F4948C",
+    "r4_compute_report_path": "ai-training/experiments/r4_4d0_ctc_hypothesis_feasibility/compute_report.json",
+    "r4_compute_report_sha256": "1DF747CDE6CD1A132C968A9B6AC93096C3A8BFD3631C4F798B679AA1A4F4335E",
+    "recorded_r4_check": {
+      "encoder_steps": 8,
+      "raw_nll": 6.206483840942383,
+      "raw_log_score": -6.206483840942383,
+      "finite": true,
+      "status": "PASS"
+    },
+    "compatibility_conclusion": "The explicit all-blank formula is the mathematical expansion of the same frozen CTC empty-output convention and is not a penalty or alternate scoring family."
+  },
+  "forbidden": [
+    "finite penalty",
+    "treating DELETE as KEEP",
+    "dropping one-phone words",
+    "using zero_infinity output without the explicit empty-target definition"
+  ],
+  "future_static_verification": {
+    "required": true,
+    "test": "Cross-check the explicit blank-log-probability sum against an independent synthetic CTC target_length=0 calculation.",
+    "completed_in_this_task": false
+  },
+  "provenance_verification": "PASS"
+}

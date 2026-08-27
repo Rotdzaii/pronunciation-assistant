@@ -1,0 +1,94 @@
+{
+  "stage": "R5-3A one frozen TRAIN-only development execution",
+  "status": "R5_3A_EVIDENCE_SEPARATION_DEVELOPMENT_NOT_CONFIRMED",
+  "manifest_self_excluded": true,
+  "artifact_count": 17,
+  "artifacts": [
+    {
+      "relative_path": "r5_3a_train_execution.py",
+      "byte_size": 33100,
+      "sha256": "A2A241F1B37F18B04D101C49985DA5D679DED9C740ED0C229F5778FF0A39930A"
+    },
+    {
+      "relative_path": "r5_3a_execution_identity.json",
+      "byte_size": 4207,
+      "sha256": "CF6E11EFBD77D2D114A6E739E341BA978E8715490AB6F340DCED3E0A11D3C6CA"
+    },
+    {
+      "relative_path": "r5_3a_train_join_audit.json",
+      "byte_size": 443,
+      "sha256": "93234F3253757AFFDC162A41E170AAD1015F8C159E60CD6280D5F785F6DFC3FF"
+    },
+    {
+      "relative_path": "r5_3a_train_features.jsonl",
+      "byte_size": 2519588,
+      "sha256": "AD2A750CB4E47B419904C9FB33A96EF21F05873166BFB0286CD01248409AC337"
+    },
+    {
+      "relative_path": "r5_3a_fold_models.json",
+      "byte_size": 8366,
+      "sha256": "7A6639E2D43BF7A2E0D2474ABF1844824248DB6D0E2BBE065910C2A73DAA8D60"
+    },
+    {
+      "relative_path": "r5_3a_fold_thresholds.json",
+      "byte_size": 2798,
+      "sha256": "B7D77709746E743AA66344F4763C7DCD2F20062030CE67C3AB36EEE24DB79544"
+    },
+    {
+      "relative_path": "r5_3a_oof_scores.jsonl",
+      "byte_size": 2044181,
+      "sha256": "FB98450B0BD06BF98816C5968ECD197D32EB80EE16FD961454F01630EB63C9B1"
+    },
+    {
+      "relative_path": "r5_3a_oof_predictions.jsonl",
+      "byte_size": 4639971,
+      "sha256": "8DC2FE33EA5E47592BFE39DC0510E4BACEDF2B2131B999F9E7AA74ABBB7DA49C"
+    },
+    {
+      "relative_path": "r5_3a_continuous_metrics.json",
+      "byte_size": 398,
+      "sha256": "7B081F6D65BEE4DF586427C493716E53195794BBD087D6F486465CBAF0B9E68A"
+    },
+    {
+      "relative_path": "r5_3a_binary_metrics.json",
+      "byte_size": 349,
+      "sha256": "67B462E06CCC6191C2A23CE65E251582DF0D046DF83D99CED3873BDDC09A1B13"
+    },
+    {
+      "relative_path": "r5_3a_relation_cohort_metrics.json",
+      "byte_size": 712,
+      "sha256": "C1CD9B6F5203F4AC6C75B25FFAB11EF12CA3DDCF52A0A24BE351BB17D94AB8DC"
+    },
+    {
+      "relative_path": "r5_3a_event_metrics.json",
+      "byte_size": 1138,
+      "sha256": "716293B7863A9D73A42A9A2FCCC1416B83AEF1B2DF451DDC7F4FD2CA3C489460"
+    },
+    {
+      "relative_path": "r5_3a_coefficient_diagnostics.json",
+      "byte_size": 8936,
+      "sha256": "302FC7A1A6C2EEFB44F86257FDD119FD9C650F3568A542A9E02F23201EA9EB45"
+    },
+    {
+      "relative_path": "r5_3a_gate_results.json",
+      "byte_size": 2298,
+      "sha256": "E8F7F77F151D6105D263AB43EF1A38D4C4D036208A8DEFC0AC00C659E1A7D6DD"
+    },
+    {
+      "relative_path": "r5_3a_protocol_audit.json",
+      "byte_size": 724,
+      "sha256": "25428F05C55B954F12D6C678CC4CE68DFA838CB9E0A1781F84AA3E9784BB49B5"
+    },
+    {
+      "relative_path": "r5_3a_final_status.json",
+      "byte_size": 1030,
+      "sha256": "C76D2CF7FD4E49A65BF53B5946F364A6494F55512800A919D91B994610E3218D"
+    },
+    {
+      "relative_path": "R5_3A_TRAIN_DEVELOPMENT_RESULT.md",
+      "byte_size": 1546,
+      "sha256": "AD9CE1239CBED84D048EE4D3A89A9436066BBDEA98DBEA29D5083827EFDD211B"
+    }
+  ],
+  "hash_audit": "HASH_AUDIT_PASS"
+}

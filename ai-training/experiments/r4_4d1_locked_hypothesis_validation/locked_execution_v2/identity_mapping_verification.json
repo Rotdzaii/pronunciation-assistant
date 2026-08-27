@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "canonical_rule": "source_csv_row = int(source_index) + 2",
+  "required_rows": 1434,
+  "mapped_rows": 1434,
+  "missing_rows": 0,
+  "duplicate_required_identities": 0,
+  "duplicate_generated_identities": 0,
+  "unexpected_ambiguities": 0,
+  "deletion_rows": 717,
+  "nondeletion_rows": 717,
+  "phones": 32,
+  "validation_speakers": 6,
+  "verified_before_acoustic_inference": true,
+  "subset_or_intersection_used": false
+}

@@ -1,0 +1,87 @@
+{
+  "verification": {
+    "status": "PASS",
+    "rows": 1564,
+    "deletion": 782,
+    "non_deletion": 782,
+    "pairs": 782,
+    "strata": 302,
+    "speakers": [
+      "ABA",
+      "HKK",
+      "HQTV",
+      "LXC",
+      "MBMPS",
+      "SVBI"
+    ],
+    "matching": "same speaker + canonical expected phone + half-open 10 ms annotation-duration bin",
+    "rebuilt_or_resampled": false
+  },
+  "metrics": {
+    "full": {
+      "rows": 1564,
+      "non_deletion_support": 782,
+      "deletion_support": 782,
+      "accuracy": 0.6221227621483376,
+      "balanced_accuracy": 0.6221227621483376,
+      "macro_f1": 0.6032629200172546,
+      "deletion_precision": 0.7165532879818595,
+      "deletion_recall": 0.4040920716112532,
+      "deletion_f1": 0.5167620605069501,
+      "confusion_matrix": [
+        [
+          657,
+          125
+        ],
+        [
+          466,
+          316
+        ]
+      ]
+    },
+    "no_audio": {
+      "rows": 1564,
+      "non_deletion_support": 782,
+      "deletion_support": 782,
+      "accuracy": 0.5,
+      "balanced_accuracy": 0.5,
+      "macro_f1": 0.48219726028325194,
+      "deletion_precision": 0.5,
+      "deletion_recall": 0.6854219948849105,
+      "deletion_f1": 0.5782092772384034,
+      "confusion_matrix": [
+        [
+          246,
+          536
+        ],
+        [
+          246,
+          536
+        ]
+      ]
+    },
+    "no_phone": {
+      "rows": 1564,
+      "non_deletion_support": 782,
+      "deletion_support": 782,
+      "accuracy": 0.5549872122762148,
+      "balanced_accuracy": 0.5549872122762148,
+      "macro_f1": 0.4745273109243698,
+      "deletion_precision": 0.7529411764705882,
+      "deletion_recall": 0.1636828644501279,
+      "deletion_f1": 0.26890756302521013,
+      "confusion_matrix": [
+        [
+          740,
+          42
+        ],
+        [
+          654,
+          128
+        ]
+      ]
+    }
+  },
+  "selection_influence": false,
+  "same_rows_for_all_modes": true
+}

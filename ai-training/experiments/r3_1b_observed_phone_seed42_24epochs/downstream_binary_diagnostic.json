@@ -1,0 +1,32 @@
+{
+  "rows": 28212,
+  "labels": {
+    "correct": 0,
+    "substitution": 1
+  },
+  "macro_f1": 0.46765875005871477,
+  "confusion_matrix": [
+    [
+      12994,
+      12309
+    ],
+    [
+      568,
+      2341
+    ]
+  ],
+  "correct": {
+    "precision": 0.9581182716413509,
+    "recall": 0.5135359443544244,
+    "f1": 0.668673613791329,
+    "support": 25303
+  },
+  "substitution": {
+    "precision": 0.1597952218430034,
+    "recall": 0.8047438982468202,
+    "f1": 0.2666438863261006,
+    "support": 2909
+  },
+  "diagnostic_only": true,
+  "used_for_training_selection_or_gate": false
+}

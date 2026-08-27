@@ -1,0 +1,50 @@
+{
+  "runtime_inputs": {
+    "required": [
+      "word audio",
+      "expected text converted to the frozen canonical phone sequence",
+      "frozen acoustic model and preprocessing",
+      "40-phone vocabulary plus CTC blank",
+      "deterministic hypothesis constructors"
+    ],
+    "not_required": [
+      "manual L2-ARCTIC relation annotation",
+      "known observed phone",
+      "speaker identity lookup",
+      "per-speaker oracle threshold",
+      "TEST information",
+      "future audio from the same speaker"
+    ]
+  },
+  "computation": {
+    "model_forward_passes_per_word": 1,
+    "exact_ctc_candidate_count": "80 * N + 41",
+    "asymptotic_hypothesis_complexity": "O(N * V) with V=40 fixed",
+    "relative_to_r5_1": "Adds 40*N non-addition edit candidates to the existing 40*N+41 KEEP/INSERT candidates; encoder inference is unchanged and exact CTC scoring remains the dominant added work.",
+    "real_audio_benchmark_run": false,
+    "synthetic_benchmark_run": false
+  },
+  "existing_vectorization_opportunities": [
+    "Reuse one log-softmax posterior tensor for every hypothesis of the word.",
+    "Apply the minimum-step guard before batching so impossible targets never enter CTCLoss.",
+    "Batch alignable targets with the existing flattened-target CTCLoss adapter.",
+    "Order or group work by encoder and target length to limit padding.",
+    "Score KEEP only once and share it across all relation comparisons.",
+    "Retain only family maxima and deterministic argmax identities when full candidate exports are not required."
+  ],
+  "runtime_output_feasibility": {
+    "binary_addition_nonaddition": true,
+    "predicted_added_phone": true,
+    "predicted_insertion_boundary": true,
+    "full_relation_classifier_confirmed": false,
+    "nonaddition_winner_handling": "Return NON_ADDITION; optionally retain KEEP/SUB/DELETE winner as research diagnostic only."
+  },
+  "technical_cautions": [
+    "Define safe empty DELETE target scoring for N=1.",
+    "Freeze within-family and cross-family tie rules before execution.",
+    "Apply R5-1A negative-infinity semantics to every family.",
+    "Do not interpret a zero_infinity=True zero loss for an impossible target.",
+    "Do not assume runtime latency until separately benchmarked without evaluation leakage."
+  ],
+  "runtime_feasible": true
+}

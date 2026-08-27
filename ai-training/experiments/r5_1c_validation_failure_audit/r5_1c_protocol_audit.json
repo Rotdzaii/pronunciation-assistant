@@ -1,0 +1,19 @@
+{
+  "status": "PASS",
+  "stage": "post-hoc exploratory failure audit",
+  "model_inference": false,
+  "train_inference": false,
+  "validation_inference": false,
+  "new_predictions": false,
+  "threshold_search": false,
+  "recalibration": false,
+  "validation_rerun": false,
+  "test_paths_resolved": false,
+  "test_audio_accessed": false,
+  "test_inference_run": false,
+  "test_performance_consumed": false,
+  "frozen_r5_1b_result_modified": false,
+  "r5_1a_modified": false,
+  "scientific_gate_or_status_assigned_to_r5_1c": false,
+  "authoritative_status_preserved": "R5_1B_VALIDATION_TRANSFER_NOT_CONFIRMED"
+}

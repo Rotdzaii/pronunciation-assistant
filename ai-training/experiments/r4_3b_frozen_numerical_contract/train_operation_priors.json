@@ -1,0 +1,31 @@
+{
+  "source": "usable TRAIN words reconstructed with the frozen R4-3A word contract",
+  "train_candidate_words": 16985,
+  "train_usable_words": 16259,
+  "counts": {
+    "MATCH_correct": 48893,
+    "SUBSTITUTION": 5867,
+    "DELETE_EXPECTED": 1544,
+    "N": 56304
+  },
+  "laplace_alpha": 1.0,
+  "denominator": 56307,
+  "formula": "(C_op + 1) / (N + 3)",
+  "natural_log": true,
+  "operations": {
+    "MATCH": {
+      "probability": 0.868346741968139,
+      "log_prior": -0.14116417177608467
+    },
+    "SUBSTITUTION": {
+      "probability": 0.10421439607864032,
+      "log_prior": -2.261305001061487
+    },
+    "DELETE_EXPECTED": {
+      "probability": 0.027438861953220737,
+      "log_prior": -3.595794950992514
+    }
+  },
+  "validation_metadata_read": false,
+  "audio_read": false
+}

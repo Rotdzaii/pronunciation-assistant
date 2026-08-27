@@ -1,0 +1,88 @@
+{
+  "status": "PASS",
+  "identities": {
+    "r5_4a_contract": {
+      "path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r5_4a_insert_candidate_recoverability\\R5_4A_AUDIT_CONTRACT.md",
+      "byte_size": 3225,
+      "sha256": "111DDB77EC09B177505AEEF7B260476D8C718F745AD6170E6969926841338A27"
+    },
+    "r5_4a_manifest": {
+      "path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r5_4a_insert_candidate_recoverability\\R5_4A_MANIFEST.json",
+      "byte_size": 1308,
+      "sha256": "012322265AACD90009001AFCBF675C9228ADC55417B0A31029CD2A3EF32393B8"
+    },
+    "r5_4b_contract_manifest": {
+      "path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r5_4b_insert_candidate_materialization\\R5_4B_CONTRACT_MANIFEST.json",
+      "byte_size": 1834,
+      "sha256": "5087DB63E37C52A407720A9A7A11D542A4DD651510469CE5960CE8B3B2421297"
+    },
+    "r5_4b_execution_manifest": {
+      "path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r5_4b_insert_candidate_materialization\\materialization_result\\R5_4B_EXECUTION_MANIFEST.json",
+      "byte_size": 4843,
+      "sha256": "FD1E4E66168654EC54778A489E0B443BD9C691DD1392233C4284CDF6CDF07B11"
+    },
+    "r5_3a_closure_manifest": {
+      "path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r5_3a_evidence_separated_relation_scoring\\R5_3A_CLOSURE_MANIFEST.json",
+      "byte_size": 2433,
+      "sha256": "9F57A293E0F4CA6E35E06761CFF54ABF70D967FE6ECF4F42ABFFF7C35397768C"
+    },
+    "r5_2b_execution_manifest": {
+      "path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r5_2b_relation_competition\\R5_2B_TC1_PA1_ENV_EXECUTION_MANIFEST.json",
+      "byte_size": 6008,
+      "sha256": "37F3C86FF11526B8AB54D173937A0F488125A1D0B610032CC8A5D47B11602387"
+    },
+    "r5_1a_execution_manifest": {
+      "path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r5_1a_alignability_safe_addition_scoring\\R5_1A_EXECUTION_MANIFEST.json",
+      "byte_size": 2971,
+      "sha256": "C9343A75CE26C2BEECA388EBA855E91AE0992D22C0C5D785308D0A98B89A3CD6"
+    },
+    "v4": {
+      "path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\datasets\\l2-arctic\\metadata\\all_speakers_expected_observed_v4.csv",
+      "byte_size": 48727961,
+      "sha256": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D"
+    },
+    "truth_source": {
+      "path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r5_2b_relation_competition\\r5_2b_tc1_pa1_env_train_scores.jsonl",
+      "byte_size": 25848478,
+      "sha256": "EAC81ABDDF56C77E4A71AD96AE5985D7C00DD60559A27C3A3BAAB16859EEFF3C"
+    }
+  },
+  "manifest_entry_audits": {
+    "r5_4a_manifest": {
+      "path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r5_4a_insert_candidate_recoverability\\R5_4A_MANIFEST.json",
+      "artifact_count": 6,
+      "status": "PASS",
+      "failures": []
+    },
+    "r5_4b_contract_manifest": {
+      "path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r5_4b_insert_candidate_materialization\\R5_4B_CONTRACT_MANIFEST.json",
+      "artifact_count": 9,
+      "status": "PASS",
+      "failures": []
+    },
+    "r5_4b_execution_manifest": {
+      "path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r5_4b_insert_candidate_materialization\\materialization_result\\R5_4B_EXECUTION_MANIFEST.json",
+      "artifact_count": 23,
+      "status": "PASS",
+      "failures": []
+    },
+    "r5_3a_closure_manifest": {
+      "path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r5_3a_evidence_separated_relation_scoring\\R5_3A_CLOSURE_MANIFEST.json",
+      "artifact_count": 8,
+      "status": "PASS",
+      "failures": []
+    },
+    "r5_2b_execution_manifest": {
+      "path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r5_2b_relation_competition\\R5_2B_TC1_PA1_ENV_EXECUTION_MANIFEST.json",
+      "artifact_count": 21,
+      "status": "PASS",
+      "failures": []
+    },
+    "r5_1a_execution_manifest": {
+      "path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r5_1a_alignability_safe_addition_scoring\\R5_1A_EXECUTION_MANIFEST.json",
+      "artifact_count": 14,
+      "status": "PASS",
+      "failures": []
+    }
+  }
+}

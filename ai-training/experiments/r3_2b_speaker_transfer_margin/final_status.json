@@ -1,0 +1,16 @@
+{
+  "status": "R3_2B_TRANSFER_PASS",
+  "binary_margin_transfer": "BINARY_MARGIN_TRANSFER_READY",
+  "gate": {
+    "A_macro_f1_improvement_at_least_0.05": true,
+    "B_oof_substitution_recall_at_least_0.50": true,
+    "C_substitution_f1_improvement_at_least_0.03": true,
+    "D_each_heldout_substitution_recall_at_least_0.35": true,
+    "E_at_least_4_of_6_speakers_improve_macro_f1": true,
+    "all_pass": true
+  },
+  "threshold_stability_assessment": "THRESHOLD_STABLE",
+  "dh_d_assessment": "DH_D_SCORE_FAILURE_MODE",
+  "test_opened": false,
+  "test_audio_accessed": false
+}

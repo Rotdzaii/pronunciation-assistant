@@ -1,0 +1,99 @@
+{
+  "train": {
+    "word_deletion_count": {
+      "one": 1279,
+      "zero": 14856,
+      "two": 109,
+      "more_than_two": 15
+    },
+    "position": {
+      "final": 961,
+      "medial": 494,
+      "initial": 82,
+      "single": 7
+    },
+    "expected_phone": {
+      "AE": 2,
+      "AH": 73,
+      "AY": 1,
+      "B": 2,
+      "CH": 7,
+      "D": 326,
+      "DH": 22,
+      "EH": 2,
+      "ER": 15,
+      "EY": 5,
+      "F": 7,
+      "G": 16,
+      "HH": 17,
+      "IH": 32,
+      "IY": 11,
+      "JH": 5,
+      "K": 40,
+      "L": 114,
+      "M": 3,
+      "N": 82,
+      "NG": 9,
+      "P": 24,
+      "R": 252,
+      "S": 45,
+      "SH": 2,
+      "T": 255,
+      "TH": 11,
+      "UW": 1,
+      "V": 42,
+      "W": 19,
+      "Y": 11,
+      "Z": 91
+    }
+  },
+  "validation": {
+    "word_deletion_count": {
+      "zero": 6914,
+      "one": 724,
+      "two": 80,
+      "more_than_two": 10
+    },
+    "position": {
+      "medial": 289,
+      "final": 561,
+      "initial": 60,
+      "single": 4
+    },
+    "expected_phone": {
+      "AA": 1,
+      "AE": 2,
+      "AH": 46,
+      "AO": 1,
+      "AY": 2,
+      "B": 3,
+      "CH": 2,
+      "D": 194,
+      "DH": 16,
+      "EH": 3,
+      "ER": 2,
+      "F": 6,
+      "G": 12,
+      "HH": 22,
+      "IH": 16,
+      "IY": 6,
+      "JH": 5,
+      "K": 28,
+      "L": 72,
+      "M": 3,
+      "N": 43,
+      "NG": 3,
+      "OW": 1,
+      "P": 13,
+      "R": 143,
+      "S": 21,
+      "T": 158,
+      "TH": 5,
+      "UW": 2,
+      "V": 18,
+      "W": 7,
+      "Y": 8,
+      "Z": 50
+    }
+  }
+}

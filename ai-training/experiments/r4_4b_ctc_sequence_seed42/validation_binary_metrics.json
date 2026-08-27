@@ -1,0 +1,32 @@
+{
+  "rows": 26337,
+  "accuracy": 0.7323537228993431,
+  "balanced_accuracy": 0.6124429359826915,
+  "macro_f1": 0.47694100707132253,
+  "non_deletion": {
+    "precision": 0.9755668288642717,
+    "recall": 0.7412972505211816,
+    "f1": 0.842448760644599,
+    "support": 25423
+  },
+  "deletion": {
+    "precision": 0.0629719333238353,
+    "recall": 0.48358862144420134,
+    "f1": 0.11143325349804614,
+    "support": 914
+  },
+  "confusion_matrix_labels": [
+    "non_deletion",
+    "deletion"
+  ],
+  "confusion_matrix": [
+    [
+      18846,
+      6577
+    ],
+    [
+      472,
+      442
+    ]
+  ]
+}

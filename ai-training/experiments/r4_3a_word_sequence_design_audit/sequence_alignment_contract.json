@@ -1,0 +1,10 @@
+{
+  "state": "DP(i,t): expected-phone index i and acoustic probe index t",
+  "emission": "negative log-softmax evidence for expected phone over a contiguous probe span",
+  "substitution": "consume a contiguous span whose sustained best competing real phone differs from expected",
+  "deletion": "advance expected index without assigning an acoustic span; global skip cost only",
+  "advance_time": "consume another probe in the current contiguous emission span",
+  "optional_insertion": "disabled in first R4-3B because addition words are excluded",
+  "cost_policy": "No costs selected in R4-3A. For R4-3B, use frozen log-softmax emissions and global Laplace-smoothed MATCH/SUBSTITUTION/DELETION priors estimated once from TRAIN only; no phone-, speaker-, duration-, or validation-tuned costs.",
+  "decision": "DELETE only when the best monotonic path skips Ei; SUBSTITUTION only when Ei consumes a span dominated by a sustained competing phone. Low P(Ei) alone is insufficient."
+}

@@ -1,0 +1,31 @@
+{
+  "status": "PASS",
+  "expected": {
+    "interpreter": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant\\ai-training\\.venv\\Scripts\\python.exe",
+    "python": "3.12.10",
+    "torch": "2.12.0.dev20260408+cu128",
+    "cuda": "12.8",
+    "cuda_available": true,
+    "gpu": "NVIDIA GeForce RTX 5060 Laptop GPU"
+  },
+  "observed": {
+    "sys_executable": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant\\ai-training\\.venv\\Scripts\\python.exe",
+    "python": "3.12.10",
+    "torch": "2.12.0.dev20260408+cu128",
+    "torch_cuda": "12.8",
+    "cuda_available": true,
+    "cuda_device_count": 1,
+    "gpu": "NVIDIA GeForce RTX 5060 Laptop GPU",
+    "numpy": "2.4.6",
+    "pandas": "3.0.3",
+    "sklearn": "1.8.0"
+  },
+  "checks": {
+    "interpreter": true,
+    "python": true,
+    "torch": true,
+    "cuda": true,
+    "cuda_available": true,
+    "gpu": true
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "status": "R4_4D1_DESIGN_INCOMPLETE",
+  "source_verification": "PASS",
+  "preregistration_completeness": "FAIL",
+  "train_threshold_calculated": false,
+  "validation_candidate_scoring": false,
+  "neural_training": false,
+  "post_hoc_threshold_modification": false,
+  "r4_test_accessed": false
+}

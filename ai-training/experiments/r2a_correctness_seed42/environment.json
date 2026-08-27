@@ -1,0 +1,20 @@
+{
+  "timestamp_utc": "2026-08-13T07:26:36.121904+00:00",
+  "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "pytorch": "2.12.0.dev20260408+cu128",
+  "torchaudio": "2.11.0.dev20260407+cu128",
+  "librosa": "0.11.0",
+  "numpy": "2.4.6",
+  "device": "cuda",
+  "cuda_available": true,
+  "cuda_version": "12.8",
+  "gpu": "NVIDIA GeForce RTX 5060 Laptop GPU",
+  "dataset_sha256": "433F006AB0ABCE47955C2305FCD131F2FFD9741417891BE125798163ADD28F7E",
+  "git_commit": "4758c0dcf5ab1681af1fcf74e068d609030d11a8",
+  "l2_arctic_root": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant\\ai-training\\datasets\\l2-arctic\\raw\\l2arctic_release_v5.0",
+  "l2_arctic_root_identity": "l2arctic_release_v5.0",
+  "deterministic_algorithms": true,
+  "cudnn_benchmark": false,
+  "num_workers": 0
+}

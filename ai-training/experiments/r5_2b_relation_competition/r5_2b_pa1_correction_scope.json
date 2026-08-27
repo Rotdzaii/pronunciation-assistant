@@ -1,0 +1,31 @@
+{
+  "correction_category": "PATH_RESOLUTION_ONLY",
+  "future_additive_driver_example": "r5_2b_train_execution_driver_tc1_pa1.py",
+  "allowed": [
+    "explicitly configure independently named AUDIO_ROOT and MANUAL_TEXTGRID_ROOT",
+    "pass authoritative roots to unchanged inherited population and audio-resolution helpers",
+    "run the frozen TRAIN-only existence guard before content or audio access",
+    "preserve and invoke the existing TC1 numerical guard"
+  ],
+  "forbidden": [
+    "modify population eligibility",
+    "modify TextGrid parsing semantics",
+    "modify V4 data",
+    "modify the frozen scorer or C formula",
+    "modify KEEP, INSERT, SUB, or DELETE families",
+    "modify model, checkpoint, or preprocessing",
+    "modify TC1 numerical policy",
+    "modify LOSO or threshold procedure",
+    "modify eight scientific gates",
+    "modify event semantics",
+    "copy, symlink, download, restore, or edit dataset annotations",
+    "overwrite or delete prior execution or audit evidence",
+    "resolve or existence-check VALIDATION paths",
+    "resolve or existence-check TEST paths"
+  ],
+  "separate_static_path_suite_required": false,
+  "correction_implemented_in_pa1": false,
+  "scientific_semantics_changed": false,
+  "scientific_values_available": false,
+  "gates_evaluated": "0/8"
+}

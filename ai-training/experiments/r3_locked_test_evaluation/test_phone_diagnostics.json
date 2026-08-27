@@ -1,0 +1,74 @@
+{
+  "TH": {
+    "correct_support": 82,
+    "substitution_support": 125,
+    "correct_recall": 0.4268292682926829,
+    "substitution_recall": 0.664,
+    "substitution_precision": 0.6384615384615384,
+    "median_margin_correct": -1.5604185163974762,
+    "median_margin_substitution": -1.9379958510398865
+  },
+  "DH": {
+    "correct_support": 367,
+    "substitution_support": 537,
+    "correct_recall": 0.7656675749318801,
+    "substitution_recall": 0.1824953445065177,
+    "substitution_precision": 0.532608695652174,
+    "median_margin_correct": 0.16187584400177002,
+    "median_margin_substitution": 0.3475920185446739
+  },
+  "R": {
+    "correct_support": 924,
+    "substitution_support": 50,
+    "correct_recall": 0.775974025974026,
+    "substitution_recall": 0.6,
+    "substitution_precision": 0.12658227848101267,
+    "median_margin_correct": -0.008638232946395874,
+    "median_margin_substitution": -1.8514822721481323
+  },
+  "V": {
+    "correct_support": 444,
+    "substitution_support": 121,
+    "correct_recall": 0.8333333333333334,
+    "substitution_recall": 0.45454545454545453,
+    "substitution_precision": 0.4263565891472868,
+    "median_margin_correct": 0.4715012460947037,
+    "median_margin_substitution": -1.0290906876325607
+  },
+  "D": {
+    "correct_support": 1080,
+    "substitution_support": 99,
+    "correct_recall": 0.6796296296296296,
+    "substitution_recall": 0.5858585858585859,
+    "substitution_precision": 0.14356435643564355,
+    "median_margin_correct": -0.7246993035078049,
+    "median_margin_substitution": -1.548794835805893
+  },
+  "T": {
+    "correct_support": 1495,
+    "substitution_support": 75,
+    "correct_recall": 0.7036789297658863,
+    "substitution_recall": 0.7866666666666666,
+    "substitution_precision": 0.11752988047808766,
+    "median_margin_correct": -0.5346143841743469,
+    "median_margin_substitution": -2.426304578781128
+  },
+  "S": {
+    "correct_support": 1116,
+    "substitution_support": 39,
+    "correct_recall": 0.9560931899641577,
+    "substitution_recall": 0.5897435897435898,
+    "substitution_precision": 0.3194444444444444,
+    "median_margin_correct": 1.4041368663311005,
+    "median_margin_substitution": -1.8413102626800537
+  },
+  "Z": {
+    "correct_support": 477,
+    "substitution_support": 448,
+    "correct_recall": 0.8448637316561844,
+    "substitution_recall": 0.45982142857142855,
+    "substitution_precision": 0.7357142857142858,
+    "median_margin_correct": 0.4327871799468994,
+    "median_margin_substitution": -1.1396443247795105
+  }
+}

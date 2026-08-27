@@ -1,0 +1,15 @@
+{
+  "status": "R5_4A_BLOCKED_CANDIDATE_SCORE_PROVENANCE",
+  "identity_verification": "PASS",
+  "contract_frozen": true,
+  "full_frozen_insert_ranking_available": false,
+  "truth_mapping_status": "NOT_RUN_DUE_TO_PROVENANCE_STOP",
+  "single_addition_recoverability_status": "NOT_EVALUATED",
+  "multiple_addition_diagnostics_status": "NOT_EVALUATED",
+  "gates_evaluated": 0,
+  "gates_total": 4,
+  "scientific_feasibility_result_assigned": false,
+  "new_inference_authorized": false,
+  "validation_accessed": false,
+  "test_accessed": false
+}

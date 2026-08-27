@@ -1,0 +1,105 @@
+{
+  "format": "uncompressed UTF-8 JSON Lines; LF; no BOM",
+  "speaker_order": [
+    "BWC",
+    "EBVS",
+    "HJK",
+    "NCC",
+    "NJS",
+    "PNV",
+    "RRBI",
+    "TLV",
+    "TNI",
+    "YBAA",
+    "YKWK",
+    "ZHAA"
+  ],
+  "word_order": "frozen R5-2B word order filtered by speaker",
+  "candidate_order": "ascending candidate_index",
+  "shards": {
+    "BWC": {
+      "words": 1390,
+      "candidate_rows": 250360,
+      "relative_path": "r5_4b_insert_candidates_BWC.jsonl",
+      "byte_size": 94429876,
+      "sha256": "BF99F85E5311F3837695D581BB0B00149EDEF2EF4AE88C22C26818D9591CBA4E"
+    },
+    "EBVS": {
+      "words": 1372,
+      "candidate_rows": 247000,
+      "relative_path": "r5_4b_insert_candidates_EBVS.jsonl",
+      "byte_size": 93647034,
+      "sha256": "050C4123D2178D7CD8B7F6D2BCF994966135659FE0FA41D767114076CE371FFC"
+    },
+    "HJK": {
+      "words": 1401,
+      "candidate_rows": 252480,
+      "relative_path": "r5_4b_insert_candidates_HJK.jsonl",
+      "byte_size": 95232467,
+      "sha256": "B2B9787F0086660FA9D29B9BB053A26C2E507D7CF7179747E9841C37EC4D6961"
+    },
+    "NCC": {
+      "words": 1408,
+      "candidate_rows": 253600,
+      "relative_path": "r5_4b_insert_candidates_NCC.jsonl",
+      "byte_size": 95659617,
+      "sha256": "ACD5661A5256C9376F6D3E902A1214963DA1117B014B916DDF40E11A7242C034"
+    },
+    "NJS": {
+      "words": 1406,
+      "candidate_rows": 254120,
+      "relative_path": "r5_4b_insert_candidates_NJS.jsonl",
+      "byte_size": 95849435,
+      "sha256": "F9C4592DC16D1440F0138638AAE24196C00624A1E76B99D50AAC376FF75EB64E"
+    },
+    "PNV": {
+      "words": 1395,
+      "candidate_rows": 251880,
+      "relative_path": "r5_4b_insert_candidates_PNV.jsonl",
+      "byte_size": 95007963,
+      "sha256": "0032C785E5D6E59878AB4AC25314D2061676B37E7869B60424FE940A12C78CF2"
+    },
+    "RRBI": {
+      "words": 1408,
+      "candidate_rows": 252600,
+      "relative_path": "r5_4b_insert_candidates_RRBI.jsonl",
+      "byte_size": 95777896,
+      "sha256": "A4A76CCC349386F333303A14621AB16B80DEBE403FEA0F6DE2A4159460197226"
+    },
+    "TLV": {
+      "words": 1383,
+      "candidate_rows": 248720,
+      "relative_path": "r5_4b_insert_candidates_TLV.jsonl",
+      "byte_size": 93802303,
+      "sha256": "40BD10443AC02E482247873726D06B48A2757D140A74B5713BA4CDE7650ED4BF"
+    },
+    "TNI": {
+      "words": 1345,
+      "candidate_rows": 239360,
+      "relative_path": "r5_4b_insert_candidates_TNI.jsonl",
+      "byte_size": 90278530,
+      "sha256": "EEE041C8EC65CC370AEA0D91531285723A29B5160ACC24CEF37F1A052D7E609E"
+    },
+    "YBAA": {
+      "words": 1298,
+      "candidate_rows": 229720,
+      "relative_path": "r5_4b_insert_candidates_YBAA.jsonl",
+      "byte_size": 87098950,
+      "sha256": "3BBEB0FD7D1C4945CB202B6875D76EEEB6B79576E1F49831484AB54E74BDB222"
+    },
+    "YKWK": {
+      "words": 1382,
+      "candidate_rows": 248240,
+      "relative_path": "r5_4b_insert_candidates_YKWK.jsonl",
+      "byte_size": 94130305,
+      "sha256": "410ADDDD149C6DF31EDFE85BF5B44BD3FECE7481E38D56EB40BF0F98F6AC17F4"
+    },
+    "ZHAA": {
+      "words": 1394,
+      "candidate_rows": 248960,
+      "relative_path": "r5_4b_insert_candidates_ZHAA.jsonl",
+      "byte_size": 94394546,
+      "sha256": "0D418E66AFE556EBC475B81B5D3EEE4C39BD4D14444EA0BACA3E1E971166D637"
+    }
+  }
+}

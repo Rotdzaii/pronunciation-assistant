@@ -1,0 +1,26 @@
+{
+  "pure_deletion": {
+    "rows": 2318,
+    "deletion_support": 616,
+    "deletion_precision": 0.5674418604651162,
+    "deletion_recall": 0.3961038961038961,
+    "deletion_f1": 0.46653919694072654,
+    "false_deletion_rate": 0.10928319623971798
+  },
+  "substitution_plus_deletion": {
+    "rows": 1370,
+    "deletion_support": 298,
+    "deletion_precision": 0.5467128027681661,
+    "deletion_recall": 0.5302013422818792,
+    "deletion_f1": 0.5383304940374788,
+    "false_deletion_rate": 0.12220149253731344
+  },
+  "multiple_deletion": {
+    "rows": 562,
+    "deletion_support": 190,
+    "deletion_precision": 0.6273584905660378,
+    "deletion_recall": 0.7,
+    "deletion_f1": 0.6616915422885572,
+    "false_deletion_rate": 0.21236559139784947
+  }
+}

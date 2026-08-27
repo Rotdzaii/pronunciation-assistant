@@ -1,0 +1,71 @@
+{
+  "status": "R3_1C_PASS_VALIDATION",
+  "trend_flag": "TRAINING_BUDGET_STILL_LIMITING",
+  "curve_classification": "CONTINUED_IMPROVEMENT",
+  "test_opened": false,
+  "test_eligible": true,
+  "selected_epoch": 36,
+  "selected_epoch_near_36": true,
+  "training_and_validation_seconds": 2210.693037099998,
+  "checkpoint": "ai-training/experiments/r3_1c_observed_phone_seed42_36epochs/R3_1C_observed_phone_40class_seed42_best_validation_macro_f1.pt",
+  "reproduction_epochs_1_24": "PASS",
+  "gates": {
+    "overall_gate": {
+      "pass": true,
+      "failures": []
+    },
+    "class_coverage_gate": {
+      "pass": true,
+      "failures": [],
+      "hard_supported_count": 37,
+      "recall_at_least_0.10_count": 37,
+      "passing_classes": [
+        "AA",
+        "AE",
+        "AH",
+        "AO",
+        "AW",
+        "AY",
+        "B",
+        "CH",
+        "D",
+        "DH",
+        "EH",
+        "ER",
+        "EY",
+        "F",
+        "G",
+        "HH",
+        "IH",
+        "IY",
+        "JH",
+        "K",
+        "L",
+        "M",
+        "N",
+        "NG",
+        "OW",
+        "P",
+        "R",
+        "S",
+        "SH",
+        "T",
+        "TH",
+        "UH",
+        "UW",
+        "V",
+        "W",
+        "Y",
+        "Z"
+      ],
+      "failing_classes": [],
+      "high_support_zero_recall": []
+    },
+    "speaker_gate": {
+      "pass": true,
+      "failures": [],
+      "median_macro_f1": 0.48870641177326885
+    },
+    "all_pass": true
+  }
+}

@@ -1,0 +1,264 @@
+{
+  "deterministic_observations_sha256": "9E7748A58F2C74875F36C34717A6089857CBCCBAE7BC9B9B1254296F9E254DE5",
+  "failed": 0,
+  "failures": [],
+  "observations": {
+    "authoritative_immutability": {
+      "authoritative": -10.0,
+      "byte_identical": true,
+      "diagnostic": -9.999998211860337,
+      "diagnostic_replaced_output": false,
+      "returned_scientific_score": -10.0
+    },
+    "beyond_bound": {
+      "bound": 3.5762793260120145e-06,
+      "delta": 7.152558652024029e-06,
+      "status": "R5_2B_TC_EXECUTION_TECHNICAL_FAILURE_EMPTY_TARGET_MISMATCH"
+    },
+    "boundary_equality": {
+      "bound": 3.5762793260120145e-06,
+      "delta": 3.5762793260120145e-06,
+      "operator": "<=",
+      "status": "PASS"
+    },
+    "bounds": {
+      "float32_n1": {
+        "backend": "cpu",
+        "dtype": "float32",
+        "eps": 1.1920928955078125e-07,
+        "gamma": 0.0,
+        "n": 1,
+        "operand_abs_sum": 3.25,
+        "per_reduction_bound": 0.0,
+        "u": 5.960464477539063e-08
+      },
+      "float32_n128": {
+        "backend": "cpu",
+        "dtype": "float32",
+        "eps": 1.1920928955078125e-07,
+        "gamma": 7.5698471886273e-06,
+        "n": 128,
+        "operand_abs_sum": 49.42857142857143,
+        "per_reduction_bound": 0.00037416673246643516,
+        "u": 5.960464477539063e-08
+      },
+      "float32_n2": {
+        "backend": "cpu",
+        "dtype": "float32",
+        "eps": 1.1920928955078125e-07,
+        "gamma": 5.960464832810453e-08,
+        "n": 2,
+        "operand_abs_sum": 3.75,
+        "per_reduction_bound": 2.2351743123039196e-07,
+        "u": 5.960464477539063e-08
+      },
+      "float32_n4": {
+        "backend": "cpu",
+        "dtype": "float32",
+        "eps": 1.1920928955078125e-07,
+        "gamma": 1.7881396630060073e-07,
+        "n": 4,
+        "operand_abs_sum": 10.0,
+        "per_reduction_bound": 1.7881396630060072e-06,
+        "u": 5.960464477539063e-08
+      },
+      "float64_n1": {
+        "backend": "cpu",
+        "dtype": "float64",
+        "eps": 2.220446049250313e-16,
+        "gamma": 0.0,
+        "n": 1,
+        "operand_abs_sum": 7.5,
+        "per_reduction_bound": 0.0,
+        "u": 1.1102230246251565e-16
+      },
+      "float64_n4": {
+        "backend": "cpu",
+        "dtype": "float64",
+        "eps": 2.220446049250313e-16,
+        "gamma": 3.330669073875471e-16,
+        "n": 4,
+        "operand_abs_sum": 10.0,
+        "per_reduction_bound": 3.330669073875471e-15,
+        "u": 1.1102230246251565e-16
+      },
+      "mixed_backend_a": {
+        "backend": "cuda",
+        "dtype": "float32",
+        "eps": 1.1920928955078125e-07,
+        "gamma": 1.7881396630060073e-07,
+        "n": 4,
+        "operand_abs_sum": 10.0,
+        "per_reduction_bound": 1.7881396630060072e-06,
+        "u": 5.960464477539063e-08
+      },
+      "mixed_backend_b": {
+        "backend": "cpu",
+        "dtype": "float32",
+        "eps": 1.1920928955078125e-07,
+        "gamma": 1.7881396630060073e-07,
+        "n": 4,
+        "operand_abs_sum": 10.0,
+        "per_reduction_bound": 1.7881396630060072e-06,
+        "u": 5.960464477539063e-08
+      }
+    },
+    "exact_equality": {
+      "bound": 3.5762793260120145e-06,
+      "difference": 0.0,
+      "status": "PASS"
+    },
+    "failed_execution_manifest_sha": "92163F8DE3ECEAFEE2950AF57302AA565C0F3612A2D6F0D36462552FA66BA09E",
+    "float64_control": {
+      "absolute_difference": 0.0,
+      "classification": "PASS",
+      "combined_bound": 1.0436404866803105e-14,
+      "cpu_value_fresh": -15.66712968974069,
+      "cuda_value_frozen_verified_tc0": -15.66712968974069,
+      "smaller_than_float32": true
+    },
+    "historical_tc0_float32": {
+      "absolute_difference": 9.5367431640625e-07,
+      "classification": "EQUIVALENT",
+      "combined_bound": 5.603003224082621e-06,
+      "cpu_value_fresh": -15.667130470275879,
+      "cuda_runtime_available": false,
+      "cuda_value_frozen_verified_tc0": -15.667129516601562,
+      "cuda_value_source": "verified_frozen_tc0_artifact"
+    },
+    "invalid_gamma_domain": {
+      "n": 16777217,
+      "status": "REJECTED"
+    },
+    "mixed_backend_same_dtype": {
+      "authoritative_backend": "cuda",
+      "combined_bound": 3.5762793260120145e-06,
+      "diagnostic_backend": "cpu",
+      "dtype": "float32"
+    },
+    "nonfinite": {
+      "nan": "R5_2B_TC_EXECUTION_TECHNICAL_FAILURE_NONFINITE_EMPTY_TARGET",
+      "negative_infinity": "R5_2B_TC_EXECUTION_TECHNICAL_FAILURE_NONFINITE_EMPTY_TARGET",
+      "positive_infinity": "R5_2B_TC_EXECUTION_TECHNICAL_FAILURE_NONFINITE_EMPTY_TARGET"
+    },
+    "original_static_fixture": {
+      "classification": "PASS",
+      "difference": 0.0,
+      "explicit": -19.43882697170362,
+      "framework": -19.43882697170362,
+      "sha256": "F0E54A0A4DBC1378F424E6C8FE8B0A9861CDD72DCBE72C045B96660324723197"
+    },
+    "relation_score_immutability": {
+      "after": 1.25,
+      "before": 1.25,
+      "byte_identical": true
+    },
+    "scorer_sha": "2E44B79828DBB37B312CDC03C897A80803947A48F13864B26C454F3B8ED161A3",
+    "within_bound": {
+      "bound": 3.5762793260120145e-06,
+      "delta": 1.7881396630060072e-06,
+      "status": "PASS"
+    }
+  },
+  "passed": 22,
+  "protocol": {
+    "checkpoint_inference_run": false,
+    "test_accessed": false,
+    "train_audio_accessed": false,
+    "train_performance_calculated": false,
+    "validation_accessed": false
+  },
+  "results": [
+    {
+      "name": "test_float32_n1_bound",
+      "status": "PASS"
+    },
+    {
+      "name": "test_float32_n2_bound",
+      "status": "PASS"
+    },
+    {
+      "name": "test_float32_n4_bound",
+      "status": "PASS"
+    },
+    {
+      "name": "test_float32_larger_n_bound",
+      "status": "PASS"
+    },
+    {
+      "name": "test_float64_n1_bound",
+      "status": "PASS"
+    },
+    {
+      "name": "test_float64_n4_bound",
+      "status": "PASS"
+    },
+    {
+      "name": "test_mixed_backend_same_dtype",
+      "status": "PASS"
+    },
+    {
+      "name": "test_invalid_gamma_domain_rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "test_historical_tc0_float32",
+      "status": "PASS"
+    },
+    {
+      "name": "test_original_static_fixture",
+      "status": "PASS"
+    },
+    {
+      "name": "test_float64_control",
+      "status": "PASS"
+    },
+    {
+      "name": "test_exact_equality",
+      "status": "PASS"
+    },
+    {
+      "name": "test_within_bound",
+      "status": "PASS"
+    },
+    {
+      "name": "test_beyond_bound_rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "test_boundary_equality_accepted",
+      "status": "PASS"
+    },
+    {
+      "name": "test_nan_rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "test_positive_infinity_rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "test_negative_infinity_rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "test_authoritative_output_immutable",
+      "status": "PASS"
+    },
+    {
+      "name": "test_relation_score_immutable",
+      "status": "PASS"
+    },
+    {
+      "name": "test_scorer_sha_unchanged",
+      "status": "PASS"
+    },
+    {
+      "name": "test_failed_execution_preserved",
+      "status": "PASS"
+    }
+  ],
+  "suite": "R5-2B-TC1 synthetic static regression",
+  "synthetic_only": true,
+  "test_count": 22
+}

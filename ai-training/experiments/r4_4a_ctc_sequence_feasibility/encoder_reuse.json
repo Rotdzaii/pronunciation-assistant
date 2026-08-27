@@ -1,0 +1,17 @@
+{
+  "verdict": "R3_ENCODER_REUSE_WITH_SMALL_ADAPTATION",
+  "input": "[B,1,64,time]",
+  "layers": {
+    "choice": "A: fresh R3-like convolutional encoder without temporal attention pooling, minimally adapted to preserve time resolution",
+    "encoder": "Conv 1->16 + MaxPool(2,2); Conv 16->32 + MaxPool(2,1); Conv 32->64; Conv 64->96 with BatchNorm/ReLU and R3 dropout pattern",
+    "variable_input": "[B,1,64,time]",
+    "encoder_output": "[B,96,16,floor(time/2)]",
+    "sequence_projection": "mean frequency dimension -> [B,T_out,96]",
+    "head": "Dropout(0.2) + Linear(96,41)",
+    "temporal_attention": false,
+    "temporal_downsampling": 2,
+    "approx_output_spacing_ms": 20
+  },
+  "adaptation": "reuse R3 encoder design/code, not weights; remove attention/classifier; second pool frequency-only; frequency mean; time-distributed Linear(96,41)",
+  "variable_duration_technically_supported": true
+}

@@ -1,0 +1,50 @@
+{
+  "1": {
+    "rows": 351,
+    "deletion_support": 4,
+    "deletion_precision": 0.0,
+    "deletion_recall": 0.0,
+    "deletion_f1": 0.0,
+    "false_deletion_rate": 0.0
+  },
+  "2": {
+    "rows": 5084,
+    "deletion_support": 67,
+    "deletion_precision": 0.22950819672131148,
+    "deletion_recall": 0.417910447761194,
+    "deletion_f1": 0.2962962962962963,
+    "false_deletion_rate": 0.018736296591588597
+  },
+  "3": {
+    "rows": 6876,
+    "deletion_support": 287,
+    "deletion_precision": 0.3781094527363184,
+    "deletion_recall": 0.26480836236933797,
+    "deletion_f1": 0.3114754098360656,
+    "false_deletion_rate": 0.018971012293215964
+  },
+  "4": {
+    "rows": 3700,
+    "deletion_support": 175,
+    "deletion_precision": 0.2631578947368421,
+    "deletion_recall": 0.5428571428571428,
+    "deletion_f1": 0.3544776119402985,
+    "false_deletion_rate": 0.07546099290780142
+  },
+  "5": {
+    "rows": 3045,
+    "deletion_support": 100,
+    "deletion_precision": 0.2548076923076923,
+    "deletion_recall": 0.53,
+    "deletion_f1": 0.3441558441558441,
+    "false_deletion_rate": 0.05263157894736842
+  },
+  "6+": {
+    "rows": 7281,
+    "deletion_support": 281,
+    "deletion_precision": 0.21551724137931033,
+    "deletion_recall": 0.5338078291814946,
+    "deletion_f1": 0.3070624360286591,
+    "false_deletion_rate": 0.078
+  }
+}

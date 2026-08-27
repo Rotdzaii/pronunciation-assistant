@@ -1,0 +1,248 @@
+{
+  "ABA": {
+    "usable_words": 1208,
+    "target_phones": 3894,
+    "phone_error_rate": 0.46635850025680536,
+    "binary": {
+      "rows": 3923,
+      "accuracy": 0.8858016823859292,
+      "balanced_accuracy": 0.7028939305385828,
+      "macro_f1": 0.5009790158959472,
+      "non_deletion": {
+        "precision": 0.9959700633275763,
+        "recall": 0.8885464817668207,
+        "f1": 0.9391965255157437,
+        "support": 3894
+      },
+      "deletion": {
+        "precision": 0.0334075723830735,
+        "recall": 0.5172413793103449,
+        "f1": 0.06276150627615062,
+        "support": 29
+      },
+      "confusion_matrix_labels": [
+        "non_deletion",
+        "deletion"
+      ],
+      "confusion_matrix": [
+        [
+          3460,
+          434
+        ],
+        [
+          14,
+          15
+        ]
+      ]
+    },
+    "substitution_false_deletion_rate": 0.19148936170212766,
+    "decoded_phone_total": 3620,
+    "decoded_target_ratio": 0.9296353364149974,
+    "blank_argmax_occupancy": 0.8157936190039117
+  },
+  "HKK": {
+    "usable_words": 1351,
+    "target_phones": 4602,
+    "phone_error_rate": 0.5010864841373316,
+    "binary": {
+      "rows": 4701,
+      "accuracy": 0.8540736013614124,
+      "balanced_accuracy": 0.5647116536947046,
+      "macro_f1": 0.4956412479637262,
+      "non_deletion": {
+        "precision": 0.982028557360906,
+        "recall": 0.8667970447631465,
+        "f1": 0.9208217913204063,
+        "support": 4602
+      },
+      "deletion": {
+        "precision": 0.0406885758998435,
+        "recall": 0.26262626262626265,
+        "f1": 0.07046070460704607,
+        "support": 99
+      },
+      "confusion_matrix_labels": [
+        "non_deletion",
+        "deletion"
+      ],
+      "confusion_matrix": [
+        [
+          3989,
+          613
+        ],
+        [
+          73,
+          26
+        ]
+      ]
+    },
+    "substitution_false_deletion_rate": 0.13636363636363635,
+    "decoded_phone_total": 4186,
+    "decoded_target_ratio": 0.9096045197740112,
+    "blank_argmax_occupancy": 0.794825169044808
+  },
+  "HQTV": {
+    "usable_words": 1335,
+    "target_phones": 4221,
+    "phone_error_rate": 0.4325989102108505,
+    "binary": {
+      "rows": 4665,
+      "accuracy": 0.82486602357985,
+      "balanced_accuracy": 0.6654116803370534,
+      "macro_f1": 0.6182434574458655,
+      "non_deletion": {
+        "precision": 0.9391124871001032,
+        "recall": 0.8623548922056384,
+        "f1": 0.8990984315178461,
+        "support": 4221
+      },
+      "deletion": {
+        "precision": 0.26362484157160965,
+        "recall": 0.46846846846846846,
+        "f1": 0.33738848337388483,
+        "support": 444
+      },
+      "confusion_matrix_labels": [
+        "non_deletion",
+        "deletion"
+      ],
+      "confusion_matrix": [
+        [
+          3640,
+          581
+        ],
+        [
+          236,
+          208
+        ]
+      ]
+    },
+    "substitution_false_deletion_rate": 0.19692737430167598,
+    "decoded_phone_total": 3964,
+    "decoded_target_ratio": 0.9391139540393272,
+    "blank_argmax_occupancy": 0.7892612202783649
+  },
+  "LXC": {
+    "usable_words": 1351,
+    "target_phones": 4494,
+    "phone_error_rate": 0.4650645304850912,
+    "binary": {
+      "rows": 4703,
+      "accuracy": 0.8481820114820328,
+      "balanced_accuracy": 0.6536737979187561,
+      "macro_f1": 0.5604893808840206,
+      "non_deletion": {
+        "precision": 0.9708520179372198,
+        "recall": 0.8671562082777036,
+        "f1": 0.9160789844851904,
+        "support": 4494
+      },
+      "deletion": {
+        "precision": 0.13352685050798258,
+        "recall": 0.44019138755980863,
+        "f1": 0.20489977728285078,
+        "support": 209
+      },
+      "confusion_matrix_labels": [
+        "non_deletion",
+        "deletion"
+      ],
+      "confusion_matrix": [
+        [
+          3897,
+          597
+        ],
+        [
+          117,
+          92
+        ]
+      ]
+    },
+    "substitution_false_deletion_rate": 0.14909638554216867,
+    "decoded_phone_total": 4128,
+    "decoded_target_ratio": 0.9185580774365821,
+    "blank_argmax_occupancy": 0.8128359107552944
+  },
+  "MBMPS": {
+    "usable_words": 1372,
+    "target_phones": 4722,
+    "phone_error_rate": 0.4248199915290131,
+    "binary": {
+      "rows": 4781,
+      "accuracy": 0.8897720142229659,
+      "balanced_accuracy": 0.7182427727406514,
+      "macro_f1": 0.5247730938249796,
+      "non_deletion": {
+        "precision": 0.9936455636620382,
+        "recall": 0.8941126641253706,
+        "f1": 0.941255155501059,
+        "support": 4722
+      },
+      "deletion": {
+        "precision": 0.06015037593984962,
+        "recall": 0.5423728813559322,
+        "f1": 0.10829103214890017,
+        "support": 59
+      },
+      "confusion_matrix_labels": [
+        "non_deletion",
+        "deletion"
+      ],
+      "confusion_matrix": [
+        [
+          4222,
+          500
+        ],
+        [
+          27,
+          32
+        ]
+      ]
+    },
+    "substitution_false_deletion_rate": 0.11642411642411643,
+    "decoded_phone_total": 4392,
+    "decoded_target_ratio": 0.9301143583227446,
+    "blank_argmax_occupancy": 0.8159735483869519
+  },
+  "SVBI": {
+    "usable_words": 1111,
+    "target_phones": 3490,
+    "phone_error_rate": 0.4243553008595988,
+    "binary": {
+      "rows": 3564,
+      "accuracy": 0.8925364758698092,
+      "balanced_accuracy": 0.6805893285835979,
+      "macro_f1": 0.5467074814525291,
+      "non_deletion": {
+        "precision": 0.9874490116096643,
+        "recall": 0.9017191977077363,
+        "f1": 0.9426389096899805,
+        "support": 3490
+      },
+      "deletion": {
+        "precision": 0.09018567639257294,
+        "recall": 0.4594594594594595,
+        "f1": 0.15077605321507762,
+        "support": 74
+      },
+      "confusion_matrix_labels": [
+        "non_deletion",
+        "deletion"
+      ],
+      "confusion_matrix": [
+        [
+          3147,
+          343
+        ],
+        [
+          40,
+          34
+        ]
+      ]
+    },
+    "substitution_false_deletion_rate": 0.0851063829787234,
+    "decoded_phone_total": 3224,
+    "decoded_target_ratio": 0.92378223495702,
+    "blank_argmax_occupancy": 0.7490211032351108
+  }
+}

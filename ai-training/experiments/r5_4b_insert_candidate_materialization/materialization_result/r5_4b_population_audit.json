@@ -1,0 +1,43 @@
+{
+  "status": "PASS",
+  "runtime_words": 16582,
+  "frozen_words": 16582,
+  "ordered_identity_matches": 16582,
+  "speaker_matches": 16582,
+  "duplicates": 0,
+  "frozen_duplicates": 0,
+  "missing": 0,
+  "unexpected": 0,
+  "missing_examples": [],
+  "unexpected_examples": [],
+  "train_speakers": [
+    "BWC",
+    "EBVS",
+    "HJK",
+    "NCC",
+    "NJS",
+    "PNV",
+    "RRBI",
+    "TLV",
+    "TNI",
+    "YBAA",
+    "YKWK",
+    "ZHAA"
+  ],
+  "observed_speakers": [
+    "BWC",
+    "EBVS",
+    "HJK",
+    "NCC",
+    "NJS",
+    "PNV",
+    "RRBI",
+    "TLV",
+    "TNI",
+    "YBAA",
+    "YKWK",
+    "ZHAA"
+  ],
+  "fuzzy_matching": false,
+  "excluded_rows": 0
+}

@@ -1,0 +1,17 @@
+{
+  "training_run": false,
+  "checkpoint_inference_run": false,
+  "train_audio_accessed": false,
+  "train_annotation_content_read": false,
+  "train_annotation_existence_checked": true,
+  "train_performance_consumed": false,
+  "validation_accessed": false,
+  "test_accessed": false,
+  "threshold_search_run": false,
+  "scientific_contract_modified": false,
+  "frozen_scorer_modified": false,
+  "previous_execution_modified": false,
+  "validation_annotation_paths_resolved": false,
+  "test_annotation_paths_resolved": false,
+  "phoenix_performance_metrics_calculated": false
+}

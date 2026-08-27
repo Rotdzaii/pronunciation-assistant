@@ -1,0 +1,77 @@
+{
+  "dataset": {
+    "dataset_sha256": "433F006AB0ABCE47955C2305FCD131F2FFD9741417891BE125798163ADD28F7E",
+    "source_rows": 120236,
+    "eligible_rows": 119144,
+    "eligible_counts": {
+      "correct": 101626,
+      "substitution": 14098,
+      "deletion": 3420
+    },
+    "excluded_addition": 1092,
+    "splits": {
+      "train": {
+        "speakers": [
+          "BWC",
+          "EBVS",
+          "HJK",
+          "NCC",
+          "NJS",
+          "PNV",
+          "RRBI",
+          "TLV",
+          "TNI",
+          "YBAA",
+          "YKWK",
+          "ZHAA"
+        ],
+        "rows": 59572,
+        "correct": 51400,
+        "incorrect": 8172,
+        "substitution": 6558,
+        "deletion": 1614
+      },
+      "validation": {
+        "speakers": [
+          "ABA",
+          "HKK",
+          "HQTV",
+          "LXC",
+          "MBMPS",
+          "SVBI"
+        ],
+        "rows": 29767,
+        "correct": 25303,
+        "incorrect": 4464,
+        "substitution": 3485,
+        "deletion": 979
+      },
+      "test": {
+        "speakers": [
+          "ASI",
+          "ERMS",
+          "SKA",
+          "THV",
+          "TXHC",
+          "YDCK"
+        ],
+        "rows": 29805,
+        "correct": 24923,
+        "incorrect": 4882,
+        "substitution": 4055,
+        "deletion": 827
+      }
+    }
+  },
+  "audio": {
+    "unique_wav_files": 3599,
+    "sample_rates": {
+      "44100": 3599
+    },
+    "total_audio_hours_across_unique_wavs": 3.663458534895443,
+    "missing": 0,
+    "unreadable": 0,
+    "invalid_duration": 0,
+    "empty_centered_crop": 0
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "stage": "R5-2B-TC1 scientific immutability regression",
+  "authoritative_empty_target": {
+    "input_authoritative_score": -10.0,
+    "diagnostic_score": -9.999998211860337,
+    "returned_scientific_score": -10.0,
+    "authoritative_value_byte_identical": true,
+    "diagnostic_replaced_scientific_score": false,
+    "status": "PASS"
+  },
+  "relation_competition_score": {
+    "formula": "BEST_INSERT - BEST_NON_ADDITION",
+    "before_guard": 1.25,
+    "after_guard": 1.25,
+    "byte_identical": true,
+    "status": "PASS"
+  },
+  "frozen_scorer": {
+    "required_sha256": "2E44B79828DBB37B312CDC03C897A80803947A48F13864B26C454F3B8ED161A3",
+    "before_sha256": "2E44B79828DBB37B312CDC03C897A80803947A48F13864B26C454F3B8ED161A3",
+    "after_sha256": "2E44B79828DBB37B312CDC03C897A80803947A48F13864B26C454F3B8ED161A3",
+    "modified": false,
+    "status": "PASS"
+  },
+  "failed_execution_manifest": {
+    "sha256": "92163F8DE3ECEAFEE2950AF57302AA565C0F3612A2D6F0D36462552FA66BA09E",
+    "modified": false,
+    "status": "PASS"
+  },
+  "scientific_contract_modified": false,
+  "scientific_score_modified": false
+}

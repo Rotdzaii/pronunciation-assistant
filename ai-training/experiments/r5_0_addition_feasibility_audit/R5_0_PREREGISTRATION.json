@@ -1,0 +1,225 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "R5-0",
+  "title": "Addition Data & Runtime Feasibility Audit",
+  "frozen_at": "2026-08-15T01:23:10+07:00",
+  "status": "PREREGISTERED_BEFORE_R5_METRICS",
+  "research_branch": "research/phoenix-correctness",
+  "purpose": [
+    "audit clean addition evidence and speaker-disjoint support",
+    "audit runtime insertion representation",
+    "measure frozen R4 CTC greedy insertion behavior on TRAIN only",
+    "audit scientific reuse provenance of the frozen R4 CTC checkpoint"
+  ],
+  "prohibited_actions": [
+    "neural training or fine-tuning",
+    "threshold tuning",
+    "architecture or checkpoint modification",
+    "VALIDATION model inference or performance measurement",
+    "TEST path resolution, audio access, inference, predictions, or performance measurement",
+    "R4 artifact or conclusion modification",
+    "R5-1 design or implementation"
+  ],
+  "source_contract": {
+    "v4_path": "ai-training/datasets/l2-arctic/metadata/all_speakers_expected_observed_v4.csv",
+    "v4_sha256": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D",
+    "v4_identity_failure_status": "R5_0_BLOCKED_SOURCE_IDENTITY",
+    "checkpoint_path": "ai-training/experiments/r4_4c2_bigru_ctc_seed42/R4_4C2_bigru_ctc_phone_sequence_seed42_best_validation_per.pt",
+    "checkpoint_sha256": "F54C9C2361AE78E1C37353AEB338A2DE6722C0B1EC4F885F6B52688CE9E88085",
+    "r4_closure_manifest_path": "ai-training/experiments/r4_deletion_research_closure/artifact_hashes.json",
+    "r4_closure_manifest_sha256": "3E21936C6175F9DEA5FAE3346E96EECD3AEF18732072C42B0B2FCAE4161D6174"
+  },
+  "pre_metric_exposure_log": {
+    "new_r5_metrics_computed_before_freeze": false,
+    "ctc_or_mfa_diagnostics_run_before_freeze": false,
+    "prior_frozen_constants_incidentally_visible_during_required_schema_parser_inspection": [
+      "existing parser documentation states 1044 source rows tagged addition",
+      "existing parser documentation states 48 tagged-addition rows have invalid observed-phone labels",
+      "existing R4 feasibility references contain word-level counts for addition-containing words"
+    ],
+    "impact": "These are pre-existing provenance constants, not newly computed R5 split metrics. All definitions, gates, alignment rules, and decision rules below were frozen without computing R5 audit outputs."
+  },
+  "speaker_splits": {
+    "TRAIN": ["BWC", "EBVS", "HJK", "NCC", "NJS", "PNV", "RRBI", "TLV", "TNI", "YBAA", "YKWK", "ZHAA"],
+    "VALIDATION": ["ABA", "HKK", "HQTV", "LXC", "MBMPS", "SVBI"],
+    "TEST": ["ASI", "ERMS", "SKA", "THV", "TXHC", "YDCK"]
+  },
+  "annotation_semantics": {
+    "source_tier": "manual annotation/phones IntervalTier",
+    "raw_triplet_form": "expected_phone,observed_phone,error_code",
+    "addition_error_code": "a",
+    "addition_expected_placeholder": "sil",
+    "resolved_addition_relation": "addition",
+    "resolved_expected_phone_canonical": "<SIL>",
+    "observed_phone_semantics": "the canonical added phone identity",
+    "interval_semantics": "the addition is a dedicated manual phones-tier interval with start_time, end_time, and duration",
+    "multiple_and_mixed_errors": "multiple addition intervals and coexistence with substitution/deletion are retained and reported"
+  },
+  "clean_addition_definition": {
+    "support_count_rule": "A clean addition event is one frozen V4 row whose resolved relation field equals addition. The V4 parser has already enforced expected raw placeholder sil and a canonical observed phone.",
+    "required_fields_for_train_validation_detailed_audit": {
+      "tagged_relation": "addition",
+      "relation": "addition",
+      "expected_phone_canonical": "<SIL>",
+      "observed_phone_canonical": "one of the frozen 40 canonical phones",
+      "research_subset": "ADDITION_AUDIT",
+      "is_addition_audit": 1,
+      "timestamps": "finite end_time greater than start_time"
+    },
+    "test_rule": "For TEST, inspect only speaker_id and frozen relation to count aggregate clean additions and per-speaker support; no detailed fields, identities, sequences, phones, positions, paths, or examples are inspected or exported.",
+    "mixed_error_policy": "A clean addition event remains eligible when another clean relation occurs in the same word; mixed status is reported and never used for exclusion.",
+    "multiple_addition_policy": "Each clean addition interval is one event; all events are retained. Words are separately classified as single-addition or multiple-addition.",
+    "exclusions": [
+      "tagged addition whose resolved relation is unresolved",
+      "addition with expected raw token other than sil",
+      "unknown, malformed, noncanonical, or non-speech observed phone",
+      "non-finite or non-positive interval for detailed TRAIN/VALIDATION event analysis",
+      "ambiguous or missing manual-word containment for word/position/CTC analyses only"
+    ],
+    "exclusion_reporting": "All excluded or ambiguous tagged additions are counted by reason; support gates use resolved clean addition relation events and are never redefined after counts are seen."
+  },
+  "word_reconstruction": {
+    "manual_word_source": "the word IntervalTier from the same frozen TextGrid referenced by each V4 row",
+    "containment_rule": "assign an interval to the unique word interval that contains the interval midpoint, using the existing R4 containment implementation",
+    "ordering_rule": "within a word order rows by frozen V4 source_index, equivalent to phones-tier interval order",
+    "expected_sequence_rule": "include resolved correct, substitution, and deletion rows whose canonical expected phone is in the frozen 40-phone inventory; additions do not enter the reference expected sequence"
+  },
+  "addition_position_contract": {
+    "boundary_definition": "For an addition row in a word with expected sequence length N, boundary equals the number of expected-sequence rows preceding that addition in source interval order.",
+    "valid_boundaries": "integers 0 through N",
+    "classes": {
+      "BEFORE_FIRST": "boundary == 0",
+      "BETWEEN": "0 < boundary < N",
+      "AFTER_FINAL": "boundary == N"
+    },
+    "ambiguous_position_policy": "If unique word containment or a nonempty expected sequence cannot be established, retain the clean event in source-level support but report position as ambiguous and exclude it only from position/exact-event metrics."
+  },
+  "eligible_relation_denominator": {
+    "definition": "resolved V4 relation rows in {correct, substitution, deletion, addition}",
+    "addition_prevalence": "clean addition events divided by eligible relation events",
+    "class_ratios": ["correct:addition", "substitution:addition", "deletion:addition"],
+    "imbalance_labels": {
+      "not severe": "correct:addition ratio <= 10",
+      "severe": "10 < correct:addition ratio <= 100",
+      "extremely severe": "correct:addition ratio > 100"
+    }
+  },
+  "data_metrics": {
+    "GLOBAL": ["eligible relation observations", "tagged addition annotations", "clean additions", "excluded/ambiguous additions by reason", "addition prevalence", "speakers with at least one clean addition"],
+    "TRAIN": ["clean additions", "speaker counts", "added-phone counts", "word counts", "boundary and position counts", "single versus multiple addition words", "prevalence", "phone support extremes", "relation class counts and ratios"],
+    "VALIDATION_SUPPORT_ONLY": ["clean additions", "per-speaker counts", "speakers with additions", "speakers meeting support", "aggregate position coverage"],
+    "TEST_AGGREGATE_ONLY": ["clean additions", "speakers with additions", "speakers meeting support"]
+  },
+  "support_gates": {
+    "minimum_speaker_support": 5,
+    "TRAIN": {
+      "clean_additions_min": 100,
+      "speakers_with_at_least_5_min": 6,
+      "position_classes_covered_min": 2,
+      "all_required": true
+    },
+    "VALIDATION": {
+      "clean_additions_min": 43,
+      "speakers_with_at_least_5_min": 3,
+      "all_required": true
+    },
+    "TEST": {
+      "clean_additions_min": 43,
+      "speakers_with_at_least_5_min": 3,
+      "all_required": true
+    },
+    "rationale": "Forty-three positive events gives approximately a worst-case 95% binomial-proportion half-width near 0.15 around p=0.5; gates are minimum feasibility conditions, not claims of detection performance."
+  },
+  "frozen_ctc_contract": {
+    "population": "TRAIN only",
+    "architecture": "frozen R4-4C2 CNN plus one packed bidirectional GRU plus CTC phone head",
+    "vocabulary": "40 frozen canonical phones, blank index 40",
+    "preprocessing": "exact frozen R4-4C2 audio feature and encoder contract",
+    "decoding": "argmax per encoder timestep, collapse consecutive identical labels, remove blank",
+    "reference": "expected canonical phone sequence",
+    "alignment": {
+      "algorithm": "unit-cost Levenshtein",
+      "tie_precedence": ["MATCH", "SUBSTITUTION", "DELETE_FROM_EXPECTED", "INSERT_IN_HYPOTHESIS"],
+      "predicted_addition": "an INSERT_IN_HYPOTHESIS operation",
+      "predicted_boundary": "reference cursor position at the insertion operation"
+    },
+    "word_positive_rule": "at least one predicted insertion",
+    "word_metrics": ["TP", "FP", "FN", "TN", "precision", "recall", "F1", "balanced_accuracy", "binary_macro_f1"],
+    "exact_event_rule": "A predicted event matches a true event only when canonical inserted phone and expected-sequence boundary both match. Match multiplicities one-to-one deterministically by boundary then phone using counts.",
+    "event_metrics": ["TP", "FP", "FN", "precision", "recall", "F1"],
+    "stratified_event_metrics": ["BEFORE_FIRST", "BETWEEN", "AFTER_FINAL", "added phone"],
+    "no_tuning": true
+  },
+  "ctc_hallucination_audit": {
+    "correct_only_word_definition": "word has at least one eligible expected-phone row and every non-addition resolved relation in it is correct, with zero clean additions, substitutions, or deletions",
+    "metrics": ["correct words", "words with predicted insertion", "false insertion word rate", "insertion edits", "insertions per word", "common inserted phones"],
+    "addition_insertion_rate_delta": "greedy insertion-positive rate on true-addition words minus greedy insertion-positive rate on correct-only words",
+    "directional_signal_rule": "delta > 0 is directional addition-related insertion signal; delta <= 0 is no directional addition-specific signal",
+    "interpretation": "feasibility diagnostic only, never a validation or tuning gate"
+  },
+  "mfa_runtime_audit": {
+    "first_step": "inspect existing Phoenix runtime MFA implementation, alignment artifacts, and frozen R4 alignment findings",
+    "question": "whether normal runtime MFA can explicitly create a phone interval not present in the canonical transcript",
+    "static_sufficiency_rule": "If implementation and existing evidence establish the answer, do not rerun MFA.",
+    "optional_empirical_rule": {
+      "population": "TRAIN clean addition-containing words only",
+      "maximum_words": 60,
+      "selection_freeze": "sort eligible identities lexicographically within speaker; traverse TRAIN speakers in frozen split order round-robin, taking the next unused identity until 60 or exhaustion",
+      "configuration": "existing frozen runtime MFA configuration with no post-observation changes",
+      "categories": ["explicit_extra_phone_interval", "absorbed_into_expected_phone", "neighbor_boundary_shift", "alignment_failure", "ambiguous"]
+    },
+    "claim_rule": "Do not claim reliable explicit localization unless observed evidence supports it. Lack of an MFA extra slot alone does not block CTC or another future acoustic representation."
+  },
+  "ctc_reuse_provenance_audit": {
+    "required_questions": [
+      "checkpoint TRAIN speakers",
+      "whether R4 excluded addition-containing words",
+      "whether R4 VALIDATION speakers influenced checkpoint selection and by which metric",
+      "whether addition labels directly entered R4 training",
+      "whether TEST was used",
+      "acceptability for TRAIN-only diagnostic reuse",
+      "acceptability for future confirmation on the current VALIDATION split",
+      "whether a new R5 model or independent protocol is required"
+    ],
+    "allowed_classifications": [
+      "R5_CTC_REUSE_TRAIN_DIAGNOSTIC_ONLY",
+      "R5_CTC_REUSE_DEVELOPMENT_ALLOWED_CONFIRMATION_REQUIRES_NEW_PROTOCOL",
+      "R5_CTC_REUSE_CONFIRMATION_ACCEPTABLE",
+      "R5_CTC_REUSE_NOT_ACCEPTABLE"
+    ]
+  },
+  "final_decision_rules": {
+    "R5_0_PASS_EXISTING_CTC_FEASIBLE": "All data support gates pass; runtime sequence representation is viable; TRAIN frozen CTC insertion baseline is computable; addition insertion rate delta is positive; protocol reuse is justified for a next development stage.",
+    "R5_0_PASS_DATA_FEASIBLE_CTC_WEAK": "All data support gates pass and addition research remains feasible, but frozen greedy CTC insertion evidence is weak, nonspecific, or hallucination-prone.",
+    "R5_0_BLOCKED_INSUFFICIENT_DATA": "One or more preregistered support gates fail strongly enough that speaker-disjoint evaluation is not credible.",
+    "R5_0_BLOCKED_RUNTIME_REPRESENTATION": "Clean data exists but neither available runtime alignment nor frozen sequence output provides a scientifically usable addition representation or location.",
+    "R5_0_BLOCKED_SOURCE_OR_ANNOTATION": "Source identity or annotation semantics fail."
+  },
+  "decision_precedence": [
+    "R5_0_BLOCKED_SOURCE_OR_ANNOTATION",
+    "R5_0_BLOCKED_INSUFFICIENT_DATA",
+    "R5_0_BLOCKED_RUNTIME_REPRESENTATION",
+    "R5_0_PASS_EXISTING_CTC_FEASIBLE",
+    "R5_0_PASS_DATA_FEASIBLE_CTC_WEAK"
+  ],
+  "test_policy": {
+    "allowed": "Only frozen source-table speaker_id and resolved relation may be used for aggregate clean-addition support and number of speakers meeting support.",
+    "forbidden": ["path resolution", "audio read", "MFA", "model inference", "predictions", "performance metrics", "word lists", "phone distributions", "position distributions", "individual sequence inspection"],
+    "test_audio_accessed": false,
+    "test_inference_run": false,
+    "test_performance_consumed": false
+  },
+  "validation_policy": {
+    "allowed": "data-support counts and aggregate position coverage only",
+    "model_inference": false,
+    "performance_consumed": false
+  },
+  "unexpected_variable_policy": {
+    "source_or_hash_failure": "STOP",
+    "implementation_bug_before_metrics": "preserve evidence and create additive technical correction with no semantic changes",
+    "bug_after_scores_exposed": "disclose information consumed and do not silently rerun",
+    "performance_failure": "accept without reclassification as a technical bug",
+    "data_assumption_failure": "STOP before training",
+    "accidental_test_inference": "STOP and disclose exact access"
+  }
+}

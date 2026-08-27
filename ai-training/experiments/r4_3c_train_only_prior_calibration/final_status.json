@@ -1,0 +1,12 @@
+{
+  "final_status": "R4_3C_NO_ELIGIBLE_PRIOR_SCALE",
+  "selected_lambda": null,
+  "eligible_lambdas": [],
+  "candidate_contract_hashes": null,
+  "validation_acoustic_inference": false,
+  "validation_candidate_metrics": false,
+  "previous_validation_used_for_selection": false,
+  "r4_test_accessed": false,
+  "training_performed": false,
+  "post_hoc_grid_change": false
+}

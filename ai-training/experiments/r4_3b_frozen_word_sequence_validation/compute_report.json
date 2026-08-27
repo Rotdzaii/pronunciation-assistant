@@ -1,0 +1,8 @@
+{
+  "status": "NO_INFERENCE_OR_DP_RUN",
+  "train_probes": 0,
+  "validation_probes": 0,
+  "acoustic_inference_seconds": 0.0,
+  "dp_seconds": 0.0,
+  "new_neural_training": false
+}

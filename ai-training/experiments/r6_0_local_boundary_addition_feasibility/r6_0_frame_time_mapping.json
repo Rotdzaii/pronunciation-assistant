@@ -1,0 +1,47 @@
+{
+  "stage": "R6-0_LOCAL_BOUNDARY_ADDITION_FEASIBILITY",
+  "status": "FROZEN_RECOMMENDATION",
+  "input_word_span": "historical MFA word span with zero side context",
+  "sample_rate_hz": 16000,
+  "mel_hop_samples": 160,
+  "mel_hop_seconds": 0.01,
+  "temporal_downsampling": 2,
+  "nominal_output_hop_seconds": 0.02,
+  "feature_frame_count": "floor(word_sample_count / 160) + 1",
+  "output_step_count": "floor(feature_frame_count / 2)",
+  "gold_anchor": {
+    "boundary_0": "start(q[0])",
+    "internal_boundary_b": "(end(q[b-1]) + start(q[b])) / 2",
+    "boundary_N": "end(q[N-1])"
+  },
+  "relative_anchor_seconds": "gold_anchor_seconds - mfa_word_start_seconds",
+  "nominal_output_center_seconds": "0.020 * k + 0.005",
+  "center_index_rule": "argmin_k abs((0.020*k + 0.005) - relative_anchor_seconds)",
+  "center_index_tie_rule": "lower k",
+  "outside_word_policy": "invalid mapping; do not clip the anchor",
+  "window": {
+    "requested_indices": "k-2, k-1, k, k+1, k+2",
+    "available_indices": "intersection with [0,T_out-1]",
+    "nominal_steps": 5,
+    "nominal_bin_span_ms": 100,
+    "window_search": false,
+    "edge_policy": "retain available frames and record available_frame_count; no padding or imputation"
+  },
+  "implementation_checks_required_before_inference": [
+    "centered-STFT frame-count formula",
+    "CNN output-length formula",
+    "nominal center mapping",
+    "lower-index distance tie",
+    "before-first and after-final edge windows",
+    "out-of-word anchor rejection",
+    "deterministic source/boundary identity"
+  ],
+  "limitations": [
+    "centered STFT uses constant zero padding at word edges",
+    "CNN time receptive field is nominally about 160 ms",
+    "bidirectional GRU makes every output step depend on the entire unpadded word",
+    "GOLD-to-MFA word-span offsets can invalidate an anchor",
+    "GOLD internal-boundary midpoint is an oracle research location, not a production boundary estimate"
+  ]
+}
+

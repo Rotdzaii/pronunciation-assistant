@@ -1,0 +1,89 @@
+{
+  "status": "R4_4C2_BIGRU_CTC_IMPROVED",
+  "classification": {
+    "status": "R4_4C2_BIGRU_CTC_IMPROVED",
+    "development": {
+      "per_improvement": 0.14951033788301937,
+      "per_improvement_pass": true,
+      "binary_macro_f1_improvement": 0.07877105117484612,
+      "binary_improvement_pass": true,
+      "deletion_f1_improvement": 0.07403065914786966,
+      "deletion_improvement_pass": true,
+      "under_generation_components": {
+        "decoded_target_ratio_plus_0_05": true,
+        "shorter_fraction_minus_0_05": true,
+        "blank_occupancy_minus_0_05": false,
+        "deletion_edits_minus_10pct": true,
+        "clean_false_deletion_minus_0_05": true
+      },
+      "under_generation_pass_count": 4,
+      "under_generation_improved": true
+    }
+  },
+  "hard_gate_report": {
+    "hard_gates": {
+      "PER_le_0_55": true,
+      "binary_macro_f1_ge_0_70": false,
+      "deletion_recall_ge_0_45": false,
+      "deletion_f1_ge_0_40": false,
+      "substitution_false_deletion_le_0_25": true,
+      "matched_macro_f1_ge_0_60": false,
+      "matched_deletion_f1_ge_0_55": false,
+      "speaker_recall_gate": true,
+      "three_relation_macro_f1_ge_0_40": true
+    },
+    "speaker_gate": {
+      "ABA": {
+        "support": 29,
+        "recall": 0.5172413793103449,
+        "eligible": false,
+        "pass": true
+      },
+      "HKK": {
+        "support": 99,
+        "recall": 0.26262626262626265,
+        "eligible": true,
+        "pass": true
+      },
+      "HQTV": {
+        "support": 444,
+        "recall": 0.46846846846846846,
+        "eligible": true,
+        "pass": true
+      },
+      "LXC": {
+        "support": 209,
+        "recall": 0.44019138755980863,
+        "eligible": true,
+        "pass": true
+      },
+      "MBMPS": {
+        "support": 59,
+        "recall": 0.5423728813559322,
+        "eligible": true,
+        "pass": true
+      },
+      "SVBI": {
+        "support": 74,
+        "recall": 0.4594594594594595,
+        "eligible": true,
+        "pass": true
+      }
+    },
+    "all_hard_gates_pass": false
+  },
+  "selected_epoch": 35,
+  "training_seconds": 1064.2835622999992,
+  "device": "cuda",
+  "peak_vram_bytes": 131788288,
+  "training_occurred": true,
+  "neural_runs_in_task": 1,
+  "r4_test_accessed": false,
+  "test_paths_resolved": false,
+  "test_audio_read": false,
+  "test_target_reconstruction": false,
+  "test_inference": false,
+  "test_metrics": false,
+  "checkpoint_sha256": "F54C9C2361AE78E1C37353AEB338A2DE6722C0B1EC4F885F6B52688CE9E88085",
+  "stop_policy_applies": true
+}

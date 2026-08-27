@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "artifact_count": 15,
+  "artifacts": [
+    {
+      "relative_path": "r5_0_addition_distribution_train.json",
+      "byte_size": 6186,
+      "sha256": "3E64EEF6E099B18D91FA3F6D259C29954173DB1EEC93B4F9EFE2C88A4D927D3C"
+    },
+    {
+      "relative_path": "R5_0_ADDITION_FEASIBILITY_REPORT.md",
+      "byte_size": 3591,
+      "sha256": "555F9416C102D40299DE27460E6422649A13556B203C117F6884A28BF8142299"
+    },
+    {
+      "relative_path": "r5_0_annotation_semantics.json",
+      "byte_size": 3856,
+      "sha256": "F4AD6B887D73F0D0E24232ED36AB4F589952D09FBD6A20FE019D348AF3497640"
+    },
+    {
+      "relative_path": "r5_0_compute_report.json",
+      "byte_size": 1339,
+      "sha256": "A03231F889B3A5C289A8D2C882DA1682D81D7E7083EAD43F2F949713B29F24EC"
+    },
+    {
+      "relative_path": "r5_0_ctc_greedy_train_baseline.json",
+      "byte_size": 7301,
+      "sha256": "94D2B4C1151E62D4D78EB7ACD0555FC558F8061A376AAEE1635D2F7C6630323E"
+    },
+    {
+      "relative_path": "r5_0_ctc_hallucination_audit.json",
+      "byte_size": 1401,
+      "sha256": "E8CC455802086A5EF88921DC443ACDA820C5C9778AE93BF4D86CEA77D8DE0E90"
+    },
+    {
+      "relative_path": "r5_0_ctc_reuse_provenance.json",
+      "byte_size": 2559,
+      "sha256": "4F6CF32D375A5FAC998650432E7D3FDB0C6E07626593A1C79A21353A8A115669"
+    },
+    {
+      "relative_path": "r5_0_data_support.json",
+      "byte_size": 1929,
+      "sha256": "D707B64B0AF38C69EF05EAE3DB5E3D56F60E75140CFAB163F9AB5743008DC5C1"
+    },
+    {
+      "relative_path": "r5_0_feasibility_gates.json",
+      "byte_size": 691,
+      "sha256": "F658386B34F3920AE40512A30EA0506DDBBFCCE52C522491BDA47EE5B98A7D0C"
+    },
+    {
+      "relative_path": "r5_0_final_status.json",
+      "byte_size": 570,
+      "sha256": "29F06679FD24F8A2BBBED25B9B57A693D15046444A97BF5D951D575E5850D0B6"
+    },
+    {
+      "relative_path": "r5_0_mfa_runtime_audit.json",
+      "byte_size": 2221,
+      "sha256": "422E6CB30B155312483EC0A85D7283D192FB162EF84588991686AF0118EB0382"
+    },
+    {
+      "relative_path": "R5_0_PREREGISTRATION.json",
+      "byte_size": 14816,
+      "sha256": "14CBFADAC0BE35D53C01DC966A030A71F24EC4D86EA88384BC449544CE12AEF7"
+    },
+    {
+      "relative_path": "r5_0_source_identity.json",
+      "byte_size": 2898,
+      "sha256": "863A6A910E9EEEEFFC37AEAAE0D9CF5C2E12DB81A16F3C362E753CC58CB67CC5"
+    },
+    {
+      "relative_path": "r5_0_split_support.json",
+      "byte_size": 980,
+      "sha256": "F4C1A0C63FCC649550322638B7CFE7AF770337CA36D86EECAA53289E359CD953"
+    },
+    {
+      "relative_path": "run_r5_0_addition_feasibility_audit.py",
+      "byte_size": 45022,
+      "sha256": "F7086A6D2AE13881799B696487BFC2C11072423529FCA29E443732D59F821EB7"
+    }
+  ],
+  "self_excluded": "artifact_hashes.json cannot contain a stable hash of itself",
+  "verification": "HASH_AUDIT_PASS",
+  "failures": []
+}

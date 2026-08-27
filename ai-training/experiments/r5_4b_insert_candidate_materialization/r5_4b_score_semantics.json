@@ -1,0 +1,32 @@
+{
+  "authoritative_scorer_path": "ai-training/experiments/r5_2b_relation_competition/r5_2b_scorer.py",
+  "authoritative_scorer_sha256": "2E44B79828DBB37B312CDC03C897A80803947A48F13864B26C454F3B8ED161A3",
+  "historical_batch_adapter_path": "ai-training/experiments/r5_2b_relation_competition/r5_2b_train_execution_driver_tc1_pa1_env.py",
+  "historical_batch_adapter_sha256": "BC023CFD259406989CAEADABE3EB08AA945B7A612729ECA2C05711E0C387A5D0",
+  "target_nonempty": true,
+  "alignability": {
+    "minimum_steps": "len(H) + adjacent_repeat_count(H)",
+    "alignable": "T >= minimum_steps",
+    "impossible_score": "-infinity",
+    "impossible_ctc_called": false
+  },
+  "ctc": {
+    "blank": 40,
+    "reduction": "none",
+    "zero_infinity": true,
+    "input": "CPU float32 log_softmax evidence copied into a float32 acoustic batch and transferred to the authorized CUDA device",
+    "hypothesis_batch_size": 4096
+  },
+  "raw_score": "negative CTCLoss copied to CPU and converted to numpy.float64",
+  "target_normalization": "RAW_SCORE / numpy.float64(len(H))",
+  "authoritative_field": "authoritative_insert_target_score_value",
+  "authoritative_python_type": "float reconstructed from numpy.float64",
+  "device": "cuda:0 on NVIDIA GeForce RTX 5060 Laptop GPU",
+  "logits_dtype": "torch.float32",
+  "log_probs_dtype": "torch.float32",
+  "ctc_acoustic_dtype": "torch.float32",
+  "persisted_score_binary_type": "IEEE-754 binary64 Python float",
+  "no_precision_or_device_change": true,
+  "tc1_empty_target_policy_applicable": false,
+  "reason_tc1_not_applicable": "INSERT targets are nonempty; TC1 bounded an independent empty-target reduction diagnostic only"
+}

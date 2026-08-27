@@ -1,0 +1,391 @@
+{
+  "all_40": {
+    "AA": {
+      "support": 368,
+      "correctly_decoded_aligned": 15,
+      "substituted": 219,
+      "deleted": 134,
+      "recall": 0.04076086956521739
+    },
+    "AE": {
+      "support": 674,
+      "correctly_decoded_aligned": 282,
+      "substituted": 257,
+      "deleted": 135,
+      "recall": 0.41839762611275966
+    },
+    "AH": {
+      "support": 2465,
+      "correctly_decoded_aligned": 1007,
+      "substituted": 895,
+      "deleted": 563,
+      "recall": 0.40851926977687625
+    },
+    "AO": {
+      "support": 549,
+      "correctly_decoded_aligned": 240,
+      "substituted": 171,
+      "deleted": 138,
+      "recall": 0.4371584699453552
+    },
+    "AW": {
+      "support": 175,
+      "correctly_decoded_aligned": 0,
+      "substituted": 126,
+      "deleted": 49,
+      "recall": 0.0
+    },
+    "AX": {
+      "support": 59,
+      "correctly_decoded_aligned": 0,
+      "substituted": 35,
+      "deleted": 24,
+      "recall": 0.0
+    },
+    "AY": {
+      "support": 507,
+      "correctly_decoded_aligned": 172,
+      "substituted": 247,
+      "deleted": 88,
+      "recall": 0.33925049309664695
+    },
+    "B": {
+      "support": 467,
+      "correctly_decoded_aligned": 190,
+      "substituted": 129,
+      "deleted": 148,
+      "recall": 0.4068522483940043
+    },
+    "CH": {
+      "support": 216,
+      "correctly_decoded_aligned": 71,
+      "substituted": 100,
+      "deleted": 45,
+      "recall": 0.3287037037037037
+    },
+    "D": {
+      "support": 1309,
+      "correctly_decoded_aligned": 577,
+      "substituted": 443,
+      "deleted": 289,
+      "recall": 0.440794499618029
+    },
+    "DH": {
+      "support": 493,
+      "correctly_decoded_aligned": 32,
+      "substituted": 305,
+      "deleted": 156,
+      "recall": 0.06490872210953347
+    },
+    "EH": {
+      "support": 730,
+      "correctly_decoded_aligned": 97,
+      "substituted": 416,
+      "deleted": 217,
+      "recall": 0.13287671232876713
+    },
+    "ER": {
+      "support": 466,
+      "correctly_decoded_aligned": 188,
+      "substituted": 156,
+      "deleted": 122,
+      "recall": 0.4034334763948498
+    },
+    "EY": {
+      "support": 477,
+      "correctly_decoded_aligned": 77,
+      "substituted": 277,
+      "deleted": 123,
+      "recall": 0.16142557651991615
+    },
+    "F": {
+      "support": 624,
+      "correctly_decoded_aligned": 477,
+      "substituted": 81,
+      "deleted": 66,
+      "recall": 0.7644230769230769
+    },
+    "G": {
+      "support": 228,
+      "correctly_decoded_aligned": 3,
+      "substituted": 100,
+      "deleted": 125,
+      "recall": 0.013157894736842105
+    },
+    "HH": {
+      "support": 746,
+      "correctly_decoded_aligned": 535,
+      "substituted": 73,
+      "deleted": 138,
+      "recall": 0.7171581769436998
+    },
+    "IH": {
+      "support": 1502,
+      "correctly_decoded_aligned": 725,
+      "substituted": 402,
+      "deleted": 375,
+      "recall": 0.4826897470039947
+    },
+    "IY": {
+      "support": 1256,
+      "correctly_decoded_aligned": 525,
+      "substituted": 449,
+      "deleted": 282,
+      "recall": 0.4179936305732484
+    },
+    "JH": {
+      "support": 88,
+      "correctly_decoded_aligned": 5,
+      "substituted": 54,
+      "deleted": 29,
+      "recall": 0.056818181818181816
+    },
+    "K": {
+      "support": 646,
+      "correctly_decoded_aligned": 180,
+      "substituted": 244,
+      "deleted": 222,
+      "recall": 0.2786377708978328
+    },
+    "L": {
+      "support": 934,
+      "correctly_decoded_aligned": 120,
+      "substituted": 391,
+      "deleted": 423,
+      "recall": 0.1284796573875803
+    },
+    "M": {
+      "support": 806,
+      "correctly_decoded_aligned": 467,
+      "substituted": 204,
+      "deleted": 135,
+      "recall": 0.5794044665012407
+    },
+    "N": {
+      "support": 1618,
+      "correctly_decoded_aligned": 1005,
+      "substituted": 356,
+      "deleted": 257,
+      "recall": 0.6211372064276885
+    },
+    "NG": {
+      "support": 294,
+      "correctly_decoded_aligned": 4,
+      "substituted": 196,
+      "deleted": 94,
+      "recall": 0.013605442176870748
+    },
+    "OW": {
+      "support": 393,
+      "correctly_decoded_aligned": 9,
+      "substituted": 269,
+      "deleted": 115,
+      "recall": 0.022900763358778626
+    },
+    "OY": {
+      "support": 48,
+      "correctly_decoded_aligned": 0,
+      "substituted": 40,
+      "deleted": 8,
+      "recall": 0.0
+    },
+    "P": {
+      "support": 487,
+      "correctly_decoded_aligned": 126,
+      "substituted": 128,
+      "deleted": 233,
+      "recall": 0.2587268993839836
+    },
+    "R": {
+      "support": 838,
+      "correctly_decoded_aligned": 71,
+      "substituted": 333,
+      "deleted": 434,
+      "recall": 0.08472553699284009
+    },
+    "S": {
+      "support": 1490,
+      "correctly_decoded_aligned": 1199,
+      "substituted": 201,
+      "deleted": 90,
+      "recall": 0.8046979865771812
+    },
+    "SH": {
+      "support": 324,
+      "correctly_decoded_aligned": 236,
+      "substituted": 51,
+      "deleted": 37,
+      "recall": 0.7283950617283951
+    },
+    "T": {
+      "support": 1368,
+      "correctly_decoded_aligned": 837,
+      "substituted": 267,
+      "deleted": 264,
+      "recall": 0.6118421052631579
+    },
+    "TH": {
+      "support": 113,
+      "correctly_decoded_aligned": 2,
+      "substituted": 75,
+      "deleted": 36,
+      "recall": 0.017699115044247787
+    },
+    "UH": {
+      "support": 177,
+      "correctly_decoded_aligned": 0,
+      "substituted": 103,
+      "deleted": 74,
+      "recall": 0.0
+    },
+    "UW": {
+      "support": 486,
+      "correctly_decoded_aligned": 160,
+      "substituted": 211,
+      "deleted": 115,
+      "recall": 0.3292181069958848
+    },
+    "V": {
+      "support": 465,
+      "correctly_decoded_aligned": 150,
+      "substituted": 194,
+      "deleted": 121,
+      "recall": 0.3225806451612903
+    },
+    "W": {
+      "support": 769,
+      "correctly_decoded_aligned": 523,
+      "substituted": 103,
+      "deleted": 143,
+      "recall": 0.6801040312093628
+    },
+    "Y": {
+      "support": 218,
+      "correctly_decoded_aligned": 70,
+      "substituted": 55,
+      "deleted": 93,
+      "recall": 0.3211009174311927
+    },
+    "Z": {
+      "support": 508,
+      "correctly_decoded_aligned": 214,
+      "substituted": 250,
+      "deleted": 44,
+      "recall": 0.421259842519685
+    },
+    "ZH": {
+      "support": 42,
+      "correctly_decoded_aligned": 2,
+      "substituted": 25,
+      "deleted": 15,
+      "recall": 0.047619047619047616
+    }
+  },
+  "rare_AX_OY_ZH": {
+    "AX": {
+      "support": 59,
+      "correctly_decoded_aligned": 0,
+      "substituted": 35,
+      "deleted": 24,
+      "recall": 0.0
+    },
+    "OY": {
+      "support": 48,
+      "correctly_decoded_aligned": 0,
+      "substituted": 40,
+      "deleted": 8,
+      "recall": 0.0
+    },
+    "ZH": {
+      "support": 42,
+      "correctly_decoded_aligned": 2,
+      "substituted": 25,
+      "deleted": 15,
+      "recall": 0.047619047619047616
+    }
+  },
+  "ten_worst_support_at_least_100": [
+    {
+      "phone": "AW",
+      "support": 175,
+      "correctly_decoded_aligned": 0,
+      "substituted": 126,
+      "deleted": 49,
+      "recall": 0.0
+    },
+    {
+      "phone": "UH",
+      "support": 177,
+      "correctly_decoded_aligned": 0,
+      "substituted": 103,
+      "deleted": 74,
+      "recall": 0.0
+    },
+    {
+      "phone": "G",
+      "support": 228,
+      "correctly_decoded_aligned": 3,
+      "substituted": 100,
+      "deleted": 125,
+      "recall": 0.013157894736842105
+    },
+    {
+      "phone": "NG",
+      "support": 294,
+      "correctly_decoded_aligned": 4,
+      "substituted": 196,
+      "deleted": 94,
+      "recall": 0.013605442176870748
+    },
+    {
+      "phone": "TH",
+      "support": 113,
+      "correctly_decoded_aligned": 2,
+      "substituted": 75,
+      "deleted": 36,
+      "recall": 0.017699115044247787
+    },
+    {
+      "phone": "OW",
+      "support": 393,
+      "correctly_decoded_aligned": 9,
+      "substituted": 269,
+      "deleted": 115,
+      "recall": 0.022900763358778626
+    },
+    {
+      "phone": "AA",
+      "support": 368,
+      "correctly_decoded_aligned": 15,
+      "substituted": 219,
+      "deleted": 134,
+      "recall": 0.04076086956521739
+    },
+    {
+      "phone": "DH",
+      "support": 493,
+      "correctly_decoded_aligned": 32,
+      "substituted": 305,
+      "deleted": 156,
+      "recall": 0.06490872210953347
+    },
+    {
+      "phone": "R",
+      "support": 838,
+      "correctly_decoded_aligned": 71,
+      "substituted": 333,
+      "deleted": 434,
+      "recall": 0.08472553699284009
+    },
+    {
+      "phone": "L",
+      "support": 934,
+      "correctly_decoded_aligned": 120,
+      "substituted": 391,
+      "deleted": 423,
+      "recall": 0.1284796573875803
+    }
+  ],
+  "supported_phones_below_0_50_recall": 28,
+  "interpretation": "Broad weakness"
+}

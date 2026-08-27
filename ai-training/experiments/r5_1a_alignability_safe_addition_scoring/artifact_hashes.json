@@ -1,0 +1,41 @@
+{
+  "manifest_type": "R5-1A contract artifact manifest",
+  "hash_algorithm": "SHA-256",
+  "self_excluded": true,
+  "artifact_count": 6,
+  "hash_audit": "HASH_AUDIT_PASS",
+  "artifacts": [
+    {
+      "relative_path": "r5_1a_alignability_semantics.json",
+      "byte_size": 1842,
+      "sha256": "0EF9BC59633759C199361627EA4CF4C41644EBA5C33FA973253AED76D8FDCC1F"
+    },
+    {
+      "relative_path": "R5_1A_DEVELOPMENT_CONTRACT.json",
+      "byte_size": 11840,
+      "sha256": "A6BE2C1C6A09AC0007E9330E44C1C7F45A91CCB76E47EE63ACEB99D0781A1BEB"
+    },
+    {
+      "relative_path": "R5_1A_PREREGISTRATION.md",
+      "byte_size": 5658,
+      "sha256": "2CE9F25B91139B9EA38E2AB552B11C29AA1397B252CE957833D1E3A80D689141"
+    },
+    {
+      "relative_path": "r5_1a_protocol_audit.json",
+      "byte_size": 807,
+      "sha256": "B809808A1D3BE648081D4222687012B027AA7CCD63B54FCC7302611275E1C25A"
+    },
+    {
+      "relative_path": "r5_1a_r5_1_failure_provenance.json",
+      "byte_size": 1409,
+      "sha256": "A452B77CF014A494ED1A1A1E6B7ECDACFA64ADDE884D22A389333573247ACD7C"
+    },
+    {
+      "relative_path": "r5_1a_source_identity.json",
+      "byte_size": 1366,
+      "sha256": "5678CBB1B14C28B1501CC6A50B498B51962FC1237D25CC67288825AD6E3A6905"
+    }
+  ],
+  "preserved_r5_1_contract_sha256": "18697A0C7DED130E122F49A9440AFA2D79B02E8630F2F7583C775F67797DCE77",
+  "preserved_r5_1_technical_manifest_sha256": "A1B3F1F8358BAEC7C72F66743C04AD95B19E52FB7FB55345438840EF4B4F30C8"
+}

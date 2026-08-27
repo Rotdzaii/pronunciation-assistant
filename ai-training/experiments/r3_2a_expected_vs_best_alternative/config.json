@@ -1,0 +1,46 @@
+{
+  "experiment": "R3-2A expected-vs-best-alternative scoring audit",
+  "markers": [
+    "RESEARCH_ONLY",
+    "VALIDATION_ONLY",
+    "NO_TRAINING",
+    "TEST_CLOSED"
+  ],
+  "checkpoint": "ai-training/experiments/r3_1d_observed_phone_seed42_48epochs/R3_1D_observed_phone_40class_seed42_best_validation_macro_f1.pt",
+  "checkpoint_sha256": "5C66860BBC50BA803F5BFE25417DF19BDF34B1C7BE36D507B0DDCA88D767EA5E",
+  "selected_epoch": 47,
+  "validation_speakers": [
+    "ABA",
+    "HKK",
+    "HQTV",
+    "LXC",
+    "MBMPS",
+    "SVBI"
+  ],
+  "validation_rows": 28212,
+  "scores": {
+    "expected_posterior": "P(expected_phone | audio)",
+    "expected_margin": "expected_logit - max(other_phone_logits)",
+    "lower_indicates": "substitution"
+  },
+  "threshold_search": {
+    "scope": "one global scalar per score on validation",
+    "candidates": "below-min sentinel plus every unique observed score; substitution when score <= threshold",
+    "selection": "highest Macro-F1; higher substitution F1; higher substitution precision; lower threshold",
+    "per_phone_threshold": false,
+    "per_speaker_threshold": false
+  },
+  "improvement_gate": {
+    "macro_f1_improvement": 0.05,
+    "or_substitution_f1_improvement": 0.1,
+    "minimum_substitution_recall": 0.5
+  },
+  "calibration_suitability_preregistered": {
+    "scoring_gate_must_pass": true,
+    "roc_auc_min": 0.65,
+    "pr_auc_min": "max(0.20, substitution_prevalence + 0.05)",
+    "every_speaker_substitution_recall_min": 0.3,
+    "per_speaker_macro_f1_range_max": 0.2
+  },
+  "test_audio_accessed": false
+}

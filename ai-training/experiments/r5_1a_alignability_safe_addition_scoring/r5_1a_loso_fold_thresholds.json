@@ -1,0 +1,618 @@
+{
+  "folds": [
+    {
+      "heldout_speaker": "BWC",
+      "calibration_words": 15192,
+      "heldout_words": 1390,
+      "candidate_count": 15194,
+      "finite_unique_scores": 15192,
+      "lower_edge": -4.220603331923486,
+      "upper_edge": 7.644605696201325,
+      "selected_threshold": 0.7137756109237671,
+      "selected_metrics": {
+        "binary_macro_f1": 0.5581549510948778,
+        "addition_f1": 0.14516129032258066,
+        "addition_precision": 0.10300429184549356,
+        "correct_only_false_addition_rate": 0.03754797220205373,
+        "confusion_matrix": [
+          [
+            14272,
+            627
+          ],
+          [
+            221,
+            72
+          ]
+        ]
+      },
+      "heldout_metrics": {
+        "words": 1390,
+        "TP": 10,
+        "FP": 59,
+        "FN": 20,
+        "TN": 1301,
+        "accuracy": 0.9431654676258993,
+        "balanced_accuracy": 0.6449754901960785,
+        "binary_macro_f1": 0.5862767925431112,
+        "addition_precision": 0.14492753623188406,
+        "addition_recall": 0.3333333333333333,
+        "addition_f1": 0.20202020202020202,
+        "nonaddition_f1": 0.9705333830660202,
+        "confusion_matrix": [
+          [
+            1301,
+            59
+          ],
+          [
+            20,
+            10
+          ]
+        ]
+      }
+    },
+    {
+      "heldout_speaker": "EBVS",
+      "calibration_words": 15210,
+      "heldout_words": 1372,
+      "candidate_count": 15212,
+      "finite_unique_scores": 15210,
+      "lower_edge": -4.220603331923486,
+      "upper_edge": 6.05150592327118,
+      "selected_threshold": 0.9448950631277899,
+      "selected_metrics": {
+        "binary_macro_f1": 0.5568249517540808,
+        "addition_f1": 0.13445378151260504,
+        "addition_precision": 0.10596026490066225,
+        "correct_only_false_addition_rate": 0.02396199132410659,
+        "confusion_matrix": [
+          [
+            14544,
+            405
+          ],
+          [
+            213,
+            48
+          ]
+        ]
+      },
+      "heldout_metrics": {
+        "words": 1372,
+        "TP": 9,
+        "FP": 36,
+        "FN": 53,
+        "TN": 1274,
+        "accuracy": 0.935131195335277,
+        "balanced_accuracy": 0.5588401871460231,
+        "binary_macro_f1": 0.5672369125209544,
+        "addition_precision": 0.2,
+        "addition_recall": 0.14516129032258066,
+        "addition_f1": 0.16822429906542055,
+        "nonaddition_f1": 0.9662495259764883,
+        "confusion_matrix": [
+          [
+            1274,
+            36
+          ],
+          [
+            53,
+            9
+          ]
+        ]
+      }
+    },
+    {
+      "heldout_speaker": "HJK",
+      "calibration_words": 15181,
+      "heldout_words": 1401,
+      "candidate_count": 15183,
+      "finite_unique_scores": 15181,
+      "lower_edge": -4.220603331923486,
+      "upper_edge": 7.644605696201325,
+      "selected_threshold": 0.7485884030659993,
+      "selected_metrics": {
+        "binary_macro_f1": 0.5642035953119973,
+        "addition_f1": 0.15694164989939638,
+        "addition_precision": 0.11504424778761062,
+        "correct_only_false_addition_rate": 0.03591130340724716,
+        "confusion_matrix": [
+          [
+            14265,
+            600
+          ],
+          [
+            238,
+            78
+          ]
+        ]
+      },
+      "heldout_metrics": {
+        "words": 1401,
+        "TP": 0,
+        "FP": 41,
+        "FN": 7,
+        "TN": 1353,
+        "accuracy": 0.9657387580299786,
+        "balanced_accuracy": 0.4852941176470588,
+        "binary_macro_f1": 0.4912854030501089,
+        "addition_precision": 0.0,
+        "addition_recall": 0.0,
+        "addition_f1": 0.0,
+        "nonaddition_f1": 0.9825708061002179,
+        "confusion_matrix": [
+          [
+            1353,
+            41
+          ],
+          [
+            7,
+            0
+          ]
+        ]
+      }
+    },
+    {
+      "heldout_speaker": "NCC",
+      "calibration_words": 15174,
+      "heldout_words": 1408,
+      "candidate_count": 15176,
+      "finite_unique_scores": 15174,
+      "lower_edge": -4.220603331923486,
+      "upper_edge": 7.644605696201325,
+      "selected_threshold": 0.7137756109237671,
+      "selected_metrics": {
+        "binary_macro_f1": 0.562877077670591,
+        "addition_f1": 0.15415821501014199,
+        "addition_precision": 0.11046511627906977,
+        "correct_only_false_addition_rate": 0.03690741329939548,
+        "confusion_matrix": [
+          [
+            14264,
+            612
+          ],
+          [
+            222,
+            76
+          ]
+        ]
+      },
+      "heldout_metrics": {
+        "words": 1408,
+        "TP": 6,
+        "FP": 74,
+        "FN": 19,
+        "TN": 1309,
+        "accuracy": 0.9339488636363636,
+        "balanced_accuracy": 0.5932465654374548,
+        "binary_macro_f1": 0.5399905148337462,
+        "addition_precision": 0.075,
+        "addition_recall": 0.24,
+        "addition_f1": 0.11428571428571428,
+        "nonaddition_f1": 0.965695315381778,
+        "confusion_matrix": [
+          [
+            1309,
+            74
+          ],
+          [
+            19,
+            6
+          ]
+        ]
+      }
+    },
+    {
+      "heldout_speaker": "NJS",
+      "calibration_words": 15176,
+      "heldout_words": 1406,
+      "candidate_count": 15178,
+      "finite_unique_scores": 15176,
+      "lower_edge": -4.220603331923486,
+      "upper_edge": 7.644605696201325,
+      "selected_threshold": 0.7485884030659993,
+      "selected_metrics": {
+        "binary_macro_f1": 0.56436218310095,
+        "addition_f1": 0.1556503198294243,
+        "addition_precision": 0.11317829457364341,
+        "correct_only_false_addition_rate": 0.03429297205757832,
+        "confusion_matrix": [
+          [
+            14311,
+            572
+          ],
+          [
+            220,
+            73
+          ]
+        ]
+      },
+      "heldout_metrics": {
+        "words": 1406,
+        "TP": 5,
+        "FP": 69,
+        "FN": 25,
+        "TN": 1307,
+        "accuracy": 0.9331436699857752,
+        "balanced_accuracy": 0.5582606589147286,
+        "binary_macro_f1": 0.5307209408021816,
+        "addition_precision": 0.06756756756756757,
+        "addition_recall": 0.16666666666666666,
+        "addition_f1": 0.09615384615384615,
+        "nonaddition_f1": 0.965288035450517,
+        "confusion_matrix": [
+          [
+            1307,
+            69
+          ],
+          [
+            25,
+            5
+          ]
+        ]
+      }
+    },
+    {
+      "heldout_speaker": "PNV",
+      "calibration_words": 15187,
+      "heldout_words": 1395,
+      "candidate_count": 15189,
+      "finite_unique_scores": 15187,
+      "lower_edge": -4.220603331923486,
+      "upper_edge": 7.644605696201325,
+      "selected_threshold": 0.7485884030659993,
+      "selected_metrics": {
+        "binary_macro_f1": 0.559930442023032,
+        "addition_f1": 0.1483739837398374,
+        "addition_precision": 0.10814814814814815,
+        "correct_only_false_addition_rate": 0.03574778530484628,
+        "confusion_matrix": [
+          [
+            14276,
+            602
+          ],
+          [
+            236,
+            73
+          ]
+        ]
+      },
+      "heldout_metrics": {
+        "words": 1395,
+        "TP": 5,
+        "FP": 39,
+        "FN": 9,
+        "TN": 1342,
+        "accuracy": 0.9655913978494624,
+        "balanced_accuracy": 0.6644512258197993,
+        "binary_macro_f1": 0.5774221234916949,
+        "addition_precision": 0.11363636363636363,
+        "addition_recall": 0.35714285714285715,
+        "addition_f1": 0.17241379310344826,
+        "nonaddition_f1": 0.9824304538799414,
+        "confusion_matrix": [
+          [
+            1342,
+            39
+          ],
+          [
+            9,
+            5
+          ]
+        ]
+      }
+    },
+    {
+      "heldout_speaker": "RRBI",
+      "calibration_words": 15174,
+      "heldout_words": 1408,
+      "candidate_count": 15176,
+      "finite_unique_scores": 15174,
+      "lower_edge": -4.220603331923486,
+      "upper_edge": 7.644605696201325,
+      "selected_threshold": 0.7485884030659993,
+      "selected_metrics": {
+        "binary_macro_f1": 0.5673090776656288,
+        "addition_f1": 0.16176470588235298,
+        "addition_precision": 0.11526946107784432,
+        "correct_only_false_addition_rate": 0.03518656319761879,
+        "confusion_matrix": [
+          [
+            14299,
+            591
+          ],
+          [
+            207,
+            77
+          ]
+        ]
+      },
+      "heldout_metrics": {
+        "words": 1408,
+        "TP": 1,
+        "FP": 50,
+        "FN": 38,
+        "TN": 1319,
+        "accuracy": 0.9375,
+        "balanced_accuracy": 0.4945590080725216,
+        "binary_macro_f1": 0.49497024537376705,
+        "addition_precision": 0.0196078431372549,
+        "addition_recall": 0.02564102564102564,
+        "addition_f1": 0.02222222222222222,
+        "nonaddition_f1": 0.9677182685253118,
+        "confusion_matrix": [
+          [
+            1319,
+            50
+          ],
+          [
+            38,
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "heldout_speaker": "TLV",
+      "calibration_words": 15199,
+      "heldout_words": 1383,
+      "candidate_count": 15201,
+      "finite_unique_scores": 15199,
+      "lower_edge": -4.220603331923486,
+      "upper_edge": 7.644605696201325,
+      "selected_threshold": 0.7569018363952638,
+      "selected_metrics": {
+        "binary_macro_f1": 0.5632729770699201,
+        "addition_f1": 0.15318230852211434,
+        "addition_precision": 0.11396468699839486,
+        "correct_only_false_addition_rate": 0.03376172990616075,
+        "confusion_matrix": [
+          [
+            14343,
+            552
+          ],
+          [
+            233,
+            71
+          ]
+        ]
+      },
+      "heldout_metrics": {
+        "words": 1383,
+        "TP": 6,
+        "FP": 79,
+        "FN": 13,
+        "TN": 1285,
+        "accuracy": 0.9334779464931309,
+        "balanced_accuracy": 0.6289357925605803,
+        "binary_macro_f1": 0.5404120672715714,
+        "addition_precision": 0.07058823529411765,
+        "addition_recall": 0.3157894736842105,
+        "addition_f1": 0.11538461538461539,
+        "nonaddition_f1": 0.9654395191585274,
+        "confusion_matrix": [
+          [
+            1285,
+            79
+          ],
+          [
+            13,
+            6
+          ]
+        ]
+      }
+    },
+    {
+      "heldout_speaker": "TNI",
+      "calibration_words": 15237,
+      "heldout_words": 1345,
+      "candidate_count": 15239,
+      "finite_unique_scores": 15237,
+      "lower_edge": -4.220603331923486,
+      "upper_edge": 7.644605696201325,
+      "selected_threshold": 0.7485884030659993,
+      "selected_metrics": {
+        "binary_macro_f1": 0.5649364002868504,
+        "addition_f1": 0.1580547112462006,
+        "addition_precision": 0.11659192825112108,
+        "correct_only_false_addition_rate": 0.03481686541737649,
+        "confusion_matrix": [
+          [
+            14328,
+            591
+          ],
+          [
+            240,
+            78
+          ]
+        ]
+      },
+      "heldout_metrics": {
+        "words": 1345,
+        "TP": 0,
+        "FP": 50,
+        "FN": 5,
+        "TN": 1290,
+        "accuracy": 0.9591078066914498,
+        "balanced_accuracy": 0.48134328358208955,
+        "binary_macro_f1": 0.48956356736242884,
+        "addition_precision": 0.0,
+        "addition_recall": 0.0,
+        "addition_f1": 0.0,
+        "nonaddition_f1": 0.9791271347248577,
+        "confusion_matrix": [
+          [
+            1290,
+            50
+          ],
+          [
+            5,
+            0
+          ]
+        ]
+      }
+    },
+    {
+      "heldout_speaker": "YBAA",
+      "calibration_words": 15284,
+      "heldout_words": 1298,
+      "candidate_count": 15286,
+      "finite_unique_scores": 15284,
+      "lower_edge": -4.220603331923486,
+      "upper_edge": 7.644605696201325,
+      "selected_threshold": 0.7485884030659993,
+      "selected_metrics": {
+        "binary_macro_f1": 0.5545085072959908,
+        "addition_f1": 0.13743589743589743,
+        "addition_precision": 0.09882005899705015,
+        "correct_only_false_addition_rate": 0.03652474605575967,
+        "confusion_matrix": [
+          [
+            14376,
+            611
+          ],
+          [
+            230,
+            67
+          ]
+        ]
+      },
+      "heldout_metrics": {
+        "words": 1298,
+        "TP": 11,
+        "FP": 30,
+        "FN": 15,
+        "TN": 1242,
+        "accuracy": 0.9653312788906009,
+        "balanced_accuracy": 0.6997460087082729,
+        "binary_macro_f1": 0.655282307324587,
+        "addition_precision": 0.2682926829268293,
+        "addition_recall": 0.4230769230769231,
+        "addition_f1": 0.3283582089552239,
+        "nonaddition_f1": 0.9822064056939502,
+        "confusion_matrix": [
+          [
+            1242,
+            30
+          ],
+          [
+            15,
+            11
+          ]
+        ]
+      }
+    },
+    {
+      "heldout_speaker": "YKWK",
+      "calibration_words": 15200,
+      "heldout_words": 1382,
+      "candidate_count": 15202,
+      "finite_unique_scores": 15200,
+      "lower_edge": -4.220603331923486,
+      "upper_edge": 7.644605696201325,
+      "selected_threshold": 0.7485884030659993,
+      "selected_metrics": {
+        "binary_macro_f1": 0.5622169384057971,
+        "addition_f1": 0.15208333333333335,
+        "addition_precision": 0.10977443609022557,
+        "correct_only_false_addition_rate": 0.03499312823765726,
+        "confusion_matrix": [
+          [
+            14313,
+            592
+          ],
+          [
+            222,
+            73
+          ]
+        ]
+      },
+      "heldout_metrics": {
+        "words": 1382,
+        "TP": 5,
+        "FP": 49,
+        "FN": 23,
+        "TN": 1305,
+        "accuracy": 0.9479015918958031,
+        "balanced_accuracy": 0.5711911795737498,
+        "binary_macro_f1": 0.5475527909641512,
+        "addition_precision": 0.09259259259259259,
+        "addition_recall": 0.17857142857142858,
+        "addition_f1": 0.12195121951219512,
+        "nonaddition_f1": 0.9731543624161073,
+        "confusion_matrix": [
+          [
+            1305,
+            49
+          ],
+          [
+            23,
+            5
+          ]
+        ]
+      }
+    },
+    {
+      "heldout_speaker": "ZHAA",
+      "calibration_words": 15188,
+      "heldout_words": 1394,
+      "candidate_count": 15190,
+      "finite_unique_scores": 15188,
+      "lower_edge": -4.177060440182687,
+      "upper_edge": 7.644605696201325,
+      "selected_threshold": 0.7137756109237671,
+      "selected_metrics": {
+        "binary_macro_f1": 0.5559972181085114,
+        "addition_f1": 0.14067278287461776,
+        "addition_precision": 0.09913793103448276,
+        "correct_only_false_addition_rate": 0.03740409207161125,
+        "confusion_matrix": [
+          [
+            14276,
+            627
+          ],
+          [
+            216,
+            69
+          ]
+        ]
+      },
+      "heldout_metrics": {
+        "words": 1394,
+        "TP": 13,
+        "FP": 59,
+        "FN": 25,
+        "TN": 1297,
+        "accuracy": 0.93974175035868,
+        "balanced_accuracy": 0.6492974693370595,
+        "binary_macro_f1": 0.6024984724013851,
+        "addition_precision": 0.18055555555555555,
+        "addition_recall": 0.34210526315789475,
+        "addition_f1": 0.2363636363636364,
+        "nonaddition_f1": 0.9686333084391338,
+        "confusion_matrix": [
+          [
+            1297,
+            59
+          ],
+          [
+            25,
+            13
+          ]
+        ]
+      }
+    }
+  ],
+  "thresholds_in_speaker_order": [
+    0.7137756109237671,
+    0.9448950631277899,
+    0.7485884030659993,
+    0.7137756109237671,
+    0.7485884030659993,
+    0.7485884030659993,
+    0.7485884030659993,
+    0.7569018363952638,
+    0.7485884030659993,
+    0.7485884030659993,
+    0.7485884030659993,
+    0.7137756109237671
+  ]
+}

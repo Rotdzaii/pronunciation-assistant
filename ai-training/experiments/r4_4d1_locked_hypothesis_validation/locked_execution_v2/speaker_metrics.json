@@ -1,0 +1,74 @@
+{
+  "ABA": {
+    "word_count": 1208,
+    "expected_phone_rows": 3923,
+    "deletion_support": 29,
+    "binary_macro_f1": 0.5503086807242398,
+    "balanced_accuracy": 0.6559782512441776,
+    "deletion_precision": 0.07246376811594203,
+    "deletion_recall": 0.3448275862068966,
+    "deletion_f1": 0.11976047904191617,
+    "correct_false_deletion": 0.03291958985429034,
+    "substitution_false_deletion": 0.031914893617021274
+  },
+  "HKK": {
+    "word_count": 1351,
+    "expected_phone_rows": 4701,
+    "deletion_support": 99,
+    "binary_macro_f1": 0.5891305948957497,
+    "balanced_accuracy": 0.6547120487798453,
+    "deletion_precision": 0.14705882352941177,
+    "deletion_recall": 0.35353535353535354,
+    "deletion_f1": 0.20771513353115728,
+    "correct_false_deletion": 0.0458758109360519,
+    "substitution_false_deletion": 0.017482517482517484
+  },
+  "HQTV": {
+    "word_count": 1335,
+    "expected_phone_rows": 4665,
+    "deletion_support": 444,
+    "binary_macro_f1": 0.6953883889825013,
+    "balanced_accuracy": 0.7053343322000039,
+    "deletion_precision": 0.4291497975708502,
+    "deletion_recall": 0.4774774774774775,
+    "deletion_f1": 0.4520255863539446,
+    "correct_false_deletion": 0.06562054208273894,
+    "substitution_false_deletion": 0.07262569832402235
+  },
+  "LXC": {
+    "word_count": 1351,
+    "expected_phone_rows": 4703,
+    "deletion_support": 209,
+    "binary_macro_f1": 0.6368385420314371,
+    "balanced_accuracy": 0.6854934702942573,
+    "deletion_precision": 0.25139664804469275,
+    "deletion_recall": 0.430622009569378,
+    "deletion_f1": 0.3174603174603175,
+    "correct_false_deletion": 0.056657963446475196,
+    "substitution_false_deletion": 0.07680722891566265
+  },
+  "MBMPS": {
+    "word_count": 1372,
+    "expected_phone_rows": 4781,
+    "deletion_support": 59,
+    "binary_macro_f1": 0.6251472478046691,
+    "balanced_accuracy": 0.7399424977925182,
+    "deletion_precision": 0.18181818181818182,
+    "deletion_recall": 0.5084745762711864,
+    "deletion_f1": 0.26785714285714285,
+    "correct_false_deletion": 0.03018156095260552,
+    "substitution_false_deletion": 0.014553014553014554
+  },
+  "SVBI": {
+    "word_count": 1111,
+    "expected_phone_rows": 3564,
+    "deletion_support": 74,
+    "binary_macro_f1": 0.5769723766727677,
+    "balanced_accuracy": 0.64456361805932,
+    "deletion_precision": 0.1282051282051282,
+    "deletion_recall": 0.33783783783783783,
+    "deletion_f1": 0.18587360594795538,
+    "correct_false_deletion": 0.05030053780449225,
+    "substitution_false_deletion": 0.03343465045592705
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "status": "R5_1_ADDITION_SCORING_GENERATION_CLOSED_NOT_CONFIRMED",
+  "causal_history_preserved": true,
+  "stages": [
+    {
+      "stage": "R5-0",
+      "type": "data and runtime feasibility",
+      "question": "Are addition data, runtime representation, and frozen CTC diagnostics sufficient to justify research?",
+      "evidence": {
+        "global_clean_addition_events": 1044,
+        "TRAIN_events": 423,
+        "VALIDATION_events": 296,
+        "TEST_aggregate_events": 325,
+        "speaker_support_gates": "PASS",
+        "greedy_ctc_directional_signal": true,
+        "greedy_performance": "weak",
+        "mfa_arbitrary_extra_phone_slot": false
+      },
+      "decision": "R5_0_PASS_EXISTING_CTC_FEASIBLE"
+    },
+    {
+      "stage": "R5-1",
+      "type": "initial exact insertion-scoring generation",
+      "question": "Can exact TARGET-normalized INSERT-vs-KEEP scoring improve on greedy insertion output?",
+      "evidence": {
+        "impossible_insert_hypotheses": 196,
+        "affected_words": 65,
+        "scientific_metrics_produced": false,
+        "gates_evaluated": 0
+      },
+      "decision": "R5_1_EXECUTION_TECHNICAL_FAILURE_CTC_ALIGNABILITY",
+      "interpretation": "pre-metric technical stop, not scientific failure"
+    },
+    {
+      "stage": "R5-1A",
+      "type": "alignability-safe TRAIN development",
+      "change_before_metrics": "CTC-impossible targets receive TARGET_SCORE=-infinity",
+      "population": {
+        "words": 16582,
+        "positive": 323,
+        "negative": 16259
+      },
+      "evidence": {
+        "development_gates_passed": 6,
+        "development_gates_total": 6,
+        "robust_theta": 0.7485884030659993
+      },
+      "decision": "R5_1A_INSERTION_HYPOTHESIS_SCORING_DEVELOPMENT_PASS"
+    },
+    {
+      "stage": "R5-1B",
+      "type": "one fixed-threshold iterative VALIDATION transfer",
+      "validation_calibration": false,
+      "evidence": {
+        "transfer_gates_passed": 4,
+        "transfer_gates_total": 6,
+        "failed_gates": [
+          "G3 Binary Macro-F1",
+          "G5 correct-only FAR"
+        ]
+      },
+      "decision": "R5_1B_VALIDATION_TRANSFER_NOT_CONFIRMED"
+    },
+    {
+      "stage": "R5-1C",
+      "type": "post-hoc exploratory failure audit",
+      "inference": false,
+      "recalibration": false,
+      "evidence": {
+        "validation_speakers_over_correct_far_reference": 5,
+        "validation_speakers": 6
+      },
+      "interpretation": "MIXED_CALIBRATION_AND_CLASS_OVERLAP",
+      "decision": "R5_1C_POSTHOC_FAILURE_AUDIT_COMPLETE",
+      "scientific_status_override": false
+    },
+    {
+      "stage": "R5-1D",
+      "type": "generation closure",
+      "decision": "R5_1_ADDITION_SCORING_GENERATION_CLOSED_NOT_CONFIRMED"
+    }
+  ]
+}

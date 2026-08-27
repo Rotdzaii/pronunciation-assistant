@@ -1,0 +1,14 @@
+{
+  "launcher_identity": "R5_2B_TC1_PA1_ENV_EXPLICIT_INTERPRETER_LAUNCH",
+  "correction_category": "EXECUTION_ENVIRONMENT_SELECTION_ONLY",
+  "old_interpreter": "C:\\Users\\Admin\\miniforge3\\python.exe",
+  "old_interpreter_failure": "ModuleNotFoundError: No module named 'torch'",
+  "authorized_interpreter": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant\\ai-training\\.venv\\Scripts\\python.exe",
+  "driver": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r5_2b_relation_competition\\r5_2b_train_execution_driver_tc1_pa1_env.py",
+  "arguments": ["--execute"],
+  "canonical_command": "& 'C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant\\ai-training\\.venv\\Scripts\\python.exe' 'C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r5_2b_relation_competition\\r5_2b_train_execution_driver_tc1_pa1_env.py' --execute",
+  "depends_on_PATH": false,
+  "depends_on_active_conda": false,
+  "automatic_fallback": false,
+  "scientific_semantics_changed": false
+}

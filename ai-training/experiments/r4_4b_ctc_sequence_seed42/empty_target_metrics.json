@@ -1,0 +1,131 @@
+{
+  "words": 15,
+  "empty_decodes": 4,
+  "hallucinated_phone_count": 14,
+  "decoded_length_distribution": {
+    "count": 15,
+    "min": 0.0,
+    "median": 1.0,
+    "mean": 0.9333333333333333,
+    "p90": 2.0,
+    "p95": 2.0,
+    "max": 2.0
+  },
+  "details": [
+    {
+      "word_id": "HKK/arctic_a0106/4",
+      "word": "had",
+      "decoded": [
+        "IH",
+        "T"
+      ],
+      "decoded_length": 2
+    },
+    {
+      "word_id": "HKK/arctic_a0120/7",
+      "word": "a",
+      "decoded": [],
+      "decoded_length": 0
+    },
+    {
+      "word_id": "HQTV/arctic_a0019/5",
+      "word": "the",
+      "decoded": [
+        "D"
+      ],
+      "decoded_length": 1
+    },
+    {
+      "word_id": "HQTV/arctic_a0052/2",
+      "word": "a",
+      "decoded": [
+        "S"
+      ],
+      "decoded_length": 1
+    },
+    {
+      "word_id": "HQTV/arctic_a0108/8",
+      "word": "and",
+      "decoded": [
+        "IH",
+        "N"
+      ],
+      "decoded_length": 2
+    },
+    {
+      "word_id": "HQTV/arctic_a0111/4",
+      "word": "and",
+      "decoded": [
+        "AH"
+      ],
+      "decoded_length": 1
+    },
+    {
+      "word_id": "HQTV/arctic_a0127/2",
+      "word": "a",
+      "decoded": [],
+      "decoded_length": 0
+    },
+    {
+      "word_id": "HQTV/arctic_a0225/8",
+      "word": "in",
+      "decoded": [
+        "HH"
+      ],
+      "decoded_length": 1
+    },
+    {
+      "word_id": "HQTV/arctic_a0260/2",
+      "word": "his",
+      "decoded": [
+        "IY",
+        "S"
+      ],
+      "decoded_length": 2
+    },
+    {
+      "word_id": "HQTV/arctic_a0271/6",
+      "word": "of",
+      "decoded": [
+        "T"
+      ],
+      "decoded_length": 1
+    },
+    {
+      "word_id": "HQTV/arctic_a0459/4",
+      "word": "the",
+      "decoded": [],
+      "decoded_length": 0
+    },
+    {
+      "word_id": "HQTV/arctic_b0393/0",
+      "word": "i",
+      "decoded": [
+        "HH"
+      ],
+      "decoded_length": 1
+    },
+    {
+      "word_id": "HQTV/arctic_b0469/4",
+      "word": "of",
+      "decoded": [],
+      "decoded_length": 0
+    },
+    {
+      "word_id": "LXC/arctic_b0400/4",
+      "word": "the",
+      "decoded": [
+        "AH"
+      ],
+      "decoded_length": 1
+    },
+    {
+      "word_id": "MBMPS/arctic_a0139/3",
+      "word": "that",
+      "decoded": [
+        "AH"
+      ],
+      "decoded_length": 1
+    }
+  ]
+}

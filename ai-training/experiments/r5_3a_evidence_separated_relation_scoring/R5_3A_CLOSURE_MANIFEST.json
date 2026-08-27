@@ -1,0 +1,58 @@
+{
+  "stage": "R5-3A development closure and documentation",
+  "status": "R5_3A_EVIDENCE_SEPARATION_GENERATION_CLOSED_NOT_CONFIRMED",
+  "frozen_execution_manifest_sha256": "1EC6DED9ECA6617AE683C9EF316B4435A11F6898B380E4592D779061BF73CE51",
+  "manifest_self_excluded": true,
+  "artifact_count": 8,
+  "artifacts": [
+    {
+      "repository": "research_worktree",
+      "relative_path": "ai-training/docs/R5_ADDITION_RESEARCH_HISTORY.md",
+      "byte_size": 25127,
+      "sha256": "24B4300F730408B7149727AC0EB1588B48C88D350E0CD2D0570F63FFEBFBD3F9"
+    },
+    {
+      "repository": "research_worktree",
+      "relative_path": "ai-training/docs/R5_ADDITION_THESIS_SUMMARY.md",
+      "byte_size": 12118,
+      "sha256": "A391C1A2E01C16835F6AFED66DBF3724BA193855DC9530C7E22B5BCC4D3C8B82"
+    },
+    {
+      "repository": "research_worktree",
+      "relative_path": "ai-training/docs/AI_CURRENT_STATUS_AND_ROADMAP.md",
+      "byte_size": 10475,
+      "sha256": "14BD1DE1761B7E0E0E83996FB504D1B60A636990378D3FF3D062351AC93492A4"
+    },
+    {
+      "repository": "main_repository",
+      "relative_path": "docs/ai-worker-v2/AI_WORKER_V2_DEVELOPMENT.md",
+      "byte_size": 63947,
+      "sha256": "3765A2E492BD73BA5ED4C7FBDF1B17B4DA6B274C95B7249A47CEF85663A19A7C"
+    },
+    {
+      "repository": "research_worktree",
+      "relative_path": "ai-training/experiments/r5_3a_evidence_separated_relation_scoring/R5_3A_CLOSURE_CONCLUSION.md",
+      "byte_size": 1902,
+      "sha256": "5D1046DA0D95B4DB86FBF6BDFFDA5713EA8B10B6568FCF4E53DB83B3572A3A2B"
+    },
+    {
+      "repository": "research_worktree",
+      "relative_path": "ai-training/experiments/r5_3a_evidence_separated_relation_scoring/r5_3a_closure_summary.json",
+      "byte_size": 1841,
+      "sha256": "23091A5F50572961AD74A7398F0FA058A2F93E380924EE3CC02123CD45181266"
+    },
+    {
+      "repository": "research_worktree",
+      "relative_path": "ai-training/experiments/r5_3a_evidence_separated_relation_scoring/r5_3a_closure_protocol_audit.json",
+      "byte_size": 422,
+      "sha256": "0E459B6027734A42E765ADBC0FBA134DBD02067843A7B2EC5E0482630F099D11"
+    },
+    {
+      "repository": "research_worktree",
+      "relative_path": "ai-training/experiments/r5_3a_evidence_separated_relation_scoring/r5_3a_final_closed_status.json",
+      "byte_size": 483,
+      "sha256": "F50D178155B509E054A3F7C791807E99A3595808A284ECC60917340A5DB024ED"
+    }
+  ],
+  "hash_audit": "HASH_AUDIT_PASS"
+}

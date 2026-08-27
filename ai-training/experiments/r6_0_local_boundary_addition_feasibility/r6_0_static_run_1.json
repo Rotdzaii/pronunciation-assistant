@@ -1,0 +1,119 @@
+{
+  "checkpoint_inference": false,
+  "checkpoint_loaded": false,
+  "deterministic_evidence": {
+    "feature_values": {
+      "adjacent_expected_phone_ids": [
+        1,
+        2
+      ],
+      "mean_nonblank_mass": 0.9602171731724715,
+      "mean_nonblank_mass_from_phone_sum": 0.960217201498987,
+      "mean_unexpected_phone_mass": 0.9275149651839456,
+      "peak_unexpected_frame_index": 1,
+      "peak_unexpected_phone_index": 39,
+      "peak_unexpected_phone_posterior": 0.06716762483119965,
+      "window_indices": [
+        0,
+        1,
+        2
+      ]
+    },
+    "label_event_counts": [
+      0,
+      1,
+      0,
+      2
+    ],
+    "label_values": [
+      false,
+      true,
+      false,
+      true
+    ],
+    "selected_indices": {
+      "exact_center": 3,
+      "lower": 3,
+      "tie": 3,
+      "upper": 4
+    },
+    "windows": {
+      "0": [
+        0,
+        1,
+        2
+      ],
+      "1": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "3": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "4": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "5": [
+        3,
+        4,
+        5
+      ]
+    }
+  },
+  "errors": [],
+  "failures": [],
+  "passed": 36,
+  "real_train_performance": false,
+  "stage": "R6-0 synthetic static verification",
+  "status": "PASS",
+  "test_accessed": false,
+  "test_count": 36,
+  "test_ids": [
+    "__main__.ContractAndDistinctnessTests.test_34_structural_expectations_unchanged",
+    "__main__.ContractAndDistinctnessTests.test_35_future_gates_unchanged",
+    "__main__.ContractAndDistinctnessTests.test_36_no_r5_scoring_dependency",
+    "__main__.FeatureTests.test_18_posterior_mass",
+    "__main__.FeatureTests.test_19_adjacent_sets",
+    "__main__.FeatureTests.test_20_primary_formula_and_exclusions",
+    "__main__.FeatureTests.test_21_blank_excluded_from_primary",
+    "__main__.FeatureTests.test_22_peak_unexpected_value_and_identity",
+    "__main__.FeatureTests.test_23_peak_tie_is_first_frame_then_lower_phone",
+    "__main__.FeatureTests.test_24_nonblank_formulations_agree",
+    "__main__.FeatureTests.test_25_exact_feature_surface",
+    "__main__.FeatureTests.test_26_local_window_only",
+    "__main__.IdentityTests.test_01_r6_manifest_hash",
+    "__main__.IdentityTests.test_02_r6_manifest_entries",
+    "__main__.LabelTests.test_27_correct_word_all_negative",
+    "__main__.LabelTests.test_28_single_addition",
+    "__main__.LabelTests.test_29_multiple_distinct_boundaries",
+    "__main__.LabelTests.test_30_multiple_events_one_boundary",
+    "__main__.LabelTests.test_31_mixed_substitution_does_not_create_positive",
+    "__main__.LabelTests.test_32_mixed_deletion_addition_uses_event_only",
+    "__main__.LabelTests.test_33_synthetic_event_coverage_semantics",
+    "__main__.TimeMappingTests.test_03_gold_boundary_formula",
+    "__main__.TimeMappingTests.test_04_exact_center",
+    "__main__.TimeMappingTests.test_05_closer_to_lower",
+    "__main__.TimeMappingTests.test_06_closer_to_upper",
+    "__main__.TimeMappingTests.test_07_exact_tie_selects_lower",
+    "__main__.TimeMappingTests.test_08_near_start",
+    "__main__.TimeMappingTests.test_09_near_final_frame",
+    "__main__.TimeMappingTests.test_10_time_reference_subtracts_once",
+    "__main__.TimeMappingTests.test_11_seconds_milliseconds_mismatch_rejected",
+    "__main__.TimeMappingTests.test_12_outside_word_rejected",
+    "__main__.WindowTests.test_13_window_k0",
+    "__main__.WindowTests.test_14_window_k1",
+    "__main__.WindowTests.test_15_window_interior",
+    "__main__.WindowTests.test_16_window_t_minus_2",
+    "__main__.WindowTests.test_17_window_t_minus_1"
+  ],
+  "validation_accessed": false
+}

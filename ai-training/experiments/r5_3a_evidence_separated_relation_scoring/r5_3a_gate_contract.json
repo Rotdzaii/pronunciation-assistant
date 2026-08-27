@@ -1,0 +1,53 @@
+{
+  "stage": "R5-3A frozen development gates",
+  "status": "FROZEN",
+  "all_required": true,
+  "full_precision": true,
+  "primary_comparator": "R5-1A frozen TRAIN development",
+  "gates": {
+    "G1": {
+      "metric": "Addition vs all-negative ROC-AUC",
+      "operator": ">=",
+      "threshold": 0.7
+    },
+    "G2": {
+      "metric": "Addition vs correct-only ROC-AUC",
+      "operator": ">=",
+      "threshold": 0.7
+    },
+    "G3": {
+      "metric": "OOF Binary Macro-F1",
+      "operator": ">",
+      "threshold": 0.5551978767901391
+    },
+    "G4": {
+      "metric": "OOF Addition F1",
+      "operator": ">",
+      "threshold": 0.1379980563654033
+    },
+    "G5": {
+      "metric": "correct-only false-addition rate",
+      "operator": "<=",
+      "threshold": 0.03491295938104449
+    },
+    "G6": {
+      "metric": "substitution-negative false-addition rate",
+      "operator": "<",
+      "threshold": 0.05016116035455278
+    },
+    "G7": {
+      "metric": "deletion-negative false-addition rate",
+      "operator": "<",
+      "threshold": 0.03349964362081254
+    },
+    "G8": {
+      "metric": "exact-event F1",
+      "operator": ">=",
+      "threshold": 0.04389312977099236
+    }
+  },
+  "pass_status": "R5_3A_EVIDENCE_SEPARATION_DEVELOPMENT_PASS",
+  "not_confirmed_status": "R5_3A_EVIDENCE_SEPARATION_DEVELOPMENT_NOT_CONFIRMED",
+  "gate_modification_after_metrics": false,
+  "R5_2B_is_primary_comparator": false
+}

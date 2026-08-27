@@ -1,0 +1,70 @@
+{
+  "status": "R3_1B_PASS_VALIDATION",
+  "test_opened": false,
+  "test_eligible": true,
+  "selected_epoch": 24,
+  "selected_epoch_is_24": true,
+  "training_budget_still_limiting": true,
+  "training_and_validation_seconds": 1321.3422438000016,
+  "checkpoint": "ai-training/experiments/r3_1b_observed_phone_seed42_24epochs/R3_1B_observed_phone_40class_seed42_best_validation_macro_f1.pt",
+  "reproduction_epochs_1_12": "PASS",
+  "gates": {
+    "overall_gate": {
+      "pass": true,
+      "failures": []
+    },
+    "class_coverage_gate": {
+      "pass": true,
+      "failures": [],
+      "hard_supported_count": 37,
+      "recall_at_least_0.10_count": 37,
+      "passing_classes": [
+        "AA",
+        "AE",
+        "AH",
+        "AO",
+        "AW",
+        "AY",
+        "B",
+        "CH",
+        "D",
+        "DH",
+        "EH",
+        "ER",
+        "EY",
+        "F",
+        "G",
+        "HH",
+        "IH",
+        "IY",
+        "JH",
+        "K",
+        "L",
+        "M",
+        "N",
+        "NG",
+        "OW",
+        "P",
+        "R",
+        "S",
+        "SH",
+        "T",
+        "TH",
+        "UH",
+        "UW",
+        "V",
+        "W",
+        "Y",
+        "Z"
+      ],
+      "failing_classes": [],
+      "high_support_zero_recall": []
+    },
+    "speaker_gate": {
+      "pass": true,
+      "failures": [],
+      "median_macro_f1": 0.4771358416131991
+    },
+    "all_pass": true
+  }
+}

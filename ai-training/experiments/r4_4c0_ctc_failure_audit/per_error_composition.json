@@ -1,0 +1,23 @@
+{
+  "target_phones": 25423,
+  "counts": {
+    "substitution": 8631,
+    "deletion": 6199,
+    "insertion": 496
+  },
+  "total_errors": 15326,
+  "fractions_of_errors": {
+    "substitution": 0.563160642046196,
+    "deletion": 0.4044760537648441,
+    "insertion": 0.03236330418895994
+  },
+  "normalized_per_target_phone": {
+    "substitution": 0.33949573221099005,
+    "deletion": 0.24383432325059984,
+    "insertion": 0.019509892616921685
+  },
+  "manual_expected_deletions": 914,
+  "ctc_target_phone_deletion_errors": 6199,
+  "ctc_error_to_manual_deletion_ratio": 6.782275711159738,
+  "distinction": "Manual deletion is an absent expected phone; a CTC PER deletion is a manual observed target phone omitted by the decoder."
+}

@@ -1,0 +1,46 @@
+{
+  "stage": "R5-3A frozen classifier contract",
+  "status": "FROZEN",
+  "implementation": "sklearn.linear_model.LogisticRegression",
+  "research_environment_sklearn_version": "1.8.0",
+  "feature_order": [
+    "A",
+    "S",
+    "D"
+  ],
+  "standardizer": {
+    "implementation": "sklearn.preprocessing.StandardScaler",
+    "parameters": {
+      "copy": true,
+      "with_mean": true,
+      "with_std": true
+    },
+    "fit_scope": "11 calibration TRAIN speakers in each LOSO fold only",
+    "heldout_statistics_used": false,
+    "global_scaler_allowed": false
+  },
+  "classifier_parameters": {
+    "penalty": "l2",
+    "C": 1.0,
+    "solver": "lbfgs",
+    "class_weight": "balanced",
+    "max_iter": 1000,
+    "random_state": null,
+    "random_state_note": "not applicable to the deterministic lbfgs solver and therefore not supplied as an experimental degree of freedom"
+  },
+  "target": {
+    "Addition-positive": 1,
+    "all frozen negatives": 0
+  },
+  "authoritative_continuous_output": {
+    "method": "predict_proba",
+    "column": 1,
+    "definition": "predict_proba(X_scaled)[:, 1]",
+    "dtype_for_thresholding": "float64",
+    "decision_function_authorized": false
+  },
+  "hyperparameter_search": false,
+  "alternate_classifier_authorized": false,
+  "polynomial_or_interaction_features": false,
+  "coefficient_interpretation": "descriptive only after frozen development execution"
+}

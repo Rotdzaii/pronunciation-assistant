@@ -1,0 +1,19 @@
+{
+  "neural_training": false,
+  "checkpoint_inference": false,
+  "new_acoustic_scores": false,
+  "classifier_fitting": false,
+  "threshold_search": false,
+  "existing_frozen_candidate_scores_read": false,
+  "existing_frozen_best_only_score_artifact_schema_inspected": true,
+  "train_audio_accessed": false,
+  "validation_accessed": false,
+  "test_accessed": false,
+  "r5_1a_modified": false,
+  "r5_2b_modified": false,
+  "r5_3a_modified": false,
+  "truth_mapping_performed": false,
+  "recoverability_metrics_calculated": false,
+  "feasibility_gates_evaluated": false,
+  "protocol_violation": false
+}

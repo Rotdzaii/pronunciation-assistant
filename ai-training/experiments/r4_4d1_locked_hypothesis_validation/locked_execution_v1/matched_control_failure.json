@@ -1,0 +1,27 @@
+{
+  "status": "FATAL_MATCHED_CONTROL_IDENTITY_MAPPING_FAILURE",
+  "stage": "after_locked_validation_hypothesis_scoring_before_validation_metrics",
+  "required_rows": 1434,
+  "missing_required_identities": 233,
+  "intersection_evaluation_performed": false,
+  "validation_metrics_calculated": false,
+  "validation_prediction_exports_written": false,
+  "exception_type": "MatchedControlError",
+  "exception_message": "Matched identity mapping failure: 233 rows",
+  "root_cause": {
+    "matched_control_identity_semantics": "source_csv_row uses CSV line identity equal to zero-based source_index + 2",
+    "frozen_driver_identity_semantics": "source_csv_row was emitted as raw zero-based source_index",
+    "frozen_driver_expression": "int(source[\"source_index\"])",
+    "prior_r4_4c2_expression": "int(source[\"source_index\"]) + 2",
+    "static_reproduction": {
+      "missing_with_frozen_driver_semantics": 233,
+      "missing_when_matched_ids_are_converted_to_raw_source_index": 0
+    }
+  },
+  "driver_modified": false,
+  "rerun_performed": false,
+  "matched_subset_used": false,
+  "post_hoc_threshold_change": false,
+  "neural_training": false,
+  "test_accessed": false
+}

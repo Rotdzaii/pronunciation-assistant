@@ -1,0 +1,22 @@
+{
+  "stage": "R6-0 static R6/R5 mechanism distinctness audit",
+  "status": "PASS",
+  "implementation_files_scanned": [
+    "r6_0_boundary_mapping.py",
+    "r6_0_local_features.py",
+    "r6_0_boundary_labels.py"
+  ],
+  "ast_parse": "PASS",
+  "r5_module_imports": 0,
+  "insert_candidate_enumeration": false,
+  "forty_times_n_plus_one_hypothesis_construction": false,
+  "ctc_loss_target_rescoring": false,
+  "best_insert_ranking": false,
+  "keep_sub_delete_scores": false,
+  "r5_a_s_d_features": false,
+  "classifier_output": false,
+  "local_feature_reads_only_selected_posterior_frames": "PASS",
+  "out_of_window_perturbation_test": "PASS",
+  "mechanism_not_distinct_status_triggered": false
+}
+

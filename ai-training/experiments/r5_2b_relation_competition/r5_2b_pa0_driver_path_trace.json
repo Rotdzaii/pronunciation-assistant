@@ -1,0 +1,25 @@
+{
+  "driver": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r5_2b_relation_competition\\r5_2b_train_execution_driver_tc1.py",
+  "failure_status": "R5_2B_TC1_EXECUTION_TECHNICAL_FAILURE_IMPLEMENTATION",
+  "configured_root": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\datasets\\l2-arctic\\raw\\l2arctic_release_v5.0",
+  "speaker": "BWC",
+  "utterance_id": "arctic_a0006",
+  "relative_annotation_path": "BWC\\annotation\\arctic_a0006.TextGrid",
+  "generated_absolute_path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\datasets\\l2-arctic\\raw\\l2arctic_release_v5.0\\BWC\\annotation\\arctic_a0006.TextGrid",
+  "generated_path_exists": false,
+  "root_source": {
+    "category": "newly_written_tc1_driver_logic",
+    "hardcoded": true,
+    "environment_selected": false,
+    "details": [
+      "EXPERIMENT_DIR = Path(__file__).resolve().parent",
+      "REPO_ROOT = EXPERIMENT_DIR.parents[2]",
+      "AUDIO_ROOT = REPO_ROOT / ai-training/datasets/l2-arctic/raw/l2arctic_release_v5.0",
+      "os.environ.setdefault(L2_ARCTIC_ROOT, str(AUDIO_ROOT))",
+      "map_train_additions(details, AUDIO_ROOT) and build_words(AUDIO_ROOT, ...) pass the hardcoded value directly"
+    ],
+    "source_lines": [19, 20, 23, 24, 780, 781]
+  },
+  "failure_mechanism": "The driver derived a dataset root from the research worktree even though that worktree contains metadata/experiments but not the raw L2-ARCTIC tree. The direct AUDIO_ROOT argument bypassed the environment-selected root behavior used by R5-1A.",
+  "driver_modified": false
+}

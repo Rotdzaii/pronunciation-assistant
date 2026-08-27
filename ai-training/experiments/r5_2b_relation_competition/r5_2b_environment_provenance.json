@@ -1,0 +1,28 @@
+{
+  "environment_identity": "R5_2B_AUTHORIZED_RESEARCH_INTERPRETER",
+  "probe_status": "PASS",
+  "probe_scope": "environment_and_imports_only",
+  "sys_executable": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant\\ai-training\\.venv\\Scripts\\python.exe",
+  "python_version": "3.12.10",
+  "torch_version": "2.12.0.dev20260408+cu128",
+  "torch_cuda_version": "12.8",
+  "cuda_available": true,
+  "cuda_device_count": 1,
+  "gpu_device_names": [
+    "NVIDIA GeForce RTX 5060 Laptop GPU"
+  ],
+  "numpy_version": "2.4.6",
+  "pandas_version": "3.0.3",
+  "sklearn_version": "1.8.0",
+  "environment_selection_policy": {
+    "absolute_interpreter_required": true,
+    "PATH_lookup_allowed": false,
+    "py_launcher_allowed": false,
+    "active_conda_environment_allowed": false,
+    "automatic_fallback_allowed": false
+  },
+  "research_runtime_note": "The authorized research environment uses a CUDA-enabled PyTorch development/nightly build; exact identity capture is required for reproducibility.",
+  "checkpoint_loaded_during_probe": false,
+  "dataset_accessed_during_probe": false,
+  "packages_modified": false
+}

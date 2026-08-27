@@ -1,0 +1,518 @@
+{
+  "BWC": {
+    "held_out_speaker": "BWC",
+    "calibration_speakers": [
+      "EBVS",
+      "HJK",
+      "NCC",
+      "NJS",
+      "PNV",
+      "RRBI",
+      "TLV",
+      "TNI",
+      "YBAA",
+      "YKWK",
+      "ZHAA"
+    ],
+    "held_out_counts": {
+      "correct": 3870,
+      "deletion": 199,
+      "substitution": 642
+    },
+    "calibration_priors": {
+      "alpha": 1.0,
+      "N": 51593,
+      "denominator": 51596,
+      "values": {
+        "MATCH": {
+          "count": 45023,
+          "probability": 0.8726257849445693,
+          "log_prior": -0.13624846917091116
+        },
+        "SUBSTITUTION": {
+          "count": 5225,
+          "probability": 0.10128692146678037,
+          "log_prior": -2.289797983004469
+        },
+        "DELETE_EXPECTED": {
+          "count": 1345,
+          "probability": 0.026087293588650282,
+          "log_prior": -3.6463069188803536
+        }
+      }
+    }
+  },
+  "EBVS": {
+    "held_out_speaker": "EBVS",
+    "calibration_speakers": [
+      "BWC",
+      "HJK",
+      "NCC",
+      "NJS",
+      "PNV",
+      "RRBI",
+      "TLV",
+      "TNI",
+      "YBAA",
+      "YKWK",
+      "ZHAA"
+    ],
+    "held_out_counts": {
+      "correct": 3570,
+      "deletion": 184,
+      "substitution": 737
+    },
+    "calibration_priors": {
+      "alpha": 1.0,
+      "N": 51813,
+      "denominator": 51816,
+      "values": {
+        "MATCH": {
+          "count": 45323,
+          "probability": 0.8747105141269106,
+          "log_prior": -0.13386228836229583
+        },
+        "SUBSTITUTION": {
+          "count": 5130,
+          "probability": 0.09902346765477844,
+          "log_prior": -2.3123984099207884
+        },
+        "DELETE_EXPECTED": {
+          "count": 1360,
+          "probability": 0.026266018218310948,
+          "log_prior": -3.6394792582112867
+        }
+      }
+    }
+  },
+  "HJK": {
+    "held_out_speaker": "HJK",
+    "calibration_speakers": [
+      "BWC",
+      "EBVS",
+      "NCC",
+      "NJS",
+      "PNV",
+      "RRBI",
+      "TLV",
+      "TNI",
+      "YBAA",
+      "YKWK",
+      "ZHAA"
+    ],
+    "held_out_counts": {
+      "correct": 4563,
+      "substitution": 322,
+      "deletion": 4
+    },
+    "calibration_priors": {
+      "alpha": 1.0,
+      "N": 51415,
+      "denominator": 51418,
+      "values": {
+        "MATCH": {
+          "count": 44330,
+          "probability": 0.8621688902718893,
+          "log_prior": -0.14830409912024145
+        },
+        "SUBSTITUTION": {
+          "count": 5545,
+          "probability": 0.10786106032906764,
+          "log_prior": -2.226911358516262
+        },
+        "DELETE_EXPECTED": {
+          "count": 1540,
+          "probability": 0.029970049399043137,
+          "log_prior": -3.507556749371869
+        }
+      }
+    }
+  },
+  "NCC": {
+    "held_out_speaker": "NCC",
+    "calibration_speakers": [
+      "BWC",
+      "EBVS",
+      "HJK",
+      "NJS",
+      "PNV",
+      "RRBI",
+      "TLV",
+      "TNI",
+      "YBAA",
+      "YKWK",
+      "ZHAA"
+    ],
+    "held_out_counts": {
+      "correct": 4245,
+      "substitution": 526,
+      "deletion": 55
+    },
+    "calibration_priors": {
+      "alpha": 1.0,
+      "N": 51478,
+      "denominator": 51481,
+      "values": {
+        "MATCH": {
+          "count": 44648,
+          "probability": 0.8672908451661778,
+          "log_prior": -0.14238089690355646
+        },
+        "SUBSTITUTION": {
+          "count": 5341,
+          "probability": 0.10376643810337795,
+          "log_prior": -2.2656126928709184
+        },
+        "DELETE_EXPECTED": {
+          "count": 1489,
+          "probability": 0.02894271673044424,
+          "log_prior": -3.54243668760132
+        }
+      }
+    }
+  },
+  "NJS": {
+    "held_out_speaker": "NJS",
+    "calibration_speakers": [
+      "BWC",
+      "EBVS",
+      "HJK",
+      "NCC",
+      "PNV",
+      "RRBI",
+      "TLV",
+      "TNI",
+      "YBAA",
+      "YKWK",
+      "ZHAA"
+    ],
+    "held_out_counts": {
+      "correct": 4196,
+      "substitution": 520,
+      "deletion": 77
+    },
+    "calibration_priors": {
+      "alpha": 1.0,
+      "N": 51511,
+      "denominator": 51514,
+      "values": {
+        "MATCH": {
+          "count": 44697,
+          "probability": 0.867686454167799,
+          "log_prior": -0.1419248574975892
+        },
+        "SUBSTITUTION": {
+          "count": 5347,
+          "probability": 0.10381643824979617,
+          "log_prior": -2.2651309561471233
+        },
+        "DELETE_EXPECTED": {
+          "count": 1467,
+          "probability": 0.028497107582404785,
+          "log_prior": -3.557952685194496
+        }
+      }
+    }
+  },
+  "PNV": {
+    "held_out_speaker": "PNV",
+    "calibration_speakers": [
+      "BWC",
+      "EBVS",
+      "HJK",
+      "NCC",
+      "NJS",
+      "RRBI",
+      "TLV",
+      "TNI",
+      "YBAA",
+      "YKWK",
+      "ZHAA"
+    ],
+    "held_out_counts": {
+      "correct": 4007,
+      "deletion": 236,
+      "substitution": 587
+    },
+    "calibration_priors": {
+      "alpha": 1.0,
+      "N": 51474,
+      "denominator": 51477,
+      "values": {
+        "MATCH": {
+          "count": 44886,
+          "probability": 0.8719816617129981,
+          "log_prior": -0.13698688543993845
+        },
+        "SUBSTITUTION": {
+          "count": 5280,
+          "probability": 0.10258950599296773,
+          "log_prior": -2.2770196322467977
+        },
+        "DELETE_EXPECTED": {
+          "count": 1308,
+          "probability": 0.02542883229403423,
+          "log_prior": -3.6718716190438307
+        }
+      }
+    }
+  },
+  "RRBI": {
+    "held_out_speaker": "RRBI",
+    "calibration_speakers": [
+      "BWC",
+      "EBVS",
+      "HJK",
+      "NCC",
+      "NJS",
+      "PNV",
+      "TLV",
+      "TNI",
+      "YBAA",
+      "YKWK",
+      "ZHAA"
+    ],
+    "held_out_counts": {
+      "correct": 4240,
+      "deletion": 64,
+      "substitution": 431
+    },
+    "calibration_priors": {
+      "alpha": 1.0,
+      "N": 51569,
+      "denominator": 51572,
+      "values": {
+        "MATCH": {
+          "count": 44653,
+          "probability": 0.8658574420228031,
+          "log_prior": -0.1440350005723458
+        },
+        "SUBSTITUTION": {
+          "count": 5436,
+          "probability": 0.10542542464903436,
+          "log_prior": -2.2497514513848076
+        },
+        "DELETE_EXPECTED": {
+          "count": 1480,
+          "probability": 0.02871713332816257,
+          "log_prior": -3.5502613542629295
+        }
+      }
+    }
+  },
+  "TLV": {
+    "held_out_speaker": "TLV",
+    "calibration_speakers": [
+      "BWC",
+      "EBVS",
+      "HJK",
+      "NCC",
+      "NJS",
+      "PNV",
+      "RRBI",
+      "TNI",
+      "YBAA",
+      "YKWK",
+      "ZHAA"
+    ],
+    "held_out_counts": {
+      "correct": 3609,
+      "substitution": 723,
+      "deletion": 416
+    },
+    "calibration_priors": {
+      "alpha": 1.0,
+      "N": 51556,
+      "denominator": 51559,
+      "values": {
+        "MATCH": {
+          "count": 45284,
+          "probability": 0.8783141643553987,
+          "log_prior": -0.12975093117623998
+        },
+        "SUBSTITUTION": {
+          "count": 5144,
+          "probability": 0.09978859171046763,
+          "log_prior": -2.304701413717139
+        },
+        "DELETE_EXPECTED": {
+          "count": 1128,
+          "probability": 0.02189724393413371,
+          "log_prior": -3.8213944978356267
+        }
+      }
+    }
+  },
+  "TNI": {
+    "held_out_speaker": "TNI",
+    "calibration_speakers": [
+      "BWC",
+      "EBVS",
+      "HJK",
+      "NCC",
+      "NJS",
+      "PNV",
+      "RRBI",
+      "TLV",
+      "YBAA",
+      "YKWK",
+      "ZHAA"
+    ],
+    "held_out_counts": {
+      "correct": 4154,
+      "deletion": 64,
+      "substitution": 397
+    },
+    "calibration_priors": {
+      "alpha": 1.0,
+      "N": 51689,
+      "denominator": 51692,
+      "values": {
+        "MATCH": {
+          "count": 44739,
+          "probability": 0.8655111042327633,
+          "log_prior": -0.14443507460096133
+        },
+        "SUBSTITUTION": {
+          "count": 5470,
+          "probability": 0.10583842760968815,
+          "log_prior": -2.245841615581256
+        },
+        "DELETE_EXPECTED": {
+          "count": 1480,
+          "probability": 0.028650468157548556,
+          "log_prior": -3.5525854953772833
+        }
+      }
+    }
+  },
+  "YBAA": {
+    "held_out_speaker": "YBAA",
+    "calibration_speakers": [
+      "BWC",
+      "EBVS",
+      "HJK",
+      "NCC",
+      "NJS",
+      "PNV",
+      "RRBI",
+      "TLV",
+      "TNI",
+      "YKWK",
+      "ZHAA"
+    ],
+    "held_out_counts": {
+      "correct": 4100,
+      "deletion": 27,
+      "substitution": 191
+    },
+    "calibration_priors": {
+      "alpha": 1.0,
+      "N": 51986,
+      "denominator": 51989,
+      "values": {
+        "MATCH": {
+          "count": 44793,
+          "probability": 0.8616053395910673,
+          "log_prior": -0.14895795586219376
+        },
+        "SUBSTITUTION": {
+          "count": 5676,
+          "probability": 0.10919617611417799,
+          "log_prior": -2.2146092335538836
+        },
+        "DELETE_EXPECTED": {
+          "count": 1517,
+          "probability": 0.02919848429475466,
+          "log_prior": -3.5336384787690345
+        }
+      }
+    }
+  },
+  "YKWK": {
+    "held_out_speaker": "YKWK",
+    "calibration_speakers": [
+      "BWC",
+      "EBVS",
+      "HJK",
+      "NCC",
+      "NJS",
+      "PNV",
+      "RRBI",
+      "TLV",
+      "TNI",
+      "YBAA",
+      "ZHAA"
+    ],
+    "held_out_counts": {
+      "correct": 4171,
+      "substitution": 425,
+      "deletion": 125
+    },
+    "calibration_priors": {
+      "alpha": 1.0,
+      "N": 51583,
+      "denominator": 51586,
+      "values": {
+        "MATCH": {
+          "count": 44722,
+          "probability": 0.8669600279145505,
+          "log_prior": -0.1427624071691989
+        },
+        "SUBSTITUTION": {
+          "count": 5442,
+          "probability": 0.10551312371573683,
+          "log_prior": -2.2489199383926555
+        },
+        "DELETE_EXPECTED": {
+          "count": 1419,
+          "probability": 0.02752684836971271,
+          "log_prior": -3.592593446231549
+        }
+      }
+    }
+  },
+  "ZHAA": {
+    "held_out_speaker": "ZHAA",
+    "calibration_speakers": [
+      "BWC",
+      "EBVS",
+      "HJK",
+      "NCC",
+      "NJS",
+      "PNV",
+      "RRBI",
+      "TLV",
+      "TNI",
+      "YBAA",
+      "YKWK"
+    ],
+    "held_out_counts": {
+      "correct": 4168,
+      "substitution": 366,
+      "deletion": 93
+    },
+    "calibration_priors": {
+      "alpha": 1.0,
+      "N": 51677,
+      "denominator": 51680,
+      "values": {
+        "MATCH": {
+          "count": 44725,
+          "probability": 0.8654411764705883,
+          "log_prior": -0.14451587146982092
+        },
+        "SUBSTITUTION": {
+          "count": 5501,
+          "probability": 0.10646284829721363,
+          "log_prior": -2.2399591969719634
+        },
+        "DELETE_EXPECTED": {
+          "count": 1451,
+          "probability": 0.02809597523219814,
+          "log_prior": -3.5721289430717422
+        }
+      }
+    }
+  }
+}

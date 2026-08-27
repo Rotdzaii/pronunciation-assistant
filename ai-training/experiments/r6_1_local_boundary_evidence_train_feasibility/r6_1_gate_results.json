@@ -1,0 +1,36 @@
+{
+  "gates": {
+    "F1": {
+      "metric": "addition_event_anchor_window_coverage",
+      "value": 0.9005847953216374,
+      "operator": ">=",
+      "threshold": 0.99,
+      "pass": false
+    },
+    "F2": {
+      "metric": "pooled_boundary_roc_auc",
+      "value": 0.5265224849834894,
+      "operator": ">=",
+      "threshold": 0.65,
+      "pass": false
+    },
+    "F3": {
+      "metric": "median_speaker_roc_auc",
+      "value": 0.5469273349525517,
+      "operator": ">=",
+      "threshold": 0.6,
+      "pass": false
+    },
+    "F4": {
+      "metric": "speakers_with_roc_auc_gt_0_55",
+      "value": 6,
+      "operator": ">=",
+      "threshold": 9,
+      "denominator": 12,
+      "pass": false
+    }
+  },
+  "passed": 0,
+  "total": 4,
+  "status": "R6_1_LOCAL_BOUNDARY_EVIDENCE_NOT_CONFIRMED"
+}

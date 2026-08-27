@@ -1,0 +1,17 @@
+{
+  "values": [
+    0.1,
+    0.2,
+    0.3,
+    0.4,
+    0.5,
+    0.6,
+    0.7,
+    0.8,
+    0.9,
+    1.0
+  ],
+  "degree_of_freedom": "one global lambda applied to all three log priors",
+  "selection": "pre-registered TRAIN OOF protocol",
+  "grid_modified_after_results": false
+}

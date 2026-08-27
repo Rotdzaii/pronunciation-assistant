@@ -1,0 +1,14 @@
+{
+  "seed": 42,
+  "python_random_seeded": true,
+  "numpy_seeded": true,
+  "torch_seeded": true,
+  "torch_cuda_seeded": true,
+  "cudnn_benchmark": false,
+  "cudnn_deterministic": true,
+  "torch_deterministic_algorithms_requested": true,
+  "torch_deterministic_algorithms_warn_only": true,
+  "cuda_ctc_backward_guaranteed_deterministic": false,
+  "runtime_warning": "PyTorch reported that ctc_loss_backward_gpu does not have a deterministic implementation on this CUDA build.",
+  "handling": "The first locked seed-42 run is retained as-is. No restart, second seed, or reproducibility rerun was performed."
+}

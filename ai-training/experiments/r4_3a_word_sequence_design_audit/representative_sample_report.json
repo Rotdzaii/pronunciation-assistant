@@ -1,0 +1,758 @@
+{
+  "checkpoint_epoch": 47,
+  "device": "cuda",
+  "probes": 90,
+  "inference_seconds": 0.3374413999990793,
+  "probes_per_second": 266.7129759426246,
+  "feature_shape": [
+    1,
+    64,
+    16
+  ],
+  "internal_feature_map_shape": [
+    96,
+    16,
+    4
+  ],
+  "samples": [
+    {
+      "category": "all_correct",
+      "word_id": "ABA/arctic_a0003/0",
+      "split": "validation",
+      "word": "for",
+      "expected": [
+        "F",
+        "AO",
+        "R"
+      ],
+      "observed_oracle": [
+        "F",
+        "AO",
+        "R"
+      ],
+      "ground_operations": [
+        "M",
+        "M",
+        "M"
+      ],
+      "probes": 9,
+      "top1_runs": [
+        {
+          "phone": "B",
+          "start_offset_ms": 0.0,
+          "end_offset_ms": 0.0,
+          "probes": 1
+        },
+        {
+          "phone": "F",
+          "start_offset_ms": 40.00000000000001,
+          "end_offset_ms": 80.00000000000001,
+          "probes": 2
+        },
+        {
+          "phone": "W",
+          "start_offset_ms": 120.00000000000003,
+          "end_offset_ms": 120.00000000000003,
+          "probes": 1
+        },
+        {
+          "phone": "AO",
+          "start_offset_ms": 160.00000000000003,
+          "end_offset_ms": 160.00000000000003,
+          "probes": 1
+        },
+        {
+          "phone": "R",
+          "start_offset_ms": 200.00000000000003,
+          "end_offset_ms": 240.00000000000003,
+          "probes": 2
+        },
+        {
+          "phone": "ER",
+          "start_offset_ms": 280.0,
+          "end_offset_ms": 300.00000000000006,
+          "probes": 2
+        }
+      ],
+      "expected_peak_probabilities": {
+        "0:F": 0.9397420883178711,
+        "1:AO": 0.6485203504562378,
+        "2:R": 0.42698630690574646
+      },
+      "error_diagnostics": []
+    },
+    {
+      "category": "one_substitution",
+      "word_id": "ABA/arctic_a0005/2",
+      "split": "validation",
+      "word": "ever",
+      "expected": [
+        "EH",
+        "V",
+        "ER"
+      ],
+      "observed_oracle": [
+        "EH",
+        "V",
+        "AH"
+      ],
+      "ground_operations": [
+        "M",
+        "M",
+        "S"
+      ],
+      "probes": 11,
+      "top1_runs": [
+        {
+          "phone": "HH",
+          "start_offset_ms": 0.0,
+          "end_offset_ms": 0.0,
+          "probes": 1
+        },
+        {
+          "phone": "IH",
+          "start_offset_ms": 40.000000000000036,
+          "end_offset_ms": 40.000000000000036,
+          "probes": 1
+        },
+        {
+          "phone": "EH",
+          "start_offset_ms": 80.00000000000007,
+          "end_offset_ms": 80.00000000000007,
+          "probes": 1
+        },
+        {
+          "phone": "V",
+          "start_offset_ms": 120.00000000000011,
+          "end_offset_ms": 200.00000000000017,
+          "probes": 3
+        },
+        {
+          "phone": "AH",
+          "start_offset_ms": 240.00000000000023,
+          "end_offset_ms": 240.00000000000023,
+          "probes": 1
+        },
+        {
+          "phone": "ER",
+          "start_offset_ms": 280.0000000000002,
+          "end_offset_ms": 320.0000000000003,
+          "probes": 2
+        },
+        {
+          "phone": "P",
+          "start_offset_ms": 360.00000000000034,
+          "end_offset_ms": 370.0000000000001,
+          "probes": 2
+        }
+      ],
+      "expected_peak_probabilities": {
+        "0:EH": 0.4700758457183838,
+        "1:V": 0.951397716999054,
+        "2:ER": 0.3742114007472992
+      },
+      "error_diagnostics": [
+        {
+          "position": 2,
+          "relation": "substitution",
+          "expected": "ER",
+          "observed": "AH",
+          "expected_peak_probability": 0.3742114007472992,
+          "expected_top1_probe_count": 2,
+          "observed_peak_probability": 0.18339978158473969,
+          "observed_top1_probe_count": 1,
+          "distinct_alternative_observable": true
+        }
+      ]
+    },
+    {
+      "category": "one_deletion",
+      "word_id": "ABA/arctic_a0029/1",
+      "split": "validation",
+      "word": "forces",
+      "expected": [
+        "F",
+        "AO",
+        "R",
+        "S",
+        "IH",
+        "Z"
+      ],
+      "observed_oracle": [
+        "F",
+        "AO",
+        "S",
+        "IH",
+        "Z"
+      ],
+      "ground_operations": [
+        "M",
+        "M",
+        "D",
+        "M",
+        "M",
+        "M"
+      ],
+      "probes": 16,
+      "top1_runs": [
+        {
+          "phone": "V",
+          "start_offset_ms": 0.0,
+          "end_offset_ms": 0.0,
+          "probes": 1
+        },
+        {
+          "phone": "F",
+          "start_offset_ms": 39.99999999999998,
+          "end_offset_ms": 79.99999999999996,
+          "probes": 2
+        },
+        {
+          "phone": "AO",
+          "start_offset_ms": 119.99999999999994,
+          "end_offset_ms": 159.99999999999991,
+          "probes": 2
+        },
+        {
+          "phone": "ER",
+          "start_offset_ms": 199.99999999999994,
+          "end_offset_ms": 199.99999999999994,
+          "probes": 1
+        },
+        {
+          "phone": "R",
+          "start_offset_ms": 240.0,
+          "end_offset_ms": 240.0,
+          "probes": 1
+        },
+        {
+          "phone": "Z",
+          "start_offset_ms": 280.0,
+          "end_offset_ms": 280.0,
+          "probes": 1
+        },
+        {
+          "phone": "S",
+          "start_offset_ms": 320.00000000000006,
+          "end_offset_ms": 320.00000000000006,
+          "probes": 1
+        },
+        {
+          "phone": "DH",
+          "start_offset_ms": 360.0000000000001,
+          "end_offset_ms": 360.0000000000001,
+          "probes": 1
+        },
+        {
+          "phone": "IH",
+          "start_offset_ms": 400.0000000000001,
+          "end_offset_ms": 440.00000000000017,
+          "probes": 2
+        },
+        {
+          "phone": "Z",
+          "start_offset_ms": 480.0000000000002,
+          "end_offset_ms": 520.0000000000002,
+          "probes": 2
+        },
+        {
+          "phone": "T",
+          "start_offset_ms": 560.0000000000002,
+          "end_offset_ms": 560.0000000000002,
+          "probes": 1
+        },
+        {
+          "phone": "G",
+          "start_offset_ms": 600.0,
+          "end_offset_ms": 600.0,
+          "probes": 1
+        }
+      ],
+      "expected_peak_probabilities": {
+        "0:F": 0.7912667989730835,
+        "1:AO": 0.6327987909317017,
+        "2:R": 0.45852020382881165,
+        "3:S": 0.8022311925888062,
+        "4:IH": 0.7033470273017883,
+        "5:Z": 0.8522596955299377
+      },
+      "error_diagnostics": [
+        {
+          "position": 2,
+          "relation": "deletion",
+          "expected": "R",
+          "observed": "<SIL>",
+          "expected_peak_probability": 0.45852020382881165,
+          "expected_top1_probe_count": 1,
+          "left_expected": "AO",
+          "right_expected": "S",
+          "left_top1_probe_count": 2,
+          "right_top1_probe_count": 1,
+          "plausible_skip_pattern": false
+        }
+      ]
+    },
+    {
+      "category": "substitution_plus_deletion",
+      "word_id": "ABA/arctic_a0028/2",
+      "split": "validation",
+      "word": "fraud",
+      "expected": [
+        "F",
+        "R",
+        "AO",
+        "D"
+      ],
+      "observed_oracle": [
+        "F",
+        "UW",
+        "T"
+      ],
+      "ground_operations": [
+        "M",
+        "D",
+        "S",
+        "S"
+      ],
+      "probes": 12,
+      "top1_runs": [
+        {
+          "phone": "F",
+          "start_offset_ms": 0.0,
+          "end_offset_ms": 160.00000000000014,
+          "probes": 5
+        },
+        {
+          "phone": "AO",
+          "start_offset_ms": 200.00000000000017,
+          "end_offset_ms": 280.0000000000002,
+          "probes": 3
+        },
+        {
+          "phone": "L",
+          "start_offset_ms": 320.0000000000003,
+          "end_offset_ms": 320.0000000000003,
+          "probes": 1
+        },
+        {
+          "phone": "UH",
+          "start_offset_ms": 360.00000000000034,
+          "end_offset_ms": 360.00000000000034,
+          "probes": 1
+        },
+        {
+          "phone": "ER",
+          "start_offset_ms": 400.00000000000034,
+          "end_offset_ms": 400.00000000000034,
+          "probes": 1
+        },
+        {
+          "phone": "D",
+          "start_offset_ms": 430.00000000000017,
+          "end_offset_ms": 430.00000000000017,
+          "probes": 1
+        }
+      ],
+      "expected_peak_probabilities": {
+        "0:F": 0.9678934812545776,
+        "1:R": 0.19345127046108246,
+        "2:AO": 0.46740540862083435,
+        "3:D": 0.3650588393211365
+      },
+      "error_diagnostics": [
+        {
+          "position": 1,
+          "relation": "deletion",
+          "expected": "R",
+          "observed": "<SIL>",
+          "expected_peak_probability": 0.19345127046108246,
+          "expected_top1_probe_count": 0,
+          "left_expected": "F",
+          "right_expected": "AO",
+          "left_top1_probe_count": 5,
+          "right_top1_probe_count": 3,
+          "plausible_skip_pattern": true
+        },
+        {
+          "position": 2,
+          "relation": "substitution",
+          "expected": "AO",
+          "observed": "UW",
+          "expected_peak_probability": 0.46740540862083435,
+          "expected_top1_probe_count": 3,
+          "observed_peak_probability": 0.03420465067028999,
+          "observed_top1_probe_count": 0,
+          "distinct_alternative_observable": false
+        },
+        {
+          "position": 3,
+          "relation": "substitution",
+          "expected": "D",
+          "observed": "T",
+          "expected_peak_probability": 0.3650588393211365,
+          "expected_top1_probe_count": 1,
+          "observed_peak_probability": 0.19576609134674072,
+          "observed_top1_probe_count": 0,
+          "distinct_alternative_observable": false
+        }
+      ]
+    },
+    {
+      "category": "initial_deletion",
+      "word_id": "ABA/arctic_a0125/9",
+      "split": "validation",
+      "word": "hold",
+      "expected": [
+        "HH",
+        "OW",
+        "L",
+        "D"
+      ],
+      "observed_oracle": [
+        "OW",
+        "L",
+        "D"
+      ],
+      "ground_operations": [
+        "D",
+        "M",
+        "M",
+        "M"
+      ],
+      "probes": 16,
+      "top1_runs": [
+        {
+          "phone": "N",
+          "start_offset_ms": 0.0,
+          "end_offset_ms": 0.0,
+          "probes": 1
+        },
+        {
+          "phone": "AH",
+          "start_offset_ms": 40.000000000000036,
+          "end_offset_ms": 40.000000000000036,
+          "probes": 1
+        },
+        {
+          "phone": "HH",
+          "start_offset_ms": 80.00000000000007,
+          "end_offset_ms": 120.00000000000011,
+          "probes": 2
+        },
+        {
+          "phone": "G",
+          "start_offset_ms": 160.00000000000014,
+          "end_offset_ms": 160.00000000000014,
+          "probes": 1
+        },
+        {
+          "phone": "AO",
+          "start_offset_ms": 200.00000000000017,
+          "end_offset_ms": 320.0000000000003,
+          "probes": 4
+        },
+        {
+          "phone": "OW",
+          "start_offset_ms": 360.00000000000034,
+          "end_offset_ms": 360.00000000000034,
+          "probes": 1
+        },
+        {
+          "phone": "EY",
+          "start_offset_ms": 400.00000000000034,
+          "end_offset_ms": 400.00000000000034,
+          "probes": 1
+        },
+        {
+          "phone": "L",
+          "start_offset_ms": 440.0000000000004,
+          "end_offset_ms": 440.0000000000004,
+          "probes": 1
+        },
+        {
+          "phone": "D",
+          "start_offset_ms": 480.00000000000045,
+          "end_offset_ms": 480.00000000000045,
+          "probes": 1
+        },
+        {
+          "phone": "T",
+          "start_offset_ms": 520.0000000000005,
+          "end_offset_ms": 520.0000000000005,
+          "probes": 1
+        },
+        {
+          "phone": "K",
+          "start_offset_ms": 560.0000000000005,
+          "end_offset_ms": 580.0000000000001,
+          "probes": 2
+        }
+      ],
+      "expected_peak_probabilities": {
+        "0:HH": 0.5329457521438599,
+        "1:OW": 0.38990870118141174,
+        "2:L": 0.5682510137557983,
+        "3:D": 0.31363511085510254
+      },
+      "error_diagnostics": [
+        {
+          "position": 0,
+          "relation": "deletion",
+          "expected": "HH",
+          "observed": "<SIL>",
+          "expected_peak_probability": 0.5329457521438599,
+          "expected_top1_probe_count": 2,
+          "plausible_skip_pattern": "NOT_ASSESSABLE_WORD_EDGE"
+        }
+      ]
+    },
+    {
+      "category": "medial_deletion",
+      "word_id": "ABA/arctic_a0032/3",
+      "split": "validation",
+      "word": "mysterious",
+      "expected": [
+        "M",
+        "IH",
+        "S",
+        "T",
+        "IH",
+        "R",
+        "IY",
+        "AH",
+        "S"
+      ],
+      "observed_oracle": [
+        "M",
+        "AY",
+        "S",
+        "T",
+        "R",
+        "EH",
+        "S"
+      ],
+      "ground_operations": [
+        "M",
+        "S",
+        "M",
+        "M",
+        "D",
+        "M",
+        "S",
+        "D",
+        "M"
+      ],
+      "probes": 19,
+      "top1_runs": [
+        {
+          "phone": "L",
+          "start_offset_ms": 0.0,
+          "end_offset_ms": 40.000000000000036,
+          "probes": 2
+        },
+        {
+          "phone": "AO",
+          "start_offset_ms": 80.00000000000007,
+          "end_offset_ms": 80.00000000000007,
+          "probes": 1
+        },
+        {
+          "phone": "AY",
+          "start_offset_ms": 120.00000000000011,
+          "end_offset_ms": 200.00000000000017,
+          "probes": 3
+        },
+        {
+          "phone": "Z",
+          "start_offset_ms": 240.00000000000023,
+          "end_offset_ms": 240.00000000000023,
+          "probes": 1
+        },
+        {
+          "phone": "TH",
+          "start_offset_ms": 280.0000000000002,
+          "end_offset_ms": 320.0000000000003,
+          "probes": 2
+        },
+        {
+          "phone": "F",
+          "start_offset_ms": 360.00000000000034,
+          "end_offset_ms": 360.00000000000034,
+          "probes": 1
+        },
+        {
+          "phone": "R",
+          "start_offset_ms": 400.00000000000034,
+          "end_offset_ms": 400.00000000000034,
+          "probes": 1
+        },
+        {
+          "phone": "ER",
+          "start_offset_ms": 440.0000000000004,
+          "end_offset_ms": 480.00000000000045,
+          "probes": 2
+        },
+        {
+          "phone": "Z",
+          "start_offset_ms": 520.0000000000005,
+          "end_offset_ms": 560.0000000000005,
+          "probes": 2
+        },
+        {
+          "phone": "S",
+          "start_offset_ms": 600.0000000000006,
+          "end_offset_ms": 600.0000000000006,
+          "probes": 1
+        },
+        {
+          "phone": "Z",
+          "start_offset_ms": 640.0000000000006,
+          "end_offset_ms": 640.0000000000006,
+          "probes": 1
+        },
+        {
+          "phone": "TH",
+          "start_offset_ms": 680.0000000000006,
+          "end_offset_ms": 680.0000000000006,
+          "probes": 1
+        },
+        {
+          "phone": "K",
+          "start_offset_ms": 710.0,
+          "end_offset_ms": 710.0,
+          "probes": 1
+        }
+      ],
+      "expected_peak_probabilities": {
+        "0:M": 0.1765047311782837,
+        "1:IH": 0.028383703902363777,
+        "2:S": 0.5127991437911987,
+        "3:T": 0.3802589178085327,
+        "4:IH": 0.028383703902363777,
+        "5:R": 0.9394785761833191,
+        "6:IY": 0.030815545469522476,
+        "7:AH": 0.052477043122053146,
+        "8:S": 0.5127991437911987
+      },
+      "error_diagnostics": [
+        {
+          "position": 1,
+          "relation": "substitution",
+          "expected": "IH",
+          "observed": "AY",
+          "expected_peak_probability": 0.028383703902363777,
+          "expected_top1_probe_count": 0,
+          "observed_peak_probability": 0.843218207359314,
+          "observed_top1_probe_count": 3,
+          "distinct_alternative_observable": true
+        },
+        {
+          "position": 4,
+          "relation": "deletion",
+          "expected": "IH",
+          "observed": "<SIL>",
+          "expected_peak_probability": 0.028383703902363777,
+          "expected_top1_probe_count": 0,
+          "left_expected": "T",
+          "right_expected": "R",
+          "left_top1_probe_count": 0,
+          "right_top1_probe_count": 1,
+          "plausible_skip_pattern": false
+        },
+        {
+          "position": 6,
+          "relation": "substitution",
+          "expected": "IY",
+          "observed": "EH",
+          "expected_peak_probability": 0.030815545469522476,
+          "expected_top1_probe_count": 0,
+          "observed_peak_probability": 0.12785330414772034,
+          "observed_top1_probe_count": 0,
+          "distinct_alternative_observable": false
+        },
+        {
+          "position": 7,
+          "relation": "deletion",
+          "expected": "AH",
+          "observed": "<SIL>",
+          "expected_peak_probability": 0.052477043122053146,
+          "expected_top1_probe_count": 0,
+          "left_expected": "IY",
+          "right_expected": "S",
+          "left_top1_probe_count": 0,
+          "right_top1_probe_count": 1,
+          "plausible_skip_pattern": false
+        }
+      ]
+    },
+    {
+      "category": "final_deletion",
+      "word_id": "ABA/arctic_a0058/2",
+      "split": "validation",
+      "word": "for",
+      "expected": [
+        "F",
+        "AO",
+        "R"
+      ],
+      "observed_oracle": [
+        "F",
+        "AO"
+      ],
+      "ground_operations": [
+        "M",
+        "M",
+        "D"
+      ],
+      "probes": 7,
+      "top1_runs": [
+        {
+          "phone": "D",
+          "start_offset_ms": 0.0,
+          "end_offset_ms": 0.0,
+          "probes": 1
+        },
+        {
+          "phone": "F",
+          "start_offset_ms": 40.000000000000036,
+          "end_offset_ms": 80.00000000000007,
+          "probes": 2
+        },
+        {
+          "phone": "AO",
+          "start_offset_ms": 120.00000000000011,
+          "end_offset_ms": 120.00000000000011,
+          "probes": 1
+        },
+        {
+          "phone": "ER",
+          "start_offset_ms": 160.00000000000014,
+          "end_offset_ms": 160.00000000000014,
+          "probes": 1
+        },
+        {
+          "phone": "OY",
+          "start_offset_ms": 200.00000000000017,
+          "end_offset_ms": 220.00000000000009,
+          "probes": 2
+        }
+      ],
+      "expected_peak_probabilities": {
+        "0:F": 0.6401682496070862,
+        "1:AO": 0.2715413272380829,
+        "2:R": 0.17995388805866241
+      },
+      "error_diagnostics": [
+        {
+          "position": 2,
+          "relation": "deletion",
+          "expected": "R",
+          "observed": "<SIL>",
+          "expected_peak_probability": 0.17995388805866241,
+          "expected_top1_probe_count": 0,
+          "plausible_skip_pattern": "NOT_ASSESSABLE_WORD_EDGE"
+        }
+      ]
+    }
+  ]
+}

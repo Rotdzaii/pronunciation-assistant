@@ -1,0 +1,39 @@
+{
+  "status": "R2B_VALIDATION_FAIL",
+  "selected_epoch": 12,
+  "primary_gate": {
+    "pass": false,
+    "failures": [
+      "macro_f1: 0.641128 < 0.650000",
+      "incorrect_f1: 0.399754 < 0.400000",
+      "macro_f1 improvement over phone-only: 0.042849 < 0.050000"
+    ],
+    "improvements": {
+      "macro_f1": 0.04284877639535156,
+      "balanced_accuracy": 0.07144744813193837,
+      "incorrect_f1": 0.11736374512620562
+    }
+  },
+  "modality_gate": {
+    "pass": false,
+    "failures": [
+      "macro_f1_delta: 0.025139 < 0.030000",
+      "incorrect_f1_delta: 0.001617 < 0.050000"
+    ],
+    "full_minus_no_audio": {
+      "macro_f1_delta": 0.025139146473529772,
+      "incorrect_f1_delta": 0.0016170991634726906
+    }
+  },
+  "duration_gate": {
+    "pass": true,
+    "failures": [],
+    "full_to_matched_drops": {
+      "macro_f1": 0.006498800226302004,
+      "incorrect_f1": -0.15675801620483282
+    }
+  },
+  "test_opened": false,
+  "test_eligible": false,
+  "training_and_validation_seconds": 773.7493923000002
+}

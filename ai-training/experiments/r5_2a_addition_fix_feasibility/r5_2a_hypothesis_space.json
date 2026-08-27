@@ -1,0 +1,56 @@
+{
+  "vocabulary": {"canonical_phones": 40, "blank_index": 40},
+  "expected_length_symbol": "N",
+  "candidate_counts": {
+    "KEEP": "1",
+    "INSERT": "40 * (N + 1)",
+    "SUBSTITUTION": "39 * N",
+    "DELETE": "N",
+    "NON_ADDITION_TOTAL": "1 + 40 * N",
+    "ALL_RELATION_COMPETITION": "80 * N + 41",
+    "R5_1_KEEP_PLUS_INSERT": "40 * N + 41"
+  },
+  "example_counts": [
+    {"N": 1, "KEEP": 1, "INSERT": 80, "SUBSTITUTION": 39, "DELETE": 1, "TOTAL": 121},
+    {"N": 2, "KEEP": 1, "INSERT": 120, "SUBSTITUTION": 78, "DELETE": 2, "TOTAL": 201},
+    {"N": 3, "KEEP": 1, "INSERT": 160, "SUBSTITUTION": 117, "DELETE": 3, "TOTAL": 281},
+    {"N": 5, "KEEP": 1, "INSERT": 240, "SUBSTITUTION": 195, "DELETE": 5, "TOTAL": 441},
+    {"N": 10, "KEEP": 1, "INSERT": 440, "SUBSTITUTION": 390, "DELETE": 10, "TOTAL": 841}
+  ],
+  "alignability_rule": "MIN_CTC_STEPS(H) = len(H) + ADJACENT_REPEAT_COUNT(H); alignable iff T >= MIN_CTC_STEPS(H)",
+  "impossible_target_semantics": "TARGET_SCORE = negative infinity; do not call CTCLoss for interpretation and do not use a finite sentinel.",
+  "families": {
+    "KEEP": {
+      "target_length": "N",
+      "minimum_steps": "N plus adjacent repeats in E",
+      "exact_likelihood_well_defined": true,
+      "runtime_constructible": true,
+      "tie_requirement": "none"
+    },
+    "INSERT": {
+      "target_length": "N + 1",
+      "minimum_steps": "N + 1 plus adjacent repeats after insertion",
+      "exact_likelihood_well_defined": true,
+      "runtime_constructible": true,
+      "tie_requirement": "existing R5-1A lower boundary, then lower canonical phone index"
+    },
+    "SUBSTITUTION": {
+      "target_length": "N",
+      "minimum_steps": "N plus adjacent repeats after replacement",
+      "exact_likelihood_well_defined": true,
+      "runtime_constructible": true,
+      "tie_requirement": "future contract must deterministically order expected position and then canonical phone; R5-2A does not freeze cross-family precedence"
+    },
+    "DELETE": {
+      "target_length": "N - 1",
+      "minimum_steps": "N - 1 plus adjacent repeats after omission",
+      "exact_likelihood_well_defined": true,
+      "runtime_constructible": true,
+      "single_phone_word_note": "For N=1 the DELETE target is empty. Empty-target CTC likelihood is mathematically well-defined and was explicitly exercised in R4, but the frozen R5-1A scorer rejects empty targets. A new R5-2 implementation must define and statically verify this case rather than importing score_hypothesis unchanged.",
+      "tie_requirement": "future contract must deterministically order deletion position"
+    }
+  },
+  "cross_family_tie_policy": "A future preregistration must freeze deterministic BEST_NON_ADDITION family/position/phone tie semantics. No final tie precedence is selected in R5-2A.",
+  "hypothesis_space_valid": true,
+  "technical_blockers": []
+}

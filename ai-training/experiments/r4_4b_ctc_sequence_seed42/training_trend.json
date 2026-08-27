@@ -1,0 +1,21 @@
+{
+  "selected_epoch": 35,
+  "minimum_validation_per": 0.6028399480785116,
+  "peak_deletion_f1_epoch": 35,
+  "same_epoch": true,
+  "epoch_36_selected": false,
+  "last_four_validation_per": [
+    0.6166463438618573,
+    0.6230185265310939,
+    0.6028399480785116,
+    0.6197931007355544
+  ],
+  "last_four_validation_loss": [
+    1.969410520903072,
+    2.003662908854692,
+    1.9728625983801935,
+    1.955641302015964
+  ],
+  "training_budget_possibly_limiting": false,
+  "flag": "NO_BUDGET_EXTENSION_AUTHORIZED"
+}

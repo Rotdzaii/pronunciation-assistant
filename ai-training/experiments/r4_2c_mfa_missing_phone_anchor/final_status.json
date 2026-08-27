@@ -1,0 +1,19 @@
+{
+  "status": "R4_2C_RUNTIME_ANCHOR_BLOCKED",
+  "anchor_criterion": "ANCHOR_NOT_RELIABLE",
+  "runtime_implementability": "IMPLEMENTABLE_WITH_SMALL_ALIGNMENT_MAPPING_LAYER",
+  "manual_deletions": 2591,
+  "exact_identification_rate": 0.006561173292165187,
+  "anchor_coverage": 0.002701659590891548,
+  "median_error_seconds": 0.012026999999999788,
+  "p90_error_seconds": 0.05634510000000003,
+  "correct_false_missing_rate": 0.0007300887840110557,
+  "substitution_false_missing_rate": 0.00022055580061755624,
+  "manual_vs_mfa_semantics": "C_FORCED_ALIGNMENT_RETAINS_EXPECTED_LABEL",
+  "training_performed": false,
+  "runtime_modified": false,
+  "mfa_modified": false,
+  "r4_test_alignment_accessed": false,
+  "r4_test_audio_accessed": false,
+  "r4_test_inference": false
+}

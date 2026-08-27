@@ -1,0 +1,69 @@
+{
+  "status": "R3_1A_VALIDATION_FAIL",
+  "test_opened": false,
+  "test_eligible": false,
+  "selected_epoch": 12,
+  "training_and_validation_seconds": 684.7451294000002,
+  "checkpoint": "ai-training/experiments/r3_1a_observed_phone_seed42/R3_1A_observed_phone_40class_seed42_best_validation_macro_f1.pt",
+  "gates": {
+    "overall_gate": {
+      "pass": false,
+      "failures": [
+        "accuracy=0.447186 < 0.500000"
+      ]
+    },
+    "class_coverage_gate": {
+      "pass": true,
+      "failures": [],
+      "hard_supported_count": 37,
+      "recall_at_least_0.10_count": 37,
+      "passing_classes": [
+        "AA",
+        "AE",
+        "AH",
+        "AO",
+        "AW",
+        "AY",
+        "B",
+        "CH",
+        "D",
+        "DH",
+        "EH",
+        "ER",
+        "EY",
+        "F",
+        "G",
+        "HH",
+        "IH",
+        "IY",
+        "JH",
+        "K",
+        "L",
+        "M",
+        "N",
+        "NG",
+        "OW",
+        "P",
+        "R",
+        "S",
+        "SH",
+        "T",
+        "TH",
+        "UH",
+        "UW",
+        "V",
+        "W",
+        "Y",
+        "Z"
+      ],
+      "failing_classes": [],
+      "high_support_zero_recall": []
+    },
+    "speaker_gate": {
+      "pass": true,
+      "failures": [],
+      "median_macro_f1": 0.41766871863214333
+    },
+    "all_pass": false
+  }
+}

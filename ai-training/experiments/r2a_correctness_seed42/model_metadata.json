@@ -1,0 +1,16 @@
+{
+  "name": "SmallPronunciationCNNAttention",
+  "task": "R2-A binary correctness",
+  "research_only": true,
+  "used_by_runtime": false,
+  "production_model": false,
+  "random_initialization": true,
+  "loaded_legacy_checkpoint": false,
+  "selected_epoch": 11,
+  "checkpoint": "R2A_binary_correctness_seed42_best_validation_macro_f1.pt",
+  "validation_macro_f1": 0.5422936865343558,
+  "class_to_index": {
+    "correct": 0,
+    "incorrect": 1
+  }
+}

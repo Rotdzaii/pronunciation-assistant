@@ -1,0 +1,89 @@
+{
+  "word_counts": {
+    "train": {
+      "addition_containing_words": 338,
+      "addition_plus_deletion_words": 28
+    },
+    "validation": {
+      "addition_containing_words": 244,
+      "addition_plus_deletion_words": 28
+    }
+  },
+  "clean_addition_rows": {
+    "validation": 296,
+    "train": 423
+  },
+  "future_ctc_representable_addition_rows": {
+    "train": 423,
+    "validation": 296
+  },
+  "unresolved_addition_rows": {
+    "validation:addition_invalid_observed_phone": 10,
+    "train:addition_invalid_observed_phone": 14
+  },
+  "observed_phone_distribution": {
+    "train": {
+      "AA": 2,
+      "AH": 59,
+      "AO": 1,
+      "AX": 33,
+      "B": 2,
+      "D": 20,
+      "DH": 3,
+      "EH": 52,
+      "ER": 2,
+      "F": 1,
+      "G": 44,
+      "HH": 7,
+      "IH": 22,
+      "IY": 14,
+      "K": 10,
+      "L": 5,
+      "M": 5,
+      "N": 12,
+      "OW": 2,
+      "P": 1,
+      "R": 49,
+      "S": 24,
+      "SH": 3,
+      "T": 11,
+      "TH": 2,
+      "UH": 6,
+      "UW": 3,
+      "W": 9,
+      "Y": 15,
+      "Z": 2,
+      "ZH": 2
+    },
+    "validation": {
+      "AE": 1,
+      "AH": 66,
+      "AO": 3,
+      "AX": 23,
+      "B": 2,
+      "D": 11,
+      "DH": 2,
+      "EH": 5,
+      "G": 10,
+      "HH": 5,
+      "IH": 21,
+      "IY": 6,
+      "JH": 1,
+      "K": 36,
+      "L": 6,
+      "M": 2,
+      "N": 10,
+      "NG": 3,
+      "OW": 1,
+      "P": 1,
+      "R": 28,
+      "S": 21,
+      "T": 8,
+      "V": 2,
+      "W": 8,
+      "Y": 10,
+      "Z": 4
+    }
+  },
+  "future_representation": "insert the clean addition observed phone at manual temporal order as an extra CTC target label; excluded from R4-4B"
+}

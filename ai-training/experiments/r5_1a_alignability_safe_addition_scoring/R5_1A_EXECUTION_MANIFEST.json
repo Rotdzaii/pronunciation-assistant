@@ -1,0 +1,82 @@
+{
+  "manifest_type": "additive R5-1A TRAIN execution manifest",
+  "self_excluded": true,
+  "hash_algorithm": "SHA-256",
+  "artifact_count": 14,
+  "hash_audit": "HASH_AUDIT_PASS",
+  "failures": [],
+  "artifacts": [
+    {
+      "relative_path": "r5_1a_train_execution_driver.py",
+      "byte_size": 49537,
+      "sha256": "80D0E1263BE1744BCC252736BAF9C28F3E5D19C204596D836F3D9C296AB52D5D"
+    },
+    {
+      "relative_path": "r5_1a_row_accounting.json",
+      "byte_size": 2204,
+      "sha256": "8F69C569F005FF6B2AF70B09865D842153994048670555AA32E3C9DD91D23CFD"
+    },
+    {
+      "relative_path": "r5_1a_alignability_audit.json",
+      "byte_size": 6246,
+      "sha256": "9C178C62CBBB9970F7B5B976A3CF1B9A179EE392755B618FD36AE71D3AC0AB52"
+    },
+    {
+      "relative_path": "r5_1a_train_scores.jsonl",
+      "byte_size": 16560475,
+      "sha256": "5117AB0D8D4E85A8E103BA1D2135B8F14FE4CEB3B6440A46137B6B29742FA28B"
+    },
+    {
+      "relative_path": "r5_1a_continuous_metrics.json",
+      "byte_size": 15856,
+      "sha256": "479BE9EDC9C493C6BC9C460E708900C7B0D40F6282C17E994C4303C5EF3A1DCD"
+    },
+    {
+      "relative_path": "r5_1a_loso_fold_thresholds.json",
+      "byte_size": 16543,
+      "sha256": "3A29C887B0E8D7C8765315CA29E4E07F2DCD460DF1DDC01CEBD03E87BF213ED8"
+    },
+    {
+      "relative_path": "r5_1a_oof_predictions.jsonl",
+      "byte_size": 18009257,
+      "sha256": "644B86E9F213078D772752AF6513E2F42A81D9EE1A11DFAC085E191780C4CA8E"
+    },
+    {
+      "relative_path": "r5_1a_binary_metrics.json",
+      "byte_size": 942,
+      "sha256": "BD899909D3C8BFEFA8A75E043D270A3385E1E9441EECB0F41F5A20D1D769926D"
+    },
+    {
+      "relative_path": "r5_1a_event_metrics.json",
+      "byte_size": 1214,
+      "sha256": "549380F7861FDF00759536519E14D2578B40928C59434863D4141670F4400DF2"
+    },
+    {
+      "relative_path": "r5_1a_gate_results.json",
+      "byte_size": 2159,
+      "sha256": "8BE4B48F87B98F9440E719EA2BA75F17D11109185A5BC1F083D554B35A930383"
+    },
+    {
+      "relative_path": "r5_1a_execution_protocol_audit.json",
+      "byte_size": 515,
+      "sha256": "EB21831257BC38128E59DBDF71894CAF9EE731799B7BD5F3D393D84E17605E73"
+    },
+    {
+      "relative_path": "r5_1a_final_status.json",
+      "byte_size": 1610,
+      "sha256": "47E5936B645B8DC4A0EFBAB971E78872D15FDFE210621C1031F864B0A827CAF3"
+    },
+    {
+      "relative_path": "r5_1a_compute_report.json",
+      "byte_size": 1538,
+      "sha256": "38B6294FEBF5C6788CBCD1F1034C12E29927517AE0D45E72F1A1E587EF03E507"
+    },
+    {
+      "relative_path": "R5_1A_TRAIN_DEVELOPMENT_RESULT.md",
+      "byte_size": 1689,
+      "sha256": "AA9913901E7E53CE61B142766E6D61B2BB5C3BF2F671EA9B7212DD2129F2A1D3"
+    }
+  ],
+  "preserved_contract_sha256": "A6BE2C1C6A09AC0007E9330E44C1C7F45A91CCB76E47EE63ACEB99D0781A1BEB",
+  "preserved_static_manifest_sha256": "EED04655AD957A66BF9A13149F812BD0CD74B2D362BDFD4CECD12579DAAA3B5E"
+}

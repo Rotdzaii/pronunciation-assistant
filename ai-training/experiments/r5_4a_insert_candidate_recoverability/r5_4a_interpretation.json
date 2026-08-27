@@ -1,0 +1,48 @@
+{
+  "Q1": "NO: most exact truth candidates are ranked below the frozen top-ten region.",
+  "Q2": "YES: Top-5 gains 0.144737 and Top-10 gains 0.253289 absolute recall over Top-1.",
+  "Q3": "NO: the correct event is usually too far down the INSERT family for top-1 selection alone to explain the low event F1.",
+  "Q4": "Speaker recoverability varies by 0.789474 Top-10 recall; weakest is ZHAA and strongest is TNI. The variation is substantial.",
+  "Q5": "Weakest position by Top-10 is BEFORE_FIRST. The weakest phones with N>=5 are AX, G, K, EH, W; rare-phone counts are preserved without interpretation.",
+  "Q6": "NO: the frozen recoverability gates do not all pass, so this audit does not justify that next generation.",
+  "existing_event_f1_context": {
+    "r5_1a_exact_event_f1": 0.04389312977099236,
+    "r5_3a_exact_event_f1": 0.044044044044044044,
+    "classification": "B: correct events are generally ranked far down the candidate family.",
+    "context_only_no_binary_scoring_rerun": true
+  },
+  "status": "R5_4A_INSERT_CANDIDATE_RECOVERABILITY_NOT_CONFIRMED",
+  "gates": {
+    "gates": {
+      "G1": {
+        "value": 1.0,
+        "operator": ">=",
+        "threshold": 0.99,
+        "result": "PASS"
+      },
+      "G2": {
+        "value": 0.27960526315789475,
+        "operator": ">=",
+        "threshold": 0.4,
+        "result": "FAIL"
+      },
+      "G3": {
+        "value": 0.3881578947368421,
+        "operator": ">=",
+        "threshold": 0.55,
+        "result": "FAIL"
+      },
+      "G4": {
+        "value": 19.0,
+        "operator": "<=",
+        "threshold": 10.0,
+        "result": "FAIL"
+      }
+    },
+    "passed_count": 1,
+    "total": 4,
+    "all_pass": false,
+    "thresholds_frozen_before_R5_4B_candidate_values": true
+  },
+  "no_new_scientific_method": true
+}

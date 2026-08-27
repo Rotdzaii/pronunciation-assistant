@@ -1,0 +1,34 @@
+{
+  "initial": {
+    "rows": 7377,
+    "deletion_support": 60,
+    "deletion_precision": 0.1839080459770115,
+    "deletion_recall": 0.26666666666666666,
+    "deletion_f1": 0.217687074829932,
+    "false_deletion_rate": 0.00970343036763701
+  },
+  "medial": {
+    "rows": 11232,
+    "deletion_support": 289,
+    "deletion_precision": 0.189419795221843,
+    "deletion_recall": 0.38408304498269896,
+    "deletion_f1": 0.2537142857142857,
+    "false_deletion_rate": 0.04340674403728411
+  },
+  "final": {
+    "rows": 7377,
+    "deletion_support": 561,
+    "deletion_precision": 0.46187363834422657,
+    "deletion_recall": 0.3778966131907308,
+    "deletion_f1": 0.4156862745098039,
+    "false_deletion_rate": 0.036238262910798125
+  },
+  "single_phone": {
+    "rows": 351,
+    "deletion_support": 4,
+    "deletion_precision": 0.16666666666666666,
+    "deletion_recall": 0.5,
+    "deletion_f1": 0.25,
+    "false_deletion_rate": 0.02881844380403458
+  }
+}

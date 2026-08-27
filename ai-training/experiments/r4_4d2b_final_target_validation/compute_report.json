@@ -1,0 +1,78 @@
+{
+  "device": "cuda",
+  "python": "3.12.10",
+  "pytorch": "2.12.0.dev20260408+cu128",
+  "cuda": "12.8",
+  "validation": {
+    "features": {
+      "words": 7728,
+      "seconds": 8.114399400001275,
+      "sample_length": {
+        "count": 7728,
+        "min": 480.0,
+        "median": 4960.0,
+        "mean": 5537.515527950311,
+        "p90": 9760.0,
+        "p95": 11520.0,
+        "max": 25440.0
+      },
+      "feature_frames": {
+        "count": 7728,
+        "min": 4.0,
+        "median": 32.0,
+        "mean": 35.609472049689444,
+        "p90": 62.0,
+        "p95": 73.0,
+        "max": 160.0
+      },
+      "encoder_output_steps": {
+        "count": 7728,
+        "min": 2.0,
+        "median": 16.0,
+        "mean": 17.554477225672876,
+        "p90": 31.0,
+        "p95": 36.0,
+        "max": 80.0
+      },
+      "edge_padded_words": 0,
+      "edge_padding_samples": 0,
+      "unalignable_words": 0,
+      "unalignable_word_ids": []
+    },
+    "inference": {
+      "words": 7728,
+      "seconds": 1.7684112999995705,
+      "encoder_steps": {
+        "count": 7728,
+        "mean": 17.554477225672876,
+        "median": 16.0,
+        "p10": 7.0,
+        "p25": 10.0,
+        "p75": 23.0,
+        "p90": 31.0,
+        "min": 2.0,
+        "max": 80.0
+      }
+    },
+    "hypothesis_scoring": {
+      "total_hypotheses": 1061208,
+      "average_hypotheses_per_word": 137.3198757763975,
+      "keep_hypotheses": 7728,
+      "delete_hypotheses": 26337,
+      "substitution_hypotheses": 1027143,
+      "batch_size": 4096,
+      "seconds": 15.068439599999692,
+      "theoretically_unalignable": {},
+      "nonfinite_returned_scores": 0
+    },
+    "seconds": 26.433615600006306
+  },
+  "validation_seconds": 28.513090100001136,
+  "average_seconds_per_word": 0.0036895820522775797,
+  "start_time": "2026-08-15T00:31:44+0700",
+  "end_time": "2026-08-15T00:32:14+0700",
+  "execution_count": 1,
+  "training": false,
+  "threshold_calibration": false,
+  "test_accessed": false
+}

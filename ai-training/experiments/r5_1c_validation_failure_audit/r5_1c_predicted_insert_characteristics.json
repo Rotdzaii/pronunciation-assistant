@@ -1,0 +1,273 @@
+{
+  "population": "frozen R5-1B false-positive words only",
+  "false_positive_words": 641,
+  "predicted_phone_frequency_with_prediction_support": [
+    {
+      "phone": "T",
+      "false_positive_count": 69,
+      "all_predicted_positive_support": 72,
+      "share_of_false_positives": 0.10764430577223089,
+      "false_positive_fraction_within_phone_predictions": 0.9583333333333334
+    },
+    {
+      "phone": "N",
+      "false_positive_count": 60,
+      "all_predicted_positive_support": 64,
+      "share_of_false_positives": 0.093603744149766,
+      "false_positive_fraction_within_phone_predictions": 0.9375
+    },
+    {
+      "phone": "D",
+      "false_positive_count": 56,
+      "all_predicted_positive_support": 66,
+      "share_of_false_positives": 0.0873634945397816,
+      "false_positive_fraction_within_phone_predictions": 0.8484848484848485
+    },
+    {
+      "phone": "IH",
+      "false_positive_count": 54,
+      "all_predicted_positive_support": 56,
+      "share_of_false_positives": 0.0842433697347894,
+      "false_positive_fraction_within_phone_predictions": 0.9642857142857143
+    },
+    {
+      "phone": "AH",
+      "false_positive_count": 49,
+      "all_predicted_positive_support": 64,
+      "share_of_false_positives": 0.07644305772230889,
+      "false_positive_fraction_within_phone_predictions": 0.765625
+    },
+    {
+      "phone": "HH",
+      "false_positive_count": 41,
+      "all_predicted_positive_support": 45,
+      "share_of_false_positives": 0.06396255850234009,
+      "false_positive_fraction_within_phone_predictions": 0.9111111111111111
+    },
+    {
+      "phone": "UW",
+      "false_positive_count": 40,
+      "all_predicted_positive_support": 40,
+      "share_of_false_positives": 0.062402496099843996,
+      "false_positive_fraction_within_phone_predictions": 1.0
+    },
+    {
+      "phone": "R",
+      "false_positive_count": 31,
+      "all_predicted_positive_support": 33,
+      "share_of_false_positives": 0.0483619344773791,
+      "false_positive_fraction_within_phone_predictions": 0.9393939393939394
+    },
+    {
+      "phone": "IY",
+      "false_positive_count": 28,
+      "all_predicted_positive_support": 32,
+      "share_of_false_positives": 0.0436817472698908,
+      "false_positive_fraction_within_phone_predictions": 0.875
+    },
+    {
+      "phone": "S",
+      "false_positive_count": 21,
+      "all_predicted_positive_support": 25,
+      "share_of_false_positives": 0.0327613104524181,
+      "false_positive_fraction_within_phone_predictions": 0.84
+    },
+    {
+      "phone": "M",
+      "false_positive_count": 20,
+      "all_predicted_positive_support": 22,
+      "share_of_false_positives": 0.031201248049921998,
+      "false_positive_fraction_within_phone_predictions": 0.9090909090909091
+    },
+    {
+      "phone": "L",
+      "false_positive_count": 17,
+      "all_predicted_positive_support": 18,
+      "share_of_false_positives": 0.0265210608424337,
+      "false_positive_fraction_within_phone_predictions": 0.9444444444444444
+    },
+    {
+      "phone": "V",
+      "false_positive_count": 16,
+      "all_predicted_positive_support": 19,
+      "share_of_false_positives": 0.0249609984399376,
+      "false_positive_fraction_within_phone_predictions": 0.8421052631578947
+    },
+    {
+      "phone": "K",
+      "false_positive_count": 14,
+      "all_predicted_positive_support": 15,
+      "share_of_false_positives": 0.0218408736349454,
+      "false_positive_fraction_within_phone_predictions": 0.9333333333333333
+    },
+    {
+      "phone": "ER",
+      "false_positive_count": 13,
+      "all_predicted_positive_support": 13,
+      "share_of_false_positives": 0.0202808112324493,
+      "false_positive_fraction_within_phone_predictions": 1.0
+    },
+    {
+      "phone": "P",
+      "false_positive_count": 12,
+      "all_predicted_positive_support": 13,
+      "share_of_false_positives": 0.0187207488299532,
+      "false_positive_fraction_within_phone_predictions": 0.9230769230769231
+    },
+    {
+      "phone": "F",
+      "false_positive_count": 11,
+      "all_predicted_positive_support": 11,
+      "share_of_false_positives": 0.0171606864274571,
+      "false_positive_fraction_within_phone_predictions": 1.0
+    },
+    {
+      "phone": "B",
+      "false_positive_count": 10,
+      "all_predicted_positive_support": 12,
+      "share_of_false_positives": 0.015600624024960999,
+      "false_positive_fraction_within_phone_predictions": 0.8333333333333334
+    },
+    {
+      "phone": "AE",
+      "false_positive_count": 9,
+      "all_predicted_positive_support": 11,
+      "share_of_false_positives": 0.014040561622464899,
+      "false_positive_fraction_within_phone_predictions": 0.8181818181818182
+    },
+    {
+      "phone": "AO",
+      "false_positive_count": 8,
+      "all_predicted_positive_support": 9,
+      "share_of_false_positives": 0.0124804992199688,
+      "false_positive_fraction_within_phone_predictions": 0.8888888888888888
+    },
+    {
+      "phone": "G",
+      "false_positive_count": 8,
+      "all_predicted_positive_support": 8,
+      "share_of_false_positives": 0.0124804992199688,
+      "false_positive_fraction_within_phone_predictions": 1.0
+    },
+    {
+      "phone": "Z",
+      "false_positive_count": 7,
+      "all_predicted_positive_support": 8,
+      "share_of_false_positives": 0.0109204368174727,
+      "false_positive_fraction_within_phone_predictions": 0.875
+    },
+    {
+      "phone": "AW",
+      "false_positive_count": 6,
+      "all_predicted_positive_support": 6,
+      "share_of_false_positives": 0.0093603744149766,
+      "false_positive_fraction_within_phone_predictions": 1.0
+    },
+    {
+      "phone": "AY",
+      "false_positive_count": 5,
+      "all_predicted_positive_support": 5,
+      "share_of_false_positives": 0.0078003120124804995,
+      "false_positive_fraction_within_phone_predictions": 1.0
+    },
+    {
+      "phone": "EH",
+      "false_positive_count": 5,
+      "all_predicted_positive_support": 6,
+      "share_of_false_positives": 0.0078003120124804995,
+      "false_positive_fraction_within_phone_predictions": 0.8333333333333334
+    },
+    {
+      "phone": "NG",
+      "false_positive_count": 5,
+      "all_predicted_positive_support": 6,
+      "share_of_false_positives": 0.0078003120124804995,
+      "false_positive_fraction_within_phone_predictions": 0.8333333333333334
+    },
+    {
+      "phone": "W",
+      "false_positive_count": 5,
+      "all_predicted_positive_support": 5,
+      "share_of_false_positives": 0.0078003120124804995,
+      "false_positive_fraction_within_phone_predictions": 1.0
+    },
+    {
+      "phone": "SH",
+      "false_positive_count": 4,
+      "all_predicted_positive_support": 4,
+      "share_of_false_positives": 0.0062402496099844,
+      "false_positive_fraction_within_phone_predictions": 1.0
+    },
+    {
+      "phone": "Y",
+      "false_positive_count": 4,
+      "all_predicted_positive_support": 4,
+      "share_of_false_positives": 0.0062402496099844,
+      "false_positive_fraction_within_phone_predictions": 1.0
+    },
+    {
+      "phone": "AA",
+      "false_positive_count": 3,
+      "all_predicted_positive_support": 3,
+      "share_of_false_positives": 0.0046801872074883,
+      "false_positive_fraction_within_phone_predictions": 1.0
+    },
+    {
+      "phone": "EY",
+      "false_positive_count": 3,
+      "all_predicted_positive_support": 4,
+      "share_of_false_positives": 0.0046801872074883,
+      "false_positive_fraction_within_phone_predictions": 0.75
+    },
+    {
+      "phone": "OW",
+      "false_positive_count": 3,
+      "all_predicted_positive_support": 3,
+      "share_of_false_positives": 0.0046801872074883,
+      "false_positive_fraction_within_phone_predictions": 1.0
+    },
+    {
+      "phone": "DH",
+      "false_positive_count": 2,
+      "all_predicted_positive_support": 3,
+      "share_of_false_positives": 0.0031201248049922,
+      "false_positive_fraction_within_phone_predictions": 0.6666666666666666
+    },
+    {
+      "phone": "JH",
+      "false_positive_count": 1,
+      "all_predicted_positive_support": 1,
+      "share_of_false_positives": 0.0015600624024961,
+      "false_positive_fraction_within_phone_predictions": 1.0
+    },
+    {
+      "phone": "UH",
+      "false_positive_count": 1,
+      "all_predicted_positive_support": 1,
+      "share_of_false_positives": 0.0015600624024961,
+      "false_positive_fraction_within_phone_predictions": 1.0
+    }
+  ],
+  "boundary_class": {
+    "BEFORE_FIRST": {
+      "false_positive_count": 199,
+      "all_predicted_positive_support": 212,
+      "share_of_false_positives": 0.31045241809672386,
+      "false_positive_fraction_within_boundary_predictions": 0.9386792452830188
+    },
+    "BETWEEN": {
+      "false_positive_count": 190,
+      "all_predicted_positive_support": 212,
+      "share_of_false_positives": 0.296411856474259,
+      "false_positive_fraction_within_boundary_predictions": 0.8962264150943396
+    },
+    "AFTER_FINAL": {
+      "false_positive_count": 252,
+      "all_predicted_positive_support": 283,
+      "share_of_false_positives": 0.39313572542901715,
+      "false_positive_fraction_within_boundary_predictions": 0.8904593639575972
+    }
+  },
+  "descriptive_only": true,
+  "phone_or_boundary_threshold_created": false
+}

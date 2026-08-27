@@ -1,0 +1,186 @@
+{
+  "status": "PASS",
+  "total_words": 7955,
+  "keep_impossible_words": 0,
+  "keep_impossible_details": [],
+  "total_insert_hypotheses": 1412080,
+  "alignable_insert_hypotheses": 1411982,
+  "impossible_insert_hypotheses": 98,
+  "words_with_impossible_insert": 32,
+  "words_with_all_inserts_impossible": 0,
+  "adjacent_repeat_related_impossible": 98,
+  "by_speaker": {
+    "ABA": {
+      "words": 1265,
+      "insert_total": 218920,
+      "insert_alignable": 218916,
+      "insert_impossible": 4,
+      "words_with_impossible": 1,
+      "words_all_impossible": 0
+    },
+    "HKK": {
+      "words": 1388,
+      "insert_total": 249720,
+      "insert_alignable": 249696,
+      "insert_impossible": 24,
+      "words_with_impossible": 8,
+      "words_all_impossible": 0
+    },
+    "HQTV": {
+      "words": 1379,
+      "insert_total": 249400,
+      "insert_alignable": 249354,
+      "insert_impossible": 46,
+      "words_with_impossible": 16,
+      "words_all_impossible": 0
+    },
+    "LXC": {
+      "words": 1396,
+      "insert_total": 251200,
+      "insert_alignable": 251188,
+      "insert_impossible": 12,
+      "words_with_impossible": 3,
+      "words_all_impossible": 0
+    },
+    "MBMPS": {
+      "words": 1393,
+      "insert_total": 251280,
+      "insert_alignable": 251280,
+      "insert_impossible": 0,
+      "words_with_impossible": 0,
+      "words_all_impossible": 0
+    },
+    "SVBI": {
+      "words": 1134,
+      "insert_total": 191560,
+      "insert_alignable": 191548,
+      "insert_impossible": 12,
+      "words_with_impossible": 4,
+      "words_all_impossible": 0
+    }
+  },
+  "by_class": {
+    "positive": {
+      "words": 227,
+      "insert_total": 49480,
+      "insert_alignable": 49480,
+      "insert_impossible": 0,
+      "words_with_impossible": 0,
+      "words_all_impossible": 0
+    },
+    "negative": {
+      "words": 7728,
+      "insert_total": 1362600,
+      "insert_alignable": 1362502,
+      "insert_impossible": 98,
+      "words_with_impossible": 32,
+      "words_all_impossible": 0
+    }
+  },
+  "by_expected_length": {
+    "1": {
+      "words": 355,
+      "insert_total": 28400,
+      "insert_alignable": 28370,
+      "insert_impossible": 30,
+      "words_with_impossible": 15,
+      "words_all_impossible": 0
+    },
+    "2": {
+      "words": 2579,
+      "insert_total": 309480,
+      "insert_alignable": 309412,
+      "insert_impossible": 68,
+      "words_with_impossible": 17,
+      "words_all_impossible": 0
+    },
+    "3": {
+      "words": 2344,
+      "insert_total": 375040,
+      "insert_alignable": 375040,
+      "insert_impossible": 0,
+      "words_with_impossible": 0,
+      "words_all_impossible": 0
+    },
+    "4": {
+      "words": 955,
+      "insert_total": 191000,
+      "insert_alignable": 191000,
+      "insert_impossible": 0,
+      "words_with_impossible": 0,
+      "words_all_impossible": 0
+    },
+    "5": {
+      "words": 645,
+      "insert_total": 154800,
+      "insert_alignable": 154800,
+      "insert_impossible": 0,
+      "words_with_impossible": 0,
+      "words_all_impossible": 0
+    },
+    "6": {
+      "words": 426,
+      "insert_total": 119280,
+      "insert_alignable": 119280,
+      "insert_impossible": 0,
+      "words_with_impossible": 0,
+      "words_all_impossible": 0
+    },
+    "7": {
+      "words": 309,
+      "insert_total": 98880,
+      "insert_alignable": 98880,
+      "insert_impossible": 0,
+      "words_with_impossible": 0,
+      "words_all_impossible": 0
+    },
+    "8": {
+      "words": 158,
+      "insert_total": 56880,
+      "insert_alignable": 56880,
+      "insert_impossible": 0,
+      "words_with_impossible": 0,
+      "words_all_impossible": 0
+    },
+    "9": {
+      "words": 104,
+      "insert_total": 41600,
+      "insert_alignable": 41600,
+      "insert_impossible": 0,
+      "words_with_impossible": 0,
+      "words_all_impossible": 0
+    },
+    "10": {
+      "words": 57,
+      "insert_total": 25080,
+      "insert_alignable": 25080,
+      "insert_impossible": 0,
+      "words_with_impossible": 0,
+      "words_all_impossible": 0
+    },
+    "11": {
+      "words": 10,
+      "insert_total": 4800,
+      "insert_alignable": 4800,
+      "insert_impossible": 0,
+      "words_with_impossible": 0,
+      "words_all_impossible": 0
+    },
+    "12": {
+      "words": 11,
+      "insert_total": 5720,
+      "insert_alignable": 5720,
+      "insert_impossible": 0,
+      "words_with_impossible": 0,
+      "words_all_impossible": 0
+    },
+    "13": {
+      "words": 2,
+      "insert_total": 1120,
+      "insert_alignable": 1120,
+      "insert_impossible": 0,
+      "words_with_impossible": 0,
+      "words_all_impossible": 0
+    }
+  }
+}

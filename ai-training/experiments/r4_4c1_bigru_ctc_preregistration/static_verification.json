@@ -1,0 +1,30 @@
+{
+  "status": "PASS",
+  "synthetic_only": true,
+  "r4_4b_cnn_repr_identical": true,
+  "r4_4b_cnn_parameter_shapes_identical": true,
+  "input_batch_shape": [3, 1, 64, 41],
+  "frequency_pooled_shape": [3, 20, 96],
+  "encoder_output_lengths": [20, 15, 8],
+  "bigru_output_contract": [3, 20, 192],
+  "logit_shape": [3, 20, 41],
+  "packed_recurrent_padding_max_abs": 0.0,
+  "parameters": {
+    "cnn_encoder": 79104,
+    "bigru": 111744,
+    "ctc_head": 7913,
+    "total": 198761,
+    "trainable": 198761
+  },
+  "alignability": {
+    "method": "static reuse of unchanged R4-4A/R4-4B temporal-downsampling-by-2 geometry",
+    "source_artifact": "ai-training/experiments/r4_4a_ctc_sequence_feasibility/ctc_alignability.json",
+    "source_sha256": "3172E1E4D0CE7A7CDBD6D635EEC6EAE2DD2395B547EBCDA61FDB14A3AAB69016",
+    "train_words": 16259,
+    "train_unalignable": 0,
+    "validation_words": 7728,
+    "validation_unalignable": 0
+  },
+  "training_occurred": false,
+  "validation_model_inference_occurred": false
+}

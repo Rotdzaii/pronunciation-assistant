@@ -1,0 +1,46 @@
+{
+  "train": {
+    "usable_words": 16259,
+    "total_target_phones": 54760,
+    "target_length": {
+      "count": 16259,
+      "min": 0.0,
+      "p5": 1.0,
+      "p10": 2.0,
+      "median": 3.0,
+      "mean": 3.36798081062796,
+      "p90": 6.0,
+      "p95": 7.0,
+      "max": 13.0
+    },
+    "empty_target_words": 28,
+    "one_phone_target_words": 838,
+    "multiple_deletion_words": 124,
+    "substitution_plus_deletion_words": 448,
+    "adjacent_identical_target_words": 24,
+    "adjacent_identical_target_pairs": 24,
+    "malformed_or_unresolved_target_words": 0
+  },
+  "validation": {
+    "usable_words": 7728,
+    "total_target_phones": 25423,
+    "target_length": {
+      "count": 7728,
+      "min": 0.0,
+      "p5": 1.0,
+      "p10": 2.0,
+      "median": 3.0,
+      "mean": 3.289725672877847,
+      "p90": 6.0,
+      "p95": 7.0,
+      "max": 13.0
+    },
+    "empty_target_words": 15,
+    "one_phone_target_words": 407,
+    "multiple_deletion_words": 90,
+    "substitution_plus_deletion_words": 259,
+    "adjacent_identical_target_words": 13,
+    "adjacent_identical_target_pairs": 13,
+    "malformed_or_unresolved_target_words": 0
+  }
+}

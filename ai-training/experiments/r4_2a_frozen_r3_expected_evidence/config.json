@@ -1,0 +1,34 @@
+{
+  "experiment": "R4-2A Frozen R3 Expected-Phone Evidence Audit",
+  "markers": [
+    "RESEARCH_ONLY",
+    "AUDIT_ONLY",
+    "NO_TRAINING",
+    "R4_TEST_CLOSED"
+  ],
+  "checkpoint": "ai-training/experiments/r3_1d_observed_phone_seed42_48epochs/R3_1D_observed_phone_40class_seed42_best_validation_macro_f1.pt",
+  "checkpoint_sha256": "5C66860BBC50BA803F5BFE25417DF19BDF34B1C7BE36D507B0DDCA88D767EA5E",
+  "selected_epoch": 47,
+  "v4_sha256": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D",
+  "matched_control_sha256": "864591A259F0C7E6F16828C5F755049CFCF0F79A8B586ADA354D190F9C5C7823",
+  "audio": {
+    "sample_rate": 16000,
+    "window_seconds": 0.5,
+    "window_samples": 8000,
+    "feature_shape": [
+      1,
+      64,
+      16
+    ]
+  },
+  "score": "expected_logit - max(other 39 logits); lower means deletion evidence",
+  "threshold_protocol": "TRAIN only: recall >=0.45; max Macro-F1; deletion F1; precision; lower threshold",
+  "interpretation_preregistered": {
+    "deletion_specific": "matched margin AUC>=0.60 AND deletion-vs-substitution AUC>=0.60 AND deletion median below both non-deletion origins",
+    "mismatch_only": "matched margin AUC>=0.60 but deletion-vs-substitution condition fails",
+    "not_confirmed": "matched margin AUC<0.60"
+  },
+  "test_audio_paths_resolved": false,
+  "test_audio_accessed": false,
+  "training_performed": false
+}

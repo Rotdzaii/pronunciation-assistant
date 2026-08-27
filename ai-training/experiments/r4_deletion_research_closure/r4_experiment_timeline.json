@@ -1,0 +1,23 @@
+{
+  "research_generation": "R4 pronunciation deletion",
+  "closed": true,
+  "events": [
+    {"experiment": "R4-0", "status": "DURATION_SHORTCUT_HIGH", "finding": "Duration produced a strong shortcut baseline and was not accepted as the intended acoustic solution."},
+    {"experiment": "R4-1", "status": "SIGNAL_WEAK", "finding": "Direct conditional deletion classification did not meet the required signal."},
+    {"experiment": "R4-2A", "status": "EXPECTED_PHONE_MISMATCH_ONLY", "finding": "Scalar R3 evidence largely captured mismatch rather than deletion."},
+    {"experiment": "R4-2B", "status": "MODERATE", "finding": "Temporal evidence showed moderate deletion-related information."},
+    {"experiment": "R4-2C", "status": "BLOCKED", "finding": "MFA could not provide a fixed interval for a phone that was deleted."},
+    {"experiment": "R4-3A", "status": "SEQUENCE_DESIGN_READY_WITH_WARNINGS", "finding": "Expected-versus-observed word-sequence relations were representable."},
+    {"experiment": "R4-3B", "status": "R4_3B_SEQUENCE_DELETION_NOT_CONFIRMED", "finding": "Deterministic sliding-logit DP strongly suppressed DELETE."},
+    {"experiment": "R4-3C", "status": "R4_3C_NO_ELIGIBLE_PRIOR_SCALE", "finding": "A global prior scale could not rescue the deterministic DP family."},
+    {"experiment": "R4-4A", "status": "R4_4A_CTC_SEQUENCE_READY_WITH_WARNINGS", "finding": "Self-trained word-level CTC was technically feasible."},
+    {"experiment": "R4-4B", "status": "R4_4B_CTC_SEQUENCE_LEARNED_DELETION_WEAK", "finding": "CNN-only CTC learned sequences but under-generated and produced weak deletion decisions."},
+    {"experiment": "R4-4C0", "status": "CTC_MIXED_ACOUSTIC_FAILURE", "finding": "Both under-generation and broad phone confusion contributed."},
+    {"experiment": "R4-4C2", "status": "R4_4C2_BIGRU_CTC_IMPROVED", "finding": "One BiGRU materially improved phone-sequence modeling, but deletion confirmation gates still failed."},
+    {"experiment": "R4-4D0", "status": "R4_4D0_CTC_HYPOTHESIS_SIGNAL_STRONG", "finding": "TRAIN-only continuous CTC hypothesis scores strongly separated deletion."},
+    {"experiment": "R4-4D1", "status": "R4_4D1_HYPOTHESIS_THRESHOLD_TRANSFER_FAIL", "finding": "The frozen RAW TRAIN threshold transferred poorly despite strong continuous validation signal."},
+    {"experiment": "R4-4D2A", "status": "R4_4D2A_ROBUST_CALIBRATION_READY", "finding": "TRAIN-speaker LOSO selected TARGET normalization and a robust median threshold."},
+    {"experiment": "R4-4D2B", "status": "R4_4D2B_DELETION_VALIDATION_NOT_CONFIRMED", "finding": "The final iterative development validation passed only 3 of 8 frozen gates."},
+    {"experiment": "R4 closure", "status": "R4_DELETION_RESEARCH_CLOSED_NOT_CONFIRMED", "finding": "The R4 deletion branch is closed without TEST access."}
+  ]
+}

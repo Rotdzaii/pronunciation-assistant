@@ -1,0 +1,163 @@
+{
+  "R5_1A_positive_TP": 71,
+  "R5_1A_TP_to_R5_2B_FN": {
+    "count": 40,
+    "suppression": {
+      "n": 40,
+      "minimum": 0.5527682985578264,
+      "maximum": 4.014498651027679,
+      "mean": 1.4526434417068959,
+      "median": 1.2906316757202148,
+      "q25": 0.9419811089833576,
+      "q75": 1.8144250392913817,
+      "q90": 2.420864880084992,
+      "equal_zero_count": 0,
+      "greater_zero_count": 40,
+      "less_zero_count": 0
+    },
+    "winner_family": {
+      "DELETE": {
+        "count": 3,
+        "share": 0.075
+      },
+      "SUB": {
+        "count": 37,
+        "share": 0.925
+      }
+    },
+    "speaker_counts": {
+      "ZHAA": 9,
+      "BWC": 8,
+      "YBAA": 7,
+      "NCC": 4,
+      "TLV": 4,
+      "EBVS": 3,
+      "NJS": 2,
+      "PNV": 2,
+      "YKWK": 1
+    },
+    "truth_diagnostics": {
+      "word_count": 40,
+      "truth_event_count": 46,
+      "phone_counts": {
+        "G": 10,
+        "EH": 5,
+        "AH": 5,
+        "AX": 4,
+        "N": 3,
+        "R": 3,
+        "T": 2,
+        "L": 2,
+        "IY": 2,
+        "S": 2,
+        "K": 2,
+        "Y": 1,
+        "D": 1,
+        "W": 1,
+        "IH": 1,
+        "UW": 1,
+        "ER": 1
+      },
+      "position_counts": {
+        "BETWEEN": 23,
+        "AFTER_FINAL": 21,
+        "BEFORE_FIRST": 2
+      },
+      "expected_context_counts": {
+        "NG|<SIL>": 11,
+        "NG|S": 4,
+        "<SIL>|AE": 2,
+        "N|D": 2,
+        "P|<SIL>": 2,
+        "D|<SIL>": 2,
+        "ER|D": 2,
+        "D|UW": 1,
+        "F|AE": 1,
+        "D|N": 1,
+        "DH|Z": 1,
+        "G|IY": 1,
+        "S|M": 1,
+        "S|N": 1,
+        "AE|D": 1,
+        "AO|<SIL>": 1,
+        "R|<SIL>": 1,
+        "UW|<SIL>": 1,
+        "T|ER": 1,
+        "AO|Z": 1,
+        "AH|<SIL>": 1,
+        "K|<SIL>": 1,
+        "AH|P": 1,
+        "G|ER": 1,
+        "HH|ER": 1,
+        "S|K": 1,
+        "T|<SIL>": 1,
+        "ER|EH": 1
+      }
+    }
+  },
+  "share_of_R5_1A_TP_lost": 0.5633802816901409,
+  "R5_1A_FN_to_R5_2B_TP": {
+    "count": 8,
+    "suppression": {
+      "n": 8,
+      "minimum": 0.0,
+      "maximum": 0.4302996635437011,
+      "mean": 0.26254677096056556,
+      "median": 0.2789131164550781,
+      "q25": 0.2078743662152972,
+      "q75": 0.36299147350447514,
+      "q90": 0.40128763437271114,
+      "equal_zero_count": 1,
+      "greater_zero_count": 7,
+      "less_zero_count": 0
+    },
+    "winner_family": {
+      "DELETE": {
+        "count": 1,
+        "share": 0.125
+      },
+      "KEEP": {
+        "count": 1,
+        "share": 0.125
+      },
+      "SUB": {
+        "count": 6,
+        "share": 0.75
+      }
+    },
+    "speaker_counts": {
+      "NJS": 2,
+      "TLV": 2,
+      "EBVS": 1,
+      "HJK": 1,
+      "NCC": 1,
+      "YKWK": 1
+    },
+    "truth_diagnostics": {
+      "word_count": 8,
+      "truth_event_count": 8,
+      "phone_counts": {
+        "AX": 2,
+        "S": 2,
+        "AH": 2,
+        "G": 1,
+        "EH": 1
+      },
+      "position_counts": {
+        "BETWEEN": 5,
+        "AFTER_FINAL": 2,
+        "BEFORE_FIRST": 1
+      },
+      "expected_context_counts": {
+        "D|<SIL>": 2,
+        "M|D": 1,
+        "IH|P": 1,
+        "NG|IH": 1,
+        "<SIL>|S": 1,
+        "V|N": 1,
+        "AH|T": 1
+      }
+    }
+  },
+  "thresholds_are_frozen_oof_values": true
+}

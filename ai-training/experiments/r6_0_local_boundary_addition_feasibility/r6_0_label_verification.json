@@ -1,0 +1,25 @@
+{
+  "stage": "R6-0 synthetic boundary label verification",
+  "status": "PASS",
+  "label_rule": "boundary is positive iff one or more frozen-style Addition events have exactly that boundary index",
+  "cases": {
+    "correct_word": {"event_counts": [0, 0, 0], "labels": [false, false, false]},
+    "single_addition": {"event_counts": [0, 1, 0], "labels": [false, true, false]},
+    "multiple_distinct_boundaries": {"event_counts": [0, 1, 0, 1], "labels": [false, true, false, true]},
+    "multiple_events_shared_boundary": {"event_counts": [0, 2, 0], "labels": [false, true, false]},
+    "mixed_substitution_without_addition_event": {"positive_boundaries": 0},
+    "mixed_deletion_addition": {"event_counts": [0, 0, 1], "labels": [false, false, true]}
+  },
+  "non_event_boundary_inside_positive_word_remains_negative": "PASS",
+  "multiple_events_one_positive_identity": "PASS",
+  "event_multiplicity_preserved": "PASS",
+  "substitution_does_not_create_positive": "PASS",
+  "deletion_does_not_create_positive": "PASS",
+  "synthetic_coverage_definition": {
+    "events": 3,
+    "covered_events": 2,
+    "coverage": 0.6666666666666666,
+    "purpose": "semantic fixture only; not real TRAIN coverage"
+  }
+}
+

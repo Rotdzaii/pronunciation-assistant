@@ -1,0 +1,34 @@
+{
+  "rows": 26337,
+  "non_deletion_support": 25423,
+  "deletion_support": 914,
+  "accuracy": 0.9622204503170445,
+  "balanced_accuracy": 0.5052628777108824,
+  "macro_f1": 0.5031010351169379,
+  "deletion_precision": 0.12149532710280374,
+  "deletion_recall": 0.014223194748358862,
+  "deletion_f1": 0.02546523016650343,
+  "confusion_matrix": [
+    [
+      25329,
+      94
+    ],
+    [
+      901,
+      13
+    ]
+  ],
+  "correct_false_deletion_rate": 0.00329539962212751,
+  "substitution_false_deletion_rate": 0.007132132132132132,
+  "macro_f1_delta_vs_duration": -0.16504496488306208,
+  "gates": {
+    "binary_macro_f1": false,
+    "deletion_f1": false,
+    "deletion_recall": false,
+    "macro_f1_gain_over_duration": false,
+    "matched_macro_f1": false,
+    "matched_deletion_f1": false,
+    "substitution_false_deletion": true,
+    "speaker_recall": false
+  }
+}

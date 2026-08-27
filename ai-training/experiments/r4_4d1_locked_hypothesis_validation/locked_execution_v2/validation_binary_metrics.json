@@ -1,0 +1,23 @@
+{
+  "accuracy": 0.9355279644606447,
+  "balanced_accuracy": 0.6965871373214231,
+  "binary_macro_f1": 0.6437496737840533,
+  "deletion_precision": 0.2531486146095718,
+  "deletion_recall": 0.43982494529540483,
+  "deletion_f1": 0.3213429256594724,
+  "nondeletion_precision": 0.9793122954462806,
+  "nondeletion_recall": 0.9533493293474413,
+  "nondeletion_f1": 0.9661564219086343,
+  "confusion_matrix": [
+    [
+      24237,
+      1186
+    ],
+    [
+      512,
+      402
+    ]
+  ],
+  "correct_false_deletion": 0.04631134935629861,
+  "substitution_false_deletion": 0.04954954954954955
+}

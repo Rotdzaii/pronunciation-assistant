@@ -1,0 +1,11 @@
+{
+  "status": "R4_4D1B_DRIVER_FROZEN",
+  "source_verification": "PASS",
+  "synthetic_tests": "14/14 PASS",
+  "consistency_missing_rules": 0,
+  "driver_sha256": "5F12FB5E6B0A4765107DCAD3C822F32E6909940E9FAE265F5C3E3551ACB6AE22",
+  "real_train_threshold_calculated": false,
+  "validation_hypothesis_scoring": false,
+  "r4_test_accessed": false,
+  "neural_training": false
+}

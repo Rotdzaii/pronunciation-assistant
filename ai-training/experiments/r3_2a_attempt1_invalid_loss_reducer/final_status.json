@@ -1,0 +1,8 @@
+{
+  "status": "R3_2A_REPRODUCTION_FAIL",
+  "test_opened": false,
+  "test_eligible": false,
+  "failures": [
+    "loss: delta=0.0870050757925"
+  ]
+}

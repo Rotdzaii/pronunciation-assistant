@@ -1,0 +1,296 @@
+{
+  "schema_version": "1.0",
+  "contract_id": "R5-1B_FROZEN_DEVELOPMENT_VALIDATION_TRANSFER",
+  "status": "R5_1B_VALIDATION_CONTRACT_FROZEN",
+  "frozen_at": "2026-08-15T18:09:15+07:00",
+  "research_branch": "research/phoenix-correctness",
+  "stage_type": "contract-only preregistration for one future iterative development-validation transfer evaluation",
+  "scientific_question": "Does the fully frozen R5-1A addition scorer with its fixed TRAIN-derived ROBUST_THETA transfer to the six unseen VALIDATION speakers without any validation calibration?",
+  "source_identities": {
+    "r5_1a_contract": {
+      "path": "ai-training/experiments/r5_1a_alignability_safe_addition_scoring/R5_1A_DEVELOPMENT_CONTRACT.json",
+      "sha256": "A6BE2C1C6A09AC0007E9330E44C1C7F45A91CCB76E47EE63ACEB99D0781A1BEB"
+    },
+    "r5_1a_preregistration": {
+      "path": "ai-training/experiments/r5_1a_alignability_safe_addition_scoring/R5_1A_PREREGISTRATION.md",
+      "sha256": "2CE9F25B91139B9EA38E2AB552B11C29AA1397B252CE957833D1E3A80D689141"
+    },
+    "r5_1a_static_manifest": {
+      "path": "ai-training/experiments/r5_1a_alignability_safe_addition_scoring/R5_1A_STATIC_VERIFICATION_MANIFEST.json",
+      "sha256": "EED04655AD957A66BF9A13149F812BD0CD74B2D362BDFD4CECD12579DAAA3B5E"
+    },
+    "r5_1a_execution_manifest": {
+      "path": "ai-training/experiments/r5_1a_alignability_safe_addition_scoring/R5_1A_EXECUTION_MANIFEST.json",
+      "sha256": "C9343A75CE26C2BEECA388EBA855E91AE0992D22C0C5D785308D0A98B89A3CD6"
+    },
+    "r5_1a_scorer": {
+      "path": "ai-training/experiments/r5_1a_alignability_safe_addition_scoring/r5_1a_scorer.py",
+      "sha256": "4DE49C9070C973EE44EFBD09DFC063C436779E723D12EC7A7A2BC4A06AF35F90"
+    },
+    "r5_1a_train_driver_provenance": {
+      "path": "ai-training/experiments/r5_1a_alignability_safe_addition_scoring/r5_1a_train_execution_driver.py",
+      "sha256": "80D0E1263BE1744BCC252736BAF9C28F3E5D19C204596D836F3D9C296AB52D5D"
+    },
+    "r5_1a_final_status": {
+      "path": "ai-training/experiments/r5_1a_alignability_safe_addition_scoring/r5_1a_final_status.json",
+      "sha256": "47E5936B645B8DC4A0EFBAB971E78872D15FDFE210621C1031F864B0A827CAF3",
+      "status": "R5_1A_INSERTION_HYPOTHESIS_SCORING_DEVELOPMENT_PASS"
+    },
+    "v4": {
+      "path": "ai-training/datasets/l2-arctic/metadata/all_speakers_expected_observed_v4.csv",
+      "sha256": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D"
+    },
+    "r4_4c2_checkpoint": {
+      "path": "ai-training/experiments/r4_4c2_bigru_ctc_seed42/R4_4C2_bigru_ctc_phone_sequence_seed42_best_validation_per.pt",
+      "sha256": "F54C9C2361AE78E1C37353AEB338A2DE6722C0B1EC4F885F6B52688CE9E88085",
+      "selected_epoch": 35,
+      "selection_metric": "R4 VALIDATION phone error rate"
+    },
+    "r5_0_annotation_semantics": {
+      "path": "ai-training/experiments/r5_0_addition_feasibility_audit/r5_0_annotation_semantics.json",
+      "sha256": "F4AD6B887D73F0D0E24232ED36AB4F589952D09FBD6A20FE019D348AF3497640"
+    },
+    "r5_1_development_contract": {
+      "path": "ai-training/experiments/r5_1_addition_hypothesis_scoring/R5_1_DEVELOPMENT_CONTRACT.json",
+      "sha256": "18697A0C7DED130E122F49A9440AFA2D79B02E8630F2F7583C775F67797DCE77"
+    }
+  },
+  "identity_verification": {
+    "required_identities_matched": true,
+    "static_manifest_entries_verified": true,
+    "execution_manifest_entries_verified": true,
+    "verified_manifest_entries": 20,
+    "frozen_artifacts_regenerated": false
+  },
+  "speaker_splits": {
+    "TRAIN": ["BWC", "EBVS", "HJK", "NCC", "NJS", "PNV", "RRBI", "TLV", "TNI", "YBAA", "YKWK", "ZHAA"],
+    "VALIDATION": ["ABA", "HKK", "HQTV", "LXC", "MBMPS", "SVBI"],
+    "TEST": ["ASI", "ERMS", "SKA", "THV", "TXHC", "YDCK"]
+  },
+  "evidence_role": {
+    "r5_1b": "iterative development-validation transfer evidence",
+    "independent_final_confirmation": false,
+    "reason": "The R4-4C2 acoustic checkpoint selected epoch 35 using PER on these VALIDATION speakers.",
+    "mitigating_facts": [
+      "R5 addition labels did not select the R4 checkpoint",
+      "the R5-1A score formula was developed without VALIDATION",
+      "ROBUST_THETA was derived from TRAIN speaker-LOSO only",
+      "the metrics and gates in this contract are frozen before VALIDATION addition performance"
+    ],
+    "forbidden_descriptions": ["independent confirmation", "locked final TEST", "final addition confirmation"]
+  },
+  "frozen_development_result": {
+    "gates_passed": 6,
+    "gates_total": 6,
+    "addition_vs_all_nonaddition_roc_auc": 0.7734833025081417,
+    "addition_vs_correct_only_roc_auc": 0.802352821409537,
+    "oof_binary_macro_f1": 0.5551978767901391,
+    "addition_precision": 0.1005665722379603,
+    "addition_recall": 0.2198142414860681,
+    "addition_f1": 0.1379980563654033,
+    "correct_only_false_addition_rate": 0.03491295938104449,
+    "exact_event_f1": 0.04389312977099236,
+    "robust_theta": 0.7485884030659993,
+    "rerun_for_tuning": false
+  },
+  "frozen_model_and_scorer": {
+    "model": "R4-4C2 CNN plus one packed bidirectional GRU plus CTC",
+    "canonical_phone_indices": "0..39 in frozen order",
+    "blank_index": 40,
+    "checkpoint_frozen": true,
+    "preprocessing_feature_extraction_and_downsampling_frozen": true,
+    "scorer_implementation": "import and call the exact static-verified r5_1a_scorer.py; do not create another scorer implementation",
+    "score_family": "TARGET only",
+    "training": false,
+    "checkpoint_selection": false
+  },
+  "hypotheses_and_score": {
+    "expected": "E=[e_1,...,e_N], N>=1",
+    "keep": "H_KEEP=E",
+    "insert": "H_INSERT(E,b,p)=E[:b]+[p]+E[b:] for b in {0,...,N} and p in {0,...,39}",
+    "alignable_raw_score": "RAW_SCORE(H)=-CTCLoss(log_softmax(logits,dim=-1),H,input_lengths=[T],target_lengths=[len(H)],blank=40,reduction='none',zero_infinity=True)",
+    "target_score": "TARGET_SCORE(H)=RAW_SCORE(H)/max(len(H),1)",
+    "best_insert": "maximum TARGET_SCORE among alignable INSERT candidates",
+    "best_insert_tie_order": ["lower insertion boundary", "lower canonical phone index"],
+    "addition_score": "A=TARGET_SCORE(BEST_INSERT)-TARGET_SCORE(KEEP) when BEST_INSERT exists; otherwise A=-infinity",
+    "manual_phone_or_boundary_given_to_scorer": false,
+    "alternative_score_or_penalty": false
+  },
+  "alignability": {
+    "adjacent_repeat_count": "count of adjacent identical labels in H",
+    "minimum_ctc_steps": "MIN_CTC_STEPS(H)=len(H)+ADJACENT_REPEAT_COUNT(H)",
+    "alignable": "T>=MIN_CTC_STEPS(H)",
+    "impossible": "T<MIN_CTC_STEPS(H)",
+    "impossible_target_score": "-infinity",
+    "impossible_insert_counted": true,
+    "all_insert_impossible": {
+      "best_insert_exists": false,
+      "best_insert_score": "-infinity",
+      "A": "-infinity",
+      "phone": null,
+      "boundary": null,
+      "word_remains_in_binary_population": true
+    },
+    "keep_impossible_action": "R5_1B_VALIDATION_BLOCKED_KEEP_ALIGNABILITY before performance interpretation; do not exclude the word",
+    "alignable_nonfinite_action": "R5_1B_VALIDATION_TECHNICAL_FAILURE_NUMERICAL before performance interpretation; do not clip or repair"
+  },
+  "validation_population": {
+    "population_rule": "Apply the frozen R5-1A runtime-word reconstruction without validation-specific exclusions: unique manual-word containment, nonempty canonical expected sequence, no unresolved or malformed row in the word, and a reliable frozen MFA word span.",
+    "source_support_reference": {
+      "clean_validation_addition_events": 296,
+      "speakers_with_at_least_five_additions": 6,
+      "role": "R5-0 data-support information only; not a forced runtime-event count"
+    },
+    "positive_word": "eligible runtime word with at least one frozen clean addition event",
+    "negative_word": "eligible runtime word with zero frozen clean addition events",
+    "correct_only_negative": "zero additions, zero substitutions, zero deletions, and every eligible expected-phone relation correct",
+    "substitution_negative": "zero additions and at least one substitution; may overlap deletion-containing negative",
+    "deletion_negative": "zero additions and at least one deletion; may overlap substitution-containing negative",
+    "pre_metric_accounting": [
+      "source validation words",
+      "runtime-evaluable words",
+      "positive addition-containing words",
+      "negative words",
+      "clean source addition events",
+      "runtime-evaluable addition events",
+      "multiple-addition words",
+      "substitution/addition mixed words",
+      "deletion/addition mixed words",
+      "every exclusion reason"
+    ],
+    "row_accounting_failure_action": "R5_1B_VALIDATION_BLOCKED_ROW_ACCOUNTING; preserve diagnostics and stop before performance interpretation",
+    "validation_specific_filtering": false
+  },
+  "event_ground_truth": {
+    "clean_addition": "A frozen V4 row with tagged_relation=addition and resolved relation=addition, expected canonical placeholder <SIL>, observed phone in the frozen 40-phone vocabulary, ADDITION_AUDIT membership, and a finite positive-duration interval.",
+    "expected_sequence": "canonical expected phones from clean resolved correct, substitution, and deletion rows in frozen source order; addition rows do not enter E",
+    "word_mapping": "map an interval to its unique containing manual word; events without unique word containment remain source support but are not runtime word/event examples",
+    "boundary": "number of eligible expected-sequence rows whose source_index precedes the addition source_index",
+    "boundary_range": "integer 0 through N",
+    "positions": {
+      "BEFORE_FIRST": "boundary==0",
+      "BETWEEN": "0<boundary<N",
+      "AFTER_FINAL": "boundary==N"
+    },
+    "position_ambiguous": "retain in source-level support; exclude only from runtime position/exact-event metrics when unique word containment or nonempty expected sequence is unavailable",
+    "mixed_error_policy": "retain eligible addition-positive words containing substitution and/or deletion and report their cohort flags",
+    "multiple_addition_policy": "retain every clean event and the word; do not collapse multiple true events",
+    "non_runtime_evaluable_policy": "report every event by frozen exclusion reason; do not silently discard or redefine it",
+    "predicted_event": "one BEST_INSERT phone and expected-sequence boundary only when A>=ROBUST_THETA and best_insert_exists=true",
+    "exact_match": "same word identity, canonical added phone, and expected-sequence insertion boundary",
+    "matching": "deterministic one-to-one multiset matching using counter intersection on (word_id,boundary,phone_index)",
+    "timestamps_used_in_primary_match": false,
+    "maximum_predicted_events_per_word": 1,
+    "multiple_addition_limitation": "unmatched additional true events are false negatives"
+  },
+  "fixed_threshold_decision": {
+    "ROBUST_THETA": 0.7485884030659993,
+    "dtype": "exact frozen float64 representation",
+    "prediction": "A>=0.7485884030659993 predicts addition; otherwise non-addition",
+    "validation_recalibration": false,
+    "threshold_search_or_neighbor_evaluation": false,
+    "speaker_phone_or_position_thresholds": false
+  },
+  "continuous_metrics": {
+    "score": "frozen extended-real A",
+    "roc_auc": "deterministic Mann-Whitney rank AUC with ascending exact comparisons and average ranks for exact ties; -infinity is the lowest ordered score and ties with -infinity",
+    "report": [
+      "addition vs all non-addition ROC-AUC",
+      "addition vs correct-only ROC-AUC",
+      "score distribution by VALIDATION speaker",
+      "addition score distribution",
+      "correct-only score distribution",
+      "substitution-containing negative distribution",
+      "deletion-containing negative distribution"
+    ],
+    "descriptive_distributions_change_scoring": false
+  },
+  "fixed_threshold_word_metrics": {
+    "positive_class": "addition",
+    "confusion_order": "[[TN,FP],[FN,TP]]",
+    "report": ["TP", "FP", "FN", "TN", "accuracy", "balanced_accuracy", "binary_macro_f1", "addition_precision", "addition_recall", "addition_f1"],
+    "balanced_accuracy": "mean of non-addition recall and addition recall",
+    "binary_macro_f1": "mean of non-addition F1 and addition F1",
+    "zero_denominator": 0,
+    "false_addition_cohorts": ["correct-only", "substitution-containing non-addition", "deletion-containing non-addition"]
+  },
+  "event_metrics": {
+    "report": ["exact-event TP", "FP", "FN", "precision", "recall", "F1"],
+    "position_strata": ["BEFORE_FIRST", "BETWEEN", "AFTER_FINAL"],
+    "same_as_r5_1a": true
+  },
+  "validation_transfer_gates": {
+    "all_required": true,
+    "G1": {"metric": "addition_vs_all_nonaddition_roc_auc", "operator": ">=", "value": 0.70},
+    "G2": {"metric": "addition_vs_correct_only_roc_auc", "operator": ">=", "value": 0.70},
+    "G3": {"metric": "fixed_threshold_binary_macro_f1", "operator": ">", "value": 0.548179},
+    "G4": {"metric": "fixed_threshold_addition_f1", "operator": ">", "value": 0.129246},
+    "G5": {"metric": "correct_only_false_addition_rate", "operator": "<=", "value": 0.054352},
+    "G6": {"metric": "exact_event_f1", "operator": ">", "value": 0.026688},
+    "compare_full_precision": true,
+    "post_access_modification": false
+  },
+  "transfer_diagnostics": {
+    "per_validation_speaker": ["positive support", "TP", "FP", "FN", "TN", "addition precision", "addition recall", "addition F1", "predicted-positive rate", "correct-only false-addition rate"],
+    "aggregate_deltas_from_frozen_train_oof": true,
+    "additional_gates": false,
+    "threshold_modification": false
+  },
+  "interpretation_rule": {
+    "strong_auc_but_failed_fixed_threshold": "ranking evidence transferred but TRAIN-derived decision calibration did not transfer sufficiently",
+    "validation_optimal_threshold_may_be_computed": false,
+    "subjective_override": false
+  },
+  "future_status_precedence": [
+    "pre-metric technical status when scientifically valid metrics cannot be produced",
+    "R5_1B_VALIDATION_TRANSFER_PASS when all six scientific gates pass",
+    "R5_1B_VALIDATION_TRANSFER_NOT_CONFIRMED when any scientific gate fails"
+  ],
+  "future_scientific_statuses": {
+    "R5_1B_VALIDATION_TRANSFER_PASS": "all six frozen transfer gates pass; iterative development transfer only",
+    "R5_1B_VALIDATION_TRANSFER_NOT_CONFIRMED": "one or more frozen transfer gates fail; accept without retuning"
+  },
+  "future_technical_statuses": [
+    "R5_1B_VALIDATION_BLOCKED_IDENTITY",
+    "R5_1B_VALIDATION_BLOCKED_ROW_ACCOUNTING",
+    "R5_1B_VALIDATION_BLOCKED_KEEP_ALIGNABILITY",
+    "R5_1B_VALIDATION_TECHNICAL_FAILURE_NUMERICAL",
+    "R5_1B_VALIDATION_TECHNICAL_FAILURE_IMPLEMENTATION"
+  ],
+  "test_policy": {
+    "speakers": ["ASI", "ERMS", "SKA", "THV", "TXHC", "YDCK"],
+    "role": "candidate independent final confirmation only after a transfer pass and a separately authorized dedicated locked TEST preregistration",
+    "paths_may_be_resolved": false,
+    "audio_may_be_read": false,
+    "mfa_or_ctc_may_run": false,
+    "scores_predictions_examples_or_metrics_may_be_inspected": false,
+    "test_audio_accessed": false,
+    "test_inference_run": false,
+    "test_performance_consumed": false,
+    "r5_1b_pass_authorizes_immediate_test": false,
+    "r5_1b_failure_action": "do not open TEST; review the frozen failure first"
+  },
+  "anti_drift": {
+    "forbidden_after_validation_access": [
+      "alter ROBUST_THETA or choose a validation threshold",
+      "change TARGET normalization or add RAW/TIME variants",
+      "add insertion penalty, beam search, or language model",
+      "emit multiple insertions",
+      "tune by speaker, phone, or boundary",
+      "remove mixed-error words or difficult speakers",
+      "change a gate or comparison operator",
+      "change checkpoint or retrain"
+    ],
+    "new_change_requires": "a new named research generation with an appropriate independent evaluation design"
+  },
+  "current_contract_task_audit": {
+    "training": false,
+    "model_inference": false,
+    "validation_audio_accessed": false,
+    "validation_inference": false,
+    "validation_metrics_calculated": false,
+    "test_accessed": false,
+    "r5_1a_modified": false,
+    "r4_modified": false
+  }
+}

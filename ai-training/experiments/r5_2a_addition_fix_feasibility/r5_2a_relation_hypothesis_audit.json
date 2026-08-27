@@ -1,0 +1,44 @@
+{
+  "new_generation": true,
+  "r5_1_closed_and_unchanged": true,
+  "scientific_distinction": {
+    "r5_1": "BEST_INSERT compared only with KEEP.",
+    "r5_2a_hypothesis": "BEST_INSERT may later be compared with the strongest permitted non-addition explanation among KEEP, substitution, and deletion in one exact CTC likelihood space.",
+    "why_distinct": "The denominator changes from a single canonical explanation to an explicit relation-competitive composite. This targets explanation confounding rather than retroactively moving the R5-1 threshold."
+  },
+  "families": {
+    "KEEP": "The unchanged expected canonical sequence E.",
+    "INSERT": "E with one canonical phone inserted at boundary b in 0..N.",
+    "SUBSTITUTION": "E with expected position i replaced by one of the other 39 canonical phones.",
+    "DELETE": "E with expected position i omitted."
+  },
+  "mechanical_overlap_analysis": {
+    "substitution_words": {
+      "plausible_confounding": true,
+      "reason": "A true substitution can make KEEP acoustically poor. An insertion hypothesis can then win against KEEP even if replacement is the better sequence explanation. BEST_SUB gives that replacement an explicit competitor."
+    },
+    "deletion_words": {
+      "plausible_confounding": true,
+      "reason": "A true deletion can make KEEP acoustically poor. Some INSERT target can score above KEEP without representing the true relation. BEST_DELETE supplies the omitted-phone explanation in the same likelihood space."
+    },
+    "correct_only_words": {
+      "direct_new_mechanism": "limited",
+      "reason": "KEEP already competes in R5-1. SUB/DELETE can help only when model confusion makes an edited non-addition sequence score above KEEP; there is no guaranteed improvement for the largest false-positive cohort."
+    }
+  },
+  "class_overlap_targeting": {
+    "assessment": "MECHANISTICALLY_JUSTIFIED_BUT_NOT_GUARANTEED",
+    "reason": "The new competitors directly represent two frozen false-positive cohorts and can also strengthen the non-addition reference for some correct words, but one-edit score overlap can remain."
+  },
+  "speaker_shift_targeting": {
+    "classification": "PARTIALLY_TARGETS",
+    "reason": "All competing scores share the same word, logits, speaker, and TARGET score convention, so common within-word location components may cancel. However R5-1 was already a within-word INSERT-minus-KEEP comparison and still shifted; relative relation preferences can remain speaker-dependent. Cancellation cannot be claimed."
+  },
+  "future_binary_contract_feasible": {
+    "addition_rule": "Feasible in principle: ADDITION only when BEST_INSERT exceeds the strongest permitted non-addition explanation by a separately preregistered criterion.",
+    "predicted_phone_available": true,
+    "predicted_boundary_available": true,
+    "when_nonaddition_wins": "Return NON_ADDITION for the binary task. The winning KEEP/SUB/DELETE family may be retained as a diagnostic, but R5-2A does not validate a complete multiclass relation output.",
+    "numeric_margin_frozen_now": false
+  }
+}

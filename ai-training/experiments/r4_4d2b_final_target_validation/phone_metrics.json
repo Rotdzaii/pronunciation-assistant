@@ -1,0 +1,332 @@
+{
+  "AA": {
+    "rows": 303,
+    "deletion_support": 1,
+    "deletion_precision": 0.0,
+    "deletion_recall": 0.0,
+    "deletion_f1": 0.0,
+    "false_deletion_rate": 0.009933774834437087
+  },
+  "AE": {
+    "rows": 693,
+    "deletion_support": 2,
+    "deletion_precision": 0.25,
+    "deletion_recall": 0.5,
+    "deletion_f1": 0.3333333333333333,
+    "false_deletion_rate": 0.004341534008683068
+  },
+  "AH": {
+    "rows": 2528,
+    "deletion_support": 46,
+    "deletion_precision": 0.1958762886597938,
+    "deletion_recall": 0.41304347826086957,
+    "deletion_f1": 0.26573426573426573,
+    "false_deletion_rate": 0.031426269137792104
+  },
+  "AO": {
+    "rows": 419,
+    "deletion_support": 1,
+    "deletion_precision": 0.0,
+    "deletion_recall": 0.0,
+    "deletion_f1": 0.0,
+    "false_deletion_rate": 0.03588516746411483
+  },
+  "AW": {
+    "rows": 202,
+    "deletion_support": 0,
+    "deletion_precision": 0.0,
+    "deletion_recall": 0.0,
+    "deletion_f1": 0.0,
+    "false_deletion_rate": 0.0049504950495049506
+  },
+  "AY": {
+    "rows": 502,
+    "deletion_support": 2,
+    "deletion_precision": 0.0,
+    "deletion_recall": 0.0,
+    "deletion_f1": 0.0,
+    "false_deletion_rate": 0.016
+  },
+  "B": {
+    "rows": 459,
+    "deletion_support": 3,
+    "deletion_precision": 0.0,
+    "deletion_recall": 0.0,
+    "deletion_f1": 0.0,
+    "false_deletion_rate": 0.02412280701754386
+  },
+  "CH": {
+    "rows": 186,
+    "deletion_support": 2,
+    "deletion_precision": 0.0,
+    "deletion_recall": 0.0,
+    "deletion_f1": 0.0,
+    "false_deletion_rate": 0.005434782608695652
+  },
+  "D": {
+    "rows": 1222,
+    "deletion_support": 194,
+    "deletion_precision": 0.5170068027210885,
+    "deletion_recall": 0.3917525773195876,
+    "deletion_f1": 0.44574780058651026,
+    "false_deletion_rate": 0.06906614785992218
+  },
+  "DH": {
+    "rows": 875,
+    "deletion_support": 16,
+    "deletion_precision": 0.3333333333333333,
+    "deletion_recall": 0.4375,
+    "deletion_f1": 0.37837837837837834,
+    "false_deletion_rate": 0.01629802095459837
+  },
+  "EH": {
+    "rows": 663,
+    "deletion_support": 3,
+    "deletion_precision": 0.0,
+    "deletion_recall": 0.0,
+    "deletion_f1": 0.0,
+    "false_deletion_rate": 0.015151515151515152
+  },
+  "ER": {
+    "rows": 633,
+    "deletion_support": 2,
+    "deletion_precision": 0.0,
+    "deletion_recall": 0.0,
+    "deletion_f1": 0.0,
+    "false_deletion_rate": 0.03169572107765452
+  },
+  "EY": {
+    "rows": 530,
+    "deletion_support": 0,
+    "deletion_precision": 0.0,
+    "deletion_recall": 0.0,
+    "deletion_f1": 0.0,
+    "false_deletion_rate": 0.013207547169811321
+  },
+  "F": {
+    "rows": 572,
+    "deletion_support": 6,
+    "deletion_precision": 0.25,
+    "deletion_recall": 0.6666666666666666,
+    "deletion_f1": 0.36363636363636365,
+    "false_deletion_rate": 0.02120141342756184
+  },
+  "G": {
+    "rows": 248,
+    "deletion_support": 12,
+    "deletion_precision": 0.36363636363636365,
+    "deletion_recall": 0.3333333333333333,
+    "deletion_f1": 0.34782608695652173,
+    "false_deletion_rate": 0.029661016949152543
+  },
+  "HH": {
+    "rows": 770,
+    "deletion_support": 22,
+    "deletion_precision": 0.13793103448275862,
+    "deletion_recall": 0.18181818181818182,
+    "deletion_f1": 0.1568627450980392,
+    "false_deletion_rate": 0.03342245989304813
+  },
+  "IH": {
+    "rows": 1686,
+    "deletion_support": 16,
+    "deletion_precision": 0.175,
+    "deletion_recall": 0.4375,
+    "deletion_f1": 0.24999999999999994,
+    "false_deletion_rate": 0.01976047904191617
+  },
+  "IY": {
+    "rows": 1088,
+    "deletion_support": 6,
+    "deletion_precision": 0.0625,
+    "deletion_recall": 0.3333333333333333,
+    "deletion_f1": 0.10526315789473684,
+    "false_deletion_rate": 0.027726432532347505
+  },
+  "JH": {
+    "rows": 155,
+    "deletion_support": 5,
+    "deletion_precision": 0.5,
+    "deletion_recall": 0.4,
+    "deletion_f1": 0.4444444444444445,
+    "false_deletion_rate": 0.013333333333333334
+  },
+  "K": {
+    "rows": 662,
+    "deletion_support": 28,
+    "deletion_precision": 0.23529411764705882,
+    "deletion_recall": 0.2857142857142857,
+    "deletion_f1": 0.2580645161290323,
+    "false_deletion_rate": 0.04100946372239748
+  },
+  "L": {
+    "rows": 1028,
+    "deletion_support": 72,
+    "deletion_precision": 0.1559633027522936,
+    "deletion_recall": 0.2361111111111111,
+    "deletion_f1": 0.1878453038674033,
+    "false_deletion_rate": 0.09623430962343096
+  },
+  "M": {
+    "rows": 809,
+    "deletion_support": 3,
+    "deletion_precision": 0.0,
+    "deletion_recall": 0.0,
+    "deletion_f1": 0.0,
+    "false_deletion_rate": 0.00620347394540943
+  },
+  "N": {
+    "rows": 1694,
+    "deletion_support": 43,
+    "deletion_precision": 0.15625,
+    "deletion_recall": 0.3488372093023256,
+    "deletion_f1": 0.21582733812949642,
+    "false_deletion_rate": 0.049061175045427015
+  },
+  "NG": {
+    "rows": 254,
+    "deletion_support": 3,
+    "deletion_precision": 0.5,
+    "deletion_recall": 0.3333333333333333,
+    "deletion_f1": 0.4,
+    "false_deletion_rate": 0.00398406374501992
+  },
+  "OW": {
+    "rows": 433,
+    "deletion_support": 1,
+    "deletion_precision": 0.16666666666666666,
+    "deletion_recall": 1.0,
+    "deletion_f1": 0.2857142857142857,
+    "false_deletion_rate": 0.011574074074074073
+  },
+  "OY": {
+    "rows": 48,
+    "deletion_support": 0,
+    "deletion_precision": 0.0,
+    "deletion_recall": 0.0,
+    "deletion_f1": 0.0,
+    "false_deletion_rate": 0.0
+  },
+  "P": {
+    "rows": 505,
+    "deletion_support": 13,
+    "deletion_precision": 0.35714285714285715,
+    "deletion_recall": 0.38461538461538464,
+    "deletion_f1": 0.3703703703703704,
+    "false_deletion_rate": 0.018292682926829267
+  },
+  "R": {
+    "rows": 992,
+    "deletion_support": 143,
+    "deletion_precision": 0.3870967741935484,
+    "deletion_recall": 0.4195804195804196,
+    "deletion_f1": 0.40268456375838924,
+    "false_deletion_rate": 0.11189634864546526
+  },
+  "S": {
+    "rows": 1065,
+    "deletion_support": 21,
+    "deletion_precision": 0.3103448275862069,
+    "deletion_recall": 0.42857142857142855,
+    "deletion_f1": 0.36000000000000004,
+    "false_deletion_rate": 0.019157088122605363
+  },
+  "SH": {
+    "rows": 310,
+    "deletion_support": 0,
+    "deletion_precision": 0.0,
+    "deletion_recall": 0.0,
+    "deletion_f1": 0.0,
+    "false_deletion_rate": 0.0032258064516129032
+  },
+  "T": {
+    "rows": 1541,
+    "deletion_support": 158,
+    "deletion_precision": 0.6206896551724138,
+    "deletion_recall": 0.45569620253164556,
+    "deletion_f1": 0.5255474452554744,
+    "false_deletion_rate": 0.03181489515545915
+  },
+  "TH": {
+    "rows": 186,
+    "deletion_support": 5,
+    "deletion_precision": 0.0,
+    "deletion_recall": 0.0,
+    "deletion_f1": 0.0,
+    "false_deletion_rate": 0.016574585635359115
+  },
+  "UH": {
+    "rows": 165,
+    "deletion_support": 0,
+    "deletion_precision": 0.0,
+    "deletion_recall": 0.0,
+    "deletion_f1": 0.0,
+    "false_deletion_rate": 0.012121212121212121
+  },
+  "UW": {
+    "rows": 476,
+    "deletion_support": 2,
+    "deletion_precision": 0.0,
+    "deletion_recall": 0.0,
+    "deletion_f1": 0.0,
+    "false_deletion_rate": 0.0379746835443038
+  },
+  "V": {
+    "rows": 542,
+    "deletion_support": 18,
+    "deletion_precision": 0.24,
+    "deletion_recall": 0.3333333333333333,
+    "deletion_f1": 0.27906976744186046,
+    "false_deletion_rate": 0.03625954198473282
+  },
+  "W": {
+    "rows": 727,
+    "deletion_support": 7,
+    "deletion_precision": 0.0,
+    "deletion_recall": 0.0,
+    "deletion_f1": 0.0,
+    "false_deletion_rate": 0.022222222222222223
+  },
+  "Y": {
+    "rows": 227,
+    "deletion_support": 8,
+    "deletion_precision": 0.2,
+    "deletion_recall": 0.25,
+    "deletion_f1": 0.22222222222222224,
+    "false_deletion_rate": 0.0365296803652968
+  },
+  "Z": {
+    "rows": 912,
+    "deletion_support": 50,
+    "deletion_precision": 0.7307692307692307,
+    "deletion_recall": 0.38,
+    "deletion_f1": 0.5,
+    "false_deletion_rate": 0.008120649651972157
+  },
+  "ZH": {
+    "rows": 27,
+    "deletion_support": 0,
+    "deletion_precision": 0.0,
+    "deletion_recall": 0.0,
+    "deletion_f1": 0.0,
+    "false_deletion_rate": 0.0
+  },
+  "groups": {
+    "D_T_R_L": {
+      "rows": 4783,
+      "deletion_support": 567,
+      "deletion_precision": 0.4269449715370019,
+      "deletion_recall": 0.3968253968253968,
+      "deletion_f1": 0.41133455210237657,
+      "false_deletion_rate": 0.07163187855787476
+    },
+    "OTHER": {
+      "rows": 21554,
+      "deletion_support": 347,
+      "deletion_precision": 0.1880064829821718,
+      "deletion_recall": 0.33429394812680113,
+      "deletion_f1": 0.24066390041493774,
+      "false_deletion_rate": 0.023624275003536567
+    }
+  }
+}

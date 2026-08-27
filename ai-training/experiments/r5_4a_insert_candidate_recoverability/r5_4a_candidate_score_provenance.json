@@ -1,0 +1,105 @@
+{
+  "status": "R5_4A_BLOCKED_CANDIDATE_SCORE_PROVENANCE",
+  "contract_frozen_before_candidate_value_inspection": true,
+  "contract_sha256": "111DDB77EC09B177505AEEF7B260476D8C718F745AD6170E6969926841338A27",
+  "complete_frozen_insert_rankings_available": false,
+  "required_for_audit": [
+    "all INSERT candidate identities per eligible TRAIN word",
+    "authoritative frozen TARGET score for every INSERT candidate",
+    "stable source identity",
+    "frozen truth event identity"
+  ],
+  "sources_inspected": [
+    {
+      "path": "ai-training/experiments/r5_1a_alignability_safe_addition_scoring/r5_1a_train_scores.jsonl",
+      "byte_size": 16560475,
+      "sha256": "5117AB0D8D4E85A8E103BA1D2135B8F14FE4CEB3B6440A46137B6B29742FA28B",
+      "available": [
+        "stable source identity",
+        "expected sequence",
+        "frozen truth events",
+        "INSERT candidate total/alignable/impossible counts",
+        "BEST_INSERT phone",
+        "BEST_INSERT boundary",
+        "BEST_INSERT TARGET score"
+      ],
+      "missing": [
+        "identity of every non-winning INSERT candidate",
+        "TARGET score of every non-winning INSERT candidate",
+        "complete within-word INSERT ranking"
+      ]
+    },
+    {
+      "path": "ai-training/experiments/r5_2b_relation_competition/r5_2b_tc1_pa1_env_train_scores.jsonl",
+      "byte_size": 25848478,
+      "sha256": "EAC81ABDDF56C77E4A71AD96AE5985D7C00DD60559A27C3A3BAAB16859EEFF3C",
+      "available": [
+        "stable source identity",
+        "expected sequence and IDs",
+        "frozen truth events",
+        "INSERT candidate total/alignable/impossible counts",
+        "BEST_INSERT phone",
+        "BEST_INSERT boundary",
+        "BEST_INSERT TARGET score",
+        "best SUB/DELETE/non-addition summaries"
+      ],
+      "missing": [
+        "identity of every non-winning INSERT candidate",
+        "TARGET score of every non-winning INSERT candidate",
+        "complete within-word INSERT ranking"
+      ]
+    },
+    {
+      "path": "ai-training/experiments/r5_2b_relation_competition/r5_2b_tc1_pa1_env_candidate_audit.json",
+      "byte_size": 6221,
+      "sha256": "716569101FA1276C2B88D1D138860FCF96258B4A24C71D4BF7065B33130B3522",
+      "available": [
+        "aggregate and speaker-level candidate counts",
+        "alignable/impossible counts by family"
+      ],
+      "missing": [
+        "per-candidate identities",
+        "per-candidate scores",
+        "candidate rankings"
+      ]
+    },
+    {
+      "path": "ai-training/experiments/r5_3a_evidence_separated_relation_scoring/train_execution_result/r5_3a_train_features.jsonl",
+      "byte_size": 2519588,
+      "sha256": "AD2A750CB4E47B419904C9FB33A96EF21F05873166BFB0286CD01248409AC337",
+      "available": [
+        "stable source identity",
+        "speaker",
+        "addition label",
+        "A/S/D word-level features"
+      ],
+      "missing": [
+        "INSERT candidate identities",
+        "INSERT candidate scores",
+        "INSERT ranking"
+      ]
+    }
+  ],
+  "driver_evidence": [
+    {
+      "path": "ai-training/experiments/r5_1a_alignability_safe_addition_scoring/r5_1a_train_execution_driver.py",
+      "sha256": "80D0E1263BE1744BCC252736BAF9C28F3E5D19C204596D836F3D9C296AB52D5D",
+      "finding": "full INSERT candidates were scored in memory; output serialization retained counts and BEST_INSERT only"
+    },
+    {
+      "path": "ai-training/experiments/r5_2b_relation_competition/r5_2b_train_execution_driver_tc1_pa1_env.py",
+      "sha256": "BC023CFD259406989CAEADABE3EB08AA945B7A612729ECA2C05711E0C387A5D0",
+      "finding": "full relation candidate families were scored in memory; output serialization retained counts and family winners only"
+    }
+  ],
+  "narrow_inventory_scope": [
+    "r5_1a_alignability_safe_addition_scoring",
+    "r5_2b_relation_competition",
+    "r5_3a_evidence_separated_relation_scoring"
+  ],
+  "separate_persisted_candidate_ranking_artifact_found": false,
+  "truth_mapping_performed": false,
+  "recoverability_metrics_calculated": false,
+  "feasibility_gates_evaluated": false,
+  "checkpoint_inference_run": false
+}

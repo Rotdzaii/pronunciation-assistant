@@ -1,0 +1,241 @@
+{
+  "schema_version": "1.0",
+  "contract_id": "R5-1_FROZEN_CTC_ADDITION_SCORING_DEVELOPMENT_CONTRACT",
+  "status": "R5_1_CONTRACT_FROZEN",
+  "frozen_at": "2026-08-15T01:49:32+07:00",
+  "research_branch": "research/phoenix-correctness",
+  "stage_type": "TRAIN-only development preregistration",
+  "scientific_hypothesis": "Exact TARGET-normalized CTC sequence likelihood distinguishes a single explicit INSERT hypothesis from canonical KEEP more reliably than greedy INSERT_IN_DECODED.",
+  "source_identities": {
+    "v4": {
+      "path": "ai-training/datasets/l2-arctic/metadata/all_speakers_expected_observed_v4.csv",
+      "sha256": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D"
+    },
+    "r4_4c2_checkpoint": {
+      "path": "ai-training/experiments/r4_4c2_bigru_ctc_seed42/R4_4C2_bigru_ctc_phone_sequence_seed42_best_validation_per.pt",
+      "sha256": "F54C9C2361AE78E1C37353AEB338A2DE6722C0B1EC4F885F6B52688CE9E88085",
+      "selected_epoch": 35,
+      "selection_metric": "lowest R4 validation PER, then higher deletion F1, then earlier epoch"
+    },
+    "r5_0_preregistration": {
+      "path": "ai-training/experiments/r5_0_addition_feasibility_audit/R5_0_PREREGISTRATION.json",
+      "sha256": "14CBFADAC0BE35D53C01DC966A030A71F24EC4D86EA88384BC449544CE12AEF7"
+    },
+    "r5_0_report": {
+      "path": "ai-training/experiments/r5_0_addition_feasibility_audit/R5_0_ADDITION_FEASIBILITY_REPORT.md",
+      "sha256": "DF484A09333A2F53A05E98E1C66B3C330CBA35F029B04B0BBB1623A3A9BAA3BA"
+    },
+    "r5_0_final_status": {
+      "path": "ai-training/experiments/r5_0_addition_feasibility_audit/r5_0_final_status.json",
+      "sha256": "29F06679FD24F8A2BBBED25B9B57A693D15046444A97BF5D951D575E5850D0B6"
+    },
+    "r5_0_manifest": {
+      "path": "ai-training/experiments/r5_0_addition_feasibility_audit/artifact_hashes.json",
+      "sha256": "3A6F62C5BD354E5FD21149135ECC9FB4CD673947A0E5E213A513B4F2005339E8"
+    }
+  },
+  "speaker_splits": {
+    "TRAIN": ["BWC", "EBVS", "HJK", "NCC", "NJS", "PNV", "RRBI", "TLV", "TNI", "YBAA", "YKWK", "ZHAA"],
+    "VALIDATION": ["ABA", "HKK", "HQTV", "LXC", "MBMPS", "SVBI"],
+    "TEST": ["ASI", "ERMS", "SKA", "THV", "TXHC", "YDCK"]
+  },
+  "frozen_model_contract": {
+    "architecture": "R4-4C2 CNN 16->32->64->96, frequency mean, one packed bidirectional GRU with hidden_size 96, Linear(192,41)",
+    "classes": 41,
+    "phone_vocabulary": "the frozen ordered 40-phone canonical R3/R4 inventory at indices 0-39",
+    "blank_index": 40,
+    "weights": "frozen checkpoint only",
+    "audio_and_features": "exact R4-4C2 full MFA word span, mono 16 kHz, 64-bin Slaney log-mel, FFT 512, 400-sample Hann window, 160-sample hop, per-word max-relative dB, temporal downsampling x2",
+    "sequence_likelihood": "exact torch.nn.CTCLoss sum over valid CTC alignments",
+    "permitted_new_logic": "deterministic KEEP/INSERT construction, exact scoring, argmax, speaker-LOSO threshold calibration, and reporting outside the neural model",
+    "checkpoint_selection": false,
+    "training": false
+  },
+  "train_word_population": {
+    "population_rule": "Reuse the frozen R5-0 runtime-evaluable TRAIN word reconstruction: unique manual-word containment, nonempty canonical expected sequence, no unresolved/malformed row in the word, and a reliable frozen MFA word span.",
+    "expected_eligible_words": 16582,
+    "expected_positive_words": 323,
+    "expected_negative_words": 16259,
+    "expected_true_addition_events_in_evaluable_words": 342,
+    "source_clean_train_additions": 423,
+    "accounting_requirement": "All 423 source clean additions remain in data accounting. Events not entering word scoring because of missing word containment, empty expected sequence, unresolved co-occurring evidence, or unavailable runtime word span must be reported by reason; they are not silently discarded.",
+    "positive_word": "at least one frozen V4 clean addition event in the eligible word",
+    "negative_word": "zero frozen V4 clean addition events in the eligible word",
+    "mixed_positive_policy": "retain addition-positive words that also contain substitution, deletion, or multiple additions and report each flag separately",
+    "correct_only_negative": "zero additions, zero substitutions, zero deletions, and every eligible expected-phone relation is correct",
+    "substitution_negative": "zero additions and at least one substitution; may overlap deletion-containing negative",
+    "deletion_negative": "zero additions and at least one deletion; may overlap substitution-containing negative"
+  },
+  "expected_sequence": {
+    "symbol": "E=[e_1,...,e_N]",
+    "construction": "canonical expected phones from resolved correct, substitution, and deletion rows in frozen source order; addition rows do not enter E",
+    "minimum_length": 1
+  },
+  "hypotheses": {
+    "KEEP": "H_KEEP=E",
+    "legal_insertion_boundaries": "b in {0,...,N}",
+    "canonical_added_phone": "p in frozen phone indices {0,...,39}",
+    "INSERT": "H_INSERT(E,b,p)=E[:b]+[p]+E[b:]",
+    "hypotheses_per_word": "1+(N+1)*40",
+    "single_insertion_only": true,
+    "manual_added_phone_not_given_to_scorer": true,
+    "manual_boundary_not_given_to_scorer": true
+  },
+  "exact_score": {
+    "log_probs": "torch.log_softmax(logits,dim=-1)",
+    "raw_nll": "torch.nn.CTCLoss(blank=40,reduction='none',zero_infinity=True)(log_probs,H,input_lengths=[T],target_lengths=[len(H)])",
+    "raw_score": "RAW_SCORE(H)=-raw_nll(H)",
+    "target_score": "TARGET_SCORE(H)=RAW_SCORE(H)/max(len(H),1)",
+    "keep_score": "KEEP=RAW_SCORE(E)/max(N,1)",
+    "insert_score": "INSERT(b,p)=RAW_SCORE(H_INSERT(E,b,p))/(N+1)",
+    "best_insert": "BEST_INSERT=max over all legal (b,p) of INSERT(b,p)",
+    "addition_decision_score": "A=BEST_INSERT-KEEP",
+    "score_family": "TARGET only",
+    "decision_dtype": "float64 after CTCLoss output is converted from the frozen inference implementation",
+    "normalization_well_defined_for_insert": true,
+    "reason": "KEEP has target length N>=1 and every single-INSERT candidate has target length N+1>=2; the inherited max(length,1) denominator is therefore unique and finite.",
+    "forbidden_families": ["RAW", "TIME", "combined or learned normalization", "length coefficient", "duration correction", "insertion penalty"]
+  },
+  "argmax_ties_and_sequence_equivalence": {
+    "tie_order": ["higher TARGET_SCORE", "lower insertion boundary b", "lower canonical phone index p"],
+    "exact_equality": "float64 exact equality; no tolerance",
+    "known_equivalence": "Different boundaries can yield the same target sequence when p equals phones in an adjacent repeated-phone run; their exact CTC scores are necessarily identical.",
+    "policy": "Do not claim the posterior distinguished equivalent boundaries. Apply the frozen tie and report total candidates, unique target sequences, duplicate-equivalent candidates, and true events whose boundary belongs to a multi-boundary equivalence class.",
+    "memoization": "Identical target sequences may share one computed likelihood only if every candidate identity is restored before deterministic argmax; score semantics must remain exact."
+  },
+  "ctc_alignability_and_numerical_guard": {
+    "minimum_ctc_steps": "len(H)+count of adjacent identical target labels",
+    "pre_score_audit": "audit KEEP and every INSERT candidate against encoder length T",
+    "required": "zero theoretically unalignable candidates and finite returned scores",
+    "failure_action": "stop before threshold calibration and classify as an implementation/protocol technical failure; do not use zero_infinity output as an artificial high score and do not change the score formula"
+  },
+  "speaker_loso": {
+    "folds": 12,
+    "held_out_unit": "one TRAIN speaker",
+    "calibration_population": "other 11 TRAIN speakers only",
+    "evaluation_population": "held-out TRAIN speaker only",
+    "each_eligible_word_held_out_exactly_once": true,
+    "score_prediction_rule": "A>=theta predicts addition; A<theta predicts non-addition",
+    "threshold_dtype": "float64",
+    "threshold_candidates": "np.nextafter(min(U),-np.inf), every sorted unique finite calibration A value U, np.nextafter(max(U),+np.inf)",
+    "edge_semantics": {"below_min": "all addition", "above_max": "no addition"},
+    "selection_precedence": [
+      "higher calibration Binary Macro-F1",
+      "higher calibration addition F1",
+      "lower calibration false-addition rate on correct-only words",
+      "higher threshold"
+    ],
+    "tie_comparison": "exact float64 equality",
+    "no_finite_score_action": "technical stop before held-out prediction; no threshold approximation",
+    "prediction_freeze": "persist each held-out speaker prediction before proceeding to the next fold",
+    "aggregate": "concatenate all 12 held-out predictions once to produce OOF metrics",
+    "validation_influence": false
+  },
+  "robust_threshold": {
+    "name": "ROBUST_THETA",
+    "derivation_condition": "derive only if all six R5-1 development gates pass and all 12 fold thresholds are finite",
+    "formula": "ordinary float64 median of the 12 fold thresholds; for 12 values, arithmetic mean of the 6th and 7th sorted values in float64",
+    "weighting": "none",
+    "post_derivation_adjustment": false,
+    "future_use": "may be evaluated only in a separately authorized, already-described-as-iterative VALIDATION protocol"
+  },
+  "word_metrics": {
+    "positive_class": "addition",
+    "confusion_order": "[[TN,FP],[FN,TP]]",
+    "report": ["TP", "FP", "FN", "TN", "accuracy", "balanced_accuracy", "binary_macro_f1", "addition_precision", "addition_recall", "addition_f1"],
+    "zero_denominator": 0,
+    "binary_macro_f1": "unweighted mean of non-addition F1 and addition F1",
+    "balanced_accuracy": "unweighted mean of non-addition recall and addition recall",
+    "false_addition_cohorts": ["correct-only", "substitution-containing non-addition", "deletion-containing non-addition"]
+  },
+  "continuous_metrics": {
+    "score": "A=BEST_INSERT-KEEP before thresholding",
+    "report": [
+      "addition vs all non-addition ROC-AUC",
+      "addition vs correct-only ROC-AUC",
+      "per-TRAIN-speaker score distributions",
+      "score distributions for true addition, correct-only, substitution-containing negative, deletion-containing negative",
+      "Pearson and Spearman score association with expected length and word duration"
+    ],
+    "distribution_statistics": ["count", "mean", "median", "p10", "p25", "p75", "p90"],
+    "length_buckets": ["1", "2", "3", "4", "5", "6+"],
+    "duration_buckets_ms": ["<150", "150-<250", "250-<400", "400-<600", ">=600"],
+    "descriptive_only": true,
+    "normalization_variants_from_diagnostics": false
+  },
+  "event_metrics": {
+    "prediction_source": "For a threshold-positive word, emit exactly the BEST_INSERT argmax phone and boundary; threshold-negative words emit no event.",
+    "true_events": "all clean addition events in the eligible word, including every event in a multiple-addition word",
+    "exact_match": "same word identity, canonical added-phone identity, and expected-sequence insertion boundary",
+    "matching": "deterministic one-to-one multiset matching by word identity, boundary, then phone; at most one predicted event per word",
+    "multiple_addition_consequence": "unmatched additional true events are false negatives; do not collapse the word to one true event",
+    "report": ["event_TP", "event_FP", "event_FN", "event_precision", "event_recall", "event_F1"],
+    "position_strata": ["BEFORE_FIRST", "BETWEEN", "AFTER_FINAL"],
+    "timestamp_in_primary_match": false,
+    "mfa_explicit_extra_phone_localizer": false
+  },
+  "development_gates": {
+    "all_required": true,
+    "gate_1": {"metric": "addition_vs_all_nonaddition_roc_auc", "operator": ">=", "value": 0.70},
+    "gate_2": {"metric": "addition_vs_correct_only_roc_auc", "operator": ">=", "value": 0.70},
+    "gate_3": {"metric": "oof_binary_macro_f1", "operator": ">", "value": 0.548179},
+    "gate_4": {"metric": "oof_addition_f1", "operator": ">", "value": 0.129246},
+    "gate_5": {"metric": "correct_only_false_addition_rate", "operator": "<=", "value": 0.054352},
+    "gate_6": {"metric": "exact_event_f1", "operator": ">", "value": 0.026688}
+  },
+  "future_result_classification": {
+    "R5_1_INSERTION_HYPOTHESIS_SCORING_DEVELOPMENT_PASS": "all six development gates pass",
+    "R5_1_INSERTION_HYPOTHESIS_SCORING_NOT_CONFIRMED": "one or more development gates fail",
+    "subjective_override": false,
+    "test_authorized_by_pass": false
+  },
+  "stop_rule": {
+    "on_any_gate_failure": [
+      "do not change threshold rule",
+      "do not change TARGET normalization",
+      "do not add another score family or insertion penalty",
+      "do not tune by phone, boundary, duration, or speaker",
+      "do not rerun with another checkpoint"
+    ],
+    "new_idea_requirement": "a new named and preregistered research cycle"
+  },
+  "validation_policy": {
+    "role": "possible later iterative development transfer evaluation only",
+    "independent_confirmation": false,
+    "reason": "the R4-4C2 checkpoint epoch was selected using these speakers' validation PER",
+    "audio_paths_may_be_resolved_in_R5_1": false,
+    "audio_may_be_read_in_R5_1": false,
+    "inference_may_run_in_R5_1": false,
+    "metrics_may_be_calculated_in_R5_1": false,
+    "validation_performance_consumed": false
+  },
+  "test_policy": {
+    "role": "candidate independent final confirmation split after development and a dedicated locked TEST preregistration",
+    "test_audio_access_allowed": false,
+    "test_inference_allowed": false,
+    "test_tuning_allowed": false,
+    "path_resolution_allowed": false,
+    "sample_level_inspection_allowed": false,
+    "performance_allowed": false,
+    "eligibility_requirements": [
+      "R5 development complete",
+      "final R5 scorer frozen",
+      "required development and iterative validation gates pass",
+      "dedicated LOCKED TEST preregistration frozen"
+    ]
+  },
+  "evidence_roles": {
+    "TRAIN_speaker_LOSO": "development only",
+    "current_VALIDATION": "possible later iterative transfer evaluation only",
+    "untouched_TEST": "candidate independent final confirmation only"
+  },
+  "forbidden": [
+    "neural training or fine-tuning",
+    "checkpoint selection or replacement",
+    "beam search or language model",
+    "learned calibration",
+    "score-family search",
+    "VALIDATION or TEST access during R5-1 development",
+    "production runtime changes"
+  ]
+}

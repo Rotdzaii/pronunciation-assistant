@@ -1,0 +1,72 @@
+{
+  "manifest_id": "R5_2B_RELATION_COMPETITION_DEVELOPMENT_CONTRACT_ARTIFACTS",
+  "date": "2026-08-18",
+  "status": "R5_2B_DEVELOPMENT_CONTRACT_FROZEN",
+  "hash_algorithm": "SHA-256",
+  "manifest_excludes_itself": true,
+  "artifact_count": 9,
+  "artifacts": [
+    {
+      "relative_path": "R5_2B_DEVELOPMENT_CONTRACT.json",
+      "byte_size": 6145,
+      "sha256": "55572805C1878D41D4B6C41E1C7A31B2C3725A81050942494F0E1292092FEF38"
+    },
+    {
+      "relative_path": "R5_2B_PREREGISTRATION.md",
+      "byte_size": 13109,
+      "sha256": "6D2DD9672222D174B32F0E25448419F42FE179522D2D8AA37C7766C8A1BBFBBA"
+    },
+    {
+      "relative_path": "r5_2b_source_identity.json",
+      "byte_size": 2397,
+      "sha256": "6C47FD78E94C21A9E7DDB1A1AAE4E3394AE9415EC45FB81927CCBB81C685AC1E"
+    },
+    {
+      "relative_path": "r5_2b_r5_2a_provenance.json",
+      "byte_size": 1343,
+      "sha256": "23CEE3C6C076A51B0AC6EA5026B31ECFED23A80433D997C551C5E4D86F450916"
+    },
+    {
+      "relative_path": "r5_2b_score_contract.json",
+      "byte_size": 2753,
+      "sha256": "947E023A5D27F8233FF5457A5C54E1F52CCD9F2AC49D61B948D52510B1F576EB"
+    },
+    {
+      "relative_path": "r5_2b_empty_target_contract.json",
+      "byte_size": 2341,
+      "sha256": "3FEB84DF4088C48D56309EDFCC7E4BD111A53552E9624E8D1DEF3F3A80AA9F30"
+    },
+    {
+      "relative_path": "r5_2b_population_contract.json",
+      "byte_size": 724,
+      "sha256": "C1BBAFEFB34FB8DDAEE3D14B6B2548489FB21797888FA8CAAF5C59CEEB9EAE1F"
+    },
+    {
+      "relative_path": "r5_2b_evaluation_policy.json",
+      "byte_size": 5085,
+      "sha256": "78AFCC6A58CE485FB0B359CDE56F371CEC3D6BEB2182A741DC17B7AA7619AF60"
+    },
+    {
+      "relative_path": "r5_2b_protocol_audit.json",
+      "byte_size": 653,
+      "sha256": "097D322C469A868C6279E5FD2E2E5974672CF2FFCD548B3C73B085D58A0651A2"
+    }
+  ],
+  "hash_audit": "HASH_AUDIT_PASS",
+  "hash_failures": [],
+  "protocol": {
+    "training_run": false,
+    "model_inference_run": false,
+    "train_audio_accessed": false,
+    "new_train_scores_created": false,
+    "validation_accessed": false,
+    "validation_rerun": false,
+    "threshold_search_run": false,
+    "test_audio_accessed": false,
+    "test_inference_run": false,
+    "test_performance_consumed": false,
+    "r5_1_modified": false,
+    "scorer_implemented": false,
+    "static_verification_executed": false
+  }
+}

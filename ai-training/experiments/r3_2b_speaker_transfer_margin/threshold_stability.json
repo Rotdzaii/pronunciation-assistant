@@ -1,0 +1,20 @@
+{
+  "values": {
+    "ABA": -1.2851450443267822,
+    "HKK": -1.3223500549793243,
+    "HQTV": -1.2716419100761414,
+    "LXC": -1.2073950171470642,
+    "MBMPS": -1.3050503730773926,
+    "SVBI": -1.3789835572242737
+  },
+  "mean": -1.2950943261384964,
+  "median": -1.2950977087020874,
+  "min": -1.3789835572242737,
+  "max": -1.2073950171470642,
+  "standard_deviation_population": 0.05199290583461459,
+  "q25": -1.3180251345038414,
+  "q75": -1.2750176936388016,
+  "iqr": 0.043007440865039825,
+  "assessment": "THRESHOLD_STABLE",
+  "interpretation": "The six LOSO thresholds cluster tightly (SD 0.052, IQR 0.043, range 0.172) relative to the broad margin distributions, and every held-out fold preserves substitution recall above 0.35. Performance variation is therefore not driven by large threshold drift."
+}

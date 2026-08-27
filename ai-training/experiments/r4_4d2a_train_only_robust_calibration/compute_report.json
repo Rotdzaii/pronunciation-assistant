@@ -1,0 +1,13 @@
+{
+  "seconds": 42.897420900000725,
+  "source": "frozen TRAIN score CSV",
+  "acoustic_inference": false,
+  "families": [
+    "RAW",
+    "TARGET",
+    "TIME"
+  ],
+  "folds_per_family": 12,
+  "validation_scoring": false,
+  "test_accessed": false
+}

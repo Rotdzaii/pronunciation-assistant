@@ -1,0 +1,128 @@
+{
+  "ABA": {
+    "rows": 4783,
+    "non_deletion_support": 4752,
+    "deletion_support": 31,
+    "accuracy": 0.9038260505958603,
+    "balanced_accuracy": 0.6791944987509504,
+    "macro_f1": 0.5033525475026998,
+    "deletion_precision": 0.030634573304157548,
+    "deletion_recall": 0.45161290322580644,
+    "deletion_f1": 0.05737704918032787,
+    "confusion_matrix": [
+      [
+        4309,
+        443
+      ],
+      [
+        17,
+        14
+      ]
+    ]
+  },
+  "HKK": {
+    "rows": 4905,
+    "non_deletion_support": 4802,
+    "deletion_support": 103,
+    "accuracy": 0.8935779816513761,
+    "balanced_accuracy": 0.5988797143584994,
+    "macro_f1": 0.5232629067070637,
+    "deletion_precision": 0.06263048016701461,
+    "deletion_recall": 0.2912621359223301,
+    "deletion_f1": 0.10309278350515465,
+    "confusion_matrix": [
+      [
+        4353,
+        449
+      ],
+      [
+        73,
+        30
+      ]
+    ]
+  },
+  "HQTV": {
+    "rows": 4994,
+    "non_deletion_support": 4517,
+    "deletion_support": 477,
+    "accuracy": 0.8490188225871045,
+    "balanced_accuracy": 0.6887189276569439,
+    "macro_f1": 0.6484822889209276,
+    "deletion_precision": 0.31409395973154364,
+    "deletion_recall": 0.49056603773584906,
+    "deletion_f1": 0.3829787234042553,
+    "confusion_matrix": [
+      [
+        4006,
+        511
+      ],
+      [
+        243,
+        234
+      ]
+    ]
+  },
+  "LXC": {
+    "rows": 4925,
+    "non_deletion_support": 4709,
+    "deletion_support": 216,
+    "accuracy": 0.8534010152284264,
+    "balanced_accuracy": 0.6251725419409642,
+    "macro_f1": 0.5513657426799887,
+    "deletion_precision": 0.12125748502994012,
+    "deletion_recall": 0.375,
+    "deletion_f1": 0.18325791855203621,
+    "confusion_matrix": [
+      [
+        4122,
+        587
+      ],
+      [
+        135,
+        81
+      ]
+    ]
+  },
+  "MBMPS": {
+    "rows": 4987,
+    "non_deletion_support": 4924,
+    "deletion_support": 63,
+    "accuracy": 0.9029476639262082,
+    "balanced_accuracy": 0.7158040307918456,
+    "macro_f1": 0.5343208828522921,
+    "deletion_precision": 0.06776180698151951,
+    "deletion_recall": 0.5238095238095238,
+    "deletion_f1": 0.12000000000000002,
+    "confusion_matrix": [
+      [
+        4470,
+        454
+      ],
+      [
+        30,
+        33
+      ]
+    ]
+  },
+  "SVBI": {
+    "rows": 4597,
+    "non_deletion_support": 4508,
+    "deletion_support": 89,
+    "accuracy": 0.892321078964542,
+    "balanced_accuracy": 0.6256879156156845,
+    "macro_f1": 0.5269995129717268,
+    "deletion_precision": 0.06623931623931624,
+    "deletion_recall": 0.34831460674157305,
+    "deletion_f1": 0.11131059245960503,
+    "confusion_matrix": [
+      [
+        4071,
+        437
+      ],
+      [
+        58,
+        31
+      ]
+    ]
+  }
+}

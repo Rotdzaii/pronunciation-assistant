@@ -1,0 +1,71 @@
+{
+  "audit": "R5-2B-TC0 empty-target numerical equivalence",
+  "historical_tensor": {
+    "construction": "((arange(4*41,float32).reshape(4,41).remainder(17)-8)/7)",
+    "shape": [4, 41],
+    "T": 4,
+    "blank_index": 40,
+    "source_device": "cuda:0",
+    "source_dtype": "float32"
+  },
+  "side_by_side": {
+    "frozen_scorer": {
+      "source_tensor": "the historical synthetic CUDA logits tensor",
+      "source_shape": [4, 41],
+      "T": 4,
+      "blank_index": 40,
+      "dtype_before_log_softmax": "float32",
+      "dtype_after_log_softmax": "float32",
+      "device_before_log_softmax": "cuda:0",
+      "device_after_log_softmax": "cuda:0",
+      "time_slice": "logits[:4]",
+      "batch_indexing": "none; tensor shape [T,41]",
+      "log_softmax_computations": 1,
+      "blank_slice": "log_probs[:,40]",
+      "summation_dtype": "float32",
+      "summation_device": "cuda:0",
+      "summation_operation": "torch.Tensor.sum",
+      "python_float_conversion": "after CUDA sum, via detach().cpu().item()",
+      "numpy_conversion": false,
+      "normalization": "none for empty target",
+      "source_lines": "r5_2b_scorer.py:139-164"
+    },
+    "failed_execution_adapter": {
+      "source_tensor": "the exact same historical synthetic CUDA logits tensor",
+      "source_shape": [4, 41],
+      "T": 4,
+      "blank_index": 40,
+      "dtype_before_log_softmax": "float32",
+      "dtype_after_log_softmax": "float32",
+      "device_before_log_softmax": "cuda:0",
+      "device_after_log_softmax": "cuda:0, then detached and copied to CPU before summation",
+      "time_slice": "all 4 rows",
+      "batch_indexing": "log_probs[0][:,40] after a one-element Python list wrapper",
+      "log_softmax_computations": 1,
+      "blank_slice": "log_probs[0][:,40]",
+      "summation_dtype": "float32",
+      "summation_device": "cpu",
+      "summation_operation": "torch.Tensor.sum",
+      "python_float_conversion": "after CPU sum, via item()",
+      "numpy_conversion": false,
+      "normalization": "none for empty target",
+      "source_lines": "r5_2b_train_execution_driver.py:385-395"
+    },
+    "intended_runtime_empty_path": {
+      "source_tensor": "model logits detached and copied to CPU",
+      "log_softmax": "computed on CPU once",
+      "blank_slice": "log_probs[word_index][:T,40]",
+      "summation_dtype": "float32",
+      "summation_device": "cpu",
+      "normalization": "none",
+      "source_lines": "r5_2b_train_execution_driver.py:244-274 and 438-449",
+      "executed_on_real_data": false
+    }
+  },
+  "same_logits": true,
+  "same_T": true,
+  "same_blank_index": true,
+  "same_individual_blank_log_prob_values": true,
+  "material_difference": "reduction backend/device only",
+  "both_attempt_same_mathematical_quantity": true
+}

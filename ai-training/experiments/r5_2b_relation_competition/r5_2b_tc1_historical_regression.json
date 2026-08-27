@@ -1,0 +1,31 @@
+{
+  "stage": "R5-2B-TC1 historical fixture regression",
+  "tc0_float32": {
+    "term_count": 4,
+    "cpu_value_fresh_synthetic_rerun": -15.667130470275879,
+    "cuda_value_from_verified_frozen_tc0_artifact": -15.667129516601562,
+    "absolute_difference": 9.5367431640625e-7,
+    "combined_two_reduction_bound": 5.603003224082621e-6,
+    "acceptance_operator": "<=",
+    "classification": "EQUIVALENT",
+    "status": "PASS",
+    "cuda_runtime_available_in_current_static_environment": false,
+    "note": "The CPU same-tensor path was rerun from the frozen synthetic logits formula. The CUDA value and identical source operands were replayed from the hash-verified TC0 artifact because the available static Python runtime is CPU-only."
+  },
+  "tc0_float64": {
+    "cpu_value_fresh_synthetic_rerun": -15.66712968974069,
+    "cuda_value_from_verified_frozen_tc0_artifact": -15.66712968974069,
+    "absolute_difference": 0.0,
+    "combined_two_reduction_bound": 1.0436404866803105e-14,
+    "bound_materially_smaller_than_float32": true,
+    "status": "PASS"
+  },
+  "original_static_fixture": {
+    "explicit_all_blank_score": -19.43882697170362,
+    "framework_empty_ctc_score": -19.43882697170362,
+    "absolute_difference": 0.0,
+    "rerun_sha256": "F0E54A0A4DBC1378F424E6C8FE8B0A9861CDD72DCBE72C045B96660324723197",
+    "expected_sha256": "F0E54A0A4DBC1378F424E6C8FE8B0A9861CDD72DCBE72C045B96660324723197",
+    "status": "PASS"
+  }
+}

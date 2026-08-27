@@ -1,0 +1,86 @@
+{
+  "status": "PASS",
+  "total_words": 16582,
+  "positive_words": 323,
+  "negative_words": 16259,
+  "source_addition_events": 423,
+  "runtime_addition_events": 342,
+  "multiple_addition_words": 19,
+  "mixed_substitution_addition_words": 117,
+  "mixed_deletion_addition_words": 26,
+  "exclusions": {
+    "without_manual_word": 49,
+    "without_expected_sequence": 14,
+    "unresolved_cooccurring_evidence_events": 18
+  },
+  "reconstruction": {
+    "counts": {
+      "train_candidate": 16985,
+      "train_usable": 16259,
+      "multiple_deletion_words": 130,
+      "substitution_plus_deletion_words": 470,
+      "addition_words_excluded": 338,
+      "addition_plus_deletion_words": 28,
+      "malformed_or_unresolved_words": 402,
+      "unavailable_word_boundary": 1
+    },
+    "target_rows_without_manual_word": {
+      "total": 57,
+      "by_relation": {
+        "addition": 49,
+        "substitution": 2,
+        "correct": 6
+      }
+    },
+    "invalid_forced_alignment_phone_labels": {
+      "spn": 12
+    },
+    "mfa_vs_manual_boundary_start_error_seconds": {
+      "count": 16984,
+      "mean": 0.004179336374713614,
+      "median": 0.0,
+      "p10": 0.0,
+      "p25": 0.0,
+      "p75": 0.0,
+      "p90": 0.009999999999999787
+    },
+    "mfa_vs_manual_boundary_end_error_seconds": {
+      "count": 16984,
+      "mean": 0.0051764543768987505,
+      "median": 0.0,
+      "p10": 0.0,
+      "p25": 0.0,
+      "p75": 0.0,
+      "p90": 0.010000000000000009
+    }
+  },
+  "source_scan": {
+    "train_relation_counts": {
+      "correct": 51400,
+      "deletion": 1612,
+      "substitution": 6159,
+      "non_speech": 7777,
+      "addition": 423,
+      "unresolved": 418
+    },
+    "source_clean_addition_events": 423,
+    "heldout_fields_inspected": [
+      "speaker_id"
+    ],
+    "validation_paths_resolved": false,
+    "test_paths_resolved": false
+  },
+  "addition_mapping": {
+    "mapping": {
+      "without_expected_sequence": 14,
+      "position_mapped": 360,
+      "without_manual_word": 49
+    },
+    "mapped_events": 360,
+    "mapped_word_multiplicity": {
+      "1": 317,
+      "2": 24,
+      "3": 3
+    }
+  }
+}

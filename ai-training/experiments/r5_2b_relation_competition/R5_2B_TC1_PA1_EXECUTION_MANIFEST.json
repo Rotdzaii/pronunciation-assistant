@@ -1,0 +1,65 @@
+{
+  "manifest_type": "additive R5-2B-TC1-PA1 pre-metric technical-stop execution manifest",
+  "self_excluded": true,
+  "hash_algorithm": "SHA-256",
+  "artifact_count": 6,
+  "artifacts": [
+    {
+      "relative_path": "r5_2b_tc1_pa1_execution_technical_stop.json",
+      "byte_size": 1363,
+      "sha256": "87863D242B26D2FBD89C2DE2FF3AB9BDA1A07B4FCB07564F3635166B42EB0A1D"
+    },
+    {
+      "relative_path": "r5_2b_tc1_pa1_final_status.json",
+      "byte_size": 498,
+      "sha256": "780EC278C292D97F747B92136EA0A590404E44DAB1F4EBBE75B27AC2D9D8D938"
+    },
+    {
+      "relative_path": "r5_2b_tc1_pa1_launcher_identity_verification.json",
+      "byte_size": 1850,
+      "sha256": "D2CADC246A92FB66E3785645CECD0D315A6782A7694DD7C293372EE627C6833D"
+    },
+    {
+      "relative_path": "r5_2b_tc1_pa1_protocol_audit.json",
+      "byte_size": 1097,
+      "sha256": "CEF6D322ADA9457A7654A22E73638F15B3A44BF769398738493F5B0F5F4845B1"
+    },
+    {
+      "relative_path": "R5_2B_TC1_PA1_TRAIN_DEVELOPMENT_RESULT.md",
+      "byte_size": 2156,
+      "sha256": "F4C58B36BF0B7239B4B52E48C240AA665B29F1DCC5F54FEE2726F31A90126A8B"
+    },
+    {
+      "relative_path": "r5_2b_train_execution_driver_tc1_pa1.py",
+      "byte_size": 64111,
+      "sha256": "C6F7F26BDAECBB9F6F5F11C8606108273F2947E5C5A99DDDE74DB017A0EE21E5"
+    }
+  ],
+  "preserved_frozen_identities": {
+    "scientific_contract_sha256": "55572805C1878D41D4B6C41E1C7A31B2C3725A81050942494F0E1292092FEF38",
+    "frozen_scorer_sha256": "2E44B79828DBB37B312CDC03C897A80803947A48F13864B26C454F3B8ED161A3",
+    "TC1_static_manifest_sha256": "462C7966B01B5858EB9D4A20F23ECF1A17EACD6430BB233A37A4E7EDA7A9DF63",
+    "previous_corrected_execution_manifest_sha256": "605941841092EA2D52D2773981FBB8D39E91738114F415AAFEF059EC536B521C",
+    "PA0_manifest_sha256": "8D17C47786AC8A4167C19A5A5C37291EDAA31DBD54505E8638CE591DD581182C",
+    "PA1_contract_sha256": "F02A497648D9D707521C3289C85755D75A5E5C3440BA97499F51C4EF677820B6",
+    "PA1_preregistration_sha256": "546373878FC019C6EA0F5722F82C32C9FC363C0B506447F30866BD6FC59AB915",
+    "PA1_manifest_sha256": "DF209C8376F18C82F6212508208D3856046BABBEB1351CE11E62BC33F24B2451",
+    "V4_sha256": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D",
+    "checkpoint_sha256": "F54C9C2361AE78E1C37353AEB338A2DE6722C0B1EC4F885F6B52688CE9E88085"
+  },
+  "execution": {
+    "attempt_count": 1,
+    "driver_import_completed": false,
+    "path_guard_run": false,
+    "TC1_preflight_run": false,
+    "population_reproduction_completed": false,
+    "train_audio_accessed": false,
+    "checkpoint_inference_run": false,
+    "performance_metrics_created": false,
+    "gates_evaluated": 0,
+    "rerun_performed": false
+  },
+  "hash_audit": "HASH_AUDIT_PASS",
+  "failures": [],
+  "final_status": "R5_2B_TC1_PA1_EXECUTION_TECHNICAL_FAILURE_IMPLEMENTATION"
+}

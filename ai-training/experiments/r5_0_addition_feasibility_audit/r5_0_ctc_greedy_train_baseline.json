@@ -1,0 +1,308 @@
+{
+  "scope": "TRAIN only",
+  "score_or_threshold_tuned": false,
+  "eligible_words": 16582,
+  "word_level": {
+    "words": 16582,
+    "TP": 78,
+    "FP": 806,
+    "FN": 245,
+    "TN": 15453,
+    "precision": 0.08823529411764706,
+    "recall": 0.24148606811145512,
+    "f1": 0.12924606462303231,
+    "balanced_accuracy": 0.5959567618372639,
+    "binary_macro_f1": 0.5481790607246964,
+    "confusion_matrix": [
+      [
+        15453,
+        806
+      ],
+      [
+        245,
+        78
+      ]
+    ]
+  },
+  "exact_insertion_event": {
+    "tp": 17,
+    "fp": 915,
+    "fn": 325,
+    "precision": 0.018240343347639486,
+    "recall": 0.049707602339181284,
+    "f1": 0.026687598116169543,
+    "true_events": 342,
+    "predicted_events": 932
+  },
+  "position_exact_event": {
+    "BEFORE_FIRST": {
+      "tp": 2,
+      "fp": 246,
+      "fn": 45,
+      "precision": 0.008064516129032258,
+      "recall": 0.0425531914893617,
+      "f1": 0.013559322033898305,
+      "true_events": 47,
+      "predicted_events": 248
+    },
+    "BETWEEN": {
+      "tp": 10,
+      "fp": 420,
+      "fn": 165,
+      "precision": 0.023255813953488372,
+      "recall": 0.05714285714285714,
+      "f1": 0.033057851239669415,
+      "true_events": 175,
+      "predicted_events": 430
+    },
+    "AFTER_FINAL": {
+      "tp": 5,
+      "fp": 249,
+      "fn": 115,
+      "precision": 0.01968503937007874,
+      "recall": 0.041666666666666664,
+      "f1": 0.026737967914438502,
+      "true_events": 120,
+      "predicted_events": 254
+    }
+  },
+  "phone_exact_recall": {
+    "AA": {
+      "support": 2,
+      "exact_matches": 0,
+      "exact_match_recall": 0.0
+    },
+    "AH": {
+      "support": 44,
+      "exact_matches": 4,
+      "exact_match_recall": 0.09090909090909091
+    },
+    "AO": {
+      "support": 1,
+      "exact_matches": 0,
+      "exact_match_recall": 0.0
+    },
+    "AX": {
+      "support": 31,
+      "exact_matches": 0,
+      "exact_match_recall": 0.0
+    },
+    "B": {
+      "support": 2,
+      "exact_matches": 0,
+      "exact_match_recall": 0.0
+    },
+    "D": {
+      "support": 13,
+      "exact_matches": 4,
+      "exact_match_recall": 0.3076923076923077
+    },
+    "EH": {
+      "support": 48,
+      "exact_matches": 1,
+      "exact_match_recall": 0.020833333333333332
+    },
+    "ER": {
+      "support": 1,
+      "exact_matches": 0,
+      "exact_match_recall": 0.0
+    },
+    "F": {
+      "support": 1,
+      "exact_matches": 0,
+      "exact_match_recall": 0.0
+    },
+    "G": {
+      "support": 38,
+      "exact_matches": 0,
+      "exact_match_recall": 0.0
+    },
+    "HH": {
+      "support": 3,
+      "exact_matches": 0,
+      "exact_match_recall": 0.0
+    },
+    "IH": {
+      "support": 20,
+      "exact_matches": 1,
+      "exact_match_recall": 0.05
+    },
+    "IY": {
+      "support": 10,
+      "exact_matches": 0,
+      "exact_match_recall": 0.0
+    },
+    "K": {
+      "support": 7,
+      "exact_matches": 0,
+      "exact_match_recall": 0.0
+    },
+    "L": {
+      "support": 5,
+      "exact_matches": 0,
+      "exact_match_recall": 0.0
+    },
+    "N": {
+      "support": 9,
+      "exact_matches": 3,
+      "exact_match_recall": 0.3333333333333333
+    },
+    "OW": {
+      "support": 2,
+      "exact_matches": 1,
+      "exact_match_recall": 0.5
+    },
+    "P": {
+      "support": 1,
+      "exact_matches": 0,
+      "exact_match_recall": 0.0
+    },
+    "R": {
+      "support": 46,
+      "exact_matches": 1,
+      "exact_match_recall": 0.021739130434782608
+    },
+    "S": {
+      "support": 15,
+      "exact_matches": 1,
+      "exact_match_recall": 0.06666666666666667
+    },
+    "SH": {
+      "support": 2,
+      "exact_matches": 0,
+      "exact_match_recall": 0.0
+    },
+    "T": {
+      "support": 9,
+      "exact_matches": 0,
+      "exact_match_recall": 0.0
+    },
+    "TH": {
+      "support": 1,
+      "exact_matches": 0,
+      "exact_match_recall": 0.0
+    },
+    "UH": {
+      "support": 4,
+      "exact_matches": 0,
+      "exact_match_recall": 0.0
+    },
+    "UW": {
+      "support": 2,
+      "exact_matches": 0,
+      "exact_match_recall": 0.0
+    },
+    "W": {
+      "support": 9,
+      "exact_matches": 0,
+      "exact_match_recall": 0.0
+    },
+    "Y": {
+      "support": 15,
+      "exact_matches": 0,
+      "exact_match_recall": 0.0
+    },
+    "Z": {
+      "support": 1,
+      "exact_matches": 1,
+      "exact_match_recall": 1.0
+    }
+  },
+  "alignment": "unit-cost Levenshtein with frozen MATCH > SUBSTITUTION > DELETE > INSERT backtrace",
+  "true_event_mapping_coverage": {
+    "events_in_baseline_words": 342
+  },
+  "word_reconstruction": {
+    "candidate_records": 16985,
+    "eligible_r5_words": 16582,
+    "addition_positive_words": 323,
+    "mapped_true_events": 342,
+    "reconstruction": {
+      "counts": {
+        "train_candidate": 16985,
+        "train_usable": 16259,
+        "multiple_deletion_words": 130,
+        "substitution_plus_deletion_words": 470,
+        "addition_words_excluded": 338,
+        "addition_plus_deletion_words": 28,
+        "malformed_or_unresolved_words": 402,
+        "unavailable_word_boundary": 1
+      },
+      "target_rows_without_manual_word": {
+        "total": 57,
+        "by_relation": {
+          "addition": 49,
+          "substitution": 2,
+          "correct": 6
+        }
+      },
+      "invalid_forced_alignment_phone_labels": {
+        "spn": 12
+      },
+      "mfa_vs_manual_boundary_start_error_seconds": {
+        "count": 16984,
+        "mean": 0.004179336374713614,
+        "median": 0.0,
+        "p10": 0.0,
+        "p25": 0.0,
+        "p75": 0.0,
+        "p90": 0.009999999999999787
+      },
+      "mfa_vs_manual_boundary_end_error_seconds": {
+        "count": 16984,
+        "mean": 0.0051764543768987505,
+        "median": 0.0,
+        "p10": 0.0,
+        "p25": 0.0,
+        "p75": 0.0,
+        "p90": 0.010000000000000009
+      }
+    }
+  },
+  "compute": {
+    "device": "cuda",
+    "gpu": "NVIDIA GeForce RTX 5060 Laptop GPU",
+    "feature_report": {
+      "words": 16582,
+      "seconds": 31.324184199998854,
+      "sample_length": {
+        "count": 16582,
+        "min": 480.0,
+        "median": 4800.0,
+        "mean": 5415.385357616693,
+        "p90": 9600.0,
+        "p95": 11040.0,
+        "max": 30560.0
+      },
+      "feature_frames": {
+        "count": 16582,
+        "min": 4.0,
+        "median": 31.0,
+        "mean": 34.84615848510433,
+        "p90": 61.0,
+        "p95": 70.0,
+        "max": 192.0
+      },
+      "encoder_output_steps": {
+        "count": 16582,
+        "min": 2.0,
+        "median": 15.0,
+        "mean": 17.172295259920396,
+        "p90": 30.0,
+        "p95": 35.0,
+        "max": 96.0
+      },
+      "edge_padded_words": 0,
+      "edge_padding_samples": 0,
+      "unalignable_words": 0,
+      "unalignable_word_ids": []
+    },
+    "feature_seconds": 31.324184199998854,
+    "inference_seconds": 10.886490700002469,
+    "total_seconds": 43.00584460000391,
+    "words_per_second": 385.5754767820762,
+    "training": false,
+    "validation_inference": false,
+    "test_inference": false
+  }
+}

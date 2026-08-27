@@ -1,0 +1,121 @@
+{
+  "status": "PASS",
+  "execution_label": "TECHNICAL CORRECTION OF THE PRE-METRIC R5-2B EXECUTION",
+  "identity_verification": {
+    "status": "PASS",
+    "expected_sha256": {
+      "contract": "55572805C1878D41D4B6C41E1C7A31B2C3725A81050942494F0E1292092FEF38",
+      "preregistration": "6D2DD9672222D174B32F0E25448419F42FE179522D2D8AA37C7766C8A1BBFBBA",
+      "contract_manifest": "5A1E82FD9E0209DB371F7E313125FAC64434BA6DA6E677CFF20E0AE3336F583E",
+      "static_manifest": "0D380ACA5C0CF101E60DFF043221BBE6AE267BA9FFDAD1C677C4E7FFCA23F80F",
+      "static_run": "F0E54A0A4DBC1378F424E6C8FE8B0A9861CDD72DCBE72C045B96660324723197",
+      "r5_2a_manifest": "F8E476F8FFA6AB2CD0F833B17D667D0D9B6CE3FC6B9FA1A7F5C1A3D71BA753E1",
+      "v4": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D",
+      "checkpoint": "F54C9C2361AE78E1C37353AEB338A2DE6722C0B1EC4F885F6B52688CE9E88085",
+      "r5_1a_scorer": "4DE49C9070C973EE44EFBD09DFC063C436779E723D12EC7A7A2BC4A06AF35F90",
+      "r5_2b_scorer": "2E44B79828DBB37B312CDC03C897A80803947A48F13864B26C454F3B8ED161A3",
+      "failed_execution_manifest": "92163F8DE3ECEAFEE2950AF57302AA565C0F3612A2D6F0D36462552FA66BA09E",
+      "tc0_manifest": "91F5DBCB9719FEF7C7E3E1CEF5773E92A18B813FFD54384359DF026F300C278E",
+      "tc1_contract": "632F32CEF2F8EE05A47ACA7FFCE97FB5DA35236C48B53E25EC06CEFCDACE954F",
+      "tc1_contract_manifest": "545C49597D3648CCBD70DB57436E8A58D01CD1D0F7DC813C854D5B3F83B56CC0",
+      "tc1_static_manifest": "462C7966B01B5858EB9D4A20F23ECF1A17EACD6430BB233A37A4E7EDA7A9DF63",
+      "tc1_guard": "E18550F191FE6933C98F21169E30E6482AA9AAE147B013024982D384E49299D8"
+    },
+    "actual_sha256": {
+      "contract": "55572805C1878D41D4B6C41E1C7A31B2C3725A81050942494F0E1292092FEF38",
+      "preregistration": "6D2DD9672222D174B32F0E25448419F42FE179522D2D8AA37C7766C8A1BBFBBA",
+      "contract_manifest": "5A1E82FD9E0209DB371F7E313125FAC64434BA6DA6E677CFF20E0AE3336F583E",
+      "static_manifest": "0D380ACA5C0CF101E60DFF043221BBE6AE267BA9FFDAD1C677C4E7FFCA23F80F",
+      "static_run": "F0E54A0A4DBC1378F424E6C8FE8B0A9861CDD72DCBE72C045B96660324723197",
+      "r5_2a_manifest": "F8E476F8FFA6AB2CD0F833B17D667D0D9B6CE3FC6B9FA1A7F5C1A3D71BA753E1",
+      "v4": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D",
+      "checkpoint": "F54C9C2361AE78E1C37353AEB338A2DE6722C0B1EC4F885F6B52688CE9E88085",
+      "r5_1a_scorer": "4DE49C9070C973EE44EFBD09DFC063C436779E723D12EC7A7A2BC4A06AF35F90",
+      "r5_2b_scorer": "2E44B79828DBB37B312CDC03C897A80803947A48F13864B26C454F3B8ED161A3",
+      "failed_execution_manifest": "92163F8DE3ECEAFEE2950AF57302AA565C0F3612A2D6F0D36462552FA66BA09E",
+      "tc0_manifest": "91F5DBCB9719FEF7C7E3E1CEF5773E92A18B813FFD54384359DF026F300C278E",
+      "tc1_contract": "632F32CEF2F8EE05A47ACA7FFCE97FB5DA35236C48B53E25EC06CEFCDACE954F",
+      "tc1_contract_manifest": "545C49597D3648CCBD70DB57436E8A58D01CD1D0F7DC813C854D5B3F83B56CC0",
+      "tc1_static_manifest": "462C7966B01B5858EB9D4A20F23ECF1A17EACD6430BB233A37A4E7EDA7A9DF63",
+      "tc1_guard": "E18550F191FE6933C98F21169E30E6482AA9AAE147B013024982D384E49299D8"
+    },
+    "manifest_audits": {
+      "contract": {
+        "artifact_count": 9,
+        "failures": [],
+        "status": "PASS"
+      },
+      "original_static": {
+        "artifact_count": 10,
+        "failures": [],
+        "status": "PASS"
+      },
+      "failed_execution": {
+        "artifact_count": 6,
+        "failures": [],
+        "status": "PASS"
+      },
+      "tc0": {
+        "artifact_count": 10,
+        "failures": [],
+        "status": "PASS"
+      },
+      "tc1_contract": {
+        "artifact_count": 7,
+        "failures": [],
+        "status": "PASS"
+      },
+      "tc1_static": {
+        "artifact_count": 11,
+        "failures": [],
+        "status": "PASS"
+      }
+    },
+    "scientific_immutability": {
+      "contract_sha256": "55572805C1878D41D4B6C41E1C7A31B2C3725A81050942494F0E1292092FEF38",
+      "scorer_sha256": "2E44B79828DBB37B312CDC03C897A80803947A48F13864B26C454F3B8ED161A3",
+      "tc1_guard_sha256": "E18550F191FE6933C98F21169E30E6482AA9AAE147B013024982D384E49299D8",
+      "c_formula": "BEST_INSERT_SCORE - BEST_NON_ADDITION_SCORE",
+      "hypothesis_families": [
+        "KEEP",
+        "INSERT",
+        "SUB",
+        "DELETE"
+      ],
+      "empty_target_formula": "SUM_t log_softmax(logits[t])[blank=40]",
+      "population_changed": false,
+      "loso_changed": false,
+      "threshold_helper_changed": false,
+      "eight_gates_changed": false
+    }
+  },
+  "tc1_numeric_guard": {
+    "status": "PASS",
+    "scope": "deterministic synthetic pre-inference diagnostic",
+    "nonempty_raw_score": -12.60501480102539,
+    "nonempty_target_score": -6.302507400512695,
+    "scorer_device": "cuda",
+    "scorer_dtype": "float32",
+    "diagnostic_device": "cpu",
+    "diagnostic_dtype": "float32",
+    "n": 4,
+    "absolute_operand_sum_authoritative": 15.667129755020142,
+    "absolute_operand_sum_diagnostic": 15.667129755020142,
+    "authoritative_scorer_value_A": -15.667129516601562,
+    "diagnostic_value_B": -15.667130470275879,
+    "observed_absolute_difference": 9.5367431640625e-07,
+    "bound_A": 2.8015016120413103e-06,
+    "bound_B": 2.8015016120413103e-06,
+    "correction_bound": 5.603003224082621e-06,
+    "acceptance_operator": "<=",
+    "equivalent": true,
+    "scientific_score_source": "frozen_r5_2b_scorer",
+    "returned_scientific_score": -15.667129516601562,
+    "diagnostic_replaced_scientific_score": false
+  },
+  "scientific_contract_modified": false,
+  "frozen_scorer_modified": false,
+  "scientific_score_source": "imported frozen r5_2b_scorer.py",
+  "diagnostic_value_used_as_scientific_score": false,
+  "original_failed_execution_preserved": true
+}

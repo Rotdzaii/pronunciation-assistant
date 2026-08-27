@@ -1,0 +1,21 @@
+{
+  "status": "PASS",
+  "frozen_words_checked": 16582,
+  "best_insert_identity_matches": 16582,
+  "best_insert_identity_mismatches": 0,
+  "best_insert_score_exact_matches": 16582,
+  "best_insert_score_mismatches": 0,
+  "identity_mismatch_examples": [],
+  "score_mismatch_examples": [],
+  "winner_rule": "higher TARGET score; lower boundary; lower phone index",
+  "score_comparison": "exact Python float == after float.fromhex",
+  "atol": null,
+  "rtol": null,
+  "persisted_artifact_audit": {
+    "persisted_words_with_finite_winner": 16582,
+    "ordering_violations": 0,
+    "float_hex_round_trip_violations": 0,
+    "persisted_per_word_count_violations": 0,
+    "count_violation_examples": []
+  }
+}

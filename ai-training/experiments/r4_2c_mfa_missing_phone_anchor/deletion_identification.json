@@ -1,0 +1,16 @@
+{
+  "manual_deletions": 2591,
+  "exact_expected_phone_identified": 17,
+  "exact_identification_rate": 0.006561173292165187,
+  "wrong_expected_phone": 4,
+  "no_missing_phone_detected": 2570,
+  "ambiguous_multiple_candidates": 0,
+  "missing_candidate_coverage": 0.008104978772674644,
+  "both_sided_anchors": 7,
+  "one_sided_anchors": 10,
+  "no_anchor_or_missing_event": 2574,
+  "without_primary_midpoint_anchor": 2584,
+  "anchor_coverage": 0.002701659590891548,
+  "sequence_mapping_evaluable": 2591,
+  "sequence_mapping_coverage": 1.0
+}

@@ -1,0 +1,54 @@
+{
+  "stage": "R5-3A evidence-separated relation scoring TRAIN development contract",
+  "status": "R5_3A_DEVELOPMENT_CONTRACT_FROZEN",
+  "manifest_self_excluded": true,
+  "artifact_count": 9,
+  "artifacts": [
+    {
+      "relative_path": "r5_3a_classifier_contract.json",
+      "byte_size": 1393,
+      "sha256": "A0A2947B1363ECBC2C29DF0D07EB790C5F6B49C40C43BABEC2E2412E6C436B6C"
+    },
+    {
+      "relative_path": "R5_3A_DEVELOPMENT_CONTRACT.json",
+      "byte_size": 5603,
+      "sha256": "A1594B45A8EE9C542FEFF28695DA27D59D07C4A37596EAB1D4308161A7B583B3"
+    },
+    {
+      "relative_path": "R5_3A_DEVELOPMENT_CONTRACT.md",
+      "byte_size": 2174,
+      "sha256": "45FA85D486A03F7031C206EABF0796C3ACC9E73EDDD5F907805ED02C2BFB4959"
+    },
+    {
+      "relative_path": "r5_3a_feature_contract.json",
+      "byte_size": 2300,
+      "sha256": "C3EE2B6AC796FC0CDB99F5844301203558EE75EF68A967020931B620064A2C40"
+    },
+    {
+      "relative_path": "r5_3a_gate_contract.json",
+      "byte_size": 1423,
+      "sha256": "FE7BD8C9D09916664FE180B81C8121E3F59E00164922DBD3773ABC0581B3342D"
+    },
+    {
+      "relative_path": "r5_3a_loso_contract.json",
+      "byte_size": 1788,
+      "sha256": "B53CC9D14EE787379038F1C6ADCCD3B3813A837C6E54A7E67C6E2D1EACE4CAEE"
+    },
+    {
+      "relative_path": "R5_3A_PREREGISTRATION.md",
+      "byte_size": 5091,
+      "sha256": "2239C047504B4B6CA212A40D0284DD38E626CF6E73D541E8AF036311BC8A6CB1"
+    },
+    {
+      "relative_path": "r5_3a_protocol_audit.json",
+      "byte_size": 560,
+      "sha256": "5EA0A9083BA306CDED70758CB22C62B87D94E0E2EFB3B5D8CF0B1C4BFCCE0C22"
+    },
+    {
+      "relative_path": "r5_3a_source_identity.json",
+      "byte_size": 2817,
+      "sha256": "E6557163CF6089C38176C919201FE5A7FE5759E709874C0B440CAB15795FCB24"
+    }
+  ],
+  "hash_audit": "HASH_AUDIT_PASS"
+}

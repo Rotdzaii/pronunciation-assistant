@@ -1,0 +1,246 @@
+{
+  "deterministic_fixture_sha256": "CBAD78A3ED01758740866D991A736FD044DCB219AA109E85C84F951403435A1F",
+  "failed": 0,
+  "failures": [],
+  "observations": {
+    "candidate_order_sha256": "CCCD4E7F672628E48DF5DF45A0D879B6A4D96178B64FF1B55728662921A83A1F",
+    "empty_target_crosscheck": {
+      "absolute_delta": 0.0,
+      "explicit_all_blank_score": -19.43882697170362,
+      "framework_empty_ctc_score": -19.43882697170362,
+      "tolerance": 1e-10
+    },
+    "one_phone": {
+      "best_nonaddition_family": "SUB",
+      "counts": {
+        "DELETE": 1,
+        "INSERT": 80,
+        "KEEP": 1,
+        "SUB": 39,
+        "TOTAL": 121
+      },
+      "delete_finite": true,
+      "delete_target": []
+    },
+    "serialization": {
+      "families": [
+        "KEEP",
+        "INSERT",
+        "SUB",
+        "DELETE",
+        "BEST_NON_ADDITION",
+        "C"
+      ],
+      "negative_infinity_representation": {
+        "score_is_neg_inf": true,
+        "score_value": null
+      }
+    }
+  },
+  "passed": 50,
+  "results": [
+    {
+      "name": "test_keep_constructor",
+      "status": "PASS"
+    },
+    {
+      "name": "test_insert_constructor_and_count",
+      "status": "PASS"
+    },
+    {
+      "name": "test_sub_constructor_and_count",
+      "status": "PASS"
+    },
+    {
+      "name": "test_delete_constructor_and_count",
+      "status": "PASS"
+    },
+    {
+      "name": "test_identical_delete_candidates_retained",
+      "status": "PASS"
+    },
+    {
+      "name": "test_total_n1",
+      "status": "PASS"
+    },
+    {
+      "name": "test_total_n2",
+      "status": "PASS"
+    },
+    {
+      "name": "test_total_n3",
+      "status": "PASS"
+    },
+    {
+      "name": "test_total_n5",
+      "status": "PASS"
+    },
+    {
+      "name": "test_alignability_no_repeat",
+      "status": "PASS"
+    },
+    {
+      "name": "test_alignability_repeats",
+      "status": "PASS"
+    },
+    {
+      "name": "test_impossible_nonempty_score",
+      "status": "PASS"
+    },
+    {
+      "name": "test_alignable_nonempty_score",
+      "status": "PASS"
+    },
+    {
+      "name": "test_empty_formula",
+      "status": "PASS"
+    },
+    {
+      "name": "test_empty_ctc_crosscheck",
+      "status": "PASS"
+    },
+    {
+      "name": "test_one_phone_word",
+      "status": "PASS"
+    },
+    {
+      "name": "test_best_insert_boundary_tie",
+      "status": "PASS"
+    },
+    {
+      "name": "test_best_insert_phone_tie",
+      "status": "PASS"
+    },
+    {
+      "name": "test_best_sub_position_tie",
+      "status": "PASS"
+    },
+    {
+      "name": "test_best_sub_phone_tie",
+      "status": "PASS"
+    },
+    {
+      "name": "test_best_delete_position_tie",
+      "status": "PASS"
+    },
+    {
+      "name": "test_identical_delete_score_tie",
+      "status": "PASS"
+    },
+    {
+      "name": "test_nonaddition_unique_keep",
+      "status": "PASS"
+    },
+    {
+      "name": "test_nonaddition_unique_sub",
+      "status": "PASS"
+    },
+    {
+      "name": "test_nonaddition_unique_delete",
+      "status": "PASS"
+    },
+    {
+      "name": "test_nonaddition_keep_sub_tie",
+      "status": "PASS"
+    },
+    {
+      "name": "test_nonaddition_keep_delete_tie",
+      "status": "PASS"
+    },
+    {
+      "name": "test_nonaddition_sub_delete_tie",
+      "status": "PASS"
+    },
+    {
+      "name": "test_c_positive",
+      "status": "PASS"
+    },
+    {
+      "name": "test_c_zero",
+      "status": "PASS"
+    },
+    {
+      "name": "test_c_negative",
+      "status": "PASS"
+    },
+    {
+      "name": "test_all_inserts_impossible",
+      "status": "PASS"
+    },
+    {
+      "name": "test_impossible_sub_cannot_win",
+      "status": "PASS"
+    },
+    {
+      "name": "test_keep_impossible_guard",
+      "status": "PASS"
+    },
+    {
+      "name": "test_mechanism_sub_beats_insert",
+      "status": "PASS"
+    },
+    {
+      "name": "test_mechanism_delete_beats_insert",
+      "status": "PASS"
+    },
+    {
+      "name": "test_mechanism_insert_beats_all",
+      "status": "PASS"
+    },
+    {
+      "name": "test_event_output_positive",
+      "status": "PASS"
+    },
+    {
+      "name": "test_event_output_nonaddition",
+      "status": "PASS"
+    },
+    {
+      "name": "test_extended_real_round_trip",
+      "status": "PASS"
+    },
+    {
+      "name": "test_threshold_candidates",
+      "status": "PASS"
+    },
+    {
+      "name": "test_threshold_prediction_equality",
+      "status": "PASS"
+    },
+    {
+      "name": "test_threshold_tie_priority",
+      "status": "PASS"
+    },
+    {
+      "name": "test_cohort_far_helpers",
+      "status": "PASS"
+    },
+    {
+      "name": "test_event_exact_match",
+      "status": "PASS"
+    },
+    {
+      "name": "test_event_wrong_boundary",
+      "status": "PASS"
+    },
+    {
+      "name": "test_event_wrong_phone",
+      "status": "PASS"
+    },
+    {
+      "name": "test_event_multiple_truth_one_prediction",
+      "status": "PASS"
+    },
+    {
+      "name": "test_event_duplicate_prediction_rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "test_candidate_order_deterministic",
+      "status": "PASS"
+    }
+  ],
+  "suite": "R5-2B synthetic static verification",
+  "synthetic_only": true,
+  "test_count": 50
+}

@@ -1,0 +1,24 @@
+{
+  "score": "expected_logit - max(other 39 logits)",
+  "lower_indicates": "substitution",
+  "roc_auc_substitution": 0.7046100288311016,
+  "pr_auc_substitution": 0.2540686705752386,
+  "correct_origin": {
+    "mean": 0.12716468488341282,
+    "median": 0.2103954404592514,
+    "p10": -2.203889012336731,
+    "p25": -0.9689726531505585,
+    "p75": 1.2859587967395782,
+    "p90": 2.399079948663711
+  },
+  "substitution_origin": {
+    "mean": -1.4631307720528526,
+    "median": -1.1201216578483582,
+    "p10": -4.319837975502014,
+    "p25": -2.571274548768997,
+    "p75": 0.1437678337097168,
+    "p90": 1.015530547499657
+  },
+  "diagnostic_only": true,
+  "threshold_search_performed": false
+}

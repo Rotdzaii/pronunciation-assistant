@@ -1,0 +1,25 @@
+{
+  "stage": "R5-2B-SV",
+  "test_scope": "synthetic_only",
+  "authoritative_formula": "RAW_SCORE([]) = sum_t log_softmax(logits[t], dim=-1)[40]",
+  "target_score_formula": "TARGET_SCORE([]) = RAW_SCORE([])",
+  "explicit_all_blank_score": -19.43882697170362,
+  "framework_empty_ctc_score": -19.43882697170362,
+  "absolute_delta": 0.0,
+  "strict_absolute_tolerance": 1e-10,
+  "crosscheck": "PASS",
+  "one_phone_word": {
+    "expected": [5],
+    "keep_candidates": 1,
+    "insert_candidates": 80,
+    "sub_candidates": 39,
+    "delete_candidates": 1,
+    "total_candidates": 121,
+    "delete_target": [],
+    "empty_delete_score_finite_for_finite_logits": true,
+    "relation_competition_includes_delete": true,
+    "status": "PASS"
+  },
+  "real_audio_or_checkpoint_used": false,
+  "status": "PASS"
+}

@@ -1,0 +1,27 @@
+{
+  "train_metadata_and_prior_seconds": 3.6653298999999606,
+  "device": "cuda",
+  "gpu_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+  "checkpoint_epoch": 47,
+  "train_probes": 158772,
+  "median_probes_per_word": 9.0,
+  "acoustic_inference_seconds": 46.15363950000028,
+  "probes_per_second": 3440.0754029375958,
+  "peak_vram_bytes": 94117376,
+  "grid_dp_seconds": 961.5320171000003,
+  "no_valid_paths_by_lambda": {
+    "0.10": 0,
+    "0.20": 0,
+    "0.30": 0,
+    "0.40": 0,
+    "0.50": 0,
+    "0.60": 0,
+    "0.70": 0,
+    "0.80": 0,
+    "0.90": 0,
+    "1.00": 0
+  },
+  "oof_rows_per_lambda": 56304,
+  "each_train_row_once_per_lambda": true,
+  "total_experiment_seconds": 1014.0686580000001
+}

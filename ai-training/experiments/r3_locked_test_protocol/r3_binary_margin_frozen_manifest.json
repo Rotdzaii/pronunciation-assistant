@@ -1,0 +1,222 @@
+{
+  "manifest_version": "R3_BINARY_MARGIN_TEST_PROTOCOL_V1",
+  "status": "FROZEN_BEFORE_TEST",
+  "markers": [
+    "RESEARCH_ONLY",
+    "VALIDATION_CALIBRATED",
+    "FROZEN_BEFORE_TEST",
+    "NOT_PRODUCTION_CALIBRATED",
+    "NO_0_TO_100_SCORE"
+  ],
+  "frozen_at_utc": "2026-08-13T17:00:39.2171312Z",
+  "git": {
+    "branch": "research/phoenix-correctness",
+    "commit": "4758c0dcf5ab1681af1fcf74e068d609030d11a8"
+  },
+  "source_identity": {
+    "dataset": "ai-training/datasets/l2-arctic/metadata/all_speakers_expected_observed_v4.csv",
+    "dataset_sha256": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D",
+    "eligible_subset": "PHONE_IDENTIFICATION_ELIGIBLE",
+    "acoustic_checkpoint": "ai-training/experiments/r3_1d_observed_phone_seed42_48epochs/R3_1D_observed_phone_40class_seed42_best_validation_macro_f1.pt",
+    "acoustic_checkpoint_sha256": "5C66860BBC50BA803F5BFE25417DF19BDF34B1C7BE36D507B0DDCA88D767EA5E",
+    "selected_epoch": 47,
+    "r3_2a_validation_evidence": "ai-training/experiments/r3_2a_expected_vs_best_alternative/validation_phone_evidence.csv",
+    "r3_2a_validation_evidence_sha256": "E0C7DF574EAA61DEAB57C77C7E8459BB4306E938DAF6F7AB00B7D0D68DF0111F",
+    "r3_2b_candidate_report": "ai-training/experiments/r3_2b_speaker_transfer_margin/all_validation_threshold_candidate.json"
+  },
+  "target_vocabulary": {
+    "size": 40,
+    "stress_digits_removed": true,
+    "index_to_phone": [
+      "AA", "AE", "AH", "AO", "AW", "AX", "AY", "B", "CH", "D",
+      "DH", "EH", "ER", "EY", "F", "G", "HH", "IH", "IY", "JH",
+      "K", "L", "M", "N", "NG", "OW", "OY", "P", "R", "S",
+      "SH", "T", "TH", "UH", "UW", "V", "W", "Y", "Z", "ZH"
+    ]
+  },
+  "acoustic_model": {
+    "neural_input": "audio log-mel only",
+    "expected_phone_is_neural_input": false,
+    "architecture": "SmallPronunciationCNNAttention",
+    "cnn_channels": [16, 32, 64, 96],
+    "pooling": "temporal attention",
+    "output_head": ["Dropout(0.2)", "Linear(96,40)"],
+    "output": "40 observed-phone logits",
+    "inference_mode": "eval; deterministic; logits and argmax generated without checkpoint adaptation"
+  },
+  "preprocessing": {
+    "audio": {
+      "mono": true,
+      "sample_rate_hz": 16000,
+      "crop_center": "(start_time + end_time) / 2",
+      "crop_seconds": 0.5,
+      "crop_bounds": "center +/- 0.25 seconds",
+      "samples": 8000,
+      "boundary_policy": "clip available audio and zero-pad only the missing side"
+    },
+    "log_mel": {
+      "n_mels": 64,
+      "n_fft": 2048,
+      "hop_length": 512,
+      "win_length": 2048,
+      "window": "hann",
+      "center": true,
+      "pad_mode": "constant",
+      "power": 2.0,
+      "mel_scale": "slaney",
+      "norm": "slaney",
+      "power_to_db_reference": "per-sample maximum",
+      "top_db": 80.0,
+      "feature_shape": [1, 64, 16]
+    }
+  },
+  "post_inference_expected_phone_policy": {
+    "expected_phone_source": "expected_phone_canonical",
+    "allowed_stage": "after the acoustic model has generated all 40 logits",
+    "forbidden_as_neural_input": true,
+    "pipeline": [
+      "audio",
+      "40 observed-phone logits",
+      "retrieve expected_phone_canonical",
+      "compute expected-vs-best-alternative margin",
+      "apply frozen threshold",
+      "emit correct or substitution"
+    ]
+  },
+  "margin_definition": {
+    "expected_logit": "logit[expected_phone_canonical]",
+    "best_alternative_logit": "max(logit[p]) for every p != expected_phone_canonical across the other 39 phones",
+    "expected_margin": "expected_logit - best_alternative_logit",
+    "softmax_required": false
+  },
+  "binary_decision": {
+    "frozen_threshold": -1.29392,
+    "threshold_decimal_string": "-1.293920",
+    "comparison_operator": "<=",
+    "rule": "if expected_margin <= -1.293920 then substitution else correct",
+    "equal_to_threshold_class": "substitution",
+    "outputs": ["correct", "substitution", "raw_expected_margin", "best_alternative_phone"],
+    "per_phone_threshold": false,
+    "per_speaker_threshold": false,
+    "pair_specific_threshold": false,
+    "test_derived_adjustment": false
+  },
+  "threshold_provenance": {
+    "source": "all six locked validation speakers",
+    "validation_speakers": ["ABA", "HKK", "HQTV", "LXC", "MBMPS", "SVBI"],
+    "source_candidate_full_precision": -1.2939202785491943,
+    "frozen_operational_decimal": -1.29392,
+    "rounding_changed_validation_predictions": 0,
+    "constraint": "substitution recall >= 0.50",
+    "optimization_order": [
+      "highest binary Macro-F1",
+      "higher substitution F1",
+      "higher substitution precision",
+      "more conservative threshold producing fewer substitution predictions"
+    ],
+    "labels": [
+      "VALIDATION_CALIBRATED",
+      "FROZEN_BEFORE_TEST",
+      "NOT_PRODUCTION_CALIBRATED"
+    ]
+  },
+  "validation_calibration_metrics": {
+    "rows": 28212,
+    "accuracy": 0.7729335034736992,
+    "balanced_accuracy": 0.6528404102538492,
+    "binary_macro_f1": 0.5884736601934054,
+    "substitution_precision": 0.227435697583788,
+    "substitution_recall": 0.5015469233413544,
+    "substitution_f1": 0.312955812955813,
+    "confusion_matrix_labels": ["correct", "substitution"],
+    "confusion_matrix": [[20347, 4956], [1450, 1459]]
+  },
+  "locked_test_evaluation": {
+    "speakers": ["ASI", "ERMS", "SKA", "THV", "TXHC", "YDCK"],
+    "checkpoint_selection_from_test_forbidden": true,
+    "threshold_selection_from_test_forbidden": true,
+    "primary_binary_metrics": [
+      "binary_macro_f1",
+      "substitution_precision",
+      "substitution_recall",
+      "substitution_f1",
+      "balanced_accuracy",
+      "accuracy",
+      "confusion_matrix"
+    ],
+    "acoustic_observed_phone_metrics": [
+      "top1_accuracy",
+      "macro_f1",
+      "balanced_accuracy",
+      "top3_accuracy"
+    ],
+    "per_speaker_metrics": [
+      "binary_macro_f1",
+      "substitution_precision",
+      "substitution_recall",
+      "substitution_f1"
+    ],
+    "phone_diagnostics": {
+      "expected_phones": ["TH", "DH", "R", "V", "D", "T", "S", "Z"],
+      "metrics": ["correct_support", "substitution_support", "correct_recall", "substitution_recall"],
+      "may_change_threshold": false
+    },
+    "substitution_pair_diagnostics": {
+      "pairs_if_supported": ["TH->T", "DH->D", "R->L", "V->W", "Z->S"],
+      "may_change_threshold": false
+    }
+  },
+  "test_interpretation_criteria": {
+    "purpose": "unbiased research evaluation; not production acceptance",
+    "no_catastrophic_speaker_collapse_definition": "every TEST speaker with at least 10 clean substitution rows must have substitution recall >= 0.20 and binary Macro-F1 >= 0.40",
+    "TEST_TRANSFER_CONFIRMED": {
+      "all_required": true,
+      "binary_macro_f1_min": 0.55,
+      "substitution_recall_min": 0.45,
+      "substitution_f1_min": 0.28,
+      "no_catastrophic_speaker_collapse": true
+    },
+    "TEST_TRANSFER_PARTIAL": {
+      "all_required": true,
+      "binary_macro_f1_min": 0.50,
+      "substitution_recall_min": 0.35,
+      "substitution_f1_min": 0.22,
+      "condition": "full confirmation criteria are not all met and no catastrophic speaker collapse is present"
+    },
+    "TEST_TRANSFER_NOT_CONFIRMED": {
+      "condition": "any partial criterion fails or catastrophic speaker collapse occurs"
+    }
+  },
+  "known_validation_failure_mode": {
+    "pair": "DH->D",
+    "status": "KNOWN_BEFORE_TEST",
+    "r3_2b_support": 300,
+    "r3_2b_detection_recall": 0.21666666666666667,
+    "r3_2b_false_negatives": 235,
+    "r3_2b_median_expected_margin": 0.051110975444316864,
+    "interpretation": "The acoustic model frequently continues to favor expected DH when manual annotation indicates observed D.",
+    "post_hoc_change_within_locked_test_evaluation_forbidden": true
+  },
+  "score_policy": {
+    "mapping_to_0_100_exists": false,
+    "forbidden": [
+      "sigmoid scaling margin to 0-100",
+      "min-max normalization using validation",
+      "multiplying posterior by 100",
+      "claiming pronunciation-score calibration"
+    ]
+  },
+  "test_state_at_freeze": {
+    "test_opened": false,
+    "test_wav_paths_resolved": false,
+    "test_audio_read": false,
+    "test_features_extracted": false,
+    "test_inference_run": false,
+    "test_metrics_calculated": false
+  },
+  "immutability_policy": {
+    "before_test": "Verify the SHA-256 of this manifest, the companion protocol document, and the acoustic checkpoint.",
+    "changes_after_freeze": "Any change creates a new protocol version with new hashes; this manifest must not be overwritten.",
+    "test_opening": "Requires a separate explicit authorization."
+  }
+}

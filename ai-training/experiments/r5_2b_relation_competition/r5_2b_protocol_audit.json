@@ -1,0 +1,21 @@
+{
+  "stage": "R5-2B contract/preregistration only",
+  "contract_creation_only": true,
+  "training_run": false,
+  "model_inference_run": false,
+  "train_audio_accessed": false,
+  "train_rerun": false,
+  "new_train_scores_created": false,
+  "performance_metrics_calculated": false,
+  "validation_accessed": false,
+  "validation_rerun": false,
+  "validation_scores_created": false,
+  "threshold_search_run": false,
+  "test_audio_accessed": false,
+  "test_inference_run": false,
+  "test_performance_consumed": false,
+  "r5_1_modified": false,
+  "r4_modified_or_reopened": false,
+  "r5_2_scorer_implemented": false,
+  "static_verification_executed": false
+}

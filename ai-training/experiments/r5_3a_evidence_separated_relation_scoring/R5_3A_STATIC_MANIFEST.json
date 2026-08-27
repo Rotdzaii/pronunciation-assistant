@@ -1,0 +1,79 @@
+{
+  "stage": "R5-3A synthetic static verification",
+  "status": "R5_3A_STATIC_VERIFICATION_PASS",
+  "manifest_self_excluded": true,
+  "artifact_count": 14,
+  "artifacts": [
+    {
+      "relative_path": "r5_3a_classifier.py",
+      "byte_size": 2143,
+      "sha256": "F07FE4C6AAC0807AABBD02AC58AA1DF9F7C6B68523958CE5E730EC0145BEFA40"
+    },
+    {
+      "relative_path": "r5_3a_event_immutability.json",
+      "byte_size": 467,
+      "sha256": "DE8D50B347CA9F94A3D945E9393C15DBAC5E1500D661B36E4E0F06679F58A0FE"
+    },
+    {
+      "relative_path": "r5_3a_features.py",
+      "byte_size": 3390,
+      "sha256": "6B97EFA1C32E22A1F0BFF281D5D00A1F7022858A43C88DBC3910ABF7C9628099"
+    },
+    {
+      "relative_path": "r5_3a_leakage_verification.json",
+      "byte_size": 1295,
+      "sha256": "D559E45D787FC6116283856985D0E74CEDCCDF9A83F5127826FCAF132FC43F84"
+    },
+    {
+      "relative_path": "r5_3a_loso.py",
+      "byte_size": 4654,
+      "sha256": "DCC0652A543D0D3FA02364FF5ECA9408C2718C4AA3EEF994A98ADC6924B59D6A"
+    },
+    {
+      "relative_path": "r5_3a_static_identity.json",
+      "byte_size": 2444,
+      "sha256": "8902AC8F5E5C8461CDD58EAF3CAEC557015C7F71A632430545E2388BE7F46A1E"
+    },
+    {
+      "relative_path": "r5_3a_static_protocol_audit.json",
+      "byte_size": 801,
+      "sha256": "660B0D9CA2E16CE176EFCC31B47EB2A4F24DD3ECCAC058F4E44048037D396F11"
+    },
+    {
+      "relative_path": "r5_3a_static_results.json",
+      "byte_size": 2241,
+      "sha256": "8C02FF309BFF548CC6B52A748E8A7A0F84DC4A6EE110F7CCBAA595D40477309B"
+    },
+    {
+      "relative_path": "r5_3a_static_run_1.json",
+      "byte_size": 9734,
+      "sha256": "DC5E43D8C7C692A0F748012772EDA157EDAAD082885651460C0D8DDD6351954C"
+    },
+    {
+      "relative_path": "r5_3a_static_run_2.json",
+      "byte_size": 9734,
+      "sha256": "DC5E43D8C7C692A0F748012772EDA157EDAAD082885651460C0D8DDD6351954C"
+    },
+    {
+      "relative_path": "R5_3A_STATIC_VERIFICATION_REPORT.md",
+      "byte_size": 2938,
+      "sha256": "7F60A2FBFE1696CD272D5FD8016CAEEAB52EF10668D247922E6C3C17D93E9C03"
+    },
+    {
+      "relative_path": "r5_3a_threshold.py",
+      "byte_size": 3269,
+      "sha256": "7C5B1703F887281C8BD525D3604B19E485AA22BD22522D12878CE7B0961817DE"
+    },
+    {
+      "relative_path": "r5_3a_threshold_verification.json",
+      "byte_size": 916,
+      "sha256": "61E6CF762A7A957AE819BD65F32A7FF2CEE99B5180BA91FA77EA4E1148DEAE0B"
+    },
+    {
+      "relative_path": "test_r5_3a_static.py",
+      "byte_size": 20500,
+      "sha256": "545D2AE8C7A3F64A1C8CC11E76112D9837018FAA0170EEFA9DA35673136D1DF1"
+    }
+  ],
+  "hash_audit": "HASH_AUDIT_PASS"
+}

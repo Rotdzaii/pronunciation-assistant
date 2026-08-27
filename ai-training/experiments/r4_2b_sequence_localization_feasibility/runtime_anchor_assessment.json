@@ -1,0 +1,14 @@
+{
+  "status": "RUNTIME_ANCHOR_UNCERTAIN",
+  "evidence": [
+    "MFA aligns known transcript and can emit phone intervals, so an approximate canonical slot may exist.",
+    "Current scorer explicitly handles MFA output that may omit a phone and refuses positional association.",
+    "Current contract has no explicit missing-expected-phone slot or gap-to-canonical-index mapping.",
+    "Fallback evenly splits canonical phones but project documentation marks phone timing reliability as limited."
+  ],
+  "source_paths": [
+    "ai-training/docs/AI_PHASE4A_FORCED_ALIGNMENT_PLAN.md",
+    "ai-worker/app/alignment/fallback_aligner.py",
+    "ai-worker/app/scorers/cnn_attention_scorer.py"
+  ]
+}

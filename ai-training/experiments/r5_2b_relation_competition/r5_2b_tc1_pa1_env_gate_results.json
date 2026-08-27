@@ -1,0 +1,103 @@
+{
+  "gates": {
+    "G1": {
+      "metric": "addition_vs_all_nonaddition_roc_auc",
+      "value": 0.6878413803490975,
+      "operator": ">=",
+      "threshold": 0.7,
+      "result": "FAIL",
+      "full_precision": true
+    },
+    "G2": {
+      "metric": "addition_vs_correct_only_roc_auc",
+      "value": 0.669239360205041,
+      "operator": ">=",
+      "threshold": 0.7,
+      "result": "FAIL",
+      "full_precision": true
+    },
+    "G3": {
+      "metric": "oof_binary_macro_f1",
+      "value": 0.5304030323273805,
+      "operator": ">",
+      "threshold": 0.5551978767901391,
+      "result": "FAIL",
+      "full_precision": true
+    },
+    "G4": {
+      "metric": "oof_addition_f1",
+      "value": 0.08637873754152824,
+      "operator": ">",
+      "threshold": 0.1379980563654033,
+      "result": "FAIL",
+      "full_precision": true
+    },
+    "G5": {
+      "metric": "correct_only_false_addition_rate",
+      "value": 0.04323017408123791,
+      "operator": "<=",
+      "threshold": 0.03491295938104449,
+      "result": "FAIL",
+      "full_precision": true
+    },
+    "G6": {
+      "metric": "substitution_negative_false_addition_rate",
+      "value": 0.017123287671232876,
+      "operator": "<",
+      "threshold": 0.05016116035455278,
+      "result": "PASS",
+      "full_precision": true
+    },
+    "G7": {
+      "metric": "deletion_negative_false_addition_rate",
+      "value": 0.006414825374198147,
+      "operator": "<",
+      "threshold": 0.03349964362081254,
+      "result": "PASS",
+      "full_precision": true
+    },
+    "G8": {
+      "metric": "exact_event_f1",
+      "value": 0.03253796095444685,
+      "operator": ">=",
+      "threshold": 0.04389312977099236,
+      "result": "FAIL",
+      "full_precision": true
+    }
+  },
+  "passed_count": 2,
+  "total": 8,
+  "all_pass": false,
+  "robust_theta": {
+    "status": "R5_2_ROBUST_THETA_NOT_AUTHORIZED",
+    "thresholds_speaker_order": [
+      0.2966622312863667,
+      0.19463801383972168,
+      0.21131936709086097,
+      0.19463801383972168,
+      0.19463801383972168,
+      0.19463801383972168,
+      0.2289594491322836,
+      0.19463801383972168,
+      0.19463801383972168,
+      0.21131936709086097,
+      0.19463801383972168,
+      0.28233603636423754
+    ],
+    "sorted_thresholds": [
+      0.19463801383972168,
+      0.19463801383972168,
+      0.19463801383972168,
+      0.19463801383972168,
+      0.19463801383972168,
+      0.19463801383972168,
+      0.19463801383972168,
+      0.21131936709086097,
+      0.21131936709086097,
+      0.2289594491322836,
+      0.28233603636423754,
+      0.2966622312863667
+    ],
+    "value": null
+  }
+}

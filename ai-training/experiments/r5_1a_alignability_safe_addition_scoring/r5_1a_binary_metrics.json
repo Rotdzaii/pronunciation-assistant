@@ -1,0 +1,41 @@
+{
+  "words": 16582,
+  "TP": 71,
+  "FP": 635,
+  "FN": 252,
+  "TN": 15624,
+  "accuracy": 0.9465082619708117,
+  "balanced_accuracy": 0.5903794745163289,
+  "binary_macro_f1": 0.5551978767901391,
+  "addition_precision": 0.10056657223796034,
+  "addition_recall": 0.21981424148606812,
+  "addition_f1": 0.1379980563654033,
+  "nonaddition_f1": 0.9723976972148748,
+  "confusion_matrix": [
+    [
+      15624,
+      635
+    ],
+    [
+      252,
+      71
+    ]
+  ],
+  "false_addition_rates": {
+    "correct_only": {
+      "support": 10340,
+      "predicted_addition": 361,
+      "false_addition_rate": 0.03491295938104449
+    },
+    "substitution_negative": {
+      "support": 4964,
+      "predicted_addition": 249,
+      "false_addition_rate": 0.05016116035455278
+    },
+    "deletion_negative": {
+      "support": 1403,
+      "predicted_addition": 47,
+      "false_addition_rate": 0.03349964362081254
+    }
+  }
+}

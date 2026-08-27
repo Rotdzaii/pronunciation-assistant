@@ -1,0 +1,11 @@
+{
+  "status": "R6_1_LOCAL_BOUNDARY_EVIDENCE_NOT_CONFIRMED",
+  "gates_passed": 0,
+  "gates_total": 4,
+  "primary_score": "MEAN_UNEXPECTED_PHONE_MASS",
+  "pooled_boundary_roc_auc": 0.5265224849834894,
+  "median_speaker_roc_auc": 0.5469273349525517,
+  "speakers_auc_gt_0_55": 6,
+  "addition_event_coverage": 0.9005847953216374,
+  "scientific_scope": "TRAIN boundary-level continuous feasibility only; not a word-level detector"
+}

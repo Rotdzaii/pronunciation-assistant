@@ -1,0 +1,14 @@
+{
+  "final_status": "R4_3B_DESIGN_INCOMPLETE",
+  "stopped_before_validation_sequence_scoring": true,
+  "reason": "The authoritative preregistration does not define a unique numerical DP scorer or deterministic tie policy.",
+  "train_usable_words_reference_only": 16259,
+  "validation_usable_words_reference_only": 7728,
+  "counts_recomputed_in_r4_3b": false,
+  "r4_test_accessed": false,
+  "r4_test_paths_resolved": false,
+  "new_neural_training": false,
+  "r3_checkpoint_modified": false,
+  "mfa_runtime_modified": false,
+  "next_smallest_action": "Declare a new pre-validation design-freeze gate that specifies the missing numerical DP recurrence, span scoring, priors, boundaries, and tie policy."
+}

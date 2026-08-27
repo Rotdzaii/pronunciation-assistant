@@ -1,0 +1,133 @@
+{
+  "manifest_type": "additive environment-and-path-corrected R5-2B frozen TRAIN execution manifest",
+  "self_excluded": true,
+  "hash_algorithm": "SHA-256",
+  "artifact_count": 21,
+  "hash_audit": "HASH_AUDIT_PASS",
+  "failures": [],
+  "artifacts": [
+    {
+      "relative_path": "r5_2b_train_execution_driver_tc1_pa1_env.py",
+      "byte_size": 68449,
+      "sha256": "BC023CFD259406989CAEADABE3EB08AA945B7A612729ECA2C05711E0C387A5D0"
+    },
+    {
+      "relative_path": "r5_2b_environment_provenance.json",
+      "byte_size": 1118,
+      "sha256": "7C8BB716A428290163B8AAA3B7A48EEE4C6700298E841D1665BACB604DC6876A"
+    },
+    {
+      "relative_path": "r5_2b_environment_import_check.json",
+      "byte_size": 696,
+      "sha256": "1D2248FFDE92FED2B24ED0B00884F452C9F1EC1A5D21B731FC127BD161225FD5"
+    },
+    {
+      "relative_path": "r5_2b_environment_protocol_audit.json",
+      "byte_size": 751,
+      "sha256": "5FD7A31226E0F8D8E2B8B75CC66C9465891375C3E1149DA8B59EF0AF8D425C71"
+    },
+    {
+      "relative_path": "r5_2b_environment_launcher.json",
+      "byte_size": 1070,
+      "sha256": "50C57A14E2DB14AB84DBF5A71574A4B44226653EFC6EE5953C151D14B47D7891"
+    },
+    {
+      "relative_path": "r5_2b_tc1_pa1_env_preflight.json",
+      "byte_size": 13161,
+      "sha256": "740615251C11A6D248169B6B05D0001FD3FF35380DC5EC5360986AF7F19FB27F"
+    },
+    {
+      "relative_path": "r5_2b_tc1_pa1_env_path_guard.json",
+      "byte_size": 2974,
+      "sha256": "53B3BB00214C0F69056B67DCFC36D8520BA073A234771B816087A5A848217061"
+    },
+    {
+      "relative_path": "r5_2b_tc1_pa1_env_population_accounting.json",
+      "byte_size": 2765,
+      "sha256": "E6E10925B69FF1319EF12C49EF5578B6B65C561C8B124BE5F0C635372588C769"
+    },
+    {
+      "relative_path": "r5_2b_tc1_pa1_env_candidate_audit.json",
+      "byte_size": 6221,
+      "sha256": "716569101FA1276C2B88D1D138860FCF96258B4A24C71D4BF7065B33130B3522"
+    },
+    {
+      "relative_path": "r5_2b_tc1_pa1_env_train_scores.jsonl",
+      "byte_size": 25848478,
+      "sha256": "EAC81ABDDF56C77E4A71AD96AE5985D7C00DD60559A27C3A3BAAB16859EEFF3C"
+    },
+    {
+      "relative_path": "r5_2b_tc1_pa1_env_continuous_metrics.json",
+      "byte_size": 5910,
+      "sha256": "0CBDED2C8DD36F3C836DD1B59DFA351D6E47F181CE7D343D1A5C168ABE274D91"
+    },
+    {
+      "relative_path": "r5_2b_tc1_pa1_env_loso_thresholds.json",
+      "byte_size": 16816,
+      "sha256": "EBFD944AEDB89AC47CB99BBE2B3AEFCA4C6CAD6B1C5FBAE77512DE71AE4DE7F2"
+    },
+    {
+      "relative_path": "r5_2b_tc1_pa1_env_oof_predictions.jsonl",
+      "byte_size": 27311170,
+      "sha256": "3064A02AC9033B33157391EE8F482D685234D89C57876AAA16A21CBEE49D3730"
+    },
+    {
+      "relative_path": "r5_2b_tc1_pa1_env_binary_metrics.json",
+      "byte_size": 943,
+      "sha256": "C0EA9F8928ADB8F32455F8BAADF235D2B4972D76D94E47A76B75120C498D0740"
+    },
+    {
+      "relative_path": "r5_2b_tc1_pa1_env_relation_cohort_metrics.json",
+      "byte_size": 1774,
+      "sha256": "CFFDE8B79D6034111F14C0967FBD0E2D11CDB05F5383FC23E5FD0E6050979021"
+    },
+    {
+      "relative_path": "r5_2b_tc1_pa1_env_event_metrics.json",
+      "byte_size": 1197,
+      "sha256": "944B3B6DB4A6C5A859B6BCB25F4A265E6EF7635936E47F37BF6E49224F9CD726"
+    },
+    {
+      "relative_path": "r5_2b_tc1_pa1_env_gate_results.json",
+      "byte_size": 2710,
+      "sha256": "9DAD1B870563510AC8403B9F00C472932D2E59F046FEE327A3583284CFC1A4E7"
+    },
+    {
+      "relative_path": "r5_2b_tc1_pa1_env_protocol_audit.json",
+      "byte_size": 1737,
+      "sha256": "401805B685F7644124754815DC74CD0690FC7EED672D9C87734FD989FA5B3A22"
+    },
+    {
+      "relative_path": "r5_2b_tc1_pa1_env_final_status.json",
+      "byte_size": 2995,
+      "sha256": "A09BB313AD8F78F399128FFC15A93D7D76E929AD53A79707F681AFD7E8CAD00F"
+    },
+    {
+      "relative_path": "r5_2b_tc1_pa1_env_compute_report.json",
+      "byte_size": 7090,
+      "sha256": "9BB09DCACB2257014D4B9719D167684229C28918DF6FA7C30817343BB5981D3F"
+    },
+    {
+      "relative_path": "R5_2B_TC1_PA1_ENV_TRAIN_DEVELOPMENT_RESULT.md",
+      "byte_size": 1870,
+      "sha256": "8401BF747AC39751AA046EFC9B8E24CE4191EB7F5D181C9D62E9B475776ADA2B"
+    }
+  ],
+  "preserved_contract_sha256": "55572805C1878D41D4B6C41E1C7A31B2C3725A81050942494F0E1292092FEF38",
+  "preserved_static_manifest_sha256": "0D380ACA5C0CF101E60DFF043221BBE6AE267BA9FFDAD1C677C4E7FFCA23F80F",
+  "preserved_scorer_sha256": "2E44B79828DBB37B312CDC03C897A80803947A48F13864B26C454F3B8ED161A3",
+  "preserved_failed_execution_manifest_sha256": "92163F8DE3ECEAFEE2950AF57302AA565C0F3612A2D6F0D36462552FA66BA09E",
+  "preserved_tc0_manifest_sha256": "91F5DBCB9719FEF7C7E3E1CEF5773E92A18B813FFD54384359DF026F300C278E",
+  "preserved_tc1_contract_manifest_sha256": "545C49597D3648CCBD70DB57436E8A58D01CD1D0F7DC813C854D5B3F83B56CC0",
+  "preserved_tc1_static_manifest_sha256": "462C7966B01B5858EB9D4A20F23ECF1A17EACD6430BB233A37A4E7EDA7A9DF63",
+  "preserved_previous_corrected_execution_manifest_sha256": "605941841092EA2D52D2773981FBB8D39E91738114F415AAFEF059EC536B521C",
+  "preserved_pa0_manifest_sha256": "8D17C47786AC8A4167C19A5A5C37291EDAA31DBD54505E8638CE591DD581182C",
+  "preserved_pa1_contract_sha256": "F02A497648D9D707521C3289C85755D75A5E5C3440BA97499F51C4EF677820B6",
+  "preserved_pa1_preregistration_sha256": "546373878FC019C6EA0F5722F82C32C9FC363C0B506447F30866BD6FC59AB915",
+  "preserved_pa1_manifest_sha256": "DF209C8376F18C82F6212508208D3856046BABBEB1351CE11E62BC33F24B2451",
+  "preserved_latest_failed_execution_manifest_sha256": "49538C3DD9804DBC50806A420557F7AD1AF299E7A48541BCEC9FA30AF91E80A3",
+  "technical_correction_only": true,
+  "tc1_guard_only_correction": true,
+  "pa1_path_resolution_only_correction": true,
+  "environment_selection_only_correction": true,
+  "authorized_interpreter": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant\\ai-training\\.venv\\Scripts\\python.exe"
+}

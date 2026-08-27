@@ -1,0 +1,22 @@
+{
+  "A_frozen_r3_sliding_logits": {
+    "available": true,
+    "checkpoint_sha256": "5C66860BBC50BA803F5BFE25417DF19BDF34B1C7BE36D507B0DDCA88D767EA5E",
+    "output": "fixed-center timeline x 40 logits; exact frozen 0.50 s preprocessing",
+    "recommended": true
+  },
+  "B_mfa_kaldi_frame_posteriors": {
+    "available_in_current_project_output": false,
+    "evidence": "run_mfa_alignment retains parsed TextGrid word/phone intervals only; no lattice/posterior matrix contract"
+  },
+  "C_r3_internal_temporal_map": {
+    "technically_accessible": true,
+    "shape_for_0_50s_input": [
+      96,
+      16,
+      4
+    ],
+    "validated_phone_posterior_sequence": false,
+    "limitation": "classifier was trained after temporal attention pooling, not at the four internal time positions"
+  }
+}

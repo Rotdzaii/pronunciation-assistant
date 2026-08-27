@@ -1,0 +1,80 @@
+{
+  "status": "PASS",
+  "manifests": {
+    "contract_manifest": {
+      "path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r5_3a_evidence_separated_relation_scoring\\R5_3A_CONTRACT_MANIFEST.json",
+      "sha256": "CB3C4EC1E2402F3821BF61CA9302731D56CE6FCED2B025295FF6FC780D521D6D",
+      "entries": 9,
+      "failures": [],
+      "pass": true
+    },
+    "static_manifest": {
+      "path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r5_3a_evidence_separated_relation_scoring\\R5_3A_STATIC_MANIFEST.json",
+      "sha256": "1BC0406C37193DF26BDCBA7A4DE0E6CE99D31D14785472E378AD67654042F89C",
+      "entries": 14,
+      "failures": [],
+      "pass": true
+    },
+    "r5_1a_manifest": {
+      "path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r5_1a_alignability_safe_addition_scoring\\R5_1A_EXECUTION_MANIFEST.json",
+      "sha256": "C9343A75CE26C2BEECA388EBA855E91AE0992D22C0C5D785308D0A98B89A3CD6",
+      "entries": 14,
+      "failures": [],
+      "pass": true
+    },
+    "r5_2b_manifest": {
+      "path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r5_2b_relation_competition\\R5_2B_TC1_PA1_ENV_EXECUTION_MANIFEST.json",
+      "sha256": "37F3C86FF11526B8AB54D173937A0F488125A1D0B610032CC8A5D47B11602387",
+      "entries": 21,
+      "failures": [],
+      "pass": true
+    },
+    "r5_2c_manifest": {
+      "path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r5_2b_relation_competition\\R5_2C_MANIFEST.json",
+      "sha256": "C18621208A35074B7681EFC95261B73147B4A6E3716F17AF0AB0471F8B328F90",
+      "entries": 15,
+      "failures": [],
+      "pass": true
+    }
+  },
+  "direct_checks": {
+    "contract": {
+      "path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r5_3a_evidence_separated_relation_scoring\\R5_3A_DEVELOPMENT_CONTRACT.json",
+      "expected_sha256": "A1594B45A8EE9C542FEFF28695DA27D59D07C4A37596EAB1D4308161A7B583B3",
+      "actual_sha256": "A1594B45A8EE9C542FEFF28695DA27D59D07C4A37596EAB1D4308161A7B583B3",
+      "match": true,
+      "loaded": null
+    },
+    "preregistration": {
+      "path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r5_3a_evidence_separated_relation_scoring\\R5_3A_PREREGISTRATION.md",
+      "expected_sha256": "2239C047504B4B6CA212A40D0284DD38E626CF6E73D541E8AF036311BC8A6CB1",
+      "actual_sha256": "2239C047504B4B6CA212A40D0284DD38E626CF6E73D541E8AF036311BC8A6CB1",
+      "match": true,
+      "loaded": null
+    },
+    "v4": {
+      "path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\datasets\\l2-arctic\\metadata\\all_speakers_expected_observed_v4.csv",
+      "expected_sha256": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D",
+      "actual_sha256": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D",
+      "match": true,
+      "loaded": null
+    },
+    "checkpoint": {
+      "path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\experiments\\r4_4c2_bigru_ctc_seed42\\R4_4C2_bigru_ctc_phone_sequence_seed42_best_validation_per.pt",
+      "expected_sha256": "F54C9C2361AE78E1C37353AEB338A2DE6722C0B1EC4F885F6B52688CE9E88085",
+      "actual_sha256": "F54C9C2361AE78E1C37353AEB338A2DE6722C0B1EC4F885F6B52688CE9E88085",
+      "match": true,
+      "loaded": false
+    }
+  },
+  "implementation_hashes": {
+    "r5_3a_features.py": "6B97EFA1C32E22A1F0BFF281D5D00A1F7022858A43C88DBC3910ABF7C9628099",
+    "r5_3a_classifier.py": "F07FE4C6AAC0807AABBD02AC58AA1DF9F7C6B68523958CE5E730EC0145BEFA40",
+    "r5_3a_loso.py": "DCC0652A543D0D3FA02364FF5ECA9408C2718C4AA3EEF994A98ADC6924B59D6A",
+    "r5_3a_threshold.py": "7C5B1703F887281C8BD525D3604B19E485AA22BD22522D12878CE7B0961817DE"
+  },
+  "static_implementation_match": true,
+  "sklearn_version": "1.8.0",
+  "sklearn_version_match": true,
+  "checkpoint_loaded": false
+}

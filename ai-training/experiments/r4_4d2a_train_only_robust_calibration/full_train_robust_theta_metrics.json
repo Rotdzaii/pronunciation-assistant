@@ -1,0 +1,230 @@
+{
+  "RAW": {
+    "robust_theta": 2.190254211425781,
+    "accuracy": 0.9371625461778914,
+    "balanced_accuracy": 0.7090091667076683,
+    "binary_macro_f1": 0.6284851693961416,
+    "deletion_precision": 0.21000581733566026,
+    "deletion_recall": 0.4676165803108808,
+    "deletion_f1": 0.28984343637093535,
+    "nondeletion_precision": 0.9844512541141754,
+    "nondeletion_recall": 0.9504017531044558,
+    "nondeletion_f1": 0.9671269024213479,
+    "binary_confusion_matrix": [
+      [
+        52044,
+        2716
+      ],
+      [
+        822,
+        722
+      ]
+    ],
+    "correct_false_deletion": 0.04896406438549485,
+    "substitution_false_deletion": 0.054883245270155104,
+    "three_relation_macro_f1": 0.48475861697685296,
+    "three_relation_per_class": {
+      "correct": {
+        "precision": 0.9620388884059231,
+        "recall": 0.6790133556950892,
+        "f1": 0.7961199971223711,
+        "support": 48893
+      },
+      "substitution": {
+        "precision": 0.24301356430789345,
+        "recall": 0.7603545253110618,
+        "f1": 0.3683124174372523,
+        "support": 5867
+      },
+      "deletion": {
+        "precision": 0.21000581733566026,
+        "recall": 0.4676165803108808,
+        "f1": 0.28984343637093535,
+        "support": 1544
+      }
+    },
+    "three_relation_confusion_matrix": [
+      [
+        33199,
+        13300,
+        2394
+      ],
+      [
+        1084,
+        4461,
+        322
+      ],
+      [
+        226,
+        596,
+        722
+      ]
+    ],
+    "per_speaker_deletion_recall": {
+      "BWC": 0.47738693467336685,
+      "EBVS": 0.4945652173913043,
+      "HJK": 0.75,
+      "NCC": 0.4,
+      "NJS": 0.2987012987012987,
+      "PNV": 0.5084745762711864,
+      "RRBI": 0.34375,
+      "TLV": 0.5216346153846154,
+      "TNI": 0.46875,
+      "YBAA": 0.48148148148148145,
+      "YKWK": 0.36,
+      "ZHAA": 0.44086021505376344
+    }
+  },
+  "TARGET": {
+    "robust_theta": 0.16184102947061696,
+    "accuracy": 0.9486359761295823,
+    "balanced_accuracy": 0.7057812328502708,
+    "binary_macro_f1": 0.6486434818341805,
+    "deletion_precision": 0.253474762253109,
+    "deletion_recall": 0.4488341968911917,
+    "deletion_f1": 0.32398316970546986,
+    "nondeletion_precision": 0.9841142430464812,
+    "nondeletion_recall": 0.9627282688093499,
+    "nondeletion_f1": 0.9733037939628911,
+    "binary_confusion_matrix": [
+      [
+        52719,
+        2041
+      ],
+      [
+        851,
+        693
+      ]
+    ],
+    "correct_false_deletion": 0.03697870860859428,
+    "substitution_false_deletion": 0.039713652633373106,
+    "three_relation_macro_f1": 0.49655489124042335,
+    "three_relation_per_class": {
+      "correct": {
+        "precision": 0.9627117665733499,
+        "recall": 0.6822449021332297,
+        "f1": 0.7985683847645496,
+        "support": 48893
+      },
+      "substitution": {
+        "precision": 0.24047354790972994,
+        "recall": 0.7755241179478439,
+        "f1": 0.3671131192512506,
+        "support": 5867
+      },
+      "deletion": {
+        "precision": 0.253474762253109,
+        "recall": 0.4488341968911917,
+        "f1": 0.32398316970546986,
+        "support": 1544
+      }
+    },
+    "three_relation_confusion_matrix": [
+      [
+        33357,
+        13728,
+        1808
+      ],
+      [
+        1084,
+        4550,
+        233
+      ],
+      [
+        208,
+        643,
+        693
+      ]
+    ],
+    "per_speaker_deletion_recall": {
+      "BWC": 0.44221105527638194,
+      "EBVS": 0.42391304347826086,
+      "HJK": 0.25,
+      "NCC": 0.36363636363636365,
+      "NJS": 0.3116883116883117,
+      "PNV": 0.5550847457627118,
+      "RRBI": 0.390625,
+      "TLV": 0.4879807692307692,
+      "TNI": 0.46875,
+      "YBAA": 0.48148148148148145,
+      "YKWK": 0.36,
+      "ZHAA": 0.3763440860215054
+    }
+  },
+  "TIME": {
+    "robust_theta": 0.1076119134300633,
+    "accuracy": 0.9406614094913328,
+    "balanced_accuracy": 0.7048285594795187,
+    "binary_macro_f1": 0.6326060071458642,
+    "deletion_precision": 0.21948173587261943,
+    "deletion_recall": 0.45531088082901555,
+    "deletion_f1": 0.2961870655150622,
+    "nondeletion_precision": 0.9841622568313214,
+    "nondeletion_recall": 0.954346238130022,
+    "nondeletion_f1": 0.9690249487766662,
+    "binary_confusion_matrix": [
+      [
+        52260,
+        2500
+      ],
+      [
+        841,
+        703
+      ]
+    ],
+    "correct_false_deletion": 0.0450371218783875,
+    "substitution_false_deletion": 0.050792568604056586,
+    "three_relation_macro_f1": 0.48643303241061503,
+    "three_relation_per_class": {
+      "correct": {
+        "precision": 0.9627147168059424,
+        "recall": 0.6786042991839323,
+        "f1": 0.7960699161438152,
+        "support": 48893
+      },
+      "substitution": {
+        "precision": 0.2412941997102538,
+        "recall": 0.7664905403102097,
+        "f1": 0.3670421155729676,
+        "support": 5867
+      },
+      "deletion": {
+        "precision": 0.21948173587261943,
+        "recall": 0.45531088082901555,
+        "f1": 0.2961870655150622,
+        "support": 1544
+      }
+    },
+    "three_relation_confusion_matrix": [
+      [
+        33179,
+        13512,
+        2202
+      ],
+      [
+        1072,
+        4497,
+        298
+      ],
+      [
+        213,
+        628,
+        703
+      ]
+    ],
+    "per_speaker_deletion_recall": {
+      "BWC": 0.4020100502512563,
+      "EBVS": 0.5054347826086957,
+      "HJK": 0.5,
+      "NCC": 0.4727272727272727,
+      "NJS": 0.36363636363636365,
+      "PNV": 0.4872881355932203,
+      "RRBI": 0.375,
+      "TLV": 0.49759615384615385,
+      "TNI": 0.390625,
+      "YBAA": 0.4444444444444444,
+      "YKWK": 0.384,
+      "ZHAA": 0.46236559139784944
+    }
+  }
+}

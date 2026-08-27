@@ -1,0 +1,54 @@
+{
+  "status": "PASS",
+  "contract_contradictions": [],
+  "resolved_implementation_constraints": [
+    {
+      "issue": "423 clean TRAIN source additions exceed the 342 events in runtime-evaluable R5-0 words",
+      "resolution": "Freeze the previously audited 16,582-word runtime population for scoring and require explicit reason accounting for every source event outside it; no mixed-error word is excluded merely because it is mixed."
+    },
+    {
+      "issue": "Multiple insertion boundaries may construct an identical target sequence inside repeated-phone runs",
+      "resolution": "Freeze exact tie order lower boundary then lower phone index and require an equivalence/ambiguity diagnostic."
+    },
+    {
+      "issue": "zero_infinity=True can mask theoretically unalignable candidates",
+      "resolution": "Require a pre-score minimum-CTC-step audit with zero unalignable candidates; otherwise stop before calibration."
+    },
+    {
+      "issue": "The threshold candidate set was not explicitly stated in the task",
+      "resolution": "Freeze the established R4 exact float64 convention: both np.nextafter edges plus every unique finite calibration score. This adds determinism, not a tunable choice."
+    }
+  ],
+  "policy_checks": {
+    "one_score_family_TARGET_only": true,
+    "raw_or_time_branch_present": false,
+    "neural_checkpoint_frozen": true,
+    "checkpoint_selection_present": false,
+    "train_only_development": true,
+    "speaker_loso_folds": 12,
+    "same_row_threshold_evaluation": false,
+    "mixed_error_positive_words_retained": true,
+    "multiple_addition_events_retained": true,
+    "timestamps_used_for_primary_event_match": false,
+    "validation_audio_paths_resolved": false,
+    "validation_audio_read": false,
+    "validation_inference": false,
+    "validation_performance_consumed": false,
+    "test_paths_resolved": false,
+    "test_audio_read": false,
+    "test_inference": false,
+    "test_performance_consumed": false,
+    "training": false,
+    "model_inference": false,
+    "r4_modified": false,
+    "r5_0_modified": false,
+    "scorer_implemented": false,
+    "production_runtime_modified": false
+  },
+  "development_vs_confirmation": {
+    "train_loso": "development evidence only",
+    "current_validation": "possible later iterative transfer evaluation; not independent confirmation",
+    "test": "untouched candidate independent final confirmation after a dedicated locked preregistration"
+  },
+  "final_contract_status": "R5_1_CONTRACT_FROZEN"
+}

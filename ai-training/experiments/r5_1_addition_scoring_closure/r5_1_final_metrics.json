@@ -1,0 +1,88 @@
+{
+  "status": "R5_1_ADDITION_SCORING_GENERATION_CLOSED_NOT_CONFIRMED",
+  "R5_1A_TRAIN": {
+    "population": {
+      "words": 16582,
+      "positive": 323,
+      "negative": 16259
+    },
+    "addition_vs_nonaddition_roc_auc": 0.7734833025081417,
+    "addition_vs_correct_only_roc_auc": 0.802352821409537,
+    "binary_macro_f1": 0.5551978767901391,
+    "addition_precision": 0.1005665722379603,
+    "addition_recall": 0.2198142414860681,
+    "addition_f1": 0.1379980563654033,
+    "correct_only_false_addition_rate": 0.03491295938104449,
+    "exact_event_f1": 0.04389312977099236,
+    "gates": {
+      "passed": 6,
+      "total": 6
+    },
+    "robust_theta": 0.7485884030659993
+  },
+  "R5_1B_VALIDATION": {
+    "addition_vs_nonaddition_roc_auc": 0.7512808848879525,
+    "addition_vs_correct_only_roc_auc": 0.7717072309229656,
+    "binary_macro_f1": 0.543887636349494,
+    "addition_precision": 0.0933521923620934,
+    "addition_recall": 0.2907488986784141,
+    "addition_f1": 0.1413276231263383,
+    "correct_only_false_addition_rate": 0.0832481079975455,
+    "exact_event_f1": 0.0378151260504202,
+    "confusion": {
+      "TP": 66,
+      "FP": 641,
+      "FN": 161,
+      "TN": 7087
+    },
+    "gates": {
+      "passed": 4,
+      "total": 6,
+      "failed": [
+        "G3",
+        "G5"
+      ]
+    },
+    "threshold": 0.7485884030659993,
+    "threshold_recalibrated": false
+  },
+  "VALIDATION_minus_TRAIN": {
+    "addition_vs_nonaddition_roc_auc": -0.022202417620189152,
+    "addition_vs_correct_only_roc_auc": -0.03064559048657145,
+    "binary_macro_f1": -0.011310240440645103,
+    "addition_precision": -0.007214379875866941,
+    "addition_recall": 0.07093465719234598,
+    "addition_f1": 0.0033295667609350432,
+    "correct_only_false_addition_rate": 0.04833514861650102,
+    "exact_event_f1": -0.006078003720572191
+  },
+  "R5_1C_POSTHOC": {
+    "speakers_exceeding_correct_far_reference": 5,
+    "speakers_total": 6,
+    "aggregate_median_shifts": {
+      "all_words": 0.15078021628516058,
+      "true_additions": 0.12813267480759394,
+      "correct_only": 0.14879998167355868
+    },
+    "false_positive_composition": {
+      "correct_only": {
+        "count": 407,
+        "percentage": 63.494539781591264
+      },
+      "substitution_only": {
+        "count": 167,
+        "percentage": 26.053042121684868
+      },
+      "deletion_only": {
+        "count": 44,
+        "percentage": 6.86427457098284
+      },
+      "substitution_plus_deletion": {
+        "count": 23,
+        "percentage": 3.5881435257410295
+      }
+    },
+    "interpretation": "MIXED_CALIBRATION_AND_CLASS_OVERLAP",
+    "role": "post-hoc exploratory only"
+  }
+}

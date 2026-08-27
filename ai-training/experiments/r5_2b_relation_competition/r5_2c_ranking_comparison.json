@@ -1,0 +1,38 @@
+{
+  "implementation": "deterministic Mann-Whitney average-rank AUC over existing frozen scores",
+  "no_score_transformation": true,
+  "comparisons": {
+    "addition_vs_all_negatives": {
+      "positive_n": 323,
+      "negative_n": 16259,
+      "R5_1A_A_auc": 0.7734833025081417,
+      "R5_2B_C_auc": 0.6878413803490975,
+      "delta_C_minus_A": -0.0856419221590442,
+      "classification": "degraded_ranking"
+    },
+    "addition_vs_correct_only": {
+      "positive_n": 323,
+      "negative_n": 10340,
+      "R5_1A_A_auc": 0.802352821409537,
+      "R5_2B_C_auc": 0.669239360205041,
+      "delta_C_minus_A": -0.13311346120449596,
+      "classification": "degraded_ranking"
+    },
+    "addition_vs_substitution_containing": {
+      "positive_n": 323,
+      "negative_n": 4964,
+      "R5_1A_A_auc": 0.7152632077895834,
+      "R5_2B_C_auc": 0.7079105784559042,
+      "delta_C_minus_A": -0.007352629333679195,
+      "classification": "degraded_ranking"
+    },
+    "addition_vs_deletion_containing": {
+      "positive_n": 323,
+      "negative_n": 1403,
+      "R5_1A_A_auc": 0.7232952827753002,
+      "R5_2B_C_auc": 0.7693377084487244,
+      "delta_C_minus_A": 0.0460424256734242,
+      "classification": "improved_ranking"
+    }
+  }
+}

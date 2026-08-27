@@ -1,0 +1,164 @@
+{
+  "ABA": {
+    "substitutions": 15,
+    "deletions": 15,
+    "sufficient_support": false,
+    "scores": {
+      "neighbor_capture": {
+        "roc_auc_deletion": 0.5511111111111111,
+        "pr_auc_deletion": 0.6482822632096679
+      },
+      "center_distinctness": {
+        "roc_auc_deletion": 0.7866666666666666,
+        "pr_auc_deletion": 0.7796361808126514
+      },
+      "alternative_persistence": {
+        "roc_auc_deletion": 0.5666666666666667,
+        "pr_auc_deletion": 0.5375
+      },
+      "left_right_transition": {
+        "roc_auc_deletion": 0.45111111111111113,
+        "pr_auc_deletion": 0.4777777777777778
+      }
+    },
+    "combined": {
+      "roc_auc_deletion": 0.6711111111111111,
+      "pr_auc_deletion": 0.6810876232844196
+    }
+  },
+  "HKK": {
+    "substitutions": 25,
+    "deletions": 25,
+    "sufficient_support": true,
+    "scores": {
+      "neighbor_capture": {
+        "roc_auc_deletion": 0.6752,
+        "pr_auc_deletion": 0.6872498017022713
+      },
+      "center_distinctness": {
+        "roc_auc_deletion": 0.5008,
+        "pr_auc_deletion": 0.5361860896794666
+      },
+      "alternative_persistence": {
+        "roc_auc_deletion": 0.3912,
+        "pr_auc_deletion": 0.44986065606126396
+      },
+      "left_right_transition": {
+        "roc_auc_deletion": 0.608,
+        "pr_auc_deletion": 0.5663063063063063
+      }
+    },
+    "combined": {
+      "roc_auc_deletion": 0.648,
+      "pr_auc_deletion": 0.6531631447094944
+    }
+  },
+  "HQTV": {
+    "substitutions": 186,
+    "deletions": 186,
+    "sufficient_support": true,
+    "scores": {
+      "neighbor_capture": {
+        "roc_auc_deletion": 0.5171696149843912,
+        "pr_auc_deletion": 0.5410235289528844
+      },
+      "center_distinctness": {
+        "roc_auc_deletion": 0.6353624696496705,
+        "pr_auc_deletion": 0.5981992512264382
+      },
+      "alternative_persistence": {
+        "roc_auc_deletion": 0.46667244768181293,
+        "pr_auc_deletion": 0.4834030439749113
+      },
+      "left_right_transition": {
+        "roc_auc_deletion": 0.46606544109145565,
+        "pr_auc_deletion": 0.48754963437519694
+      }
+    },
+    "combined": {
+      "roc_auc_deletion": 0.5649786102439588,
+      "pr_auc_deletion": 0.5621274688813338
+    }
+  },
+  "LXC": {
+    "substitutions": 96,
+    "deletions": 96,
+    "sufficient_support": true,
+    "scores": {
+      "neighbor_capture": {
+        "roc_auc_deletion": 0.564670138888889,
+        "pr_auc_deletion": 0.545444077639732
+      },
+      "center_distinctness": {
+        "roc_auc_deletion": 0.6869574652777777,
+        "pr_auc_deletion": 0.6458397554644055
+      },
+      "alternative_persistence": {
+        "roc_auc_deletion": 0.5215928819444444,
+        "pr_auc_deletion": 0.5142813082987302
+      },
+      "left_right_transition": {
+        "roc_auc_deletion": 0.5206163194444444,
+        "pr_auc_deletion": 0.5068770130523148
+      }
+    },
+    "combined": {
+      "roc_auc_deletion": 0.603732638888889,
+      "pr_auc_deletion": 0.5624787037418568
+    }
+  },
+  "MBMPS": {
+    "substitutions": 34,
+    "deletions": 34,
+    "sufficient_support": true,
+    "scores": {
+      "neighbor_capture": {
+        "roc_auc_deletion": 0.564878892733564,
+        "pr_auc_deletion": 0.5444670032132061
+      },
+      "center_distinctness": {
+        "roc_auc_deletion": 0.7352941176470589,
+        "pr_auc_deletion": 0.7298425518565035
+      },
+      "alternative_persistence": {
+        "roc_auc_deletion": 0.5795847750865053,
+        "pr_auc_deletion": 0.5606060606060606
+      },
+      "left_right_transition": {
+        "roc_auc_deletion": 0.5008650519031141,
+        "pr_auc_deletion": 0.5082935134838249
+      }
+    },
+    "combined": {
+      "roc_auc_deletion": 0.6115916955017301,
+      "pr_auc_deletion": 0.6035931550183398
+    }
+  },
+  "SVBI": {
+    "substitutions": 31,
+    "deletions": 31,
+    "sufficient_support": true,
+    "scores": {
+      "neighbor_capture": {
+        "roc_auc_deletion": 0.5837669094693028,
+        "pr_auc_deletion": 0.656688972812749
+      },
+      "center_distinctness": {
+        "roc_auc_deletion": 0.4849115504682622,
+        "pr_auc_deletion": 0.5609625641127349
+      },
+      "alternative_persistence": {
+        "roc_auc_deletion": 0.5712799167533819,
+        "pr_auc_deletion": 0.5397276573241672
+      },
+      "left_right_transition": {
+        "roc_auc_deletion": 0.48022892819979185,
+        "pr_auc_deletion": 0.5269398430688753
+      }
+    },
+    "combined": {
+      "roc_auc_deletion": 0.5192507804370448,
+      "pr_auc_deletion": 0.6022622309012439
+    }
+  }
+}

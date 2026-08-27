@@ -1,0 +1,39 @@
+{
+  "stage": "R5-4A INSERT candidate recoverability feasibility audit",
+  "status": "R5_4A_BLOCKED_CANDIDATE_SCORE_PROVENANCE",
+  "manifest_self_excluded": true,
+  "artifact_count": 6,
+  "artifacts": [
+    {
+      "relative_path": "R5_4A_AUDIT_CONTRACT.md",
+      "byte_size": 3225,
+      "sha256": "111DDB77EC09B177505AEEF7B260476D8C718F745AD6170E6969926841338A27"
+    },
+    {
+      "relative_path": "r5_4a_source_identity.json",
+      "byte_size": 851,
+      "sha256": "F3AD93D6FD9DF7044622B71FB19E85D240E0B7BBA9D0AAF80BA7E6360BB9555E"
+    },
+    {
+      "relative_path": "r5_4a_candidate_score_provenance.json",
+      "byte_size": 4100,
+      "sha256": "7FFF6A473F42AB07D8C523F36CB852BB45374F621550115155065CAF6175F933"
+    },
+    {
+      "relative_path": "r5_4a_protocol_audit.json",
+      "byte_size": 600,
+      "sha256": "A523A51D1CE94A7A4A4C8090EDF4646882143FC827CDBF4416201B1D7D612BBB"
+    },
+    {
+      "relative_path": "r5_4a_final_status.json",
+      "byte_size": 539,
+      "sha256": "500C54A8B5811F46C53E74594BD1FB60227BF6A32E06B3F3F6E2F35015E9A606"
+    },
+    {
+      "relative_path": "R5_4A_INSERT_CANDIDATE_RECOVERABILITY_REPORT.md",
+      "byte_size": 2235,
+      "sha256": "E7178B033869F417BE91F5A5E1F22CC3529807BFC79CA55D9454A427AC3E739E"
+    }
+  ],
+  "hash_audit": "HASH_AUDIT_PASS"
+}

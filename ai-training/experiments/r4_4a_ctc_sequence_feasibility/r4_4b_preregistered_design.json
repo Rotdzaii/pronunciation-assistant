@@ -1,0 +1,279 @@
+{
+  "experiment": "R4-4B one self-trained word-level CTC feasibility run",
+  "markers": [
+    "RESEARCH_ONLY",
+    "NOT_PRODUCTION",
+    "R4_TEST_CLOSED"
+  ],
+  "source_hashes": {
+    "v4": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D",
+    "checkpoint": "5C66860BBC50BA803F5BFE25417DF19BDF34B1C7BE36D507B0DDCA88D767EA5E",
+    "r43a_oracle": "FF6E73CB0EEA88EF5B6E258B614C0711C59CCF3FB65E46E2AA47594BF26CB528",
+    "r43a_reconstruction": "3440961B65A311ACF2ECC352E4F1DBF589E7628CA37B2BCE49972DDBEB8A1D93"
+  },
+  "split": {
+    "train": [
+      "BWC",
+      "EBVS",
+      "HJK",
+      "NCC",
+      "NJS",
+      "PNV",
+      "RRBI",
+      "TLV",
+      "TNI",
+      "YBAA",
+      "YKWK",
+      "ZHAA"
+    ],
+    "validation": [
+      "ABA",
+      "HKK",
+      "HQTV",
+      "LXC",
+      "MBMPS",
+      "SVBI"
+    ],
+    "test_closed": [
+      "ASI",
+      "ERMS",
+      "SKA",
+      "THV",
+      "TXHC",
+      "YDCK"
+    ]
+  },
+  "eligibility": "R4-3A usable words: clean correct/substitution/deletion, reliable MFA word boundary, no addition/unresolved/malformed word",
+  "expected_counts": {
+    "train": 16259,
+    "validation": 7728
+  },
+  "target": {
+    "correct": "append expected canonical phone",
+    "substitution": "append manual observed canonical phone",
+    "deletion": "append nothing",
+    "addition_words": "excluded",
+    "stress": "removed",
+    "empty_target": "included; locally verified CTCLoss target_length=0 support on CPU and CUDA"
+  },
+  "vocabulary": {
+    "phones": [
+      "AA",
+      "AE",
+      "AH",
+      "AO",
+      "AW",
+      "AX",
+      "AY",
+      "B",
+      "CH",
+      "D",
+      "DH",
+      "EH",
+      "ER",
+      "EY",
+      "F",
+      "G",
+      "HH",
+      "IH",
+      "IY",
+      "JH",
+      "K",
+      "L",
+      "M",
+      "N",
+      "NG",
+      "OW",
+      "OY",
+      "P",
+      "R",
+      "S",
+      "SH",
+      "T",
+      "TH",
+      "UH",
+      "UW",
+      "V",
+      "W",
+      "Y",
+      "Z",
+      "ZH"
+    ],
+    "phone_indexes": {
+      "AA": 0,
+      "AE": 1,
+      "AH": 2,
+      "AO": 3,
+      "AW": 4,
+      "AX": 5,
+      "AY": 6,
+      "B": 7,
+      "CH": 8,
+      "D": 9,
+      "DH": 10,
+      "EH": 11,
+      "ER": 12,
+      "EY": 13,
+      "F": 14,
+      "G": 15,
+      "HH": 16,
+      "IH": 17,
+      "IY": 18,
+      "JH": 19,
+      "K": 20,
+      "L": 21,
+      "M": 22,
+      "N": 23,
+      "NG": 24,
+      "OW": 25,
+      "OY": 26,
+      "P": 27,
+      "R": 28,
+      "S": 29,
+      "SH": 30,
+      "T": 31,
+      "TH": 32,
+      "UH": 33,
+      "UW": 34,
+      "V": 35,
+      "W": 36,
+      "Y": 37,
+      "Z": 38,
+      "ZH": 39
+    },
+    "ctc_blank": "<CTC_BLANK>",
+    "blank_index": 40,
+    "class_count": 41
+  },
+  "audio": {
+    "source": "full MFA word span",
+    "side_context_seconds": 0.0,
+    "sample_rate": 16000,
+    "mono": true,
+    "word_edge_policy": "no neighbor context; zero-pad only waveform/short-frame technical need"
+  },
+  "features": {
+    "type": "log-mel",
+    "n_mels": 64,
+    "n_fft": 512,
+    "win_length": 400,
+    "hop_length": 160,
+    "hop_ms": 10,
+    "window": "Hann",
+    "center": true,
+    "pad_mode": "constant",
+    "power": 2.0,
+    "mel_scale": "slaney",
+    "norm": "slaney",
+    "power_to_db": "relative to per-word maximum, floor -80 dB"
+  },
+  "architecture": {
+    "choice": "A: fresh R3-like convolutional encoder without temporal attention pooling, minimally adapted to preserve time resolution",
+    "encoder": "Conv 1->16 + MaxPool(2,2); Conv 16->32 + MaxPool(2,1); Conv 32->64; Conv 64->96 with BatchNorm/ReLU and R3 dropout pattern",
+    "variable_input": "[B,1,64,time]",
+    "encoder_output": "[B,96,16,floor(time/2)]",
+    "sequence_projection": "mean frequency dimension -> [B,T_out,96]",
+    "head": "Dropout(0.2) + Linear(96,41)",
+    "temporal_attention": false,
+    "temporal_downsampling": 2,
+    "approx_output_spacing_ms": 20
+  },
+  "initialization": {
+    "policy": "fresh random initialization for encoder and CTC head",
+    "reason": "10 ms/25 ms word-sequence features and one temporal pooling stage differ from frozen R3 phone-crop semantics; transplanting weights would add an initialization confound",
+    "external_pretraining": false,
+    "r3_checkpoint_loaded": false,
+    "r3_checkpoint_sha256_for_architecture_audit_only": "5C66860BBC50BA803F5BFE25417DF19BDF34B1C7BE36D507B0DDCA88D767EA5E"
+  },
+  "loss": {
+    "name": "torch.nn.CTCLoss",
+    "blank": 40,
+    "reduction": "mean",
+    "zero_infinity": true,
+    "auxiliary_losses": "none"
+  },
+  "training": {
+    "seed": 42,
+    "epochs": 36,
+    "batch_size": 8,
+    "batching": "length-bucketed variable word batches with right padding and exact input lengths",
+    "optimizer": "Adam",
+    "learning_rate": 0.0001,
+    "weight_decay": 0.0,
+    "gradient_clip_norm": 5.0,
+    "augmentation": "none",
+    "sampler": "none",
+    "early_stopping": false,
+    "checkpoint_metric": "lowest validation PER; tie higher deletion F1; tie earlier epoch"
+  },
+  "decoding": {
+    "method": "greedy",
+    "steps": [
+      "argmax each output time",
+      "collapse consecutive repeated labels",
+      "remove CTC blank"
+    ],
+    "beam_search": false,
+    "lexicon": false,
+    "expected_phone_constraint": false
+  },
+  "edit_alignment": {
+    "algorithm": "unit-cost deterministic Levenshtein expected vs greedy decoded sequence",
+    "tie_order": [
+      "MATCH",
+      "SUBSTITUTION",
+      "DELETE_FROM_EXPECTED",
+      "INSERT_IN_DECODED"
+    ],
+    "mapping": {
+      "MATCH": "correct",
+      "SUBSTITUTION": "substitution",
+      "DELETE_FROM_EXPECTED": "deletion",
+      "INSERT_IN_DECODED": "future addition diagnostic"
+    }
+  },
+  "matched_control": {
+    "seed": 42,
+    "sampling": "numpy default_rng(42), sorted strata/source identities, without replacement",
+    "pairs": 717,
+    "rows": 1434,
+    "deletion": 717,
+    "non_deletion": 717,
+    "phones": 32,
+    "speakers": [
+      "ABA",
+      "HKK",
+      "HQTV",
+      "LXC",
+      "MBMPS",
+      "SVBI"
+    ],
+    "deletion_coverage": 0.7844638949671773,
+    "duration_is_model_input": false,
+    "rebuild_or_resample_in_r4_4b": false,
+    "sha256": "D933F674743DA06CC8FAB425CEBF81D9C78505E1BDB4A90204DDB2E1A15B4798"
+  },
+  "validation_metrics": [
+    "PER",
+    "edit counts",
+    "exact decoded phone-sequence rate",
+    "binary deletion metrics",
+    "3-relation metrics",
+    "substitution false-deletion rate",
+    "per-speaker metrics",
+    "matched metrics"
+  ],
+  "hard_gates": {
+    "validation_phone_error_rate_max": 0.55,
+    "binary_macro_f1_min": 0.7,
+    "deletion_recall_min": 0.45,
+    "deletion_f1_min": 0.4,
+    "substitution_false_deletion_rate_max": 0.25,
+    "matched_macro_f1_min": 0.6,
+    "matched_deletion_f1_min": 0.55,
+    "speaker_rule": "each validation speaker with >=30 deletions must have deletion recall >=0.25",
+    "three_relation_macro_f1_min": 0.4,
+    "rationale": "retain prior R4 deletion/matched/speaker objectives; Macro-F1 .70 exceeds duration baseline by .031854; PER .55 requires meaningful self-trained acoustic sequencing without production claims"
+  },
+  "test_policy": "CLOSED; no TEST paths/audio/targets/inference; opening requires a separate command after validation gates"
+}

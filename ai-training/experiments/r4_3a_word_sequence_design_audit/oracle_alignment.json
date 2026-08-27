@@ -1,0 +1,982 @@
+{
+  "words": 23987,
+  "exact_deterministic_word_recovery": 23673,
+  "exact_deterministic_word_recovery_rate": 0.9869095760203443,
+  "ground_truth_signature_optimal_path_representable": 23982,
+  "ground_truth_signature_representable_rate": 0.9997915537582858,
+  "ambiguous_optimal_alignment_words": 418,
+  "ambiguous_word_rate": 0.017426105807312294,
+  "path_enumeration_capped_words": 0,
+  "canonical_equal_substitutions_not_identifiable_after_stress_removal": 3,
+  "relation_recovery": {
+    "correct": {
+      "support": 71652,
+      "chosen_recovered": 71637,
+      "optimal_path_representable": 71652,
+      "operation_ambiguous": 19,
+      "chosen_recovery_rate": 0.9997906548316865,
+      "optimal_path_representable_rate": 1.0,
+      "ambiguity_rate": 0.00026517054653045274
+    },
+    "substitution": {
+      "support": 8531,
+      "chosen_recovered": 8217,
+      "optimal_path_representable": 8525,
+      "operation_ambiguous": 480,
+      "chosen_recovery_rate": 0.9631930606025085,
+      "optimal_path_representable_rate": 0.9992966826866722,
+      "ambiguity_rate": 0.056265385066229044
+    },
+    "deletion": {
+      "support": 2458,
+      "chosen_recovered": 2134,
+      "optimal_path_representable": 2456,
+      "operation_ambiguous": 449,
+      "chosen_recovery_rate": 0.8681855166802278,
+      "optimal_path_representable_rate": 0.9991863303498779,
+      "ambiguity_rate": 0.1826688364524003
+    }
+  },
+  "first_mismatch_examples": [
+    {
+      "word_id": "ABA/arctic_a0032/3",
+      "word": "mysterious",
+      "expected": [
+        "M",
+        "IH",
+        "S",
+        "T",
+        "IH",
+        "R",
+        "IY",
+        "AH",
+        "S"
+      ],
+      "observed": [
+        "M",
+        "AY",
+        "S",
+        "T",
+        "R",
+        "EH",
+        "S"
+      ],
+      "ground_operations": [
+        "M",
+        "S",
+        "M",
+        "M",
+        "D",
+        "M",
+        "S",
+        "D",
+        "M"
+      ],
+      "chosen_operations": [
+        "M",
+        "S",
+        "M",
+        "M",
+        "D",
+        "M",
+        "D",
+        "S",
+        "M"
+      ],
+      "ambiguous": true
+    },
+    {
+      "word_id": "ABA/arctic_a0117/3",
+      "word": "genuine",
+      "expected": [
+        "JH",
+        "EH",
+        "N",
+        "Y",
+        "AH",
+        "W",
+        "AH",
+        "N"
+      ],
+      "observed": [
+        "JH",
+        "EH",
+        "N",
+        "Y",
+        "AH",
+        "N"
+      ],
+      "ground_operations": [
+        "M",
+        "M",
+        "M",
+        "M",
+        "M",
+        "D",
+        "D",
+        "M"
+      ],
+      "chosen_operations": [
+        "M",
+        "M",
+        "M",
+        "M",
+        "D",
+        "D",
+        "M",
+        "M"
+      ],
+      "ambiguous": true
+    },
+    {
+      "word_id": "ABA/arctic_b0494/8",
+      "word": "jerusalem",
+      "expected": [
+        "JH",
+        "ER",
+        "UW",
+        "S",
+        "AH",
+        "L",
+        "AH",
+        "M"
+      ],
+      "observed": [
+        "ZH",
+        "UW",
+        "S",
+        "L",
+        "AH",
+        "M"
+      ],
+      "ground_operations": [
+        "S",
+        "D",
+        "M",
+        "M",
+        "D",
+        "M",
+        "M",
+        "M"
+      ],
+      "chosen_operations": [
+        "D",
+        "S",
+        "M",
+        "M",
+        "D",
+        "M",
+        "M",
+        "M"
+      ],
+      "ambiguous": true
+    },
+    {
+      "word_id": "BWC/arctic_a0006/0",
+      "word": "god",
+      "expected": [
+        "G",
+        "AA",
+        "D"
+      ],
+      "observed": [
+        "G",
+        "AO"
+      ],
+      "ground_operations": [
+        "M",
+        "S",
+        "D"
+      ],
+      "chosen_operations": [
+        "M",
+        "D",
+        "S"
+      ],
+      "ambiguous": true
+    },
+    {
+      "word_id": "BWC/arctic_a0013/3",
+      "word": "head",
+      "expected": [
+        "HH",
+        "EH",
+        "D"
+      ],
+      "observed": [
+        "HH",
+        "AE"
+      ],
+      "ground_operations": [
+        "M",
+        "S",
+        "D"
+      ],
+      "chosen_operations": [
+        "M",
+        "D",
+        "S"
+      ],
+      "ambiguous": true
+    },
+    {
+      "word_id": "BWC/arctic_a0019/6",
+      "word": "proposed",
+      "expected": [
+        "P",
+        "R",
+        "AH",
+        "P",
+        "OW",
+        "Z",
+        "D"
+      ],
+      "observed": [
+        "P",
+        "R",
+        "AA",
+        "P",
+        "ER",
+        "S"
+      ],
+      "ground_operations": [
+        "M",
+        "M",
+        "S",
+        "M",
+        "S",
+        "S",
+        "D"
+      ],
+      "chosen_operations": [
+        "M",
+        "M",
+        "S",
+        "M",
+        "D",
+        "S",
+        "S"
+      ],
+      "ambiguous": true
+    },
+    {
+      "word_id": "BWC/arctic_a0023/6",
+      "word": "organized",
+      "expected": [
+        "AO",
+        "R",
+        "G",
+        "AH",
+        "N",
+        "AY",
+        "Z",
+        "D"
+      ],
+      "observed": [
+        "AO",
+        "R",
+        "G",
+        "AH",
+        "N",
+        "AY",
+        "S"
+      ],
+      "ground_operations": [
+        "M",
+        "M",
+        "M",
+        "M",
+        "M",
+        "M",
+        "S",
+        "D"
+      ],
+      "chosen_operations": [
+        "M",
+        "M",
+        "M",
+        "M",
+        "M",
+        "M",
+        "D",
+        "S"
+      ],
+      "ambiguous": true
+    },
+    {
+      "word_id": "BWC/arctic_a0023/12",
+      "word": "privileges",
+      "expected": [
+        "P",
+        "R",
+        "IH",
+        "V",
+        "IH",
+        "L",
+        "IH",
+        "JH",
+        "IH",
+        "Z"
+      ],
+      "observed": [
+        "P",
+        "R",
+        "IH",
+        "V",
+        "IH",
+        "L",
+        "EY",
+        "CH"
+      ],
+      "ground_operations": [
+        "M",
+        "M",
+        "M",
+        "M",
+        "M",
+        "M",
+        "S",
+        "S",
+        "D",
+        "D"
+      ],
+      "chosen_operations": [
+        "M",
+        "M",
+        "M",
+        "M",
+        "M",
+        "M",
+        "D",
+        "D",
+        "S",
+        "S"
+      ],
+      "ambiguous": true
+    },
+    {
+      "word_id": "BWC/arctic_a0045/4",
+      "word": "quietly",
+      "expected": [
+        "K",
+        "W",
+        "AY",
+        "AH",
+        "T",
+        "L",
+        "IY"
+      ],
+      "observed": [
+        "K",
+        "W",
+        "IH",
+        "K",
+        "L",
+        "IY"
+      ],
+      "ground_operations": [
+        "M",
+        "M",
+        "S",
+        "D",
+        "S",
+        "M",
+        "M"
+      ],
+      "chosen_operations": [
+        "M",
+        "M",
+        "D",
+        "S",
+        "S",
+        "M",
+        "M"
+      ],
+      "ambiguous": true
+    },
+    {
+      "word_id": "BWC/arctic_a0046/8",
+      "word": "sudden",
+      "expected": [
+        "S",
+        "AH",
+        "D",
+        "AH",
+        "N"
+      ],
+      "observed": [
+        "SH",
+        "AW",
+        "D",
+        "ER"
+      ],
+      "ground_operations": [
+        "S",
+        "S",
+        "M",
+        "S",
+        "D"
+      ],
+      "chosen_operations": [
+        "S",
+        "S",
+        "M",
+        "D",
+        "S"
+      ],
+      "ambiguous": true
+    },
+    {
+      "word_id": "BWC/arctic_a0076/5",
+      "word": "flush",
+      "expected": [
+        "F",
+        "L",
+        "AH",
+        "SH"
+      ],
+      "observed": [
+        "F",
+        "L",
+        "UH"
+      ],
+      "ground_operations": [
+        "M",
+        "M",
+        "S",
+        "D"
+      ],
+      "chosen_operations": [
+        "M",
+        "M",
+        "D",
+        "S"
+      ],
+      "ambiguous": true
+    },
+    {
+      "word_id": "BWC/arctic_a0085/1",
+      "word": "trickle",
+      "expected": [
+        "T",
+        "R",
+        "IH",
+        "K",
+        "AH",
+        "L"
+      ],
+      "observed": [
+        "T",
+        "R",
+        "IY",
+        "K",
+        "OW"
+      ],
+      "ground_operations": [
+        "M",
+        "M",
+        "S",
+        "M",
+        "S",
+        "D"
+      ],
+      "chosen_operations": [
+        "M",
+        "M",
+        "S",
+        "M",
+        "D",
+        "S"
+      ],
+      "ambiguous": true
+    },
+    {
+      "word_id": "BWC/arctic_a0117/3",
+      "word": "genuine",
+      "expected": [
+        "JH",
+        "EH",
+        "N",
+        "Y",
+        "AH",
+        "W",
+        "AH",
+        "N"
+      ],
+      "observed": [
+        "JH",
+        "IY",
+        "N",
+        "IY",
+        "AH",
+        "N"
+      ],
+      "ground_operations": [
+        "M",
+        "S",
+        "M",
+        "S",
+        "M",
+        "D",
+        "D",
+        "M"
+      ],
+      "chosen_operations": [
+        "M",
+        "S",
+        "M",
+        "D",
+        "D",
+        "S",
+        "M",
+        "M"
+      ],
+      "ambiguous": true
+    },
+    {
+      "word_id": "BWC/arctic_a0122/6",
+      "word": "civilization",
+      "expected": [
+        "S",
+        "IH",
+        "V",
+        "AH",
+        "L",
+        "IH",
+        "Z",
+        "EY",
+        "SH",
+        "AH",
+        "N"
+      ],
+      "observed": [
+        "S",
+        "IH",
+        "V",
+        "AH",
+        "L",
+        "IH",
+        "S",
+        "AH",
+        "N"
+      ],
+      "ground_operations": [
+        "M",
+        "M",
+        "M",
+        "M",
+        "M",
+        "M",
+        "S",
+        "D",
+        "D",
+        "M",
+        "M"
+      ],
+      "chosen_operations": [
+        "M",
+        "M",
+        "M",
+        "M",
+        "M",
+        "M",
+        "D",
+        "D",
+        "S",
+        "M",
+        "M"
+      ],
+      "ambiguous": true
+    },
+    {
+      "word_id": "BWC/arctic_a0515/3",
+      "word": "ourselves",
+      "expected": [
+        "AA",
+        "R",
+        "S",
+        "EH",
+        "L",
+        "V",
+        "Z"
+      ],
+      "observed": [
+        "AW",
+        "S",
+        "EH",
+        "L",
+        "F",
+        "F"
+      ],
+      "ground_operations": [
+        "S",
+        "D",
+        "M",
+        "M",
+        "M",
+        "S",
+        "S"
+      ],
+      "chosen_operations": [
+        "D",
+        "S",
+        "M",
+        "M",
+        "M",
+        "S",
+        "S"
+      ],
+      "ambiguous": true
+    },
+    {
+      "word_id": "BWC/arctic_b0140/5",
+      "word": "shoulder",
+      "expected": [
+        "SH",
+        "OW",
+        "L",
+        "D",
+        "ER"
+      ],
+      "observed": [
+        "SH",
+        "AO",
+        "D",
+        "ER"
+      ],
+      "ground_operations": [
+        "M",
+        "S",
+        "D",
+        "M",
+        "M"
+      ],
+      "chosen_operations": [
+        "M",
+        "D",
+        "S",
+        "M",
+        "M"
+      ],
+      "ambiguous": true
+    },
+    {
+      "word_id": "BWC/arctic_b0140/7",
+      "word": "shoulder",
+      "expected": [
+        "SH",
+        "OW",
+        "L",
+        "D",
+        "ER"
+      ],
+      "observed": [
+        "SH",
+        "AO",
+        "D",
+        "ER"
+      ],
+      "ground_operations": [
+        "M",
+        "S",
+        "D",
+        "M",
+        "M"
+      ],
+      "chosen_operations": [
+        "M",
+        "D",
+        "S",
+        "M",
+        "M"
+      ],
+      "ambiguous": true
+    },
+    {
+      "word_id": "BWC/arctic_b0142/3",
+      "word": "thrilling",
+      "expected": [
+        "TH",
+        "R",
+        "IH",
+        "L",
+        "IH",
+        "NG"
+      ],
+      "observed": [
+        "TH",
+        "R",
+        "IH",
+        "L",
+        "IY"
+      ],
+      "ground_operations": [
+        "M",
+        "M",
+        "M",
+        "M",
+        "S",
+        "D"
+      ],
+      "chosen_operations": [
+        "M",
+        "M",
+        "M",
+        "M",
+        "D",
+        "S"
+      ],
+      "ambiguous": true
+    },
+    {
+      "word_id": "BWC/arctic_b0165/4",
+      "word": "log",
+      "expected": [
+        "L",
+        "AO",
+        "G"
+      ],
+      "observed": [
+        "L",
+        "EH"
+      ],
+      "ground_operations": [
+        "M",
+        "S",
+        "D"
+      ],
+      "chosen_operations": [
+        "M",
+        "D",
+        "S"
+      ],
+      "ambiguous": true
+    },
+    {
+      "word_id": "BWC/arctic_b0323/0",
+      "word": "crickets",
+      "expected": [
+        "K",
+        "R",
+        "IH",
+        "K",
+        "AH",
+        "T",
+        "S"
+      ],
+      "observed": [
+        "K",
+        "R",
+        "IH",
+        "K",
+        "IY",
+        "S"
+      ],
+      "ground_operations": [
+        "M",
+        "M",
+        "M",
+        "M",
+        "S",
+        "D",
+        "M"
+      ],
+      "chosen_operations": [
+        "M",
+        "M",
+        "M",
+        "M",
+        "D",
+        "S",
+        "M"
+      ],
+      "ambiguous": true
+    },
+    {
+      "word_id": "BWC/arctic_b0465/4",
+      "word": "opinion",
+      "expected": [
+        "AH",
+        "P",
+        "IH",
+        "N",
+        "Y",
+        "AH",
+        "N"
+      ],
+      "observed": [
+        "AO",
+        "P",
+        "IH",
+        "N",
+        "Y",
+        "EY"
+      ],
+      "ground_operations": [
+        "S",
+        "M",
+        "M",
+        "M",
+        "M",
+        "S",
+        "D"
+      ],
+      "chosen_operations": [
+        "S",
+        "M",
+        "M",
+        "M",
+        "M",
+        "D",
+        "S"
+      ],
+      "ambiguous": true
+    },
+    {
+      "word_id": "EBVS/arctic_a0006/4",
+      "word": "hope",
+      "expected": [
+        "HH",
+        "OW",
+        "P"
+      ],
+      "observed": [
+        "HH",
+        "AO"
+      ],
+      "ground_operations": [
+        "M",
+        "S",
+        "D"
+      ],
+      "chosen_operations": [
+        "M",
+        "D",
+        "S"
+      ],
+      "ambiguous": true
+    },
+    {
+      "word_id": "EBVS/arctic_a0013/7",
+      "word": "companion",
+      "expected": [
+        "K",
+        "AH",
+        "M",
+        "P",
+        "AE",
+        "N",
+        "Y",
+        "AH",
+        "N"
+      ],
+      "observed": [
+        "K",
+        "AO",
+        "M",
+        "P",
+        "AE",
+        "N",
+        "Y",
+        "AO"
+      ],
+      "ground_operations": [
+        "M",
+        "S",
+        "M",
+        "M",
+        "M",
+        "M",
+        "M",
+        "S",
+        "D"
+      ],
+      "chosen_operations": [
+        "M",
+        "S",
+        "M",
+        "M",
+        "M",
+        "M",
+        "M",
+        "D",
+        "S"
+      ],
+      "ambiguous": true
+    },
+    {
+      "word_id": "EBVS/arctic_a0021/5",
+      "word": "recognizing",
+      "expected": [
+        "R",
+        "EH",
+        "K",
+        "AH",
+        "G",
+        "N",
+        "AY",
+        "Z",
+        "IH",
+        "NG"
+      ],
+      "observed": [
+        "R",
+        "EH",
+        "K",
+        "AH",
+        "N",
+        "AY",
+        "S"
+      ],
+      "ground_operations": [
+        "M",
+        "M",
+        "M",
+        "M",
+        "D",
+        "M",
+        "M",
+        "S",
+        "D",
+        "D"
+      ],
+      "chosen_operations": [
+        "M",
+        "M",
+        "M",
+        "M",
+        "D",
+        "M",
+        "M",
+        "D",
+        "D",
+        "S"
+      ],
+      "ambiguous": true
+    },
+    {
+      "word_id": "EBVS/arctic_a0023/6",
+      "word": "and",
+      "expected": [
+        "AH",
+        "N",
+        "D"
+      ],
+      "observed": [
+        "AH",
+        "M"
+      ],
+      "ground_operations": [
+        "M",
+        "S",
+        "D"
+      ],
+      "chosen_operations": [
+        "M",
+        "D",
+        "S"
+      ],
+      "ambiguous": true
+    }
+  ]
+}

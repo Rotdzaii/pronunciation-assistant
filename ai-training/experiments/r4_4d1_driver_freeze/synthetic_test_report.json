@@ -1,0 +1,27 @@
+{
+  "status": "PASS",
+  "passed": 14,
+  "total": 14,
+  "tests": {
+    "A_threshold_equality": true,
+    "B_keep_sub_equality": true,
+    "C_best_sub_tie": true,
+    "D_no_eligible_threshold": true,
+    "E_confirmed": true,
+    "F_strong_partial": true,
+    "G_transfer_fail": true,
+    "H_signal_not_confirmed": true,
+    "I_matched_missing_identity": true,
+    "J_test_guard_before_resolution": true,
+    "K_empty_delete_finite": true,
+    "L_threshold_edges": true,
+    "M_zero_denominator": true,
+    "N_classification_precedence": true
+  },
+  "empty_target_raw_score": -30.162843704223633,
+  "input_kind": "synthetic tensors and synthetic metadata only",
+  "real_train_threshold_calculated": false,
+  "validation_hypothesis_scoring": false,
+  "r4_test_accessed": false,
+  "neural_training": false
+}

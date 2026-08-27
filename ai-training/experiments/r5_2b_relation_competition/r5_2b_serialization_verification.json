@@ -1,0 +1,51 @@
+{
+  "stage": "R5-2B-SV",
+  "synthetic_only": true,
+  "negative_infinity_json": {
+    "score_value": null,
+    "score_is_neg_inf": true
+  },
+  "finite_json_contract": {
+    "score_value": "finite_float64",
+    "score_is_neg_inf": false
+  },
+  "families_tested": [
+    "KEEP",
+    "INSERT",
+    "SUB",
+    "DELETE",
+    "BEST_NON_ADDITION",
+    "C"
+  ],
+  "bare_nonstandard_infinity_emitted": false,
+  "negative_infinity_round_trip": "PASS",
+  "finite_round_trip": "PASS",
+  "threshold_helper": {
+    "unique_finite_scores_included": true,
+    "negative_infinity_excluded": true,
+    "nextafter_edges_preserved": true,
+    "decision_rule": "C >= theta",
+    "tie_order": [
+      "higher_binary_macro_f1",
+      "higher_addition_f1",
+      "lower_correct_only_far",
+      "higher_theta"
+    ],
+    "status": "PASS"
+  },
+  "cohort_far_helpers": {
+    "correct_only": "PASS",
+    "substitution_containing": "PASS",
+    "deletion_containing": "PASS",
+    "status": "PASS"
+  },
+  "event_helper": {
+    "exact_match": "PASS",
+    "wrong_boundary": "PASS",
+    "wrong_phone": "PASS",
+    "multiple_truth_one_prediction": "PASS",
+    "duplicate_prediction_rejected": "PASS",
+    "status": "PASS"
+  },
+  "status": "PASS"
+}

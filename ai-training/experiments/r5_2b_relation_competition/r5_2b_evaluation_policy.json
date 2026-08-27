@@ -1,0 +1,146 @@
+{
+  "contract_status": "FROZEN",
+  "development_split": "TRAIN only",
+  "speaker_loso": {
+    "folds": 12,
+    "held_out_unit": "one TRAIN speaker",
+    "calibration_unit": "other 11 TRAIN speakers",
+    "each_speaker_evaluated_once": true,
+    "oof_predictions_concatenated_once": true
+  },
+  "threshold_candidates": {
+    "members": [
+      "np.nextafter(min(unique finite calibration C), -infinity)",
+      "every unique finite float64 calibration C",
+      "np.nextafter(max(unique finite calibration C), +infinity)"
+    ],
+    "negative_infinity_is_candidate": false,
+    "decision_rule": "C >= theta means ADDITION"
+  },
+  "threshold_tie_break": [
+    "higher Binary Macro-F1",
+    "higher addition F1",
+    "lower correct-only false-addition rate",
+    "higher threshold"
+  ],
+  "continuous_metrics": [
+    "addition vs all non-addition ROC-AUC",
+    "addition vs correct-only ROC-AUC",
+    "descriptive addition vs substitution-only ROC-AUC",
+    "descriptive addition vs deletion-only ROC-AUC",
+    "score distributions by TRAIN speaker",
+    "score distributions by frozen relation cohort"
+  ],
+  "binary_metrics": [
+    "TP", "FP", "FN", "TN", "Accuracy", "Balanced Accuracy",
+    "Binary Macro-F1", "Addition Precision", "Addition Recall", "Addition F1",
+    "correct-only false-addition rate",
+    "substitution-containing negative false-addition rate",
+    "deletion-containing negative false-addition rate"
+  ],
+  "event_metrics": {
+    "exact_match": ["same word", "same added canonical phone", "same insertion boundary"],
+    "metrics": ["Precision", "Recall", "F1"],
+    "position_breakdown": ["BEFORE_FIRST", "BETWEEN", "AFTER_FINAL"],
+    "one_best_insert_per_word": true,
+    "deterministic_one_to_one_matching": true
+  },
+  "frozen_r5_1a_comparator": {
+    "addition_vs_nonaddition_roc_auc": 0.7734833025081417,
+    "addition_vs_correct_only_roc_auc": 0.802352821409537,
+    "binary_macro_f1": 0.5551978767901391,
+    "addition_f1": 0.1379980563654033,
+    "correct_only_false_addition_rate": 0.03491295938104449,
+    "substitution_negative_false_addition_rate": 0.05016116035455278,
+    "deletion_negative_false_addition_rate": 0.03349964362081254,
+    "exact_event_f1": 0.04389312977099236,
+    "recompute_allowed": false
+  },
+  "development_gates": [
+    {
+      "id": "G1",
+      "name": "Continuous addition discrimination retained",
+      "metric": "addition_vs_all_nonaddition_roc_auc",
+      "operator": ">=",
+      "value": 0.7
+    },
+    {
+      "id": "G2",
+      "name": "Correct-only discrimination retained",
+      "metric": "addition_vs_correct_only_roc_auc",
+      "operator": ">=",
+      "value": 0.7
+    },
+    {
+      "id": "G3",
+      "name": "Binary decision improvement",
+      "metric": "oof_binary_macro_f1",
+      "operator": ">",
+      "value": 0.5551978767901391
+    },
+    {
+      "id": "G4",
+      "name": "Addition F1 improvement",
+      "metric": "oof_addition_f1",
+      "operator": ">",
+      "value": 0.1379980563654033
+    },
+    {
+      "id": "G5",
+      "name": "Correct-only false-addition non-inferiority",
+      "metric": "correct_only_false_addition_rate",
+      "operator": "<=",
+      "value": 0.03491295938104449
+    },
+    {
+      "id": "G6",
+      "name": "Substitution false-addition improvement",
+      "metric": "substitution_negative_false_addition_rate",
+      "operator": "<",
+      "value": 0.05016116035455278
+    },
+    {
+      "id": "G7",
+      "name": "Deletion false-addition improvement",
+      "metric": "deletion_negative_false_addition_rate",
+      "operator": "<",
+      "value": 0.03349964362081254
+    },
+    {
+      "id": "G8",
+      "name": "Event localization non-inferiority",
+      "metric": "exact_event_f1",
+      "operator": ">=",
+      "value": 0.04389312977099236
+    }
+  ],
+  "all_eight_required": true,
+  "mechanism_gate_reason": "G6 and G7 are required because explicit SUB/DELETE competition is intended to reduce false additions caused by those relations.",
+  "robust_threshold": {
+    "authorized_only_if_all_gates_pass": true,
+    "definition": "ordinary float64 median of the 12 speaker-order fold thresholds",
+    "preserve": ["speaker-order thresholds", "sorted thresholds", "exact float64 median"],
+    "if_any_gate_fails": "R5_2_ROBUST_THETA_NOT_AUTHORIZED"
+  },
+  "future_scientific_status": {
+    "all_pass": "R5_2_RELATION_COMPETITION_DEVELOPMENT_PASS",
+    "any_valid_gate_fail": "R5_2_RELATION_COMPETITION_DEVELOPMENT_NOT_CONFIRMED"
+  },
+  "validation": {
+    "speakers": ["ABA", "HKK", "HQTV", "LXC", "MBMPS", "SVBI"],
+    "consumed_in_r5_1b": true,
+    "independent_confirmation": false,
+    "audio_resolution_allowed": false,
+    "inference_allowed": false,
+    "new_scores_allowed": false,
+    "future_use": "Only under a later separate transparent iterative-evidence protocol; not authorized here."
+  },
+  "test": {
+    "speakers": ["ASI", "ERMS", "SKA", "THV", "TXHC", "YDCK"],
+    "untouched": true,
+    "audio_resolution_allowed": false,
+    "inference_allowed": false,
+    "performance_allowed": false,
+    "automatic_authorization_from_development": false
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "empty_target_ctc_probe": {
+    "pytorch_version": "2.12.0.dev20260408+cu128",
+    "blank_index": 40,
+    "target_length": 0,
+    "results": {
+      "cpu": {
+        "finite": true,
+        "loss": 16.40720558166504
+      },
+      "cuda": {
+        "finite": true,
+        "loss": 12.132003784179688
+      }
+    },
+    "verdict": "EMPTY_TARGET_SUPPORTED"
+  }
+}

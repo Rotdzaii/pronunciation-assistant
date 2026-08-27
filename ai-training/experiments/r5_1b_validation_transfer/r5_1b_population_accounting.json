@@ -1,0 +1,96 @@
+{
+  "status": "PASS",
+  "source_validation_words": 8494,
+  "runtime_evaluable_words": 7955,
+  "positive_words": 227,
+  "negative_words": 7728,
+  "source_addition_events": 296,
+  "runtime_addition_events": 245,
+  "multiple_addition_words": 17,
+  "mixed_substitution_addition_words": 91,
+  "mixed_deletion_addition_words": 27,
+  "exclusions": {
+    "without_manual_word": 30,
+    "without_expected_sequence": 3,
+    "unresolved_or_nonruntime_cooccurring_evidence_events": 18
+  },
+  "source_scan": {
+    "validation_relation_counts": {
+      "non_speech": 4095,
+      "correct": 25303,
+      "addition": 296,
+      "substitution": 2909,
+      "unresolved": 589,
+      "deletion": 979
+    },
+    "source_clean_addition_events": 296,
+    "clean_additions_by_speaker": {
+      "ABA": 74,
+      "HKK": 43,
+      "HQTV": 72,
+      "LXC": 57,
+      "MBMPS": 23,
+      "SVBI": 27
+    },
+    "validation_utterances": 900,
+    "nonvalidation_fields_inspected": [
+      "speaker_id"
+    ],
+    "test_paths_resolved": false
+  },
+  "addition_mapping": {
+    "mapping": {
+      "position_mapped": 263,
+      "without_manual_word": 30,
+      "without_expected_sequence": 3
+    },
+    "mapped_events": 263,
+    "mapped_word_multiplicity": {
+      "1": 226,
+      "2": 17,
+      "3": 2
+    }
+  },
+  "reconstruction": {
+    "counts": {
+      "validation_candidate": 8494,
+      "validation_usable": 7728,
+      "addition_words_excluded": 244,
+      "malformed_or_unresolved_words": 538,
+      "substitution_plus_deletion_words": 283,
+      "multiple_deletion_words": 95,
+      "addition_plus_deletion_words": 28,
+      "unavailable_word_boundary": 1
+    },
+    "target_rows_without_manual_word": {
+      "total": 31,
+      "by_relation": {
+        "addition": 30,
+        "substitution": 1
+      }
+    },
+    "invalid_forced_alignment_phone_labels": {
+      "spn": 6
+    },
+    "mfa_vs_manual_boundary_start_error_seconds": {
+      "count": 8493,
+      "mean": 0.006765528993863521,
+      "median": 0.0,
+      "p10": 0.0,
+      "p25": 0.0,
+      "p75": 0.0,
+      "p90": 0.010000000000000009
+    },
+    "mfa_vs_manual_boundary_end_error_seconds": {
+      "count": 8493,
+      "mean": 0.008525998742685885,
+      "median": 0.0,
+      "p10": 0.0,
+      "p25": 0.0,
+      "p75": 0.0,
+      "p90": 0.010000000000000231
+    }
+  },
+  "source_word_definition": "manual word records reconstructed for the frozen VALIDATION speakers before runtime eligibility filtering",
+  "runtime_eligibility": "same frozen R5-1A rules; no validation-specific exclusions"
+}

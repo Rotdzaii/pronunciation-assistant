@@ -1,0 +1,46 @@
+{
+  "status": "FROZEN",
+  "target": "H=[h_1,...,h_U]",
+  "adjacent_repeat_count": "sum_{i=2..U} 1[h_i==h_(i-1)]",
+  "minimum_ctc_steps": "len(H)+adjacent_repeat_count(H)",
+  "alignable_condition": "T>=minimum_ctc_steps(H)",
+  "impossible_condition": "T<minimum_ctc_steps(H)",
+  "semantic_reason": "Adjacent identical CTC labels require an intervening blank.",
+  "decision_before_loss_interpretation": true,
+  "keep": {
+    "must_be_alignable_for_every_word": true,
+    "failure_status": "R5_1A_EXECUTION_BLOCKED_KEEP_ALIGNABILITY",
+    "word_exclusion_allowed": false
+  },
+  "insert": {
+    "enumerate_every_boundary_and_phone": true,
+    "impossible_probability": 0,
+    "impossible_raw_score": "-Infinity",
+    "impossible_target_score": "-Infinity",
+    "removed_from_accounting": false,
+    "eligible_for_best_insert": false
+  },
+  "all_insert_impossible": {
+    "best_insert_exists": false,
+    "best_insert_score": "-Infinity",
+    "addition_score": "-Infinity",
+    "best_phone": null,
+    "best_boundary": null,
+    "predicted_event": null,
+    "word_retained": true
+  },
+  "alignable_score": {
+    "raw_score": "-CTCLoss(log_softmax(logits),H,input_lengths=[T],target_lengths=[len(H)],blank=40,reduction='none',zero_infinity=True)",
+    "target_score": "raw_score/max(len(H),1)",
+    "unexpected_nonfinite_action": "stop future execution"
+  },
+  "best_insert_tie_order": ["lower boundary", "lower canonical phone index"],
+  "forbidden": ["zero as impossible score", "finite sentinel", "epsilon", "clipping", "penalty", "candidate exclusion"],
+  "extended_real_auc": {
+    "method": "Mann-Whitney rank AUC",
+    "negative_infinity_order": "lower than every finite score",
+    "negative_infinity_ties": "average rank",
+    "finite_replacement": false,
+    "unsupported_status": "R5_1A_EXECUTION_BLOCKED_NONFINITE_METRIC_SUPPORT"
+  }
+}

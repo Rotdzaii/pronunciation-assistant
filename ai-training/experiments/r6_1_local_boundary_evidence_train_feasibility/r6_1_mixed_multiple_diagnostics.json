@@ -1,0 +1,62 @@
+{
+  "unit": "valid positive boundary identity; event multiplicity reported separately",
+  "gating": false,
+  "groups": [
+    {
+      "group": "single_addition_words",
+      "positive_boundary_count": 276,
+      "addition_event_count": 276,
+      "primary_score_distribution": {
+        "count": 276,
+        "mean": 0.16301144809310003,
+        "median": 0.10904628402609581,
+        "p25": 0.016187036497938404,
+        "p75": 0.26632128236786984,
+        "min": 0.0001918199869873606,
+        "max": 0.9138506439299258
+      }
+    },
+    {
+      "group": "multiple_addition_words",
+      "positive_boundary_count": 17,
+      "addition_event_count": 32,
+      "primary_score_distribution": {
+        "count": 17,
+        "mean": 0.12103111889575624,
+        "median": 0.056566380928789003,
+        "p25": 0.012831424271666994,
+        "p75": 0.18129021892417718,
+        "min": 0.0004885327796446709,
+        "max": 0.37990382203182715
+      }
+    },
+    {
+      "group": "mixed_substitution_addition",
+      "positive_boundary_count": 105,
+      "addition_event_count": 110,
+      "primary_score_distribution": {
+        "count": 105,
+        "mean": 0.13499530873237953,
+        "median": 0.06495789097662229,
+        "p25": 0.007870990504620196,
+        "p75": 0.23167159614888497,
+        "min": 0.0002575595665467945,
+        "max": 0.6363409022982187
+      }
+    },
+    {
+      "group": "mixed_deletion_addition",
+      "positive_boundary_count": 23,
+      "addition_event_count": 25,
+      "primary_score_distribution": {
+        "count": 23,
+        "mean": 0.13932362281544758,
+        "median": 0.06207653101910201,
+        "p25": 0.019576568519894876,
+        "p75": 0.1910705853280224,
+        "min": 0.0002575595665467945,
+        "max": 0.6504065251828806
+      }
+    }
+  ]
+}

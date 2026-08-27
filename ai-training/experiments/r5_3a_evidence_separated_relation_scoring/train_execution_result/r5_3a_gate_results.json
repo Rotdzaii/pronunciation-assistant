@@ -1,0 +1,95 @@
+{
+  "gates": {
+    "G1": {
+      "value": 0.7825848108511275,
+      "operator": ">=",
+      "threshold": 0.7,
+      "result": "PASS",
+      "full_precision": true
+    },
+    "G2": {
+      "value": 0.8269990598295717,
+      "operator": ">=",
+      "threshold": 0.7,
+      "result": "PASS",
+      "full_precision": true
+    },
+    "G3": {
+      "value": 0.5583786087141792,
+      "operator": ">",
+      "threshold": 0.5551978767901391,
+      "result": "PASS",
+      "full_precision": true
+    },
+    "G4": {
+      "value": 0.14285714285714285,
+      "operator": ">",
+      "threshold": 0.1379980563654033,
+      "result": "PASS",
+      "full_precision": true
+    },
+    "G5": {
+      "value": 0.02446808510638298,
+      "operator": "<=",
+      "threshold": 0.03491295938104449,
+      "result": "PASS",
+      "full_precision": true
+    },
+    "G6": {
+      "value": 0.05257856567284448,
+      "operator": "<",
+      "threshold": 0.05016116035455278,
+      "result": "FAIL",
+      "full_precision": true
+    },
+    "G7": {
+      "value": 0.09907341411261582,
+      "operator": "<",
+      "threshold": 0.03349964362081254,
+      "result": "FAIL",
+      "full_precision": true
+    },
+    "G8": {
+      "value": 0.044044044044044044,
+      "operator": ">=",
+      "threshold": 0.04389312977099236,
+      "result": "PASS",
+      "full_precision": true
+    }
+  },
+  "passed_count": 6,
+  "total": 8,
+  "all_pass": false,
+  "robust_threshold": {
+    "status": "R5_3A_ROBUST_THETA_NOT_AUTHORIZED",
+    "thresholds_speaker_order": [
+      0.7756310375133694,
+      0.7696336587481865,
+      0.7703152412526275,
+      0.7773010378920989,
+      0.7775582775136194,
+      0.7741998069800518,
+      0.7971574912329571,
+      0.74088012374138,
+      0.7790431438700388,
+      0.7749607954933213,
+      0.7875162126605274,
+      0.7712658907697739
+    ],
+    "sorted_thresholds": [
+      0.74088012374138,
+      0.7696336587481865,
+      0.7703152412526275,
+      0.7712658907697739,
+      0.7741998069800518,
+      0.7749607954933213,
+      0.7756310375133694,
+      0.7773010378920989,
+      0.7775582775136194,
+      0.7790431438700388,
+      0.7875162126605274,
+      0.7971574912329571
+    ],
+    "value": null
+  }
+}

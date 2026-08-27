@@ -1,0 +1,7 @@
+{
+  "true_substitution_support": 2664,
+  "predicted_substitution_coverage": 719,
+  "coverage_rate": 0.2698948948948949,
+  "observed_phone_top1_correct": 220,
+  "top1_accuracy_on_covered": 0.30598052851182195
+}

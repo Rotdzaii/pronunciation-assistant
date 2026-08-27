@@ -1,0 +1,22 @@
+{
+  "stage": "R5-4B contract/preregistration only",
+  "neural_training": false,
+  "checkpoint_loaded": false,
+  "checkpoint_inference": false,
+  "train_audio_accessed": false,
+  "candidate_scores_materialized": false,
+  "new_acoustic_candidate_artifact": false,
+  "scientific_scorer_modified": false,
+  "performance_metrics": false,
+  "recoverability_metrics": false,
+  "truth_candidate_ranks_inspected": false,
+  "threshold_search": false,
+  "classifier_fitting": false,
+  "validation_paths_resolved": false,
+  "validation_accessed": false,
+  "test_paths_resolved": false,
+  "test_accessed": false,
+  "environment_probe_only": true,
+  "packages_installed_or_changed": false,
+  "frozen_artifacts_modified": false
+}

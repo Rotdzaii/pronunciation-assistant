@@ -1,0 +1,65 @@
+{
+  "eligibility_by_lambda": {
+    "0.10": {
+      "deletion_recall_ge_0_45": false,
+      "substitution_false_deletion_le_0_25": false,
+      "all_supported_speakers_recall_ge_0_25": true
+    },
+    "0.20": {
+      "deletion_recall_ge_0_45": false,
+      "substitution_false_deletion_le_0_25": false,
+      "all_supported_speakers_recall_ge_0_25": false
+    },
+    "0.30": {
+      "deletion_recall_ge_0_45": false,
+      "substitution_false_deletion_le_0_25": true,
+      "all_supported_speakers_recall_ge_0_25": false
+    },
+    "0.40": {
+      "deletion_recall_ge_0_45": false,
+      "substitution_false_deletion_le_0_25": true,
+      "all_supported_speakers_recall_ge_0_25": false
+    },
+    "0.50": {
+      "deletion_recall_ge_0_45": false,
+      "substitution_false_deletion_le_0_25": true,
+      "all_supported_speakers_recall_ge_0_25": false
+    },
+    "0.60": {
+      "deletion_recall_ge_0_45": false,
+      "substitution_false_deletion_le_0_25": true,
+      "all_supported_speakers_recall_ge_0_25": false
+    },
+    "0.70": {
+      "deletion_recall_ge_0_45": false,
+      "substitution_false_deletion_le_0_25": true,
+      "all_supported_speakers_recall_ge_0_25": false
+    },
+    "0.80": {
+      "deletion_recall_ge_0_45": false,
+      "substitution_false_deletion_le_0_25": true,
+      "all_supported_speakers_recall_ge_0_25": false
+    },
+    "0.90": {
+      "deletion_recall_ge_0_45": false,
+      "substitution_false_deletion_le_0_25": true,
+      "all_supported_speakers_recall_ge_0_25": false
+    },
+    "1.00": {
+      "deletion_recall_ge_0_45": false,
+      "substitution_false_deletion_le_0_25": true,
+      "all_supported_speakers_recall_ge_0_25": false
+    }
+  },
+  "eligible_lambdas": [],
+  "selected_lambda": null,
+  "selection_order": [
+    "highest OOF Binary Macro-F1",
+    "higher deletion F1",
+    "higher deletion precision",
+    "higher matched Macro-F1",
+    "larger lambda"
+  ],
+  "minimum_development_gates": null,
+  "final_status": "R4_3C_NO_ELIGIBLE_PRIOR_SCALE"
+}

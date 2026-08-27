@@ -1,0 +1,152 @@
+{
+  "status": "PASS",
+  "words": 16582,
+  "total_candidates": 2977040,
+  "alignable_candidates": 2976844,
+  "impossible_candidates": 196,
+  "words_affected_by_impossible_insert": 65,
+  "words_without_finite_insert": 0,
+  "per_word_40_times_n_plus_1_violations": 0,
+  "per_word_violation_examples": [],
+  "duplicate_candidate_identities": 0,
+  "missing_candidate_identities": 0,
+  "by_speaker": {
+    "BWC": {
+      "words": 1390,
+      "candidate_rows": 250360
+    },
+    "EBVS": {
+      "words": 1372,
+      "candidate_rows": 247000
+    },
+    "HJK": {
+      "words": 1401,
+      "candidate_rows": 252480
+    },
+    "NCC": {
+      "words": 1408,
+      "candidate_rows": 253600
+    },
+    "NJS": {
+      "words": 1406,
+      "candidate_rows": 254120
+    },
+    "PNV": {
+      "words": 1395,
+      "candidate_rows": 251880
+    },
+    "RRBI": {
+      "words": 1408,
+      "candidate_rows": 252600
+    },
+    "TLV": {
+      "words": 1383,
+      "candidate_rows": 248720
+    },
+    "TNI": {
+      "words": 1345,
+      "candidate_rows": 239360
+    },
+    "YBAA": {
+      "words": 1298,
+      "candidate_rows": 229720
+    },
+    "YKWK": {
+      "words": 1382,
+      "candidate_rows": 248240
+    },
+    "ZHAA": {
+      "words": 1394,
+      "candidate_rows": 248960
+    }
+  },
+  "seconds": 24.762332799999058,
+  "expected": {
+    "words": 16582,
+    "candidates": 2977040,
+    "alignable": 2976844,
+    "impossible": 196,
+    "affected_words": 65,
+    "no_finite_words": 0
+  },
+  "historical_all_family_candidate_audit": {
+    "insert_total": 2977040,
+    "insert_alignable": 2976844,
+    "insert_impossible": 196,
+    "words_with_no_finite_insert": 0
+  },
+  "numeric_preflight": {
+    "status": "PASS",
+    "scope": "deterministic synthetic pre-inference diagnostic",
+    "nonempty_raw_score": -12.60501480102539,
+    "nonempty_target_score": -6.302507400512695,
+    "scorer_device": "cuda",
+    "scorer_dtype": "float32",
+    "diagnostic_device": "cpu",
+    "diagnostic_dtype": "float32",
+    "n": 4,
+    "absolute_operand_sum_authoritative": 15.667129755020142,
+    "absolute_operand_sum_diagnostic": 15.667129755020142,
+    "authoritative_scorer_value_A": -15.667129516601562,
+    "diagnostic_value_B": -15.667130470275879,
+    "observed_absolute_difference": 9.5367431640625e-07,
+    "bound_A": 2.8015016120413103e-06,
+    "bound_B": 2.8015016120413103e-06,
+    "correction_bound": 5.603003224082621e-06,
+    "acceptance_operator": "<=",
+    "equivalent": true,
+    "scientific_score_source": "frozen_r5_2b_scorer",
+    "returned_scientific_score": -15.667129516601562,
+    "diagnostic_replaced_scientific_score": false
+  },
+  "inference": {
+    "feature_report": {
+      "words": 16582,
+      "seconds": 25.786685099999886,
+      "sample_length": {
+        "count": 16582,
+        "min": 480.0,
+        "median": 4800.0,
+        "mean": 5415.385357616693,
+        "p90": 9600.0,
+        "p95": 11040.0,
+        "max": 30560.0
+      },
+      "feature_frames": {
+        "count": 16582,
+        "min": 4.0,
+        "median": 31.0,
+        "mean": 34.84615848510433,
+        "p90": 61.0,
+        "p95": 70.0,
+        "max": 192.0
+      },
+      "encoder_output_steps": {
+        "count": 16582,
+        "min": 2.0,
+        "median": 15.0,
+        "mean": 17.172295259920396,
+        "p90": 30.0,
+        "p95": 35.0,
+        "max": 96.0
+      },
+      "edge_padded_words": 0,
+      "edge_padding_samples": 0,
+      "unalignable_words": 0,
+      "unalignable_word_ids": []
+    },
+    "inference_seconds": 6.661899899998389
+  },
+  "scoring": {
+    "status": "PASS",
+    "scientific_score_source": "imported frozen R5-2B scorer and historical batch adapter",
+    "historical_all_family_batch_layout_reproduced": true,
+    "hypothesis_batch_size": 4096,
+    "processed_alignable_nonempty_all_families": 5306476,
+    "processed_empty_delete_diagnostic_scores": 710,
+    "alignable_insert_scores_persistable": 2976844,
+    "seconds": 82.2310553999996
+  },
+  "started_at": "2026-08-19T15:42:05+0700",
+  "total_seconds_before_hashing": 212.68792159999975
+}

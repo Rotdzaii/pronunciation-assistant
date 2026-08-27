@@ -1,0 +1,22 @@
+{
+  "neural_training": false,
+  "checkpoint_loaded": false,
+  "checkpoint_inference": false,
+  "new_candidate_scores": false,
+  "existing_materialized_candidate_scores_read": true,
+  "classifier_fitting": false,
+  "threshold_search": false,
+  "new_word_level_performance_metrics": false,
+  "recoverability_metrics": true,
+  "train_audio_accessed": false,
+  "train_textgrid_accessed": false,
+  "validation_paths_resolved": false,
+  "validation_accessed": false,
+  "test_paths_resolved": false,
+  "test_accessed": false,
+  "r5_1a_modified": false,
+  "r5_2b_modified": false,
+  "r5_3a_modified": false,
+  "r5_4b_modified": false,
+  "r5_4a_contract_modified": false
+}

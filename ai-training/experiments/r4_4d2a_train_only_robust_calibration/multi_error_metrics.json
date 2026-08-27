@@ -1,0 +1,71 @@
+{
+  "RAW": {
+    "pure_deletion": {
+      "rows": 3963,
+      "deletion_support": 1047,
+      "deletion_precision": 0.6185430463576159,
+      "deletion_recall": 0.44603629417383,
+      "deletion_f1": 0.5183129855715872
+    },
+    "substitution_plus_deletion": {
+      "rows": 2396,
+      "deletion_support": 497,
+      "deletion_precision": 0.5108910891089109,
+      "deletion_recall": 0.5191146881287726,
+      "deletion_f1": 0.5149700598802395
+    },
+    "multiple_deletion": {
+      "rows": 754,
+      "deletion_support": 265,
+      "deletion_precision": 0.6013745704467354,
+      "deletion_recall": 0.660377358490566,
+      "deletion_f1": 0.6294964028776978
+    }
+  },
+  "TARGET": {
+    "pure_deletion": {
+      "rows": 3963,
+      "deletion_support": 1047,
+      "deletion_precision": 0.7684049079754601,
+      "deletion_recall": 0.4785100286532951,
+      "deletion_f1": 0.5897586815773985
+    },
+    "substitution_plus_deletion": {
+      "rows": 2396,
+      "deletion_support": 497,
+      "deletion_precision": 0.6549520766773163,
+      "deletion_recall": 0.4124748490945674,
+      "deletion_f1": 0.5061728395061729
+    },
+    "multiple_deletion": {
+      "rows": 754,
+      "deletion_support": 265,
+      "deletion_precision": 0.6928104575163399,
+      "deletion_recall": 0.4,
+      "deletion_f1": 0.507177033492823
+    }
+  },
+  "TIME": {
+    "pure_deletion": {
+      "rows": 3963,
+      "deletion_support": 1047,
+      "deletion_precision": 0.6604527296937417,
+      "deletion_recall": 0.47373447946513847,
+      "deletion_f1": 0.5517241379310344
+    },
+    "substitution_plus_deletion": {
+      "rows": 2396,
+      "deletion_support": 497,
+      "deletion_precision": 0.5643835616438356,
+      "deletion_recall": 0.41448692152917505,
+      "deletion_f1": 0.4779582366589327
+    },
+    "multiple_deletion": {
+      "rows": 754,
+      "deletion_support": 265,
+      "deletion_precision": 0.6425531914893617,
+      "deletion_recall": 0.569811320754717,
+      "deletion_f1": 0.604
+    }
+  }
+}

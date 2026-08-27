@@ -1,0 +1,126 @@
+{
+  "epochs_12_through_24": [
+    {
+      "epoch": 12,
+      "validation_loss": 1.7203562806789443,
+      "top1_accuracy": 0.44718559478236214,
+      "macro_f1": 0.410323432756743,
+      "balanced_accuracy": 0.44951753294944696,
+      "substitution_origin_top1": 0.3695427982124441
+    },
+    {
+      "epoch": 13,
+      "validation_loss": 1.6695005289125355,
+      "top1_accuracy": 0.4487097688926698,
+      "macro_f1": 0.4157775108791311,
+      "balanced_accuracy": 0.4658377470816715,
+      "substitution_origin_top1": 0.37813681677552424
+    },
+    {
+      "epoch": 14,
+      "validation_loss": 1.6620749658377445,
+      "top1_accuracy": 0.46809868141216504,
+      "macro_f1": 0.4223644293725485,
+      "balanced_accuracy": 0.4627011084992184,
+      "substitution_origin_top1": 0.38982468202131315
+    },
+    {
+      "epoch": 15,
+      "validation_loss": 1.665853567061214,
+      "top1_accuracy": 0.45689777399688075,
+      "macro_f1": 0.41598157277674924,
+      "balanced_accuracy": 0.47028320418807146,
+      "substitution_origin_top1": 0.3863870745960811
+    },
+    {
+      "epoch": 16,
+      "validation_loss": 1.6262640863145714,
+      "top1_accuracy": 0.46880759960300583,
+      "macro_f1": 0.4301934080937624,
+      "balanced_accuracy": 0.4705972893650895,
+      "substitution_origin_top1": 0.38157442420075627
+    },
+    {
+      "epoch": 17,
+      "validation_loss": 1.6129129858248863,
+      "top1_accuracy": 0.46838224868850137,
+      "macro_f1": 0.4392999137615826,
+      "balanced_accuracy": 0.48528918371910423,
+      "substitution_origin_top1": 0.3953248539016844
+    },
+    {
+      "epoch": 18,
+      "validation_loss": 1.5880595214414577,
+      "top1_accuracy": 0.479937615199206,
+      "macro_f1": 0.4432270273364347,
+      "balanced_accuracy": 0.4918426129550394,
+      "substitution_origin_top1": 0.39876246132691645
+    },
+    {
+      "epoch": 19,
+      "validation_loss": 1.5680333688447412,
+      "top1_accuracy": 0.49337161491563875,
+      "macro_f1": 0.45788545869636127,
+      "balanced_accuracy": 0.5007077224525085,
+      "substitution_origin_top1": 0.38948092127878997
+    },
+    {
+      "epoch": 20,
+      "validation_loss": 1.5760393932104686,
+      "top1_accuracy": 0.47678292924996457,
+      "macro_f1": 0.4455935244491077,
+      "balanced_accuracy": 0.4977207848361654,
+      "substitution_origin_top1": 0.36129254039188724
+    },
+    {
+      "epoch": 21,
+      "validation_loss": 1.561764830361862,
+      "top1_accuracy": 0.49174110307670493,
+      "macro_f1": 0.45547748512805414,
+      "balanced_accuracy": 0.49846056825407337,
+      "substitution_origin_top1": 0.4052939154348573
+    },
+    {
+      "epoch": 22,
+      "validation_loss": 1.5594078389090307,
+      "top1_accuracy": 0.48553806890684814,
+      "macro_f1": 0.44546204770817965,
+      "balanced_accuracy": 0.49929502081273275,
+      "substitution_origin_top1": 0.3856995531110347
+    },
+    {
+      "epoch": 23,
+      "validation_loss": 1.5356406960422462,
+      "top1_accuracy": 0.4882319580320431,
+      "macro_f1": 0.4532990187119064,
+      "balanced_accuracy": 0.5010389840680796,
+      "substitution_origin_top1": 0.39669989687177726
+    },
+    {
+      "epoch": 24,
+      "validation_loss": 1.5181513635483124,
+      "top1_accuracy": 0.5017722954771019,
+      "macro_f1": 0.46327032786255523,
+      "balanced_accuracy": 0.5093503237838711,
+      "substitution_origin_top1": 0.39944998281196287
+    }
+  ],
+  "epoch_12_to_24_delta": {
+    "validation_loss": -0.20220491713063193,
+    "top1_accuracy": 0.054586700694739754,
+    "macro_f1": 0.05294689510581224,
+    "balanced_accuracy": 0.059832790834424165,
+    "substitution_origin_top1": 0.029907184599518744
+  },
+  "best_macro_f1_after_epoch_12": {
+    "epoch": 24,
+    "validation_loss": 1.5181513635483124,
+    "top1_accuracy": 0.5017722954771019,
+    "macro_f1": 0.46327032786255523,
+    "balanced_accuracy": 0.5093503237838711,
+    "substitution_origin_top1": 0.39944998281196287
+  },
+  "classification": "CONTINUED_IMPROVEMENT",
+  "selected_epoch_is_24": true,
+  "training_budget_still_limiting": true
+}

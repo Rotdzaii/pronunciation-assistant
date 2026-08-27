@@ -1,0 +1,35 @@
+{
+  "stage": "R6-0 synthetic time mapping verification",
+  "status": "PASS",
+  "formula": "c_k = 0.020*k + 0.005 seconds",
+  "relative_time": "gold_boundary_absolute_seconds - mfa_word_start_absolute_seconds",
+  "cases": {
+    "exact_center": {"relative_seconds": 0.065, "expected_index": 3, "actual_index": 3},
+    "closer_to_lower": {"relative_seconds": 0.061, "expected_index": 3, "actual_index": 3},
+    "closer_to_upper": {"relative_seconds": 0.081, "expected_index": 4, "actual_index": 4},
+    "exact_tie": {"relative_seconds": 0.075, "expected_lower_index": 3, "actual_index": 3},
+    "near_start": {"expected_index": 0, "actual_index": 0},
+    "near_final_output": {"expected_index": 5, "actual_index": 5}
+  },
+  "time_reference_checks": {
+    "utterance_level_coordinates_for_gold_and_mfa": "PASS",
+    "subtraction_before_frame_mapping": "PASS",
+    "word_start_subtracted_once": "PASS",
+    "seconds_units": "PASS",
+    "milliseconds_mismatch_rejected": "PASS",
+    "outside_mfa_word_crop_rejected": "PASS"
+  },
+  "windows_for_T_6": {
+    "k_0": [0, 1, 2],
+    "k_1": [0, 1, 2, 3],
+    "k_3_interior": [1, 2, 3, 4, 5],
+    "k_T_minus_2": [2, 3, 4, 5],
+    "k_T_minus_1": [3, 4, 5]
+  },
+  "edge_padding": false,
+  "edge_reflection": false,
+  "edge_duplication": false,
+  "edge_imputation": false,
+  "wraparound": false
+}
+

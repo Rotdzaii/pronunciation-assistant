@@ -1,0 +1,27 @@
+{
+  "status": "R5_1_ADDITION_SCORING_GENERATION_CLOSED_NOT_CONFIRMED",
+  "frozen_at": "2026-08-18T08:59:55+07:00",
+  "generation": "R5-1 exact CTC addition hypothesis scoring",
+  "current_generation_closed": true,
+  "all_future_r5_research_closed": false,
+  "authoritative_validation_status": "R5_1B_VALIDATION_TRANSFER_NOT_CONFIRMED",
+  "train_development_status": "R5_1A_INSERTION_HYPOTHESIS_SCORING_DEVELOPMENT_PASS",
+  "posthoc_audit_status": "R5_1C_POSTHOC_FAILURE_AUDIT_COMPLETE",
+  "posthoc_interpretation": "MIXED_CALIBRATION_AND_CLASS_OVERLAP",
+  "test_eligible_for_current_generation": false,
+  "identities_verified": true,
+  "upstream_manifest_entries_verified": 37,
+  "protocol_audit": {
+    "training_run": false,
+    "model_inference_run": false,
+    "new_predictions_created": false,
+    "threshold_search_run": false,
+    "recalibration_run": false,
+    "validation_rerun": false,
+    "test_audio_accessed": false,
+    "test_inference_run": false,
+    "test_performance_consumed": false,
+    "upstream_scientific_results_modified": false,
+    "r5_2_implemented": false
+  }
+}

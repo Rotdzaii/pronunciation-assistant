@@ -1,0 +1,18 @@
+{
+  "type": "log-mel",
+  "n_mels": 64,
+  "n_fft": 512,
+  "win_length": 400,
+  "hop_length": 160,
+  "hop_ms": 10,
+  "window": "Hann",
+  "center": true,
+  "pad_mode": "constant",
+  "power": 2.0,
+  "mel_scale": "slaney",
+  "norm": "slaney",
+  "power_to_db": "relative to per-word maximum, floor -80 dB",
+  "sample_rate": 16000,
+  "word_span": "MFA word boundary only",
+  "side_context_seconds": 0.0
+}

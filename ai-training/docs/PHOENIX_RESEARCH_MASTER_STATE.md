@@ -2,7 +2,7 @@
 
 Authoritative recovery and research-state register for Phoenix pronunciation research.
 
-- Last verified: `2026-08-26 04:08:14 +07:00` (`Asia/Bangkok`)
+- Last verified: `2026-08-27 18:10:04 +07:00` (`Asia/Bangkok`)
 - Verification basis: local frozen artifacts in the main repository and linked research worktree; no fetch, training, inference, VALIDATION access, or TEST access was performed for this document.
 - Source-of-truth rule: frozen experiment/result/closure artifacts override roadmap prose. Unknown identities are marked `UNVERIFIED`.
 - Preservation classification: `PRESERVATION_CLASSIFICATION_COMPLETE`
@@ -17,15 +17,17 @@ Authoritative recovery and research-state register for Phoenix pronunciation res
 | Origin URL | `https://github.com/Rotdzaii/pronunciation-assistant.git` |
 | Main application branch | `feature/wav2vec2-demo-score` |
 | Research branch | `research/phoenix-correctness` |
-| Current HEAD in both worktrees | `4758c0dcf5ab1681af1fcf74e068d609030d11a8` |
+| Main worktree HEAD | `4758c0dcf5ab1681af1fcf74e068d609030d11a8` |
+| Research compact-preservation HEAD before documentation reconciliation | `180655ec94293b165f9ed0d3b22abd46909a9d7c` |
 | Worktree relationship | Linked Git worktrees sharing the main repository's Git object database |
-| Current-branch upstreams | None for either current branch |
-| Cached-origin reachability of HEAD | Reachable from `origin/backup/full-demo-state-20260716` |
+| Main-branch upstream/live ref | No configured upstream; `refs/heads/feature/wav2vec2-demo-score` is absent on the live origin |
+| Main HEAD live backup identity | `refs/heads/backup/full-demo-state-20260716` exists live at `4758c0dcf5ab1681af1fcf74e068d609030d11a8` |
+| Research upstream/live ref | `origin/research/phoenix-correctness`; live origin verified at `180655ec94293b165f9ed0d3b22abd46909a9d7c` before documentation reconciliation |
 | Git LFS | Not configured for repository content; `git lfs ls-files` returned zero paths |
 | External archive | `NOT_CREATED` |
 | Cleanup safety | `NOT_SAFE_TO_REMOVE_YET` |
 
-No fetch was performed. Live GitHub branch/ref/object availability is `UNVERIFIED` and must be checked before cleanup. A clean clone of the current origin does not by itself preserve uncommitted files, ignored research material, local stashes, local-only branch identities, or reflog/dangling objects.
+No fetch was performed. Live branch identities above were verified with read-only remote inspection. R3 through R6 compact research artifacts, including the V3/V4 compact contracts, are preserved on `origin/research/phoenix-correctness` through the pre-documentation boundary `180655ec94293b165f9ed0d3b22abd46909a9d7c`. A clean clone of the current origin still does not preserve uncommitted files, ignored or externally archived research material, local stashes, local-only branch identities, or reflog/dangling objects.
 
 ## 2. Dataset identity
 
@@ -59,7 +61,7 @@ The builders and tests that must accompany these data identities are:
 - `ai-training/tests/test_build_l2_arctic_all_speakers_correctness_v3.py`
 - `ai-training/tests/test_build_l2_arctic_expected_observed_v4.py`
 
-The pipelines are present locally but are not yet protected by GitHub; therefore the V3/V4 CSVs must not be treated as safely recreatable yet.
+The V3/V4 builders, tests, audits, contracts, and compact documentation are protected on `origin/research/phoenix-correctness`. The large V3/V4 CSV datasets themselves are not stored in ordinary Git and remain external-archive material; they must not be treated as safely recoverable from GitHub alone.
 
 ## 3. Canonical 40-phone vocabulary
 
@@ -261,7 +263,7 @@ R5 TEST remains untouched: no TEST path resolution, audio access, inference, or 
 
 ## 7. R6 current state — Local boundary addition evidence
 
-The current roadmap entry that says only “R6 Planned” is stale relative to the frozen local R6 artifacts. The roadmap is not modified by this document.
+The research roadmap is reconciled in the same bounded documentation change set as this operational update. Frozen R6-0/R6-1 artifacts remain authoritative over roadmap prose.
 
 ### 7.1 R6-0
 
@@ -466,8 +468,8 @@ Before cleanup, meaningful local-only history must be reviewed and either pushed
 
 ## 16. Stale documents and unresolved identities
 
-- `ai-training/docs/AI_CURRENT_STATUS_AND_ROADMAP.md` records R6 as merely “Planned”; this is stale. Frozen R6-0/R6-1 artifacts above are authoritative.
-- Exact live GitHub state: `UNVERIFIED` because no fetch/live remote verification was authorized.
+- `ai-training/docs/R5_DOCUMENTATION_UPDATE_MANIFEST.json` is preserved byte-for-byte as a historical R5-1 documentation snapshot and is superseded for current closure documentation by `ai-training/docs/R5_RESEARCH_CLOSURE_DOCUMENTATION_MANIFEST.json`.
+- Live GitHub state was verified without fetch: `research/phoenix-correctness` exists at the compact-research preservation boundary recorded above; `feature/wav2vec2-demo-score` is absent as a named live branch, while its HEAD is preserved by `backup/full-demo-state-20260716`.
 - External archive location, ID and archive-wide checksums: `UNVERIFIED` because the archive does not exist.
 - L2-ARCTIC v5 ZIP SHA-256: `UNVERIFIED`; not computed in this task.
 - Exact Phoenix v2 deploy checkpoint: `UNVERIFIED`; scorer family is selected, but no frozen selection artifact pins a compatible checkpoint path/hash.
@@ -479,13 +481,24 @@ Before cleanup, meaningful local-only history must be reviewed and either pushed
 
 `CURRENT_LOCAL_DELETION_STATUS: NOT_SAFE_TO_REMOVE_YET`
 
-Reasons:
+Completed compact Git preservation:
 
-- Research/application Git preservation is not complete or pushed.
+- The initial MASTER_STATE was preserved.
+- `research/phoenix-correctness` was created and pushed.
+- V3/V4 compact builders, tests, contracts, audits, and documentation were preserved.
+- R2 compact records were preserved.
+- R3 compact development plus the locked TEST protocol/result record were preserved.
+- R4 compact research history and deletion closure were preserved.
+- R5 compact research history and closure were preserved.
+- R6 compact local-boundary research history was preserved.
+
+Still incomplete:
+
 - The external archive is not created or verified.
-- V3/V4, checkpoints, large R2–R6 evidence, R5 materialization and R6 boundary scores remain local-only.
-- Local-only branches, stashes, `refs/codex`, and reflog/dangling history are not normalized or preserved.
+- V3/V4 CSV datasets, required checkpoints, large R2–R6 evidence, R5 materialization, and R6 boundary scores remain local-only external-archive material.
+- Still-required main-worktree local-only state has not been fully preserved.
+- Local-only branches, stashes, `refs/codex`, and reflog/dangling history are not normalized or preserved where required.
 - Sensitive local files and the sensitive stash require separate handling.
-- Live GitHub recoverability has not been verified.
+- A complete external-archive inventory and clean-machine safe-removal verification remain pending.
 
 Local deletion may be reconsidered only after Git preservation, external archive creation, checksum verification, sensitive backup handling, and a clean-machine recovery check are complete.

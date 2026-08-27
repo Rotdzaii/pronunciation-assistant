@@ -1,0 +1,9 @@
+{
+  "algorithm": "SHA-256",
+  "files": {
+    "final_status.json": "EEF6180CC1CAEA5A407A3EE12493FD9F9C00A9EAEF73C72A16C2D5E21EA39311",
+    "preflight.json": "C010E25C6F373F30814C496A9FC4FB32D489C070835C25A46D0B4F2BD8B5E595",
+    "r4_4d1_report.md": "33FAD31A81BA26F2C022CEDE57CCB8320D0DB95D2D813B3390A26D53CF90122D"
+  },
+  "note": "Preflight-stop manifest; no threshold or validation prediction artifacts were created. Manifest excludes itself."
+}

@@ -1,0 +1,71 @@
+{
+  "stage": "R5-3A evidence-separated relation scoring TRAIN development contract",
+  "status": "PASS",
+  "verified_on": "2026-08-19",
+  "upstream_identities": [
+    {
+      "name": "R5-1A execution manifest",
+      "path": "ai-training/experiments/r5_1a_alignability_safe_addition_scoring/R5_1A_EXECUTION_MANIFEST.json",
+      "expected_sha256": "C9343A75CE26C2BEECA388EBA855E91AE0992D22C0C5D785308D0A98B89A3CD6",
+      "actual_sha256": "C9343A75CE26C2BEECA388EBA855E91AE0992D22C0C5D785308D0A98B89A3CD6",
+      "manifest_entries_verified": 14,
+      "failures": [],
+      "match": true
+    },
+    {
+      "name": "R5-2B final execution manifest",
+      "path": "ai-training/experiments/r5_2b_relation_competition/R5_2B_TC1_PA1_ENV_EXECUTION_MANIFEST.json",
+      "expected_sha256": "37F3C86FF11526B8AB54D173937A0F488125A1D0B610032CC8A5D47B11602387",
+      "actual_sha256": "37F3C86FF11526B8AB54D173937A0F488125A1D0B610032CC8A5D47B11602387",
+      "manifest_entries_verified": 21,
+      "failures": [],
+      "match": true
+    },
+    {
+      "name": "R5-2C manifest",
+      "path": "ai-training/experiments/r5_2b_relation_competition/R5_2C_MANIFEST.json",
+      "expected_sha256": "C18621208A35074B7681EFC95261B73147B4A6E3716F17AF0AB0471F8B328F90",
+      "actual_sha256": "C18621208A35074B7681EFC95261B73147B4A6E3716F17AF0AB0471F8B328F90",
+      "manifest_entries_verified": 15,
+      "failures": [],
+      "match": true
+    },
+    {
+      "name": "V4 metadata",
+      "path": "ai-training/datasets/l2-arctic/metadata/all_speakers_expected_observed_v4.csv",
+      "expected_sha256": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D",
+      "actual_sha256": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D",
+      "match": true
+    },
+    {
+      "name": "Frozen checkpoint",
+      "path": "ai-training/experiments/r4_4c2_bigru_ctc_seed42/R4_4C2_bigru_ctc_phone_sequence_seed42_best_validation_per.pt",
+      "expected_sha256": "F54C9C2361AE78E1C37353AEB338A2DE6722C0B1EC4F885F6B52688CE9E88085",
+      "actual_sha256": "F54C9C2361AE78E1C37353AEB338A2DE6722C0B1EC4F885F6B52688CE9E88085",
+      "match": true,
+      "loaded": false
+    }
+  ],
+  "feature_provenance_check": {
+    "r5_1a_score_rows": 16582,
+    "r5_2b_score_rows": 16582,
+    "matched_rows": 16582,
+    "r5_1a_duplicates": 0,
+    "r5_2b_duplicates": 0,
+    "missing_from_r5_1a": 0,
+    "missing_from_r5_2b": 0,
+    "metadata_mismatches": 0,
+    "positive_words": 323,
+    "negative_words": 16259,
+    "finite_A_inputs": 16582,
+    "finite_S_inputs": 16582,
+    "finite_D_inputs": 16582,
+    "feature_values_persisted": false,
+    "performance_metrics_calculated": false,
+    "status": "PASS"
+  },
+  "checkpoint_inference": false,
+  "validation_accessed": false,
+  "test_accessed": false,
+  "upstream_modified": false
+}

@@ -1,0 +1,11 @@
+{
+  "counts": {
+    "C_expected_label_interval_contains_manual_deletion_center": 2454,
+    "C_expected_label_interval_overlaps_manual_deletion_slot": 47,
+    "C_expected_label_retained_elsewhere_in_utterance": 73,
+    "D_missing_without_clean_anchor": 10,
+    "A_temporal_gap": 0,
+    "B_neighbors_touch_or_stretch": 7
+  },
+  "verdict": "C_FORCED_ALIGNMENT_RETAINS_EXPECTED_LABEL"
+}

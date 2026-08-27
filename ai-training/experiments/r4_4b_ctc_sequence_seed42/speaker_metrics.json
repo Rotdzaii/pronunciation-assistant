@@ -1,0 +1,230 @@
+{
+  "ABA": {
+    "usable_words": 1208,
+    "target_phones": 3894,
+    "phone_error_rate": 0.6081150487930149,
+    "binary": {
+      "rows": 3923,
+      "accuracy": 0.7348967626816212,
+      "balanced_accuracy": 0.5926535961603174,
+      "macro_f1": 0.4354989567594791,
+      "non_deletion": {
+        "precision": 0.9944559944559944,
+        "recall": 0.7370313302516692,
+        "f1": 0.8466076696165191,
+        "support": 3894
+      },
+      "deletion": {
+        "precision": 0.01253616200578592,
+        "recall": 0.4482758620689655,
+        "f1": 0.024390243902439025,
+        "support": 29
+      },
+      "confusion_matrix_labels": [
+        "non_deletion",
+        "deletion"
+      ],
+      "confusion_matrix": [
+        [
+          2870,
+          1024
+        ],
+        [
+          16,
+          13
+        ]
+      ]
+    },
+    "substitution_false_deletion_rate": 0.3351063829787234
+  },
+  "HKK": {
+    "usable_words": 1351,
+    "target_phones": 4602,
+    "phone_error_rate": 0.6349413298565841,
+    "binary": {
+      "rows": 4701,
+      "accuracy": 0.6938949159753244,
+      "balanced_accuracy": 0.5619691043419857,
+      "macro_f1": 0.43625845509523264,
+      "non_deletion": {
+        "precision": 0.9826060421116876,
+        "recall": 0.6996957844415471,
+        "f1": 0.8173626094682066,
+        "support": 4602
+      },
+      "deletion": {
+        "precision": 0.02949438202247191,
+        "recall": 0.42424242424242425,
+        "f1": 0.0551543007222587,
+        "support": 99
+      },
+      "confusion_matrix_labels": [
+        "non_deletion",
+        "deletion"
+      ],
+      "confusion_matrix": [
+        [
+          3220,
+          1382
+        ],
+        [
+          57,
+          42
+        ]
+      ]
+    },
+    "substitution_false_deletion_rate": 0.2727272727272727
+  },
+  "HQTV": {
+    "usable_words": 1335,
+    "target_phones": 4221,
+    "phone_error_rate": 0.6003316749585407,
+    "binary": {
+      "rows": 4665,
+      "accuracy": 0.7016077170418007,
+      "balanced_accuracy": 0.6003228708452589,
+      "macro_f1": 0.5237150822090382,
+      "non_deletion": {
+        "precision": 0.9292867981790591,
+        "recall": 0.7254205164652926,
+        "f1": 0.8147951037786056,
+        "support": 4221
+      },
+      "deletion": {
+        "precision": 0.15401459854014599,
+        "recall": 0.4752252252252252,
+        "f1": 0.2326350606394708,
+        "support": 444
+      },
+      "confusion_matrix_labels": [
+        "non_deletion",
+        "deletion"
+      ],
+      "confusion_matrix": [
+        [
+          3062,
+          1159
+        ],
+        [
+          233,
+          211
+        ]
+      ]
+    },
+    "substitution_false_deletion_rate": 0.36312849162011174
+  },
+  "LXC": {
+    "usable_words": 1351,
+    "target_phones": 4494,
+    "phone_error_rate": 0.6081441922563418,
+    "binary": {
+      "rows": 4703,
+      "accuracy": 0.7193280884541782,
+      "balanced_accuracy": 0.613623587430769,
+      "macro_f1": 0.48428521869504715,
+      "non_deletion": {
+        "precision": 0.9689716312056738,
+        "recall": 0.7296395193591455,
+        "f1": 0.8324447829398325,
+        "support": 4494
+      },
+      "deletion": {
+        "precision": 0.07884761182714177,
+        "recall": 0.49760765550239233,
+        "f1": 0.13612565445026178,
+        "support": 209
+      },
+      "confusion_matrix_labels": [
+        "non_deletion",
+        "deletion"
+      ],
+      "confusion_matrix": [
+        [
+          3279,
+          1215
+        ],
+        [
+          105,
+          104
+        ]
+      ]
+    },
+    "substitution_false_deletion_rate": 0.30271084337349397
+  },
+  "MBMPS": {
+    "usable_words": 1372,
+    "target_phones": 4722,
+    "phone_error_rate": 0.5933926302414231,
+    "binary": {
+      "rows": 4781,
+      "accuracy": 0.7659485463292198,
+      "balanced_accuracy": 0.6890322256441181,
+      "macro_f1": 0.4633888075270056,
+      "non_deletion": {
+        "precision": 0.9936969032611674,
+        "recall": 0.7678949597628124,
+        "f1": 0.8663242145502329,
+        "support": 4722
+      },
+      "deletion": {
+        "precision": 0.03180212014134275,
+        "recall": 0.6101694915254238,
+        "f1": 0.060453400503778336,
+        "support": 59
+      },
+      "confusion_matrix_labels": [
+        "non_deletion",
+        "deletion"
+      ],
+      "confusion_matrix": [
+        [
+          3626,
+          1096
+        ],
+        [
+          23,
+          36
+        ]
+      ]
+    },
+    "substitution_false_deletion_rate": 0.17255717255717257
+  },
+  "SVBI": {
+    "usable_words": 1111,
+    "target_phones": 3490,
+    "phone_error_rate": 0.5636103151862464,
+    "binary": {
+      "rows": 3564,
+      "accuracy": 0.792648709315376,
+      "balanced_accuracy": 0.6428134438163091,
+      "macro_f1": 0.4858966868999101,
+      "non_deletion": {
+        "precision": 0.9865581888928192,
+        "recall": 0.7991404011461318,
+        "f1": 0.8830140889662814,
+        "support": 3490
+      },
+      "deletion": {
+        "precision": 0.048846675712347354,
+        "recall": 0.4864864864864865,
+        "f1": 0.08877928483353884,
+        "support": 74
+      },
+      "confusion_matrix_labels": [
+        "non_deletion",
+        "deletion"
+      ],
+      "confusion_matrix": [
+        [
+          2789,
+          701
+        ],
+        [
+          38,
+          36
+        ]
+      ]
+    },
+    "substitution_false_deletion_rate": 0.19148936170212766
+  }
+}

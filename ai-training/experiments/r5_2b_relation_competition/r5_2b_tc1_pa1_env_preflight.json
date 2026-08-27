@@ -1,0 +1,306 @@
+{
+  "status": "PASS",
+  "execution_label": "ENVIRONMENT-AND-PATH-CORRECTED CONTINUATION OF THE PRE-METRIC R5-2B EXECUTION",
+  "authorized_environment": {
+    "status": "PASS",
+    "correction_category": "EXECUTION_ENVIRONMENT_SELECTION_ONLY",
+    "expected": {
+      "sys_executable": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant\\ai-training\\.venv\\Scripts\\python.exe",
+      "python_version": "3.12.10",
+      "torch_version": "2.12.0.dev20260408+cu128",
+      "torch_cuda_version": "12.8",
+      "cuda_available": true,
+      "cuda_device_count": 1,
+      "gpu_device_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+      "numpy_version": "2.4.6",
+      "pandas_version": "3.0.3",
+      "sklearn_version": "1.8.0"
+    },
+    "observed": {
+      "sys_executable": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant\\ai-training\\.venv\\Scripts\\python.exe",
+      "python_version": "3.12.10",
+      "torch_version": "2.12.0.dev20260408+cu128",
+      "torch_cuda_version": "12.8",
+      "cuda_available": true,
+      "cuda_device_count": 1,
+      "gpu_device_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+      "numpy_version": "2.4.6",
+      "pandas_version": "3.0.3",
+      "sklearn_version": "1.8.0"
+    },
+    "absolute_interpreter_match": true,
+    "automatic_fallback_used": false,
+    "packages_modified": false,
+    "checkpoint_loaded": false,
+    "dataset_accessed": false
+  },
+  "identity_verification": {
+    "status": "PASS",
+    "expected_sha256": {
+      "contract": "55572805C1878D41D4B6C41E1C7A31B2C3725A81050942494F0E1292092FEF38",
+      "preregistration": "6D2DD9672222D174B32F0E25448419F42FE179522D2D8AA37C7766C8A1BBFBBA",
+      "contract_manifest": "5A1E82FD9E0209DB371F7E313125FAC64434BA6DA6E677CFF20E0AE3336F583E",
+      "static_manifest": "0D380ACA5C0CF101E60DFF043221BBE6AE267BA9FFDAD1C677C4E7FFCA23F80F",
+      "static_run": "F0E54A0A4DBC1378F424E6C8FE8B0A9861CDD72DCBE72C045B96660324723197",
+      "r5_2a_manifest": "F8E476F8FFA6AB2CD0F833B17D667D0D9B6CE3FC6B9FA1A7F5C1A3D71BA753E1",
+      "v4": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D",
+      "checkpoint": "F54C9C2361AE78E1C37353AEB338A2DE6722C0B1EC4F885F6B52688CE9E88085",
+      "r5_1a_scorer": "4DE49C9070C973EE44EFBD09DFC063C436779E723D12EC7A7A2BC4A06AF35F90",
+      "r5_2b_scorer": "2E44B79828DBB37B312CDC03C897A80803947A48F13864B26C454F3B8ED161A3",
+      "failed_execution_manifest": "92163F8DE3ECEAFEE2950AF57302AA565C0F3612A2D6F0D36462552FA66BA09E",
+      "tc0_manifest": "91F5DBCB9719FEF7C7E3E1CEF5773E92A18B813FFD54384359DF026F300C278E",
+      "tc1_contract": "632F32CEF2F8EE05A47ACA7FFCE97FB5DA35236C48B53E25EC06CEFCDACE954F",
+      "tc1_contract_manifest": "545C49597D3648CCBD70DB57436E8A58D01CD1D0F7DC813C854D5B3F83B56CC0",
+      "tc1_static_manifest": "462C7966B01B5858EB9D4A20F23ECF1A17EACD6430BB233A37A4E7EDA7A9DF63",
+      "tc1_guard": "E18550F191FE6933C98F21169E30E6482AA9AAE147B013024982D384E49299D8",
+      "previous_corrected_execution_manifest": "605941841092EA2D52D2773981FBB8D39E91738114F415AAFEF059EC536B521C",
+      "pa0_manifest": "8D17C47786AC8A4167C19A5A5C37291EDAA31DBD54505E8638CE591DD581182C",
+      "pa1_contract": "F02A497648D9D707521C3289C85755D75A5E5C3440BA97499F51C4EF677820B6",
+      "pa1_preregistration": "546373878FC019C6EA0F5722F82C32C9FC363C0B506447F30866BD6FC59AB915",
+      "pa1_manifest": "DF209C8376F18C82F6212508208D3856046BABBEB1351CE11E62BC33F24B2451",
+      "latest_failed_execution_manifest": "49538C3DD9804DBC50806A420557F7AD1AF299E7A48541BCEC9FA30AF91E80A3",
+      "environment_provenance": "7C8BB716A428290163B8AAA3B7A48EEE4C6700298E841D1665BACB604DC6876A",
+      "environment_import_check": "1D2248FFDE92FED2B24ED0B00884F452C9F1EC1A5D21B731FC127BD161225FD5",
+      "environment_protocol_audit": "5FD7A31226E0F8D8E2B8B75CC66C9465891375C3E1149DA8B59EF0AF8D425C71",
+      "environment_launcher": "50C57A14E2DB14AB84DBF5A71574A4B44226653EFC6EE5953C151D14B47D7891"
+    },
+    "actual_sha256": {
+      "contract": "55572805C1878D41D4B6C41E1C7A31B2C3725A81050942494F0E1292092FEF38",
+      "preregistration": "6D2DD9672222D174B32F0E25448419F42FE179522D2D8AA37C7766C8A1BBFBBA",
+      "contract_manifest": "5A1E82FD9E0209DB371F7E313125FAC64434BA6DA6E677CFF20E0AE3336F583E",
+      "static_manifest": "0D380ACA5C0CF101E60DFF043221BBE6AE267BA9FFDAD1C677C4E7FFCA23F80F",
+      "static_run": "F0E54A0A4DBC1378F424E6C8FE8B0A9861CDD72DCBE72C045B96660324723197",
+      "r5_2a_manifest": "F8E476F8FFA6AB2CD0F833B17D667D0D9B6CE3FC6B9FA1A7F5C1A3D71BA753E1",
+      "v4": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D",
+      "checkpoint": "F54C9C2361AE78E1C37353AEB338A2DE6722C0B1EC4F885F6B52688CE9E88085",
+      "r5_1a_scorer": "4DE49C9070C973EE44EFBD09DFC063C436779E723D12EC7A7A2BC4A06AF35F90",
+      "r5_2b_scorer": "2E44B79828DBB37B312CDC03C897A80803947A48F13864B26C454F3B8ED161A3",
+      "failed_execution_manifest": "92163F8DE3ECEAFEE2950AF57302AA565C0F3612A2D6F0D36462552FA66BA09E",
+      "tc0_manifest": "91F5DBCB9719FEF7C7E3E1CEF5773E92A18B813FFD54384359DF026F300C278E",
+      "tc1_contract": "632F32CEF2F8EE05A47ACA7FFCE97FB5DA35236C48B53E25EC06CEFCDACE954F",
+      "tc1_contract_manifest": "545C49597D3648CCBD70DB57436E8A58D01CD1D0F7DC813C854D5B3F83B56CC0",
+      "tc1_static_manifest": "462C7966B01B5858EB9D4A20F23ECF1A17EACD6430BB233A37A4E7EDA7A9DF63",
+      "tc1_guard": "E18550F191FE6933C98F21169E30E6482AA9AAE147B013024982D384E49299D8",
+      "previous_corrected_execution_manifest": "605941841092EA2D52D2773981FBB8D39E91738114F415AAFEF059EC536B521C",
+      "pa0_manifest": "8D17C47786AC8A4167C19A5A5C37291EDAA31DBD54505E8638CE591DD581182C",
+      "pa1_contract": "F02A497648D9D707521C3289C85755D75A5E5C3440BA97499F51C4EF677820B6",
+      "pa1_preregistration": "546373878FC019C6EA0F5722F82C32C9FC363C0B506447F30866BD6FC59AB915",
+      "pa1_manifest": "DF209C8376F18C82F6212508208D3856046BABBEB1351CE11E62BC33F24B2451",
+      "latest_failed_execution_manifest": "49538C3DD9804DBC50806A420557F7AD1AF299E7A48541BCEC9FA30AF91E80A3",
+      "environment_provenance": "7C8BB716A428290163B8AAA3B7A48EEE4C6700298E841D1665BACB604DC6876A",
+      "environment_import_check": "1D2248FFDE92FED2B24ED0B00884F452C9F1EC1A5D21B731FC127BD161225FD5",
+      "environment_protocol_audit": "5FD7A31226E0F8D8E2B8B75CC66C9465891375C3E1149DA8B59EF0AF8D425C71",
+      "environment_launcher": "50C57A14E2DB14AB84DBF5A71574A4B44226653EFC6EE5953C151D14B47D7891"
+    },
+    "manifest_audits": {
+      "contract": {
+        "artifact_count": 9,
+        "failures": [],
+        "status": "PASS"
+      },
+      "original_static": {
+        "artifact_count": 10,
+        "failures": [],
+        "status": "PASS"
+      },
+      "failed_execution": {
+        "artifact_count": 6,
+        "failures": [],
+        "status": "PASS"
+      },
+      "tc0": {
+        "artifact_count": 10,
+        "failures": [],
+        "status": "PASS"
+      },
+      "tc1_contract": {
+        "artifact_count": 7,
+        "failures": [],
+        "status": "PASS"
+      },
+      "tc1_static": {
+        "artifact_count": 11,
+        "failures": [],
+        "status": "PASS"
+      },
+      "previous_corrected_execution": {
+        "artifact_count": 6,
+        "failures": [],
+        "status": "PASS"
+      },
+      "pa0": {
+        "artifact_count": 8,
+        "failures": [],
+        "status": "PASS"
+      },
+      "pa1": {
+        "artifact_count": 7,
+        "failures": [],
+        "status": "PASS"
+      },
+      "latest_failed_execution": {
+        "artifact_count": 6,
+        "failures": [],
+        "status": "PASS"
+      }
+    },
+    "scientific_immutability": {
+      "contract_sha256": "55572805C1878D41D4B6C41E1C7A31B2C3725A81050942494F0E1292092FEF38",
+      "scorer_sha256": "2E44B79828DBB37B312CDC03C897A80803947A48F13864B26C454F3B8ED161A3",
+      "tc1_guard_sha256": "E18550F191FE6933C98F21169E30E6482AA9AAE147B013024982D384E49299D8",
+      "c_formula": "BEST_INSERT_SCORE - BEST_NON_ADDITION_SCORE",
+      "hypothesis_families": [
+        "KEEP",
+        "INSERT",
+        "SUB",
+        "DELETE"
+      ],
+      "empty_target_formula": "SUM_t log_softmax(logits[t])[blank=40]",
+      "population_changed": false,
+      "loso_changed": false,
+      "threshold_helper_changed": false,
+      "eight_gates_changed": false,
+      "tc1_numeric_policy_changed": false,
+      "pa1_root_policy_changed": false
+    }
+  },
+  "pa1_path_guard": {
+    "status": "PASS",
+    "scope": "TRAIN_ONLY_EXISTENCE_AND_PROVENANCE_GUARD",
+    "roots": {
+      "MANUAL_TEXTGRID_ROOT": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant\\ai-training\\datasets\\l2-arctic\\raw\\l2arctic_release_v5.0",
+      "AUDIO_ROOT": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant\\ai-training\\datasets\\l2-arctic\\raw\\l2arctic_release_v5.0",
+      "V4_METADATA_ROOT": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\datasets\\l2-arctic\\metadata",
+      "logical_roles_independently_configured": true,
+      "root_cross_derivation_used": false
+    },
+    "path_formula": "MANUAL_TEXTGRID_ROOT/<speaker>/annotation/<utterance_id>.TextGrid",
+    "expected": 1799,
+    "derived_from_v4": 1799,
+    "existing": 1799,
+    "missing": 0,
+    "ambiguous": 0,
+    "missing_paths": [],
+    "ambiguous_mappings": [],
+    "by_speaker": {
+      "BWC": {
+        "expected": 150,
+        "derived_from_v4": 150,
+        "existing": 150,
+        "missing": 0
+      },
+      "EBVS": {
+        "expected": 150,
+        "derived_from_v4": 150,
+        "existing": 150,
+        "missing": 0
+      },
+      "HJK": {
+        "expected": 150,
+        "derived_from_v4": 150,
+        "existing": 150,
+        "missing": 0
+      },
+      "NCC": {
+        "expected": 150,
+        "derived_from_v4": 150,
+        "existing": 150,
+        "missing": 0
+      },
+      "NJS": {
+        "expected": 150,
+        "derived_from_v4": 150,
+        "existing": 150,
+        "missing": 0
+      },
+      "PNV": {
+        "expected": 150,
+        "derived_from_v4": 150,
+        "existing": 150,
+        "missing": 0
+      },
+      "RRBI": {
+        "expected": 150,
+        "derived_from_v4": 150,
+        "existing": 150,
+        "missing": 0
+      },
+      "TLV": {
+        "expected": 150,
+        "derived_from_v4": 150,
+        "existing": 150,
+        "missing": 0
+      },
+      "TNI": {
+        "expected": 150,
+        "derived_from_v4": 150,
+        "existing": 150,
+        "missing": 0
+      },
+      "YBAA": {
+        "expected": 149,
+        "derived_from_v4": 149,
+        "existing": 149,
+        "missing": 0
+      },
+      "YKWK": {
+        "expected": 150,
+        "derived_from_v4": 150,
+        "existing": 150,
+        "missing": 0
+      },
+      "ZHAA": {
+        "expected": 150,
+        "derived_from_v4": 150,
+        "existing": 150,
+        "missing": 0
+      }
+    },
+    "first_file": {
+      "path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant\\ai-training\\datasets\\l2-arctic\\raw\\l2arctic_release_v5.0\\BWC\\annotation\\arctic_a0006.TextGrid",
+      "exists": true,
+      "byte_size": 8123,
+      "sha256": "EF3056511B71013C399F5F69F40B6A8865756FE26091DF72CC5EDB8E7D14A337",
+      "expected_byte_size": 8123,
+      "expected_sha256": "EF3056511B71013C399F5F69F40B6A8865756FE26091DF72CC5EDB8E7D14A337",
+      "match": true
+    },
+    "annotation_content_parsed": false,
+    "audio_accessed": false,
+    "validation_paths_resolved": false,
+    "test_paths_resolved": false
+  },
+  "tc1_numeric_guard": {
+    "status": "PASS",
+    "scope": "deterministic synthetic pre-inference diagnostic",
+    "nonempty_raw_score": -12.60501480102539,
+    "nonempty_target_score": -6.302507400512695,
+    "scorer_device": "cuda",
+    "scorer_dtype": "float32",
+    "diagnostic_device": "cpu",
+    "diagnostic_dtype": "float32",
+    "n": 4,
+    "absolute_operand_sum_authoritative": 15.667129755020142,
+    "absolute_operand_sum_diagnostic": 15.667129755020142,
+    "authoritative_scorer_value_A": -15.667129516601562,
+    "diagnostic_value_B": -15.667130470275879,
+    "observed_absolute_difference": 9.5367431640625e-07,
+    "bound_A": 2.8015016120413103e-06,
+    "bound_B": 2.8015016120413103e-06,
+    "correction_bound": 5.603003224082621e-06,
+    "acceptance_operator": "<=",
+    "equivalent": true,
+    "scientific_score_source": "frozen_r5_2b_scorer",
+    "returned_scientific_score": -15.667129516601562,
+    "diagnostic_replaced_scientific_score": false
+  },
+  "scientific_contract_modified": false,
+  "frozen_scorer_modified": false,
+  "tc1_numeric_policy_modified": false,
+  "pa1_root_policy_modified": false,
+  "scientific_score_source": "imported frozen r5_2b_scorer.py",
+  "diagnostic_value_used_as_scientific_score": false,
+  "original_failed_execution_preserved": true,
+  "previous_corrected_execution_preserved": true,
+  "latest_failed_execution_preserved": true
+}

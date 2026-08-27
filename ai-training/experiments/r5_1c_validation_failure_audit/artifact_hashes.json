@@ -1,0 +1,58 @@
+{
+  "manifest_type": "R5-1C post-hoc failure audit artifacts",
+  "created_at": "2026-08-18T08:52:18+07:00",
+  "self_excluded": true,
+  "hash_algorithm": "SHA-256",
+  "artifact_count": 9,
+  "hash_audit": "HASH_AUDIT_PASS",
+  "failures": [],
+  "artifacts": [
+    {
+      "relative_path": "r5_1c_source_identity.json",
+      "byte_size": 13730,
+      "sha256": "14A01FADBCA5CD77C1F2BE7A3E93558313209E406BAAB0F48099012DA9D2CCD7"
+    },
+    {
+      "relative_path": "r5_1c_speaker_audit.json",
+      "byte_size": 3205,
+      "sha256": "E6DFDB73CB27667BA0B67A416E2405E8BAD199D05B0D88449E53157BE992E716"
+    },
+    {
+      "relative_path": "r5_1c_score_location_audit.json",
+      "byte_size": 14965,
+      "sha256": "BBF88ECE8E5A981F8A1A772B76A463A85802F05668C40B96C52E97861C983C99"
+    },
+    {
+      "relative_path": "r5_1c_threshold_margin_audit.json",
+      "byte_size": 1456,
+      "sha256": "9B905BDFE44A3338A41F00A083A4D0874FE22BA5AB9B935421D02ABF86ECE2F4"
+    },
+    {
+      "relative_path": "r5_1c_false_positive_composition.json",
+      "byte_size": 1458,
+      "sha256": "E5F05E3A37ACD20929946416EEF5724885D6E08734602A8E17BEED78F6736D75"
+    },
+    {
+      "relative_path": "r5_1c_predicted_insert_characteristics.json",
+      "byte_size": 9459,
+      "sha256": "A90ABF51AE13A8D97482E6E3DC584DAF54CD650B01B8FB9FFCF2CF610030E21C"
+    },
+    {
+      "relative_path": "r5_1c_failure_interpretation.json",
+      "byte_size": 1966,
+      "sha256": "AA0B69506947C6D5D0F16CE572F67BD6BBFC97054BD03BD4CAAAD5E0272C9AB7"
+    },
+    {
+      "relative_path": "r5_1c_protocol_audit.json",
+      "byte_size": 628,
+      "sha256": "730010DC54C5E3872B7F43E20D684C0D5E7CF5B80CB24A242CE4989F65C6B7EF"
+    },
+    {
+      "relative_path": "R5_1C_POSTHOC_FAILURE_AUDIT.md",
+      "byte_size": 1185,
+      "sha256": "AABCC88E7684ED8D247C17664B1A77DF9D63BA55496FB18CFE7F81891C1DC270"
+    }
+  ],
+  "authoritative_scientific_status": "R5_1B_VALIDATION_TRANSFER_NOT_CONFIRMED",
+  "r5_1c_status": "R5_1C_POSTHOC_FAILURE_AUDIT_COMPLETE"
+}

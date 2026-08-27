@@ -1,0 +1,19 @@
+{
+  "choice": "A: fresh R3-like convolutional encoder without temporal attention pooling, minimally adapted to preserve time resolution",
+  "encoder": "Conv 1->16 + MaxPool(2,2); Conv 16->32 + MaxPool(2,1); Conv 32->64; Conv 64->96 with BatchNorm/ReLU and R3 dropout pattern",
+  "variable_input": "[B,1,64,time]",
+  "encoder_output": "[B,96,16,floor(time/2)]",
+  "sequence_projection": "mean frequency dimension -> [B,T_out,96]",
+  "head": "Dropout(0.2) + Linear(96,41)",
+  "temporal_attention": false,
+  "temporal_downsampling": 2,
+  "approx_output_spacing_ms": 20,
+  "parameter_count": 83081,
+  "initialization": {
+    "policy": "fresh random initialization for encoder and CTC head",
+    "reason": "10 ms/25 ms word-sequence features and one temporal pooling stage differ from frozen R3 phone-crop semantics; transplanting weights would add an initialization confound",
+    "external_pretraining": false,
+    "r3_checkpoint_loaded": false,
+    "r3_checkpoint_sha256_for_architecture_audit_only": "5C66860BBC50BA803F5BFE25417DF19BDF34B1C7BE36D507B0DDCA88D767EA5E"
+  }
+}

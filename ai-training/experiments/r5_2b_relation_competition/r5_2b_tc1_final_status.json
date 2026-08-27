@@ -1,0 +1,15 @@
+{
+  "status": "R5_2B_TC1_EXECUTION_TECHNICAL_FAILURE_IMPLEMENTATION",
+  "scientific_result_exists": false,
+  "scientific_pass_or_fail_assigned": false,
+  "gates_evaluated": 0,
+  "gates_total": 8,
+  "robust_theta": "R5_2_ROBUST_THETA_NOT_AUTHORIZED",
+  "tc1_preflight": "PASS",
+  "technical_stop": "Required authorized TRAIN TextGrid missing from the configured research audio root before frozen population reproduction.",
+  "train_inference": false,
+  "performance_metrics_created": false,
+  "validation_accessed": false,
+  "test_accessed": false,
+  "rerun_performed": false
+}

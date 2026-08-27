@@ -1,0 +1,45 @@
+{
+  "status": "PASS",
+  "freeze_verified_before_test_access": true,
+  "dataset_sha256": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D",
+  "eligible_subset": "PHONE_IDENTIFICATION_ELIGIBLE",
+  "test_speakers": [
+    "ASI",
+    "ERMS",
+    "SKA",
+    "THV",
+    "TXHC",
+    "YDCK"
+  ],
+  "test_rows": 28216,
+  "correct_rows": 24923,
+  "substitution_rows": 3293,
+  "speaker_disjoint": true,
+  "audio": {
+    "scope": "locked TEST speakers only",
+    "rows": 28216,
+    "unique_wav_files": 900,
+    "sample_rates": {
+      "44100": 900
+    },
+    "total_unique_audio_hours": 0.9083138007054671,
+    "missing": 0,
+    "unreadable": 0,
+    "invalid_duration": 0,
+    "empty_crop": 0,
+    "edge_padding_by_origin": {
+      "correct": {
+        "rows": 24923,
+        "padded": 2431,
+        "padded_rate": 0.09754042450748304
+      },
+      "substitution": {
+        "rows": 3293,
+        "padded": 410,
+        "padded_rate": 0.12450652900091103
+      }
+    }
+  },
+  "training_performed": false,
+  "threshold_search_performed": false
+}

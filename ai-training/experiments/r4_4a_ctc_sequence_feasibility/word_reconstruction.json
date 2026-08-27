@@ -1,0 +1,49 @@
+{
+  "usable_words": {
+    "train": 16259,
+    "validation": 7728
+  },
+  "source_reconstruction": {
+    "counts": {
+      "validation_candidate": 8494,
+      "validation_usable": 7728,
+      "addition_words_excluded": 582,
+      "malformed_or_unresolved_words": 940,
+      "substitution_plus_deletion_words": 753,
+      "multiple_deletion_words": 225,
+      "addition_plus_deletion_words": 56,
+      "train_candidate": 16985,
+      "train_usable": 16259,
+      "unavailable_word_boundary": 2
+    },
+    "target_rows_without_manual_word": {
+      "total": 88,
+      "by_relation": {
+        "addition": 79,
+        "substitution": 3,
+        "correct": 6
+      }
+    },
+    "invalid_forced_alignment_phone_labels": {
+      "spn": 18
+    },
+    "mfa_vs_manual_boundary_start_error_seconds": {
+      "count": 25477,
+      "mean": 0.005041468255015068,
+      "median": 0.0,
+      "p10": 0.0,
+      "p25": 0.0,
+      "p75": 0.0,
+      "p90": 0.010000000000000009
+    },
+    "mfa_vs_manual_boundary_end_error_seconds": {
+      "count": 25477,
+      "mean": 0.0062930568143376225,
+      "median": 0.0,
+      "p10": 0.0,
+      "p25": 0.0,
+      "p75": 0.0,
+      "p90": 0.010000000000000009
+    }
+  }
+}

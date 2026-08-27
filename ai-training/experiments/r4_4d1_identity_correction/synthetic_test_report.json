@@ -1,0 +1,24 @@
+{
+  "status": "PASS",
+  "passed": 10,
+  "total": 10,
+  "tests": {
+    "A_source_index_0_maps_to_2": "PASS",
+    "B_source_index_100_maps_to_102": "PASS",
+    "C_frozen_mapping_1434_of_1434": "PASS",
+    "D_old_mapping_reproduces_233_missing": "PASS",
+    "E_threshold_sha_and_theta": "PASS",
+    "F_different_theta_fatal": "PASS",
+    "G_train_recalibration_fatal": "PASS",
+    "H_test_guard_before_resolution": "PASS",
+    "I_missing_identity_fatal": "PASS",
+    "J_metrics_gates_classification_match": "PASS"
+  },
+  "metadata_only": true,
+  "validation_acoustic_inference": false,
+  "validation_hypothesis_scoring": false,
+  "validation_metrics": false,
+  "threshold_recalculated": false,
+  "training": false,
+  "test_accessed": false
+}

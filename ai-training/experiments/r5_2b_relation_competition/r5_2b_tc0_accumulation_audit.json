@@ -1,0 +1,42 @@
+{
+  "case": "CUDA float32 historical fixture",
+  "blank_log_prob_values": [
+    -4.125710964202881,
+    -3.2495081424713135,
+    -4.680192470550537,
+    -3.61171817779541
+  ],
+  "accumulation_results": {
+    "cuda_float32_tensor_sum": -15.667129516601562,
+    "cpu_float32_tensor_sum": -15.667130470275879,
+    "numpy_float32_sum": -15.667130470275879,
+    "float64_promoted_tensor_sum": -15.667129755020142,
+    "python_math_fsum": -15.667129755020142,
+    "numpy_float64_sum": -15.667129755020142
+  },
+  "historical_absolute_difference": 9.5367431640625e-7,
+  "historical_relative_difference": 6.087103035662633e-8,
+  "recomputation_audit": {
+    "shared_log_probs_cuda_sum": -15.667129516601562,
+    "separately_recomputed_log_softmax_cuda_sum": -15.667129516601562,
+    "difference": 0.0,
+    "recomputation_contributes": false
+  },
+  "device_transfer_audit": {
+    "shared_values_cuda_sum": -15.667129516601562,
+    "same_values_after_cpu_transfer_sum": -15.667130470275879,
+    "difference": 9.5367431640625e-7,
+    "device_specific_reduction_contributes": true
+  },
+  "forward_error_analysis": {
+    "terms": 4,
+    "float32_machine_epsilon": 1.1920928955078125e-7,
+    "unit_roundoff_epsilon_over_2": 5.960464477539063e-8,
+    "gamma_3": 1.788139663006007e-7,
+    "sum_absolute_terms": 15.667129755020142,
+    "standard_sequential_sum_absolute_error_bound": 2.8015016120413103e-6,
+    "observed_difference_within_bound": true,
+    "derivation": "gamma_(T-1) * sum(abs(x_i)), where gamma_n = n*u/(1-n*u), u=eps/2, T=4"
+  },
+  "classification_support": "Different valid float32 reduction orders/backends reproduce the discrepancy without changing operands or the mathematical sum."
+}

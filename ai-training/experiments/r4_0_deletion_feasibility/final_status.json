@@ -1,0 +1,46 @@
+{
+  "status": "R4_0_DELETION_READY_WITH_WARNINGS",
+  "acoustic_feasibility_verdict": "DELETION_SIGNAL_UNCERTAIN",
+  "shortcut_severity": "HIGH_DURATION_SHORTCUT",
+  "evidence": {
+    "duration_only_validation_roc_auc": 0.8588509533353419,
+    "duration_only_validation_macro_f1": 0.6681455065707653,
+    "duration_only_validation_deletion_f1": 0.3641642472003318,
+    "central_rms_validation_roc_auc": 0.5213540470489086,
+    "central_silence_validation_roc_auc": 0.4692747915413616,
+    "strict_matched_pairs": 782,
+    "strict_matched_duration_balanced_accuracy": 0.4993606138107417,
+    "strict_matched_energy_balanced_accuracy": 0.5166240409207161
+  },
+  "interpretation": "Raw deletion classification is strongly exposed by annotated interval duration, but not by simple energy or silence measures. Speaker/phone/duration matching removes the duration advantage and retains 782 validation pairs across 33 phones and all six validation speakers. This supports one tightly controlled conditional experiment, but does not yet confirm an acoustic deletion signal.",
+  "recommended_window_seconds": 0.3,
+  "r4_1_design": {
+    "experiment": "one conditional expected-phone compatibility model; not a blind audio-only deletion CNN",
+    "input": "uniform 0.30 s audio log-mel plus canonical expected-phone token, with no duration/start/end/speaker/relation features",
+    "target": "non-deletion=0 for clean correct/substitution; deletion=1 for DELETION_ELIGIBLE",
+    "loss": "TRAIN-only class-weighted CrossEntropy; standard shuffled loader; no sampler, focal loss, or augmentation",
+    "split": "unchanged S1 TRAIN/VALIDATION; R4 TEST closed",
+    "mandatory_ablations": ["FULL audio+phone", "NO-AUDIO phone-only", "NO-PHONE audio-only"],
+    "mandatory_controls": [
+      "full validation and strict speaker+phone+10ms-duration-matched validation",
+      "compare against frozen TRAIN-fit duration baseline",
+      "per-speaker and per-expected-phone metrics",
+      "fixed input tensor length and identical crop/padding for both classes"
+    ],
+    "hard_validation_gates": {
+      "full_macro_f1_min": 0.7,
+      "full_balanced_accuracy_min": 0.72,
+      "full_deletion_f1_min": 0.4,
+      "full_deletion_recall_min": 0.45,
+      "macro_f1_gain_over_duration_baseline_min": 0.03,
+      "strict_matched_balanced_accuracy_min": 0.6,
+      "strict_matched_deletion_f1_min": 0.55,
+      "full_minus_no_audio_matched_macro_f1_min": 0.05,
+      "speaker_with_at_least_30_deletions_recall_min": 0.25
+    }
+  },
+  "training_performed": false,
+  "v4_modified": false,
+  "r4_test_audio_accessed": false,
+  "r3_test_used_for_selection": false
+}

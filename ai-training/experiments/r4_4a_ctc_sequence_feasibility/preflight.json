@@ -1,0 +1,15 @@
+{
+  "source_hashes": {
+    "v4": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D",
+    "checkpoint": "5C66860BBC50BA803F5BFE25417DF19BDF34B1C7BE36D507B0DDCA88D767EA5E",
+    "r43a_oracle": "FF6E73CB0EEA88EF5B6E258B614C0711C59CCF3FB65E46E2AA47594BF26CB528",
+    "r43a_reconstruction": "3440961B65A311ACF2ECC352E4F1DBF589E7628CA37B2BCE49972DDBEB8A1D93"
+  },
+  "train_validation_only": true,
+  "validation_model_inference": false,
+  "validation_audio_read": false,
+  "r4_test_paths_resolved": false,
+  "r4_test_audio_read": false,
+  "r4_test_inference": false,
+  "training_performed": false
+}

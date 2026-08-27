@@ -1,0 +1,12 @@
+{
+  "status": "R5_1_EXECUTION_TECHNICAL_FAILURE_CTC_ALIGNABILITY",
+  "scientific_status_not_assigned": true,
+  "reason": "The frozen pre-score guard requires zero theoretically unalignable KEEP/INSERT candidates, but 196 INSERT candidates across 65 TRAIN words violate the minimum-step condition.",
+  "performance_failure": false,
+  "scores_or_metrics_exposed": false,
+  "gates_passed": null,
+  "gates_total": 6,
+  "robust_theta": "ROBUST_THETA_NOT_AUTHORIZED",
+  "contract_action": "stop before calibration; do not use zero_infinity output as an artificial high score and do not change the score formula",
+  "next_action_not_implemented": "Review the frozen alignability contradiction and, only if scientifically justified, authorize a newly named contract with an explicit treatment for impossible CTC targets."
+}

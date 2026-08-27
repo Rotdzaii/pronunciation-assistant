@@ -1,0 +1,134 @@
+{
+  "full": {
+    "D_T_R_L": {
+      "rows": 5285,
+      "non_deletion_support": 4676,
+      "deletion_support": 609,
+      "accuracy": 0.7912961210974456,
+      "balanced_accuracy": 0.6992505137508235,
+      "macro_f1": 0.6321859989453991,
+      "deletion_precision": 0.2941666666666667,
+      "deletion_recall": 0.5796387520525451,
+      "deletion_f1": 0.3902708678828082,
+      "confusion_matrix": [
+        [
+          3829,
+          847
+        ],
+        [
+          256,
+          353
+        ]
+      ]
+    },
+    "other_phones": {
+      "rows": 23906,
+      "non_deletion_support": 23536,
+      "deletion_support": 370,
+      "accuracy": 0.9829331548565213,
+      "balanced_accuracy": 0.5510669107244566,
+      "macro_f1": 0.5759363865971933,
+      "deletion_precision": 0.33620689655172414,
+      "deletion_recall": 0.10540540540540541,
+      "deletion_f1": 0.16049382716049385,
+      "confusion_matrix": [
+        [
+          23459,
+          77
+        ],
+        [
+          331,
+          39
+        ]
+      ]
+    }
+  },
+  "no_audio": {
+    "D_T_R_L": {
+      "rows": 5285,
+      "non_deletion_support": 4676,
+      "deletion_support": 609,
+      "accuracy": 0.1152317880794702,
+      "balanced_accuracy": 0.5,
+      "macro_f1": 0.10332541567695962,
+      "deletion_precision": 0.1152317880794702,
+      "deletion_recall": 1.0,
+      "deletion_f1": 0.20665083135391923,
+      "confusion_matrix": [
+        [
+          0,
+          4676
+        ],
+        [
+          0,
+          609
+        ]
+      ]
+    },
+    "other_phones": {
+      "rows": 23906,
+      "non_deletion_support": 23536,
+      "deletion_support": 370,
+      "accuracy": 0.9112356730527901,
+      "balanced_accuracy": 0.5558879324599922,
+      "macro_f1": 0.5076529809063213,
+      "deletion_precision": 0.03699788583509514,
+      "deletion_recall": 0.1891891891891892,
+      "deletion_f1": 0.0618921308576481,
+      "confusion_matrix": [
+        [
+          21714,
+          1822
+        ],
+        [
+          300,
+          70
+        ]
+      ]
+    }
+  },
+  "no_phone": {
+    "D_T_R_L": {
+      "rows": 5285,
+      "non_deletion_support": 4676,
+      "deletion_support": 609,
+      "accuracy": 0.871523178807947,
+      "balanced_accuracy": 0.5653520545116663,
+      "macro_f1": 0.5804683186220199,
+      "deletion_precision": 0.3722627737226277,
+      "deletion_recall": 0.16748768472906403,
+      "deletion_f1": 0.2310305775764439,
+      "confusion_matrix": [
+        [
+          4504,
+          172
+        ],
+        [
+          507,
+          102
+        ]
+      ]
+    },
+    "other_phones": {
+      "rows": 23906,
+      "non_deletion_support": 23536,
+      "deletion_support": 370,
+      "accuracy": 0.9754036643520455,
+      "balanced_accuracy": 0.5605440544215188,
+      "macro_f1": 0.5651899770220866,
+      "deletion_precision": 0.1550632911392405,
+      "deletion_recall": 0.13243243243243244,
+      "deletion_f1": 0.14285714285714285,
+      "confusion_matrix": [
+        [
+          23269,
+          267
+        ],
+        [
+          321,
+          49
+        ]
+      ]
+    }
+  }
+}

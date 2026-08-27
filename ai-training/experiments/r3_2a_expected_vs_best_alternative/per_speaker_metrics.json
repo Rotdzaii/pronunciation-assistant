@@ -1,0 +1,121 @@
+{
+  "score": "expected_margin",
+  "global_threshold": -2.338523507118225,
+  "speakers": {
+    "ABA": {
+      "rows": 4752,
+      "accuracy": 0.8836279461279462,
+      "balanced_accuracy": 0.6282132080431883,
+      "macro_f1": 0.5871250751204874,
+      "substitution_precision": 0.18143459915611815,
+      "substitution_recall": 0.3426294820717131,
+      "substitution_f1": 0.23724137931034486,
+      "confusion_matrix": [
+        [
+          4113,
+          388
+        ],
+        [
+          165,
+          86
+        ]
+      ]
+    },
+    "HKK": {
+      "rows": 4802,
+      "accuracy": 0.8740108288213244,
+      "balanced_accuracy": 0.5999618251386581,
+      "macro_f1": 0.5774040227356203,
+      "substitution_precision": 0.1831578947368421,
+      "substitution_recall": 0.28618421052631576,
+      "substitution_f1": 0.22336328626444157,
+      "confusion_matrix": [
+        [
+          4110,
+          388
+        ],
+        [
+          217,
+          87
+        ]
+      ]
+    },
+    "HQTV": {
+      "rows": 4517,
+      "accuracy": 0.8237768430374142,
+      "balanced_accuracy": 0.6301146578034199,
+      "macro_f1": 0.645105289922363,
+      "substitution_precision": 0.4716636197440585,
+      "substitution_recall": 0.33725490196078434,
+      "substitution_f1": 0.3932926829268293,
+      "confusion_matrix": [
+        [
+          3463,
+          289
+        ],
+        [
+          507,
+          258
+        ]
+      ]
+    },
+    "LXC": {
+      "rows": 4709,
+      "accuracy": 0.8222552558929709,
+      "balanced_accuracy": 0.6258104514411016,
+      "macro_f1": 0.6310411313520581,
+      "substitution_precision": 0.3856,
+      "substitution_recall": 0.3472622478386167,
+      "substitution_f1": 0.36542835481425323,
+      "confusion_matrix": [
+        [
+          3631,
+          384
+        ],
+        [
+          453,
+          241
+        ]
+      ]
+    },
+    "MBMPS": {
+      "rows": 4924,
+      "accuracy": 0.855808285946385,
+      "balanced_accuracy": 0.5960081374321881,
+      "macro_f1": 0.5977235278414478,
+      "substitution_precision": 0.28125,
+      "substitution_recall": 0.27,
+      "substitution_f1": 0.2755102040816327,
+      "confusion_matrix": [
+        [
+          4079,
+          345
+        ],
+        [
+          365,
+          135
+        ]
+      ]
+    },
+    "SVBI": {
+      "rows": 4508,
+      "accuracy": 0.8413930789707187,
+      "balanced_accuracy": 0.5469182308641634,
+      "macro_f1": 0.5428455531893317,
+      "substitution_precision": 0.1595744680851064,
+      "substitution_recall": 0.189873417721519,
+      "substitution_f1": 0.17341040462427748,
+      "confusion_matrix": [
+        [
+          3718,
+          395
+        ],
+        [
+          320,
+          75
+        ]
+      ]
+    }
+  },
+  "macro_f1_range": 0.10225973673303135
+}

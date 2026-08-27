@@ -1,0 +1,51 @@
+{
+  "status": "PROVENANCE_VERIFIED",
+  "r5_1a_status": "R5_1A_INSERTION_HYPOTHESIS_SCORING_DEVELOPMENT_PASS",
+  "r5_1a_gates": {"passed": 6, "total": 6},
+  "r5_1a_execution_manifest_sha256": "C9343A75CE26C2BEECA388EBA855E91AE0992D22C0C5D785308D0A98B89A3CD6",
+  "r5_1a_final_status": {
+    "path": "ai-training/experiments/r5_1a_alignability_safe_addition_scoring/r5_1a_final_status.json",
+    "sha256": "47E5936B645B8DC4A0EFBAB971E78872D15FDFE210621C1031F864B0A827CAF3"
+  },
+  "r5_1a_row_accounting": {
+    "path": "ai-training/experiments/r5_1a_alignability_safe_addition_scoring/r5_1a_row_accounting.json",
+    "sha256": "8F69C569F005FF6B2AF70B09865D842153994048670555AA32E3C9DD91D23CFD"
+  },
+  "static_verified_scorer": {
+    "path": "ai-training/experiments/r5_1a_alignability_safe_addition_scoring/r5_1a_scorer.py",
+    "sha256": "4DE49C9070C973EE44EFBD09DFC063C436779E723D12EC7A7A2BC4A06AF35F90",
+    "must_be_imported_without_modification": true
+  },
+  "train_driver_as_population_and_event_provenance": {
+    "path": "ai-training/experiments/r5_1a_alignability_safe_addition_scoring/r5_1a_train_execution_driver.py",
+    "sha256": "80D0E1263BE1744BCC252736BAF9C28F3E5D19C204596D836F3D9C296AB52D5D",
+    "scientific_scoring_may_not_be_reimplemented": true
+  },
+  "frozen_train_metrics": {
+    "addition_vs_all_nonaddition_roc_auc": 0.7734833025081417,
+    "addition_vs_correct_only_roc_auc": 0.802352821409537,
+    "oof_binary_macro_f1": 0.5551978767901391,
+    "addition_precision": 0.1005665722379603,
+    "addition_recall": 0.2198142414860681,
+    "addition_f1": 0.1379980563654033,
+    "correct_only_false_addition_rate": 0.03491295938104449,
+    "exact_event_f1": 0.04389312977099236
+  },
+  "threshold": {
+    "name": "ROBUST_THETA",
+    "value": 0.7485884030659993,
+    "dtype": "float64",
+    "derivation": "ordinary median of 12 TRAIN speaker-LOSO thresholds",
+    "validation_recalibration_permitted": false
+  },
+  "validation_history": {
+    "r5_addition_performance_observed": false,
+    "checkpoint_selected_with_current_validation_PER": true,
+    "evidence_role": "iterative development transfer only"
+  },
+  "modification_audit": {
+    "r5_1a_modified": false,
+    "r5_1_modified": false,
+    "r4_modified": false
+  }
+}

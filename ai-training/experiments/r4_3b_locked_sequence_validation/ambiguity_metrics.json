@@ -1,0 +1,157 @@
+{
+  "words": 7728,
+  "unique_optimal_words": 7718,
+  "numerically_ambiguous_words": 10,
+  "numerically_ambiguous_rate": 0.0012939958592132505,
+  "deletion_predictions_from_ambiguous_words": 11,
+  "path_score_gap": {
+    "count": 7728,
+    "mean": 0.5304423555594419,
+    "median": 0.33984412680090426,
+    "p10": 0.047296741902828114,
+    "p25": 0.13138240121273803,
+    "p75": 0.7241096500462536,
+    "p90": 1.2775371937702098,
+    "p95": 1.6918650816781038,
+    "min": 0.0,
+    "max": 5.005228127887268
+  },
+  "ambiguous_binary": {
+    "rows": 70,
+    "non_deletion_support": 67,
+    "deletion_support": 3,
+    "accuracy": 0.8285714285714286,
+    "balanced_accuracy": 0.5920398009950248,
+    "macro_f1": 0.5238095238095237,
+    "deletion_precision": 0.09090909090909091,
+    "deletion_recall": 0.3333333333333333,
+    "deletion_f1": 0.14285714285714288,
+    "confusion_matrix": [
+      [
+        57,
+        10
+      ],
+      [
+        2,
+        1
+      ]
+    ]
+  },
+  "ambiguous_3class": {
+    "rows": 70,
+    "labels": [
+      "correct",
+      "substitution",
+      "deletion"
+    ],
+    "macro_f1": 0.33252470799640615,
+    "macro_precision": 0.35040885040885034,
+    "macro_recall": 0.3852459016393442,
+    "per_class": {
+      "correct": {
+        "support": 61,
+        "precision": 0.8888888888888888,
+        "recall": 0.6557377049180327,
+        "f1": 0.7547169811320755
+      },
+      "substitution": {
+        "support": 6,
+        "precision": 0.07142857142857142,
+        "recall": 0.16666666666666666,
+        "f1": 0.1
+      },
+      "deletion": {
+        "support": 3,
+        "precision": 0.09090909090909091,
+        "recall": 0.3333333333333333,
+        "f1": 0.14285714285714288
+      }
+    },
+    "confusion_matrix": [
+      [
+        40,
+        13,
+        8
+      ],
+      [
+        3,
+        1,
+        2
+      ],
+      [
+        2,
+        0,
+        1
+      ]
+    ]
+  },
+  "unambiguous_binary": {
+    "rows": 26267,
+    "non_deletion_support": 25356,
+    "deletion_support": 911,
+    "accuracy": 0.962576617048007,
+    "balanced_accuracy": 0.504929756361617,
+    "macro_f1": 0.5023778954580151,
+    "deletion_precision": 0.125,
+    "deletion_recall": 0.013172338090010977,
+    "deletion_f1": 0.023833167825223434,
+    "confusion_matrix": [
+      [
+        25272,
+        84
+      ],
+      [
+        899,
+        12
+      ]
+    ]
+  },
+  "unambiguous_3class": {
+    "rows": 26267,
+    "labels": [
+      "correct",
+      "substitution",
+      "deletion"
+    ],
+    "macro_f1": 0.38466579650204746,
+    "macro_precision": 0.4092426063123053,
+    "macro_recall": 0.39293255148938694,
+    "per_class": {
+      "correct": {
+        "support": 22698,
+        "precision": 0.8945515359563418,
+        "recall": 0.8954974006520399,
+        "f1": 0.8950242184059886
+      },
+      "substitution": {
+        "support": 2658,
+        "precision": 0.20817628298057408,
+        "recall": 0.27012791572610984,
+        "f1": 0.2351400032749304
+      },
+      "deletion": {
+        "support": 911,
+        "precision": 0.125,
+        "recall": 0.013172338090010977,
+        "f1": 0.023833167825223434
+      }
+    },
+    "confusion_matrix": [
+      [
+        20326,
+        2305,
+        67
+      ],
+      [
+        1923,
+        718,
+        17
+      ],
+      [
+        473,
+        426,
+        12
+      ]
+    ]
+  }
+}

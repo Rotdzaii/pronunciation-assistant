@@ -1,0 +1,48 @@
+{
+  "status": "PASS",
+  "v1_driver_sha256": "5F12FB5E6B0A4765107DCAD3C822F32E6909940E9FAE265F5C3E3551ACB6AE22",
+  "v2_driver_sha256": "B2894879020B59B7CD11AB39BAD8B98727CA4368D545111A29A26F190DA746AC",
+  "allowed_semantic_changes": [
+    {
+      "id": 1,
+      "change": "source_csv_row canonicalization +2",
+      "v2_implementation": ["canonical_source_csv_row", "canonical_metadata_ids", "canonicalize_scored_rows", "identity_mapping_audit"],
+      "tests": ["A", "B", "C", "D", "I"]
+    },
+    {
+      "id": 2,
+      "change": "remove and reject TRAIN calibration execution path",
+      "v2_implementation": ["reject_train_recalibration", "execute_validation_only", "parse_args"],
+      "static_evidence": "v2 contains no call to select_train_threshold and exposes no TRAIN execution mode",
+      "tests": ["G"]
+    },
+    {
+      "id": 3,
+      "change": "load immutable v1 threshold artifact",
+      "v2_implementation": ["load_frozen_threshold"],
+      "tests": ["E", "F"]
+    },
+    {
+      "id": 4,
+      "change": "future output directory locked_execution_v2",
+      "v2_implementation": ["LOCKED_OUTPUT", "execute_validation_only"],
+      "static_evidence": "v1 output directory is never overwritten"
+    }
+  ],
+  "unchanged_semantics": {
+    "acoustic_model_features_and_raw_hypothesis_scoring": "imports and calls frozen v1.score_population",
+    "threshold_decision": "imports and calls frozen v1.apply_threshold with immutable theta",
+    "matched_guard": "imports frozen v1.read_matched_ids and v1.matched_control_guard",
+    "binary_three_class_speaker_continuous_metrics": "imports frozen v1.validation_diagnostics",
+    "phone_position_multi_error_length_duration_metrics": "imports frozen v1.grouped_deletion_metrics and frozen bucket definitions",
+    "classification_and_gates": "imports frozen v1.classify_result and loads unchanged R4-4D1A numerical contract",
+    "test_guard": "imports frozen v1.guard_test_speakers_before_resolution and calls it before audio-root resolution",
+    "checkpoint_and_validation_population": "loaded from unchanged R4-4D1A numerical contract"
+  },
+  "additional_output_only_diagnostics": ["BEST_SUB_PHONE coverage/top-1 accuracy", "rescued-to-correct/substitution counts"],
+  "scoring_model_metric_or_gate_changes": 0,
+  "missing_required_rules": 0,
+  "unexpected_semantic_changes": 0,
+  "allowed_change_count": 4,
+  "pass": true
+}

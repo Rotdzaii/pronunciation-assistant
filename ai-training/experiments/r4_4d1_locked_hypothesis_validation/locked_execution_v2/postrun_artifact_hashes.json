@@ -1,0 +1,20 @@
+{
+  "algorithm": "SHA-256",
+  "driver_generated_manifest": {
+    "path": "artifact_hashes.json",
+    "sha256": "447D55708D20FC7506C0A49C9F8909B8E7AFDDEEF46F54FC63F99C322AC42577",
+    "entries": 21,
+    "verified_mismatches": 0,
+    "modified": false
+  },
+  "supplemental_reporting_artifacts": {
+    "identity_mapping_verification.json": "6FBF825EB03DB2438332A8429A262AA03799C9CD9E492D5CF814629B1F219CF3",
+    "gate_results.json": "B917314AFD47372CD2152A9540361DAB2A11672FF357E9746BA65A700E8F7A51",
+    "execution_record.json": "4FF7CD297EDA4039CB5E835DEACFCBC407D52EB7E44B7EDE16D1AC3FA8AE965F",
+    "r4_4d1_v2_report.md": "D77F6490420424A09A41F1A6762C7F21219D1015CA149083D5D2A085906E7C8D"
+  },
+  "metric_prediction_threshold_or_classification_changes": false,
+  "rerun": false,
+  "training": false,
+  "test_accessed": false
+}

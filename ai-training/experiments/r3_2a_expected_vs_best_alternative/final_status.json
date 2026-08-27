@@ -1,0 +1,58 @@
+{
+  "status": "R3_2A_SCORING_WEAK",
+  "best_score": "expected_margin",
+  "calibration_suitability": "NOT_YET_SUITABLE",
+  "hard_argmax": {
+    "rows": 28212,
+    "accuracy": 0.5678434708634623,
+    "balanced_accuracy": 0.665830471570098,
+    "macro_f1": 0.48301289296711397,
+    "substitution_precision": 0.16547747747747749,
+    "substitution_recall": 0.789274664833276,
+    "substitution_f1": 0.2735938989513823,
+    "confusion_matrix": [
+      [
+        13724,
+        11579
+      ],
+      [
+        613,
+        2296
+      ]
+    ]
+  },
+  "best_continuous": {
+    "score": "expected_margin",
+    "direction": "predict substitution when score <= threshold",
+    "candidate_thresholds_evaluated": 28210,
+    "tie_break": "higher Macro-F1; higher substitution F1; higher substitution precision; lower/more-conservative threshold",
+    "threshold": -2.338523507118225,
+    "metrics": {
+      "rows": 28212,
+      "accuracy": 0.8505600453707642,
+      "balanced_accuracy": 0.6083427470266964,
+      "macro_f1": 0.6057027243562119,
+      "substitution_precision": 0.2872028655161185,
+      "substitution_recall": 0.3031969749054658,
+      "substitution_f1": 0.2949832775919733,
+      "confusion_matrix": [
+        [
+          23114,
+          2189
+        ],
+        [
+          2027,
+          882
+        ]
+      ]
+    }
+  },
+  "improvement": {
+    "macro_f1": 0.12268983138909789,
+    "substitution_f1": 0.021389378640590984,
+    "substitution_recall": 0.3031969749054658,
+    "meaningful": false
+  },
+  "test_opened": false,
+  "test_audio_accessed": false
+}

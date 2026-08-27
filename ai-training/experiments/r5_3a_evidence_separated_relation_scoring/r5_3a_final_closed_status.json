@@ -1,0 +1,16 @@
+{
+  "status": "R5_3A_EVIDENCE_SEPARATION_GENERATION_CLOSED_NOT_CONFIRMED",
+  "development_result": "NOT_CONFIRMED",
+  "gates_passed": 6,
+  "gates_total": 8,
+  "failed_gates": [
+    "G6_SUBSTITUTION_NEGATIVE_FAR",
+    "G7_DELETION_NEGATIVE_FAR"
+  ],
+  "robust_threshold_authorized": false,
+  "robust_threshold_status": "R5_3A_ROBUST_THETA_NOT_AUTHORIZED",
+  "validation_accessed": false,
+  "test_accessed": false,
+  "generation_closed": true,
+  "future_generation_automatic": false
+}

@@ -1,0 +1,69 @@
+{
+  "stage": "R6-0_LOCAL_BOUNDARY_ADDITION_FEASIBILITY",
+  "next_stage_name": "R6-1_LOCAL_BOUNDARY_EVIDENCE_TRAIN_FEASIBILITY",
+  "status": "PREREGISTERED_NOT_EXECUTED",
+  "purpose": "test whether a single fixed local boundary posterior-mass score has useful and speaker-consistent ranking signal",
+  "precondition": "synthetic/static verification of boundary mapping, frame indexing, feature formulas, label independence, and R5 mechanism separation",
+  "execution": {
+    "split": "TRAIN only",
+    "checkpoint": "frozen R4-4C2 checkpoint",
+    "inference_passes": 1,
+    "audio_crop": "historical MFA word span",
+    "boundary_reference": "GOLD/manual V4 oracle boundary",
+    "window": "five nominal output steps k-2..k+2, clipped only to available output indices",
+    "primary_score": "MEAN_UNEXPECTED_PHONE_MASS",
+    "classifier_fitting": false,
+    "threshold_selection": false,
+    "word_level_detector": false,
+    "insert_candidate_enumeration": false
+  },
+  "registered_outputs": [
+    "Addition-event valid anchor/window coverage over 342 events",
+    "positive-boundary valid anchor/window coverage over 324 boundary identities",
+    "pooled boundary ROC-AUC for MEAN_UNEXPECTED_PHONE_MASS",
+    "12 per-speaker ROC-AUC values",
+    "median per-speaker ROC-AUC",
+    "count of speakers with ROC-AUC > 0.55"
+  ],
+  "speaker_disjoint_policy": "Because the score is fixed and no model or normalization is fitted, each TRAIN speaker is reported as one held-out partition without calibration on that speaker or any other speaker.",
+  "gates": {
+    "F1": {
+      "metric": "valid anchor/window coverage over frozen Addition events",
+      "operator": ">=",
+      "threshold": 0.99,
+      "denominator": 342
+    },
+    "F2": {
+      "metric": "pooled boundary ROC-AUC for MEAN_UNEXPECTED_PHONE_MASS",
+      "operator": ">=",
+      "threshold": 0.65
+    },
+    "F3": {
+      "metric": "median of 12 TRAIN-speaker ROC-AUC values",
+      "operator": ">=",
+      "threshold": 0.6
+    },
+    "F4": {
+      "metric": "number of TRAIN speakers with ROC-AUC > 0.55",
+      "operator": ">=",
+      "threshold": 9,
+      "denominator": 12
+    }
+  },
+  "pass_rule": "4/4 gates -> R6_1_LOCAL_BOUNDARY_EVIDENCE_FEASIBLE; only a separately named and preregistered development stage may follow",
+  "failure_rule": "any valid gate failure -> R6_1_LOCAL_BOUNDARY_EVIDENCE_NOT_CONFIRMED; stop this mechanism",
+  "technical_stop_rule": "identity, mapping, undefined-speaker-AUC, coverage, or numerical failure is technical and must not be relabeled scientific failure",
+  "forbidden_after_metrics": [
+    "window search",
+    "feature selection",
+    "classifier fitting",
+    "threshold search",
+    "speaker exclusion",
+    "phone exclusion",
+    "boundary-position exclusion",
+    "VALIDATION access",
+    "TEST access"
+  ],
+  "final_production_threshold_authorized": false
+}
+

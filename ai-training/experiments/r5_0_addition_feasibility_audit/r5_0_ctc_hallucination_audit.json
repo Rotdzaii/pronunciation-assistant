@@ -1,0 +1,179 @@
+{
+  "scope": "TRAIN correct-only words",
+  "correct_only_words": 10340,
+  "words_with_at_least_one_greedy_insert": 562,
+  "false_insertion_word_rate": 0.05435203094777563,
+  "insertion_edits": 588,
+  "insertion_edits_per_word": 0.05686653771760155,
+  "true_addition_words": 323,
+  "greedy_insertion_positive_true_addition_words": 78,
+  "greedy_insertion_positive_rate_true_addition_words": 0.24148606811145512,
+  "greedy_insertion_positive_rate_correct_only_words": 0.05435203094777563,
+  "ADDITION_INSERTION_RATE_DELTA": 0.1871340371636795,
+  "directional_signal": true,
+  "most_common_hallucinated_inserted_phones_all_eligible_train": [
+    [
+      "D",
+      133
+    ],
+    [
+      "T",
+      119
+    ],
+    [
+      "N",
+      80
+    ],
+    [
+      "AH",
+      70
+    ],
+    [
+      "IH",
+      68
+    ],
+    [
+      "IY",
+      65
+    ],
+    [
+      "UW",
+      39
+    ],
+    [
+      "R",
+      38
+    ],
+    [
+      "S",
+      38
+    ],
+    [
+      "M",
+      32
+    ],
+    [
+      "V",
+      28
+    ],
+    [
+      "L",
+      24
+    ],
+    [
+      "EY",
+      23
+    ],
+    [
+      "K",
+      17
+    ],
+    [
+      "B",
+      16
+    ],
+    [
+      "AO",
+      15
+    ],
+    [
+      "HH",
+      13
+    ],
+    [
+      "F",
+      13
+    ],
+    [
+      "AE",
+      12
+    ],
+    [
+      "OW",
+      9
+    ]
+  ],
+  "most_common_hallucinated_inserted_phones_correct_only": [
+    [
+      "D",
+      73
+    ],
+    [
+      "T",
+      72
+    ],
+    [
+      "N",
+      56
+    ],
+    [
+      "IY",
+      45
+    ],
+    [
+      "IH",
+      41
+    ],
+    [
+      "UW",
+      35
+    ],
+    [
+      "AH",
+      34
+    ],
+    [
+      "R",
+      27
+    ],
+    [
+      "M",
+      24
+    ],
+    [
+      "V",
+      20
+    ],
+    [
+      "S",
+      20
+    ],
+    [
+      "L",
+      18
+    ],
+    [
+      "EY",
+      17
+    ],
+    [
+      "K",
+      11
+    ],
+    [
+      "HH",
+      10
+    ],
+    [
+      "B",
+      9
+    ],
+    [
+      "AE",
+      7
+    ],
+    [
+      "F",
+      7
+    ],
+    [
+      "P",
+      7
+    ],
+    [
+      "AO",
+      7
+    ]
+  ],
+  "technical_correction": "R5_0_TECHNICAL_CORRECTION_001"
+}

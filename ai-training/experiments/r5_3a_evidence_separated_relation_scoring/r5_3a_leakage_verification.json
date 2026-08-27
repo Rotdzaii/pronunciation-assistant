@@ -1,0 +1,51 @@
+{
+  "stage": "R5-3A synthetic leakage verification",
+  "status": "PASS",
+  "fixture": {
+    "heldout_speaker": "S3",
+    "calibration_speakers": [
+      "S0",
+      "S1",
+      "S2"
+    ],
+    "calibration_rows": 18,
+    "heldout_rows": 6,
+    "heldout_features_are_extreme": true
+  },
+  "scaler": {
+    "fit_rows": "calibration only",
+    "mean": [
+      -0.12999999999999995,
+      0.12333333333333335,
+      -0.034999999999999996
+    ],
+    "scale": [
+      1.346575904532183,
+      0.33334999958335415,
+      0.3427584183259885
+    ],
+    "variance": [
+      1.8132666666666668,
+      0.11112222222222222,
+      0.11748333333333333
+    ],
+    "matches_independent_calibration_reference": true,
+    "heldout_rows_contributed": false,
+    "heldout_transformed_with_same_scaler": true,
+    "second_scaler_created": false,
+    "heldout_fit_transform": false
+  },
+  "classifier": {
+    "fit_rows": "calibration only",
+    "heldout_features_contributed": false,
+    "heldout_labels_contributed": false
+  },
+  "threshold": {
+    "selection_rows": "calibration only",
+    "heldout_probabilities_contributed": false,
+    "heldout_labels_contributed": false,
+    "heldout_label_mutation_changed_threshold": false,
+    "heldout_label_mutation_changed_model": false
+  },
+  "speaker_isolation": "PASS"
+}

@@ -1,0 +1,119 @@
+{
+  "device": "cuda",
+  "validation": {
+    "features": {
+      "words": 7728,
+      "seconds": 7.048907600001257,
+      "sample_length": {
+        "count": 7728,
+        "min": 480.0,
+        "median": 4960.0,
+        "mean": 5537.515527950311,
+        "p90": 9760.0,
+        "p95": 11520.0,
+        "max": 25440.0
+      },
+      "feature_frames": {
+        "count": 7728,
+        "min": 4.0,
+        "median": 32.0,
+        "mean": 35.609472049689444,
+        "p90": 62.0,
+        "p95": 73.0,
+        "max": 160.0
+      },
+      "encoder_output_steps": {
+        "count": 7728,
+        "min": 2.0,
+        "median": 16.0,
+        "mean": 17.554477225672876,
+        "p90": 31.0,
+        "p95": 36.0,
+        "max": 80.0
+      },
+      "edge_padded_words": 0,
+      "edge_padding_samples": 0,
+      "unalignable_words": 0,
+      "unalignable_word_ids": []
+    },
+    "inference": {
+      "words": 7728,
+      "seconds": 1.3478826999999,
+      "encoder_steps": {
+        "count": 7728,
+        "mean": 17.554477225672876,
+        "median": 16.0,
+        "p10": 7.0,
+        "p25": 10.0,
+        "p75": 23.0,
+        "p90": 31.0,
+        "min": 2.0,
+        "max": 80.0
+      }
+    },
+    "hypothesis_scoring": {
+      "total_hypotheses": 1061208,
+      "average_hypotheses_per_word": 137.3198757763975,
+      "keep_hypotheses": 7728,
+      "delete_hypotheses": 26337,
+      "substitution_hypotheses": 1027143,
+      "batch_size": 4096,
+      "seconds": 16.808421500005352,
+      "theoretically_unalignable": {},
+      "nonfinite_returned_scores": 0
+    },
+    "seconds": 26.00986560000456
+  },
+  "validation_seconds": 27.88987790000101,
+  "validation_population": {
+    "words": 7728,
+    "relations": {
+      "correct": 22759,
+      "substitution": 2664,
+      "deletion": 914
+    },
+    "reconstruction": {
+      "counts": {
+        "validation_candidate": 8494,
+        "validation_usable": 7728,
+        "addition_words_excluded": 244,
+        "malformed_or_unresolved_words": 538,
+        "substitution_plus_deletion_words": 283,
+        "multiple_deletion_words": 95,
+        "addition_plus_deletion_words": 28,
+        "unavailable_word_boundary": 1
+      },
+      "target_rows_without_manual_word": {
+        "total": 31,
+        "by_relation": {
+          "addition": 30,
+          "substitution": 1
+        }
+      },
+      "invalid_forced_alignment_phone_labels": {
+        "spn": 6
+      },
+      "mfa_vs_manual_boundary_start_error_seconds": {
+        "count": 8493,
+        "mean": 0.006765528993863521,
+        "median": 0.0,
+        "p10": 0.0,
+        "p25": 0.0,
+        "p75": 0.0,
+        "p90": 0.010000000000000009
+      },
+      "mfa_vs_manual_boundary_end_error_seconds": {
+        "count": 8493,
+        "mean": 0.008525998742685885,
+        "median": 0.0,
+        "p10": 0.0,
+        "p25": 0.0,
+        "p75": 0.0,
+        "p90": 0.010000000000000231
+      }
+    }
+  },
+  "train_scoring": false,
+  "train_recalibration": false,
+  "locked_execution": "v2"
+}

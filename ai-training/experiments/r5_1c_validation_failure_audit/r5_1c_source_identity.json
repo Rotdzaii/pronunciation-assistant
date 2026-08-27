@@ -1,0 +1,311 @@
+{
+  "status": "PASS",
+  "verified_at": "2026-08-18T08:52:18+07:00",
+  "identities": [
+    {
+      "name": "r5_1b_contract",
+      "path": "ai-training/experiments/r5_1b_validation_transfer/R5_1B_VALIDATION_CONTRACT.json",
+      "expected_sha256": "BD169175C0777B1C37506E95350CB6AD90A992045527396DDE5DA4419779AC4A",
+      "actual_sha256": "BD169175C0777B1C37506E95350CB6AD90A992045527396DDE5DA4419779AC4A",
+      "byte_size": 16243,
+      "pass": true
+    },
+    {
+      "name": "r5_1b_execution_manifest",
+      "path": "ai-training/experiments/r5_1b_validation_transfer/R5_1B_EXECUTION_MANIFEST.json",
+      "expected_sha256": "B1E053F8B80F6EDCBB4195BA632B1215E9FA42A7AA0AF5C2950D92AFF6E0771E",
+      "actual_sha256": "B1E053F8B80F6EDCBB4195BA632B1215E9FA42A7AA0AF5C2950D92AFF6E0771E",
+      "byte_size": 3236,
+      "pass": true
+    },
+    {
+      "name": "r5_1a_execution_manifest",
+      "path": "ai-training/experiments/r5_1a_alignability_safe_addition_scoring/R5_1A_EXECUTION_MANIFEST.json",
+      "expected_sha256": "C9343A75CE26C2BEECA388EBA855E91AE0992D22C0C5D785308D0A98B89A3CD6",
+      "actual_sha256": "C9343A75CE26C2BEECA388EBA855E91AE0992D22C0C5D785308D0A98B89A3CD6",
+      "byte_size": 2971,
+      "pass": true
+    },
+    {
+      "name": "scorer",
+      "path": "ai-training/experiments/r5_1a_alignability_safe_addition_scoring/r5_1a_scorer.py",
+      "expected_sha256": "4DE49C9070C973EE44EFBD09DFC063C436779E723D12EC7A7A2BC4A06AF35F90",
+      "actual_sha256": "4DE49C9070C973EE44EFBD09DFC063C436779E723D12EC7A7A2BC4A06AF35F90",
+      "byte_size": 10711,
+      "pass": true
+    },
+    {
+      "name": "v4",
+      "path": "ai-training/datasets/l2-arctic/metadata/all_speakers_expected_observed_v4.csv",
+      "expected_sha256": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D",
+      "actual_sha256": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D",
+      "byte_size": 48727961,
+      "pass": true
+    },
+    {
+      "name": "checkpoint",
+      "path": "ai-training/experiments/r4_4c2_bigru_ctc_seed42/R4_4C2_bigru_ctc_phone_sequence_seed42_best_validation_per.pt",
+      "expected_sha256": "F54C9C2361AE78E1C37353AEB338A2DE6722C0B1EC4F885F6B52688CE9E88085",
+      "actual_sha256": "F54C9C2361AE78E1C37353AEB338A2DE6722C0B1EC4F885F6B52688CE9E88085",
+      "byte_size": 813093,
+      "pass": true
+    }
+  ],
+  "manifest_entry_count": 28,
+  "all_manifest_entries_pass": true,
+  "manifest_entries": [
+    {
+      "manifest": "R5_1A_EXECUTION_MANIFEST.json",
+      "relative_path": "r5_1a_train_execution_driver.py",
+      "expected_sha256": "80D0E1263BE1744BCC252736BAF9C28F3E5D19C204596D836F3D9C296AB52D5D",
+      "actual_sha256": "80D0E1263BE1744BCC252736BAF9C28F3E5D19C204596D836F3D9C296AB52D5D",
+      "expected_byte_size": 49537,
+      "actual_byte_size": 49537,
+      "pass": true
+    },
+    {
+      "manifest": "R5_1A_EXECUTION_MANIFEST.json",
+      "relative_path": "r5_1a_row_accounting.json",
+      "expected_sha256": "8F69C569F005FF6B2AF70B09865D842153994048670555AA32E3C9DD91D23CFD",
+      "actual_sha256": "8F69C569F005FF6B2AF70B09865D842153994048670555AA32E3C9DD91D23CFD",
+      "expected_byte_size": 2204,
+      "actual_byte_size": 2204,
+      "pass": true
+    },
+    {
+      "manifest": "R5_1A_EXECUTION_MANIFEST.json",
+      "relative_path": "r5_1a_alignability_audit.json",
+      "expected_sha256": "9C178C62CBBB9970F7B5B976A3CF1B9A179EE392755B618FD36AE71D3AC0AB52",
+      "actual_sha256": "9C178C62CBBB9970F7B5B976A3CF1B9A179EE392755B618FD36AE71D3AC0AB52",
+      "expected_byte_size": 6246,
+      "actual_byte_size": 6246,
+      "pass": true
+    },
+    {
+      "manifest": "R5_1A_EXECUTION_MANIFEST.json",
+      "relative_path": "r5_1a_train_scores.jsonl",
+      "expected_sha256": "5117AB0D8D4E85A8E103BA1D2135B8F14FE4CEB3B6440A46137B6B29742FA28B",
+      "actual_sha256": "5117AB0D8D4E85A8E103BA1D2135B8F14FE4CEB3B6440A46137B6B29742FA28B",
+      "expected_byte_size": 16560475,
+      "actual_byte_size": 16560475,
+      "pass": true
+    },
+    {
+      "manifest": "R5_1A_EXECUTION_MANIFEST.json",
+      "relative_path": "r5_1a_continuous_metrics.json",
+      "expected_sha256": "479BE9EDC9C493C6BC9C460E708900C7B0D40F6282C17E994C4303C5EF3A1DCD",
+      "actual_sha256": "479BE9EDC9C493C6BC9C460E708900C7B0D40F6282C17E994C4303C5EF3A1DCD",
+      "expected_byte_size": 15856,
+      "actual_byte_size": 15856,
+      "pass": true
+    },
+    {
+      "manifest": "R5_1A_EXECUTION_MANIFEST.json",
+      "relative_path": "r5_1a_loso_fold_thresholds.json",
+      "expected_sha256": "3A29C887B0E8D7C8765315CA29E4E07F2DCD460DF1DDC01CEBD03E87BF213ED8",
+      "actual_sha256": "3A29C887B0E8D7C8765315CA29E4E07F2DCD460DF1DDC01CEBD03E87BF213ED8",
+      "expected_byte_size": 16543,
+      "actual_byte_size": 16543,
+      "pass": true
+    },
+    {
+      "manifest": "R5_1A_EXECUTION_MANIFEST.json",
+      "relative_path": "r5_1a_oof_predictions.jsonl",
+      "expected_sha256": "644B86E9F213078D772752AF6513E2F42A81D9EE1A11DFAC085E191780C4CA8E",
+      "actual_sha256": "644B86E9F213078D772752AF6513E2F42A81D9EE1A11DFAC085E191780C4CA8E",
+      "expected_byte_size": 18009257,
+      "actual_byte_size": 18009257,
+      "pass": true
+    },
+    {
+      "manifest": "R5_1A_EXECUTION_MANIFEST.json",
+      "relative_path": "r5_1a_binary_metrics.json",
+      "expected_sha256": "BD899909D3C8BFEFA8A75E043D270A3385E1E9441EECB0F41F5A20D1D769926D",
+      "actual_sha256": "BD899909D3C8BFEFA8A75E043D270A3385E1E9441EECB0F41F5A20D1D769926D",
+      "expected_byte_size": 942,
+      "actual_byte_size": 942,
+      "pass": true
+    },
+    {
+      "manifest": "R5_1A_EXECUTION_MANIFEST.json",
+      "relative_path": "r5_1a_event_metrics.json",
+      "expected_sha256": "549380F7861FDF00759536519E14D2578B40928C59434863D4141670F4400DF2",
+      "actual_sha256": "549380F7861FDF00759536519E14D2578B40928C59434863D4141670F4400DF2",
+      "expected_byte_size": 1214,
+      "actual_byte_size": 1214,
+      "pass": true
+    },
+    {
+      "manifest": "R5_1A_EXECUTION_MANIFEST.json",
+      "relative_path": "r5_1a_gate_results.json",
+      "expected_sha256": "8BE4B48F87B98F9440E719EA2BA75F17D11109185A5BC1F083D554B35A930383",
+      "actual_sha256": "8BE4B48F87B98F9440E719EA2BA75F17D11109185A5BC1F083D554B35A930383",
+      "expected_byte_size": 2159,
+      "actual_byte_size": 2159,
+      "pass": true
+    },
+    {
+      "manifest": "R5_1A_EXECUTION_MANIFEST.json",
+      "relative_path": "r5_1a_execution_protocol_audit.json",
+      "expected_sha256": "EB21831257BC38128E59DBDF71894CAF9EE731799B7BD5F3D393D84E17605E73",
+      "actual_sha256": "EB21831257BC38128E59DBDF71894CAF9EE731799B7BD5F3D393D84E17605E73",
+      "expected_byte_size": 515,
+      "actual_byte_size": 515,
+      "pass": true
+    },
+    {
+      "manifest": "R5_1A_EXECUTION_MANIFEST.json",
+      "relative_path": "r5_1a_final_status.json",
+      "expected_sha256": "47E5936B645B8DC4A0EFBAB971E78872D15FDFE210621C1031F864B0A827CAF3",
+      "actual_sha256": "47E5936B645B8DC4A0EFBAB971E78872D15FDFE210621C1031F864B0A827CAF3",
+      "expected_byte_size": 1610,
+      "actual_byte_size": 1610,
+      "pass": true
+    },
+    {
+      "manifest": "R5_1A_EXECUTION_MANIFEST.json",
+      "relative_path": "r5_1a_compute_report.json",
+      "expected_sha256": "38B6294FEBF5C6788CBCD1F1034C12E29927517AE0D45E72F1A1E587EF03E507",
+      "actual_sha256": "38B6294FEBF5C6788CBCD1F1034C12E29927517AE0D45E72F1A1E587EF03E507",
+      "expected_byte_size": 1538,
+      "actual_byte_size": 1538,
+      "pass": true
+    },
+    {
+      "manifest": "R5_1A_EXECUTION_MANIFEST.json",
+      "relative_path": "R5_1A_TRAIN_DEVELOPMENT_RESULT.md",
+      "expected_sha256": "AA9913901E7E53CE61B142766E6D61B2BB5C3BF2F671EA9B7212DD2129F2A1D3",
+      "actual_sha256": "AA9913901E7E53CE61B142766E6D61B2BB5C3BF2F671EA9B7212DD2129F2A1D3",
+      "expected_byte_size": 1689,
+      "actual_byte_size": 1689,
+      "pass": true
+    },
+    {
+      "manifest": "R5_1B_EXECUTION_MANIFEST.json",
+      "relative_path": "r5_1b_validation_execution_driver.py",
+      "expected_sha256": "39B8F559DE380F591B358BA31E6E0AC5B3E351BDFFCEADEE9868DD526F92DC76",
+      "actual_sha256": "39B8F559DE380F591B358BA31E6E0AC5B3E351BDFFCEADEE9868DD526F92DC76",
+      "expected_byte_size": 40776,
+      "actual_byte_size": 40776,
+      "pass": true
+    },
+    {
+      "manifest": "R5_1B_EXECUTION_MANIFEST.json",
+      "relative_path": "r5_1b_population_accounting.json",
+      "expected_sha256": "DC975592ABBCEF000D0EB440192B68ACA43E1E59EC085F9CDB7D5286A37808C1",
+      "actual_sha256": "DC975592ABBCEF000D0EB440192B68ACA43E1E59EC085F9CDB7D5286A37808C1",
+      "expected_byte_size": 2627,
+      "actual_byte_size": 2627,
+      "pass": true
+    },
+    {
+      "manifest": "R5_1B_EXECUTION_MANIFEST.json",
+      "relative_path": "r5_1b_alignability_audit.json",
+      "expected_sha256": "CA61081C4321D1CACE068F85E2447731D65BC1F9E07F358EB0455C8B005D6750",
+      "actual_sha256": "CA61081C4321D1CACE068F85E2447731D65BC1F9E07F358EB0455C8B005D6750",
+      "expected_byte_size": 4794,
+      "actual_byte_size": 4794,
+      "pass": true
+    },
+    {
+      "manifest": "R5_1B_EXECUTION_MANIFEST.json",
+      "relative_path": "r5_1b_validation_scores.jsonl",
+      "expected_sha256": "5BD5924B690299AB8D25F9D080F894C70CC5B9DD73FC20066F4CDDC876EAA5EF",
+      "actual_sha256": "5BD5924B690299AB8D25F9D080F894C70CC5B9DD73FC20066F4CDDC876EAA5EF",
+      "expected_byte_size": 8141185,
+      "actual_byte_size": 8141185,
+      "pass": true
+    },
+    {
+      "manifest": "R5_1B_EXECUTION_MANIFEST.json",
+      "relative_path": "r5_1b_continuous_metrics.json",
+      "expected_sha256": "699027D27605F0DC44983EFC2FBB83C71FBF849564B68AEBD9AC86980005D851",
+      "actual_sha256": "699027D27605F0DC44983EFC2FBB83C71FBF849564B68AEBD9AC86980005D851",
+      "expected_byte_size": 4933,
+      "actual_byte_size": 4933,
+      "pass": true
+    },
+    {
+      "manifest": "R5_1B_EXECUTION_MANIFEST.json",
+      "relative_path": "r5_1b_binary_metrics.json",
+      "expected_sha256": "3A03D249749B69EC63F1271A32E4EBF7CDF97E256DF09E32EACE36A78CB936E4",
+      "actual_sha256": "3A03D249749B69EC63F1271A32E4EBF7CDF97E256DF09E32EACE36A78CB936E4",
+      "expected_byte_size": 1007,
+      "actual_byte_size": 1007,
+      "pass": true
+    },
+    {
+      "manifest": "R5_1B_EXECUTION_MANIFEST.json",
+      "relative_path": "r5_1b_per_speaker_metrics.json",
+      "expected_sha256": "2E9C604AA189444560B3734CD37C2579C34D970CE16495E076299D8A5194D1FE",
+      "actual_sha256": "2E9C604AA189444560B3734CD37C2579C34D970CE16495E076299D8A5194D1FE",
+      "expected_byte_size": 4994,
+      "actual_byte_size": 4994,
+      "pass": true
+    },
+    {
+      "manifest": "R5_1B_EXECUTION_MANIFEST.json",
+      "relative_path": "r5_1b_event_metrics.json",
+      "expected_sha256": "316410E6C043ED5C3A382BD49575E547E8720151EF17B92A7D90177AD88986CE",
+      "actual_sha256": "316410E6C043ED5C3A382BD49575E547E8720151EF17B92A7D90177AD88986CE",
+      "expected_byte_size": 1193,
+      "actual_byte_size": 1193,
+      "pass": true
+    },
+    {
+      "manifest": "R5_1B_EXECUTION_MANIFEST.json",
+      "relative_path": "r5_1b_train_validation_deltas.json",
+      "expected_sha256": "553DD0CA1749739D29569CB089E120216B68518D85910D46601D8B63ACC38BEA",
+      "actual_sha256": "553DD0CA1749739D29569CB089E120216B68518D85910D46601D8B63ACC38BEA",
+      "expected_byte_size": 1356,
+      "actual_byte_size": 1356,
+      "pass": true
+    },
+    {
+      "manifest": "R5_1B_EXECUTION_MANIFEST.json",
+      "relative_path": "r5_1b_gate_results.json",
+      "expected_sha256": "1BD81E83584B263AA06BE7556BEDFE05E43DD97AD2727D73AFF88931AC8FBE80",
+      "actual_sha256": "1BD81E83584B263AA06BE7556BEDFE05E43DD97AD2727D73AFF88931AC8FBE80",
+      "expected_byte_size": 1402,
+      "actual_byte_size": 1402,
+      "pass": true
+    },
+    {
+      "manifest": "R5_1B_EXECUTION_MANIFEST.json",
+      "relative_path": "r5_1b_execution_protocol_audit.json",
+      "expected_sha256": "79FECDD04C999CC2ACB25D095A1B3F6E7E1333B363C29854ED4B67A43F1F979B",
+      "actual_sha256": "79FECDD04C999CC2ACB25D095A1B3F6E7E1333B363C29854ED4B67A43F1F979B",
+      "expected_byte_size": 620,
+      "actual_byte_size": 620,
+      "pass": true
+    },
+    {
+      "manifest": "R5_1B_EXECUTION_MANIFEST.json",
+      "relative_path": "r5_1b_final_status.json",
+      "expected_sha256": "0C19F49CFB5AC35DA236694A77BB98C9E28582E5CF56FC013ED503A9DA11C85E",
+      "actual_sha256": "0C19F49CFB5AC35DA236694A77BB98C9E28582E5CF56FC013ED503A9DA11C85E",
+      "expected_byte_size": 1035,
+      "actual_byte_size": 1035,
+      "pass": true
+    },
+    {
+      "manifest": "R5_1B_EXECUTION_MANIFEST.json",
+      "relative_path": "r5_1b_compute_report.json",
+      "expected_sha256": "2ED2811F3BA19B4CE8AF9EF7F991A200D1EC2657ED3D3F821B487C79E2E468AC",
+      "actual_sha256": "2ED2811F3BA19B4CE8AF9EF7F991A200D1EC2657ED3D3F821B487C79E2E468AC",
+      "expected_byte_size": 1618,
+      "actual_byte_size": 1618,
+      "pass": true
+    },
+    {
+      "manifest": "R5_1B_EXECUTION_MANIFEST.json",
+      "relative_path": "R5_1B_VALIDATION_TRANSFER_RESULT.md",
+      "expected_sha256": "2A558CCD44974B28257F884DBDF281152F90A7932BD496C058C28B235C6C6898",
+      "actual_sha256": "2A558CCD44974B28257F884DBDF281152F90A7932BD496C058C28B235C6C6898",
+      "expected_byte_size": 1624,
+      "actual_byte_size": 1624,
+      "pass": true
+    }
+  ],
+  "source_use": "existing frozen score/prediction artifacts only"
+}

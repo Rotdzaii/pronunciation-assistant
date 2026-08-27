@@ -1,0 +1,18 @@
+{
+  "correct_origin": {
+    "rows": 76703,
+    "false_missing": 56,
+    "rate": 0.0007300887840110557,
+    "word_any_missing_rate": 0.004132824009491155,
+    "sequence_mapping_evaluable": 76703,
+    "sequence_mapping_coverage": 1.0
+  },
+  "substitution_origin": {
+    "rows": 9068,
+    "false_missing": 2,
+    "rate": 0.00022055580061755624,
+    "word_any_missing_rate": 0.006065284516982797,
+    "sequence_mapping_evaluable": 9068,
+    "sequence_mapping_coverage": 1.0
+  }
+}

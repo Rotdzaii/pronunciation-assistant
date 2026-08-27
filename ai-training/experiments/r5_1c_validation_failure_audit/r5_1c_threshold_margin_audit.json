@@ -1,0 +1,53 @@
+{
+  "historical_frozen_threshold": 0.7485884030659993,
+  "margin_definition": "A - 0.7485884030659993",
+  "validation_cohorts": {
+    "true_additions": {
+      "support": 227,
+      "bins": {
+        "margin_lt_-0.50": 92,
+        "margin_-0.50_to_-0.25": 41,
+        "margin_-0.25_to_0": 28,
+        "margin_0_to_0.25": 18,
+        "margin_0.25_to_0.50": 9,
+        "margin_ge_0.50": 39
+      }
+    },
+    "correct_only_negatives": {
+      "support": 4889,
+      "bins": {
+        "margin_lt_-0.50": 3902,
+        "margin_-0.50_to_-0.25": 393,
+        "margin_-0.25_to_0": 187,
+        "margin_0_to_0.25": 128,
+        "margin_0.25_to_0.50": 73,
+        "margin_ge_0.50": 206
+      }
+    },
+    "substitution_containing_negatives": {
+      "support": 2284,
+      "bins": {
+        "margin_lt_-0.50": 1651,
+        "margin_-0.50_to_-0.25": 289,
+        "margin_-0.25_to_0": 154,
+        "margin_0_to_0.25": 65,
+        "margin_0.25_to_0.50": 40,
+        "margin_ge_0.50": 85
+      }
+    },
+    "deletion_containing_negatives": {
+      "support": 814,
+      "bins": {
+        "margin_lt_-0.50": 609,
+        "margin_-0.50_to_-0.25": 97,
+        "margin_-0.25_to_0": 41,
+        "margin_0_to_0.25": 23,
+        "margin_0.25_to_0.50": 13,
+        "margin_ge_0.50": 31
+      }
+    }
+  },
+  "descriptive_only": true,
+  "metrics_at_bin_boundaries_calculated": false,
+  "alternate_threshold_computed": false
+}

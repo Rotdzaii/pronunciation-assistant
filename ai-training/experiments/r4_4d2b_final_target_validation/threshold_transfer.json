@@ -1,0 +1,33 @@
+{
+  "theta": 0.16184102947061696,
+  "train_medians": {
+    "correct": -1.5545236587524414,
+    "substitution": -1.9593603134155273,
+    "deletion": 0.10596789916356408
+  },
+  "validation_medians": {
+    "correct": -1.6282814542452493,
+    "substitution": -1.912900161743164,
+    "deletion": -0.01604356841435517
+  },
+  "absolute_median_shifts": {
+    "correct": 0.07375779549280792,
+    "substitution": 0.04646015167236328,
+    "deletion": 0.12201146757791925
+  },
+  "assessment": "descriptive_shift_only",
+  "threshold_recalculated": false,
+  "threshold_modified": false,
+  "continuous_target_signal": {
+    "deletion_vs_nondeletion": {
+      "roc_auc": 0.8541244506193716,
+      "pr_auc": 0.2320715783086963,
+      "count": 26337
+    },
+    "deletion_vs_substitution": {
+      "roc_auc": 0.8622339516759647,
+      "pr_auc": 0.6767422108795518,
+      "count": 3578
+    }
+  }
+}

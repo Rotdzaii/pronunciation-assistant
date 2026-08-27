@@ -1,0 +1,53 @@
+{
+  "format": "plain UTF-8 JSON Lines",
+  "compression": "none",
+  "package_requirement": "Python standard library only",
+  "encoding": "UTF-8 without BOM",
+  "line_ending": "LF",
+  "serializer": "json.dumps(record, ensure_ascii=False, separators=(',', ':'), allow_nan=False)",
+  "sharding": "one shard per TRAIN speaker",
+  "speaker_order": [
+    "BWC", "EBVS", "HJK", "NCC", "NJS", "PNV",
+    "RRBI", "TLV", "TNI", "YBAA", "YKWK", "ZHAA"
+  ],
+  "shard_name_template": "r5_4b_insert_candidates_<SPEAKER>.jsonl",
+  "row_order": [
+    "frozen R5-2B word order filtered to shard speaker",
+    "ascending candidate_index within word"
+  ],
+  "field_order": [
+    "source_identity",
+    "speaker",
+    "candidate_index",
+    "expected_sequence_length",
+    "boundary_index",
+    "inserted_phone_index",
+    "inserted_phone_symbol",
+    "alignable",
+    "authoritative_insert_target_score_value",
+    "authoritative_insert_target_score_float64_hex",
+    "authoritative_insert_score_is_neg_inf"
+  ],
+  "finite_score": {
+    "value": "JSON number from the authoritative Python float",
+    "float64_hex": "float.hex(authoritative Python float)",
+    "is_neg_inf": false,
+    "round_trip_guard": "float.fromhex(float64_hex) == value"
+  },
+  "impossible_score": {
+    "value": null,
+    "float64_hex": null,
+    "is_neg_inf": true
+  },
+  "forbidden_fields": [
+    "addition truth label",
+    "truth candidate flag",
+    "truth rank",
+    "rank",
+    "Top-k membership",
+    "recoverability",
+    "binary prediction"
+  ],
+  "index_artifact": "r5_4b_materialization_index.json",
+  "hash_policy": "SHA-256 and byte size for every shard and execution artifact"
+}

@@ -1,0 +1,55 @@
+{
+  "artifact_type": "additive pre-metric technical correction",
+  "original_contract_modified": false,
+  "original_driver_modified": false,
+  "original_failure_evidence_preserved": true,
+  "information_consumed_before_correction": {
+    "model_scores": false,
+    "performance_metrics": false,
+    "thresholds": false,
+    "validation": false,
+    "test": false
+  },
+  "implementation_bug": {
+    "field": "addition event eligibility",
+    "buggy_rule": "relation == addition AND label_quality == clean",
+    "frozen_rule": "relation == addition in the resolved canonical V4 relation field",
+    "reason": "The frozen V4 relation field is already the clean resolved-event authority; addition rows are not required to carry label_quality=clean.",
+    "semantic_change": false
+  },
+  "corrected_row_accounting": {
+    "source_clean_addition_events": 423,
+    "mapped_events_before_runtime_filter": 360,
+    "runtime_evaluable_words": 16582,
+    "positive_words": 323,
+    "negative_words": 16259,
+    "runtime_events": 342,
+    "multiple_addition_words": 19,
+    "mixed_substitution_addition_words": 117,
+    "mixed_deletion_addition_words": 26,
+    "clean_addition_without_manual_word": 49,
+    "clean_addition_without_expected_sequence": 14,
+    "mapped_events_excluded_for_unresolved_cooccurring_evidence": 18,
+    "mapped_word_multiplicity": {
+      "1": 317,
+      "2": 24,
+      "3": 3
+    },
+    "matches_frozen_16582_323_16259_342_population": true
+  },
+  "independent_contract_blocker": {
+    "guard": "len(H) + adjacent_identical_target_count <= encoder_T for KEEP and every INSERT candidate",
+    "total_hypotheses": 2993622,
+    "insert_hypotheses": 2977040,
+    "theoretically_unalignable_candidates": 196,
+    "affected_words": 65,
+    "patterns": {
+      "target_len=3,minimum_steps=4,encoder_T=3": 132,
+      "target_len=2,minimum_steps=3,encoder_T=2": 64
+    },
+    "contract_requirement": 0,
+    "result": "FAIL",
+    "zero_infinity_result_accepted_as_score": false,
+    "required_action": "stop before TRAIN model inference, hypothesis scoring, LOSO calibration, metrics, and gates"
+  }
+}

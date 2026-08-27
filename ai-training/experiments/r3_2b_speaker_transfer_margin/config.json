@@ -1,0 +1,35 @@
+{
+  "experiment": "R3-2B speaker-transfer expected-margin threshold audit",
+  "markers": [
+    "RESEARCH_ONLY",
+    "NO_TRAINING",
+    "VALIDATION_EVIDENCE_ONLY",
+    "TEST_CLOSED"
+  ],
+  "checkpoint_sha256": "5C66860BBC50BA803F5BFE25417DF19BDF34B1C7BE36D507B0DDCA88D767EA5E",
+  "evidence_sha256": "E0C7DF574EAA61DEAB57C77C7E8459BB4306E938DAF6F7AB00B7D0D68DF0111F",
+  "score": "expected_margin only",
+  "rule": "margin <= threshold => substitution",
+  "speakers": [
+    "ABA",
+    "HKK",
+    "HQTV",
+    "LXC",
+    "MBMPS",
+    "SVBI"
+  ],
+  "folds": 6,
+  "calibration": "five speakers; held-out speaker has no influence on threshold",
+  "threshold_constraint": "calibration substitution recall >= 0.50",
+  "threshold_selection": "highest Macro-F1; higher substitution F1; higher substitution precision; lower threshold",
+  "per_phone_threshold": false,
+  "per_speaker_heldout_tuning": false,
+  "pass_gate": {
+    "A_macro_f1_delta": 0.05,
+    "B_oof_substitution_recall": 0.5,
+    "C_substitution_f1_delta": 0.03,
+    "D_each_speaker_substitution_recall": 0.35,
+    "E_speakers_macro_f1_improved": ">=4/6"
+  },
+  "test_audio_accessed": false
+}

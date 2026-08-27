@@ -1,0 +1,32 @@
+{
+  "rows": 28216,
+  "correct_support": 24923,
+  "substitution_support": 3293,
+  "accuracy": 0.7627941593422172,
+  "balanced_accuracy": 0.6331427855188454,
+  "macro_f1": 0.5850483996852586,
+  "correct_precision": 0.9188878676470589,
+  "correct_recall": 0.8022709946635638,
+  "correct_f1": 0.8566287513655935,
+  "substitution_precision": 0.23667905824039653,
+  "substitution_recall": 0.46401457637412696,
+  "substitution_f1": 0.3134680480049236,
+  "confusion_matrix_labels": [
+    "correct",
+    "substitution"
+  ],
+  "confusion_matrix": [
+    [
+      19995,
+      4928
+    ],
+    [
+      1765,
+      1528
+    ]
+  ],
+  "frozen_threshold": -1.29392,
+  "comparison_operator": "<=",
+  "margin_equation": "expected_logit - max(other 39 logits)",
+  "threshold_changed": false
+}

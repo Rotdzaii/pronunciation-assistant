@@ -1,0 +1,40 @@
+{
+  "expected_sequence": {
+    "file": "ai-worker/app/scorers/cnn_attention_scorer.py",
+    "function": "_job_canonical_phones",
+    "behavior": "reads job canonical_phones/phones and calls normalize_expected_phones"
+  },
+  "canonicalization": {
+    "file": "ai-worker/app/phonetics/canonicalization.py",
+    "functions": [
+      "canonicalize_phones",
+      "normalize_expected_phones"
+    ]
+  },
+  "provider_selection": {
+    "file": "ai-worker/app/alignment/alignment_service.py",
+    "function": "align_audio"
+  },
+  "mfa_execution": {
+    "file": "ai-worker/app/alignment/mfa_aligner.py",
+    "function": "run_mfa_alignment"
+  },
+  "textgrid_parsing": {
+    "file": "ai-worker/app/alignment/textgrid_parser.py",
+    "function": "parse_textgrid"
+  },
+  "fallback": {
+    "file": "ai-worker/app/alignment/fallback_aligner.py",
+    "function": "align_prompt_fallback",
+    "reliability": "limited_fallback_alignment; not primary evidence"
+  },
+  "quality": {
+    "file": "ai-worker/app/alignment/quality.py",
+    "function": "validate_alignment_quality"
+  },
+  "unsafe_position_warning": {
+    "file": "ai-worker/app/scorers/cnn_attention_scorer.py",
+    "function": "_alignment_phone_for_prediction",
+    "behavior": "does not fall back to list position because alignment may omit a phone"
+  }
+}

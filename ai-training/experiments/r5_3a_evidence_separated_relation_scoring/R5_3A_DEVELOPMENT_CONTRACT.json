@@ -1,0 +1,156 @@
+{
+  "contract_name": "R5-3A Evidence-Separated Relation Scoring TRAIN Development Contract",
+  "contract_version": "R5-3A",
+  "frozen_on": "2026-08-19",
+  "status": "R5_3A_DEVELOPMENT_CONTRACT_FROZEN",
+  "stage_scope": "contract and preregistration only",
+  "scientific_hypothesis": "Keeping Addition, Substitution, and Deletion evidence as separate features will preserve useful Addition evidence while allowing a simple linear decision model to use SUB/DELETE evidence as confounder information.",
+  "generation_boundary": {
+    "new_generation": true,
+    "R5_2B_status": "R5_2_RELATION_COMPETITION_DEVELOPMENT_NOT_CONFIRMED",
+    "R5_2B_modified_or_rerun": false,
+    "R5_2C_diagnosis": "MIXED_OVER_SUPPRESSION_AND_THRESHOLD_COMPENSATION"
+  },
+  "upstream": {
+    "R5_1A_execution_manifest_sha256": "C9343A75CE26C2BEECA388EBA855E91AE0992D22C0C5D785308D0A98B89A3CD6",
+    "R5_2B_execution_manifest_sha256": "37F3C86FF11526B8AB54D173937A0F488125A1D0B610032CC8A5D47B11602387",
+    "R5_2C_manifest_sha256": "C18621208A35074B7681EFC95261B73147B4A6E3716F17AF0AB0471F8B328F90",
+    "V4_sha256": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D",
+    "checkpoint_sha256": "F54C9C2361AE78E1C37353AEB338A2DE6722C0B1EC4F885F6B52688CE9E88085"
+  },
+  "population": {
+    "source": "exact stable-row join of frozen R5-1A and R5-2B TRAIN score artifacts",
+    "stable_identity": "source_identity",
+    "runtime_words": 16582,
+    "positive_words": 323,
+    "negative_words": 16259,
+    "speakers": [
+      "BWC",
+      "EBVS",
+      "HJK",
+      "NCC",
+      "NJS",
+      "PNV",
+      "RRBI",
+      "TLV",
+      "TNI",
+      "YBAA",
+      "YKWK",
+      "ZHAA"
+    ],
+    "fuzzy_matching": false,
+    "new_exclusions": false
+  },
+  "features": {
+    "ordered_feature_vector": [
+      "A",
+      "S",
+      "D"
+    ],
+    "A": "frozen R5-1A addition_score_A_value = BEST_INSERT_SCORE - KEEP_SCORE",
+    "S": "frozen R5-2B BEST_SUB_SCORE - frozen R5-2B KEEP_SCORE",
+    "D": "frozen R5-2B BEST_DELETE_SCORE - frozen R5-2B KEEP_SCORE",
+    "dtype": "float64",
+    "finite_required": true,
+    "R5_2B_C_allowed": false,
+    "hard_max_or_presubtraction_allowed": false,
+    "non_scientific_metadata_features_allowed": false
+  },
+  "classifier": {
+    "scaler": {
+      "class": "sklearn.preprocessing.StandardScaler",
+      "copy": true,
+      "with_mean": true,
+      "with_std": true,
+      "fit_on": "11-speaker calibration feature matrix only"
+    },
+    "model": {
+      "class": "sklearn.linear_model.LogisticRegression",
+      "penalty": "l2",
+      "C": 1.0,
+      "solver": "lbfgs",
+      "class_weight": "balanced",
+      "max_iter": 1000,
+      "random_state": null
+    },
+    "authoritative_output": "predict_proba(X_scaled)[:, 1]",
+    "hyperparameter_search": false,
+    "alternate_model": false
+  },
+  "development": {
+    "split": "exact 12-fold TRAIN speaker LOSO",
+    "fit_speakers_per_fold": 11,
+    "heldout_speakers_per_fold": 1,
+    "heldout_statistics_used_for_scaler": false,
+    "heldout_labels_used_for_model_or_threshold": false,
+    "each_word_predicted_oof_once": true
+  },
+  "threshold": {
+    "candidates": "every unique finite float64 calibration probability plus np.nextafter lower and upper edge candidates",
+    "lower_edge": "np.nextafter(min_finite_score, -np.inf)",
+    "upper_edge": "np.nextafter(max_finite_score, np.inf)",
+    "decision": "score >= theta",
+    "tie_priority": [
+      "higher Binary Macro-F1",
+      "higher Addition F1",
+      "lower correct-only false-addition rate",
+      "higher threshold"
+    ]
+  },
+  "event_policy": {
+    "localization_changed": false,
+    "positive_word_event": "frozen BEST_INSERT phone plus frozen BEST_INSERT expected-sequence boundary",
+    "source": "existing frozen insertion hypothesis scoring",
+    "one_event_maximum_per_word": true
+  },
+  "primary_comparator": {
+    "name": "R5-1A frozen TRAIN development",
+    "AUC_all": 0.7734833025081417,
+    "AUC_correct": 0.802352821409537,
+    "Binary_Macro_F1": 0.5551978767901391,
+    "Addition_F1": 0.1379980563654033,
+    "Correct_FAR": 0.03491295938104449,
+    "SUB_FAR": 0.05016116035455278,
+    "DELETE_FAR": 0.03349964362081254,
+    "Exact_event_F1": 0.04389312977099236
+  },
+  "development_gate_count": 8,
+  "all_gates_required": true,
+  "robust_threshold": {
+    "authorized_only_if": "8/8 gates pass",
+    "name": "R5_3A_ROBUST_THETA",
+    "formula": "ordinary float64 median of the 12 fold calibration thresholds",
+    "otherwise": "R5_3A_ROBUST_THETA_NOT_AUTHORIZED"
+  },
+  "static_verification_required_before_fitting": true,
+  "static_verification_scope": [
+    "exact A/S/D construction",
+    "exact row identity",
+    "calibration-only scaler fitting",
+    "held-out speaker exclusion from scaler and classifier fit",
+    "fixed LogisticRegression parameters",
+    "predict_proba[:,1] output",
+    "threshold helper and ties",
+    "deterministic A/S/D ordering",
+    "unchanged BEST_INSERT event metadata",
+    "forbidden-feature leakage prevention"
+  ],
+  "contamination_policy": {
+    "VALIDATION_consumed_by_prior_R5_generation": true,
+    "VALIDATION_authorized": false,
+    "TEST_untouched": true,
+    "TEST_authorized": false
+  },
+  "contract_stage_actions": {
+    "checkpoint_inference": false,
+    "classifier_fitting": false,
+    "performance_metrics": false,
+    "threshold_search": false,
+    "validation_access": false,
+    "test_access": false
+  },
+  "future_development_statuses": {
+    "all_8_pass": "R5_3A_EVIDENCE_SEPARATION_DEVELOPMENT_PASS",
+    "any_valid_gate_fails": "R5_3A_EVIDENCE_SEPARATION_DEVELOPMENT_NOT_CONFIRMED"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "span": "full MFA word span",
+  "side_context_seconds": 0.0,
+  "mono": true,
+  "sample_rate": 16000,
+  "feature": "64-bin log-mel",
+  "n_mels": 64,
+  "n_fft": 512,
+  "win_length_samples": 400,
+  "window_ms": 25,
+  "window": "Hann",
+  "hop_length_samples": 160,
+  "hop_ms": 10,
+  "center": true,
+  "pad_mode": "constant",
+  "power": 2.0,
+  "mel_scale": "slaney",
+  "mel_norm": "slaney",
+  "amplitude": "per-word maximum-relative dB with -80 dB floor",
+  "phone_interval_input": false,
+  "duration_feature": false,
+  "relation_specific_preprocessing": false
+}

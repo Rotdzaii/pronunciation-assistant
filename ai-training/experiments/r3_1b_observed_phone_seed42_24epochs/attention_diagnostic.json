@@ -1,0 +1,15 @@
+{
+  "shape": [
+    28212,
+    4
+  ],
+  "finite": true,
+  "nan_count": 0,
+  "row_sum_min": 0.9999998616340235,
+  "row_sum_max": 1.0000001424268703,
+  "mean_entropy": 0.19814853347818967,
+  "mean_normalized_entropy": 0.1429339533042025,
+  "mean_max_weight": 0.9202650627275824,
+  "degenerate_one_hot_rate": 0.17740677725790444,
+  "interpretation_warning": "Attention concentration is a diagnostic, not an explanation."
+}

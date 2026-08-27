@@ -1,0 +1,20 @@
+{
+  "method": "metadata-only audit using the frozen matched-control CSV, V4 physical-row metadata, and saved R4-4C2 prediction identity columns",
+  "semantic_convention": {
+    "source_index": "zero-based csv.DictReader data-record index",
+    "source_csv_row": "one-based physical CSV line number including the header",
+    "header_physical_line": 1,
+    "first_data_physical_line": 2,
+    "canonical_equation": "source_csv_row = int(source_index) + 2"
+  },
+  "old_mapping": {"equation": "source_csv_row = int(source_index)", "required_rows": 1434, "mapped_rows": 1201, "missing_rows": 233},
+  "canonical_mapping": {"equation": "source_csv_row = int(source_index) + 2", "required_rows": 1434, "mapped_rows": 1434, "missing_rows": 0},
+  "duplicates_and_ambiguity": {"matched_duplicate_identities": 0, "canonical_generated_collision_identities": 0, "unexpected_identity_ambiguities": 0, "metadata_field_mismatches": 0},
+  "unchanged_field_checks": ["speaker_id", "utterance_id", "start_time", "end_time", "expected_phone", "relation"],
+  "support": {"deletion_rows": 717, "nondeletion_rows": 717, "phones": 32, "validation_speakers": 6},
+  "validation_metadata_rows": 26337,
+  "validation_unique_source_rows": 26337,
+  "acoustic_inference": false,
+  "hypothesis_scoring": false,
+  "metrics_calculated": false
+}

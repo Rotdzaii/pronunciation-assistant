@@ -1,0 +1,398 @@
+{
+  "error_count": 0,
+  "event_fixture": {
+    "negative": null,
+    "positive": {
+      "boundary": 7,
+      "phone": "ZH"
+    }
+  },
+  "failure_count": 0,
+  "feature_order": [
+    "A",
+    "S",
+    "D"
+  ],
+  "leakage_fixture": {
+    "calibration_row_ids": [
+      "S0/row_0",
+      "S0/row_1",
+      "S0/row_2",
+      "S0/row_3",
+      "S0/row_4",
+      "S0/row_5",
+      "S1/row_0",
+      "S1/row_1",
+      "S1/row_2",
+      "S1/row_3",
+      "S1/row_4",
+      "S1/row_5",
+      "S2/row_0",
+      "S2/row_1",
+      "S2/row_2",
+      "S2/row_3",
+      "S2/row_4",
+      "S2/row_5"
+    ],
+    "heldout_row_ids": [
+      "S3/row_0",
+      "S3/row_1",
+      "S3/row_2",
+      "S3/row_3",
+      "S3/row_4",
+      "S3/row_5"
+    ],
+    "heldout_speaker": "S3",
+    "model_fit_row_ids": [
+      "S0/row_0",
+      "S0/row_1",
+      "S0/row_2",
+      "S0/row_3",
+      "S0/row_4",
+      "S0/row_5",
+      "S1/row_0",
+      "S1/row_1",
+      "S1/row_2",
+      "S1/row_3",
+      "S1/row_4",
+      "S1/row_5",
+      "S2/row_0",
+      "S2/row_1",
+      "S2/row_2",
+      "S2/row_3",
+      "S2/row_4",
+      "S2/row_5"
+    ],
+    "same_scaler_used_for_heldout_transform": true,
+    "scaler_fit_row_ids": [
+      "S0/row_0",
+      "S0/row_1",
+      "S0/row_2",
+      "S0/row_3",
+      "S0/row_4",
+      "S0/row_5",
+      "S1/row_0",
+      "S1/row_1",
+      "S1/row_2",
+      "S1/row_3",
+      "S1/row_4",
+      "S1/row_5",
+      "S2/row_0",
+      "S2/row_1",
+      "S2/row_2",
+      "S2/row_3",
+      "S2/row_4",
+      "S2/row_5"
+    ],
+    "scaler_mean": [
+      -0.12999999999999995,
+      0.12333333333333335,
+      -0.034999999999999996
+    ],
+    "scaler_scale": [
+      1.346575904532183,
+      0.33334999958335415,
+      0.3427584183259885
+    ],
+    "scaler_var": [
+      1.8132666666666668,
+      0.11112222222222222,
+      0.11748333333333333
+    ],
+    "threshold": 0.8457933150212635,
+    "threshold_selection_row_ids": [
+      "S0/row_0",
+      "S0/row_1",
+      "S0/row_2",
+      "S0/row_3",
+      "S0/row_4",
+      "S0/row_5",
+      "S1/row_0",
+      "S1/row_1",
+      "S1/row_2",
+      "S1/row_3",
+      "S1/row_4",
+      "S1/row_5",
+      "S2/row_0",
+      "S2/row_1",
+      "S2/row_2",
+      "S2/row_3",
+      "S2/row_4",
+      "S2/row_5"
+    ]
+  },
+  "protocol": {
+    "audio_access": false,
+    "checkpoint_inference": false,
+    "real_performance_metrics": false,
+    "real_train_fitting": false,
+    "test_access": false,
+    "validation_access": false
+  },
+  "real_schema_only": {
+    "classifier_fit_on_real_rows": false,
+    "r5_1a_fields_present": [
+      "addition_score_A_value",
+      "source_identity"
+    ],
+    "r5_2b_fields_present": [
+      "best_delete_score_value",
+      "best_sub_score_value",
+      "keep_target_score_value",
+      "source_identity"
+    ],
+    "rows_read_per_artifact": 1
+  },
+  "sklearn_version": "1.8.0",
+  "status": "PASS",
+  "synthetic_fixture": {
+    "fold_count": 4,
+    "oof": [
+      {
+        "predicted_addition": false,
+        "predicted_event": null,
+        "probability": 0.4997234589700129,
+        "row_id": "S0/row_0",
+        "speaker": "S0",
+        "threshold": 0.4997617144971221
+      },
+      {
+        "predicted_addition": false,
+        "predicted_event": null,
+        "probability": 0.4997398981150167,
+        "row_id": "S0/row_1",
+        "speaker": "S0",
+        "threshold": 0.4997617144971221
+      },
+      {
+        "predicted_addition": true,
+        "predicted_event": {
+          "boundary": 2,
+          "phone": "P2"
+        },
+        "probability": 0.49976404920974543,
+        "row_id": "S0/row_2",
+        "speaker": "S0",
+        "threshold": 0.4997617144971221
+      },
+      {
+        "predicted_addition": false,
+        "predicted_event": null,
+        "probability": 0.4997616619693459,
+        "row_id": "S0/row_3",
+        "speaker": "S0",
+        "threshold": 0.4997617144971221
+      },
+      {
+        "predicted_addition": false,
+        "predicted_event": null,
+        "probability": 0.4997421448796003,
+        "row_id": "S0/row_4",
+        "speaker": "S0",
+        "threshold": 0.4997617144971221
+      },
+      {
+        "predicted_addition": false,
+        "predicted_event": null,
+        "probability": 0.4997313511643124,
+        "row_id": "S0/row_5",
+        "speaker": "S0",
+        "threshold": 0.4997617144971221
+      },
+      {
+        "predicted_addition": false,
+        "predicted_event": null,
+        "probability": 0.4997235483589479,
+        "row_id": "S1/row_0",
+        "speaker": "S1",
+        "threshold": 0.4997616961600797
+      },
+      {
+        "predicted_addition": false,
+        "predicted_event": null,
+        "probability": 0.49973998635325817,
+        "row_id": "S1/row_1",
+        "speaker": "S1",
+        "threshold": 0.4997616961600797
+      },
+      {
+        "predicted_addition": true,
+        "predicted_event": {
+          "boundary": 2,
+          "phone": "P2"
+        },
+        "probability": 0.4997641357574784,
+        "row_id": "S1/row_2",
+        "speaker": "S1",
+        "threshold": 0.4997616961600797
+      },
+      {
+        "predicted_addition": true,
+        "predicted_event": {
+          "boundary": 3,
+          "phone": "P3"
+        },
+        "probability": 0.4997617486841792,
+        "row_id": "S1/row_3",
+        "speaker": "S1",
+        "threshold": 0.4997616961600797
+      },
+      {
+        "predicted_addition": false,
+        "predicted_event": null,
+        "probability": 0.49974223296057474,
+        "row_id": "S1/row_4",
+        "speaker": "S1",
+        "threshold": 0.4997616961600797
+      },
+      {
+        "predicted_addition": false,
+        "predicted_event": null,
+        "probability": 0.4997314400008159,
+        "row_id": "S1/row_5",
+        "speaker": "S1",
+        "threshold": 0.4997616961600797
+      },
+      {
+        "predicted_addition": false,
+        "predicted_event": null,
+        "probability": 0.49972363772995887,
+        "row_id": "S2/row_0",
+        "speaker": "S2",
+        "threshold": 0.4997617303413628
+      },
+      {
+        "predicted_addition": false,
+        "predicted_event": null,
+        "probability": 0.49974007457405906,
+        "row_id": "S2/row_1",
+        "speaker": "S2",
+        "threshold": 0.4997617303413628
+      },
+      {
+        "predicted_addition": true,
+        "predicted_event": {
+          "boundary": 2,
+          "phone": "P2"
+        },
+        "probability": 0.49976422228848033,
+        "row_id": "S2/row_2",
+        "speaker": "S2",
+        "threshold": 0.4997617303413628
+      },
+      {
+        "predicted_addition": true,
+        "predicted_event": {
+          "boundary": 3,
+          "phone": "P3"
+        },
+        "probability": 0.49976183538221125,
+        "row_id": "S2/row_3",
+        "speaker": "S2",
+        "threshold": 0.4997617303413628
+      },
+      {
+        "predicted_addition": false,
+        "predicted_event": null,
+        "probability": 0.49974232102417443,
+        "row_id": "S2/row_4",
+        "speaker": "S2",
+        "threshold": 0.4997617303413628
+      },
+      {
+        "predicted_addition": false,
+        "predicted_event": null,
+        "probability": 0.4997315288196275,
+        "row_id": "S2/row_5",
+        "speaker": "S2",
+        "threshold": 0.4997617303413628
+      },
+      {
+        "predicted_addition": false,
+        "predicted_event": null,
+        "probability": 3.599149930531471e-291,
+        "row_id": "S3/row_0",
+        "speaker": "S3",
+        "threshold": 0.8457933150212635
+      },
+      {
+        "predicted_addition": false,
+        "predicted_event": null,
+        "probability": 4.051000844496679e-290,
+        "row_id": "S3/row_1",
+        "speaker": "S3",
+        "threshold": 0.8457933150212635
+      },
+      {
+        "predicted_addition": false,
+        "predicted_event": null,
+        "probability": 1.3073099387427608e-288,
+        "row_id": "S3/row_2",
+        "speaker": "S3",
+        "threshold": 0.8457933150212635
+      },
+      {
+        "predicted_addition": false,
+        "predicted_event": null,
+        "probability": 9.094719798577569e-289,
+        "row_id": "S3/row_3",
+        "speaker": "S3",
+        "threshold": 0.8457933150212635
+      },
+      {
+        "predicted_addition": false,
+        "predicted_event": null,
+        "probability": 3.7213849056106186e-290,
+        "row_id": "S3/row_4",
+        "speaker": "S3",
+        "threshold": 0.8457933150212635
+      },
+      {
+        "predicted_addition": false,
+        "predicted_event": null,
+        "probability": 1.6814370983514347e-290,
+        "row_id": "S3/row_5",
+        "speaker": "S3",
+        "threshold": 0.8457933150212635
+      }
+    ],
+    "row_count": 24,
+    "speaker_order": [
+      "S0",
+      "S1",
+      "S2",
+      "S3"
+    ],
+    "thresholds": [
+      0.4997617144971221,
+      0.4997616961600797,
+      0.4997617303413628,
+      0.8457933150212635
+    ]
+  },
+  "tests_run": 31,
+  "threshold_fixture": {
+    "candidate_hex": [
+      "0x1.9999999999999p-3",
+      "0x1.999999999999ap-3",
+      "0x1.999999999999ap-1",
+      "0x1.999999999999bp-1"
+    ],
+    "decision_at_0_5": [
+      false,
+      true,
+      true
+    ],
+    "input": [
+      0.2,
+      0.8,
+      0.2
+    ],
+    "tie_priorities_verified": [
+      "binary_macro_f1",
+      "addition_f1",
+      "correct_only_far",
+      "higher_threshold"
+    ]
+  }
+}

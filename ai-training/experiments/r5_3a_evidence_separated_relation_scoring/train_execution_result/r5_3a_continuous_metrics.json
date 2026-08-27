@@ -1,0 +1,8 @@
+{
+  "authoritative_output": "predict_proba(X_scaled) class identity 1",
+  "addition_vs_all_negative_roc_auc": 0.7825848108511275,
+  "addition_vs_correct_only_roc_auc": 0.8269990598295717,
+  "addition_vs_substitution_containing_roc_auc": 0.7143987795720519,
+  "addition_vs_deletion_containing_roc_auc": 0.6112200966968173,
+  "AUC_implementation": "deterministic Mann-Whitney average-rank"
+}

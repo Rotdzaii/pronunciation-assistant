@@ -1,0 +1,106 @@
+{
+  "neighbor_capture": {
+    "roc_auc_deletion": 0.5514959704611768,
+    "pr_auc_deletion": 0.5494194954115539,
+    "deletion_high_orientation": true,
+    "substitution": {
+      "mean": 0.18514017760753632,
+      "median": 0.15885591506958008,
+      "p10": 0.052201610058546066,
+      "p25": 0.09205545485019684,
+      "p75": 0.25583553314208984,
+      "p90": 0.3476943075656891
+    },
+    "deletion": {
+      "mean": 0.2080313116312027,
+      "median": 0.18358176946640015,
+      "p10": 0.060697201639413834,
+      "p25": 0.10778206586837769,
+      "p75": 0.297550231218338,
+      "p90": 0.37397265434265137
+    },
+    "speaker_direction_consistency": {
+      "consistent": 5,
+      "eligible": 5,
+      "minimum_pairs_per_class": 20
+    }
+  },
+  "center_distinctness": {
+    "roc_auc_deletion": 0.6396183455855351,
+    "pr_auc_deletion": 0.6106694933940421,
+    "deletion_high_orientation": false,
+    "substitution": {
+      "mean": 0.42730483412742615,
+      "median": 0.3995807468891144,
+      "p10": 0.16495317220687866,
+      "p25": 0.24619229137897491,
+      "p75": 0.571823239326477,
+      "p90": 0.7591423392295837
+    },
+    "deletion": {
+      "mean": 0.32187604904174805,
+      "median": 0.2771665155887604,
+      "p10": 0.13887442648410797,
+      "p25": 0.20658689737319946,
+      "p75": 0.4012766480445862,
+      "p90": 0.5792133212089539
+    },
+    "speaker_direction_consistency": {
+      "consistent": 4,
+      "eligible": 5,
+      "minimum_pairs_per_class": 20
+    }
+  },
+  "alternative_persistence": {
+    "roc_auc_deletion": 0.49693194185712675,
+    "pr_auc_deletion": 0.4988124901831531,
+    "deletion_high_orientation": false,
+    "substitution": {
+      "mean": 0.34108527131782945,
+      "median": 0.4,
+      "p10": 0.2,
+      "p25": 0.2,
+      "p75": 0.4,
+      "p90": 0.4
+    },
+    "deletion": {
+      "mean": 0.344702842377261,
+      "median": 0.4,
+      "p10": 0.2,
+      "p25": 0.2,
+      "p75": 0.4,
+      "p90": 0.4
+    },
+    "speaker_direction_consistency": {
+      "consistent": 3,
+      "eligible": 5,
+      "minimum_pairs_per_class": 20
+    }
+  },
+  "left_right_transition": {
+    "roc_auc_deletion": 0.4948787799878479,
+    "pr_auc_deletion": 0.4971359110249686,
+    "deletion_high_orientation": true,
+    "substitution": {
+      "mean": 0.2777777777777778,
+      "median": 0.25,
+      "p10": 0.0,
+      "p25": 0.0,
+      "p75": 0.5,
+      "p90": 0.75
+    },
+    "deletion": {
+      "mean": 0.27260981912144705,
+      "median": 0.25,
+      "p10": 0.0,
+      "p25": 0.0,
+      "p75": 0.5,
+      "p90": 0.5
+    },
+    "speaker_direction_consistency": {
+      "consistent": 3,
+      "eligible": 5,
+      "minimum_pairs_per_class": 20
+    }
+  }
+}

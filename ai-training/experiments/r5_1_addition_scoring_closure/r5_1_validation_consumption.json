@@ -1,0 +1,17 @@
+{
+  "status": "CONSUMED_FOR_R5_1B_ITERATIVE_TRANSFER",
+  "speakers": [
+    "ABA",
+    "HKK",
+    "HQTV",
+    "LXC",
+    "MBMPS",
+    "SVBI"
+  ],
+  "addition_performance_consumed": true,
+  "used_for_threshold_calibration": false,
+  "history_must_be_preserved": true,
+  "future_use_requirement": "Any future use must transparently acknowledge prior R5-1B consumption.",
+  "may_be_claimed_as_untouched_independent_confirmation": false,
+  "reason": "R5-1B addition metrics were observed, and the underlying R4-4C2 checkpoint had already used these speakers for PER-based epoch selection."
+}

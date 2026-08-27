@@ -1,0 +1,128 @@
+{
+  "BWC": {
+    "split": "train",
+    "usable_words": 1360,
+    "target_phones": 4512,
+    "deletion_containing_words": 186,
+    "substitution_containing_words": 524
+  },
+  "EBVS": {
+    "split": "train",
+    "usable_words": 1310,
+    "target_phones": 4307,
+    "deletion_containing_words": 151,
+    "substitution_containing_words": 568
+  },
+  "HJK": {
+    "split": "train",
+    "usable_words": 1394,
+    "target_phones": 4885,
+    "deletion_containing_words": 4,
+    "substitution_containing_words": 297
+  },
+  "NCC": {
+    "split": "train",
+    "usable_words": 1383,
+    "target_phones": 4771,
+    "deletion_containing_words": 50,
+    "substitution_containing_words": 439
+  },
+  "NJS": {
+    "split": "train",
+    "usable_words": 1376,
+    "target_phones": 4716,
+    "deletion_containing_words": 76,
+    "substitution_containing_words": 427
+  },
+  "PNV": {
+    "split": "train",
+    "usable_words": 1381,
+    "target_phones": 4594,
+    "deletion_containing_words": 221,
+    "substitution_containing_words": 491
+  },
+  "RRBI": {
+    "split": "train",
+    "usable_words": 1369,
+    "target_phones": 4671,
+    "deletion_containing_words": 64,
+    "substitution_containing_words": 382
+  },
+  "TLV": {
+    "split": "train",
+    "usable_words": 1364,
+    "target_phones": 4332,
+    "deletion_containing_words": 357,
+    "substitution_containing_words": 600
+  },
+  "TNI": {
+    "split": "train",
+    "usable_words": 1340,
+    "target_phones": 4551,
+    "deletion_containing_words": 60,
+    "substitution_containing_words": 346
+  },
+  "YBAA": {
+    "split": "train",
+    "usable_words": 1272,
+    "target_phones": 4291,
+    "deletion_containing_words": 25,
+    "substitution_containing_words": 171
+  },
+  "YKWK": {
+    "split": "train",
+    "usable_words": 1354,
+    "target_phones": 4596,
+    "deletion_containing_words": 123,
+    "substitution_containing_words": 385
+  },
+  "ZHAA": {
+    "split": "train",
+    "usable_words": 1356,
+    "target_phones": 4534,
+    "deletion_containing_words": 86,
+    "substitution_containing_words": 334
+  },
+  "ABA": {
+    "split": "validation",
+    "usable_words": 1208,
+    "target_phones": 3894,
+    "deletion_containing_words": 25,
+    "substitution_containing_words": 171
+  },
+  "HKK": {
+    "split": "validation",
+    "usable_words": 1351,
+    "target_phones": 4602,
+    "deletion_containing_words": 94,
+    "substitution_containing_words": 252
+  },
+  "HQTV": {
+    "split": "validation",
+    "usable_words": 1335,
+    "target_phones": 4221,
+    "deletion_containing_words": 371,
+    "substitution_containing_words": 595
+  },
+  "LXC": {
+    "split": "validation",
+    "usable_words": 1351,
+    "target_phones": 4494,
+    "deletion_containing_words": 198,
+    "substitution_containing_words": 537
+  },
+  "MBMPS": {
+    "split": "validation",
+    "usable_words": 1372,
+    "target_phones": 4722,
+    "deletion_containing_words": 53,
+    "substitution_containing_words": 429
+  },
+  "SVBI": {
+    "split": "validation",
+    "usable_words": 1111,
+    "target_phones": 3490,
+    "deletion_containing_words": 73,
+    "substitution_containing_words": 300
+  }
+}

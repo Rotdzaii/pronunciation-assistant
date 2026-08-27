@@ -1,0 +1,24 @@
+{
+  "family": "INSERT",
+  "phone_count": 40,
+  "blank_index": 40,
+  "phone_vocabulary": [
+    "AA", "AE", "AH", "AO", "AW", "AX", "AY", "B", "CH", "D",
+    "DH", "EH", "ER", "EY", "F", "G", "HH", "IH", "IY", "JH",
+    "K", "L", "M", "N", "NG", "OW", "OY", "P", "R", "S",
+    "SH", "T", "TH", "UH", "UW", "V", "W", "Y", "Z", "ZH"
+  ],
+  "candidate_count_formula": "40*(N+1)",
+  "boundary_order": "ascending 0 through N; outer loop",
+  "phone_order": "ascending canonical index 0 through 39; inner loop",
+  "candidate_index_origin": 0,
+  "candidate_index_formula": "40*boundary_index + inserted_phone_index",
+  "target_formula": "E[:boundary] + [phone] + E[boundary:]",
+  "best_insert_rule": "minimum key (-target_score, boundary_index, inserted_phone_index) among finite alignable candidates",
+  "tie_priority": [
+    "lower boundary_index",
+    "lower inserted_phone_index"
+  ],
+  "word_order": "frozen R5-2B TRAIN score-artifact line order, filtered within speaker shard",
+  "truth_used": false
+}

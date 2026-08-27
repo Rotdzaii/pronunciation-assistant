@@ -1,0 +1,683 @@
+{
+  "phones": {
+    "AA": {
+      "N": 2,
+      "top_1": {
+        "recovered": 0,
+        "denominator": 2,
+        "recall": 0.0
+      },
+      "top_3": {
+        "recovered": 0,
+        "denominator": 2,
+        "recall": 0.0
+      },
+      "top_5": {
+        "recovered": 0,
+        "denominator": 2,
+        "recall": 0.0
+      },
+      "top_10": {
+        "recovered": 1,
+        "denominator": 2,
+        "recall": 0.5
+      },
+      "median_rank": 48.0,
+      "mean_rank": 48.0,
+      "interpretation_support": "rare_preserve_count_only"
+    },
+    "AH": {
+      "N": 41,
+      "top_1": {
+        "recovered": 7,
+        "denominator": 41,
+        "recall": 0.17073170731707318
+      },
+      "top_3": {
+        "recovered": 11,
+        "denominator": 41,
+        "recall": 0.2682926829268293
+      },
+      "top_5": {
+        "recovered": 12,
+        "denominator": 41,
+        "recall": 0.2926829268292683
+      },
+      "top_10": {
+        "recovered": 16,
+        "denominator": 41,
+        "recall": 0.3902439024390244
+      },
+      "median_rank": 18.0,
+      "mean_rank": 49.09756097560975,
+      "interpretation_support": "sufficient_for_description"
+    },
+    "AO": {
+      "N": 1,
+      "top_1": {
+        "recovered": 0,
+        "denominator": 1,
+        "recall": 0.0
+      },
+      "top_3": {
+        "recovered": 0,
+        "denominator": 1,
+        "recall": 0.0
+      },
+      "top_5": {
+        "recovered": 1,
+        "denominator": 1,
+        "recall": 1.0
+      },
+      "top_10": {
+        "recovered": 1,
+        "denominator": 1,
+        "recall": 1.0
+      },
+      "median_rank": 5.0,
+      "mean_rank": 5.0,
+      "interpretation_support": "rare_preserve_count_only"
+    },
+    "AX": {
+      "N": 28,
+      "top_1": {
+        "recovered": 0,
+        "denominator": 28,
+        "recall": 0.0
+      },
+      "top_3": {
+        "recovered": 0,
+        "denominator": 28,
+        "recall": 0.0
+      },
+      "top_5": {
+        "recovered": 0,
+        "denominator": 28,
+        "recall": 0.0
+      },
+      "top_10": {
+        "recovered": 3,
+        "denominator": 28,
+        "recall": 0.10714285714285714
+      },
+      "median_rank": 39.0,
+      "mean_rank": 67.78571428571429,
+      "interpretation_support": "sufficient_for_description"
+    },
+    "B": {
+      "N": 2,
+      "top_1": {
+        "recovered": 1,
+        "denominator": 2,
+        "recall": 0.5
+      },
+      "top_3": {
+        "recovered": 1,
+        "denominator": 2,
+        "recall": 0.5
+      },
+      "top_5": {
+        "recovered": 2,
+        "denominator": 2,
+        "recall": 1.0
+      },
+      "top_10": {
+        "recovered": 2,
+        "denominator": 2,
+        "recall": 1.0
+      },
+      "median_rank": 2.5,
+      "mean_rank": 2.5,
+      "interpretation_support": "rare_preserve_count_only"
+    },
+    "D": {
+      "N": 11,
+      "top_1": {
+        "recovered": 4,
+        "denominator": 11,
+        "recall": 0.36363636363636365
+      },
+      "top_3": {
+        "recovered": 8,
+        "denominator": 11,
+        "recall": 0.7272727272727273
+      },
+      "top_5": {
+        "recovered": 8,
+        "denominator": 11,
+        "recall": 0.7272727272727273
+      },
+      "top_10": {
+        "recovered": 9,
+        "denominator": 11,
+        "recall": 0.8181818181818182
+      },
+      "median_rank": 2.0,
+      "mean_rank": 4.909090909090909,
+      "interpretation_support": "sufficient_for_description"
+    },
+    "EH": {
+      "N": 43,
+      "top_1": {
+        "recovered": 3,
+        "denominator": 43,
+        "recall": 0.06976744186046512
+      },
+      "top_3": {
+        "recovered": 7,
+        "denominator": 43,
+        "recall": 0.16279069767441862
+      },
+      "top_5": {
+        "recovered": 7,
+        "denominator": 43,
+        "recall": 0.16279069767441862
+      },
+      "top_10": {
+        "recovered": 9,
+        "denominator": 43,
+        "recall": 0.20930232558139536
+      },
+      "median_rank": 159.0,
+      "mean_rank": 155.2093023255814,
+      "interpretation_support": "sufficient_for_description"
+    },
+    "F": {
+      "N": 1,
+      "top_1": {
+        "recovered": 0,
+        "denominator": 1,
+        "recall": 0.0
+      },
+      "top_3": {
+        "recovered": 0,
+        "denominator": 1,
+        "recall": 0.0
+      },
+      "top_5": {
+        "recovered": 0,
+        "denominator": 1,
+        "recall": 0.0
+      },
+      "top_10": {
+        "recovered": 0,
+        "denominator": 1,
+        "recall": 0.0
+      },
+      "median_rank": 22.0,
+      "mean_rank": 22.0,
+      "interpretation_support": "rare_preserve_count_only"
+    },
+    "G": {
+      "N": 36,
+      "top_1": {
+        "recovered": 0,
+        "denominator": 36,
+        "recall": 0.0
+      },
+      "top_3": {
+        "recovered": 1,
+        "denominator": 36,
+        "recall": 0.027777777777777776
+      },
+      "top_5": {
+        "recovered": 1,
+        "denominator": 36,
+        "recall": 0.027777777777777776
+      },
+      "top_10": {
+        "recovered": 5,
+        "denominator": 36,
+        "recall": 0.1388888888888889
+      },
+      "median_rank": 20.5,
+      "mean_rank": 54.666666666666664,
+      "interpretation_support": "sufficient_for_description"
+    },
+    "HH": {
+      "N": 3,
+      "top_1": {
+        "recovered": 0,
+        "denominator": 3,
+        "recall": 0.0
+      },
+      "top_3": {
+        "recovered": 0,
+        "denominator": 3,
+        "recall": 0.0
+      },
+      "top_5": {
+        "recovered": 0,
+        "denominator": 3,
+        "recall": 0.0
+      },
+      "top_10": {
+        "recovered": 0,
+        "denominator": 3,
+        "recall": 0.0
+      },
+      "median_rank": 40.0,
+      "mean_rank": 59.0,
+      "interpretation_support": "rare_preserve_count_only"
+    },
+    "IH": {
+      "N": 15,
+      "top_1": {
+        "recovered": 3,
+        "denominator": 15,
+        "recall": 0.2
+      },
+      "top_3": {
+        "recovered": 7,
+        "denominator": 15,
+        "recall": 0.4666666666666667
+      },
+      "top_5": {
+        "recovered": 7,
+        "denominator": 15,
+        "recall": 0.4666666666666667
+      },
+      "top_10": {
+        "recovered": 9,
+        "denominator": 15,
+        "recall": 0.6
+      },
+      "median_rank": 7.0,
+      "mean_rank": 36.06666666666667,
+      "interpretation_support": "sufficient_for_description"
+    },
+    "IY": {
+      "N": 9,
+      "top_1": {
+        "recovered": 2,
+        "denominator": 9,
+        "recall": 0.2222222222222222
+      },
+      "top_3": {
+        "recovered": 4,
+        "denominator": 9,
+        "recall": 0.4444444444444444
+      },
+      "top_5": {
+        "recovered": 4,
+        "denominator": 9,
+        "recall": 0.4444444444444444
+      },
+      "top_10": {
+        "recovered": 5,
+        "denominator": 9,
+        "recall": 0.5555555555555556
+      },
+      "median_rank": 7.0,
+      "mean_rank": 18.333333333333332,
+      "interpretation_support": "sufficient_for_description"
+    },
+    "K": {
+      "N": 7,
+      "top_1": {
+        "recovered": 0,
+        "denominator": 7,
+        "recall": 0.0
+      },
+      "top_3": {
+        "recovered": 0,
+        "denominator": 7,
+        "recall": 0.0
+      },
+      "top_5": {
+        "recovered": 0,
+        "denominator": 7,
+        "recall": 0.0
+      },
+      "top_10": {
+        "recovered": 1,
+        "denominator": 7,
+        "recall": 0.14285714285714285
+      },
+      "median_rank": 38.0,
+      "mean_rank": 97.0,
+      "interpretation_support": "sufficient_for_description"
+    },
+    "L": {
+      "N": 4,
+      "top_1": {
+        "recovered": 2,
+        "denominator": 4,
+        "recall": 0.5
+      },
+      "top_3": {
+        "recovered": 2,
+        "denominator": 4,
+        "recall": 0.5
+      },
+      "top_5": {
+        "recovered": 2,
+        "denominator": 4,
+        "recall": 0.5
+      },
+      "top_10": {
+        "recovered": 3,
+        "denominator": 4,
+        "recall": 0.75
+      },
+      "median_rank": 4.0,
+      "mean_rank": 5.75,
+      "interpretation_support": "rare_preserve_count_only"
+    },
+    "N": {
+      "N": 5,
+      "top_1": {
+        "recovered": 4,
+        "denominator": 5,
+        "recall": 0.8
+      },
+      "top_3": {
+        "recovered": 4,
+        "denominator": 5,
+        "recall": 0.8
+      },
+      "top_5": {
+        "recovered": 4,
+        "denominator": 5,
+        "recall": 0.8
+      },
+      "top_10": {
+        "recovered": 4,
+        "denominator": 5,
+        "recall": 0.8
+      },
+      "median_rank": 1.0,
+      "mean_rank": 13.4,
+      "interpretation_support": "sufficient_for_description"
+    },
+    "OW": {
+      "N": 1,
+      "top_1": {
+        "recovered": 0,
+        "denominator": 1,
+        "recall": 0.0
+      },
+      "top_3": {
+        "recovered": 0,
+        "denominator": 1,
+        "recall": 0.0
+      },
+      "top_5": {
+        "recovered": 0,
+        "denominator": 1,
+        "recall": 0.0
+      },
+      "top_10": {
+        "recovered": 0,
+        "denominator": 1,
+        "recall": 0.0
+      },
+      "median_rank": 38.0,
+      "mean_rank": 38.0,
+      "interpretation_support": "rare_preserve_count_only"
+    },
+    "R": {
+      "N": 44,
+      "top_1": {
+        "recovered": 7,
+        "denominator": 44,
+        "recall": 0.1590909090909091
+      },
+      "top_3": {
+        "recovered": 14,
+        "denominator": 44,
+        "recall": 0.3181818181818182
+      },
+      "top_5": {
+        "recovered": 21,
+        "denominator": 44,
+        "recall": 0.4772727272727273
+      },
+      "top_10": {
+        "recovered": 27,
+        "denominator": 44,
+        "recall": 0.6136363636363636
+      },
+      "median_rank": 8.0,
+      "mean_rank": 17.181818181818183,
+      "interpretation_support": "sufficient_for_description"
+    },
+    "S": {
+      "N": 14,
+      "top_1": {
+        "recovered": 2,
+        "denominator": 14,
+        "recall": 0.14285714285714285
+      },
+      "top_3": {
+        "recovered": 3,
+        "denominator": 14,
+        "recall": 0.21428571428571427
+      },
+      "top_5": {
+        "recovered": 3,
+        "denominator": 14,
+        "recall": 0.21428571428571427
+      },
+      "top_10": {
+        "recovered": 5,
+        "denominator": 14,
+        "recall": 0.35714285714285715
+      },
+      "median_rank": 38.5,
+      "mean_rank": 75.85714285714286,
+      "interpretation_support": "sufficient_for_description"
+    },
+    "SH": {
+      "N": 2,
+      "top_1": {
+        "recovered": 1,
+        "denominator": 2,
+        "recall": 0.5
+      },
+      "top_3": {
+        "recovered": 1,
+        "denominator": 2,
+        "recall": 0.5
+      },
+      "top_5": {
+        "recovered": 1,
+        "denominator": 2,
+        "recall": 0.5
+      },
+      "top_10": {
+        "recovered": 1,
+        "denominator": 2,
+        "recall": 0.5
+      },
+      "median_rank": 9.5,
+      "mean_rank": 9.5,
+      "interpretation_support": "rare_preserve_count_only"
+    },
+    "T": {
+      "N": 7,
+      "top_1": {
+        "recovered": 1,
+        "denominator": 7,
+        "recall": 0.14285714285714285
+      },
+      "top_3": {
+        "recovered": 3,
+        "denominator": 7,
+        "recall": 0.42857142857142855
+      },
+      "top_5": {
+        "recovered": 3,
+        "denominator": 7,
+        "recall": 0.42857142857142855
+      },
+      "top_10": {
+        "recovered": 5,
+        "denominator": 7,
+        "recall": 0.7142857142857143
+      },
+      "median_rank": 7.0,
+      "mean_rank": 8.0,
+      "interpretation_support": "sufficient_for_description"
+    },
+    "TH": {
+      "N": 1,
+      "top_1": {
+        "recovered": 0,
+        "denominator": 1,
+        "recall": 0.0
+      },
+      "top_3": {
+        "recovered": 0,
+        "denominator": 1,
+        "recall": 0.0
+      },
+      "top_5": {
+        "recovered": 0,
+        "denominator": 1,
+        "recall": 0.0
+      },
+      "top_10": {
+        "recovered": 0,
+        "denominator": 1,
+        "recall": 0.0
+      },
+      "median_rank": 35.0,
+      "mean_rank": 35.0,
+      "interpretation_support": "rare_preserve_count_only"
+    },
+    "UH": {
+      "N": 4,
+      "top_1": {
+        "recovered": 0,
+        "denominator": 4,
+        "recall": 0.0
+      },
+      "top_3": {
+        "recovered": 0,
+        "denominator": 4,
+        "recall": 0.0
+      },
+      "top_5": {
+        "recovered": 0,
+        "denominator": 4,
+        "recall": 0.0
+      },
+      "top_10": {
+        "recovered": 0,
+        "denominator": 4,
+        "recall": 0.0
+      },
+      "median_rank": 41.5,
+      "mean_rank": 37.25,
+      "interpretation_support": "rare_preserve_count_only"
+    },
+    "UW": {
+      "N": 1,
+      "top_1": {
+        "recovered": 0,
+        "denominator": 1,
+        "recall": 0.0
+      },
+      "top_3": {
+        "recovered": 1,
+        "denominator": 1,
+        "recall": 1.0
+      },
+      "top_5": {
+        "recovered": 1,
+        "denominator": 1,
+        "recall": 1.0
+      },
+      "top_10": {
+        "recovered": 1,
+        "denominator": 1,
+        "recall": 1.0
+      },
+      "median_rank": 3.0,
+      "mean_rank": 3.0,
+      "interpretation_support": "rare_preserve_count_only"
+    },
+    "W": {
+      "N": 6,
+      "top_1": {
+        "recovered": 0,
+        "denominator": 6,
+        "recall": 0.0
+      },
+      "top_3": {
+        "recovered": 0,
+        "denominator": 6,
+        "recall": 0.0
+      },
+      "top_5": {
+        "recovered": 0,
+        "denominator": 6,
+        "recall": 0.0
+      },
+      "top_10": {
+        "recovered": 2,
+        "denominator": 6,
+        "recall": 0.3333333333333333
+      },
+      "median_rank": 15.0,
+      "mean_rank": 22.333333333333332,
+      "interpretation_support": "sufficient_for_description"
+    },
+    "Y": {
+      "N": 15,
+      "top_1": {
+        "recovered": 3,
+        "denominator": 15,
+        "recall": 0.2
+      },
+      "top_3": {
+        "recovered": 5,
+        "denominator": 15,
+        "recall": 0.3333333333333333
+      },
+      "top_5": {
+        "recovered": 7,
+        "denominator": 15,
+        "recall": 0.4666666666666667
+      },
+      "top_10": {
+        "recovered": 8,
+        "denominator": 15,
+        "recall": 0.5333333333333333
+      },
+      "median_rank": 9.0,
+      "mean_rank": 47.93333333333333,
+      "interpretation_support": "sufficient_for_description"
+    },
+    "Z": {
+      "N": 1,
+      "top_1": {
+        "recovered": 1,
+        "denominator": 1,
+        "recall": 1.0
+      },
+      "top_3": {
+        "recovered": 1,
+        "denominator": 1,
+        "recall": 1.0
+      },
+      "top_5": {
+        "recovered": 1,
+        "denominator": 1,
+        "recall": 1.0
+      },
+      "top_10": {
+        "recovered": 1,
+        "denominator": 1,
+        "recall": 1.0
+      },
+      "median_rank": 1.0,
+      "mean_rank": 1.0,
+      "interpretation_support": "rare_preserve_count_only"
+    }
+  },
+  "descriptive_support_marker": "N>=5",
+  "rare_phone_counts_preserved": true,
+  "phone_specific_rule": false
+}

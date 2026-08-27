@@ -1,0 +1,53 @@
+{
+  "stage": "R5-2B relation-competitive exact CTC TRAIN development contract",
+  "status": "PASS",
+  "verified_on": "2026-08-18",
+  "identities": [
+    {
+      "name": "R5-2A artifact manifest",
+      "path": "ai-training/experiments/r5_2a_addition_fix_feasibility/artifact_hashes.json",
+      "expected_sha256": "F8E476F8FFA6AB2CD0F833B17D667D0D9B6CE3FC6B9FA1A7F5C1A3D71BA753E1",
+      "actual_sha256": "F8E476F8FFA6AB2CD0F833B17D667D0D9B6CE3FC6B9FA1A7F5C1A3D71BA753E1",
+      "match": true,
+      "manifested_artifacts_verified": 11
+    },
+    {
+      "name": "V4 metadata",
+      "path": "ai-training/datasets/l2-arctic/metadata/all_speakers_expected_observed_v4.csv",
+      "expected_sha256": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D",
+      "actual_sha256": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D",
+      "match": true
+    },
+    {
+      "name": "R4-4C2 frozen checkpoint",
+      "path": "ai-training/experiments/r4_4c2_bigru_ctc_seed42/R4_4C2_bigru_ctc_phone_sequence_seed42_best_validation_per.pt",
+      "expected_sha256": "F54C9C2361AE78E1C37353AEB338A2DE6722C0B1EC4F885F6B52688CE9E88085",
+      "actual_sha256": "F54C9C2361AE78E1C37353AEB338A2DE6722C0B1EC4F885F6B52688CE9E88085",
+      "match": true,
+      "loaded": false
+    },
+    {
+      "name": "R5-1A frozen scorer",
+      "path": "ai-training/experiments/r5_1a_alignability_safe_addition_scoring/r5_1a_scorer.py",
+      "expected_sha256": "4DE49C9070C973EE44EFBD09DFC063C436779E723D12EC7A7A2BC4A06AF35F90",
+      "actual_sha256": "4DE49C9070C973EE44EFBD09DFC063C436779E723D12EC7A7A2BC4A06AF35F90",
+      "match": true
+    },
+    {
+      "name": "R5-1 closure manifest",
+      "path": "ai-training/experiments/r5_1_addition_scoring_closure/artifact_hashes.json",
+      "expected_sha256": "C8E71EDE56902D594A60F1194ABF8A72AB0A7EFBE4F212F57BC71FCEF21B1D69",
+      "actual_sha256": "C8E71EDE56902D594A60F1194ABF8A72AB0A7EFBE4F212F57BC71FCEF21B1D69",
+      "match": true
+    },
+    {
+      "name": "R5 documentation manifest",
+      "path": "ai-training/docs/R5_DOCUMENTATION_UPDATE_MANIFEST.json",
+      "expected_sha256": "1E9AE8829F7C3DAAB25FD8E1FBFB30EE6BFE3746E9A16DFF2379CD39C074D813",
+      "actual_sha256": "1E9AE8829F7C3DAAB25FD8E1FBFB30EE6BFE3746E9A16DFF2379CD39C074D813",
+      "match": true
+    }
+  ],
+  "identity_failures": [],
+  "upstream_artifacts_modified": false
+}

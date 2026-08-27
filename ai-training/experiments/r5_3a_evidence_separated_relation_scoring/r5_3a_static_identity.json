@@ -1,0 +1,65 @@
+{
+  "stage": "R5-3A synthetic static verification",
+  "status": "PASS",
+  "verified_on": "2026-08-19",
+  "identities": [
+    {
+      "name": "R5-3A development contract",
+      "expected_sha256": "A1594B45A8EE9C542FEFF28695DA27D59D07C4A37596EAB1D4308161A7B583B3",
+      "actual_sha256": "A1594B45A8EE9C542FEFF28695DA27D59D07C4A37596EAB1D4308161A7B583B3",
+      "match": true
+    },
+    {
+      "name": "R5-3A preregistration",
+      "expected_sha256": "2239C047504B4B6CA212A40D0284DD38E626CF6E73D541E8AF036311BC8A6CB1",
+      "actual_sha256": "2239C047504B4B6CA212A40D0284DD38E626CF6E73D541E8AF036311BC8A6CB1",
+      "match": true
+    },
+    {
+      "name": "R5-3A contract manifest",
+      "expected_sha256": "CB3C4EC1E2402F3821BF61CA9302731D56CE6FCED2B025295FF6FC780D521D6D",
+      "actual_sha256": "CB3C4EC1E2402F3821BF61CA9302731D56CE6FCED2B025295FF6FC780D521D6D",
+      "manifest_entries_verified": 9,
+      "failures": [],
+      "match": true
+    },
+    {
+      "name": "R5-1A execution manifest",
+      "expected_sha256": "C9343A75CE26C2BEECA388EBA855E91AE0992D22C0C5D785308D0A98B89A3CD6",
+      "actual_sha256": "C9343A75CE26C2BEECA388EBA855E91AE0992D22C0C5D785308D0A98B89A3CD6",
+      "manifest_entries_verified": 14,
+      "failures": [],
+      "match": true
+    },
+    {
+      "name": "R5-2B execution manifest",
+      "expected_sha256": "37F3C86FF11526B8AB54D173937A0F488125A1D0B610032CC8A5D47B11602387",
+      "actual_sha256": "37F3C86FF11526B8AB54D173937A0F488125A1D0B610032CC8A5D47B11602387",
+      "manifest_entries_verified": 21,
+      "failures": [],
+      "match": true
+    },
+    {
+      "name": "R5-2C manifest",
+      "expected_sha256": "C18621208A35074B7681EFC95261B73147B4A6E3716F17AF0AB0471F8B328F90",
+      "actual_sha256": "C18621208A35074B7681EFC95261B73147B4A6E3716F17AF0AB0471F8B328F90",
+      "manifest_entries_verified": 15,
+      "failures": [],
+      "match": true
+    },
+    {
+      "name": "V4",
+      "expected_sha256": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D",
+      "actual_sha256": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D",
+      "match": true
+    },
+    {
+      "name": "frozen checkpoint",
+      "expected_sha256": "F54C9C2361AE78E1C37353AEB338A2DE6722C0B1EC4F885F6B52688CE9E88085",
+      "actual_sha256": "F54C9C2361AE78E1C37353AEB338A2DE6722C0B1EC4F885F6B52688CE9E88085",
+      "match": true,
+      "loaded": false
+    }
+  ],
+  "all_match": true
+}

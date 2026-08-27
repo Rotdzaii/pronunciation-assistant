@@ -1,0 +1,47 @@
+{
+  "same_tensor_control": {
+    "construction": "((arange(4*41,dtype).reshape(4,41).remainder(17)-8)/7)",
+    "same_tensor_object_used_within_each device/dtype case": true,
+    "shape": [4, 41],
+    "T": 4,
+    "blank_index": 40
+  },
+  "cuda_float32": {
+    "frozen_scorer_A": -15.667129516601562,
+    "shared_log_probs_explicit_sum_B": -15.667129516601562,
+    "execution_adapter_cpu_sum_C": -15.667130470275879,
+    "framework_target_length_zero_D": -15.667130470275879,
+    "A_equals_B": true,
+    "C_equals_D": true,
+    "absolute_A_minus_C": 9.5367431640625e-7
+  },
+  "cuda_float64": {
+    "frozen_scorer_A": -15.66712968974069,
+    "shared_log_probs_explicit_sum_B": -15.66712968974069,
+    "execution_adapter_cpu_sum_C": -15.66712968974069,
+    "framework_target_length_zero_D": -15.66712968974069,
+    "all_equal": true
+  },
+  "cpu_float32": {
+    "frozen_scorer_A": -15.667130470275879,
+    "shared_log_probs_explicit_sum_B": -15.667130470275879,
+    "execution_adapter_cpu_sum_C": -15.667130470275879,
+    "framework_target_length_zero_D": -15.667130470275879,
+    "all_equal": true
+  },
+  "cpu_float64": {
+    "frozen_scorer_A": -15.66712968974069,
+    "shared_log_probs_explicit_sum_B": -15.66712968974069,
+    "execution_adapter_cpu_sum_C": -15.66712968974069,
+    "framework_target_length_zero_D": -15.66712968974069,
+    "all_equal": true
+  },
+  "original_static_fixture": {
+    "explicit": -19.43882697170362,
+    "framework": -19.43882697170362,
+    "absolute_difference": 0.0,
+    "rerun_summary_sha256": "F0E54A0A4DBC1378F424E6C8FE8B0A9861CDD72DCBE72C045B96660324723197",
+    "matches_frozen_static_run_sha256": true,
+    "status": "PASS"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "status": "PASS",
+  "research_branch": "research/phoenix-correctness",
+  "verified_at": "2026-08-15T03:00:00+07:00",
+  "identities": {
+    "v4": {
+      "path": "ai-training/datasets/l2-arctic/metadata/all_speakers_expected_observed_v4.csv",
+      "expected_sha256": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D",
+      "actual_sha256": "160CF1813716CFE598A6C913B38A1A8492E67DE6E3F779BF121B94352DB3F54D",
+      "byte_size": 48727961,
+      "match": true
+    },
+    "checkpoint": {
+      "path": "ai-training/experiments/r4_4c2_bigru_ctc_seed42/R4_4C2_bigru_ctc_phone_sequence_seed42_best_validation_per.pt",
+      "expected_sha256": "F54C9C2361AE78E1C37353AEB338A2DE6722C0B1EC4F885F6B52688CE9E88085",
+      "actual_sha256": "F54C9C2361AE78E1C37353AEB338A2DE6722C0B1EC4F885F6B52688CE9E88085",
+      "byte_size": 813093,
+      "match": true
+    },
+    "r5_0_preregistration": {
+      "sha256": "14CBFADAC0BE35D53C01DC966A030A71F24EC4D86EA88384BC449544CE12AEF7",
+      "match": true
+    },
+    "r5_0_report": {
+      "sha256": "DF484A09333A2F53A05E98E1C66B3C330CBA35F029B04B0BBB1623A3A9BAA3BA",
+      "match": true
+    },
+    "r5_0_final_status": {
+      "sha256": "29F06679FD24F8A2BBBED25B9B57A693D15046444A97BF5D951D575E5850D0B6",
+      "match": true
+    }
+  },
+  "all_match": true,
+  "audio_paths_resolved": false,
+  "model_loaded": false
+}

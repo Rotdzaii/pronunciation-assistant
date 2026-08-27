@@ -1,0 +1,38 @@
+{
+  "selected_epoch": 13,
+  "checkpoint_selection_used_this_mode": false,
+  "metrics": {
+    "rows": 29191,
+    "non_deletion_support": 28212,
+    "deletion_support": 979,
+    "accuracy": 0.7671200027405707,
+    "balanced_accuracy": 0.7316186709500098,
+    "macro_f1": 0.5155774809093892,
+    "deletion_precision": 0.09460777483628256,
+    "deletion_recall": 0.693564862104188,
+    "deletion_f1": 0.16650318783717508,
+    "confusion_matrix": [
+      [
+        21714,
+        6498
+      ],
+      [
+        300,
+        679
+      ]
+    ],
+    "origin_false_deletion_rate": {
+      "correct": {
+        "support": 25303,
+        "false_deletion_rate": 0.21222779907520847
+      },
+      "substitution": {
+        "support": 2909,
+        "false_deletion_rate": 0.38776211756617396
+      }
+    },
+    "loss": 0.517408980068831,
+    "mode": "no_audio",
+    "threshold": "argmax"
+  }
+}

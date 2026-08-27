@@ -1,0 +1,8 @@
+{
+  "path": "ai-training/scripts/execute_r4_4d1_locked_hypothesis_validation_v2.py",
+  "sha256": "B2894879020B59B7CD11AB39BAD8B98727CA4368D545111A29A26F190DA746AC",
+  "mode": "future validation-only locked execution",
+  "train_calibration_path": false,
+  "output_directory": "ai-training/experiments/r4_4d1_locked_hypothesis_validation/locked_execution_v2",
+  "frozen_after_synthetic_tests": true
+}

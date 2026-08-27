@@ -1,0 +1,31 @@
+{
+  "confirmation": {
+    "A_binary_macro_f1_at_least_0_70": {"value": 0.6437496737840533, "pass": false},
+    "B_deletion_recall_at_least_0_45": {"value": 0.43982494529540483, "pass": false},
+    "C_deletion_f1_at_least_0_40": {"value": 0.3213429256594724, "pass": false},
+    "D_substitution_false_deletion_at_most_0_25": {"value": 0.04954954954954955, "pass": true},
+    "E_matched_macro_f1_at_least_0_60": {"value": 0.6133438208203699, "pass": true},
+    "F_matched_deletion_f1_at_least_0_55": {"value": 0.5338015803336259, "pass": false},
+    "G_every_eligible_speaker_recall_at_least_0_25": {"eligible_speakers": ["HKK", "HQTV", "LXC", "MBMPS", "SVBI"], "pass": true},
+    "H_three_relation_macro_f1_at_least_0_40": {"value": 0.4622633291545553, "pass": true},
+    "all_pass": false
+  },
+  "strong_partial": {
+    "binary_macro_f1_at_least_0_65": false,
+    "deletion_f1_at_least_0_35": false,
+    "deletion_recall_at_least_0_40": true,
+    "substitution_false_deletion_at_most_0_25": true,
+    "matched_macro_f1_at_least_0_58": true,
+    "matched_deletion_f1_at_least_0_50": true,
+    "three_relation_macro_f1_at_least_0_38": true,
+    "every_eligible_speaker_recall_at_least_0_20": true,
+    "all_pass": false
+  },
+  "threshold_transfer_fail": {
+    "deletion_vs_nondeletion_roc_auc_at_least_0_75": {"value": 0.8877398573682524, "pass": true},
+    "deletion_vs_substitution_roc_auc_at_least_0_70": {"value": 0.88764242908116, "pass": true},
+    "all_pass": true
+  },
+  "classification": "R4_4D1_HYPOTHESIS_THRESHOLD_TRANSFER_FAIL",
+  "subjective_override": false
+}

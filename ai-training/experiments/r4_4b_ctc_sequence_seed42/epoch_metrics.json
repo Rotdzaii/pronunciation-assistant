@@ -1,0 +1,4616 @@
+[
+  {
+    "epoch": 1,
+    "train": {
+      "ctc_loss": 5.259353903520517,
+      "online_phone_error_rate": 0.9989590942293645,
+      "online_exact_sequence_accuracy": 0.017713266498554647,
+      "note": "online TRAIN PER is accumulated from each batch immediately before its optimizer update with training-mode dropout"
+    },
+    "validation": {
+      "loss": 3.332475565481877,
+      "phone_error_rate": 0.8803052354167487,
+      "target_phone_denominator": 25423,
+      "edit_counts": {
+        "substitution": 8592,
+        "deletion": 13732,
+        "insertion": 56,
+        "errors": 22380
+      },
+      "exact_decoded_sequence_accuracy": 0.04218426501035197,
+      "exact_decoded_words": 326,
+      "binary": {
+        "rows": 26337,
+        "accuracy": 0.43824277632228426,
+        "balanced_accuracy": 0.42265667961547937,
+        "macro_f1": 0.3246836105820751,
+        "non_deletion": {
+          "precision": 0.9536452108588014,
+          "recall": 0.43940526295087123,
+          "f1": 0.6016102539246574,
+          "support": 25423
+        },
+        "deletion": {
+          "precision": 0.02537099090473911,
+          "recall": 0.4059080962800875,
+          "f1": 0.047756967239492826,
+          "support": 914
+        },
+        "confusion_matrix_labels": [
+          "non_deletion",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            11171,
+            14252
+          ],
+          [
+            543,
+            371
+          ]
+        ]
+      },
+      "three_relation": {
+        "rows": 26337,
+        "macro_f1": 0.15475961465812085,
+        "per_class": {
+          "correct": {
+            "precision": 0.9457693564194708,
+            "recall": 0.12720242541412188,
+            "f1": 0.22424477149496513,
+            "support": 22759
+          },
+          "substitution": {
+            "precision": 0.12573673870333987,
+            "recall": 0.4084084084084084,
+            "f1": 0.19227710523990457,
+            "support": 2664
+          },
+          "deletion": {
+            "precision": 0.02537099090473911,
+            "recall": 0.4059080962800875,
+            "f1": 0.047756967239492826,
+            "support": 914
+          }
+        },
+        "confusion_matrix_labels": [
+          "correct",
+          "substitution",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            2895,
+            7048,
+            12816
+          ],
+          [
+            140,
+            1088,
+            1436
+          ],
+          [
+            26,
+            517,
+            371
+          ]
+        ]
+      },
+      "correct_false_deletion_rate": 0.5631178874291489,
+      "substitution_false_deletion_rate": 0.539039039039039,
+      "predicted_insertions": 33,
+      "predicted_insertion_phone_counts": {
+        "HH": 29,
+        "D": 3,
+        "W": 1
+      },
+      "empty_target_per_rule": "empty target contributes decoded phones as insertions to aggregate PER numerator; denominator remains total nonempty target phones; per-word PER is 0 only for empty->empty and otherwise undefined"
+    },
+    "epoch_seconds": 15.660702799999854
+  },
+  {
+    "epoch": 2,
+    "train": {
+      "ctc_loss": 3.1528681800465015,
+      "online_phone_error_rate": 0.885299488677867,
+      "online_exact_sequence_accuracy": 0.0325973307091457,
+      "note": "online TRAIN PER is accumulated from each batch immediately before its optimizer update with training-mode dropout"
+    },
+    "validation": {
+      "loss": 3.004207251975255,
+      "phone_error_rate": 0.8432128387680446,
+      "target_phone_denominator": 25423,
+      "edit_counts": {
+        "substitution": 7905,
+        "deletion": 13477,
+        "insertion": 55,
+        "errors": 21437
+      },
+      "exact_decoded_sequence_accuracy": 0.04723084886128364,
+      "exact_decoded_words": 365,
+      "binary": {
+        "rows": 26337,
+        "accuracy": 0.44800091126552,
+        "balanced_accuracy": 0.42771115784385527,
+        "macro_f1": 0.32989063046483647,
+        "non_deletion": {
+          "precision": 0.954640380920558,
+          "recall": 0.44951421940762304,
+          "f1": 0.6112210515055891,
+          "support": 25423
+        },
+        "deletion": {
+          "precision": 0.025824864262842823,
+          "recall": 0.4059080962800875,
+          "f1": 0.04856020942408377,
+          "support": 914
+        },
+        "confusion_matrix_labels": [
+          "non_deletion",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            11428,
+            13995
+          ],
+          [
+            543,
+            371
+          ]
+        ]
+      },
+      "three_relation": {
+        "rows": 26337,
+        "macro_f1": 0.17374175258478539,
+        "per_class": {
+          "correct": {
+            "precision": 0.9471442885771543,
+            "recall": 0.16613207961685486,
+            "f1": 0.28268102127023287,
+            "support": 22759
+          },
+          "substitution": {
+            "precision": 0.1267076074696077,
+            "recall": 0.3795045045045045,
+            "f1": 0.18998402706003947,
+            "support": 2664
+          },
+          "deletion": {
+            "precision": 0.025824864262842823,
+            "recall": 0.4059080962800875,
+            "f1": 0.04856020942408377,
+            "support": 914
+          }
+        },
+        "confusion_matrix_labels": [
+          "correct",
+          "substitution",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            3781,
+            6463,
+            12515
+          ],
+          [
+            173,
+            1011,
+            1480
+          ],
+          [
+            38,
+            505,
+            371
+          ]
+        ]
+      },
+      "correct_false_deletion_rate": 0.5498923502790105,
+      "substitution_false_deletion_rate": 0.5555555555555556,
+      "predicted_insertions": 30,
+      "predicted_insertion_phone_counts": {
+        "HH": 15,
+        "D": 8,
+        "T": 4,
+        "W": 2,
+        "B": 1
+      },
+      "empty_target_per_rule": "empty target contributes decoded phones as insertions to aggregate PER numerator; denominator remains total nonempty target phones; per-word PER is 0 only for empty->empty and otherwise undefined"
+    },
+    "epoch_seconds": 14.869317799999408
+  },
+  {
+    "epoch": 3,
+    "train": {
+      "ctc_loss": 2.90261998469264,
+      "online_phone_error_rate": 0.8454346238130022,
+      "online_exact_sequence_accuracy": 0.0463743157635771,
+      "note": "online TRAIN PER is accumulated from each batch immediately before its optimizer update with training-mode dropout"
+    },
+    "validation": {
+      "loss": 2.849369405836299,
+      "phone_error_rate": 0.818904141918735,
+      "target_phone_denominator": 25423,
+      "edit_counts": {
+        "substitution": 9349,
+        "deletion": 11350,
+        "insertion": 120,
+        "errors": 20819
+      },
+      "exact_decoded_sequence_accuracy": 0.054865424430641824,
+      "exact_decoded_words": 424,
+      "binary": {
+        "rows": 26337,
+        "accuracy": 0.5282682158180506,
+        "balanced_accuracy": 0.4634865171021847,
+        "macro_f1": 0.37024245166771647,
+        "non_deletion": {
+          "precision": 0.9607287162401644,
+          "recall": 0.5330999488652008,
+          "f1": 0.6857070579306855,
+          "support": 25423
+        },
+        "deletion": {
+          "precision": 0.029435813573180702,
+          "recall": 0.3938730853391685,
+          "f1": 0.054777845404747415,
+          "support": 914
+        },
+        "confusion_matrix_labels": [
+          "non_deletion",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            13553,
+            11870
+          ],
+          [
+            554,
+            360
+          ]
+        ]
+      },
+      "three_relation": {
+        "rows": 26337,
+        "macro_f1": 0.19228553146570268,
+        "per_class": {
+          "correct": {
+            "precision": 0.9484467944481163,
+            "recall": 0.18915593831011907,
+            "f1": 0.3154077221774489,
+            "support": 22759
+          },
+          "substitution": {
+            "precision": 0.13210702341137123,
+            "recall": 0.4744744744744745,
+            "f1": 0.2066710268149117,
+            "support": 2664
+          },
+          "deletion": {
+            "precision": 0.029435813573180702,
+            "recall": 0.3938730853391685,
+            "f1": 0.054777845404747415,
+            "support": 914
+          }
+        },
+        "confusion_matrix_labels": [
+          "correct",
+          "substitution",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            4305,
+            7791,
+            10663
+          ],
+          [
+            193,
+            1264,
+            1207
+          ],
+          [
+            41,
+            513,
+            360
+          ]
+        ]
+      },
+      "correct_false_deletion_rate": 0.4685179489432752,
+      "substitution_false_deletion_rate": 0.4530780780780781,
+      "predicted_insertions": 86,
+      "predicted_insertion_phone_counts": {
+        "HH": 49,
+        "D": 17,
+        "T": 10,
+        "W": 4,
+        "AH": 3,
+        "B": 2,
+        "K": 1
+      },
+      "empty_target_per_rule": "empty target contributes decoded phones as insertions to aggregate PER numerator; denominator remains total nonempty target phones; per-word PER is 0 only for empty->empty and otherwise undefined"
+    },
+    "epoch_seconds": 15.003082799999902
+  },
+  {
+    "epoch": 4,
+    "train": {
+      "ctc_loss": 2.7438031720150233,
+      "online_phone_error_rate": 0.8135500365230095,
+      "online_exact_sequence_accuracy": 0.057506611722738174,
+      "note": "online TRAIN PER is accumulated from each batch immediately before its optimizer update with training-mode dropout"
+    },
+    "validation": {
+      "loss": 2.7094918668393517,
+      "phone_error_rate": 0.7906226645163829,
+      "target_phone_denominator": 25423,
+      "edit_counts": {
+        "substitution": 8792,
+        "deletion": 11200,
+        "insertion": 108,
+        "errors": 20100
+      },
+      "exact_decoded_sequence_accuracy": 0.0661231884057971,
+      "exact_decoded_words": 511,
+      "binary": {
+        "rows": 26337,
+        "accuracy": 0.5355203705813114,
+        "balanced_accuracy": 0.4793726687123455,
+        "macro_f1": 0.3752987135407101,
+        "non_deletion": {
+          "precision": 0.9627420712882403,
+          "recall": 0.5397081382999646,
+          "f1": 0.6916698172652804,
+          "support": 25423
+        },
+        "deletion": {
+          "precision": 0.031692180388911875,
+          "recall": 0.4190371991247265,
+          "f1": 0.0589276098161397,
+          "support": 914
+        },
+        "confusion_matrix_labels": [
+          "non_deletion",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            13721,
+            11702
+          ],
+          [
+            531,
+            383
+          ]
+        ]
+      },
+      "three_relation": {
+        "rows": 26337,
+        "macro_f1": 0.20728491110882885,
+        "per_class": {
+          "correct": {
+            "precision": 0.9521193092621664,
+            "recall": 0.21319038622083572,
+            "f1": 0.34837551606533834,
+            "support": 22759
+          },
+          "substitution": {
+            "precision": 0.13848842289209262,
+            "recall": 0.47597597597597596,
+            "f1": 0.21455160744500845,
+            "support": 2664
+          },
+          "deletion": {
+            "precision": 0.031692180388911875,
+            "recall": 0.4190371991247265,
+            "f1": 0.0589276098161397,
+            "support": 914
+          }
+        },
+        "confusion_matrix_labels": [
+          "correct",
+          "substitution",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            4852,
+            7400,
+            10507
+          ],
+          [
+            201,
+            1268,
+            1195
+          ],
+          [
+            43,
+            488,
+            383
+          ]
+        ]
+      },
+      "correct_false_deletion_rate": 0.46166351772924996,
+      "substitution_false_deletion_rate": 0.4485735735735736,
+      "predicted_insertions": 79,
+      "predicted_insertion_phone_counts": {
+        "HH": 30,
+        "D": 24,
+        "T": 9,
+        "AH": 7,
+        "W": 5,
+        "IY": 1,
+        "DH": 1,
+        "IH": 1,
+        "F": 1
+      },
+      "empty_target_per_rule": "empty target contributes decoded phones as insertions to aggregate PER numerator; denominator remains total nonempty target phones; per-word PER is 0 only for empty->empty and otherwise undefined"
+    },
+    "epoch_seconds": 20.917508999998972
+  },
+  {
+    "epoch": 5,
+    "train": {
+      "ctc_loss": 2.621804219593208,
+      "online_phone_error_rate": 0.7867969320672024,
+      "online_exact_sequence_accuracy": 0.06747032412817516,
+      "note": "online TRAIN PER is accumulated from each batch immediately before its optimizer update with training-mode dropout"
+    },
+    "validation": {
+      "loss": 2.618503170971051,
+      "phone_error_rate": 0.7620658458875821,
+      "target_phone_denominator": 25423,
+      "edit_counts": {
+        "substitution": 9370,
+        "deletion": 9852,
+        "insertion": 152,
+        "errors": 19374
+      },
+      "exact_decoded_sequence_accuracy": 0.06728778467908902,
+      "exact_decoded_words": 520,
+      "binary": {
+        "rows": 26337,
+        "accuracy": 0.5869309336674641,
+        "balanced_accuracy": 0.5044199625918088,
+        "macro_f1": 0.4000912801905393,
+        "non_deletion": {
+          "precision": 0.9657955418908531,
+          "recall": 0.5930850017700507,
+          "f1": 0.7348848543925917,
+          "support": 25423
+        },
+        "deletion": {
+          "precision": 0.035431235431235435,
+          "recall": 0.41575492341356673,
+          "f1": 0.06529770598848698,
+          "support": 914
+        },
+        "confusion_matrix_labels": [
+          "non_deletion",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            15078,
+            10345
+          ],
+          [
+            534,
+            380
+          ]
+        ]
+      },
+      "three_relation": {
+        "rows": 26337,
+        "macro_f1": 0.22528599450768447,
+        "per_class": {
+          "correct": {
+            "precision": 0.9557445331482124,
+            "recall": 0.24197020958741597,
+            "f1": 0.38617159286140035,
+            "support": 22759
+          },
+          "substitution": {
+            "precision": 0.14253807106598984,
+            "recall": 0.527027027027027,
+            "f1": 0.22438868467316606,
+            "support": 2664
+          },
+          "deletion": {
+            "precision": 0.035431235431235435,
+            "recall": 0.41575492341356673,
+            "f1": 0.06529770598848698,
+            "support": 914
+          }
+        },
+        "confusion_matrix_labels": [
+          "correct",
+          "substitution",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            5507,
+            7957,
+            9295
+          ],
+          [
+            210,
+            1404,
+            1050
+          ],
+          [
+            45,
+            489,
+            380
+          ]
+        ]
+      },
+      "correct_false_deletion_rate": 0.4084098598356694,
+      "substitution_false_deletion_rate": 0.39414414414414417,
+      "predicted_insertions": 111,
+      "predicted_insertion_phone_counts": {
+        "HH": 46,
+        "D": 18,
+        "W": 12,
+        "T": 8,
+        "F": 6,
+        "AH": 6,
+        "IH": 5,
+        "B": 5,
+        "K": 1,
+        "M": 1,
+        "IY": 1,
+        "S": 1,
+        "AY": 1
+      },
+      "empty_target_per_rule": "empty target contributes decoded phones as insertions to aggregate PER numerator; denominator remains total nonempty target phones; per-word PER is 0 only for empty->empty and otherwise undefined"
+    },
+    "epoch_seconds": 22.70422260000123
+  },
+  {
+    "epoch": 6,
+    "train": {
+      "ctc_loss": 2.531263924237437,
+      "online_phone_error_rate": 0.7628378378378379,
+      "online_exact_sequence_accuracy": 0.07989421243618919,
+      "note": "online TRAIN PER is accumulated from each batch immediately before its optimizer update with training-mode dropout"
+    },
+    "validation": {
+      "loss": 2.5154443576962806,
+      "phone_error_rate": 0.7433819769500059,
+      "target_phone_denominator": 25423,
+      "edit_counts": {
+        "substitution": 9439,
+        "deletion": 9281,
+        "insertion": 179,
+        "errors": 18899
+      },
+      "exact_decoded_sequence_accuracy": 0.08372153209109731,
+      "exact_decoded_words": 647,
+      "binary": {
+        "rows": 26337,
+        "accuracy": 0.6085734897672476,
+        "balanced_accuracy": 0.5145755265115557,
+        "macro_f1": 0.41028232219347294,
+        "non_deletion": {
+          "precision": 0.96688496231311,
+          "recall": 0.6155843134169846,
+          "f1": 0.7522411016847317,
+          "support": 25423
+        },
+        "deletion": {
+          "precision": 0.037237710570387154,
+          "recall": 0.4135667396061269,
+          "f1": 0.06832354270221419,
+          "support": 914
+        },
+        "confusion_matrix_labels": [
+          "non_deletion",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            15650,
+            9773
+          ],
+          [
+            536,
+            378
+          ]
+        ]
+      },
+      "three_relation": {
+        "rows": 26337,
+        "macro_f1": 0.23611424763371971,
+        "per_class": {
+          "correct": {
+            "precision": 0.9549636803874092,
+            "recall": 0.259941122193418,
+            "f1": 0.4086482005940457,
+            "support": 22759
+          },
+          "substitution": {
+            "precision": 0.14653187869082174,
+            "recall": 0.5495495495495496,
+            "f1": 0.23137099960489924,
+            "support": 2664
+          },
+          "deletion": {
+            "precision": 0.037237710570387154,
+            "recall": 0.4135667396061269,
+            "f1": 0.06832354270221419,
+            "support": 914
+          }
+        },
+        "confusion_matrix_labels": [
+          "correct",
+          "substitution",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            5916,
+            8044,
+            8799
+          ],
+          [
+            226,
+            1464,
+            974
+          ],
+          [
+            53,
+            483,
+            378
+          ]
+        ]
+      },
+      "correct_false_deletion_rate": 0.3866162836679995,
+      "substitution_false_deletion_rate": 0.3656156156156156,
+      "predicted_insertions": 135,
+      "predicted_insertion_phone_counts": {
+        "HH": 40,
+        "D": 34,
+        "T": 20,
+        "AH": 11,
+        "W": 10,
+        "IH": 6,
+        "B": 3,
+        "M": 2,
+        "F": 2,
+        "S": 2,
+        "SH": 1,
+        "IY": 1,
+        "DH": 1,
+        "P": 1,
+        "AY": 1
+      },
+      "empty_target_per_rule": "empty target contributes decoded phones as insertions to aggregate PER numerator; denominator remains total nonempty target phones; per-word PER is 0 only for empty->empty and otherwise undefined"
+    },
+    "epoch_seconds": 22.632549899999503
+  },
+  {
+    "epoch": 7,
+    "train": {
+      "ctc_loss": 2.4552204897940557,
+      "online_phone_error_rate": 0.7453798392987582,
+      "online_exact_sequence_accuracy": 0.08536810381942309,
+      "note": "online TRAIN PER is accumulated from each batch immediately before its optimizer update with training-mode dropout"
+    },
+    "validation": {
+      "loss": 2.458204310009445,
+      "phone_error_rate": 0.7206466585375447,
+      "target_phone_denominator": 25423,
+      "edit_counts": {
+        "substitution": 9725,
+        "deletion": 8395,
+        "insertion": 201,
+        "errors": 18321
+      },
+      "exact_decoded_sequence_accuracy": 0.08812111801242237,
+      "exact_decoded_words": 681,
+      "binary": {
+        "rows": 26337,
+        "accuracy": 0.6441508144435585,
+        "balanced_accuracy": 0.5446060533239298,
+        "macro_f1": 0.4290699983806827,
+        "non_deletion": {
+          "precision": 0.9699045611569764,
+          "recall": 0.6515753451598946,
+          "f1": 0.7794927297538939,
+          "support": 25423
+        },
+        "deletion": {
+          "precision": 0.04320587599913588,
+          "recall": 0.437636761487965,
+          "f1": 0.07864726700747149,
+          "support": 914
+        },
+        "confusion_matrix_labels": [
+          "non_deletion",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            16565,
+            8858
+          ],
+          [
+            514,
+            400
+          ]
+        ]
+      },
+      "three_relation": {
+        "rows": 26337,
+        "macro_f1": 0.2530103232063044,
+        "per_class": {
+          "correct": {
+            "precision": 0.9598168119367706,
+            "recall": 0.2854694845994991,
+            "f1": 0.4400568951503658,
+            "support": 22759
+          },
+          "substitution": {
+            "precision": 0.15121241513094083,
+            "recall": 0.5852102102102102,
+            "f1": 0.240326807461076,
+            "support": 2664
+          },
+          "deletion": {
+            "precision": 0.04320587599913588,
+            "recall": 0.437636761487965,
+            "f1": 0.07864726700747149,
+            "support": 914
+          }
+        },
+        "confusion_matrix_labels": [
+          "correct",
+          "substitution",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            6497,
+            8275,
+            7987
+          ],
+          [
+            234,
+            1559,
+            871
+          ],
+          [
+            38,
+            476,
+            400
+          ]
+        ]
+      },
+      "correct_false_deletion_rate": 0.3509380904257656,
+      "substitution_false_deletion_rate": 0.3269519519519519,
+      "predicted_insertions": 150,
+      "predicted_insertion_phone_counts": {
+        "D": 40,
+        "HH": 21,
+        "W": 16,
+        "AH": 11,
+        "B": 10,
+        "S": 10,
+        "IY": 9,
+        "T": 6,
+        "IH": 6,
+        "K": 5,
+        "N": 4,
+        "M": 4,
+        "F": 3,
+        "P": 2,
+        "AY": 2,
+        "DH": 1
+      },
+      "empty_target_per_rule": "empty target contributes decoded phones as insertions to aggregate PER numerator; denominator remains total nonempty target phones; per-word PER is 0 only for empty->empty and otherwise undefined"
+    },
+    "epoch_seconds": 23.762496100000135
+  },
+  {
+    "epoch": 8,
+    "train": {
+      "ctc_loss": 2.3962500686318213,
+      "online_phone_error_rate": 0.7308802045288532,
+      "online_exact_sequence_accuracy": 0.08948889845623963,
+      "note": "online TRAIN PER is accumulated from each batch immediately before its optimizer update with training-mode dropout"
+    },
+    "validation": {
+      "loss": 2.407462021825723,
+      "phone_error_rate": 0.7205679896157023,
+      "target_phone_denominator": 25423,
+      "edit_counts": {
+        "substitution": 9061,
+        "deletion": 9105,
+        "insertion": 153,
+        "errors": 18319
+      },
+      "exact_decoded_sequence_accuracy": 0.08514492753623189,
+      "exact_decoded_words": 658,
+      "binary": {
+        "rows": 26337,
+        "accuracy": 0.6188631962638114,
+        "balanced_accuracy": 0.5446921458721495,
+        "macro_f1": 0.4189217994432498,
+        "non_deletion": {
+          "precision": 0.9701155044918414,
+          "recall": 0.6243952326633363,
+          "f1": 0.7597760015316135,
+          "support": 25423
+        },
+        "deletion": {
+          "precision": 0.04261078804892721,
+          "recall": 0.4649890590809628,
+          "f1": 0.07806759735488611,
+          "support": 914
+        },
+        "confusion_matrix_labels": [
+          "non_deletion",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            15874,
+            9549
+          ],
+          [
+            489,
+            425
+          ]
+        ]
+      },
+      "three_relation": {
+        "rows": 26337,
+        "macro_f1": 0.2499702276525452,
+        "per_class": {
+          "correct": {
+            "precision": 0.9593568557391693,
+            "recall": 0.2831407355331957,
+            "f1": 0.43723707422988195,
+            "support": 22759
+          },
+          "substitution": {
+            "precision": 0.14969935724652705,
+            "recall": 0.5420420420420421,
+            "f1": 0.2346060113728676,
+            "support": 2664
+          },
+          "deletion": {
+            "precision": 0.04261078804892721,
+            "recall": 0.4649890590809628,
+            "f1": 0.07806759735488611,
+            "support": 914
+          }
+        },
+        "confusion_matrix_labels": [
+          "correct",
+          "substitution",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            6444,
+            7752,
+            8563
+          ],
+          [
+            234,
+            1444,
+            986
+          ],
+          [
+            39,
+            450,
+            425
+          ]
+        ]
+      },
+      "correct_false_deletion_rate": 0.3762467595237049,
+      "substitution_false_deletion_rate": 0.37012012012012013,
+      "predicted_insertions": 108,
+      "predicted_insertion_phone_counts": {
+        "D": 27,
+        "HH": 25,
+        "AH": 11,
+        "T": 10,
+        "IH": 7,
+        "IY": 5,
+        "S": 5,
+        "W": 4,
+        "M": 3,
+        "F": 3,
+        "AE": 2,
+        "AY": 2,
+        "B": 1,
+        "DH": 1,
+        "P": 1,
+        "N": 1
+      },
+      "empty_target_per_rule": "empty target contributes decoded phones as insertions to aggregate PER numerator; denominator remains total nonempty target phones; per-word PER is 0 only for empty->empty and otherwise undefined"
+    },
+    "epoch_seconds": 20.328711800000747
+  },
+  {
+    "epoch": 9,
+    "train": {
+      "ctc_loss": 2.348367138523055,
+      "online_phone_error_rate": 0.7188276113951789,
+      "online_exact_sequence_accuracy": 0.09502429423703795,
+      "note": "online TRAIN PER is accumulated from each batch immediately before its optimizer update with training-mode dropout"
+    },
+    "validation": {
+      "loss": 2.373035218528092,
+      "phone_error_rate": 0.6991307084136412,
+      "target_phone_denominator": 25423,
+      "edit_counts": {
+        "substitution": 9934,
+        "deletion": 7570,
+        "insertion": 270,
+        "errors": 17774
+      },
+      "exact_decoded_sequence_accuracy": 0.09575569358178054,
+      "exact_decoded_words": 740,
+      "binary": {
+        "rows": 26337,
+        "accuracy": 0.6750199339332498,
+        "balanced_accuracy": 0.5537395883102113,
+        "macro_f1": 0.442725543750879,
+        "non_deletion": {
+          "precision": 0.9705882352941176,
+          "recall": 0.6840656098808165,
+          "f1": 0.8025195542327127,
+          "support": 25423
+        },
+        "deletion": {
+          "precision": 0.04596745456705072,
+          "recall": 0.4234135667396061,
+          "f1": 0.08293153326904533,
+          "support": 914
+        },
+        "confusion_matrix_labels": [
+          "non_deletion",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            17391,
+            8032
+          ],
+          [
+            527,
+            387
+          ]
+        ]
+      },
+      "three_relation": {
+        "rows": 26337,
+        "macro_f1": 0.2637355597719194,
+        "per_class": {
+          "correct": {
+            "precision": 0.9617343427391604,
+            "recall": 0.30699942879739883,
+            "f1": 0.46542765787370105,
+            "support": 22759
+          },
+          "substitution": {
+            "precision": 0.15178822866798086,
+            "recall": 0.6069819819819819,
+            "f1": 0.24284748817301194,
+            "support": 2664
+          },
+          "deletion": {
+            "precision": 0.04596745456705072,
+            "recall": 0.4234135667396061,
+            "f1": 0.08293153326904533,
+            "support": 914
+          }
+        },
+        "confusion_matrix_labels": [
+          "correct",
+          "substitution",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            6987,
+            8557,
+            7215
+          ],
+          [
+            230,
+            1617,
+            817
+          ],
+          [
+            48,
+            479,
+            387
+          ]
+        ]
+      },
+      "correct_false_deletion_rate": 0.31701744364866646,
+      "substitution_false_deletion_rate": 0.3066816816816817,
+      "predicted_insertions": 205,
+      "predicted_insertion_phone_counts": {
+        "HH": 57,
+        "D": 42,
+        "W": 14,
+        "AH": 13,
+        "S": 12,
+        "T": 11,
+        "K": 10,
+        "Y": 7,
+        "P": 7,
+        "IY": 7,
+        "IH": 6,
+        "M": 4,
+        "F": 3,
+        "AY": 3,
+        "B": 2,
+        "N": 2,
+        "V": 1,
+        "ER": 1,
+        "DH": 1,
+        "AE": 1,
+        "UW": 1
+      },
+      "empty_target_per_rule": "empty target contributes decoded phones as insertions to aggregate PER numerator; denominator remains total nonempty target phones; per-word PER is 0 only for empty->empty and otherwise undefined"
+    },
+    "epoch_seconds": 18.948032899999816
+  },
+  {
+    "epoch": 10,
+    "train": {
+      "ctc_loss": 2.304701471161568,
+      "online_phone_error_rate": 0.7083820306793279,
+      "online_exact_sequence_accuracy": 0.0998831416446276,
+      "note": "online TRAIN PER is accumulated from each batch immediately before its optimizer update with training-mode dropout"
+    },
+    "validation": {
+      "loss": 2.374322673672228,
+      "phone_error_rate": 0.7157298509223932,
+      "target_phone_denominator": 25423,
+      "edit_counts": {
+        "substitution": 9715,
+        "deletion": 8243,
+        "insertion": 238,
+        "errors": 18196
+      },
+      "exact_decoded_sequence_accuracy": 0.10494306418219462,
+      "exact_decoded_words": 811,
+      "binary": {
+        "rows": 26337,
+        "accuracy": 0.6472263355735277,
+        "balanced_accuracy": 0.5256313288566643,
+        "macro_f1": 0.4271597622792674,
+        "non_deletion": {
+          "precision": 0.9679197122636036,
+          "recall": 0.6562954804704402,
+          "f1": 0.7822132626989522,
+          "support": 25423
+        },
+        "deletion": {
+          "precision": 0.039674689526321576,
+          "recall": 0.3949671772428884,
+          "f1": 0.07210626185958255,
+          "support": 914
+        },
+        "confusion_matrix_labels": [
+          "non_deletion",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            16685,
+            8738
+          ],
+          [
+            553,
+            361
+          ]
+        ]
+      },
+      "three_relation": {
+        "rows": 26337,
+        "macro_f1": 0.2533012353580532,
+        "per_class": {
+          "correct": {
+            "precision": 0.9604437308422128,
+            "recall": 0.28911639351465357,
+            "f1": 0.4444444444444444,
+            "support": 22759
+          },
+          "substitution": {
+            "precision": 0.15288341195725427,
+            "recall": 0.5960960960960962,
+            "f1": 0.24335299977013256,
+            "support": 2664
+          },
+          "deletion": {
+            "precision": 0.039674689526321576,
+            "recall": 0.3949671772428884,
+            "f1": 0.07210626185958255,
+            "support": 914
+          }
+        },
+        "confusion_matrix_labels": [
+          "correct",
+          "substitution",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            6580,
+            8291,
+            7888
+          ],
+          [
+            226,
+            1588,
+            850
+          ],
+          [
+            45,
+            508,
+            361
+          ]
+        ]
+      },
+      "correct_false_deletion_rate": 0.3465881629245573,
+      "substitution_false_deletion_rate": 0.31906906906906907,
+      "predicted_insertions": 180,
+      "predicted_insertion_phone_counts": {
+        "HH": 47,
+        "D": 46,
+        "W": 18,
+        "Y": 16,
+        "T": 12,
+        "AH": 12,
+        "S": 8,
+        "IY": 4,
+        "DH": 4,
+        "IH": 3,
+        "AY": 3,
+        "M": 2,
+        "B": 2,
+        "N": 1,
+        "K": 1,
+        "F": 1
+      },
+      "empty_target_per_rule": "empty target contributes decoded phones as insertions to aggregate PER numerator; denominator remains total nonempty target phones; per-word PER is 0 only for empty->empty and otherwise undefined"
+    },
+    "epoch_seconds": 20.036141300000963
+  },
+  {
+    "epoch": 11,
+    "train": {
+      "ctc_loss": 2.266548333070369,
+      "online_phone_error_rate": 0.6997078159240322,
+      "online_exact_sequence_accuracy": 0.10357340549849314,
+      "note": "online TRAIN PER is accumulated from each batch immediately before its optimizer update with training-mode dropout"
+    },
+    "validation": {
+      "loss": 2.3072056806112173,
+      "phone_error_rate": 0.6922078432915076,
+      "target_phone_denominator": 25423,
+      "edit_counts": {
+        "substitution": 9707,
+        "deletion": 7636,
+        "insertion": 255,
+        "errors": 17598
+      },
+      "exact_decoded_sequence_accuracy": 0.10403726708074534,
+      "exact_decoded_words": 804,
+      "binary": {
+        "rows": 26337,
+        "accuracy": 0.6728936477199378,
+        "balanced_accuracy": 0.5563298744542128,
+        "macro_f1": 0.44235448004801387,
+        "non_deletion": {
+          "precision": 0.9708650829224563,
+          "recall": 0.6815875388427801,
+          "f1": 0.8009059185135541,
+          "support": 25423
+        },
+        "deletion": {
+          "precision": 0.046413005065378724,
+          "recall": 0.4310722100656455,
+          "f1": 0.08380304158247368,
+          "support": 914
+        },
+        "confusion_matrix_labels": [
+          "non_deletion",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            17328,
+            8095
+          ],
+          [
+            520,
+            394
+          ]
+        ]
+      },
+      "three_relation": {
+        "rows": 26337,
+        "macro_f1": 0.2678538763657476,
+        "per_class": {
+          "correct": {
+            "precision": 0.9606719104119451,
+            "recall": 0.31662199569401117,
+            "f1": 0.4762723066754792,
+            "support": 22759
+          },
+          "substitution": {
+            "precision": 0.15308785155117424,
+            "recall": 0.5945945945945946,
+            "f1": 0.24348628083928983,
+            "support": 2664
+          },
+          "deletion": {
+            "precision": 0.046413005065378724,
+            "recall": 0.4310722100656455,
+            "f1": 0.08380304158247368,
+            "support": 914
+          }
+        },
+        "confusion_matrix_labels": [
+          "correct",
+          "substitution",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            7206,
+            8293,
+            7260
+          ],
+          [
+            245,
+            1584,
+            835
+          ],
+          [
+            50,
+            470,
+            394
+          ]
+        ]
+      },
+      "correct_false_deletion_rate": 0.318994683421943,
+      "substitution_false_deletion_rate": 0.31343843843843844,
+      "predicted_insertions": 194,
+      "predicted_insertion_phone_counts": {
+        "HH": 46,
+        "D": 29,
+        "W": 20,
+        "T": 17,
+        "AH": 14,
+        "IY": 11,
+        "Y": 8,
+        "S": 8,
+        "K": 7,
+        "IH": 5,
+        "AY": 5,
+        "AE": 5,
+        "M": 4,
+        "F": 4,
+        "V": 2,
+        "N": 2,
+        "B": 2,
+        "ER": 2,
+        "DH": 1,
+        "P": 1,
+        "CH": 1
+      },
+      "empty_target_per_rule": "empty target contributes decoded phones as insertions to aggregate PER numerator; denominator remains total nonempty target phones; per-word PER is 0 only for empty->empty and otherwise undefined"
+    },
+    "epoch_seconds": 20.153748200000337
+  },
+  {
+    "epoch": 12,
+    "train": {
+      "ctc_loss": 2.2306455704652484,
+      "online_phone_error_rate": 0.6902300949598247,
+      "online_exact_sequence_accuracy": 0.10837074850851836,
+      "note": "online TRAIN PER is accumulated from each batch immediately before its optimizer update with training-mode dropout"
+    },
+    "validation": {
+      "loss": 2.26798834551442,
+      "phone_error_rate": 0.6837115997325257,
+      "target_phone_denominator": 25423,
+      "edit_counts": {
+        "substitution": 8768,
+        "deletion": 8449,
+        "insertion": 165,
+        "errors": 17382
+      },
+      "exact_decoded_sequence_accuracy": 0.10106107660455486,
+      "exact_decoded_words": 781,
+      "binary": {
+        "rows": 26337,
+        "accuracy": 0.6449481717735506,
+        "balanced_accuracy": 0.5661142140195765,
+        "macro_f1": 0.43284704067837954,
+        "non_deletion": {
+          "precision": 0.9721504112808461,
+          "recall": 0.6508279904023916,
+          "f1": 0.7796809839078294,
+          "support": 25423
+        },
+        "deletion": {
+          "precision": 0.047225501770956316,
+          "recall": 0.4814004376367615,
+          "f1": 0.08601309744892972,
+          "support": 914
+        },
+        "confusion_matrix_labels": [
+          "non_deletion",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            16546,
+            8877
+          ],
+          [
+            474,
+            440
+          ]
+        ]
+      },
+      "three_relation": {
+        "rows": 26337,
+        "macro_f1": 0.2715646743056607,
+        "per_class": {
+          "correct": {
+            "precision": 0.9603029511621833,
+            "recall": 0.32312491761500944,
+            "f1": 0.4835453858039912,
+            "support": 22759
+          },
+          "substitution": {
+            "precision": 0.1574449903866695,
+            "recall": 0.5533033033033034,
+            "f1": 0.2451355396640612,
+            "support": 2664
+          },
+          "deletion": {
+            "precision": 0.047225501770956316,
+            "recall": 0.4814004376367615,
+            "f1": 0.08601309744892972,
+            "support": 914
+          }
+        },
+        "confusion_matrix_labels": [
+          "correct",
+          "substitution",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            7354,
+            7461,
+            7944
+          ],
+          [
+            257,
+            1474,
+            933
+          ],
+          [
+            47,
+            427,
+            440
+          ]
+        ]
+      },
+      "correct_false_deletion_rate": 0.3490487279757459,
+      "substitution_false_deletion_rate": 0.3502252252252252,
+      "predicted_insertions": 119,
+      "predicted_insertion_phone_counts": {
+        "D": 25,
+        "HH": 22,
+        "AH": 13,
+        "K": 8,
+        "S": 8,
+        "M": 8,
+        "T": 6,
+        "IH": 6,
+        "W": 6,
+        "IY": 4,
+        "B": 2,
+        "N": 2,
+        "Y": 2,
+        "F": 2,
+        "AY": 2,
+        "DH": 1,
+        "AE": 1,
+        "AO": 1
+      },
+      "empty_target_per_rule": "empty target contributes decoded phones as insertions to aggregate PER numerator; denominator remains total nonempty target phones; per-word PER is 0 only for empty->empty and otherwise undefined"
+    },
+    "epoch_seconds": 20.074325800000224
+  },
+  {
+    "epoch": 13,
+    "train": {
+      "ctc_loss": 2.2032159658014736,
+      "online_phone_error_rate": 0.6847516435354273,
+      "online_exact_sequence_accuracy": 0.11372163109662341,
+      "note": "online TRAIN PER is accumulated from each batch immediately before its optimizer update with training-mode dropout"
+    },
+    "validation": {
+      "loss": 2.2642241443659703,
+      "phone_error_rate": 0.6784014475081619,
+      "target_phone_denominator": 25423,
+      "edit_counts": {
+        "substitution": 9641,
+        "deletion": 7325,
+        "insertion": 281,
+        "errors": 17247
+      },
+      "exact_decoded_sequence_accuracy": 0.10649585921325051,
+      "exact_decoded_words": 823,
+      "binary": {
+        "rows": 26337,
+        "accuracy": 0.6853476098264799,
+        "balanced_accuracy": 0.5648902409308891,
+        "macro_f1": 0.4487640968525368,
+        "non_deletion": {
+          "precision": 0.9715984147952443,
+          "recall": 0.6943319041812532,
+          "f1": 0.8098919501732009,
+          "support": 25423
+        },
+        "deletion": {
+          "precision": 0.0487207736565063,
+          "recall": 0.43544857768052514,
+          "f1": 0.08763624353187273,
+          "support": 914
+        },
+        "confusion_matrix_labels": [
+          "non_deletion",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            17652,
+            7771
+          ],
+          [
+            516,
+            398
+          ]
+        ]
+      },
+      "three_relation": {
+        "rows": 26337,
+        "macro_f1": 0.27523173386816463,
+        "per_class": {
+          "correct": {
+            "precision": 0.9580966805502966,
+            "recall": 0.33353838042093237,
+            "f1": 0.4948178084870608,
+            "support": 22759
+          },
+          "substitution": {
+            "precision": 0.15324548560273304,
+            "recall": 0.5893393393393394,
+            "f1": 0.24324114958556045,
+            "support": 2664
+          },
+          "deletion": {
+            "precision": 0.0487207736565063,
+            "recall": 0.43544857768052514,
+            "f1": 0.08763624353187273,
+            "support": 914
+          }
+        },
+        "confusion_matrix_labels": [
+          "correct",
+          "substitution",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            7591,
+            8205,
+            6963
+          ],
+          [
+            286,
+            1570,
+            808
+          ],
+          [
+            46,
+            470,
+            398
+          ]
+        ]
+      },
+      "correct_false_deletion_rate": 0.30594490091831805,
+      "substitution_false_deletion_rate": 0.3033033033033033,
+      "predicted_insertions": 211,
+      "predicted_insertion_phone_counts": {
+        "HH": 29,
+        "D": 28,
+        "W": 27,
+        "S": 20,
+        "AH": 18,
+        "T": 15,
+        "B": 14,
+        "Y": 12,
+        "K": 8,
+        "IH": 8,
+        "IY": 8,
+        "M": 6,
+        "L": 4,
+        "F": 3,
+        "AY": 3,
+        "ER": 2,
+        "AE": 2,
+        "N": 2,
+        "Z": 1,
+        "P": 1
+      },
+      "empty_target_per_rule": "empty target contributes decoded phones as insertions to aggregate PER numerator; denominator remains total nonempty target phones; per-word PER is 0 only for empty->empty and otherwise undefined"
+    },
+    "epoch_seconds": 20.000271999999313
+  },
+  {
+    "epoch": 14,
+    "train": {
+      "ctc_loss": 2.1738057945537,
+      "online_phone_error_rate": 0.6757121986851716,
+      "online_exact_sequence_accuracy": 0.11507472784304078,
+      "note": "online TRAIN PER is accumulated from each batch immediately before its optimizer update with training-mode dropout"
+    },
+    "validation": {
+      "loss": 2.261215283263544,
+      "phone_error_rate": 0.6634936868190221,
+      "target_phone_denominator": 25423,
+      "edit_counts": {
+        "substitution": 9645,
+        "deletion": 6802,
+        "insertion": 421,
+        "errors": 16868
+      },
+      "exact_decoded_sequence_accuracy": 0.09510869565217392,
+      "exact_decoded_words": 735,
+      "binary": {
+        "rows": 26337,
+        "accuracy": 0.7083190948095834,
+        "balanced_accuracy": 0.5952471706085334,
+        "macro_f1": 0.46360893808348325,
+        "non_deletion": {
+          "precision": 0.9742822007164627,
+          "recall": 0.7167525469063446,
+          "f1": 0.8259076281557358,
+          "support": 25423
+        },
+        "deletion": {
+          "precision": 0.056719937123395334,
+          "recall": 0.4737417943107221,
+          "f1": 0.1013102480112307,
+          "support": 914
+        },
+        "confusion_matrix_labels": [
+          "non_deletion",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            18222,
+            7201
+          ],
+          [
+            481,
+            433
+          ]
+        ]
+      },
+      "three_relation": {
+        "rows": 26337,
+        "macro_f1": 0.28815592729500383,
+        "per_class": {
+          "correct": {
+            "precision": 0.9608240057156466,
+            "recall": 0.3545410606792917,
+            "f1": 0.5179574413454441,
+            "support": 22759
+          },
+          "substitution": {
+            "precision": 0.15429403202328967,
+            "recall": 0.5968468468468469,
+            "f1": 0.2452000925283368,
+            "support": 2664
+          },
+          "deletion": {
+            "precision": 0.056719937123395334,
+            "recall": 0.4737417943107221,
+            "f1": 0.1013102480112307,
+            "support": 914
+          }
+        },
+        "confusion_matrix_labels": [
+          "correct",
+          "substitution",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            8069,
+            8281,
+            6409
+          ],
+          [
+            282,
+            1590,
+            792
+          ],
+          [
+            47,
+            434,
+            433
+          ]
+        ]
+      },
+      "correct_false_deletion_rate": 0.28160288237620285,
+      "substitution_false_deletion_rate": 0.2972972972972973,
+      "predicted_insertions": 339,
+      "predicted_insertion_phone_counts": {
+        "D": 57,
+        "HH": 30,
+        "L": 29,
+        "AH": 25,
+        "B": 24,
+        "K": 20,
+        "Y": 20,
+        "IH": 20,
+        "T": 19,
+        "W": 15,
+        "S": 13,
+        "M": 13,
+        "IY": 11,
+        "N": 7,
+        "F": 6,
+        "AY": 4,
+        "R": 4,
+        "AO": 3,
+        "V": 3,
+        "P": 3,
+        "SH": 3,
+        "AE": 3,
+        "EH": 2,
+        "ER": 2,
+        "DH": 1,
+        "JH": 1,
+        "CH": 1
+      },
+      "empty_target_per_rule": "empty target contributes decoded phones as insertions to aggregate PER numerator; denominator remains total nonempty target phones; per-word PER is 0 only for empty->empty and otherwise undefined"
+    },
+    "epoch_seconds": 20.838733700000375
+  },
+  {
+    "epoch": 15,
+    "train": {
+      "ctc_loss": 2.1502556608453345,
+      "online_phone_error_rate": 0.6699050401753105,
+      "online_exact_sequence_accuracy": 0.11458269266252537,
+      "note": "online TRAIN PER is accumulated from each batch immediately before its optimizer update with training-mode dropout"
+    },
+    "validation": {
+      "loss": 2.2242165001159377,
+      "phone_error_rate": 0.6716359202297133,
+      "target_phone_denominator": 25423,
+      "edit_counts": {
+        "substitution": 8996,
+        "deletion": 7811,
+        "insertion": 268,
+        "errors": 17075
+      },
+      "exact_decoded_sequence_accuracy": 0.10584886128364389,
+      "exact_decoded_words": 818,
+      "binary": {
+        "rows": 26337,
+        "accuracy": 0.670159851159965,
+        "balanced_accuracy": 0.5828649060952147,
+        "macro_f1": 0.44586120532312573,
+        "non_deletion": {
+          "precision": 0.9735710243350312,
+          "recall": 0.6766707312276286,
+          "f1": 0.7984127352470238,
+          "support": 25423
+        },
+        "deletion": {
+          "precision": 0.05157493942540672,
+          "recall": 0.4890590809628009,
+          "f1": 0.09330967539922763,
+          "support": 914
+        },
+        "confusion_matrix_labels": [
+          "non_deletion",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            17203,
+            8220
+          ],
+          [
+            467,
+            447
+          ]
+        ]
+      },
+      "three_relation": {
+        "rows": 26337,
+        "macro_f1": 0.28035118916902707,
+        "per_class": {
+          "correct": {
+            "precision": 0.9603371343579573,
+            "recall": 0.340436750296586,
+            "f1": 0.5026762253868362,
+            "support": 22759
+          },
+          "substitution": {
+            "precision": 0.15652988960633202,
+            "recall": 0.5641891891891891,
+            "f1": 0.24506766672101746,
+            "support": 2664
+          },
+          "deletion": {
+            "precision": 0.05157493942540672,
+            "recall": 0.4890590809628009,
+            "f1": 0.09330967539922763,
+            "support": 914
+          }
+        },
+        "confusion_matrix_labels": [
+          "correct",
+          "substitution",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            7748,
+            7676,
+            7335
+          ],
+          [
+            276,
+            1503,
+            885
+          ],
+          [
+            44,
+            423,
+            447
+          ]
+        ]
+      },
+      "correct_false_deletion_rate": 0.3222900830440705,
+      "substitution_false_deletion_rate": 0.3322072072072072,
+      "predicted_insertions": 210,
+      "predicted_insertion_phone_counts": {
+        "D": 49,
+        "HH": 26,
+        "AH": 22,
+        "M": 15,
+        "K": 13,
+        "W": 12,
+        "S": 12,
+        "IH": 10,
+        "Y": 9,
+        "T": 9,
+        "IY": 7,
+        "B": 6,
+        "N": 5,
+        "AY": 4,
+        "AE": 3,
+        "AO": 3,
+        "F": 3,
+        "SH": 1,
+        "DH": 1
+      },
+      "empty_target_per_rule": "empty target contributes decoded phones as insertions to aggregate PER numerator; denominator remains total nonempty target phones; per-word PER is 0 only for empty->empty and otherwise undefined"
+    },
+    "epoch_seconds": 20.27761780000037
+  },
+  {
+    "epoch": 16,
+    "train": {
+      "ctc_loss": 2.125366725284636,
+      "online_phone_error_rate": 0.6621073776479182,
+      "online_exact_sequence_accuracy": 0.12196322037025648,
+      "note": "online TRAIN PER is accumulated from each batch immediately before its optimizer update with training-mode dropout"
+    },
+    "validation": {
+      "loss": 2.209144024868683,
+      "phone_error_rate": 0.6757267041655194,
+      "target_phone_denominator": 25423,
+      "edit_counts": {
+        "substitution": 8953,
+        "deletion": 7981,
+        "insertion": 245,
+        "errors": 17179
+      },
+      "exact_decoded_sequence_accuracy": 0.10571946169772256,
+      "exact_decoded_words": 817,
+      "binary": {
+        "rows": 26337,
+        "accuracy": 0.6632494209667008,
+        "balanced_accuracy": 0.5750664403801895,
+        "macro_f1": 0.44173621701663734,
+        "non_deletion": {
+          "precision": 0.9728633455210237,
+          "recall": 0.6698265350273375,
+          "f1": 0.7933934353670185,
+          "support": 25423
+        },
+        "deletion": {
+          "precision": 0.04969998867881807,
+          "recall": 0.4803063457330416,
+          "f1": 0.09007899866625628,
+          "support": 914
+        },
+        "confusion_matrix_labels": [
+          "non_deletion",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            17029,
+            8394
+          ],
+          [
+            475,
+            439
+          ]
+        ]
+      },
+      "three_relation": {
+        "rows": 26337,
+        "macro_f1": 0.2771921484355963,
+        "per_class": {
+          "correct": {
+            "precision": 0.961616417532303,
+            "recall": 0.33353838042093237,
+            "f1": 0.4952859426483542,
+            "support": 22759
+          },
+          "substitution": {
+            "precision": 0.15723204994797085,
+            "recall": 0.5671921921921922,
+            "f1": 0.2462115039921786,
+            "support": 2664
+          },
+          "deletion": {
+            "precision": 0.04969998867881807,
+            "recall": 0.4803063457330416,
+            "f1": 0.09007899866625628,
+            "support": 914
+          }
+        },
+        "confusion_matrix_labels": [
+          "correct",
+          "substitution",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            7591,
+            7667,
+            7501
+          ],
+          [
+            260,
+            1511,
+            893
+          ],
+          [
+            43,
+            432,
+            439
+          ]
+        ]
+      },
+      "correct_false_deletion_rate": 0.3295839008743794,
+      "substitution_false_deletion_rate": 0.3352102102102102,
+      "predicted_insertions": 183,
+      "predicted_insertion_phone_counts": {
+        "D": 37,
+        "HH": 25,
+        "W": 19,
+        "AH": 16,
+        "Y": 14,
+        "S": 14,
+        "T": 13,
+        "K": 8,
+        "M": 8,
+        "IH": 8,
+        "L": 5,
+        "AY": 4,
+        "IY": 3,
+        "N": 2,
+        "F": 2,
+        "SH": 1,
+        "DH": 1,
+        "AE": 1,
+        "UW": 1,
+        "ER": 1
+      },
+      "empty_target_per_rule": "empty target contributes decoded phones as insertions to aggregate PER numerator; denominator remains total nonempty target phones; per-word PER is 0 only for empty->empty and otherwise undefined"
+    },
+    "epoch_seconds": 21.234191100000317
+  },
+  {
+    "epoch": 17,
+    "train": {
+      "ctc_loss": 2.1010037726365858,
+      "online_phone_error_rate": 0.656227173119065,
+      "online_exact_sequence_accuracy": 0.12380835229718926,
+      "note": "online TRAIN PER is accumulated from each batch immediately before its optimizer update with training-mode dropout"
+    },
+    "validation": {
+      "loss": 2.192736253975341,
+      "phone_error_rate": 0.6654604098650828,
+      "target_phone_denominator": 25423,
+      "edit_counts": {
+        "substitution": 8962,
+        "deletion": 7712,
+        "insertion": 244,
+        "errors": 16918
+      },
+      "exact_decoded_sequence_accuracy": 0.10351966873706005,
+      "exact_decoded_words": 800,
+      "binary": {
+        "rows": 26337,
+        "accuracy": 0.6744124235865893,
+        "balanced_accuracy": 0.5877045295137994,
+        "macro_f1": 0.44842518137430315,
+        "non_deletion": {
+          "precision": 0.9740040513166779,
+          "recall": 0.6808795185461983,
+          "f1": 0.8014816529690937,
+          "support": 25423
+        },
+        "deletion": {
+          "precision": 0.052772913018096904,
+          "recall": 0.49452954048140046,
+          "f1": 0.0953687097795126,
+          "support": 914
+        },
+        "confusion_matrix_labels": [
+          "non_deletion",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            17310,
+            8113
+          ],
+          [
+            462,
+            452
+          ]
+        ]
+      },
+      "three_relation": {
+        "rows": 26337,
+        "macro_f1": 0.284008995642366,
+        "per_class": {
+          "correct": {
+            "precision": 0.9638998035363457,
+            "recall": 0.34491849378267936,
+            "f1": 0.5080412904895965,
+            "support": 22759
+          },
+          "substitution": {
+            "precision": 0.1587037806398006,
+            "recall": 0.5735735735735735,
+            "f1": 0.24861698665798893,
+            "support": 2664
+          },
+          "deletion": {
+            "precision": 0.052772913018096904,
+            "recall": 0.49452954048140046,
+            "f1": 0.0953687097795126,
+            "support": 914
+          }
+        },
+        "confusion_matrix_labels": [
+          "correct",
+          "substitution",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            7850,
+            7678,
+            7231
+          ],
+          [
+            254,
+            1528,
+            882
+          ],
+          [
+            40,
+            422,
+            452
+          ]
+        ]
+      },
+      "correct_false_deletion_rate": 0.31772046223472034,
+      "substitution_false_deletion_rate": 0.3310810810810811,
+      "predicted_insertions": 183,
+      "predicted_insertion_phone_counts": {
+        "HH": 28,
+        "W": 22,
+        "D": 22,
+        "M": 15,
+        "AH": 14,
+        "Y": 12,
+        "IH": 12,
+        "IY": 10,
+        "K": 9,
+        "L": 8,
+        "T": 7,
+        "S": 5,
+        "ER": 4,
+        "SH": 4,
+        "N": 2,
+        "F": 2,
+        "AY": 2,
+        "CH": 1,
+        "V": 1,
+        "R": 1,
+        "AO": 1,
+        "UW": 1
+      },
+      "empty_target_per_rule": "empty target contributes decoded phones as insertions to aggregate PER numerator; denominator remains total nonempty target phones; per-word PER is 0 only for empty->empty and otherwise undefined"
+    },
+    "epoch_seconds": 20.418013900000005
+  },
+  {
+    "epoch": 18,
+    "train": {
+      "ctc_loss": 2.0792544659114176,
+      "online_phone_error_rate": 0.65009130752374,
+      "online_exact_sequence_accuracy": 0.12473091826065563,
+      "note": "online TRAIN PER is accumulated from each batch immediately before its optimizer update with training-mode dropout"
+    },
+    "validation": {
+      "loss": 2.152896592890994,
+      "phone_error_rate": 0.6639657003500767,
+      "target_phone_denominator": 25423,
+      "edit_counts": {
+        "substitution": 8990,
+        "deletion": 7616,
+        "insertion": 274,
+        "errors": 16880
+      },
+      "exact_decoded_sequence_accuracy": 0.11438923395445134,
+      "exact_decoded_words": 884,
+      "binary": {
+        "rows": 26337,
+        "accuracy": 0.6757413524699093,
+        "balanced_accuracy": 0.5709893847737421,
+        "macro_f1": 0.4460556066256876,
+        "non_deletion": {
+          "precision": 0.9723045935209534,
+          "recall": 0.6835542618888408,
+          "f1": 0.8027531411677753,
+          "support": 25423
+        },
+        "deletion": {
+          "precision": 0.049503780718336485,
+          "recall": 0.45842450765864334,
+          "f1": 0.08935807208359992,
+          "support": 914
+        },
+        "confusion_matrix_labels": [
+          "non_deletion",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            17378,
+            8045
+          ],
+          [
+            495,
+            419
+          ]
+        ]
+      },
+      "three_relation": {
+        "rows": 26337,
+        "macro_f1": 0.2831958271386453,
+        "per_class": {
+          "correct": {
+            "precision": 0.9590352684523088,
+            "recall": 0.34768662946526646,
+            "f1": 0.5103514995162851,
+            "support": 22759
+          },
+          "substitution": {
+            "precision": 0.15953024319268344,
+            "recall": 0.5762012012012012,
+            "f1": 0.2498779098160508,
+            "support": 2664
+          },
+          "deletion": {
+            "precision": 0.049503780718336485,
+            "recall": 0.45842450765864334,
+            "f1": 0.08935807208359992,
+            "support": 914
+          }
+        },
+        "confusion_matrix_labels": [
+          "correct",
+          "substitution",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            7913,
+            7651,
+            7195
+          ],
+          [
+            279,
+            1535,
+            850
+          ],
+          [
+            59,
+            436,
+            419
+          ]
+        ]
+      },
+      "correct_false_deletion_rate": 0.3161386704160991,
+      "substitution_false_deletion_rate": 0.31906906906906907,
+      "predicted_insertions": 208,
+      "predicted_insertion_phone_counts": {
+        "D": 29,
+        "HH": 23,
+        "T": 22,
+        "AH": 19,
+        "W": 18,
+        "IY": 15,
+        "S": 15,
+        "Y": 11,
+        "M": 8,
+        "K": 7,
+        "IH": 7,
+        "SH": 7,
+        "AY": 7,
+        "AE": 5,
+        "F": 4,
+        "N": 3,
+        "V": 2,
+        "ER": 2,
+        "B": 2,
+        "EY": 1,
+        "DH": 1
+      },
+      "empty_target_per_rule": "empty target contributes decoded phones as insertions to aggregate PER numerator; denominator remains total nonempty target phones; per-word PER is 0 only for empty->empty and otherwise undefined"
+    },
+    "epoch_seconds": 20.33761720000075
+  },
+  {
+    "epoch": 19,
+    "train": {
+      "ctc_loss": 2.0560240407983965,
+      "online_phone_error_rate": 0.6467311906501095,
+      "online_exact_sequence_accuracy": 0.12811366012669906,
+      "note": "online TRAIN PER is accumulated from each batch immediately before its optimizer update with training-mode dropout"
+    },
+    "validation": {
+      "loss": 2.1750249022899455,
+      "phone_error_rate": 0.6629823388270464,
+      "target_phone_denominator": 25423,
+      "edit_counts": {
+        "substitution": 9527,
+        "deletion": 6910,
+        "insertion": 418,
+        "errors": 16855
+      },
+      "exact_decoded_sequence_accuracy": 0.12745859213250518,
+      "exact_decoded_words": 985,
+      "binary": {
+        "rows": 26337,
+        "accuracy": 0.7019402361696473,
+        "balanced_accuracy": 0.5734848206421742,
+        "macro_f1": 0.45688503253276397,
+        "non_deletion": {
+          "precision": 0.9722655200214996,
+          "recall": 0.7115210636038233,
+          "f1": 0.8217043699463977,
+          "support": 25423
+        },
+        "deletion": {
+          "precision": 0.05147439213657527,
+          "recall": 0.43544857768052514,
+          "f1": 0.09206569511913024,
+          "support": 914
+        },
+        "confusion_matrix_labels": [
+          "non_deletion",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            18089,
+            7334
+          ],
+          [
+            516,
+            398
+          ]
+        ]
+      },
+      "three_relation": {
+        "rows": 26337,
+        "macro_f1": 0.28296160787145114,
+        "per_class": {
+          "correct": {
+            "precision": 0.9498659204850181,
+            "recall": 0.35796827628630434,
+            "f1": 0.5199770232320654,
+            "support": 22759
+          },
+          "substitution": {
+            "precision": 0.14988033506182688,
+            "recall": 0.5641891891891891,
+            "f1": 0.23684210526315788,
+            "support": 2664
+          },
+          "deletion": {
+            "precision": 0.05147439213657527,
+            "recall": 0.43544857768052514,
+            "f1": 0.09206569511913024,
+            "support": 914
+          }
+        },
+        "confusion_matrix_labels": [
+          "correct",
+          "substitution",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            8147,
+            8056,
+            6556
+          ],
+          [
+            383,
+            1503,
+            778
+          ],
+          [
+            47,
+            469,
+            398
+          ]
+        ]
+      },
+      "correct_false_deletion_rate": 0.28806186563557273,
+      "substitution_false_deletion_rate": 0.29204204204204204,
+      "predicted_insertions": 326,
+      "predicted_insertion_phone_counts": {
+        "HH": 66,
+        "D": 48,
+        "S": 31,
+        "Y": 27,
+        "W": 23,
+        "AH": 22,
+        "M": 19,
+        "IY": 15,
+        "T": 13,
+        "F": 13,
+        "IH": 10,
+        "K": 9,
+        "AY": 6,
+        "DH": 6,
+        "Z": 5,
+        "ER": 3,
+        "V": 2,
+        "N": 2,
+        "B": 2,
+        "SH": 1,
+        "AO": 1,
+        "EH": 1,
+        "UW": 1
+      },
+      "empty_target_per_rule": "empty target contributes decoded phones as insertions to aggregate PER numerator; denominator remains total nonempty target phones; per-word PER is 0 only for empty->empty and otherwise undefined"
+    },
+    "epoch_seconds": 20.501513300001534
+  },
+  {
+    "epoch": 20,
+    "train": {
+      "ctc_loss": 2.041480369897513,
+      "online_phone_error_rate": 0.6422753834915997,
+      "online_exact_sequence_accuracy": 0.12792914693400578,
+      "note": "online TRAIN PER is accumulated from each batch immediately before its optimizer update with training-mode dropout"
+    },
+    "validation": {
+      "loss": 2.112874202661633,
+      "phone_error_rate": 0.6558628014003068,
+      "target_phone_denominator": 25423,
+      "edit_counts": {
+        "substitution": 8542,
+        "deletion": 7863,
+        "insertion": 269,
+        "errors": 16674
+      },
+      "exact_decoded_sequence_accuracy": 0.11542443064182195,
+      "exact_decoded_words": 892,
+      "binary": {
+        "rows": 26337,
+        "accuracy": 0.6695903102099707,
+        "balanced_accuracy": 0.5920627146234939,
+        "macro_f1": 0.447189268003855,
+        "non_deletion": {
+          "precision": 0.9745161473409387,
+          "recall": 0.6753726940172285,
+          "f1": 0.7978253798615306,
+          "support": 25423
+        },
+        "deletion": {
+          "precision": 0.05333792154163799,
+          "recall": 0.5087527352297593,
+          "f1": 0.0965531561461794,
+          "support": 914
+        },
+        "confusion_matrix_labels": [
+          "non_deletion",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            17170,
+            8253
+          ],
+          [
+            449,
+            465
+          ]
+        ]
+      },
+      "three_relation": {
+        "rows": 26337,
+        "macro_f1": 0.29015713356408773,
+        "per_class": {
+          "correct": {
+            "precision": 0.9608122550765942,
+            "recall": 0.35550771123511576,
+            "f1": 0.518986529826812,
+            "support": 22759
+          },
+          "substitution": {
+            "precision": 0.1643835616438356,
+            "recall": 0.5675675675675675,
+            "f1": 0.2549317147192716,
+            "support": 2664
+          },
+          "deletion": {
+            "precision": 0.05333792154163799,
+            "recall": 0.5087527352297593,
+            "f1": 0.0965531561461794,
+            "support": 914
+          }
+        },
+        "confusion_matrix_labels": [
+          "correct",
+          "substitution",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            8091,
+            7289,
+            7379
+          ],
+          [
+            278,
+            1512,
+            874
+          ],
+          [
+            52,
+            397,
+            465
+          ]
+        ]
+      },
+      "correct_false_deletion_rate": 0.3242233841557186,
+      "substitution_false_deletion_rate": 0.3280780780780781,
+      "predicted_insertions": 210,
+      "predicted_insertion_phone_counts": {
+        "D": 32,
+        "HH": 25,
+        "S": 25,
+        "AH": 19,
+        "IY": 16,
+        "M": 14,
+        "Y": 11,
+        "F": 9,
+        "K": 8,
+        "T": 8,
+        "AY": 7,
+        "W": 6,
+        "IH": 4,
+        "EH": 4,
+        "N": 4,
+        "V": 3,
+        "SH": 2,
+        "DH": 2,
+        "P": 2,
+        "R": 2,
+        "B": 2,
+        "ER": 1,
+        "EY": 1,
+        "AO": 1,
+        "L": 1,
+        "AE": 1
+      },
+      "empty_target_per_rule": "empty target contributes decoded phones as insertions to aggregate PER numerator; denominator remains total nonempty target phones; per-word PER is 0 only for empty->empty and otherwise undefined"
+    },
+    "epoch_seconds": 20.379161299999396
+  },
+  {
+    "epoch": 21,
+    "train": {
+      "ctc_loss": 2.014242199809138,
+      "online_phone_error_rate": 0.6366143170197224,
+      "online_exact_sequence_accuracy": 0.13383356910019067,
+      "note": "online TRAIN PER is accumulated from each batch immediately before its optimizer update with training-mode dropout"
+    },
+    "validation": {
+      "loss": 2.1146874941777494,
+      "phone_error_rate": 0.6557841324784643,
+      "target_phone_denominator": 25423,
+      "edit_counts": {
+        "substitution": 8883,
+        "deletion": 7450,
+        "insertion": 339,
+        "errors": 16672
+      },
+      "exact_decoded_sequence_accuracy": 0.11361283643892339,
+      "exact_decoded_words": 878,
+      "binary": {
+        "rows": 26337,
+        "accuracy": 0.6837528951664958,
+        "balanced_accuracy": 0.5846319873861183,
+        "macro_f1": 0.45168501740246997,
+        "non_deletion": {
+          "precision": 0.9735704787234043,
+          "recall": 0.6911458128466349,
+          "f1": 0.8084010029674956,
+          "support": 25423
+        },
+        "deletion": {
+          "precision": 0.052720472915912656,
+          "recall": 0.47811816192560175,
+          "f1": 0.09496903183744432,
+          "support": 914
+        },
+        "confusion_matrix_labels": [
+          "non_deletion",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            17571,
+            7852
+          ],
+          [
+            477,
+            437
+          ]
+        ]
+      },
+      "three_relation": {
+        "rows": 26337,
+        "macro_f1": 0.2880406508700688,
+        "per_class": {
+          "correct": {
+            "precision": 0.9526517349425554,
+            "recall": 0.36069247330726306,
+            "f1": 0.5232661907190209,
+            "support": 22759
+          },
+          "substitution": {
+            "precision": 0.1576715088537801,
+            "recall": 0.5581831831831832,
+            "f1": 0.2458867300537412,
+            "support": 2664
+          },
+          "deletion": {
+            "precision": 0.052720472915912656,
+            "recall": 0.47811816192560175,
+            "f1": 0.09496903183744432,
+            "support": 914
+          }
+        },
+        "confusion_matrix_labels": [
+          "correct",
+          "substitution",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            8209,
+            7512,
+            7038
+          ],
+          [
+            363,
+            1487,
+            814
+          ],
+          [
+            45,
+            432,
+            437
+          ]
+        ]
+      },
+      "correct_false_deletion_rate": 0.30924030054044555,
+      "substitution_false_deletion_rate": 0.3055555555555556,
+      "predicted_insertions": 264,
+      "predicted_insertion_phone_counts": {
+        "Y": 38,
+        "D": 37,
+        "S": 34,
+        "HH": 30,
+        "AH": 15,
+        "IY": 13,
+        "F": 11,
+        "K": 10,
+        "IH": 10,
+        "M": 10,
+        "L": 9,
+        "W": 8,
+        "N": 8,
+        "T": 8,
+        "AY": 4,
+        "EH": 4,
+        "DH": 3,
+        "SH": 3,
+        "Z": 2,
+        "ER": 2,
+        "B": 2,
+        "EY": 1,
+        "AO": 1,
+        "AE": 1
+      },
+      "empty_target_per_rule": "empty target contributes decoded phones as insertions to aggregate PER numerator; denominator remains total nonempty target phones; per-word PER is 0 only for empty->empty and otherwise undefined"
+    },
+    "epoch_seconds": 20.47964260000117
+  },
+  {
+    "epoch": 22,
+    "train": {
+      "ctc_loss": 1.9970421994903356,
+      "online_phone_error_rate": 0.6307341124908693,
+      "online_exact_sequence_accuracy": 0.13598622301494556,
+      "note": "online TRAIN PER is accumulated from each batch immediately before its optimizer update with training-mode dropout"
+    },
+    "validation": {
+      "loss": 2.1151934810306714,
+      "phone_error_rate": 0.6537780749714825,
+      "target_phone_denominator": 25423,
+      "edit_counts": {
+        "substitution": 8594,
+        "deletion": 7684,
+        "insertion": 343,
+        "errors": 16621
+      },
+      "exact_decoded_sequence_accuracy": 0.11490683229813664,
+      "exact_decoded_words": 888,
+      "binary": {
+        "rows": 26337,
+        "accuracy": 0.676500740403235,
+        "balanced_accuracy": 0.5893136059105321,
+        "macro_f1": 0.44955689660897324,
+        "non_deletion": {
+          "precision": 0.9741374474053296,
+          "recall": 0.6830035794359438,
+          "f1": 0.8029966703662597,
+          "support": 25423
+        },
+        "deletion": {
+          "precision": 0.05321898496240601,
+          "recall": 0.49562363238512036,
+          "f1": 0.09611712285168682,
+          "support": 914
+        },
+        "confusion_matrix_labels": [
+          "non_deletion",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            17364,
+            8059
+          ],
+          [
+            461,
+            453
+          ]
+        ]
+      },
+      "three_relation": {
+        "rows": 26337,
+        "macro_f1": 0.2917018914769565,
+        "per_class": {
+          "correct": {
+            "precision": 0.9641850634100516,
+            "recall": 0.3607803506305198,
+            "f1": 0.525083932853717,
+            "support": 22759
+          },
+          "substitution": {
+            "precision": 0.1632828445590289,
+            "recall": 0.5705705705705706,
+            "f1": 0.25390461872546566,
+            "support": 2664
+          },
+          "deletion": {
+            "precision": 0.05321898496240601,
+            "recall": 0.49562363238512036,
+            "f1": 0.09611712285168682,
+            "support": 914
+          }
+        },
+        "confusion_matrix_labels": [
+          "correct",
+          "substitution",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            8211,
+            7367,
+            7181
+          ],
+          [
+            266,
+            1520,
+            878
+          ],
+          [
+            39,
+            422,
+            453
+          ]
+        ]
+      },
+      "correct_false_deletion_rate": 0.315523529153302,
+      "substitution_false_deletion_rate": 0.32957957957957956,
+      "predicted_insertions": 257,
+      "predicted_insertion_phone_counts": {
+        "HH": 41,
+        "D": 35,
+        "Y": 22,
+        "S": 20,
+        "M": 19,
+        "W": 14,
+        "AH": 13,
+        "IY": 12,
+        "K": 11,
+        "T": 11,
+        "IH": 9,
+        "F": 9,
+        "N": 6,
+        "AY": 6,
+        "B": 6,
+        "P": 4,
+        "AE": 4,
+        "L": 3,
+        "SH": 3,
+        "EH": 3,
+        "Z": 2,
+        "V": 1,
+        "ER": 1,
+        "UW": 1,
+        "AO": 1
+      },
+      "empty_target_per_rule": "empty target contributes decoded phones as insertions to aggregate PER numerator; denominator remains total nonempty target phones; per-word PER is 0 only for empty->empty and otherwise undefined"
+    },
+    "epoch_seconds": 20.245936299999812
+  },
+  {
+    "epoch": 23,
+    "train": {
+      "ctc_loss": 1.9814188070817513,
+      "online_phone_error_rate": 0.627081811541271,
+      "online_exact_sequence_accuracy": 0.13690878897841197,
+      "note": "online TRAIN PER is accumulated from each batch immediately before its optimizer update with training-mode dropout"
+    },
+    "validation": {
+      "loss": 2.1014178715507437,
+      "phone_error_rate": 0.6498446288793612,
+      "target_phone_denominator": 25423,
+      "edit_counts": {
+        "substitution": 8881,
+        "deletion": 7287,
+        "insertion": 353,
+        "errors": 16521
+      },
+      "exact_decoded_sequence_accuracy": 0.13146997929606624,
+      "exact_decoded_words": 1016,
+      "binary": {
+        "rows": 26337,
+        "accuracy": 0.6887268861297794,
+        "balanced_accuracy": 0.5787703350340682,
+        "macro_f1": 0.45263029134948346,
+        "non_deletion": {
+          "precision": 0.97292844983801,
+          "recall": 0.6969279786020532,
+          "f1": 0.812118989778613,
+          "support": 25423
+        },
+        "deletion": {
+          "precision": 0.05180900812207728,
+          "recall": 0.46061269146608314,
+          "f1": 0.09314159292035398,
+          "support": 914
+        },
+        "confusion_matrix_labels": [
+          "non_deletion",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            17718,
+            7705
+          ],
+          [
+            493,
+            421
+          ]
+        ]
+      },
+      "three_relation": {
+        "rows": 26337,
+        "macro_f1": 0.2903161560023522,
+        "per_class": {
+          "correct": {
+            "precision": 0.9580403458213257,
+            "recall": 0.3651742167933565,
+            "f1": 0.5287904816440797,
+            "support": 22759
+          },
+          "substitution": {
+            "precision": 0.15929110738255034,
+            "recall": 0.5701951951951952,
+            "f1": 0.24901639344262294,
+            "support": 2664
+          },
+          "deletion": {
+            "precision": 0.05180900812207728,
+            "recall": 0.46061269146608314,
+            "f1": 0.09314159292035398,
+            "support": 914
+          }
+        },
+        "confusion_matrix_labels": [
+          "correct",
+          "substitution",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            8311,
+            7569,
+            6879
+          ],
+          [
+            319,
+            1519,
+            826
+          ],
+          [
+            45,
+            448,
+            421
+          ]
+        ]
+      },
+      "correct_false_deletion_rate": 0.3022540533415352,
+      "substitution_false_deletion_rate": 0.31006006006006004,
+      "predicted_insertions": 278,
+      "predicted_insertion_phone_counts": {
+        "Y": 34,
+        "D": 34,
+        "IY": 31,
+        "S": 28,
+        "HH": 26,
+        "AH": 25,
+        "W": 24,
+        "K": 10,
+        "T": 10,
+        "F": 7,
+        "IH": 7,
+        "M": 7,
+        "SH": 5,
+        "N": 5,
+        "AY": 5,
+        "ER": 4,
+        "Z": 3,
+        "UW": 3,
+        "B": 3,
+        "DH": 2,
+        "V": 1,
+        "L": 1,
+        "AE": 1,
+        "EH": 1,
+        "R": 1
+      },
+      "empty_target_per_rule": "empty target contributes decoded phones as insertions to aggregate PER numerator; denominator remains total nonempty target phones; per-word PER is 0 only for empty->empty and otherwise undefined"
+    },
+    "epoch_seconds": 20.567515700000513
+  },
+  {
+    "epoch": 24,
+    "train": {
+      "ctc_loss": 1.9642629968158813,
+      "online_phone_error_rate": 0.6222059897735573,
+      "online_exact_sequence_accuracy": 0.1386309121102159,
+      "note": "online TRAIN PER is accumulated from each batch immediately before its optimizer update with training-mode dropout"
+    },
+    "validation": {
+      "loss": 2.067093418436761,
+      "phone_error_rate": 0.6364709121661488,
+      "target_phone_denominator": 25423,
+      "edit_counts": {
+        "substitution": 8833,
+        "deletion": 6997,
+        "insertion": 351,
+        "errors": 16181
+      },
+      "exact_decoded_sequence_accuracy": 0.11801242236024845,
+      "exact_decoded_words": 912,
+      "binary": {
+        "rows": 26337,
+        "accuracy": 0.7001177051296655,
+        "balanced_accuracy": 0.588889533943445,
+        "macro_f1": 0.45907740121436913,
+        "non_deletion": {
+          "precision": 0.9737766964044337,
+          "recall": 0.7084136411910474,
+          "f1": 0.8201648526799945,
+          "support": 25423
+        },
+        "deletion": {
+          "precision": 0.05470543228768172,
+          "recall": 0.46936542669584247,
+          "f1": 0.09798994974874371,
+          "support": 914
+        },
+        "confusion_matrix_labels": [
+          "non_deletion",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            18010,
+            7413
+          ],
+          [
+            485,
+            429
+          ]
+        ]
+      },
+      "three_relation": {
+        "rows": 26337,
+        "macro_f1": 0.2992875946480113,
+        "per_class": {
+          "correct": {
+            "precision": 0.9631743899708977,
+            "recall": 0.3780921833120963,
+            "f1": 0.5430221184488688,
+            "support": 22759
+          },
+          "substitution": {
+            "precision": 0.16420876477355925,
+            "recall": 0.5893393393393394,
+            "f1": 0.25685071574642127,
+            "support": 2664
+          },
+          "deletion": {
+            "precision": 0.05470543228768172,
+            "recall": 0.46936542669584247,
+            "f1": 0.09798994974874371,
+            "support": 914
+          }
+        },
+        "confusion_matrix_labels": [
+          "correct",
+          "substitution",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            8605,
+            7544,
+            6610
+          ],
+          [
+            291,
+            1570,
+            803
+          ],
+          [
+            38,
+            447,
+            429
+          ]
+        ]
+      },
+      "correct_false_deletion_rate": 0.29043455336350454,
+      "substitution_false_deletion_rate": 0.3014264264264264,
+      "predicted_insertions": 282,
+      "predicted_insertion_phone_counts": {
+        "D": 27,
+        "IY": 26,
+        "AH": 25,
+        "HH": 22,
+        "IH": 21,
+        "W": 20,
+        "T": 19,
+        "Y": 16,
+        "M": 15,
+        "S": 14,
+        "K": 12,
+        "UW": 11,
+        "SH": 9,
+        "F": 8,
+        "AY": 8,
+        "N": 7,
+        "L": 6,
+        "V": 4,
+        "ER": 3,
+        "EH": 3,
+        "AE": 2,
+        "R": 1,
+        "AO": 1,
+        "P": 1,
+        "B": 1
+      },
+      "empty_target_per_rule": "empty target contributes decoded phones as insertions to aggregate PER numerator; denominator remains total nonempty target phones; per-word PER is 0 only for empty->empty and otherwise undefined"
+    },
+    "epoch_seconds": 20.511173099999723
+  },
+  {
+    "epoch": 25,
+    "train": {
+      "ctc_loss": 1.9518156410605347,
+      "online_phone_error_rate": 0.6199598246895545,
+      "online_exact_sequence_accuracy": 0.1405990528322775,
+      "note": "online TRAIN PER is accumulated from each batch immediately before its optimizer update with training-mode dropout"
+    },
+    "validation": {
+      "loss": 2.0860439243400566,
+      "phone_error_rate": 0.6472485544585611,
+      "target_phone_denominator": 25423,
+      "edit_counts": {
+        "substitution": 8528,
+        "deletion": 7591,
+        "insertion": 336,
+        "errors": 16455
+      },
+      "exact_decoded_sequence_accuracy": 0.11710662525879917,
+      "exact_decoded_words": 905,
+      "binary": {
+        "rows": 26337,
+        "accuracy": 0.6788548429965447,
+        "balanced_accuracy": 0.5857865657064956,
+        "macro_f1": 0.4499026343152356,
+        "non_deletion": {
+          "precision": 0.9737503490645071,
+          "recall": 0.68579632616135,
+          "f1": 0.8047913589364845,
+          "support": 25423
+        },
+        "deletion": {
+          "precision": 0.05265654648956357,
+          "recall": 0.48577680525164113,
+          "f1": 0.09501390969398674,
+          "support": 914
+        },
+        "confusion_matrix_labels": [
+          "non_deletion",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            17435,
+            7988
+          ],
+          [
+            470,
+            444
+          ]
+        ]
+      },
+      "three_relation": {
+        "rows": 26337,
+        "macro_f1": 0.2931161604548949,
+        "per_class": {
+          "correct": {
+            "precision": 0.9574540891981294,
+            "recall": 0.36882112570851094,
+            "f1": 0.5325128465393644,
+            "support": 22759
+          },
+          "substitution": {
+            "precision": 0.1626176406215802,
+            "recall": 0.5578078078078078,
+            "f1": 0.25182172513133366,
+            "support": 2664
+          },
+          "deletion": {
+            "precision": 0.05265654648956357,
+            "recall": 0.48577680525164113,
+            "f1": 0.09501390969398674,
+            "support": 914
+          }
+        },
+        "confusion_matrix_labels": [
+          "correct",
+          "substitution",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            8394,
+            7229,
+            7136
+          ],
+          [
+            326,
+            1486,
+            852
+          ],
+          [
+            47,
+            423,
+            444
+          ]
+        ]
+      },
+      "correct_false_deletion_rate": 0.3135462893800255,
+      "substitution_false_deletion_rate": 0.31981981981981983,
+      "predicted_insertions": 263,
+      "predicted_insertion_phone_counts": {
+        "HH": 49,
+        "S": 36,
+        "D": 27,
+        "W": 18,
+        "IY": 18,
+        "IH": 18,
+        "AH": 15,
+        "Y": 14,
+        "T": 12,
+        "M": 9,
+        "F": 8,
+        "K": 6,
+        "AY": 6,
+        "ER": 5,
+        "N": 5,
+        "AE": 4,
+        "SH": 4,
+        "UW": 3,
+        "R": 2,
+        "V": 1,
+        "L": 1,
+        "Z": 1,
+        "B": 1
+      },
+      "empty_target_per_rule": "empty target contributes decoded phones as insertions to aggregate PER numerator; denominator remains total nonempty target phones; per-word PER is 0 only for empty->empty and otherwise undefined"
+    },
+    "epoch_seconds": 20.589681800000108
+  },
+  {
+    "epoch": 26,
+    "train": {
+      "ctc_loss": 1.9349500985887262,
+      "online_phone_error_rate": 0.6148100803506209,
+      "online_exact_sequence_accuracy": 0.14275170674703241,
+      "note": "online TRAIN PER is accumulated from each batch immediately before its optimizer update with training-mode dropout"
+    },
+    "validation": {
+      "loss": 2.034743663995656,
+      "phone_error_rate": 0.6248279117334697,
+      "target_phone_denominator": 25423,
+      "edit_counts": {
+        "substitution": 8408,
+        "deletion": 7154,
+        "insertion": 323,
+        "errors": 15885
+      },
+      "exact_decoded_sequence_accuracy": 0.12280020703933747,
+      "exact_decoded_words": 949,
+      "binary": {
+        "rows": 26337,
+        "accuracy": 0.6965485818430345,
+        "balanced_accuracy": 0.6018074184793297,
+        "macro_f1": 0.46001414148537234,
+        "non_deletion": {
+          "precision": 0.9750885799945489,
+          "recall": 0.7036148369586595,
+          "f1": 0.8174008407969293,
+          "support": 25423
+        },
+        "deletion": {
+          "precision": 0.057182182182182184,
+          "recall": 0.5,
+          "f1": 0.1026274421738154,
+          "support": 914
+        },
+        "confusion_matrix_labels": [
+          "non_deletion",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            17888,
+            7535
+          ],
+          [
+            457,
+            457
+          ]
+        ]
+      },
+      "three_relation": {
+        "rows": 26337,
+        "macro_f1": 0.3070939986446309,
+        "per_class": {
+          "correct": {
+            "precision": 0.9644983223292564,
+            "recall": 0.39153741377037654,
+            "f1": 0.5569723107694231,
+            "support": 22759
+          },
+          "substitution": {
+            "precision": 0.16911926202503844,
+            "recall": 0.5780780780780781,
+            "f1": 0.2616822429906542,
+            "support": 2664
+          },
+          "deletion": {
+            "precision": 0.057182182182182184,
+            "recall": 0.5,
+            "f1": 0.1026274421738154,
+            "support": 914
+          }
+        },
+        "confusion_matrix_labels": [
+          "correct",
+          "substitution",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            8911,
+            7150,
+            6698
+          ],
+          [
+            287,
+            1540,
+            837
+          ],
+          [
+            41,
+            416,
+            457
+          ]
+        ]
+      },
+      "correct_false_deletion_rate": 0.2943011555868008,
+      "substitution_false_deletion_rate": 0.3141891891891892,
+      "predicted_insertions": 247,
+      "predicted_insertion_phone_counts": {
+        "HH": 32,
+        "D": 25,
+        "W": 18,
+        "S": 18,
+        "IY": 18,
+        "AH": 17,
+        "Y": 16,
+        "T": 14,
+        "K": 11,
+        "M": 11,
+        "L": 10,
+        "N": 8,
+        "AE": 7,
+        "IH": 6,
+        "AY": 6,
+        "SH": 5,
+        "AO": 4,
+        "EH": 4,
+        "ER": 4,
+        "UW": 3,
+        "B": 3,
+        "P": 3,
+        "F": 2,
+        "V": 1,
+        "R": 1
+      },
+      "empty_target_per_rule": "empty target contributes decoded phones as insertions to aggregate PER numerator; denominator remains total nonempty target phones; per-word PER is 0 only for empty->empty and otherwise undefined"
+    },
+    "epoch_seconds": 20.303784599998835
+  },
+  {
+    "epoch": 27,
+    "train": {
+      "ctc_loss": 1.9173574169166443,
+      "online_phone_error_rate": 0.6091124908692477,
+      "online_exact_sequence_accuracy": 0.14490436066178733,
+      "note": "online TRAIN PER is accumulated from each batch immediately before its optimizer update with training-mode dropout"
+    },
+    "validation": {
+      "loss": 2.0150437181657392,
+      "phone_error_rate": 0.6134602525272391,
+      "target_phone_denominator": 25423,
+      "edit_counts": {
+        "substitution": 8631,
+        "deletion": 6565,
+        "insertion": 400,
+        "errors": 15596
+      },
+      "exact_decoded_sequence_accuracy": 0.1151656314699793,
+      "exact_decoded_words": 890,
+      "binary": {
+        "rows": 26337,
+        "accuracy": 0.7181151991494855,
+        "balanced_accuracy": 0.6087593756097595,
+        "macro_f1": 0.47025929289808166,
+        "non_deletion": {
+          "precision": 0.9754345184637329,
+          "recall": 0.7262714864492782,
+          "f1": 0.8326118326118326,
+          "support": 25423
+        },
+        "deletion": {
+          "precision": 0.06061015118790497,
+          "recall": 0.4912472647702407,
+          "f1": 0.10790675318433068,
+          "support": 914
+        },
+        "confusion_matrix_labels": [
+          "non_deletion",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            18464,
+            6959
+          ],
+          [
+            465,
+            449
+          ]
+        ]
+      },
+      "three_relation": {
+        "rows": 26337,
+        "macro_f1": 0.3132303296409777,
+        "per_class": {
+          "correct": {
+            "precision": 0.9607068607068607,
+            "recall": 0.406081110769366,
+            "f1": 0.5708638314957225,
+            "support": 22759
+          },
+          "substitution": {
+            "precision": 0.1677946073692126,
+            "recall": 0.5863363363363363,
+            "f1": 0.2609204042428798,
+            "support": 2664
+          },
+          "deletion": {
+            "precision": 0.06061015118790497,
+            "recall": 0.4912472647702407,
+            "f1": 0.10790675318433068,
+            "support": 914
+          }
+        },
+        "confusion_matrix_labels": [
+          "correct",
+          "substitution",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            9242,
+            7327,
+            6190
+          ],
+          [
+            333,
+            1562,
+            769
+          ],
+          [
+            45,
+            420,
+            449
+          ]
+        ]
+      },
+      "correct_false_deletion_rate": 0.2719803154795905,
+      "substitution_false_deletion_rate": 0.28866366366366364,
+      "predicted_insertions": 329,
+      "predicted_insertion_phone_counts": {
+        "IY": 35,
+        "W": 31,
+        "Y": 30,
+        "AH": 27,
+        "D": 24,
+        "HH": 24,
+        "S": 23,
+        "IH": 20,
+        "K": 20,
+        "M": 16,
+        "N": 16,
+        "T": 13,
+        "B": 11,
+        "AE": 8,
+        "AY": 6,
+        "L": 5,
+        "AO": 4,
+        "ER": 3,
+        "V": 2,
+        "F": 2,
+        "EY": 2,
+        "SH": 2,
+        "Z": 1,
+        "P": 1,
+        "EH": 1,
+        "NG": 1,
+        "R": 1
+      },
+      "empty_target_per_rule": "empty target contributes decoded phones as insertions to aggregate PER numerator; denominator remains total nonempty target phones; per-word PER is 0 only for empty->empty and otherwise undefined"
+    },
+    "epoch_seconds": 20.576443300000392
+  },
+  {
+    "epoch": 28,
+    "train": {
+      "ctc_loss": 1.9031537901806035,
+      "online_phone_error_rate": 0.6066837107377648,
+      "online_exact_sequence_accuracy": 0.14521188264960944,
+      "note": "online TRAIN PER is accumulated from each batch immediately before its optimizer update with training-mode dropout"
+    },
+    "validation": {
+      "loss": 2.0268819580166975,
+      "phone_error_rate": 0.6207371277976635,
+      "target_phone_denominator": 25423,
+      "edit_counts": {
+        "substitution": 8818,
+        "deletion": 6517,
+        "insertion": 446,
+        "errors": 15781
+      },
+      "exact_decoded_sequence_accuracy": 0.1182712215320911,
+      "exact_decoded_words": 914,
+      "binary": {
+        "rows": 26337,
+        "accuracy": 0.7199377301894673,
+        "balanced_accuracy": 0.6054843729006738,
+        "macro_f1": 0.47036961974869534,
+        "non_deletion": {
+          "precision": 0.975096088032433,
+          "recall": 0.7284742162608662,
+          "f1": 0.8339337175792507,
+          "support": 25423
+        },
+        "deletion": {
+          "precision": 0.06004901960784314,
+          "recall": 0.4824945295404814,
+          "f1": 0.10680552191813998,
+          "support": 914
+        },
+        "confusion_matrix_labels": [
+          "non_deletion",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            18520,
+            6903
+          ],
+          [
+            473,
+            441
+          ]
+        ]
+      },
+      "three_relation": {
+        "rows": 26337,
+        "macro_f1": 0.307835308508068,
+        "per_class": {
+          "correct": {
+            "precision": 0.95625,
+            "recall": 0.4033569137484072,
+            "f1": 0.5673846534194505,
+            "support": 22759
+          },
+          "substitution": {
+            "precision": 0.1600127754710955,
+            "recall": 0.5641891891891891,
+            "f1": 0.2493157501866136,
+            "support": 2664
+          },
+          "deletion": {
+            "precision": 0.06004901960784314,
+            "recall": 0.4824945295404814,
+            "f1": 0.10680552191813998,
+            "support": 914
+          }
+        },
+        "confusion_matrix_labels": [
+          "correct",
+          "substitution",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            9180,
+            7464,
+            6115
+          ],
+          [
+            373,
+            1503,
+            788
+          ],
+          [
+            47,
+            426,
+            441
+          ]
+        ]
+      },
+      "correct_false_deletion_rate": 0.26868491585746296,
+      "substitution_false_deletion_rate": 0.2957957957957958,
+      "predicted_insertions": 359,
+      "predicted_insertion_phone_counts": {
+        "D": 39,
+        "AH": 32,
+        "W": 30,
+        "IY": 26,
+        "S": 24,
+        "B": 22,
+        "HH": 20,
+        "Y": 19,
+        "M": 19,
+        "L": 18,
+        "T": 16,
+        "IH": 14,
+        "N": 12,
+        "K": 11,
+        "AE": 11,
+        "AY": 9,
+        "AO": 7,
+        "Z": 6,
+        "V": 5,
+        "ER": 3,
+        "EH": 3,
+        "F": 3,
+        "UW": 2,
+        "SH": 2,
+        "G": 1,
+        "DH": 1,
+        "NG": 1,
+        "AA": 1,
+        "R": 1,
+        "OW": 1
+      },
+      "empty_target_per_rule": "empty target contributes decoded phones as insertions to aggregate PER numerator; denominator remains total nonempty target phones; per-word PER is 0 only for empty->empty and otherwise undefined"
+    },
+    "epoch_seconds": 20.26123480000024
+  },
+  {
+    "epoch": 29,
+    "train": {
+      "ctc_loss": 1.8930155151378214,
+      "online_phone_error_rate": 0.6015157048940832,
+      "online_exact_sequence_accuracy": 0.1465034749984624,
+      "note": "online TRAIN PER is accumulated from each batch immediately before its optimizer update with training-mode dropout"
+    },
+    "validation": {
+      "loss": 2.030855010755314,
+      "phone_error_rate": 0.6157809857215907,
+      "target_phone_denominator": 25423,
+      "edit_counts": {
+        "substitution": 8621,
+        "deletion": 6636,
+        "insertion": 398,
+        "errors": 15655
+      },
+      "exact_decoded_sequence_accuracy": 0.11231884057971014,
+      "exact_decoded_words": 868,
+      "binary": {
+        "rows": 26337,
+        "accuracy": 0.7166723620761666,
+        "balanced_accuracy": 0.6159227016732467,
+        "macro_f1": 0.4710522848029659,
+        "non_deletion": {
+          "precision": 0.976141243836488,
+          "recall": 0.7241867600204539,
+          "f1": 0.8314967030981845,
+          "support": 25423
+        },
+        "deletion": {
+          "precision": 0.06206527554842162,
+          "recall": 0.5076586433260394,
+          "f1": 0.11060786650774732,
+          "support": 914
+        },
+        "confusion_matrix_labels": [
+          "non_deletion",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            18411,
+            7012
+          ],
+          [
+            450,
+            464
+          ]
+        ]
+      },
+      "three_relation": {
+        "rows": 26337,
+        "macro_f1": 0.31571868169278117,
+        "per_class": {
+          "correct": {
+            "precision": 0.9649434910004185,
+            "recall": 0.40515839887517024,
+            "f1": 0.570694723812471,
+            "support": 22759
+          },
+          "substitution": {
+            "precision": 0.1709833422890919,
+            "recall": 0.5972222222222222,
+            "f1": 0.26585345475812516,
+            "support": 2664
+          },
+          "deletion": {
+            "precision": 0.06206527554842162,
+            "recall": 0.5076586433260394,
+            "f1": 0.11060786650774732,
+            "support": 914
+          }
+        },
+        "confusion_matrix_labels": [
+          "correct",
+          "substitution",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            9221,
+            7308,
+            6230
+          ],
+          [
+            291,
+            1591,
+            782
+          ],
+          [
+            44,
+            406,
+            464
+          ]
+        ]
+      },
+      "correct_false_deletion_rate": 0.27373786194472516,
+      "substitution_false_deletion_rate": 0.29354354354354356,
+      "predicted_insertions": 324,
+      "predicted_insertion_phone_counts": {
+        "IY": 46,
+        "HH": 33,
+        "D": 25,
+        "M": 22,
+        "AH": 22,
+        "S": 20,
+        "T": 17,
+        "W": 16,
+        "IH": 13,
+        "Y": 13,
+        "F": 12,
+        "B": 12,
+        "N": 10,
+        "AO": 9,
+        "P": 8,
+        "L": 7,
+        "AE": 7,
+        "AY": 6,
+        "K": 5,
+        "AA": 3,
+        "V": 3,
+        "ER": 3,
+        "EH": 3,
+        "Z": 2,
+        "R": 2,
+        "UW": 2,
+        "SH": 2,
+        "G": 1
+      },
+      "empty_target_per_rule": "empty target contributes decoded phones as insertions to aggregate PER numerator; denominator remains total nonempty target phones; per-word PER is 0 only for empty->empty and otherwise undefined"
+    },
+    "epoch_seconds": 21.00154459999976
+  },
+  {
+    "epoch": 30,
+    "train": {
+      "ctc_loss": 1.8788421907961035,
+      "online_phone_error_rate": 0.600146092037984,
+      "online_exact_sequence_accuracy": 0.1508087828279722,
+      "note": "online TRAIN PER is accumulated from each batch immediately before its optimizer update with training-mode dropout"
+    },
+    "validation": {
+      "loss": 2.0127941840183663,
+      "phone_error_rate": 0.6299020571923062,
+      "target_phone_denominator": 25423,
+      "edit_counts": {
+        "substitution": 8251,
+        "deletion": 7492,
+        "insertion": 271,
+        "errors": 16014
+      },
+      "exact_decoded_sequence_accuracy": 0.11633022774327122,
+      "exact_decoded_words": 899,
+      "binary": {
+        "rows": 26337,
+        "accuracy": 0.684702130083153,
+        "balanced_accuracy": 0.608328331889205,
+        "macro_f1": 0.456259638044322,
+        "non_deletion": {
+          "precision": 0.9759243814289685,
+          "recall": 0.6903984580891319,
+          "f1": 0.8086988573534832,
+          "support": 25423
+        },
+        "deletion": {
+          "precision": 0.057590996168582376,
+          "recall": 0.526258205689278,
+          "f1": 0.1038204187351608,
+          "support": 914
+        },
+        "confusion_matrix_labels": [
+          "non_deletion",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            17552,
+            7871
+          ],
+          [
+            433,
+            481
+          ]
+        ]
+      },
+      "three_relation": {
+        "rows": 26337,
+        "macro_f1": 0.3051969941770465,
+        "per_class": {
+          "correct": {
+            "precision": 0.9618848857644992,
+            "recall": 0.3847708598796081,
+            "f1": 0.5496657565201016,
+            "support": 22759
+          },
+          "substitution": {
+            "precision": 0.17036369778178134,
+            "recall": 0.5679429429429429,
+            "f1": 0.262104807275877,
+            "support": 2664
+          },
+          "deletion": {
+            "precision": 0.057590996168582376,
+            "recall": 0.526258205689278,
+            "f1": 0.1038204187351608,
+            "support": 914
+          }
+        },
+        "confusion_matrix_labels": [
+          "correct",
+          "substitution",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            8757,
+            6979,
+            7023
+          ],
+          [
+            303,
+            1513,
+            848
+          ],
+          [
+            44,
+            389,
+            481
+          ]
+        ]
+      },
+      "correct_false_deletion_rate": 0.30858122061602006,
+      "substitution_false_deletion_rate": 0.3183183183183183,
+      "predicted_insertions": 217,
+      "predicted_insertion_phone_counts": {
+        "HH": 24,
+        "S": 23,
+        "AH": 21,
+        "W": 18,
+        "IY": 18,
+        "M": 18,
+        "D": 16,
+        "T": 13,
+        "IH": 9,
+        "Y": 8,
+        "K": 6,
+        "AY": 5,
+        "F": 5,
+        "N": 5,
+        "AE": 4,
+        "ER": 3,
+        "AO": 3,
+        "B": 3,
+        "Z": 2,
+        "SH": 2,
+        "V": 2,
+        "P": 2,
+        "EH": 2,
+        "R": 2,
+        "UW": 1,
+        "AA": 1,
+        "L": 1
+      },
+      "empty_target_per_rule": "empty target contributes decoded phones as insertions to aggregate PER numerator; denominator remains total nonempty target phones; per-word PER is 0 only for empty->empty and otherwise undefined"
+    },
+    "epoch_seconds": 20.914564799999425
+  },
+  {
+    "epoch": 31,
+    "train": {
+      "ctc_loss": 1.8715906666612498,
+      "online_phone_error_rate": 0.5988130021913806,
+      "online_exact_sequence_accuracy": 0.15093179162310105,
+      "note": "online TRAIN PER is accumulated from each batch immediately before its optimizer update with training-mode dropout"
+    },
+    "validation": {
+      "loss": 2.0285284872751057,
+      "phone_error_rate": 0.633009479605082,
+      "target_phone_denominator": 25423,
+      "edit_counts": {
+        "substitution": 8577,
+        "deletion": 7134,
+        "insertion": 382,
+        "errors": 16093
+      },
+      "exact_decoded_sequence_accuracy": 0.13082298136645962,
+      "exact_decoded_words": 1011,
+      "binary": {
+        "rows": 26337,
+        "accuracy": 0.6965485818430345,
+        "balanced_accuracy": 0.5960062525439369,
+        "macro_f1": 0.45894890054339205,
+        "non_deletion": {
+          "precision": 0.9745195187020199,
+          "recall": 0.7040475160287928,
+          "f1": 0.8174925782142042,
+          "support": 25423
+        },
+        "deletion": {
+          "precision": 0.05595984943538269,
+          "recall": 0.487964989059081,
+          "f1": 0.10040522287257991,
+          "support": 914
+        },
+        "confusion_matrix_labels": [
+          "non_deletion",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            17899,
+            7524
+          ],
+          [
+            468,
+            446
+          ]
+        ]
+      },
+      "three_relation": {
+        "rows": 26337,
+        "macro_f1": 0.3039192444911003,
+        "per_class": {
+          "correct": {
+            "precision": 0.9630725399956169,
+            "recall": 0.3861768970517158,
+            "f1": 0.5512937117766975,
+            "support": 22759
+          },
+          "substitution": {
+            "precision": 0.16751433827507844,
+            "recall": 0.581081081081081,
+            "f1": 0.2600587988240235,
+            "support": 2664
+          },
+          "deletion": {
+            "precision": 0.05595984943538269,
+            "recall": 0.487964989059081,
+            "f1": 0.10040522287257991,
+            "support": 914
+          }
+        },
+        "confusion_matrix_labels": [
+          "correct",
+          "substitution",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            8789,
+            7265,
+            6705
+          ],
+          [
+            297,
+            1548,
+            819
+          ],
+          [
+            40,
+            428,
+            446
+          ]
+        ]
+      },
+      "correct_false_deletion_rate": 0.2946087262181994,
+      "substitution_false_deletion_rate": 0.30743243243243246,
+      "predicted_insertions": 304,
+      "predicted_insertion_phone_counts": {
+        "W": 45,
+        "HH": 38,
+        "IY": 32,
+        "S": 26,
+        "D": 20,
+        "M": 18,
+        "AH": 18,
+        "T": 15,
+        "Y": 14,
+        "N": 10,
+        "K": 9,
+        "F": 9,
+        "UW": 7,
+        "B": 6,
+        "IH": 6,
+        "SH": 6,
+        "AY": 6,
+        "Z": 3,
+        "V": 3,
+        "AO": 2,
+        "AE": 2,
+        "P": 2,
+        "ER": 2,
+        "EH": 2,
+        "L": 1,
+        "EY": 1,
+        "OW": 1
+      },
+      "empty_target_per_rule": "empty target contributes decoded phones as insertions to aggregate PER numerator; denominator remains total nonempty target phones; per-word PER is 0 only for empty->empty and otherwise undefined"
+    },
+    "epoch_seconds": 20.37399539999933
+  },
+  {
+    "epoch": 32,
+    "train": {
+      "ctc_loss": 1.8540969564800474,
+      "online_phone_error_rate": 0.5921840759678597,
+      "online_exact_sequence_accuracy": 0.15351497632080693,
+      "note": "online TRAIN PER is accumulated from each batch immediately before its optimizer update with training-mode dropout"
+    },
+    "validation": {
+      "loss": 1.9619751393054583,
+      "phone_error_rate": 0.6119262085513119,
+      "target_phone_denominator": 25423,
+      "edit_counts": {
+        "substitution": 8392,
+        "deletion": 6767,
+        "insertion": 398,
+        "errors": 15557
+      },
+      "exact_decoded_sequence_accuracy": 0.13004658385093168,
+      "exact_decoded_words": 1005,
+      "binary": {
+        "rows": 26337,
+        "accuracy": 0.7103314728328967,
+        "balanced_accuracy": 0.6036728359225364,
+        "macro_f1": 0.4660496376108898,
+        "non_deletion": {
+          "precision": 0.9750640751815464,
+          "recall": 0.718286590882272,
+          "f1": 0.8272066317863696,
+          "support": 25423
+        },
+        "deletion": {
+          "precision": 0.05874622157970824,
+          "recall": 0.4890590809628009,
+          "f1": 0.10489264343541006,
+          "support": 914
+        },
+        "confusion_matrix_labels": [
+          "non_deletion",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            18261,
+            7162
+          ],
+          [
+            467,
+            447
+          ]
+        ]
+      },
+      "three_relation": {
+        "rows": 26337,
+        "macro_f1": 0.3122990197969311,
+        "per_class": {
+          "correct": {
+            "precision": 0.9604920254352132,
+            "recall": 0.4048508282437717,
+            "f1": 0.5696092977250248,
+            "support": 22759
+          },
+          "substitution": {
+            "precision": 0.16945812807881774,
+            "recall": 0.581081081081081,
+            "f1": 0.2623951182303585,
+            "support": 2664
+          },
+          "deletion": {
+            "precision": 0.05874622157970824,
+            "recall": 0.4890590809628009,
+            "f1": 0.10489264343541006,
+            "support": 914
+          }
+        },
+        "confusion_matrix_labels": [
+          "correct",
+          "substitution",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            9214,
+            7164,
+            6381
+          ],
+          [
+            335,
+            1548,
+            781
+          ],
+          [
+            44,
+            423,
+            447
+          ]
+        ]
+      },
+      "correct_false_deletion_rate": 0.28037259985060853,
+      "substitution_false_deletion_rate": 0.29316816816816815,
+      "predicted_insertions": 326,
+      "predicted_insertion_phone_counts": {
+        "IY": 56,
+        "D": 41,
+        "AH": 32,
+        "T": 26,
+        "HH": 24,
+        "S": 23,
+        "W": 14,
+        "M": 13,
+        "IH": 12,
+        "Y": 10,
+        "K": 9,
+        "N": 9,
+        "L": 7,
+        "UW": 7,
+        "SH": 6,
+        "AE": 5,
+        "F": 5,
+        "R": 4,
+        "AY": 4,
+        "P": 3,
+        "AO": 3,
+        "B": 3,
+        "DH": 2,
+        "V": 2,
+        "ER": 2,
+        "EH": 2,
+        "Z": 1,
+        "OW": 1
+      },
+      "empty_target_per_rule": "empty target contributes decoded phones as insertions to aggregate PER numerator; denominator remains total nonempty target phones; per-word PER is 0 only for empty->empty and otherwise undefined"
+    },
+    "epoch_seconds": 19.98165390000031
+  },
+  {
+    "epoch": 33,
+    "train": {
+      "ctc_loss": 1.8468301589363314,
+      "online_phone_error_rate": 0.5911431701972243,
+      "online_exact_sequence_accuracy": 0.15548311704286857,
+      "note": "online TRAIN PER is accumulated from each batch immediately before its optimizer update with training-mode dropout"
+    },
+    "validation": {
+      "loss": 1.969410520903072,
+      "phone_error_rate": 0.6166463438618573,
+      "target_phone_denominator": 25423,
+      "edit_counts": {
+        "substitution": 8113,
+        "deletion": 7247,
+        "insertion": 317,
+        "errors": 15677
+      },
+      "exact_decoded_sequence_accuracy": 0.130175983436853,
+      "exact_decoded_words": 1006,
+      "binary": {
+        "rows": 26337,
+        "accuracy": 0.6928275809697384,
+        "balanced_accuracy": 0.600934787336989,
+        "macro_f1": 0.4583197048660757,
+        "non_deletion": {
+          "precision": 0.9750589267116154,
+          "recall": 0.6996813908665381,
+          "f1": 0.8147299958777997,
+          "support": 25423
+        },
+        "deletion": {
+          "precision": 0.05670867309117865,
+          "recall": 0.5021881838074398,
+          "f1": 0.10190941385435169,
+          "support": 914
+        },
+        "confusion_matrix_labels": [
+          "non_deletion",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            17788,
+            7635
+          ],
+          [
+            455,
+            459
+          ]
+        ]
+      },
+      "three_relation": {
+        "rows": 26337,
+        "macro_f1": 0.30968409958261184,
+        "per_class": {
+          "correct": {
+            "precision": 0.9582630691399663,
+            "recall": 0.39949031152511094,
+            "f1": 0.5638974168139672,
+            "support": 22759
+          },
+          "substitution": {
+            "precision": 0.17167332952598516,
+            "recall": 0.5641891891891891,
+            "f1": 0.2632454680795166,
+            "support": 2664
+          },
+          "deletion": {
+            "precision": 0.05670867309117865,
+            "recall": 0.5021881838074398,
+            "f1": 0.10190941385435169,
+            "support": 914
+          }
+        },
+        "confusion_matrix_labels": [
+          "correct",
+          "substitution",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            9092,
+            6847,
+            6820
+          ],
+          [
+            346,
+            1503,
+            815
+          ],
+          [
+            50,
+            405,
+            459
+          ]
+        ]
+      },
+      "correct_false_deletion_rate": 0.2996616723054616,
+      "substitution_false_deletion_rate": 0.30593093093093093,
+      "predicted_insertions": 250,
+      "predicted_insertion_phone_counts": {
+        "HH": 32,
+        "D": 31,
+        "IY": 28,
+        "AH": 28,
+        "T": 17,
+        "S": 16,
+        "IH": 12,
+        "W": 12,
+        "M": 9,
+        "SH": 7,
+        "Y": 7,
+        "AE": 7,
+        "F": 7,
+        "N": 7,
+        "K": 5,
+        "AY": 5,
+        "EH": 4,
+        "AO": 3,
+        "B": 3,
+        "R": 2,
+        "V": 2,
+        "ER": 2,
+        "UW": 2,
+        "Z": 1,
+        "L": 1
+      },
+      "empty_target_per_rule": "empty target contributes decoded phones as insertions to aggregate PER numerator; denominator remains total nonempty target phones; per-word PER is 0 only for empty->empty and otherwise undefined"
+    },
+    "epoch_seconds": 20.675747400000546
+  },
+  {
+    "epoch": 34,
+    "train": {
+      "ctc_loss": 1.8369929379470762,
+      "online_phone_error_rate": 0.5883126369612857,
+      "online_exact_sequence_accuracy": 0.15456055107940217,
+      "note": "online TRAIN PER is accumulated from each batch immediately before its optimizer update with training-mode dropout"
+    },
+    "validation": {
+      "loss": 2.003662908854692,
+      "phone_error_rate": 0.6230185265310939,
+      "target_phone_denominator": 25423,
+      "edit_counts": {
+        "substitution": 8539,
+        "deletion": 6839,
+        "insertion": 461,
+        "errors": 15839
+      },
+      "exact_decoded_sequence_accuracy": 0.1291407867494824,
+      "exact_decoded_words": 998,
+      "binary": {
+        "rows": 26337,
+        "accuracy": 0.7069142271329308,
+        "balanced_accuracy": 0.5934647256386922,
+        "macro_f1": 0.4626963456452302,
+        "non_deletion": {
+          "precision": 0.974129619710766,
+          "recall": 0.7153758407741022,
+          "f1": 0.8249381988070669,
+          "support": 25423
+        },
+        "deletion": {
+          "precision": 0.05621494717620973,
+          "recall": 0.47155361050328226,
+          "f1": 0.10045449248339354,
+          "support": 914
+        },
+        "confusion_matrix_labels": [
+          "non_deletion",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            18187,
+            7236
+          ],
+          [
+            483,
+            431
+          ]
+        ]
+      },
+      "three_relation": {
+        "rows": 26337,
+        "macro_f1": 0.30778474540235745,
+        "per_class": {
+          "correct": {
+            "precision": 0.9600635593220339,
+            "recall": 0.3982160903378883,
+            "f1": 0.5629367371657504,
+            "support": 22759
+          },
+          "substitution": {
+            "precision": 0.1674972914409534,
+            "recall": 0.5803303303303303,
+            "f1": 0.25996300655792837,
+            "support": 2664
+          },
+          "deletion": {
+            "precision": 0.05621494717620973,
+            "recall": 0.47155361050328226,
+            "f1": 0.10045449248339354,
+            "support": 914
+          }
+        },
+        "confusion_matrix_labels": [
+          "correct",
+          "substitution",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            9063,
+            7242,
+            6454
+          ],
+          [
+            336,
+            1546,
+            782
+          ],
+          [
+            41,
+            442,
+            431
+          ]
+        ]
+      },
+      "correct_false_deletion_rate": 0.2835801221494793,
+      "substitution_false_deletion_rate": 0.29354354354354356,
+      "predicted_insertions": 375,
+      "predicted_insertion_phone_counts": {
+        "IY": 66,
+        "HH": 52,
+        "D": 51,
+        "S": 27,
+        "Y": 26,
+        "W": 23,
+        "AH": 21,
+        "IH": 15,
+        "N": 14,
+        "T": 11,
+        "M": 11,
+        "F": 8,
+        "K": 8,
+        "UW": 6,
+        "SH": 6,
+        "AO": 4,
+        "ER": 4,
+        "B": 4,
+        "Z": 3,
+        "V": 3,
+        "L": 3,
+        "AY": 2,
+        "AE": 2,
+        "G": 1,
+        "DH": 1,
+        "OW": 1,
+        "EH": 1,
+        "R": 1
+      },
+      "empty_target_per_rule": "empty target contributes decoded phones as insertions to aggregate PER numerator; denominator remains total nonempty target phones; per-word PER is 0 only for empty->empty and otherwise undefined"
+    },
+    "epoch_seconds": 19.76080759999968
+  },
+  {
+    "epoch": 35,
+    "train": {
+      "ctc_loss": 1.8252024305461407,
+      "online_phone_error_rate": 0.5846603360116873,
+      "online_exact_sequence_accuracy": 0.15511409065748202,
+      "note": "online TRAIN PER is accumulated from each batch immediately before its optimizer update with training-mode dropout"
+    },
+    "validation": {
+      "loss": 1.9728625983801935,
+      "phone_error_rate": 0.6028399480785116,
+      "target_phone_denominator": 25423,
+      "edit_counts": {
+        "substitution": 8631,
+        "deletion": 6199,
+        "insertion": 496,
+        "errors": 15326
+      },
+      "exact_decoded_sequence_accuracy": 0.12487060041407867,
+      "exact_decoded_words": 965,
+      "binary": {
+        "rows": 26337,
+        "accuracy": 0.7323537228993431,
+        "balanced_accuracy": 0.6124429359826915,
+        "macro_f1": 0.47694100707132253,
+        "non_deletion": {
+          "precision": 0.9755668288642717,
+          "recall": 0.7412972505211816,
+          "f1": 0.842448760644599,
+          "support": 25423
+        },
+        "deletion": {
+          "precision": 0.0629719333238353,
+          "recall": 0.48358862144420134,
+          "f1": 0.11143325349804614,
+          "support": 914
+        },
+        "confusion_matrix_labels": [
+          "non_deletion",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            18846,
+            6577
+          ],
+          [
+            472,
+            442
+          ]
+        ]
+      },
+      "three_relation": {
+        "rows": 26337,
+        "macro_f1": 0.3193130914357745,
+        "per_class": {
+          "correct": {
+            "precision": 0.9586661341853036,
+            "recall": 0.421899028955578,
+            "f1": 0.5859344012204424,
+            "support": 22759
+          },
+          "substitution": {
+            "precision": 0.167598365942808,
+            "recall": 0.5852102102102102,
+            "f1": 0.260571619588835,
+            "support": 2664
+          },
+          "deletion": {
+            "precision": 0.0629719333238353,
+            "recall": 0.48358862144420134,
+            "f1": 0.11143325349804614,
+            "support": 914
+          }
+        },
+        "confusion_matrix_labels": [
+          "correct",
+          "substitution",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            9602,
+            7328,
+            5829
+          ],
+          [
+            357,
+            1559,
+            748
+          ],
+          [
+            57,
+            415,
+            442
+          ]
+        ]
+      },
+      "correct_false_deletion_rate": 0.2561184586317501,
+      "substitution_false_deletion_rate": 0.2807807807807808,
+      "predicted_insertions": 402,
+      "predicted_insertion_phone_counts": {
+        "D": 56,
+        "IY": 55,
+        "HH": 35,
+        "IH": 31,
+        "S": 29,
+        "AH": 26,
+        "M": 22,
+        "T": 21,
+        "N": 18,
+        "W": 15,
+        "Y": 10,
+        "K": 9,
+        "AO": 9,
+        "AE": 8,
+        "UW": 8,
+        "F": 7,
+        "B": 6,
+        "AY": 6,
+        "Z": 5,
+        "SH": 5,
+        "ER": 5,
+        "L": 4,
+        "P": 3,
+        "V": 3,
+        "EH": 2,
+        "G": 1,
+        "CH": 1,
+        "OW": 1,
+        "R": 1
+      },
+      "empty_target_per_rule": "empty target contributes decoded phones as insertions to aggregate PER numerator; denominator remains total nonempty target phones; per-word PER is 0 only for empty->empty and otherwise undefined"
+    },
+    "epoch_seconds": 20.418543400001
+  },
+  {
+    "epoch": 36,
+    "train": {
+      "ctc_loss": 1.8135238947980672,
+      "online_phone_error_rate": 0.583290723155588,
+      "online_exact_sequence_accuracy": 0.1576972753551879,
+      "note": "online TRAIN PER is accumulated from each batch immediately before its optimizer update with training-mode dropout"
+    },
+    "validation": {
+      "loss": 1.955641302015964,
+      "phone_error_rate": 0.6197931007355544,
+      "target_phone_denominator": 25423,
+      "edit_counts": {
+        "substitution": 8016,
+        "deletion": 7414,
+        "insertion": 327,
+        "errors": 15757
+      },
+      "exact_decoded_sequence_accuracy": 0.1286231884057971,
+      "exact_decoded_words": 994,
+      "binary": {
+        "rows": 26337,
+        "accuracy": 0.6864487223298021,
+        "balanced_accuracy": 0.5965759351768084,
+        "macro_f1": 0.4549103797263894,
+        "non_deletion": {
+          "precision": 0.9747220532109077,
+          "recall": 0.6931518703536168,
+          "f1": 0.8101696473725346,
+          "support": 25423
+        },
+        "deletion": {
+          "precision": 0.055340276095907,
+          "recall": 0.5,
+          "f1": 0.09965111208024423,
+          "support": 914
+        },
+        "confusion_matrix_labels": [
+          "non_deletion",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            17622,
+            7801
+          ],
+          [
+            457,
+            457
+          ]
+        ]
+      },
+      "three_relation": {
+        "rows": 26337,
+        "macro_f1": 0.30785894429317956,
+        "per_class": {
+          "correct": {
+            "precision": 0.9629392288796326,
+            "recall": 0.39615097324135506,
+            "f1": 0.5613598157026337,
+            "support": 22759
+          },
+          "substitution": {
+            "precision": 0.1714089031665902,
+            "recall": 0.5608108108108109,
+            "f1": 0.26256590509666083,
+            "support": 2664
+          },
+          "deletion": {
+            "precision": 0.055340276095907,
+            "recall": 0.5,
+            "f1": 0.09965111208024423,
+            "support": 914
+          }
+        },
+        "confusion_matrix_labels": [
+          "correct",
+          "substitution",
+          "deletion"
+        ],
+        "confusion_matrix": [
+          [
+            9016,
+            6806,
+            6937
+          ],
+          [
+            306,
+            1494,
+            864
+          ],
+          [
+            41,
+            416,
+            457
+          ]
+        ]
+      },
+      "correct_false_deletion_rate": 0.3048024957159805,
+      "substitution_false_deletion_rate": 0.32432432432432434,
+      "predicted_insertions": 257,
+      "predicted_insertion_phone_counts": {
+        "HH": 36,
+        "IY": 31,
+        "S": 24,
+        "D": 24,
+        "M": 18,
+        "T": 16,
+        "AH": 15,
+        "Y": 13,
+        "IH": 10,
+        "F": 9,
+        "W": 9,
+        "N": 7,
+        "UW": 7,
+        "AY": 5,
+        "B": 5,
+        "ER": 5,
+        "AE": 5,
+        "V": 3,
+        "K": 3,
+        "AO": 2,
+        "Z": 2,
+        "SH": 2,
+        "G": 1,
+        "P": 1,
+        "EH": 1,
+        "DH": 1,
+        "L": 1,
+        "R": 1
+      },
+      "empty_target_per_rule": "empty target contributes decoded phones as insertions to aggregate PER numerator; denominator remains total nonempty target phones; per-word PER is 0 only for empty->empty and otherwise undefined"
+    },
+    "epoch_seconds": 21.414446599999792
+  }
+]

@@ -1,0 +1,68 @@
+{
+  "stage": "R5-3A synthetic static verification",
+  "status": "R5_3A_STATIC_VERIFICATION_PASS",
+  "synthetic_runs": 2,
+  "tests_per_run": 31,
+  "run_1": {
+    "status": "PASS",
+    "failures": 0,
+    "errors": 0,
+    "summary_sha256": "DC5E43D8C7C692A0F748012772EDA157EDAAD082885651460C0D8DDD6351954C"
+  },
+  "run_2": {
+    "status": "PASS",
+    "failures": 0,
+    "errors": 0,
+    "summary_sha256": "DC5E43D8C7C692A0F748012772EDA157EDAAD082885651460C0D8DDD6351954C"
+  },
+  "deterministic_summaries_byte_identical": true,
+  "synthetic_fixture": {
+    "speakers": 4,
+    "rows": 24,
+    "folds": 4,
+    "feature_order": [
+      "A",
+      "S",
+      "D"
+    ],
+    "fold_thresholds": [
+      0.4997617144971221,
+      0.4997616961600797,
+      0.4997617303413628,
+      0.8457933150212635
+    ],
+    "OOF_rows": 24,
+    "OOF_duplicate_rows": 0,
+    "OOF_missing_rows": 0
+  },
+  "pass_criteria": {
+    "1_contract_identities_verified": "PASS",
+    "2_upstream_identities_verified": "PASS",
+    "3_exact_A_S_D_ordering": "PASS",
+    "4_exact_feature_formulas": "PASS",
+    "5_only_three_classifier_features": "PASS",
+    "6_forbidden_features_excluded": "PASS",
+    "7_StandardScaler_configuration": "PASS",
+    "8_LogisticRegression_configuration": "PASS",
+    "9_Addition_probability_output": "PASS",
+    "10_scaler_calibration_only": "PASS",
+    "11_heldout_excluded_from_scaler": "PASS",
+    "12_heldout_excluded_from_model": "PASS",
+    "13_heldout_uses_calibration_scaler": "PASS",
+    "14_heldout_excluded_from_threshold": "PASS",
+    "15_threshold_candidates": "PASS",
+    "16_score_greater_equal_theta": "PASS",
+    "17_threshold_tie_priority": "PASS",
+    "18_LOSO_structure": "PASS",
+    "19_OOF_uniqueness": "PASS",
+    "20_event_metadata_unchanged": "PASS",
+    "21_determinism": "PASS",
+    "22_real_artifact_schema": "PASS",
+    "23_no_real_TRAIN_fitting_or_performance": "PASS",
+    "24_no_checkpoint_inference_or_audio": "PASS",
+    "25_VALIDATION_untouched": "PASS",
+    "26_TEST_untouched": "PASS",
+    "27_hash_audit": "PASS"
+  },
+  "implementation_note": "scikit-learn 1.8.0 emits a future deprecation warning for the explicitly frozen penalty='l2' argument; the implementation preserves the frozen contract unchanged"
+}

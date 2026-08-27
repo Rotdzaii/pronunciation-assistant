@@ -1,0 +1,18 @@
+{
+  "status": "PARTIAL_ARTIFACT_MANIFEST_AFTER_CONTRACTUAL_STOP",
+  "files": {
+    "preflight.json": "D6B5B2A7FAD5C3A677B1E04CE627DA393A00013755BD1307E6F2F78E93404FA1",
+    "threshold_calibration_metrics.json": "D3877C44A658BAC8A67DA5BE3D390CD03BF754425C8166BE688E05A6F88E9709",
+    "threshold_identity.json": "24B9E9E40BB1613C05BEB6BEB31359C20EDD1F0BF8337E6924D942981CD18B5B",
+    "train_calibrated_threshold.json": "36F6FD5AB6B7E98A607D499445E455DCAB8C3DD4ACDD19F252DC472FCDD07E94",
+    "matched_control_failure.json": "8A8EC5382CAD171028A4E7DD642ED462E45E39BB0F564563C83A80DDA7486436",
+    "compute_report.json": "24676567F28CB7A7AC5271D35621A839A8B45367C845B658163E08828609FCC3",
+    "final_status.json": "AF5CC0096E5E4FAACFD71C430C1DBC79BEA480ECBB629AE9EED406E35EF55BF8",
+    "r4_4d1_locked_report.md": "8104F06696975202643E74EA8E5555539B56B31A9D1B87C5CC053271DC651F9F"
+  },
+  "validation_metric_artifacts_absent_by_design_after_stop": true,
+  "validation_prediction_exports_absent_by_design_after_stop": true,
+  "locked_execution_count": 1,
+  "test_accessed": false,
+  "training": false
+}

@@ -1,0 +1,21 @@
+{
+  "r5_2a_status": "R5_2A_RELATION_COMPETITION_FEASIBLE",
+  "r5_2a_manifest_sha256": "F8E476F8FFA6AB2CD0F833B17D667D0D9B6CE3FC6B9FA1A7F5C1A3D71BA753E1",
+  "manifested_artifacts_verified": 11,
+  "scientific_motivation": {
+    "r5_1_reference": "BEST_INSERT versus KEEP",
+    "new_hypothesis": "BEST_INSERT versus the strongest permitted non-addition explanation in the same exact CTC likelihood space",
+    "permitted_nonaddition_families": ["KEEP", "single SUBSTITUTION", "single DELETE"],
+    "intended_mechanism": "Reduce false addition explanations when substitution or deletion makes KEEP acoustically weak.",
+    "speaker_shift_assessment": "PARTIALLY_TARGETS",
+    "class_overlap_assessment": "MECHANISTICALLY_JUSTIFIED_BUT_NOT_GUARANTEED"
+  },
+  "reuse_boundary": {
+    "r3": "Reuse only the canonical substitution concept; no R3 model output, probability, margin, or threshold.",
+    "r4": "Reuse deterministic KEEP/SUB/DELETE construction and TARGET-score provenance, not the closed R4 scientific conclusion.",
+    "r5_1a": "Reuse alignability-safe score semantics, BEST_INSERT tie behavior, extended-real handling, threshold helper, and cohort/population definitions without modifying the frozen scorer."
+  },
+  "r5_1_remains_closed": true,
+  "r4_remains_closed": true,
+  "performance_claim": "No R5-2 performance result exists."
+}

@@ -1,0 +1,46 @@
+{
+  "provenance_status": "CONFIRMED",
+  "roots": {
+    "AUDIO_ROOT": {
+      "value": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant\\ai-training\\datasets\\l2-arctic\\raw\\l2arctic_release_v5.0",
+      "role": "Frozen prior pipeline root used to resolve waveform paths",
+      "exists": true
+    },
+    "MANUAL_TEXTGRID_ROOT": {
+      "value": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant\\ai-training\\datasets\\l2-arctic\\raw\\l2arctic_release_v5.0",
+      "role": "Authoritative root for manual L2-ARCTIC TextGrid annotations",
+      "exists": true
+    },
+    "V4_METADATA_ROOT": {
+      "value": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\datasets\\l2-arctic\\metadata",
+      "role": "Frozen research metadata location; not a raw annotation root",
+      "exists": true
+    }
+  },
+  "root_distinction": "AUDIO_ROOT and MANUAL_TEXTGRID_ROOT are separate logical roles that happen to resolve to the same raw L2-ARCTIC dataset directory in the frozen prior pipeline. V4_METADATA_ROOT is a distinct research-worktree metadata directory.",
+  "frozen_manual_path_formula": "MANUAL_TEXTGRID_ROOT / speaker / 'annotation' / (utterance_id + '.TextGrid')",
+  "authoritative_first_file": {
+    "speaker": "BWC",
+    "utterance_id": "arctic_a0006",
+    "path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant\\ai-training\\datasets\\l2-arctic\\raw\\l2arctic_release_v5.0\\BWC\\annotation\\arctic_a0006.TextGrid",
+    "exists": true,
+    "byte_size": 8123,
+    "sha256": "EF3056511B71013C399F5F69F40B6A8865756FE26091DF72CC5EDB8E7D14A337"
+  },
+  "provenance_scoped_candidates": [
+    {
+      "root": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant\\ai-training\\datasets\\l2-arctic\\raw\\l2arctic_release_v5.0",
+      "root_exists": true,
+      "first_file_exists": true,
+      "classification": "authoritative_prior_pipeline_root"
+    },
+    {
+      "root": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\datasets\\l2-arctic\\raw\\l2arctic_release_v5.0",
+      "root_exists": false,
+      "first_file_exists": false,
+      "classification": "incorrect_tc1_derived_root"
+    }
+  ],
+  "multiple_authoritative_candidates": false,
+  "path_freeze_is_scientific_contract_change": false
+}

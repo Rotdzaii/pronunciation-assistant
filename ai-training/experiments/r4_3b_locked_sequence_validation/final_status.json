@@ -1,0 +1,23 @@
+{
+  "final_status": "R4_3B_SEQUENCE_DELETION_NOT_CONFIRMED",
+  "all_frozen_gates_pass": false,
+  "gates": {
+    "binary_macro_f1": false,
+    "deletion_f1": false,
+    "deletion_recall": false,
+    "macro_f1_gain_over_duration": false,
+    "matched_macro_f1": false,
+    "matched_deletion_f1": false,
+    "substitution_false_deletion": true,
+    "speaker_recall": false
+  },
+  "exact_matched_control_evaluable": false,
+  "post_hoc_changes": false,
+  "r4_test_accessed": false,
+  "test_paths_resolved": false,
+  "test_audio_read": false,
+  "test_inference": false,
+  "new_neural_training": false,
+  "frozen_r3_modified": false,
+  "mfa_runtime_modified": false
+}

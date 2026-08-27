@@ -1,0 +1,196 @@
+{
+  "addition_vs_all_nonaddition_roc_auc": 0.6878413803490975,
+  "addition_vs_correct_only_roc_auc": 0.669239360205041,
+  "addition_vs_substitution_only_roc_auc": 0.7051145291457686,
+  "addition_vs_deletion_only_roc_auc": 0.7849318399170084,
+  "auc_implementation": "frozen R5-1A extended-real Mann-Whitney average-rank",
+  "score_distributions_by_speaker": {
+    "BWC": {
+      "count": 1390,
+      "negative_infinity_count": 0,
+      "finite_count": 1390,
+      "minimum": -6.720275958379109,
+      "q25": -1.3471510000526905,
+      "median": -0.8417380849520365,
+      "q75": -0.42614099383354187,
+      "maximum": 2.5512085556983948
+    },
+    "EBVS": {
+      "count": 1372,
+      "negative_infinity_count": 0,
+      "finite_count": 1372,
+      "minimum": -6.390632629394531,
+      "q25": -1.434955496589343,
+      "median": -0.8709240574685352,
+      "q75": -0.4339163988828659,
+      "maximum": 3.981416940689087
+    },
+    "HJK": {
+      "count": 1401,
+      "negative_infinity_count": 0,
+      "finite_count": 1401,
+      "minimum": -4.1165867487589525,
+      "q25": -1.2280766169230142,
+      "median": -0.7243900994459789,
+      "q75": -0.3976682027180989,
+      "maximum": 2.6309139132499695
+    },
+    "NCC": {
+      "count": 1408,
+      "negative_infinity_count": 0,
+      "finite_count": 1408,
+      "minimum": -6.119325180848439,
+      "q25": -1.1531581254675984,
+      "median": -0.6496084729830425,
+      "q75": -0.299538654088974,
+      "maximum": 4.03297742207845
+    },
+    "NJS": {
+      "count": 1406,
+      "negative_infinity_count": 0,
+      "finite_count": 1406,
+      "minimum": -5.880697041749954,
+      "q25": -1.3225684414307277,
+      "median": -0.7602317929267883,
+      "q75": -0.35925112026078365,
+      "maximum": 2.746130347251892
+    },
+    "PNV": {
+      "count": 1395,
+      "negative_infinity_count": 0,
+      "finite_count": 1395,
+      "minimum": -6.154381960630417,
+      "q25": -1.2896041994293532,
+      "median": -0.8176961143811544,
+      "q75": -0.44499290642284206,
+      "maximum": 3.6087523102760315
+    },
+    "RRBI": {
+      "count": 1408,
+      "negative_infinity_count": 0,
+      "finite_count": 1408,
+      "minimum": -4.977392613887787,
+      "q25": -1.392359961445133,
+      "median": -0.8742824370662372,
+      "q75": -0.4606576623338642,
+      "maximum": 3.5026426315307617
+    },
+    "TLV": {
+      "count": 1383,
+      "negative_infinity_count": 0,
+      "finite_count": 1383,
+      "minimum": -5.1381596326828,
+      "q25": -1.6148622979720433,
+      "median": -0.9792217463254929,
+      "q75": -0.5049338360627491,
+      "maximum": 3.6891243755817413
+    },
+    "TNI": {
+      "count": 1345,
+      "negative_infinity_count": 0,
+      "finite_count": 1345,
+      "minimum": -5.449967722098033,
+      "q25": -1.3536791801452637,
+      "median": -0.8310430844624838,
+      "q75": -0.398780834107172,
+      "maximum": 2.3271254897117615
+    },
+    "YBAA": {
+      "count": 1298,
+      "negative_infinity_count": 0,
+      "finite_count": 1298,
+      "minimum": -5.527891318003337,
+      "q25": -1.3262451489766438,
+      "median": -0.8417218265079317,
+      "q75": -0.4298104686396462,
+      "maximum": 2.424639026323954
+    },
+    "YKWK": {
+      "count": 1382,
+      "negative_infinity_count": 0,
+      "finite_count": 1382,
+      "minimum": -5.87303868929545,
+      "q25": -1.3345995073517163,
+      "median": -0.826646978656451,
+      "q75": -0.41889369913509916,
+      "maximum": 2.740139901638031
+    },
+    "ZHAA": {
+      "count": 1394,
+      "negative_infinity_count": 0,
+      "finite_count": 1394,
+      "minimum": -4.858330309391022,
+      "q25": -1.300120136141777,
+      "median": -0.769290308157603,
+      "q75": -0.4018664091825485,
+      "maximum": 3.0435501734415693
+    }
+  },
+  "score_distributions_by_cohort": {
+    "positive": {
+      "count": 323,
+      "negative_infinity_count": 0,
+      "finite_count": 323,
+      "minimum": -3.8294227321942644,
+      "q25": -0.8260702649752298,
+      "median": -0.37749380724770687,
+      "q75": -0.04355205496152248,
+      "maximum": 2.7316818237304688
+    },
+    "correct_only": {
+      "count": 10340,
+      "negative_infinity_count": 0,
+      "finite_count": 10340,
+      "minimum": -6.154381960630417,
+      "q25": -1.3018916696310043,
+      "median": -0.7807089246454693,
+      "q75": -0.3773475289344788,
+      "maximum": 4.03297742207845
+    },
+    "substitution_negative": {
+      "count": 4964,
+      "negative_infinity_count": 0,
+      "finite_count": 4964,
+      "minimum": -6.390632629394531,
+      "q25": -1.35318806519111,
+      "median": -0.8444064131804875,
+      "q75": -0.4686027030150096,
+      "maximum": 3.5026426315307617
+    },
+    "deletion_negative": {
+      "count": 1403,
+      "negative_infinity_count": 0,
+      "finite_count": 1403,
+      "minimum": -6.720275958379109,
+      "q25": -1.6887181486402238,
+      "median": -1.0595619281133017,
+      "q75": -0.5759425549280077,
+      "maximum": 1.5065217018127441
+    },
+    "substitution_only_negative": {
+      "count": 4516,
+      "negative_infinity_count": 0,
+      "finite_count": 4516,
+      "minimum": -6.390632629394531,
+      "q25": -1.3498710592587788,
+      "median": -0.8430982143159897,
+      "q75": -0.4608268022537231,
+      "maximum": 3.5026426315307617
+    },
+    "deletion_only_negative": {
+      "count": 955,
+      "negative_infinity_count": 0,
+      "finite_count": 955,
+      "minimum": -6.720275958379109,
+      "q25": -1.8223193436861038,
+      "median": -1.1750644048055015,
+      "q75": -0.6324427440052942,
+      "maximum": 1.5065217018127441
+    }
+  },
+  "descriptive_only": [
+    "addition_vs_substitution_only_roc_auc",
+    "addition_vs_deletion_only_roc_auc",
+    "distributions"
+  ]
+}

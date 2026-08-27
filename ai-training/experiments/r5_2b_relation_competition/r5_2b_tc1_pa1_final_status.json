@@ -1,0 +1,11 @@
+{
+  "status": "R5_2B_TC1_PA1_EXECUTION_TECHNICAL_FAILURE_IMPLEMENTATION",
+  "scientific_performance_status": "UNKNOWN",
+  "valid_scientific_metrics_exist": false,
+  "gates_passed": null,
+  "gates_evaluated": 0,
+  "gates_total": 8,
+  "robust_theta": "R5_2_ROBUST_THETA_NOT_AUTHORIZED",
+  "technical_stop": "Python launcher environment did not provide the frozen runtime dependency torch; the driver stopped during import before any data or model access.",
+  "rerun_authorized_or_performed": false
+}

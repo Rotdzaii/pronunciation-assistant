@@ -1,0 +1,26 @@
+{
+  "stage": "R6-0 synthetic static verification",
+  "neural_training": false,
+  "fine_tuning": false,
+  "classifier_fitting": false,
+  "threshold_search": false,
+  "checkpoint_loaded": false,
+  "checkpoint_inference": false,
+  "real_logits_read": false,
+  "real_posterior_features_calculated": false,
+  "train_audio_accessed": false,
+  "train_annotation_content_read": false,
+  "real_train_roc_auc_calculated": false,
+  "real_train_speaker_metrics_calculated": false,
+  "real_train_performance_exposed": false,
+  "frozen_r6_0_contract_modified": false,
+  "frozen_r5_artifacts_modified": false,
+  "validation_accessed": false,
+  "validation_paths_resolved": false,
+  "test_accessed": false,
+  "test_paths_resolved": false,
+  "synthetic_logits_only": true,
+  "static_verification_only": true,
+  "protocol_status": "PASS"
+}
+

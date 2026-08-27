@@ -1,0 +1,66 @@
+{
+  "status": "R4_4D2A_ROBUST_CALIBRATION_READY",
+  "eligible_families": [
+    "RAW",
+    "TARGET",
+    "TIME"
+  ],
+  "development_ready_families": [
+    "TARGET"
+  ],
+  "selected_family": "TARGET",
+  "robust_theta": 0.16184102947061696,
+  "family_gate_results": {
+    "RAW": {
+      "all_12_fold_thresholds": true,
+      "folds_no_eligible_threshold": 0,
+      "oof_deletion_recall": 0.469559585492228,
+      "oof_substitution_false_deletion": 0.0557354695755923,
+      "speaker_gate_failures": 0,
+      "family_eligible": true,
+      "development_binary_macro_f1": true,
+      "development_deletion_f1": false,
+      "development_three_relation_macro_f1": true,
+      "development_pass": false
+    },
+    "TARGET": {
+      "all_12_fold_thresholds": true,
+      "folds_no_eligible_threshold": 0,
+      "oof_deletion_recall": 0.4572538860103627,
+      "oof_substitution_false_deletion": 0.041247656383160046,
+      "speaker_gate_failures": 0,
+      "family_eligible": true,
+      "development_binary_macro_f1": true,
+      "development_deletion_f1": true,
+      "development_three_relation_macro_f1": true,
+      "development_pass": true
+    },
+    "TIME": {
+      "all_12_fold_thresholds": true,
+      "folds_no_eligible_threshold": 0,
+      "oof_deletion_recall": 0.45466321243523317,
+      "oof_substitution_false_deletion": 0.051133458326231465,
+      "speaker_gate_failures": 0,
+      "family_eligible": true,
+      "development_binary_macro_f1": true,
+      "development_deletion_f1": false,
+      "development_three_relation_macro_f1": true,
+      "development_pass": false
+    }
+  },
+  "selection_precedence": [
+    "OOF deletion F1",
+    "OOF Binary Macro-F1",
+    "deletion precision",
+    "lower substitution false-deletion",
+    "RAW then TIME then TARGET"
+  ],
+  "cross_family_threshold_stability_used": false,
+  "future_validation_contract": {
+    "json_path": "ai-training\\experiments\\r4_4d2a_train_only_robust_calibration\\r4_4d2b_preregistered_validation_design.json",
+    "json_sha256": "F0AC6874C1330DBFA2A8D99C88BE5167DCBED31122B40CE1F427FC0938DFA8AA",
+    "markdown_path": "ai-training\\experiments\\r4_4d2a_train_only_robust_calibration\\r4_4d2b_preregistered_validation_design.md",
+    "markdown_sha256": "71BEB2A97331455863CCE203FD886F6831697D69F857B2AC1D5C35EAA5DB2D6B"
+  },
+  "validation_used_for_selection": false
+}

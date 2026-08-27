@@ -1,0 +1,220 @@
+{
+  "started_at": "2026-08-19T02:43:22+0700",
+  "ended_at": "2026-08-19T02:47:25+0700",
+  "python": "3.12.10",
+  "pytorch": "2.12.0.dev20260408+cu128",
+  "cuda": "12.8",
+  "device": "cuda",
+  "gpu": "NVIDIA GeForce RTX 5060 Laptop GPU",
+  "peak_vram_bytes": 125096448,
+  "authorized_environment": {
+    "status": "PASS",
+    "correction_category": "EXECUTION_ENVIRONMENT_SELECTION_ONLY",
+    "expected": {
+      "sys_executable": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant\\ai-training\\.venv\\Scripts\\python.exe",
+      "python_version": "3.12.10",
+      "torch_version": "2.12.0.dev20260408+cu128",
+      "torch_cuda_version": "12.8",
+      "cuda_available": true,
+      "cuda_device_count": 1,
+      "gpu_device_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+      "numpy_version": "2.4.6",
+      "pandas_version": "3.0.3",
+      "sklearn_version": "1.8.0"
+    },
+    "observed": {
+      "sys_executable": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant\\ai-training\\.venv\\Scripts\\python.exe",
+      "python_version": "3.12.10",
+      "torch_version": "2.12.0.dev20260408+cu128",
+      "torch_cuda_version": "12.8",
+      "cuda_available": true,
+      "cuda_device_count": 1,
+      "gpu_device_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+      "numpy_version": "2.4.6",
+      "pandas_version": "3.0.3",
+      "sklearn_version": "1.8.0"
+    },
+    "absolute_interpreter_match": true,
+    "automatic_fallback_used": false,
+    "packages_modified": false,
+    "checkpoint_loaded": false,
+    "dataset_accessed": false
+  },
+  "pa1_path_guard": {
+    "status": "PASS",
+    "scope": "TRAIN_ONLY_EXISTENCE_AND_PROVENANCE_GUARD",
+    "roots": {
+      "MANUAL_TEXTGRID_ROOT": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant\\ai-training\\datasets\\l2-arctic\\raw\\l2arctic_release_v5.0",
+      "AUDIO_ROOT": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant\\ai-training\\datasets\\l2-arctic\\raw\\l2arctic_release_v5.0",
+      "V4_METADATA_ROOT": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant-research\\ai-training\\datasets\\l2-arctic\\metadata",
+      "logical_roles_independently_configured": true,
+      "root_cross_derivation_used": false
+    },
+    "path_formula": "MANUAL_TEXTGRID_ROOT/<speaker>/annotation/<utterance_id>.TextGrid",
+    "expected": 1799,
+    "derived_from_v4": 1799,
+    "existing": 1799,
+    "missing": 0,
+    "ambiguous": 0,
+    "missing_paths": [],
+    "ambiguous_mappings": [],
+    "by_speaker": {
+      "BWC": {
+        "expected": 150,
+        "derived_from_v4": 150,
+        "existing": 150,
+        "missing": 0
+      },
+      "EBVS": {
+        "expected": 150,
+        "derived_from_v4": 150,
+        "existing": 150,
+        "missing": 0
+      },
+      "HJK": {
+        "expected": 150,
+        "derived_from_v4": 150,
+        "existing": 150,
+        "missing": 0
+      },
+      "NCC": {
+        "expected": 150,
+        "derived_from_v4": 150,
+        "existing": 150,
+        "missing": 0
+      },
+      "NJS": {
+        "expected": 150,
+        "derived_from_v4": 150,
+        "existing": 150,
+        "missing": 0
+      },
+      "PNV": {
+        "expected": 150,
+        "derived_from_v4": 150,
+        "existing": 150,
+        "missing": 0
+      },
+      "RRBI": {
+        "expected": 150,
+        "derived_from_v4": 150,
+        "existing": 150,
+        "missing": 0
+      },
+      "TLV": {
+        "expected": 150,
+        "derived_from_v4": 150,
+        "existing": 150,
+        "missing": 0
+      },
+      "TNI": {
+        "expected": 150,
+        "derived_from_v4": 150,
+        "existing": 150,
+        "missing": 0
+      },
+      "YBAA": {
+        "expected": 149,
+        "derived_from_v4": 149,
+        "existing": 149,
+        "missing": 0
+      },
+      "YKWK": {
+        "expected": 150,
+        "derived_from_v4": 150,
+        "existing": 150,
+        "missing": 0
+      },
+      "ZHAA": {
+        "expected": 150,
+        "derived_from_v4": 150,
+        "existing": 150,
+        "missing": 0
+      }
+    },
+    "first_file": {
+      "path": "C:\\Users\\Admin\\Documents\\KLTN\\pronunciation-assistant\\ai-training\\datasets\\l2-arctic\\raw\\l2arctic_release_v5.0\\BWC\\annotation\\arctic_a0006.TextGrid",
+      "exists": true,
+      "byte_size": 8123,
+      "sha256": "EF3056511B71013C399F5F69F40B6A8865756FE26091DF72CC5EDB8E7D14A337",
+      "expected_byte_size": 8123,
+      "expected_sha256": "EF3056511B71013C399F5F69F40B6A8865756FE26091DF72CC5EDB8E7D14A337",
+      "match": true
+    },
+    "annotation_content_parsed": false,
+    "audio_accessed": false,
+    "validation_paths_resolved": false,
+    "test_paths_resolved": false
+  },
+  "tc1_preflight": {
+    "status": "PASS",
+    "scope": "deterministic synthetic pre-inference diagnostic",
+    "nonempty_raw_score": -12.60501480102539,
+    "nonempty_target_score": -6.302507400512695,
+    "scorer_device": "cuda",
+    "scorer_dtype": "float32",
+    "diagnostic_device": "cpu",
+    "diagnostic_dtype": "float32",
+    "n": 4,
+    "absolute_operand_sum_authoritative": 15.667129755020142,
+    "absolute_operand_sum_diagnostic": 15.667129755020142,
+    "authoritative_scorer_value_A": -15.667129516601562,
+    "diagnostic_value_B": -15.667130470275879,
+    "observed_absolute_difference": 9.5367431640625e-07,
+    "bound_A": 2.8015016120413103e-06,
+    "bound_B": 2.8015016120413103e-06,
+    "correction_bound": 5.603003224082621e-06,
+    "acceptance_operator": "<=",
+    "equivalent": true,
+    "scientific_score_source": "frozen_r5_2b_scorer",
+    "returned_scientific_score": -15.667129516601562,
+    "diagnostic_replaced_scientific_score": false
+  },
+  "inference": {
+    "feature_report": {
+      "words": 16582,
+      "seconds": 23.95294620000641,
+      "sample_length": {
+        "count": 16582,
+        "min": 480.0,
+        "median": 4800.0,
+        "mean": 5415.385357616693,
+        "p90": 9600.0,
+        "p95": 11040.0,
+        "max": 30560.0
+      },
+      "feature_frames": {
+        "count": 16582,
+        "min": 4.0,
+        "median": 31.0,
+        "mean": 34.84615848510433,
+        "p90": 61.0,
+        "p95": 70.0,
+        "max": 192.0
+      },
+      "encoder_output_steps": {
+        "count": 16582,
+        "min": 2.0,
+        "median": 15.0,
+        "mean": 17.172295259920396,
+        "p90": 30.0,
+        "p95": 35.0,
+        "max": 96.0
+      },
+      "edge_padded_words": 0,
+      "edge_padding_samples": 0,
+      "unalignable_words": 0,
+      "unalignable_word_ids": []
+    },
+    "inference_seconds": 6.639006799996423
+  },
+  "scoring": {
+    "alignable_nonempty_hypotheses_scored": 5306476,
+    "empty_delete_hypotheses_scored": 710,
+    "empty_delete_score_source": "imported frozen r5_2b_scorer.py",
+    "empty_delete_diagnostic_used_as_score": false,
+    "batch_size": 4096,
+    "seconds": 104.6312414999993
+  },
+  "total_seconds_before_hashing": 242.77538159999676
+}

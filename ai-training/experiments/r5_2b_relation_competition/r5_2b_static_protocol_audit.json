@@ -1,0 +1,22 @@
+{
+  "stage": "R5-2B-SV",
+  "neural_training": false,
+  "checkpoint_loaded": false,
+  "checkpoint_inference": false,
+  "train_audio_paths_resolved": false,
+  "train_audio_accessed": false,
+  "train_loso_run": false,
+  "threshold_search_run": false,
+  "phoenix_performance_metrics_calculated": false,
+  "validation_paths_resolved": false,
+  "validation_accessed": false,
+  "validation_inference_run": false,
+  "test_paths_resolved": false,
+  "test_accessed": false,
+  "test_inference_run": false,
+  "r5_1_modified": false,
+  "r5_2b_frozen_contract_modified": false,
+  "production_runtime_modified": false,
+  "synthetic_tensor_tests_only": true,
+  "status": "PASS"
+}

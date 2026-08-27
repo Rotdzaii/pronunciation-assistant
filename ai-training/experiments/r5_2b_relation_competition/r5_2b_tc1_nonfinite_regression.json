@@ -1,0 +1,36 @@
+{
+  "stage": "R5-2B-TC1 diagnostic failure controls",
+  "finite_controls": {
+    "exact_equality": {
+      "difference": 0.0,
+      "status": "PASS"
+    },
+    "within_bound": {
+      "difference": 1.7881396630060072e-6,
+      "combined_bound": 3.5762793260120145e-6,
+      "status": "PASS"
+    },
+    "equality_at_bound": {
+      "difference": 3.5762793260120145e-6,
+      "combined_bound": 3.5762793260120145e-6,
+      "operator": "<=",
+      "status": "PASS"
+    },
+    "beyond_bound": {
+      "difference": 7.152558652024029e-6,
+      "combined_bound": 3.5762793260120145e-6,
+      "rejected_with": "R5_2B_TC_EXECUTION_TECHNICAL_FAILURE_EMPTY_TARGET_MISMATCH",
+      "status": "PASS"
+    }
+  },
+  "nonfinite_controls": {
+    "nan": "R5_2B_TC_EXECUTION_TECHNICAL_FAILURE_NONFINITE_EMPTY_TARGET",
+    "positive_infinity": "R5_2B_TC_EXECUTION_TECHNICAL_FAILURE_NONFINITE_EMPTY_TARGET",
+    "negative_infinity": "R5_2B_TC_EXECUTION_TECHNICAL_FAILURE_NONFINITE_EMPTY_TARGET",
+    "all_rejected": true,
+    "status": "PASS"
+  },
+  "fixed_atol_used": false,
+  "relative_tolerance_used": false,
+  "bound_enlarged_after_failure": false
+}

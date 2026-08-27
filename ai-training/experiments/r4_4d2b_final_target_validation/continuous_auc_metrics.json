@@ -1,0 +1,12 @@
+{
+  "deletion_vs_nondeletion": {
+    "roc_auc": 0.8541244506193716,
+    "pr_auc": 0.2320715783086963,
+    "count": 26337
+  },
+  "deletion_vs_substitution": {
+    "roc_auc": 0.8622339516759647,
+    "pr_auc": 0.6767422108795518,
+    "count": 3578
+  }
+}

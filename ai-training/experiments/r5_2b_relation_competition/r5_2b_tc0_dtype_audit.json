@@ -1,0 +1,50 @@
+{
+  "scope": "same deterministic [4,41] synthetic tensor",
+  "blank_index": 40,
+  "cases": [
+    {
+      "device": "cpu",
+      "dtype": "float32",
+      "frozen_scorer": -15.667130470275879,
+      "explicit_shared_log_probs_sum": -15.667130470275879,
+      "historical_adapter_sum": -15.667130470275879,
+      "framework_ctc_empty": -15.667130470275879,
+      "adapter_absolute_difference": 0.0,
+      "adapter_relative_difference": 0.0
+    },
+    {
+      "device": "cpu",
+      "dtype": "float64",
+      "frozen_scorer": -15.66712968974069,
+      "explicit_shared_log_probs_sum": -15.66712968974069,
+      "historical_adapter_sum": -15.66712968974069,
+      "framework_ctc_empty": -15.66712968974069,
+      "adapter_absolute_difference": 0.0,
+      "adapter_relative_difference": 0.0
+    },
+    {
+      "device": "cuda:0",
+      "dtype": "float32",
+      "frozen_scorer": -15.667129516601562,
+      "explicit_shared_log_probs_sum_same_device": -15.667129516601562,
+      "historical_adapter_cpu_sum": -15.667130470275879,
+      "framework_ctc_empty": -15.667130470275879,
+      "adapter_absolute_difference": 9.5367431640625e-7,
+      "adapter_relative_difference": 6.087103035662633e-8
+    },
+    {
+      "device": "cuda:0",
+      "dtype": "float64",
+      "frozen_scorer": -15.66712968974069,
+      "explicit_shared_log_probs_sum_same_device": -15.66712968974069,
+      "historical_adapter_cpu_sum": -15.66712968974069,
+      "framework_ctc_empty": -15.66712968974069,
+      "adapter_absolute_difference": 0.0,
+      "adapter_relative_difference": 0.0
+    }
+  ],
+  "float32_machine_epsilon": 1.1920928955078125e-7,
+  "float64_machine_epsilon": 2.220446049250313e-16,
+  "historical_difference_reproduced_exactly": true,
+  "dtype_conclusion": "The discrepancy occurs only for float32 when identical values are reduced on CUDA versus CPU."
+}

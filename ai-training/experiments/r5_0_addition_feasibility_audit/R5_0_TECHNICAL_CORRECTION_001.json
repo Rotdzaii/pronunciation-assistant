@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "R5-0",
+  "correction_id": "R5_0_TECHNICAL_CORRECTION_001",
+  "category": "CATEGORY_3_BUG_AFTER_SCORES_EXPOSED",
+  "frozen_at": "2026-08-15T01:42:00+07:00",
+  "original_preregistration_path": "R5_0_PREREGISTRATION.json",
+  "original_preregistration_sha256": "14CBFADAC0BE35D53C01DC966A030A71F24EC4D86EA88384BC449544CE12AEF7",
+  "original_driver_path": "run_r5_0_addition_feasibility_audit.py",
+  "original_driver_sha256": "F7086A6D2AE13881799B696487BFC2C11072423529FCA29E443732D59F821EB7",
+  "information_consumed_before_detection": {
+    "data_support": {"train": 423, "validation": 296, "test_aggregate": 325},
+    "word_f1": 0.12924606462303231,
+    "exact_event_f1": 0.026687598116169543,
+    "addition_insertion_rate_delta": 0.1871340371636795,
+    "initial_status": "R5_0_PASS_EXISTING_CTC_FEASIBLE"
+  },
+  "defects": [
+    {
+      "artifact": "r5_0_ctc_hallucination_audit.json",
+      "field": "most_common_hallucinated_inserted_phones_all_train",
+      "problem": "The phone list was accumulated over all eligible TRAIN words, while the registered audit requires correct-only words.",
+      "correction": "Preserve the original all-TRAIN list under an explicitly scoped name and add a newly computed correct-only phone list."
+    },
+    {
+      "artifact": "r5_0_addition_distribution_train.json",
+      "field": "by_added_phone",
+      "problem": "The field counted only events with manual-word containment instead of all 423 resolved clean TRAIN addition source rows.",
+      "correction": "Replace by_added_phone with all clean TRAIN source-event counts and preserve the original subset as by_added_phone_manual_word_mapped. Mark by_word as manual-word-mapped only."
+    }
+  ],
+  "permitted_actions": [
+    "preserve the initial artifact manifest and affected artifacts",
+    "read TRAIN canonical source rows",
+    "repeat the exact frozen TRAIN-only checkpoint inference once solely to recover the missing correct-only phone breakdown",
+    "verify primary metrics reproduce exactly",
+    "update only the affected reporting fields, report, correction audit, final manifest"
+  ],
+  "forbidden_actions": [
+    "change preregistration, definitions, gates, or verdict logic",
+    "train or tune",
+    "VALIDATION model inference or performance consumption",
+    "TEST path resolution, audio access, inference, detailed inspection, or performance",
+    "R4 modification"
+  ],
+  "acceptance": {
+    "primary_word_confusion_must_equal": {"TP": 78, "FP": 806, "FN": 245, "TN": 15453},
+    "exact_event_confusion_must_equal": {"tp": 17, "fp": 915, "fn": 325},
+    "addition_insertion_rate_delta_must_equal_float64": 0.1871340371636795,
+    "clean_train_addition_phone_counts_must_sum": 423,
+    "validation_inference": false,
+    "test_access": false
+  }
+}

@@ -1,0 +1,337 @@
+{
+  "dataset_version": "correctness_v3",
+  "usage": [
+    "RESEARCH_ONLY",
+    "NOT_USED_BY_RUNTIME",
+    "NOT_USED_BY_CURRENT_CHECKPOINT"
+  ],
+  "source": "l2arctic_release_v5.0/<speaker>/annotation/*.TextGrid; tier=phones",
+  "speakers": 24,
+  "annotation_files": 3599,
+  "input_total_intervals": 135890,
+  "distribution": {
+    "correct": 101626,
+    "substitution": 14098,
+    "deletion": 3420,
+    "addition": 1092,
+    "non_speech": 15644,
+    "unknown": 10
+  },
+  "training_rows": 120236,
+  "training_distribution": {
+    "correct": 101626,
+    "substitution": 14098,
+    "deletion": 3420,
+    "addition": 1092
+  },
+  "non_speech_labels": {
+    "empty": 3640,
+    "sp": 8034,
+    "sil": 3970
+  },
+  "unknown_labels": {
+    "spn": 3,
+    "D_": 1,
+    "ER)": 1,
+    "V``": 1,
+    "W`": 1,
+    "Y_": 1,
+    "Z_": 1,
+    "s": 1
+  },
+  "unknown_locations": [
+    {
+      "speaker_id": "ABA",
+      "utterance_id": "arctic_a0025",
+      "textgrid_path": "ai-training/datasets/l2-arctic/raw/l2arctic_release_v5.0/ABA/annotation/arctic_a0025.TextGrid",
+      "start_time": 2.58,
+      "end_time": 2.74,
+      "raw_label": "ER)"
+    },
+    {
+      "speaker_id": "BWC",
+      "utterance_id": "arctic_a0434",
+      "textgrid_path": "ai-training/datasets/l2-arctic/raw/l2arctic_release_v5.0/BWC/annotation/arctic_a0434.TextGrid",
+      "start_time": 5.31,
+      "end_time": 5.38,
+      "raw_label": "D_"
+    },
+    {
+      "speaker_id": "ERMS",
+      "utterance_id": "arctic_a0097",
+      "textgrid_path": "ai-training/datasets/l2-arctic/raw/l2arctic_release_v5.0/ERMS/annotation/arctic_a0097.TextGrid",
+      "start_time": 0.31,
+      "end_time": 0.35,
+      "raw_label": "Y_"
+    },
+    {
+      "speaker_id": "HJK",
+      "utterance_id": "arctic_a0104",
+      "textgrid_path": "ai-training/datasets/l2-arctic/raw/l2arctic_release_v5.0/HJK/annotation/arctic_a0104.TextGrid",
+      "start_time": 0.44,
+      "end_time": 0.47,
+      "raw_label": "Z_"
+    },
+    {
+      "speaker_id": "MBMPS",
+      "utterance_id": "arctic_a0006",
+      "textgrid_path": "ai-training/datasets/l2-arctic/raw/l2arctic_release_v5.0/MBMPS/annotation/arctic_a0006.TextGrid",
+      "start_time": 0.82,
+      "end_time": 1.07,
+      "raw_label": "spn"
+    },
+    {
+      "speaker_id": "SVBI",
+      "utterance_id": "arctic_a0006",
+      "textgrid_path": "ai-training/datasets/l2-arctic/raw/l2arctic_release_v5.0/SVBI/annotation/arctic_a0006.TextGrid",
+      "start_time": 0.62,
+      "end_time": 0.77,
+      "raw_label": "spn"
+    },
+    {
+      "speaker_id": "TXHC",
+      "utterance_id": "arctic_a0006",
+      "textgrid_path": "ai-training/datasets/l2-arctic/raw/l2arctic_release_v5.0/TXHC/annotation/arctic_a0006.TextGrid",
+      "start_time": 0.75,
+      "end_time": 0.99,
+      "raw_label": "spn"
+    },
+    {
+      "speaker_id": "TXHC",
+      "utterance_id": "arctic_b0418",
+      "textgrid_path": "ai-training/datasets/l2-arctic/raw/l2arctic_release_v5.0/TXHC/annotation/arctic_b0418.TextGrid",
+      "start_time": 4.19,
+      "end_time": 4.25,
+      "raw_label": "W`"
+    },
+    {
+      "speaker_id": "TXHC",
+      "utterance_id": "arctic_b0488",
+      "textgrid_path": "ai-training/datasets/l2-arctic/raw/l2arctic_release_v5.0/TXHC/annotation/arctic_b0488.TextGrid",
+      "start_time": 4.17,
+      "end_time": 4.22,
+      "raw_label": "V``"
+    },
+    {
+      "speaker_id": "YKWK",
+      "utterance_id": "arctic_a0178",
+      "textgrid_path": "ai-training/datasets/l2-arctic/raw/l2arctic_release_v5.0/YKWK/annotation/arctic_a0178.TextGrid",
+      "start_time": 1.35,
+      "end_time": 1.44,
+      "raw_label": "s"
+    }
+  ],
+  "speaker_distribution": {
+    "ABA": {
+      "correct": 4501,
+      "substitution": 402,
+      "deletion": 31,
+      "addition": 78,
+      "non_speech": 842,
+      "unknown": 1
+    },
+    "ASI": {
+      "correct": 4053,
+      "substitution": 761,
+      "deletion": 120,
+      "addition": 26,
+      "non_speech": 523,
+      "unknown": 0
+    },
+    "BWC": {
+      "correct": 4044,
+      "substitution": 696,
+      "deletion": 206,
+      "addition": 44,
+      "non_speech": 690,
+      "unknown": 1
+    },
+    "EBVS": {
+      "correct": 3939,
+      "substitution": 876,
+      "deletion": 194,
+      "addition": 93,
+      "non_speech": 833,
+      "unknown": 0
+    },
+    "ERMS": {
+      "correct": 4101,
+      "substitution": 855,
+      "deletion": 56,
+      "addition": 43,
+      "non_speech": 796,
+      "unknown": 1
+    },
+    "HJK": {
+      "correct": 4585,
+      "substitution": 330,
+      "deletion": 4,
+      "addition": 7,
+      "non_speech": 457,
+      "unknown": 1
+    },
+    "HKK": {
+      "correct": 4498,
+      "substitution": 318,
+      "deletion": 103,
+      "addition": 44,
+      "non_speech": 478,
+      "unknown": 0
+    },
+    "HQTV": {
+      "correct": 3752,
+      "substitution": 809,
+      "deletion": 477,
+      "addition": 72,
+      "non_speech": 708,
+      "unknown": 0
+    },
+    "LXC": {
+      "correct": 4015,
+      "substitution": 709,
+      "deletion": 216,
+      "addition": 58,
+      "non_speech": 671,
+      "unknown": 0
+    },
+    "MBMPS": {
+      "correct": 4424,
+      "substitution": 530,
+      "deletion": 63,
+      "addition": 26,
+      "non_speech": 850,
+      "unknown": 1
+    },
+    "NCC": {
+      "correct": 4356,
+      "substitution": 536,
+      "deletion": 55,
+      "addition": 31,
+      "non_speech": 609,
+      "unknown": 0
+    },
+    "NJS": {
+      "correct": 4370,
+      "substitution": 561,
+      "deletion": 80,
+      "addition": 38,
+      "non_speech": 541,
+      "unknown": 0
+    },
+    "PNV": {
+      "correct": 4154,
+      "substitution": 631,
+      "deletion": 246,
+      "addition": 16,
+      "non_speech": 692,
+      "unknown": 0
+    },
+    "RRBI": {
+      "correct": 4429,
+      "substitution": 451,
+      "deletion": 65,
+      "addition": 47,
+      "non_speech": 635,
+      "unknown": 0
+    },
+    "SKA": {
+      "correct": 4328,
+      "substitution": 571,
+      "deletion": 59,
+      "addition": 116,
+      "non_speech": 595,
+      "unknown": 0
+    },
+    "SVBI": {
+      "correct": 4113,
+      "substitution": 717,
+      "deletion": 89,
+      "addition": 28,
+      "non_speech": 546,
+      "unknown": 1
+    },
+    "THV": {
+      "correct": 3698,
+      "substitution": 926,
+      "deletion": 406,
+      "addition": 67,
+      "non_speech": 664,
+      "unknown": 0
+    },
+    "TLV": {
+      "correct": 3811,
+      "substitution": 789,
+      "deletion": 437,
+      "addition": 43,
+      "non_speech": 863,
+      "unknown": 0
+    },
+    "TNI": {
+      "correct": 4380,
+      "substitution": 491,
+      "deletion": 68,
+      "addition": 8,
+      "non_speech": 660,
+      "unknown": 0
+    },
+    "TXHC": {
+      "correct": 4322,
+      "substitution": 492,
+      "deletion": 128,
+      "addition": 73,
+      "non_speech": 499,
+      "unknown": 3
+    },
+    "YBAA": {
+      "correct": 4572,
+      "substitution": 331,
+      "deletion": 31,
+      "addition": 30,
+      "non_speech": 725,
+      "unknown": 0
+    },
+    "YDCK": {
+      "correct": 4421,
+      "substitution": 450,
+      "deletion": 58,
+      "addition": 24,
+      "non_speech": 695,
+      "unknown": 0
+    },
+    "YKWK": {
+      "correct": 4326,
+      "substitution": 462,
+      "deletion": 129,
+      "addition": 30,
+      "non_speech": 471,
+      "unknown": 1
+    },
+    "ZHAA": {
+      "correct": 4434,
+      "substitution": 404,
+      "deletion": 99,
+      "addition": 50,
+      "non_speech": 601,
+      "unknown": 0
+    }
+  },
+  "sanity_checks": {
+    "duplicate_intervals": 0,
+    "overlapping_label_rules": 0,
+    "missing_audio_lookup": 0,
+    "invalid_duration": 0,
+    "valid_plain_phone_dropped": 0,
+    "error_tagged_mapped_correct": 0,
+    "non_speech_mapped_correct": 0,
+    "invalid_training_rows": 0,
+    "all_24_speakers_in_training": true,
+    "category_sum_matches_total": true,
+    "training_sum_matches_rows": true
+  },
+  "written_csv_validation": {
+    "rows": 120236,
+    "blank_required_label_fields": 0,
+    "excluded_class_rows": 0,
+    "status": "PASS"
+  }
+}

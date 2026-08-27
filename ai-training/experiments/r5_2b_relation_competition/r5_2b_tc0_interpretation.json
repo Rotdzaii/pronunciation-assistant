@@ -1,0 +1,34 @@
+{
+  "technical_interpretation": "FLOATING_POINT_EQUIVALENCE_ONLY",
+  "final_status": "R5_2B_TC0_NUMERICAL_EQUIVALENCE_CONFIRMED",
+  "mathematical_semantics_check": {
+    "both_paths_attempt_exact_frozen_quantity": true,
+    "quantity": "sum_t log_softmax(logits[t],dim=-1)[blank=40]",
+    "same_logits": true,
+    "same_time_steps": true,
+    "same_blank_index": true,
+    "same_individual_log_probability_operands": true,
+    "different_normalization": false,
+    "different_preprocessing": false,
+    "different_batch_or_time_index": false,
+    "only_difference": "float32 summation backend/device"
+  },
+  "root_cause": "The frozen scorer reduced four float32 blank log-probabilities on CUDA. The execution guard detached and copied the identical values to CPU before reduction. CUDA and CPU used different valid float32 reduction orders/backends, producing a one-ULP-scale aggregate difference. Recomputing log_softmax was not causal.",
+  "frozen_scorer_contract_mismatch": false,
+  "execution_adapter_semantic_mismatch": false,
+  "scientific_contract_impact": false,
+  "technical_correction_justified": true,
+  "permitted_correction_category": "Execution-orchestration-only correction: retain the frozen scorer as the authoritative empty-target implementation; make any independent adapter cross-check diagnostic and use a preregistered dtype-aware forward-error equivalence bound derived from machine precision, reduction length, and operand magnitudes rather than exact bit equality. Do not change the score formula, scorer, contract, model, population, thresholds, or gates.",
+  "recommended_future_policy": {
+    "authoritative_actual_score": "imported frozen scorer empty-target result",
+    "independent_check_role": "diagnostic/preflight only",
+    "equivalence_basis": "gamma_(T-1) * sum(abs(blank_log_probs)), u=machine_epsilon/2",
+    "observed_difference_used_to_choose_policy": false,
+    "fixed_atol_recommended": false,
+    "implementation_authorized_here": false,
+    "rerun_authorized_here": false
+  },
+  "failed_execution_status_preserved": "R5_2B_EXECUTION_TECHNICAL_FAILURE_EMPTY_TARGET",
+  "scientific_metrics_still_exist": false,
+  "gates_evaluated": 0
+}
